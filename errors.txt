@@ -4,4 +4,4 @@ SN 68k version 2.53
 0-$FFFF bytes of RAM used with $0 bytes to spare.
 
 Assembly completed.
-0 error(s) from 301265 lines in 12.78 seconds
+0 error(s) from 301308 lines in 4.77 seconds
