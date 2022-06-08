@@ -18,17 +18,8 @@ DeformLayers:
 		bsr.w	UpdateCamera_X				; update camera position & redraw flags
 		bsr.w	UpdateCamera_Y
 		bsr.w	DynamicLevelEvents			; update level boundaries, load bosses etc.
-		if Revision=0
-			move.w	(v_camera_x_pos).w,(v_fg_x_pos_hscroll).w
-			move.w	(v_camera_y_pos).w,(v_fg_y_pos_vsram).w
-			move.w	(v_bg1_x_pos).w,(v_bg_x_pos_hscroll).w
-			move.w	(v_bg1_y_pos).w,(v_bg_y_pos_vsram).w
-			move.w	(v_bg3_x_pos).w,(v_bg3_x_pos_copy_unused).w
-			move.w	(v_bg3_y_pos).w,(v_bg3_y_pos_copy_unused).w
-		else
-			move.w	(v_camera_y_pos).w,(v_fg_y_pos_vsram).w ; v_fg_y_pos_vsram is sent to VSRAM during VBlank
-			move.w	(v_bg1_y_pos).w,(v_bg_y_pos_vsram).w
-		endc
+		move.w	(v_camera_y_pos).w,(v_fg_y_pos_vsram).w ; v_fg_y_pos_vsram is sent to VSRAM during VBlank
+		move.w	(v_bg1_y_pos).w,(v_bg_y_pos_vsram).w
 		moveq	#0,d0
 		move.b	(v_zone).w,d0				; get zone number
 		add.w	d0,d0					; multiply by 2

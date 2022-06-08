@@ -13,7 +13,7 @@ GM_Ending:
 		move.l	d0,(a1)+
 		dbf	d1,@clear_ost				; clear object RAM
 
-		lea	(v_vblank_0e_counter).w,a1
+		lea	(v_vblank_routine).w,a1
 		moveq	#0,d0
 		move.w	#loops_to_clear_vblankstuff,d1
 	@clear_ram1:
@@ -91,7 +91,6 @@ GM_Ending:
 		move.b	d0,(v_shield).w
 		move.b	d0,(v_invincibility).w
 		move.b	d0,(v_shoes).w
-		move.b	d0,(v_unused_powerup).w
 		move.w	d0,(v_debug_active).w
 		move.w	d0,(f_restart).w
 		move.w	d0,(v_frame_counter).w

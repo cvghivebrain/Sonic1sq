@@ -45,7 +45,7 @@ v_jpadpress1:		equ v_joypad_press_actual
 v_vdp_buffer1:		equ v_vdp_mode_buffer
 v_demolength:		equ v_countdown
 v_scrposy_dup:		equ v_fg_y_pos_vsram
-v_scrposx_dup:		equ v_fg_x_pos_hscroll
+;v_scrposx_dup:		equ v_fg_x_pos_hscroll
 v_hbla_hreg:		equ v_vdp_hint_counter
 v_hbla_line:		equ v_vdp_hint_line
 v_pfade_start:		equ v_palfade_start
@@ -462,7 +462,7 @@ Vscroll_Factor_BG:	equ v_bg_y_pos_vsram
 Palette_fade_range:	equ v_palfade_start
 Palette_fade_start:	equ v_palfade_start
 Palette_fade_length:	equ v_palfade_size
-VIntSubE_RunCount:	equ v_vblank_0e_counter
+;VIntSubE_RunCount:	equ v_vblank_0e_counter
 Vint_routine:		equ v_vblank_routine
 Sprite_count:		equ v_spritecount
 PalCycle_Frame:		equ v_palcycle_num

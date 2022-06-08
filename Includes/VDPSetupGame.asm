@@ -29,7 +29,6 @@ VDPSetupGame:
 		dbf	d7,@clrCRAM				; clear	the CRAM
 
 		clr.l	(v_fg_y_pos_vsram).w
-		clr.l	(v_fg_x_pos_hscroll).w
 		move.l	d1,-(sp)
 		dma_fill	0,$FFFF,0			; clear the VRAM (also sets a5 to vdp_control_port)
 

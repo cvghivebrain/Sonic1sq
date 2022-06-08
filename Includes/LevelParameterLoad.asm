@@ -6,78 +6,64 @@
 
 LevelParameterLoad:
 		moveq	#0,d0
-		move.b	d0,(v_levelsizeload_unused_1).w		; clear unused variables
-		move.b	d0,(v_levelsizeload_unused_2).w
-		move.b	d0,(v_levelsizeload_unused_3).w
-		move.b	d0,(v_levelsizeload_unused_4).w
 		move.b	d0,(v_dle_routine).w			; clear DynamicLevelEvents routine counter
 		move.w	(v_zone).w,d0				; get zone/act number
 		lsl.b	#6,d0					; move act number next to zone number
 		lsr.w	#4,d0					; move both into low byte
-		move.w	d0,d1
-		add.w	d0,d0
-		add.w	d1,d0					; d0 = zone/act id multiplied by 12
+		add.w	d0,d0					; d0 = zone/act id multiplied by 8
 		lea	LevelBoundaryList(pc,d0.w),a0		; load level boundaries
-		move.w	(a0)+,d0
-		move.w	d0,(v_boundary_unused).w		; unused, always 4
 		move.l	(a0)+,d0
 		move.l	d0,(v_boundary_left).w			; load left & right boundaries (2 bytes each)
 		move.l	d0,(v_boundary_left_next).w
 		move.l	(a0)+,d0
 		move.l	d0,(v_boundary_top).w			; load top & bottom boundaries (2 bytes each)
 		move.l	d0,(v_boundary_top_next).w
-		move.w	(v_boundary_left).w,d0
-		addi.w	#$240,d0
-		move.w	d0,(v_boundary_left_unused).w		; unused, v_boundary_left+$240
 		move.w	#$1010,(v_fg_x_redraw_flag).w		; set fg redraw flag
-		move.w	(a0)+,d0
-		move.w	d0,(v_camera_y_shift).w			; default camera shift = $60 (changes when Sonic looks up/down)
+		move.w	#camera_y_shift_default,(v_camera_y_shift).w ; default camera shift = $60 (changes when Sonic looks up/down)
 		bra.w	LPL_StartPos
 
 ; ---------------------------------------------------------------------------
-; Level boundary list - 6 values per act:
+; Level boundary list - 4 values per act:
 
-; v_boundary_unused, v_boundary_left, v_boundary_right
-; v_boundary_top, v_boundary_bottom, v_camera_y_shift
+; v_boundary_left, v_boundary_right, v_boundary_top, v_boundary_bottom
 ; ---------------------------------------------------------------------------
 
 LevelBoundaryList:
 		; GHZ
-		dc.w $0004, $0000, $24BF, $0000, $0300, camera_y_shift_default
-		dc.w $0004, $0000, $1EBF, $0000, $0300, camera_y_shift_default
-		dc.w $0004, $0000, $2960, $0000, $0300, camera_y_shift_default
-		dc.w $0004, $0000, $2ABF, $0000, $0300, camera_y_shift_default
+		dc.w $0000, $24BF, $0000, $0300
+		dc.w $0000, $1EBF, $0000, $0300
+		dc.w $0000, $2960, $0000, $0300
+		dc.w $0000, $2ABF, $0000, $0300
 		; LZ
-		dc.w $0004, $0000, $19BF, $0000, $0530, camera_y_shift_default
-		dc.w $0004, $0000, $10AF, $0000, $0720, camera_y_shift_default
-		dc.w $0004, $0000, $202F, $FF00, $0800, camera_y_shift_default
-		dc.w $0004, $0000, $20BF, $0000, $0720, camera_y_shift_default
+		dc.w $0000, $19BF, $0000, $0530
+		dc.w $0000, $10AF, $0000, $0720
+		dc.w $0000, $202F, $FF00, $0800
+		dc.w $0000, $20BF, $0000, $0720
 		; MZ
-		dc.w $0004, $0000, $17BF, $0000, $01D0, camera_y_shift_default
-		dc.w $0004, $0000, $17BF, $0000, $0520, camera_y_shift_default
-		dc.w $0004, $0000, $1800, $0000, $0720, camera_y_shift_default
-		dc.w $0004, $0000, $16BF, $0000, $0720, camera_y_shift_default
+		dc.w $0000, $17BF, $0000, $01D0
+		dc.w $0000, $17BF, $0000, $0520
+		dc.w $0000, $1800, $0000, $0720
+		dc.w $0000, $16BF, $0000, $0720
 		; SLZ
-		dc.w $0004, $0000, $1FBF, $0000, $0640, camera_y_shift_default
-		dc.w $0004, $0000, $1FBF, $0000, $0640, camera_y_shift_default
-		dc.w $0004, $0000, $2000, $0000, $06C0, camera_y_shift_default
-		dc.w $0004, $0000, $3EC0, $0000, $0720, camera_y_shift_default
+		dc.w $0000, $1FBF, $0000, $0640
+		dc.w $0000, $1FBF, $0000, $0640
+		dc.w $0000, $2000, $0000, $06C0
+		dc.w $0000, $3EC0, $0000, $0720
 		; SYZ
-		dc.w $0004, $0000, $22C0, $0000, $0420, camera_y_shift_default
-		dc.w $0004, $0000, $28C0, $0000, $0520, camera_y_shift_default
-		dc.w $0004, $0000, $2C00, $0000, $0620, camera_y_shift_default
-		dc.w $0004, $0000, $2EC0, $0000, $0620, camera_y_shift_default
+		dc.w $0000, $22C0, $0000, $0420
+		dc.w $0000, $28C0, $0000, $0520
+		dc.w $0000, $2C00, $0000, $0620
+		dc.w $0000, $2EC0, $0000, $0620
 		; SBZ
-		dc.w $0004, $0000, $21C0, $0000, $0720, camera_y_shift_default
-		dc.w $0004, $0000, $1E40, $FF00, $0800, camera_y_shift_default
-		dc.w $0004, $2080, $2460, $0510, $0510, camera_y_shift_default
-		dc.w $0004, $0000, $3EC0, $0000, $0720, camera_y_shift_default
-		zonewarning LevelBoundaryList,$30
+		dc.w $0000, $21C0, $0000, $0720
+		dc.w $0000, $1E40, $FF00, $0800
+		dc.w $2080, $2460, $0510, $0510
+		dc.w $0000, $3EC0, $0000, $0720
 		; Ending
-		dc.w $0004, $0000, $0500, $0110, $0110, camera_y_shift_default
-		dc.w $0004, $0000, $0DC0, $0110, $0110, camera_y_shift_default
-		dc.w $0004, $0000, $2FFF, $0000, $0320, camera_y_shift_default
-		dc.w $0004, $0000, $2FFF, $0000, $0320, camera_y_shift_default
+		dc.w $0000, $0500, $0110, $0110
+		dc.w $0000, $0DC0, $0110, $0110
+		dc.w $0000, $2FFF, $0000, $0320
+		dc.w $0000, $2FFF, $0000, $0320
 
 ; ---------------------------------------------------------------------------
 ; Sonic start position list, ending credits demo

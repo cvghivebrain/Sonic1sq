@@ -1096,11 +1096,8 @@ Sonic_JumpCollision:
 		move.w	ost_x_vel(a0),d1
 		move.w	ost_y_vel(a0),d2
 		jsr	(CalcAngle).l				; convert x/y speed to angle of direction
-		move.b	d0,(v_sonic_angle1_unused).w
 		subi.b	#$20,d0
-		move.b	d0,(v_sonic_angle2_unused).w
 		andi.b	#$C0,d0
-		move.b	d0,(v_sonic_angle3_unused).w
 		cmpi.b	#$40,d0
 		beq.w	Sonic_JumpCollision_Left		; branch if Sonic is moving left +-45 degrees
 		cmpi.b	#$80,d0
@@ -1124,7 +1121,6 @@ Sonic_JumpCollision:
 
 	@no_wallright:
 		bsr.w	Sonic_FindFloor
-		move.b	d1,(v_sonic_floor_dist_unused).w
 		tst.w	d1
 		bpl.s	@exit					; branch if Sonic hasn't hit floor
 		move.b	ost_y_vel(a0),d2

@@ -25,13 +25,7 @@ ClearScreen:
 		bne.s	@wait_for_dma2
 
 		move.w	#$8F02,(a5)				; set VDP increment 2 bytes
-		if Revision=0
-			move.l	#0,(v_fg_y_pos_vsram).w		; clear screen y position
-			move.l	#0,(v_fg_x_pos_hscroll).w	; clear screen x position (unused)
-		else
-			clr.l	(v_fg_y_pos_vsram).w
-			clr.l	(v_fg_x_pos_hscroll).w
-		endc
+		clr.l	(v_fg_y_pos_vsram).w
 
 		lea	(v_sprite_buffer).w,a1
 		moveq	#0,d0

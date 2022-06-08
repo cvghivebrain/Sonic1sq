@@ -75,7 +75,6 @@ GM_Title:
 		move.b	#0,(v_last_lamppost).w			; clear lamppost counter
 		move.w	#0,(v_debug_active).w			; disable debug item placement mode
 		move.w	#0,(v_demo_mode).w			; disable debug mode
-		move.w	#0,(v_title_unused).w			; unused variable
 		move.w	#id_GHZ_act1,(v_zone).w			; set level to GHZ act 1 (0000)
 		move.w	#0,(v_palcycle_time).w			; disable palette cycling
 		bsr.w	LevelParameterLoad			; set level boundaries and Sonic's start position

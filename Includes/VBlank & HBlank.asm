@@ -246,9 +246,6 @@ VBlank_Ending:
 
 ; $E - unused
 VBlank_0E:
-		bsr.w	ReadPad_Palette_Sprites_HScroll		; read joypad, DMA palettes, sprites and hscroll
-		addq.b	#1,(v_vblank_0e_counter).w		; increment unused counter
-		move.b	#id_VBlank_0E,(v_vblank_routine).w
 		rts	
 ; ===========================================================================
 
