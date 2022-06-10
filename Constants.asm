@@ -199,6 +199,10 @@ spring_power_yellow:		equ $A00
 combo_max:			equ 16*2			; value at which v_enemy_combo gives the max points
 combo_max_points:		equ 10000/10			; points given after 16 enemies are broken in a row
 
+; General gameplay
+emerald_count:			equ 6				; number of emeralds
+emerald_all:			equ %111111			; value stored in emerald bitfield when all 6 are collected ($3F)
+
 ; Object variables
 			rsset 0
 ost_id:			rs.b 1	; 0 ; object id

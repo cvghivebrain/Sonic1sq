@@ -1078,22 +1078,11 @@ SS_Load:
 		move.b	#0,(v_last_ss_levelid).w		; reset if higher than 6
 
 	@ss_valid:
-		cmpi.b	#6,(v_emeralds).w			; do you have all emeralds?
+		move.l	(v_emeralds).w,d1
+		cmp.l	#emerald_all,d1				; do you have all emeralds?
 		beq.s	SS_LoadData				; if yes, branch
-		moveq	#0,d1
-		move.b	(v_emeralds).w,d1
-		subq.b	#1,d1
-		blo.s	SS_LoadData
-		lea	(v_emerald_list).w,a3			; check which emeralds you have
-
-SS_ChkEmldLoop:	
-		cmp.b	(a3,d1.w),d0
-		bne.s	SS_ChkEmldRepeat
-		bra.s	SS_Load
-; ===========================================================================
-
-SS_ChkEmldRepeat:
-		dbf	d1,SS_ChkEmldLoop
+		btst	d0,d1					; check if emerald has been collected for specific level
+		bne.s	SS_Load					; branch if yes (increment level counter until uncollected emerald is found)
 
 SS_LoadData:
 		lsl.w	#2,d0

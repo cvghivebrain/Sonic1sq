@@ -74,10 +74,10 @@ SSR_Main:	; Routine 0
 		dbf	d1,@loop				; repeat 3 or 4 times
 
 		moveq	#7,d0
-		move.b	(v_emeralds).w,d1
+		move.l	(v_emeralds).w,d1
 		beq.s	@skip_emeralds				; branch if you have no chaos emeralds
 		moveq	#id_frame_ssr_chaos,d0			; use "CHAOS EMERALDS" text
-		cmpi.b	#6,d1					; do you have all chaos	emeralds?
+		cmpi.l	#emerald_all,d1				; do you have all chaos	emeralds?
 		bne.s	@skip_emeralds				; if not, branch
 		moveq	#id_frame_ssr_gotthemall,d0		; use "SONIC GOT THEM ALL" text
 		move.w	#$18,ost_x_pos(a0)

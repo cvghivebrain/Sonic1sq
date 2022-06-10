@@ -28,24 +28,26 @@ SSRC_Main:	; Routine 0
 		movea.l	a0,a1					; replace current object with 1st emerald
 		lea	(SSRC_PosData).l,a2
 		moveq	#0,d2
-		moveq	#0,d1
-		move.b	(v_emeralds).w,d1			; get number of emeralds
-		subq.b	#1,d1					; subtract 1 for number of loops
-		bcs.w	DeleteObject				; if you have 0	emeralds, branch
+		moveq	#emerald_count-1,d1
+		move.l	(v_emeralds).w,d0			; get emerald bitfield
 
 	@loop:
+		move.b	#0,ost_id(a1)				; set object to none by default
+		btst	d2,d0					; check if emerald was collected
+		beq.s	@emerald_not_got			; branch if not
+
 		move.b	#id_SSRChaos,ost_id(a1)
 		move.w	(a2)+,ost_x_pos(a1)			; set x position from list
 		move.w	#$F0,ost_y_screen(a1)			; set y position
-		lea	(v_emerald_list).w,a3			; get list of individual emeralds (numbered 0 to 5)
-		move.b	(a3,d2.w),d3				; read value of current emerald
-		move.b	d3,ost_frame(a1)			; set frame number
-		move.b	d3,ost_anim(a1)				; copy frame number (not an animation number)
-		addq.b	#1,d2					; next emerald value
+		move.b	d2,ost_frame(a1)			; set frame number
+		move.b	d2,ost_anim(a1)				; copy frame number (not an animation number)
 		addq.b	#2,ost_routine(a1)			; goto SSRC_Flash next
 		move.l	#Map_SSRC,ost_mappings(a1)
 		move.w	#tile_Nem_ResultEm+tile_hi,ost_tile(a1)
 		move.b	#render_abs,ost_render(a1)
+
+	@emerald_not_got:
+		addq.b	#1,d2					; next emerald value
 		lea	sizeof_ost(a1),a1			; next object
 		dbf	d1,@loop				; repeat for rest of emeralds
 

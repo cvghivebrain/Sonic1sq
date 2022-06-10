@@ -586,8 +586,8 @@ Ring_spill_anim_accum:	equ v_syncani_3_accumulator
 LevSel_HoldTimer:	equ v_levelselect_hold_delay
 Level_select_zone:	equ v_levelselect_item
 Sound_test_sound:	equ v_levelselect_sound
-Emerald_count:		equ v_emeralds
-Got_Emeralds_array:	equ v_emerald_list
+;Emerald_count:		equ v_emeralds
+;Got_Emeralds_array:	equ v_emerald_list
 Next_Extra_life_score:	equ v_score_next_life
 Camera_Min_Y_pos_Debug_Copy:	equ v_boundary_top_debugcopy
 Camera_Max_Y_pos_Debug_Copy:	equ v_boundary_bottom_debugcopy

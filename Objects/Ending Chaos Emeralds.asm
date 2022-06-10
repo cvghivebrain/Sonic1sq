@@ -35,7 +35,7 @@ ECha_CreateEms:
 		movea.l	a0,a1
 		moveq	#0,d3
 		moveq	#id_frame_echaos_blue,d2
-		moveq	#6-1,d1
+		moveq	#emerald_count-1,d1
 
 	ECha_LoadLoop:
 		move.b	#id_EndChaos,(a1)			; load chaos emerald object
@@ -50,7 +50,7 @@ ECha_CreateEms:
 		move.b	d2,ost_frame(a1)
 		addq.b	#1,d2
 		move.b	d3,ost_angle(a1)
-		addi.b	#$100/6,d3				; angle between each emerald
+		addi.b	#$100/emerald_count,d3			; angle between each emerald
 		lea	sizeof_ost(a1),a1
 		dbf	d1,ECha_LoadLoop			; repeat 5 more times
 

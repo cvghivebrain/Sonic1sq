@@ -315,10 +315,7 @@ LevSel_Level_SS:
 		move.w	d0,(v_rings).w				; clear rings
 		move.l	d0,(v_time).w				; clear time
 		move.l	d0,(v_score).w				; clear score
-		if Revision=0
-		else
-			move.l	#5000,(v_score_next_life).w	; extra life is awarded at 50000 points
-		endc
+		move.l	#5000,(v_score_next_life).w		; extra life is awarded at 50000 points
 		rts	
 ; ===========================================================================
 
@@ -334,14 +331,9 @@ PlayLevel:
 		move.l	d0,(v_time).w				; clear time
 		move.l	d0,(v_score).w				; clear score
 		move.b	d0,(v_last_ss_levelid).w		; clear special stage number
-		move.b	d0,(v_emeralds).w			; clear emeralds
-		move.l	d0,(v_emerald_list).w			; clear emeralds
-		move.l	d0,(v_emerald_list+4).w			; clear emeralds (also clears v_oscillating_direction)
+		move.l	d0,(v_emeralds).w			; clear emeralds
 		move.b	d0,(v_continues).w			; clear continues
-		if Revision=0
-		else
-			move.l	#5000,(v_score_next_life).w	; extra life is awarded at 50000 points
-		endc
+		move.l	#5000,(v_score_next_life).w		; extra life is awarded at 50000 points
 		play.b	1, bsr.w, cmd_Fade			; fade out music
 		rts	
 ; ===========================================================================

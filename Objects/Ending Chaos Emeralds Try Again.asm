@@ -26,12 +26,16 @@ TCha_Main:	; Routine 0
 		movea.l	a0,a1
 		moveq	#0,d2
 		moveq	#0,d3
-		moveq	#6-1,d1
-		sub.b	(v_emeralds).w,d1
+		moveq	#emerald_count-1,d1
+		move.l	(v_emeralds).w,d0			; get emerald bitfield
 
 @makeemerald:
-		move.b	#id_TryChaos,(a1)			; load emerald object
-		addq.b	#2,ost_routine(a1)			; goto TCha_Move next
+		move.b	#0,ost_id(a1)				; set object to none by default
+		btst	d2,d0					; check if emerald was collected
+		bne.s	@sonic_has_emerald			; branch if yes
+
+		move.b	#id_TryChaos,ost_id(a1)			; load emerald object
+		move.b	#id_TCha_Move,ost_routine(a1)		; goto TCha_Move next
 		move.l	#Map_ECha,ost_mappings(a1)
 		move.w	#tile_Nem_EndEm_TryAgain,ost_tile(a1)
 		move.b	#render_abs,ost_render(a1)
@@ -41,34 +45,17 @@ TCha_Main:	; Routine 0
 		move.w	#$EC,ost_y_screen(a1)
 		move.w	ost_y_screen(a1),ost_ectry_y_start(a1)
 		move.b	#$1C,ost_ectry_radius(a1)
-		lea	(v_emerald_list).w,a3
-
-	@chkemerald:
-		moveq	#0,d0
-		move.b	(v_emeralds).w,d0			; get emerald count
-		subq.w	#1,d0
-		bcs.s	@no_emeralds				; branch if 0
-
-	@chkloop:
-		cmp.b	(a3,d0.w),d2				; have you got specific emerald?
-		bne.s	@no_match				; if not, branch
-		addq.b	#1,d2					; try next emerald
-		bra.s	@chkemerald
-; ===========================================================================
-
-	@no_match:
-		dbf	d0,@chkloop				; repeat for number of emeralds you have
-
-	@no_emeralds:
-		move.b	d2,ost_frame(a1)
-		addq.b	#1,ost_frame(a1)
-		addq.b	#1,d2
 		move.b	#$80,ost_angle(a1)
+		move.b	d2,ost_frame(a1)
+		addq.b	#id_frame_echaos_blue,ost_frame(a1)	; set frame based on emerald id
 		move.b	d3,ost_anim_time(a1)
 		move.b	d3,ost_anim_delay(a1)
+
+	@sonic_has_emerald:
+		addq.b	#1,d2					; next emerald
 		addi.w	#10,d3
-		lea	sizeof_ost(a1),a1
-		dbf	d1,@makeemerald
+		lea	sizeof_ost(a1),a1			; next OST slot
+		dbf	d1,@makeemerald				; repeat for remaining emeralds
 
 TCha_Move:	; Routine 2
 		tst.w	ost_ectry_speed(a0)			; should be 0, 2 or -2 (changed by Eggman object)

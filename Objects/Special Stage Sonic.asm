@@ -511,14 +511,12 @@ SSS_ChkEmerald:
 		move.l	a1,ss_update_levelptr(a2)
 
 	@noslot:
-		cmpi.b	#6,(v_emeralds).w			; do you have all the emeralds?
+		cmpi.l	#emerald_all,(v_emeralds).w		; do you have all the emeralds?
 		beq.s	@noemerald				; if yes, branch
-		subi.b	#id_SS_Item_Em1,d4
-		moveq	#0,d0
-		move.b	(v_emeralds).w,d0
-		lea	(v_emerald_list).w,a2
-		move.b	d4,(a2,d0.w)
-		addq.b	#1,(v_emeralds).w			; add 1 to number of emeralds
+		subi.b	#id_SS_Item_Em1,d4			; get id of emerald collected
+		move.l	(v_emeralds).w,d0			; get emerald bitfield
+		bset	d4,d0					; set bit for specified emerald
+		move.l	d0,(v_emeralds).w			; update bitfield
 
 	@noemerald:
 		play.w	1, jsr, mus_Emerald			; play emerald music
