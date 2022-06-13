@@ -45,7 +45,8 @@ Jaws_Turn:	; Routine 2
 		move.w	ost_jaws_turn_master(a0),ost_jaws_turn_time(a0) ; reset turn delay time
 		neg.w	ost_x_vel(a0)				; change speed direction
 		bchg	#status_xflip_bit,ost_status(a0)	; change Jaws facing direction
-		move.b	#1,ost_anim_restart(a0)			; reset animation
+		move.b	#0,ost_anim_frame(a0)			; reset animation
+		move.b	#0,ost_anim_time(a0)
 
 	@animate:
 		lea	(Ani_Jaws).l,a1

@@ -229,7 +229,7 @@ Solid_SideAir:
 Solid_NoCollision:
 		btst	#status_pushing_bit,ost_status(a0)	; is Sonic pushing?
 		beq.s	Solid_Debug				; if not, branch
-		move.w	#id_Run,ost_anim(a1)			; use running animation
+		move.b	#id_Run,ost_sonic_anim_next(a1)		; use running animation
 
 Solid_NotPushing:
 		bclr	#status_pushing_bit,ost_status(a0)	; clear pushing flag

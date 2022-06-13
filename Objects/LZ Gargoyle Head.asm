@@ -19,6 +19,8 @@ Gar_Index:	index *,,2
 		ptr Gar_FireBall
 		ptr Gar_AniFire
 
+ost_gar_time_master:	equ $3F
+
 Gar_SpitRate:	dc.b 30						; 0 - 0.5 seconds (unused)
 		dc.b 60						; 1 - 1 second
 		dc.b 90						; 2 - 1.5 seconds
@@ -39,15 +41,15 @@ Gar_Main:	; Routine 0
 		move.b	#$10,ost_displaywidth(a0)
 		move.b	ost_subtype(a0),d0			; get object type
 		andi.w	#$F,d0					; read only the	low nybble
-		move.b	Gar_SpitRate(pc,d0.w),ost_anim_delay(a0) ; set fireball spit rate
-		move.b	ost_anim_delay(a0),ost_anim_time(a0)
+		move.b	Gar_SpitRate(pc,d0.w),ost_gar_time_master(a0) ; set fireball spit rate
+		move.b	ost_gar_time_master(a0),ost_anim_time(a0)
 		andi.b	#$F,ost_subtype(a0)
 
 Gar_MakeFire:	; Routine 2
 		subq.b	#1,ost_anim_time(a0)			; decrement timer
 		bne.s	@nofire					; if time remains, branch
 
-		move.b	ost_anim_delay(a0),ost_anim_time(a0)	; reset timer
+		move.b	ost_gar_time_master(a0),ost_anim_time(a0) ; reset timer
 		bsr.w	CheckOffScreen
 		bne.s	@nofire					; branch if off screen
 		bsr.w	FindFreeObj				; find free OST slot

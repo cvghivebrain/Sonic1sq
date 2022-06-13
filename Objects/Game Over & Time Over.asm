@@ -15,6 +15,8 @@ Over_Index:	index *,,2
 		ptr Over_ChkPLC
 		ptr Over_Move
 		ptr Over_Wait
+
+ost_over_time:	equ $3E
 ; ===========================================================================
 
 Over_ChkPLC:	; Routine 0
@@ -49,7 +51,7 @@ Over_Move:	; Routine 2
 		bra.w	DisplaySprite
 
 @next:
-		move.w	#720,ost_anim_time(a0)			; set time delay to 12 seconds
+		move.w	#720,ost_over_time(a0)			; set time delay to 12 seconds
 		addq.b	#2,ost_routine(a0)			; goto Over_Wait next
 		rts	
 ; ===========================================================================
@@ -60,9 +62,9 @@ Over_Wait:	; Routine 4
 		bne.s	Over_ChgMode				; if yes, branch
 		btst	#0,ost_frame(a0)			; is object "OVER"?
 		bne.s	Over_Display				; if yes, branch
-		tst.w	ost_anim_time(a0)			; has time delay reached zero?
+		tst.w	ost_over_time(a0)			; has time delay reached zero?
 		beq.s	Over_ChgMode				; if yes, branch
-		subq.w	#1,ost_anim_time(a0)			; subtract 1 from time delay
+		subq.w	#1,ost_over_time(a0)			; subtract 1 from time delay
 		bra.w	DisplaySprite
 ; ===========================================================================
 

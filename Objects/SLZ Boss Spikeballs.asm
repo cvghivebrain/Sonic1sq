@@ -32,6 +32,7 @@ BSpike_Index:	index *,,2
 ost_bspike_x_start:	equ $30					; seesaw x position (2 bytes)
 ost_bspike_y_start:	equ $34					; seesaw y position (2 bytes)
 ost_bspike_state:	equ $3A					; seesaw state: 0 = left raised; 2 = right raised; 1/3 = flat
+ost_bspike_time_master:	equ $3B
 ost_bspike_seesaw:	equ $3C					; address of OST of seesaw (4 bytes)
 ; ===========================================================================
 
@@ -81,8 +82,8 @@ BSpike_Fall:	; Routine 2
 
 	@no_xflip:
 		move.w	#$F0,ost_subtype(a0)
-		move.b	#10,ost_anim_delay(a0)			; set frame duration to 10 frames
-		move.b	ost_anim_delay(a0),ost_anim_time(a0)
+		move.b	#10,ost_bspike_time_master(a0)		; set frame duration to 10 frames
+		move.b	ost_bspike_time_master(a0),ost_anim_time(a0)
 		bra.w	BSpike_Update
 ; ===========================================================================
 
@@ -156,18 +157,18 @@ BSpike_Bounce:	; Routine 4
 BSpike_Animate:
 		cmpi.w	#$78,ost_subtype(a0)			; subtype decrements like a timer
 		bne.s	@not_fast				; branch if not at specified value
-		move.b	#5,ost_anim_delay(a0)			; use faster animation speed
+		move.b	#5,ost_bspike_time_master(a0)		; use faster animation speed
 
 	@not_fast:
 		cmpi.w	#$3C,ost_subtype(a0)
 		bne.s	@not_faster
-		move.b	#2,ost_anim_delay(a0)			; use fastest animation speed
+		move.b	#2,ost_bspike_time_master(a0)		; use fastest animation speed
 
 	@not_faster:
 		subq.b	#1,ost_anim_time(a0)			; decrement animation timer
 		bgt.s	@wait					; branch if time remains
 		bchg	#0,ost_frame(a0)			; change frame
-		move.b	ost_anim_delay(a0),ost_anim_time(a0)
+		move.b	ost_bspike_time_master(a0),ost_anim_time(a0)
 
 	@wait:
 		rts	

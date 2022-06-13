@@ -75,7 +75,7 @@ Crab_WaitFire:
 		move.w	#$80,ost_x_vel(a0)			; move Crabmeat to the right
 		bsr.w	Crab_SetAni				; select animation based on floor angle
 		addq.b	#id_ani_crab_walk,d0			; use walking animation
-		move.b	d0,ost_anim(a0)
+		bsr.w	NewAnim
 		bchg	#status_xflip_bit,ost_status(a0)
 		bne.s	@noflip
 		neg.w	ost_x_vel(a0)				; change direction
@@ -138,8 +138,7 @@ Crab_Walk:
 		move.b	d3,ost_angle(a0)			; update angle
 		bsr.w	Crab_SetAni				; set animation based on angle
 		addq.b	#id_ani_crab_walk,d0			; use walking animation
-		move.b	d0,ost_anim(a0)
-		rts	
+		bra.w	NewAnim
 ; ===========================================================================
 
 @stop:
@@ -147,8 +146,7 @@ Crab_Walk:
 		move.w	#59,ost_crab_wait_time(a0)
 		move.w	#0,ost_x_vel(a0)
 		bsr.w	Crab_SetAni				; set animation based on angle
-		move.b	d0,ost_anim(a0)				; use standing animation
-		rts
+		bra.w	NewAnim
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	set the	correct	animation for a	Crabmeat
@@ -181,8 +179,7 @@ Crab_SetAni:
 		moveq	#id_ani_crab_standslope,d0		; use xflip animation
 
 	@nearly_flat2:
-		rts	
-; End of function Crab_SetAni
+		rts
 
 ; ===========================================================================
 

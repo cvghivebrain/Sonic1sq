@@ -16,6 +16,7 @@ TCha_Index:	index *,,2
 		ptr TCha_Main
 		ptr TCha_Move
 
+ost_ectry_time_master:	equ $37
 ost_ectry_x_start:	equ $38					; x-axis centre of emerald circle (2 bytes)
 ost_ectry_y_start:	equ $3A					; y-axis centre of emerald circle (2 bytes)
 ost_ectry_radius:	equ $3C					; radius
@@ -49,7 +50,7 @@ TCha_Main:	; Routine 0
 		move.b	d2,ost_frame(a1)
 		addq.b	#id_frame_echaos_blue,ost_frame(a1)	; set frame based on emerald id
 		move.b	d3,ost_anim_time(a1)
-		move.b	d3,ost_anim_delay(a1)
+		move.b	d3,ost_ectry_time_master(a1)
 
 	@sonic_has_emerald:
 		addq.b	#1,d2					; next emerald
@@ -77,7 +78,7 @@ TCha_Move:	; Routine 2
 
 	@angle_0:
 		clr.w	ost_ectry_speed(a0)
-		move.b	ost_anim_delay(a0),ost_anim_time(a0)
+		move.b	ost_ectry_time_master(a0),ost_anim_time(a0)
 
 	@angle_not_80:
 		jsr	(CalcSine).l				; convert angle (d0) to sine (d0) and cosine (d1)

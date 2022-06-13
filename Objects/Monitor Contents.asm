@@ -45,7 +45,7 @@ Pow_Move:	; Routine 2
 
 Pow_Checks:
 		addq.b	#2,ost_routine(a0)			; goto Pow_Delete next
-		move.w	#29,ost_anim_time(a0)			; display icon for half a second
+		move.b	#29,ost_anim_time(a0)			; display icon for half a second
 
 Pow_ChkEggman:
 		move.b	ost_anim(a0),d0
@@ -141,6 +141,6 @@ Pow_ChkEnd:
 ; ===========================================================================
 
 Pow_Delete:	; Routine 4
-		subq.w	#1,ost_anim_time(a0)
+		subq.b	#1,ost_anim_time(a0)
 		bmi.w	DeleteObject				; delete after half a second
 		rts	

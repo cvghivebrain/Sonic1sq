@@ -50,7 +50,9 @@ ESon_MakeEmeralds:
 		subq.w	#1,ost_esonic_wait_time(a0)		; decrement timer
 		bne.s	@wait					; branch if time remains
 		addq.b	#2,ost_routine2(a0)			; goto ESon_Animate next
-		move.w	#id_ani_esonic_confused,ost_anim(a0)
+		move.b	#id_ani_esonic_hold,ost_anim(a0)
+		move.b	#0,ost_anim_frame(a0)			; reset animation
+		move.b	#0,ost_anim_time(a0)
 		move.b	#id_EndChaos,(v_ost_end_emeralds).w	; load chaos emeralds objects
 
 	@wait:

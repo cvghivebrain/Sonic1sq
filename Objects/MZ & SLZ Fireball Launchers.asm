@@ -17,6 +17,8 @@ FireM_Index:	index *,,2
 		ptr FireM_Main
 		ptr FireM_MakeFire
 
+ost_firem_time_master:	equ $3F
+
 ; Delay between launching fireballs
 FireM_Rates:	dc.b 30						; 0x - 0.5 seconds (unused)
 		dc.b 60						; 1x - 1 seconds (SLZ2)
@@ -31,14 +33,14 @@ FireM_Main:	; Routine 0
 		move.b	ost_subtype(a0),d0
 		lsr.w	#4,d0
 		andi.w	#$F,d0					; get high nybble of subtype (rate)
-		move.b	FireM_Rates(pc,d0.w),ost_anim_delay(a0)
-		move.b	ost_anim_delay(a0),ost_anim_time(a0)	; set time delay for fireballs
+		move.b	FireM_Rates(pc,d0.w),ost_firem_time_master(a0)
+		move.b	ost_firem_time_master(a0),ost_anim_time(a0) ; set time delay for fireballs
 		andi.b	#$F,ost_subtype(a0)			; get low nybble of subtype (speed/direction)
 
 FireM_MakeFire:	; Routine 2
 		subq.b	#1,ost_anim_time(a0)			; decrement timer
 		bne.s	@wait					; if time remains, branch
-		move.b	ost_anim_delay(a0),ost_anim_time(a0)	; reset time delay
+		move.b	ost_firem_time_master(a0),ost_anim_time(a0) ; reset time delay
 		bsr.w	CheckOffScreen				; is object on-screen?
 		bne.s	@wait					; if not, branch
 		bsr.w	FindFreeObj				; find free OST slot

@@ -59,6 +59,7 @@ Sign_Spin:	; Routine 4
 		bpl.s	@chksparkle				; if time remains, branch
 		move.w	#60,ost_sign_spin_time(a0)		; set spin cycle time to 1 second
 		addq.b	#1,ost_anim(a0)				; next spin cycle
+		bclr	#7,ost_anim(a0)				; restart animation
 		cmpi.b	#id_ani_sign_sonic,ost_anim(a0)		; have 3 spin cycles completed?
 		bne.s	@chksparkle				; if not, branch
 		addq.b	#2,ost_routine(a0)			; goto Sign_SonicRun next

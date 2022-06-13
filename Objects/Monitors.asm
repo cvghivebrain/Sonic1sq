@@ -132,7 +132,7 @@ Mon_Solid_Side:
 Mon_Solid_ChkPush:
 		btst	#status_pushing_bit,ost_status(a0)	; is monitor being pushed?
 		beq.s	Mon_Animate				; if not, branch
-		move.w	#id_Run,ost_anim(a1)
+		move.b	#id_Run,ost_sonic_anim_next(a1)
 
 Mon_Solid_ClearPush:
 		bclr	#status_pushing_bit,ost_status(a0)

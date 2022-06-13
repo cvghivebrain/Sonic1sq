@@ -33,6 +33,7 @@ Pri_Var:	dc.b id_Pri_Body, $20, 4, id_frame_prison_capsule ; 0 - body
 		dc.b id_Pri_Panel, $10, 3, id_frame_prison_unused_panel ; 3 - unused
 
 ost_prison_y_start:	equ $30					; original y position (2 bytes)
+ost_prison_time:	equ $3E
 ; ===========================================================================
 
 Pri_Main:	; Routine 0
@@ -94,7 +95,7 @@ Pri_Switch:	; Routine 4
 
 		addq.w	#8,ost_y_pos(a0)			; move switch down 8px
 		move.b	#id_Pri_Explosion,ost_routine(a0)	; goto Pri_Explosion next
-		move.w	#60,ost_anim_time(a0)			; set time for explosions to 1 sec
+		move.w	#60,ost_prison_time(a0)			; set time for explosions to 1 sec
 		clr.b	(f_hud_time_update).w			; stop time counter
 		clr.b	(f_boss_boundary).w			; lock screen position
 		move.b	#1,(f_lock_controls).w			; lock controls
@@ -130,7 +131,7 @@ Pri_Explosion:	; Routine 6, 8, $A
 		add.w	d0,ost_y_pos(a1)
 
 	@noexplosion:
-		subq.w	#1,ost_anim_time(a0)			; decrement timer
+		subq.w	#1,ost_prison_time(a0)			; decrement timer
 		beq.s	@makeanimal				; branch if 0
 		rts	
 ; ===========================================================================
@@ -139,7 +140,7 @@ Pri_Explosion:	; Routine 6, 8, $A
 		move.b	#2,(v_boss_status).w			; set flag for prison open
 		move.b	#id_Pri_Animals,ost_routine(a0)		; goto Pri_Animals next
 		move.b	#id_frame_prison_blank,ost_frame(a0)	; make switch invisible
-		move.w	#150,ost_anim_time(a0)			; set time for additional animals to load to 2.5 secs
+		move.w	#150,ost_prison_time(a0)			; set time for additional animals to load to 2.5 secs
 		addi.w	#$20,ost_y_pos(a0)
 		moveq	#8-1,d6					; number of animals to load
 		move.w	#$9A,d5					; animal jumping queue start
@@ -183,10 +184,10 @@ Pri_Animals:	; Routine $C
 		move.w	#$C,ost_animal_prison_num(a1)		; set time for animal to jump out
 
 	@noanimal:
-		subq.w	#1,ost_anim_time(a0)			; decrement timer
+		subq.w	#1,ost_prison_time(a0)			; decrement timer
 		bne.s	@wait					; branch if time remains
 		addq.b	#2,ost_routine(a0)			; goto Pri_EndAct next
-		move.w	#180,ost_anim_time(a0)			; this does nothing
+		move.w	#180,ost_prison_time(a0)			; this does nothing
 
 	@wait:
 		rts	

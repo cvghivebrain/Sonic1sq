@@ -102,7 +102,7 @@ Disc_Inertia:
 
 	@jumping:
 		bclr	#status_pushing_bit,ost_status(a1)
-		move.b	#id_Run,ost_anim_restart(a1)		; use running animation
+		move.b	#id_Run,ost_sonic_anim_next(a1)		; use running animation
 		move.b	#1,ost_sonic_sbz_disc(a1)		; keep Sonic stuck to disc until he jumps
 
 	@skip_init:

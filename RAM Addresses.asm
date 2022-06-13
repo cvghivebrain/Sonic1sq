@@ -324,8 +324,7 @@ f_water_pal_full_lampcopy:	rs.b 1 ; $FFFFFE53 ; lamppost copy of f_water_pal_ful
 				rsblockend lamppost
 v_ring_reward_lampcopy:		rs.b 1 ; $FFFFFE54 ; lamppost copy of v_ring_reward
 
-v_emeralds:			rs.b 1 ; $FFFFFE57 ; number of chaos emeralds
-v_emerald_list:			rs.w 3 ; $FFFFFE58 ; which individual emeralds you have, 1 byte per emerald numbered 0 to 5 (6 bytes)
+v_emeralds:			rs.l 1 ; $FFFFFE57 ; number of chaos emeralds
 v_oscillating_direction:	rs.w 1 ; $FFFFFE5E ; bitfield for the direction values in the table below are moving - 0 = up; 1 = down
 
 				rsblock synctables ; $FE60-$FEFF cleared by GM_Special

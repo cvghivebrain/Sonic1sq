@@ -24,6 +24,7 @@ Has_Index:	index *,,2
 
 ost_has_x_stop:		equ $30					; on screen x position (2 bytes)
 ost_has_x_start:	equ $32					; start & finish x position (2 bytes)
+ost_has_time:		equ $3E
 
 include_Has_Config:	macro
 		; x pos start, x pos stop, y pos
@@ -117,10 +118,10 @@ Has_Move:	; Routine 2
 		bne.s	@chk_visible				; if not, branch
 
 		addq.b	#2,ost_routine(a0)			; goto Has_Wait next, and then Has_Bonus
-		move.w	#180,ost_anim_time(a0)			; set time delay to 3 seconds
+		move.w	#180,ost_has_time(a0)			; set time delay to 3 seconds
 
 Has_Wait:	; Routine 4, 8, $C
-		subq.w	#1,ost_anim_time(a0)			; decrement timer
+		subq.w	#1,ost_has_time(a0)			; decrement timer
 		bne.s	@wait					; branch if time remains
 		addq.b	#2,ost_routine(a0)			; goto Has_Bonus/Has_NextLevel/Has_MoveBack next
 
@@ -153,7 +154,7 @@ Has_Bonus:	; Routine 6
 		addq.b	#4,ost_routine(a0)			; goto Has_Wait next, and then Has_MoveBack
 
 	@not_sbz2:
-		move.w	#180,ost_anim_time(a0)			; set time delay to 3 seconds
+		move.w	#180,ost_has_time(a0)			; set time delay to 3 seconds
 
 @exit:
 		rts	

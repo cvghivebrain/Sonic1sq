@@ -72,7 +72,7 @@ Sonic_Control:	; Routine 2
 		beq.s	@no_tunnel				; if not, branch
 		tst.b	ost_anim(a0)				; is Sonic using walking animation?
 		bne.s	@no_tunnel				; if not, branch
-		move.b	ost_anim_restart(a0),ost_anim(a0)	; update animation
+		move.b	ost_sonic_anim_next(a0),ost_anim(a0)	; update animation
 
 	@no_tunnel:
 		bsr.w	Sonic_Animate
@@ -486,7 +486,7 @@ Sonic_MoveLeft:
 		bset	#status_xflip_bit,ost_status(a0)	; make Sonic face left
 		bne.s	@alreadyleft				; branch if already facing left
 		bclr	#status_pushing_bit,ost_status(a0)
-		move.b	#id_Run,ost_anim_restart(a0)		; restart animation
+		move.b	#id_Run,ost_sonic_anim_next(a0)		; restart animation
 
 	@alreadyleft:
 		sub.w	d5,d0					; d0 = inertia minus acceleration
@@ -532,7 +532,7 @@ Sonic_MoveRight:
 		bclr	#status_xflip_bit,ost_status(a0)	; make Sonic face right
 		beq.s	@alreadyright				; branch if already facing right
 		bclr	#status_pushing_bit,ost_status(a0)
-		move.b	#id_Run,ost_anim_restart(a0)		; restart animation
+		move.b	#id_Run,ost_sonic_anim_next(a0)		; restart animation
 
 	@alreadyright:
 		add.w	d5,d0					; d0 = inertia plus acceleration
@@ -1515,9 +1515,9 @@ Sonic_Animate:
 		lea	(Ani_Sonic).l,a1
 		moveq	#0,d0
 		move.b	ost_anim(a0),d0
-		cmp.b	ost_anim_restart(a0),d0			; is animation set to restart?
+		cmp.b	ost_sonic_anim_next(a0),d0		; is animation set to restart?
 		beq.s	@do					; if not, branch
-		move.b	d0,ost_anim_restart(a0)			; set to "no restart"
+		move.b	d0,ost_sonic_anim_next(a0)		; set to "no restart"
 		move.b	#0,ost_anim_frame(a0)			; reset animation
 		move.b	#0,ost_anim_time(a0)			; reset frame duration
 
@@ -1838,7 +1838,7 @@ Sonic_AnglePos:
 		bne.s	@on_disc				; branch if Sonic is on a SBZ disc
 		bset	#status_air_bit,ost_status(a0)
 		bclr	#status_pushing_bit,ost_status(a0)
-		move.b	#id_Run,ost_anim_restart(a0)
+		move.b	#id_Run,ost_sonic_anim_next(a0)
 		rts	
 ; ===========================================================================
 
@@ -1984,7 +1984,7 @@ Sonic_WalkVertR:
 		bne.s	@on_disc				; branch if Sonic is on a SBZ disc
 		bset	#status_air_bit,ost_status(a0)
 		bclr	#status_pushing_bit,ost_status(a0)
-		move.b	#id_Run,ost_anim_restart(a0)
+		move.b	#id_Run,ost_sonic_anim_next(a0)
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -2051,7 +2051,7 @@ Sonic_WalkCeiling:
 		bne.s	@on_disc				; branch if Sonic is on a SBZ disc
 		bset	#status_air_bit,ost_status(a0)
 		bclr	#status_pushing_bit,ost_status(a0)
-		move.b	#id_Run,ost_anim_restart(a0)
+		move.b	#id_Run,ost_sonic_anim_next(a0)
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -2118,7 +2118,7 @@ Sonic_WalkVertL:
 		bne.s	@on_disc				; branch if Sonic is on a SBZ disc
 		bset	#status_air_bit,ost_status(a0)
 		bclr	#status_pushing_bit,ost_status(a0)
-		move.b	#id_Run,ost_anim_restart(a0)
+		move.b	#id_Run,ost_sonic_anim_next(a0)
 		rts
 
 		endm

@@ -19,6 +19,7 @@ Card_Index:	index *,,2
 
 ost_card_x_stop:	equ $30					; on screen x position (2 bytes)
 ost_card_x_start:	equ $32					; start & finish x position (2 bytes)
+ost_card_time:		equ $3E
 
 include_Card_Data:	macro
 Card_ItemData:	; y position, routine number, frame number
@@ -111,7 +112,7 @@ Card_Main:	; Routine 0
 		move.b	#$78,ost_displaywidth(a1)
 		move.b	#render_abs,ost_render(a1)
 		move.b	#0,ost_priority(a1)
-		move.w	#60,ost_anim_time(a1)			; set time delay to 1 second
+		move.w	#60,ost_card_time(a1)			; set time delay to 1 second
 		lea	sizeof_ost(a1),a1			; next object
 		dbf	d1,@loop				; repeat sequence 3 times
 
@@ -140,9 +141,9 @@ Card_Move:	; Routine 2
 
 Card_Wait:	; Routine 4/6
 		; title cards are instructed to jump here by GM_Level
-		tst.w	ost_anim_time(a0)			; has timer hit 0?
+		tst.w	ost_card_time(a0)			; has timer hit 0?
 		beq.s	Card_MoveBack				; if yes, branch
-		subq.w	#1,ost_anim_time(a0)			; decrement timer
+		subq.w	#1,ost_card_time(a0)			; decrement timer
 		bra.w	DisplaySprite
 ; ===========================================================================
 

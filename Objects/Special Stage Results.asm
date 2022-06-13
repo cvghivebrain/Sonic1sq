@@ -25,6 +25,7 @@ SSR_Index:	index *,,2
 		ptr SSR_ContAni
 
 ost_ssr_x_stop:		equ $30					; on screen x position (2 bytes)
+ost_ssr_time:		equ $3E
 
 include_SSR_Config:	macro
 		; x pos start, x pos stop, y pos
@@ -114,11 +115,11 @@ SSR_Move:	; Routine 2
 		bne.s	@chk_visible				; if not, branch
 
 		addq.b	#2,ost_routine(a0)			; goto SSR_Wait next, and then SSR_RingBonus
-		move.w	#180,ost_anim_time(a0)			; set time delay to 3 seconds
+		move.w	#180,ost_ssr_time(a0)			; set time delay to 3 seconds
 		move.b	#id_SSRChaos,(v_ost_ssres_emeralds).w	; load chaos emerald object
 
 SSR_Wait:	; Routine 4, 8, $C, $10
-		subq.w	#1,ost_anim_time(a0)			; decrement timer
+		subq.w	#1,ost_ssr_time(a0)			; decrement timer
 		bne.s	@wait					; branch if time remains
 		addq.b	#2,ost_routine(a0)			; goto SSR_RingBonus/SSR_Exit/SSR_Continue next
 
@@ -144,10 +145,10 @@ SSR_RingBonus:	; Routine 6
 @finish_bonus:
 		play.w	1, jsr, sfx_Register			; play "ker-ching" sound
 		addq.b	#2,ost_routine(a0)			; goto SSR_Wait next, and then SSR_Exit
-		move.w	#180,ost_anim_time(a0)			; set time delay to 3 seconds
+		move.w	#180,ost_ssr_time(a0)			; set time delay to 3 seconds
 		cmpi.w	#50,(v_rings).w				; do you have at least 50 rings?
 		bcs.s	@exit					; if not, branch
-		move.w	#60,ost_anim_time(a0)			; set time delay to 1 second
+		move.w	#60,ost_ssr_time(a0)			; set time delay to 1 second
 		addq.b	#4,ost_routine(a0)			; goto SSR_Continue next
 
 @exit:
@@ -164,7 +165,7 @@ SSR_Continue:	; Routine $E
 		move.b	#id_SSR_ContAni,(v_ost_ssresult5+ost_routine).w ; "CONTINUE" object goto SSR_ContAni next
 		play.w	1, jsr, sfx_Continue			; play continues jingle
 		addq.b	#2,ost_routine(a0)			; goto SSR_Wait next, and then SSR_Exit
-		move.w	#360,ost_anim_time(a0)			; set time delay to 6 seconds
+		move.w	#360,ost_ssr_time(a0)			; set time delay to 6 seconds
 		bra.w	DisplaySprite
 ; ===========================================================================
 

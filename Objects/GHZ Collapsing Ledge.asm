@@ -90,7 +90,7 @@ Ledge_WaitFall:	; Routine 6
 		bne.s	@exit					; if not, branch
 		bclr	#status_platform_bit,ost_status(a1)	; clear platform status
 		bclr	#status_pushing_bit,ost_status(a1)
-		move.b	#id_Run,ost_anim_restart(a1)
+		move.b	#id_Run,ost_sonic_anim_next(a1)
 
 	@platform_clear:
 		move.b	#0,ost_ledge_flag(a0)

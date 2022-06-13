@@ -15,9 +15,9 @@ obActWid:		equ ost_displaywidth
 obFrame:		equ ost_frame
 obAniFrame:		equ ost_anim_frame
 obAnim:			equ ost_anim
-obNextAni:		equ ost_anim_restart
+;obNextAni:		equ ost_anim_restart
 obTimeFrame:		equ ost_anim_time
-obDelayAni:		equ ost_anim_delay
+;obDelayAni:		equ ost_anim_delay
 obColType:		equ ost_col_type
 obColProp:		equ ost_col_property
 obStatus:		equ ost_status

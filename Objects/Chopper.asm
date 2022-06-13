@@ -35,24 +35,25 @@ Chop_ChgSpeed:	; Routine 2
 		bsr.w	AnimateSprite
 		bsr.w	SpeedToPos
 		addi.w	#$18,ost_y_vel(a0)			; reduce speed
-		move.w	ost_chopper_y_start(a0),d0
-		cmp.w	ost_y_pos(a0),d0			; has Chopper returned to its original position?
+		move.w	ost_chopper_y_start(a0),d1
+		cmp.w	ost_y_pos(a0),d1			; has Chopper returned to its original position?
 		bcc.s	@chganimation				; if not, branch
-		move.w	d0,ost_y_pos(a0)
+		move.w	d1,ost_y_pos(a0)
 		move.w	#-$700,ost_y_vel(a0)			; set vertical speed
 
 	@chganimation:
-		move.b	#id_ani_chopper_fast,ost_anim(a0)	; use fast animation
-		subi.w	#$C0,d0
-		cmp.w	ost_y_pos(a0),d0
-		bcc.s	@nochg
-		move.b	#id_ani_chopper_slow,ost_anim(a0)	; use slow animation
+		moveq	#0,d0
+		move.b	#id_ani_chopper_fast,d0			; use fast animation
+		subi.w	#$C0,d1
+		cmp.w	ost_y_pos(a0),d1
+		bcc.s	@chkanim
+		move.b	#id_ani_chopper_slow,d0			; use slow animation
 		tst.w	ost_y_vel(a0)				; is Chopper at	its highest point?
-		bmi.s	@nochg					; if not, branch
-		move.b	#id_ani_chopper_still,ost_anim(a0)	; use stationary animation
+		bmi.s	@chkanim				; if not, branch
+		move.b	#id_ani_chopper_still,d0		; use stationary animation
 
-	@nochg:
-		rts	
+	@chkanim:
+		bra.w	NewAnim					; check if animation has changed
 
 ; ---------------------------------------------------------------------------
 ; Animation script
