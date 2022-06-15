@@ -19,7 +19,7 @@ Plasma_Index:	index *,,2
 		ptr Plasma_Finish
 		ptr Plasma_Balls
 
-ost_plasma_flag:	equ $29					; flag set when firing
+ost_plasma_flag:	equ ost_subtype+1			; flag set when firing
 ost_plasma_x_target:	equ $30					; x position where plasma ball stops (2 bytes)
 ost_plasma_count_top:	equ $32					; number of plasma balls moving across top (2 bytes)
 ost_plasma_parent:	equ $34					; address of OST of parent object (4 bytes)

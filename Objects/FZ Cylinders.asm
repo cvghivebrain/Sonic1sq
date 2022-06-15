@@ -25,7 +25,7 @@ Cyl_PosData:	dc.w $24D0, $620				; bottom left
 		dc.w $2490, $4C0				; top left
 		dc.w $2510, $4C0				; top right
 
-ost_cylinder_flag:	equ $29					; flag set when extending
+ost_cylinder_flag:	equ ost_subtype+1			; flag set when extending
 ost_cylinder_eggman:	equ $30					; -1 if cylinder contains Eggman (2 bytes)
 ost_cylinder_parent:	equ $34					; address of OST of parent object (4 bytes)
 ost_cylinder_y_start:	equ $38					; original y position (4 bytes; low word always 0)

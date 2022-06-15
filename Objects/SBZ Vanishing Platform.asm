@@ -75,6 +75,7 @@ VanP_StoodOn:	; Routine 4
 
 	@isvanishing:
 		bchg	#0,ost_anim(a0)				; switch between vanishing/appearing animations
+		bclr	#7,ost_anim(a0)
 
 	@wait:
 		lea	(Ani_Van).l,a1

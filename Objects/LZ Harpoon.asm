@@ -52,6 +52,7 @@ Harp_Wait:	; Routine 4
 		move.w	#60,ost_harp_time(a0)			; reset timer
 		subq.b	#2,ost_routine(a0)			; goto Harp_Move next
 		bchg	#0,ost_anim(a0)				; reverse animation
+		bclr	#7,ost_anim(a0)
 
 	@chkdel:
 		bra.w	DespawnObject

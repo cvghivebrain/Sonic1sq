@@ -2,7 +2,7 @@
 ; Object 2E - contents of monitors
 
 ; spawned by:
-;	Monitor - animation (used instead of subtype) inherited from parent
+;	Monitor - subtype inherited from parent
 ; ---------------------------------------------------------------------------
 
 PowerUp:
@@ -25,8 +25,9 @@ Pow_Main:	; Routine 0
 		move.b	#3,ost_priority(a0)
 		move.b	#8,ost_displaywidth(a0)
 		move.w	#-$300,ost_y_vel(a0)
+		andi.b	#$7F,ost_subtype(a0)
 		moveq	#0,d0
-		move.b	ost_anim(a0),d0				; get subtype
+		move.b	ost_subtype(a0),d0			; get subtype
 		addq.b	#2,d0
 		move.b	d0,ost_frame(a0)			; use correct frame
 		movea.l	#Map_Monitor,a1
@@ -48,7 +49,7 @@ Pow_Checks:
 		move.b	#29,ost_anim_time(a0)			; display icon for half a second
 
 Pow_ChkEggman:
-		move.b	ost_anim(a0),d0
+		move.b	ost_subtype(a0),d0
 		cmpi.b	#id_ani_monitor_eggman,d0		; does monitor contain Eggman?
 		bne.s	Pow_ChkSonic
 		rts						; Eggman monitor does nothing

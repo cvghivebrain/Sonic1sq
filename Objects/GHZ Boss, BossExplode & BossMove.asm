@@ -326,18 +326,18 @@ BGHZ_Escape:
 ; ===========================================================================
 
 BGHZ_FaceMain:	; Routine 4
-		moveq	#0,d0
+		moveq	#0,d2
 		moveq	#id_ani_boss_face1,d1
 		movea.l	ost_bghz_parent(a0),a1			; get address of OST of parent object
-		move.b	ost_routine2(a1),d0
-		subq.b	#4,d0					; is ship on BGHZ_ShipMove?
+		move.b	ost_routine2(a1),d2
+		subq.b	#4,d2					; is ship on BGHZ_ShipMove?
 		bne.s	@chk_recover				; if not, branch
 		cmpi.w	#$2A00,ost_bghz_parent_x_pos(a1)	; is ship in middle while ball spawns?
 		bne.s	@chk_hit				; if not, branch
 		moveq	#id_ani_boss_laugh,d1			; laugh while ball spawns
 
 @chk_recover:
-		subq.b	#6,d0					; is ship on BGHZ_Recover?
+		subq.b	#6,d2					; is ship on BGHZ_Recover?
 		bmi.s	@chk_hit				; if not, branch
 		moveq	#id_ani_boss_defeat,d1
 		bra.s	@update
@@ -356,10 +356,12 @@ BGHZ_FaceMain:	; Routine 4
 		moveq	#id_ani_boss_laugh,d1			; use laughing animation
 
 @update:
-		move.b	d1,ost_anim(a0)				; set animation
-		subq.b	#2,d0					; is ship on BGHZ_Escape?
+		move.b	d1,d0					; set animation
+		jsr	NewAnim
+		subq.b	#2,d2					; is ship on BGHZ_Escape?
 		bne.s	@display				; if not, branch
-		move.b	#id_ani_boss_panic,ost_anim(a0)		; use sweating animation
+		move.b	#id_ani_boss_panic,d0			; use sweating animation
+		jsr	NewAnim
 		tst.b	ost_render(a0)				; is object on-screen?
 		bpl.s	@delete					; if not, branch
 
@@ -372,22 +374,28 @@ BGHZ_FaceMain:	; Routine 4
 ; ===========================================================================
 
 BGHZ_FlameMain:	; Routine 6
-		move.b	#id_ani_boss_blank,ost_anim(a0)
 		movea.l	ost_bghz_parent(a0),a1			; get address of OST of parent object
 		cmpi.b	#id_BGHZ_Escape,ost_routine2(a1)	; is ship on BGHZ_Escape?
 		bne.s	@chk_moving				; if not, branch
-		move.b	#id_ani_boss_bigflame,ost_anim(a0)	; use big flame animation
+		move.b	#id_ani_boss_bigflame,d0		; use big flame animation
+		jsr	NewAnim
 		tst.b	ost_render(a0)				; is object on-screen?
 		bpl.s	@delete					; if not, branch
 		bra.s	@display
 ; ===========================================================================
 
 @chk_moving:
-		move.w	ost_x_vel(a1),d0
-		beq.s	@display				; branch if ship isn't moving
-		move.b	#id_ani_boss_flame1,ost_anim(a0)
+		tst.w	ost_x_vel(a1)
+		beq.s	@not_moving				; branch if ship isn't moving
+		move.b	#id_ani_boss_flame1,d0
+		jsr	NewAnim
 
 @display:
+		bra.s	BGHZ_Display
+
+@not_moving:
+		move.b	#id_ani_boss_blank,d0
+		jsr	NewAnim
 		bra.s	BGHZ_Display
 ; ===========================================================================
 

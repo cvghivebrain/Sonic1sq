@@ -156,7 +156,7 @@ Mon_BreakOpen:	; Routine 4
 		move.b	#id_PowerUp,ost_id(a1)			; load monitor contents object
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
-		move.b	ost_anim(a0),ost_anim(a1)		; inherit animation id
+		move.b	ost_anim(a0),ost_subtype(a1)		; inherit animation id
 
 Mon_Explode:
 		bsr.w	FindFreeObj				; find free OST slot

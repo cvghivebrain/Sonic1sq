@@ -26,30 +26,36 @@ ADoor_Main:	; Routine 0
 
 ADoor_OpenShut:	; Routine 2
 		move.w	#$40,d1					; set range for door detection
-		clr.b	ost_anim(a0)				; use "closing"	animation by default
 		move.w	(v_ost_player+ost_x_pos).w,d0
 		add.w	d1,d0					; d0 = 64px right of Sonic
 		cmp.w	ost_x_pos(a0),d0			; is Sonic > 64px left of door?
-		bcs.s	ADoor_Animate				; if yes, branch
+		bcs.s	ADoor_Close				; if yes, branch
 		sub.w	d1,d0
 		sub.w	d1,d0					; d0 = 64px left of Sonic
 		cmp.w	ost_x_pos(a0),d0			; is Sonic > 64px right of door?
-		bcc.s	ADoor_Animate				; if yes, branch
+		bcc.s	ADoor_Close				; if yes, branch
 
 		add.w	d1,d0					; d0 = Sonic's x position
 		cmp.w	ost_x_pos(a0),d0			; is Sonic left of the door?
-		bcc.s	@sonic_is_left				; if yes, branch
+		bcc.s	ADoor_SonicLeft				; if yes, branch
 		btst	#status_xflip_bit,ost_status(a0)
 		bne.s	ADoor_Animate
 		bra.s	ADoor_Open
+
+ADoor_Close:
+		move.b	#id_ani_autodoor_close,d0		; use "closing"	animation
+		bsr.w	NewAnim
+		bra.s	ADoor_Animate
+		
 ; ===========================================================================
 
-@sonic_is_left:
+ADoor_SonicLeft:
 		btst	#status_xflip_bit,ost_status(a0)
 		beq.s	ADoor_Animate
 
 ADoor_Open:
-		move.b	#id_ani_autodoor_open,ost_anim(a0)	; use "opening" animation if Sonic is on active side of door
+		move.b	#id_ani_autodoor_open,d0		; use "opening" animation if Sonic is on active side of door
+		bsr.w	NewAnim		
 
 ADoor_Animate:
 		lea	(Ani_ADoor).l,a1

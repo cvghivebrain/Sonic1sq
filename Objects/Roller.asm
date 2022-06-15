@@ -81,7 +81,8 @@ Roll_RollChk:
 		sub.w	ost_x_pos(a0),d0			; is Sonic > 256px left of the roller?
 		bcs.s	@exit					; if not, branch
 		addq.b	#id_Roll_ChkJump,ost_routine2(a0)	; goto Roll_ChkJump next
-		move.b	#id_ani_roll_roll,ost_anim(a0)		; use roller's rolling animation
+		move.b	#id_ani_roll_roll,d0			; use roller's rolling animation
+		bsr.w	NewAnim
 		move.w	#$700,ost_x_vel(a0)			; move roller to the right
 		move.b	#id_col_14x14+id_col_hurt,ost_col_type(a0) ; make roller invincible
 
@@ -91,11 +92,12 @@ Roll_RollChk:
 ; ===========================================================================
 
 Roll_Stopped:
-		cmpi.b	#id_ani_roll_roll,ost_anim(a0)		; is roller still rolling?
-		beq.s	@is_rolling				; if yes, branch
+		btst	#1,ost_anim(a0)				; is roller still rolling?
+		bne.s	@is_rolling				; if yes, branch
 		subq.w	#1,ost_roller_open_time(a0)		; decrement timer
 		bpl.s	@wait					; branch if time remains
-		move.b	#id_ani_roll_fold,ost_anim(a0)		; use curling animation
+		move.b	#id_ani_roll_fold,d0			; use curling animation
+		bsr.w	NewAnim
 		move.w	#$700,ost_x_vel(a0)			; move roller right
 		move.b	#id_col_14x14+id_col_hurt,ost_col_type(a0) ; make roller invincible
 
@@ -155,7 +157,8 @@ Roll_Stop:
 		subi.w	#$30,d0
 		sub.w	ost_x_pos(a0),d0
 		bcc.s	@exit					; branch if Sonic is > 48px left of the roller
-		move.b	#id_ani_roll_unfold,ost_anim(a0)
+		move.b	#id_ani_roll_unfold,d0
+		bsr.w	NewAnim
 		move.b	#id_col_14x14,ost_col_type(a0)
 		clr.w	ost_x_vel(a0)				; stop roller moving
 		move.w	#120,ost_roller_open_time(a0)		; set waiting time to 2 seconds

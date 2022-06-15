@@ -24,7 +24,7 @@ BSYZ_ObjData:	dc.b id_BSYZ_ShipMain,	id_ani_boss_ship, 5	; routine number, anima
 		dc.b id_BSYZ_FlameMain, id_ani_boss_blank, 5
 		dc.b id_BSYZ_SpikeMain, 0, 5
 
-ost_bsyz_mode:		equ $29					; $FF = lifting block
+ost_bsyz_mode:		equ ost_subtype+1			; $FF = lifting block
 ost_bsyz_parent_x_pos:	equ $30					; parent x position (2 bytes)
 ost_bsyz_block_num:	equ $34					; number of block Eggman is above (0-9) - parent only
 ost_bsyz_parent:	equ $34					; address of OST of parent object - children only (4 bytes)
@@ -474,11 +474,12 @@ BSYZ_FaceMain:	; Routine 4
 		move.b	ost_routine2(a1),d0
 		move.w	BSYZ_Face_Index(pc,d0.w),d0
 		jsr	BSYZ_Face_Index(pc,d0.w)		; set d1 as animation number
-		move.b	d1,ost_anim(a0)				; set animation
+		move.b	d1,d0					; set animation
+		jsr	NewAnim
 		move.b	(a0),d0
 		cmp.b	(a1),d0					; has ship been destroyed? (objects no longer match id)
 		bne.s	@delete					; if yes, branch
-		bra.s	BSYZ_Display
+		bra.w	BSYZ_Display
 ; ===========================================================================
 
 @delete:
@@ -542,11 +543,11 @@ BSYZ_Face_ChkHit:
 ; ===========================================================================
 
 BSYZ_FlameMain:; Routine 6
-		move.b	#id_ani_boss_blank,ost_anim(a0)
 		movea.l	ost_bsyz_parent(a0),a1			; get address of OST of parent object
 		cmpi.b	#id_BSYZ_Escape,ost_routine2(a1)	; is ship on BSYZ_Escape?
 		bne.s	@chk_moving				; if not, branch
-		move.b	#id_ani_boss_bigflame,ost_anim(a0)	; use big flame animation
+		move.b	#id_ani_boss_bigflame,d0		; use big flame animation
+		jsr	NewAnim
 		tst.b	ost_render(a0)				; is object on-screen?
 		bpl.s	@delete					; if not, branch
 		bra.s	@update
@@ -554,10 +555,16 @@ BSYZ_FlameMain:; Routine 6
 
 @chk_moving:
 		tst.w	ost_x_vel(a1)
-		beq.s	@update					; branch if ship isn't moving
-		move.b	#id_ani_boss_flame1,ost_anim(a0)
+		beq.s	@not_moving				; branch if ship isn't moving
+		move.b	#id_ani_boss_flame1,d0
+		jsr	NewAnim
 
 @update:
+		bra.s	BSYZ_Display
+
+@not_moving:
+		move.b	#id_ani_boss_blank,d0
+		jsr	NewAnim
 		bra.s	BSYZ_Display
 ; ===========================================================================
 

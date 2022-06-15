@@ -349,11 +349,11 @@ BMZ_Escape:
 ; ===========================================================================
 
 BMZ_FaceMain:	; Routine 4
-		moveq	#0,d0
+		moveq	#0,d2
 		moveq	#id_ani_boss_face1,d1
 		movea.l	ost_bmz_parent(a0),a1			; get address of OST of parent object
-		move.b	ost_routine2(a1),d0
-		subq.w	#2,d0					; is ship on BMZ_ShipMove?
+		move.b	ost_routine2(a1),d2
+		subq.w	#2,d2					; is ship on BMZ_ShipMove?
 		bne.s	@chk_explode				; if not, branch
 		btst	#1,ost_subtype(a1)
 		beq.s	@chk_hit
@@ -364,7 +364,7 @@ BMZ_FaceMain:	; Routine 4
 ; ===========================================================================
 
 @chk_explode:
-		subq.b	#2,d0					; is ship on BMZ_Explode/BMZ_Recover/BMZ_Escape?
+		subq.b	#2,d2					; is ship on BMZ_Explode/BMZ_Recover/BMZ_Escape?
 		bmi.s	@chk_hit				; if not, branch
 		moveq	#id_ani_boss_defeat,d1
 		bra.s	@update
@@ -383,8 +383,9 @@ BMZ_FaceMain:	; Routine 4
 		moveq	#id_ani_boss_laugh,d1			; use laughing animation
 
 @update:
-		move.b	d1,ost_anim(a0)				; set animation
-		subq.b	#4,d0					; is ship on BMZ_Escape?
+		move.b	d1,d0					; set animation
+		jsr	NewAnim
+		subq.b	#4,d2					; is ship on BMZ_Escape?
 		bne.s	@display				; if not, branch
 		move.b	#id_ani_boss_panic,ost_anim(a0)		; use sweating animation
 		tst.b	ost_render(a0)				; is object on-screen?
@@ -399,11 +400,11 @@ BMZ_FaceMain:	; Routine 4
 ; ===========================================================================
 
 BMZ_FlameMain:	; Routine 6
-		move.b	#id_ani_boss_blank,ost_anim(a0)
 		movea.l	ost_bmz_parent(a0),a1			; get address of OST of parent object
 		cmpi.b	#id_BMZ_Escape,ost_routine2(a1)		; is ship on BMZ_Escape?
 		blt.s	@chk_moving				; if not, branch
-		move.b	#id_ani_boss_bigflame,ost_anim(a0)	; use big flame animation
+		move.b	#id_ani_boss_bigflame,d0		; use big flame animation
+		jsr	NewAnim
 		tst.b	ost_render(a0)				; is object on-screen?
 		bpl.s	@delete					; if not, branch
 		bra.s	@display
@@ -411,10 +412,16 @@ BMZ_FlameMain:	; Routine 6
 
 @chk_moving:
 		tst.w	ost_x_vel(a1)
-		beq.s	@display				; branch if ship isn't moving
-		move.b	#id_ani_boss_flame1,ost_anim(a0)
+		beq.s	@not_moving				; branch if ship isn't moving
+		move.b	#id_ani_boss_flame1,d0
+		jsr	NewAnim
 
 @display:
+		bra.s	BMZ_Display
+
+@not_moving:
+		move.b	#id_ani_boss_blank,d0
+		jsr	NewAnim
 		bra.s	BMZ_Display
 ; ===========================================================================
 

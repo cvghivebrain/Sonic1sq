@@ -50,6 +50,7 @@ Flame_Action:	; Routine 2
 		bpl.s	@wait					; if time remains, branch
 		move.w	ost_flame_off_master(a0),ost_flame_time(a0) ; begin pause time
 		bchg	#0,ost_anim(a0)				; switch between on/off animations
+		bclr	#7,ost_anim(a0)
 		beq.s	@wait					; branch if previously on
 
 		move.w	ost_flame_on_master(a0),ost_flame_time(a0) ; begin flaming time

@@ -35,6 +35,7 @@ Flap_OpenClose:	; Routine 2
 		bpl.s	@wait					; if time remains, branch
 		move.w	ost_flap_time(a0),ost_flap_wait(a0)	; reset time delay
 		bchg	#0,ost_anim(a0)				; open/close door
+		bclr	#7,ost_anim(a0)
 		tst.b	ost_render(a0)
 		bpl.s	@nosound
 		play.w	1, jsr, sfx_Door			; play door sound

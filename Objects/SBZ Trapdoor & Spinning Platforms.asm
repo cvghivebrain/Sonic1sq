@@ -62,6 +62,7 @@ Spin_Trapdoor:	; Routine 2
 
 		move.w	ost_spin_wait_master(a0),ost_spin_wait_time(a0)
 		bchg	#0,ost_anim(a0)				; switch between opening/closing animations
+		bclr	#7,ost_anim(a0)
 		tst.b	ost_render(a0)
 		bpl.s	@animate
 		play.w	1, jsr, sfx_Door			; play door sound
@@ -106,6 +107,7 @@ Spin_Spinner:	; Routine 4
 		move.w	ost_spin_wait_master(a0),ost_spin_wait_time(a0) ; reset timer
 		clr.b	ost_spin_flag(a0)
 		bchg	#0,ost_anim(a0)				; restart animation (switches between identical animations)
+		bclr	#7,ost_anim(a0)
 
 	@animate:
 		lea	(Ani_Spin).l,a1

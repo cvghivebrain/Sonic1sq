@@ -341,8 +341,8 @@ BLZ_FaceMain:	; Routine 4
 		move.b	(a1),d0
 		cmp.b	(a0),d0
 		bne.s	@delete					; branch if parent has been deleted
-		moveq	#0,d0
-		move.b	ost_routine2(a1),d0
+		moveq	#0,d2
+		move.b	ost_routine2(a1),d2
 		moveq	#id_ani_boss_face1,d1
 		tst.b	ost_blz_beaten_flag(a0)			; has boss been beaten?
 		beq.s	@chk_hit				; if not, branch
@@ -363,10 +363,12 @@ BLZ_FaceMain:	; Routine 4
 		moveq	#id_ani_boss_laugh,d1
 
 @update:
-		move.b	d1,ost_anim(a0)				; set animation
-		cmpi.b	#id_BLZ_Escape2,d0			; is boss escaping?
+		move.b	d1,d0					; set animation
+		jsr	NewAnim
+		cmpi.b	#id_BLZ_Escape2,d2			; is boss escaping?
 		bne.s	@display				; if not, branch
-		move.b	#id_ani_boss_panic,ost_anim(a0)		; use sweating animation
+		move.b	#id_ani_boss_panic,d0			; use sweating animation
+		jsr	NewAnim
 		tst.b	ost_render(a0)				; is object on-screen?
 		bpl.s	@delete					; if not, branch
 
@@ -379,23 +381,29 @@ BLZ_FaceMain:	; Routine 4
 ; ===========================================================================
 
 BLZ_FlameMain:; Routine 6
-		move.b	#id_ani_boss_blank,ost_anim(a0)
 		movea.l	ost_blz_parent(a0),a1			; get address of OST of parent object
 		move.b	(a1),d0
 		cmp.b	(a0),d0
 		bne.s	@delete					; branch if parent has been deleted
 		cmpi.b	#id_BLZ_Escape2,ost_routine2(a1)	; is boss escaping?
 		bne.s	@display				; if not, branch
-		move.b	#id_ani_boss_bigflame,ost_anim(a0)	; use big flame animation
+		move.b	#id_ani_boss_bigflame,d0		; use big flame animation
+		jsr	NewAnim
 		tst.b	ost_render(a0)				; is object on-screen?
 		bpl.s	@delete					; if not, branch
 		bra.s	@display
 ; ===========================================================================
 		tst.w	ost_x_vel(a1)
-		beq.s	@display
-		move.b	#id_ani_boss_flame1,ost_anim(a0)
+		beq.s	@not_moving
+		move.b	#id_ani_boss_flame1,d0
+		jsr	NewAnim
 
 @display:
+		bra.s	BLZ_Display
+
+@not_moving:
+		move.b	#id_ani_boss_blank,d0
+		jsr	NewAnim
 		bra.s	BLZ_Display
 ; ===========================================================================
 
