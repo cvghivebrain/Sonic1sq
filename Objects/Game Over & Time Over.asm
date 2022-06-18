@@ -16,7 +16,9 @@ Over_Index:	index *,,2
 		ptr Over_Move
 		ptr Over_Wait
 
-ost_over_time:	equ $3E
+		rsobj GameOverCard
+ost_over_time:	rs.w 1 ; $3E
+		rsobjend
 ; ===========================================================================
 
 Over_ChkPLC:	; Routine 0

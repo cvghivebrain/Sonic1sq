@@ -15,7 +15,9 @@ Brick_Index:	index *,,2
 		ptr Brick_Main
 		ptr Brick_Action
 
-ost_brick_y_start:	equ $30					; original y position (2 bytes)
+		rsobj MarbleBrick
+ost_brick_y_start:	rs.w 1 ; $30				; original y position (2 bytes)
+		rsobjend
 ; ===========================================================================
 
 Brick_Main:	; Routine 0

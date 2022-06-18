@@ -20,14 +20,16 @@ Bub_Index:	index *,,2
 		ptr Bub_Delete
 		ptr Bub_BblMaker
 
-ost_bubble_inhalable:	equ $2E					; flag set when bubble is collectable
-ost_bubble_x_start:	equ $30					; original x-axis position (2 bytes)
-ost_bubble_wait_time:	equ $32					; time until next bubble spawn
-ost_bubble_wait_master:	equ $33					; time between bubble spawns
-ost_bubble_mini_count:	equ $34					; number of smaller bubbles to spawn
-ost_bubble_flag:	equ $36					; 1 = bubbles currently spawning; +$4000 = large bubble spawned; +$8000 = allow large bubble (2 bytes)
-ost_bubble_random_time:	equ $38					; randomised time between mini bubble spawns (2 bytes)
-ost_bubble_type_list:	equ $3C					; address of bubble type list (4 bytes)
+		rsobj Bubble
+ost_bubble_inhalable:	rs.b 1 ; $2E				; flag set when bubble is collectable
+ost_bubble_x_start:	rs.w 1 ; $30				; original x-axis position (2 bytes)
+ost_bubble_wait_time:	rs.b 1 ; $32				; time until next bubble spawn
+ost_bubble_wait_master:	rs.b 1 ; $33				; time between bubble spawns
+ost_bubble_mini_count:	rs.b 1 ; $34				; number of smaller bubbles to spawn
+ost_bubble_flag:	rs.w 1 ; $36				; 1 = bubbles currently spawning; +$4000 = large bubble spawned; +$8000 = allow large bubble (2 bytes)
+ost_bubble_random_time:	rs.w 1 ; $38				; randomised time between mini bubble spawns (2 bytes)
+ost_bubble_type_list:	rs.l 1 ; $3C				; address of bubble type list (4 bytes)
+		rsobjend
 ; ===========================================================================
 
 Bub_Main:	; Routine 0
@@ -71,6 +73,7 @@ Bub_ChkWater:	; Routine 4
 @burst:
 		move.b	#id_Bub_Display,ost_routine(a0)		; goto Bub_Display next
 		addq.b	#3,ost_anim(a0)				; type 0/1: goto Bub_Delete next; type 2: use burst animation & goto Bub_Delete
+		bclr	#7,ost_anim(a0)
 		bra.w	Bub_Display
 ; ===========================================================================
 

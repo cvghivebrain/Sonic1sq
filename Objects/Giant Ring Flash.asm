@@ -16,7 +16,9 @@ Flash_Index:	index *,,2
 		ptr Flash_ChkDel
 		ptr Flash_Delete
 
-ost_flash_parent:	equ $3C					; address of OST of parent object (4 bytes)
+		rsobj RingFlash
+ost_flash_parent:	rs.l 1 ; $3C				; address of OST of parent object (4 bytes)
+		rsobjend
 ; ===========================================================================
 
 Flash_Main:	; Routine 0

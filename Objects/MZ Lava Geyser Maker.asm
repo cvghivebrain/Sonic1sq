@@ -21,9 +21,11 @@ GMake_Index:	index *,,2
 		ptr GMake_Display
 		ptr GMake_Delete
 
-ost_gmake_wait_time:	equ $32					; current time remaining (2 bytes)
-ost_gmake_wait_total:	equ $34					; time delay (2 bytes)
-ost_gmake_parent:	equ $3C					; address of OST of parent object (4 bytes)
+		rsobj GeyserMaker
+ost_gmake_wait_time:	rs.w 1 ; $32				; current time remaining (2 bytes)
+ost_gmake_wait_total:	rs.w 1 ; $34				; time delay (2 bytes)
+ost_gmake_parent:	rs.l 1 ; $3C				; address of OST of parent object (4 bytes)
+		rsobjend
 ; ===========================================================================
 
 GMake_Main:	; Routine 0

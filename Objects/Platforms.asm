@@ -20,11 +20,13 @@ Plat_Index:	index *,,2
 		ptr Plat_Delete
 		ptr Plat_Action
 
-ost_plat_y_pos:		equ $2C					; y position ignoring dip when Sonic is on the platform (2 bytes)
-ost_plat_x_start:	equ $32					; original x position (2 bytes)
-ost_plat_y_start:	equ $34					; original y position (2 bytes)
-ost_plat_y_nudge:	equ $38					; amount of dip when Sonic is on the platform
-ost_plat_wait_time:	equ $3A					; time delay for platform moving when stood on (2 bytes)
+		rsobj BasicPlatform
+ost_plat_y_pos:		rs.w 1 ; $2C				; y position ignoring dip when Sonic is on the platform (2 bytes)
+ost_plat_x_start:	rs.w 1 ; $32				; original x position (2 bytes)
+ost_plat_y_start:	rs.w 1 ; $34				; original y position (2 bytes)
+ost_plat_y_nudge:	rs.b 1 ; $38				; amount of dip when Sonic is on the platform
+ost_plat_wait_time:	rs.w 1 ; $3A				; time delay for platform moving when stood on (2 bytes)
+		rsobjend
 ; ===========================================================================
 
 Plat_Main:	; Routine 0
@@ -254,7 +256,7 @@ Plat_Type_Falls_Now:
 		asl.l	#8,d0
 		add.l	d0,d3					; add falling speed to y pos
 		move.l	d3,ost_plat_y_pos(a0)			; update y pos
-		addi.w	#ost_plat_y_nudge,ost_y_vel(a0)		; apply gravity
+		addi.w	#$38,ost_y_vel(a0)			; apply gravity
 		move.w	(v_boundary_bottom).w,d0
 		addi.w	#224,d0					; d0 = y pos of bottom edge of level
 		cmp.w	ost_plat_y_pos(a0),d0

@@ -17,8 +17,10 @@ BBlock_Index:	index *,,2
 		ptr BBlock_Action
 		ptr BBlock_Frag
 
-ost_bblock_mode:	equ ost_subtype+1			; same as subtype = solid; $FF = lifted; $A = breaking
-ost_bblock_boss:	equ $34					; address of OST of main boss object (4 bytes)
+		rsobj BossBlock
+ost_bblock_mode:	rs.b 1 ; ost_subtype+1			; same as subtype = solid; $FF = lifted; $A = breaking
+ost_bblock_boss:	rs.l 1 ; $34				; address of OST of main boss object (4 bytes)
+		rsobjend
 ; ===========================================================================
 
 BBlock_Main:	; Routine 0

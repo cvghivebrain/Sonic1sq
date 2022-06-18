@@ -18,10 +18,12 @@ Jun_Index:	index *,,2
 		ptr Jun_Display
 		ptr Jun_Release
 
-ost_junc_grab_frame:	equ $32					; which frame the junction grabbed Sonic on
-ost_junc_direction:	equ $34					; direction of rotation: 1 or -1 (added to the frame number)
-ost_junc_button_flag:	equ $36					; flag set when button is pressed
-ost_junc_button_num:	equ $38					; which button will reverse the disc
+		rsobj Junction
+ost_junc_grab_frame:	rs.b 1 ; $32				; which frame the junction grabbed Sonic on
+ost_junc_direction:	rs.b 1 ; $34				; direction of rotation: 1 or -1 (added to the frame number)
+ost_junc_button_flag:	rs.b 1 ; $36				; flag set when button is pressed
+ost_junc_button_num:	rs.b 1 ; $38				; which button will reverse the disc
+		rsobjend
 ; ===========================================================================
 
 Jun_Main:	; Routine 0

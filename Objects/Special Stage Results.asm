@@ -24,8 +24,10 @@ SSR_Index:	index *,,2
 		ptr SSR_Exit
 		ptr SSR_ContAni
 
-ost_ssr_x_stop:		equ $30					; on screen x position (2 bytes)
-ost_ssr_time:		equ $3E
+		rsobj SSResult
+ost_ssr_x_stop:		rs.w 1 ; $30				; on screen x position (2 bytes)
+ost_ssr_time:		rs.w 1 ; $3E
+		rsobjend
 
 include_SSR_Config:	macro
 		; x pos start, x pos stop, y pos

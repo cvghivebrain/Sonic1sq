@@ -17,7 +17,9 @@ Bonus_Index:	index *,,2
 		ptr Bonus_Main
 		ptr Bonus_Display
 
-ost_bonus_wait_time:	equ $30					; length of time to display bonus sprites (2 bytes)
+		rsobj HiddenBonus
+ost_bonus_wait_time:	rs.w 1 ; $30				; length of time to display bonus sprites (2 bytes)
+		rsobjend
 ; ===========================================================================
 
 Bonus_Main:	; Routine 0

@@ -16,7 +16,9 @@ Harp_Index:	index *,,2
 		ptr Harp_Move
 		ptr Harp_Wait
 
-ost_harp_time:	equ $30						; time between stabbing/retracting (2 bytes)
+		rsobj Harpoon
+ost_harp_time:	rs.w 1 ; $30					; time between stabbing/retracting (2 bytes)
+		rsobjend
 ; ===========================================================================
 
 Harp_Main:	; Routine 0

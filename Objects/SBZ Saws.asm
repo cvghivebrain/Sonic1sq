@@ -15,9 +15,11 @@ Saw_Index:	index *,,2
 		ptr Saw_Main
 		ptr Saw_Action
 
-ost_saw_x_start:	equ $3A					; original x-axis position (2 bytes)
-ost_saw_y_start:	equ $38					; original y-axis position (2 bytes)
-ost_saw_flag:		equ $3D					; flag set when the ground saw appears
+		rsobj Saws
+ost_saw_x_start:	rs.w 1 ; $3A				; original x-axis position (2 bytes)
+ost_saw_y_start:	rs.w 1 ; $38				; original y-axis position (2 bytes)
+ost_saw_flag:		rs.b 1 ; $3D				; flag set when the ground saw appears
+		rsobjend
 ; ===========================================================================
 
 Saw_Main:	; Routine 0

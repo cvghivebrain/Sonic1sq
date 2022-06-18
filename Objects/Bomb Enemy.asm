@@ -18,9 +18,11 @@ Bom_Index:	index *,,2
 		ptr Bom_Fuse
 		ptr Bom_Shrapnel
 
-ost_bomb_fuse_time:	equ $30					; time left on fuse - also used for change direction timer (2 bytes)
-ost_bomb_y_start:	equ $34					; original y-axis position (2 bytes)
-ost_bomb_parent:	equ $3C					; address of OST of parent object (4 bytes)
+		rsobj Bomb
+ost_bomb_fuse_time:	rs.w 1 ; $30				; time left on fuse - also used for change direction timer (2 bytes)
+ost_bomb_y_start:	rs.w 1 ; $34				; original y-axis position (2 bytes)
+ost_bomb_parent:	rs.l 1 ; $3C				; address of OST of parent object (4 bytes)
+		rsobjend
 ; ===========================================================================
 
 Bom_Main:	; Routine 0

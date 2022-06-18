@@ -1518,13 +1518,6 @@ ObjPosSBZPlatform_Index:
 		include	"Object Placement\Ending.asm"
 ObjPos_Null:	endobj
 
-		if Revision=0
-			dcb.b $62A,$FF
-		else
-			dcb.b $63C,$FF
-		endc
-		;dcb.b ($10000-(*%$10000))-(ROM_End-SoundDriver),$FF
-
 ; ---------------------------------------------------------------------------
 ; Sound driver data
 ; ---------------------------------------------------------------------------

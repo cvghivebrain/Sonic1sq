@@ -19,8 +19,10 @@ LWall_Index:	index *,,2
 		ptr LWall_BackHalf
 		ptr LWall_Delete
 
-ost_lwall_flag:		equ $36					; flag to start wall moving
-ost_lwall_parent:	equ $3C					; address of OST of parent object (4 bytes)
+		rsobj LavaWall
+ost_lwall_flag:		rs.b 1 ; $36				; flag to start wall moving
+ost_lwall_parent:	rs.l 1 ; $3C				; address of OST of parent object (4 bytes)
+		rsobjend
 ; ===========================================================================
 
 LWall_Main:	; Routine 0

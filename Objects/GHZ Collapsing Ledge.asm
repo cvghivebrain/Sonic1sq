@@ -19,8 +19,10 @@ Ledge_Index:	index *,,2
 		ptr Ledge_Delete
 		ptr Ledge_WalkOff
 
-ost_ledge_wait_time:	equ $38					; time between touching the ledge and it collapsing
-ost_ledge_flag:		equ $3A					; flag set when ledge is stood on
+		rsobj CollapseLedge
+ost_ledge_wait_time:	rs.b 1 ; $38				; time between touching the ledge and it collapsing
+ost_ledge_flag:		rs.b 1 ; $3A				; flag set when ledge is stood on
+		rsobjend
 ; ===========================================================================
 
 Ledge_Main:	; Routine 0

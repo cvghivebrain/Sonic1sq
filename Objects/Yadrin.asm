@@ -54,7 +54,9 @@ Yad_Index:	index *,,2
 		ptr Yad_Main
 		ptr Yad_Action
 
-ost_yadrin_wait_time:	equ $30					; time to wait before changing direction (2 bytes)
+		rsobj Yadrin
+ost_yadrin_wait_time:	rs.w 1 ; $30				; time to wait before changing direction (2 bytes)
+		rsobjend
 ; ===========================================================================
 
 Yad_Main:	; Routine 0

@@ -17,7 +17,9 @@ TSon_Index:	index *,,2
 		ptr TSon_Move
 		ptr TSon_Animate
 
-ost_tson_time:	equ $3F
+		rsobj TitleSonic
+ost_tson_time:	rs.b 1
+		rsobjend
 ; ===========================================================================
 
 TSon_Main:	; Routine 0

@@ -17,7 +17,9 @@ FireM_Index:	index *,,2
 		ptr FireM_Main
 		ptr FireM_MakeFire
 
-ost_firem_time_master:	equ $3F
+		rsobj FireMaker
+ost_firem_time_master:	rs.b 1
+		rsobjend
 
 ; Delay between launching fireballs
 FireM_Rates:	dc.b 30						; 0x - 0.5 seconds (unused)

@@ -14,7 +14,9 @@ Swi_Index:	index *,,2
 		ptr Swi_Action
 		ptr Swi_Delete
 
-ost_switch_y_start:	equ $30					; original y-axis position (2 bytes)
+		rsobj MagicSwitch
+ost_switch_y_start:	rs.w 1 ; $30				; original y-axis position (2 bytes)
+		rsobjend
 ; ===========================================================================
 
 Swi_Main:	; Routine 0

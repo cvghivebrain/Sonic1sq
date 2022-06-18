@@ -19,7 +19,9 @@ Gar_Index:	index *,,2
 		ptr Gar_FireBall
 		ptr Gar_AniFire
 
-ost_gar_time_master:	equ $3F
+		rsobj Gargoyle
+ost_gar_time_master:	rs.b 1 ; $3F
+		rsobjend
 
 Gar_SpitRate:	dc.b 30						; 0 - 0.5 seconds (unused)
 		dc.b 60						; 1 - 1 second

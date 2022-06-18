@@ -51,10 +51,12 @@ Swing_Index:	index *,,2
 		ptr Swing_Display
 		ptr Swing_Action
 
-ost_swing_y_start:	equ $38					; original y-axis position (2 bytes)
-ost_swing_x_start:	equ $3A					; original x-axis position (2 bytes)
-ost_swing_radius:	equ $3C					; distance of chainlink from anchor
-ost_swing_unused:	equ $3E
+		rsobj SwingingPlatform
+ost_swing_child_list:	rs.b 15 ; $29
+ost_swing_y_start:	rs.w 1 ; $38				; original y-axis position (2 bytes)
+ost_swing_x_start:	rs.w 1 ; $3A				; original x-axis position (2 bytes)
+ost_swing_radius:	rs.b 1 ; $3C				; distance of chainlink from anchor
+		rsobjend
 ; ===========================================================================
 
 Swing_Main:	; Routine 0
@@ -139,8 +141,6 @@ Swing_Main:	; Routine 0
 		lsr.w	#6,d5
 		andi.w	#$7F,d5					; convert to index
 		move.b	d5,(a2)+				; save to end of child OST list
-		move.w	#$4080,ost_angle(a0)			; unused
-		move.w	#-$200,ost_swing_unused(a0)
 		move.w	(sp)+,d1				; retrieve chain length from stack
 		btst	#4,d1					; is object type $1x ?
 		beq.s	@not1x					; if not, branch
@@ -206,7 +206,7 @@ Swing_Move:
 		add.w	d1,d0					; d0 = oscillating value, same for all platforms
 
 	@no_xflip:
-		bra.s	Swing_MoveAll
+		bra.w	Swing_MoveAll
 ; End of function Swing_Move
 
 		endm

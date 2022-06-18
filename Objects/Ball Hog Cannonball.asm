@@ -15,7 +15,9 @@ Cbal_Index:	index *,,2
 		ptr Cbal_Main
 		ptr Cbal_Bounce
 
-ost_ball_time:	equ $30						; time until the cannonball explodes (2 bytes)
+		rsobj Cannonball
+ost_ball_time:	rs.w 1 ; $30					; time until the cannonball explodes (2 bytes)
+		rsobjend
 ; ===========================================================================
 
 Cbal_Main:	; Routine 0

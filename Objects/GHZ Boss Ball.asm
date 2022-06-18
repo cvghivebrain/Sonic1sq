@@ -21,13 +21,16 @@ GBall_Index:	index *,,2
 		ptr GBall_Link
 		ptr GBall_Ball
 
-ost_ball_boss_dist:	equ $32					; distance of base from boss (2 bytes)
-ost_ball_parent:	equ $34					; address of OST of parent object (4 bytes)
-ost_ball_base_y_pos:	equ $38					; y position of base (2 bytes)
-ost_ball_base_x_pos:	equ $3A					; x position of base (2 bytes)
-ost_ball_radius:	equ $3C					; distance of ball/link from base
-ost_ball_side:		equ $3D					; which side the ball is on - 0 = right; 1 = left
-ost_ball_speed:		equ $3E					; rate of change of angle (2 bytes)
+		rsobj BossBall
+ist_ball_child_list:	rs.b 6
+ost_ball_boss_dist:	rs.w 1 ; $32				; distance of base from boss (2 bytes)
+ost_ball_parent:	rs.l 1 ; $34				; address of OST of parent object (4 bytes)
+ost_ball_base_y_pos:	rs.w 1 ; $38				; y position of base (2 bytes)
+ost_ball_base_x_pos:	rs.w 1 ; $3A				; x position of base (2 bytes)
+ost_ball_radius:	rs.b 1 ; $3C				; distance of ball/link from base
+ost_ball_side:		rs.b 1 ; $3D				; which side the ball is on - 0 = right; 1 = left
+ost_ball_speed:		rs.w 1 ; $3E				; rate of change of angle (2 bytes)
+		rsobjend
 ; ===========================================================================
 
 GBall_Main:	; Routine 0
@@ -119,7 +122,7 @@ GBall_Base:	; Routine 2
 	@reached_dist2:
 		bsr.w	GBall_UpdateBase			; update base animation/position
 		move.b	ost_angle(a0),d0
-		jsr	(Swing_MoveAll).l			; update positions of all chain links & ball
+		jsr	(GBall_MoveAll).l			; update positions of all chain links & ball
 		jmp	(DisplaySprite).l
 ; ===========================================================================
 
@@ -224,9 +227,42 @@ GBall_Move:
 	@not_at_highest:
 		move.b	ost_angle(a0),d0			; get latest angle
 
-		;bra.w	Swing_MoveAll				; runs directly into Swing_MoveAll (update positions of all objects)
-
 ; End of function GBall_Move
+
+; ---------------------------------------------------------------------------
+; Subroutine to convert angle to position for all chain links
+
+; input:
+;	d0 = current swing angle
+; ---------------------------------------------------------------------------
+
+GBall_MoveAll:
+		bsr.w	CalcSine				; convert d0 to sine
+		move.w	ost_ball_base_y_pos(a0),d2
+		move.w	ost_ball_base_x_pos(a0),d3
+		lea	ost_subtype(a0),a2			; (a2) = chain length, followed by child OST index list
+		moveq	#0,d6
+		move.b	(a2)+,d6				; get chain length
+
+	@loop:
+		moveq	#0,d4
+		move.b	(a2)+,d4				; get child OST index
+		lsl.w	#6,d4
+		addi.l	#v_ost_all&$FFFFFF,d4			; convert to RAM address
+		movea.l	d4,a1
+		moveq	#0,d4
+		move.b	ost_ball_radius(a1),d4			; get distance of object from anchor
+		move.l	d4,d5
+		muls.w	d0,d4
+		asr.l	#8,d4
+		muls.w	d1,d5
+		asr.l	#8,d5
+		add.w	d2,d4
+		add.w	d3,d5
+		move.w	d4,ost_y_pos(a1)			; update position
+		move.w	d5,ost_x_pos(a1)
+		dbf	d6,@loop				; repeat for all chainlinks and platform
+		rts
 
 		endm
 		
