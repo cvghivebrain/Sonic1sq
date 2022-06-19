@@ -1,11 +1,6 @@
 ;  =========================================================================
-; |           Sonic the Hedgehog Disassembly for Sega Mega Drive            |
+; |                           Sonic 1-squared                               |
 ;  =========================================================================
-
-; Disassembly created by Hivebrain
-; thanks to drx, Stealth, Esrael L.G. Neto and the Sonic Retro Github
-
-; ===========================================================================
 
 		opt	l@					; @ is the local label symbol
 		opt	ae-					; automatic evens are disabled by default
@@ -85,9 +80,9 @@ Vectors:	dc.l v_stack_pointer&$FFFFFF			; Initial stack pointer value
 			dcb.l 3,ErrorTrap
 		endc
 		dc.b "SEGA MEGA DRIVE "				; Hardware system ID (Console name)
-		dc.b "(C)SEGA 1991.APR"				; Copyright holder and release date (generally year)
-		dc.b "SONIC THE               HEDGEHOG                " ; Domestic name
-		dc.b "SONIC THE               HEDGEHOG                " ; International name
+		dc.b "(C)SEGA 2022.JUN"				; Copyright holder and release date (generally year)
+		dc.b "SONIC 1-SQUARED                                 " ; Domestic name
+		dc.b "SONIC 1-SQUARED                                 " ; International name
 
 	if Revision=0
 		dc.b "GM 00001009-00"				; Serial/version number (Rev 0)

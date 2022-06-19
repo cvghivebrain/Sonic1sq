@@ -289,19 +289,33 @@ ost_used:		equ __rs-1	; bytes used by regular OST, everything after this is scra
 ost_enemy_combo:	equ $3E		; number of enemies broken in a row (0-$A) (2 bytes)
 
 ; Object variables used by Sonic
-ost_sonic_flash_time:	equ $30	; time Sonic flashes for after getting hit (2 bytes)
-ost_sonic_invincible_time: equ $32 ; time left for invincibility (2 bytes)
-ost_sonic_shoe_time:	equ $34	; time left for speed shoes (2 bytes)
-ost_sonic_angle_right:	equ $36 ; angle of floor on Sonic's right side
-ost_sonic_angle_left:	equ $37 ; angle of floor on Sonic's left side
-ost_sonic_sbz_disc:	equ $38 ; 1 if Sonic is stuck to SBZ disc
-ost_sonic_anim_next:	equ $39 ; next animation
-ost_sonic_restart_time:	equ $3A ; time until level restarts (2 bytes)
-ost_sonic_jump:		equ $3C ; 1 if Sonic is jumping
-ost_sonic_on_obj:	equ $3D	; OST index of object Sonic stands on
-ost_sonic_lock_time:	equ $3E	; time left for locked controls, e.g. after hitting a spring (2 bytes)
+		rsobj SonicPlayer
+ost_sonic_flash_time:	rs.w 1					; time Sonic flashes for after getting hit (2 bytes)
+ost_sonic_invincible_time: rs.w 1				; time left for invincibility (2 bytes)
+ost_sonic_shoe_time:	rs.w 1					; time left for speed shoes (2 bytes)
+ost_sonic_angle_right:	rs.b 1					; angle of floor on Sonic's right side
+ost_sonic_angle_left:	rs.b 1					; angle of floor on Sonic's left side
+ost_sonic_sbz_disc:	rs.b 1					; 1 if Sonic is stuck to SBZ disc
+ost_sonic_anim_next:	rs.b 1					; next animation
+ost_sonic_restart_time:	rs.w 1					; time until level restarts (2 bytes)
+ost_sonic_jump:		rs.b 1					; 1 if Sonic is jumping
+ost_sonic_on_obj:	rs.b 1					; OST index of object Sonic stands on
+ost_sonic_lock_time:	rs.w 1					; time left for locked controls, e.g. after hitting a spring (2 bytes)
+		rsobjend
 
-; Boss variables
+; Object variables used by bosses
+		rsobj Boss
+ost_boss_mode:		rs.b 1					; $FF = lifting block (SYZ) / boss beaten (LZ)
+ost_boss_parent_x_pos:	rs.l 1					; parent x position (4 bytes)
+ost_boss_parent:	rs.l 1					; address of OST of parent object (4 bytes)
+ost_boss_extra:		rs.w 1					; extra 2 bytes used by SLZ boss
+ost_boss_parent_y_pos:	rs.l 1					; parent y position (4 bytes)
+ost_boss_wait_time:	rs.w 1					; time to wait between each action (2 bytes)
+ost_boss_flash_num:	rs.b 1					; number of times to make boss flash when hit
+ost_boss_wobble:	rs.b 1					; wobble state as Eggman moves back & forth (1 byte incremented every frame & interpreted by CalcSine)
+		rsobjend
+
+; Boss constants
 hitcount_all:		equ 8
 hitcount_ghz:		equ hitcount_all
 hitcount_mz:		equ hitcount_all

@@ -21,17 +21,6 @@ BGHZ_Index:	index *,,2
 BGHZ_ObjData:	dc.b id_BGHZ_ShipMain, id_ani_boss_ship		; routine number, animation
 		dc.b id_BGHZ_FaceMain, id_ani_boss_face1
 		dc.b id_BGHZ_FlameMain,	id_ani_boss_blank
-
-		rsobj BossGreenHill
-ost_boss_mode:		rs.b 1					; $FF = lifting block (SYZ) / boss beaten (LZ)
-ost_boss_parent_x_pos:	rs.l 1 ; $30				; parent x position (4 bytes)
-ost_boss_parent:	rs.l 1 ; $34				; address of OST of parent object (4 bytes)
-ost_boss_extra:		rs.w 1					; extra 2 bytes used by SLZ boss
-ost_boss_parent_y_pos:	rs.l 1 ; $38				; parent y position (4 bytes)
-ost_boss_wait_time:	rs.w 1 ; $3C				; time to wait between each action (2 bytes)
-ost_boss_flash_num:	rs.b 1 ; $3E				; number of times to make boss flash when hit
-ost_boss_wobble:	rs.b 1 ; $3F				; wobble state as Eggman moves back & forth (1 byte incremented every frame & interpreted by CalcSine)
-		rsobjend
 ; ===========================================================================
 
 BGHZ_Main:	; Routine 0
