@@ -14,7 +14,6 @@ DemoLevelArray:
 ; Demo data pointers (these are hardcoded to match zone numbers)
 ; ---------------------------------------------------------------------------
 
-include_demo_pointers:	macro
 DemoDataPtr:	index.l 0,,$100					; longword, absolute, ids multiplied by $100
 		ptr Demo_GHZ					; 0 - GHZ act 1
 		ptr Demo_GHZ					; 1 - unused
@@ -38,7 +37,6 @@ DemoEndDataPtr:	index.l 0
 		ptr Demo_EndSBZ1
 		ptr Demo_EndSBZ2
 		ptr Demo_EndGHZ2
-		endm
 
 ; ---------------------------------------------------------------------------
 ; Ending demo level list

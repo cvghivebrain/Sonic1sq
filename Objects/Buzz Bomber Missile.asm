@@ -105,8 +105,6 @@ Msl_Animate2:
 ; Animation script
 ; ---------------------------------------------------------------------------
 
-include_Missile_animation:	macro
-
 Ani_Missile:	index *
 		ptr ani_buzz_flare
 		ptr ani_buzz_missile
@@ -124,5 +122,3 @@ ani_buzz_missile:
 		dc.b id_frame_buzz_ball2
 		dc.b afEnd
 		even
-
-		endm

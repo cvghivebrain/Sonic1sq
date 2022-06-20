@@ -63,8 +63,6 @@ Van_LoadSonic:	; Routine 4
 ; Animation script - special stage entry effect from beta
 ; ---------------------------------------------------------------------------
 
-include_VanishSonic_animation:	macro
-
 Ani_Vanish:	index *
 		ptr ani_vanish_0
 		
@@ -89,5 +87,3 @@ ani_vanish_0:	dc.b 5
 		dc.b id_frame_vanish_blank
 		dc.b afRoutine
 		even
-
-		endm

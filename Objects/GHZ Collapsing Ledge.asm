@@ -113,12 +113,7 @@ Ledge_FallNow:
 Ledge_Delete:	; Routine 8
 		bsr.w	DeleteObject
 		rts	
-
-; ---------------------------------------------------------------------------
-; Object 1A - GHZ collapsing ledge, part 2
-; ---------------------------------------------------------------------------
-
-include_CollapseLedge_2:	macro
+; ===========================================================================
 
 Ledge_Fragment:
 		move.b	#0,ost_ledge_flag(a0)
@@ -181,6 +176,3 @@ Ledge_FragTiming:
 		dc.b $1C, $18, $14, $10, $1A, $16, $12,	$E, $A,	6, $18,	$14, $10, $C, 8, 4
 		dc.b $16, $12, $E, $A, 6, 2, $14, $10, $C
 		even
-		
-		endm
-		

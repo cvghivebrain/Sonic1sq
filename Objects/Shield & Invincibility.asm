@@ -114,8 +114,6 @@ Shi_Stars:	; Routine 4
 ; Animation script
 ; ---------------------------------------------------------------------------
 
-include_ShieldItem_animation:	macro
-
 Ani_Shield:	index *
 		ptr ani_shield_0
 		ptr ani_stars1
@@ -220,5 +218,3 @@ ani_stars4:	dc.b 0
 		dc.b id_frame_shield_blank
 		dc.b afEnd
 		even
-
-		endm

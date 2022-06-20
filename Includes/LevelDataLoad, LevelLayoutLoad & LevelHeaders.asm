@@ -108,8 +108,6 @@ lhead:		macro plc1,lvlgfx,plc2,sixteen,twofivesix,music,pal
 		dc.b 0, music, pal, pal
 		endm
 
-include_levelheaders:	macro
-
 LevelHeaders:
 
 ; 1st PLC, level gfx (unused), 2nd PLC, 16x16 data, 256x256 data,
@@ -129,5 +127,3 @@ LevelHeaders:
 		even
 
 ; * music and level gfx are actually set elsewhere, so these values are useless
-
-		endm

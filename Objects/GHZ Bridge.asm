@@ -117,14 +117,8 @@ Bri_Detect:
 		bmi.w	Plat_Exit				; branch if Sonic is left of the bridge
 		cmp.w	d2,d0
 		bcc.w	Plat_Exit				; branch if Sonic is right of the bridge
-		bra.s	Plat_NoXCheck				; y-axis check, update flags and routine counter
-; End of function Bri_Detect
-
-; ---------------------------------------------------------------------------
-; Object 11 - GHZ bridge, part 2
-; ---------------------------------------------------------------------------
-
-include_Bridge_2:	macro
+		bra.w	Plat_NoXCheck				; y-axis check, update flags and routine counter
+; ===========================================================================
 
 Bri_Platform:	; Routine 4
 		bsr.s	Bri_ChkPosition
@@ -141,7 +135,7 @@ Bri_ChkPosition:
 		lsl.w	#3,d1					; multiply by 8
 		move.w	d1,d2					; d2 = distance from centre to right edge
 		addq.w	#8,d1					; d1 = distance from centre to left edge
-		bsr.s	ExitPlatform2				; update flags, goto Bri_Action next if leaving the bridge
+		bsr.w	ExitPlatform2				; update flags, goto Bri_Action next if leaving the bridge
 		bcc.s	@exit
 		lsr.w	#4,d0					; d0 = relative position of log Sonic is standing on, divided by 16
 		move.b	d0,ost_bridge_current_log(a0)
@@ -155,16 +149,7 @@ Bri_ChkPosition:
 		bsr.w	Bri_MoveSonic				; update Sonic's position
 
 	@exit:
-		rts	
-; End of function Bri_ChkPosition
-
-		endm
-
-; ---------------------------------------------------------------------------
-; Object 11 - GHZ bridge, part 3
-; ---------------------------------------------------------------------------
-
-include_Bridge_3:	macro
+		rts
 
 ; ---------------------------------------------------------------------------
 ; Subroutine updating Sonic's y position
@@ -184,8 +169,7 @@ Bri_MoveSonic:
 		move.b	ost_height(a1),d1
 		sub.w	d1,d0
 		move.w	d0,ost_y_pos(a1)			; change Sonic's position on y-axis
-		rts	
-; End of function Bri_MoveSonic
+		rts
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to update y position of child logs when the bridge bends
@@ -259,8 +243,7 @@ Bri_UpdateY:
 		dbf	d2,@loop_right
 
 	@exit:
-		rts	
-; End of function Bri_UpdateY
+		rts
 
 ; ---------------------------------------------------------------------------
 ; GHZ bridge-bending data
@@ -345,7 +328,4 @@ Bri_Delete:	; Routine 6, 8
 
 Bri_Display:	; Routine $A
 		bsr.w	DisplaySprite
-		rts	
-		
-		endm
-		
+		rts		

@@ -190,10 +190,10 @@ PalCycle_SYZ:
 ; ---------------------------------------------------------------------------
 
 PalCycle_SBZ:
-		lea	(Pal_SBZCycList_Act1).l,a2
+		lea	Pal_SBZCycList_Act1(pc),a2
 		tst.b	(v_act).w				; is this act 1?
 		beq.s	@is_act1				; if yes, branch
-		lea	(Pal_SBZCycList_Act2).l,a2
+		lea	Pal_SBZCycList_Act2(pc),a2
 
 	@is_act1:
 		lea	(v_palcycle_buffer).w,a1
@@ -275,7 +275,6 @@ mSBZp:		macro time,length,paladdress,ramaddress
 
 ; time between updates in frames, length of sequence, palette address, RAM address
 
-include_Pal_SBZCycList:	macro
 Pal_SBZCycList_Act1:
 		dc.w ((@end-Pal_SBZCycList_Act1-2)/6)-1
 		mSBZp	7,8,Pal_SBZCyc1,v_pal_dry_line3+(8*2)
@@ -301,4 +300,3 @@ Pal_SBZCycList_Act2:
 		mSBZp	3,3,Pal_SBZCyc8+4,v_pal_dry_line4+(14*2)
 	@end:
 		even
-		endm

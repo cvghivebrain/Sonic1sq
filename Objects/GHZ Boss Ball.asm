@@ -6,8 +6,6 @@
 ;	BossBall - routines 6 (chain), 8 (ball)
 ; ---------------------------------------------------------------------------
 
-include_BossBall_1:	macro
-
 BossBall:
 		moveq	#0,d0
 		move.b	ost_routine(a0),d0
@@ -181,7 +179,7 @@ GBall_Ball:	; Routine 8
 		tst.b	ost_status(a1)				; has boss been beaten?
 		bpl.s	@display				; if not, branch
 		move.b	#0,ost_col_type(a0)			; make ball harmless
-		bsr.w	BossExplode				; spawn explosions
+		jsr	BossExplode				; spawn explosions
 		subq.b	#1,ost_ball_radius(a0)			; use radius as timer, decrements from 96
 		bpl.s	@display				; branch if time remains
 		move.b	#id_ExplosionBomb,(a0)			; replace ball with explosion after 1.5 seconds
@@ -189,14 +187,6 @@ GBall_Ball:	; Routine 8
 
 	@display:
 		jmp	(DisplaySprite).l
-
-		endm
-		
-; ---------------------------------------------------------------------------
-; Object 48 - ball on a	chain that Eggman swings (GHZ), part 2
-; ---------------------------------------------------------------------------
-
-include_BossBall_2:	macro
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to update swinging angle and positions for chain links and ball
@@ -226,8 +216,7 @@ GBall_Move:
 
 	@not_at_highest:
 		move.b	ost_angle(a0),d0			; get latest angle
-
-; End of function GBall_Move
+		;bra.w	GBall_MoveAll
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to convert angle to position for all chain links
@@ -262,7 +251,4 @@ GBall_MoveAll:
 		move.w	d4,ost_y_pos(a1)			; update position
 		move.w	d5,ost_x_pos(a1)
 		dbf	d6,@loop				; repeat for all chainlinks and platform
-		rts
-
-		endm
-		
+		rts		

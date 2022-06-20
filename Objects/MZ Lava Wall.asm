@@ -140,8 +140,6 @@ LWall_Delete:	; Routine 8
 ; Animation script
 ; ---------------------------------------------------------------------------
 
-include_LavaWall_animation:	macro
-
 Ani_LWall:	index *
 		ptr ani_lavawall_0
 		
@@ -152,5 +150,3 @@ ani_lavawall_0:	dc.b 9
 		dc.b id_frame_lavawall_3
 		dc.b afEnd
 		even
-
-		endm

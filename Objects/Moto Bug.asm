@@ -60,10 +60,7 @@ Moto_Action:	; Routine 2
 		jsr	Moto_ActIndex(pc,d1.w)
 		lea	(Ani_Moto).l,a1
 		bsr.w	AnimateSprite
-
-		;jmp	(DespawnObject).l				; runs straight into DespawnObject
-
-include_MotoBug_1:	macro
+		bra.w	DespawnObject
 
 ; ===========================================================================
 Moto_ActIndex:	index *
@@ -161,5 +158,3 @@ ani_moto_smoke:	dc.b 1
 		dc.b id_frame_moto_smoke3
 		dc.b afRoutine
 		even
-
-		endm

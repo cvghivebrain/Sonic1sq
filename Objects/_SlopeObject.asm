@@ -55,8 +55,6 @@ SlopeObject:
 ;	uses d2
 ; ---------------------------------------------------------------------------
 
-include_SlopeObject_NoChk:	macro
-
 SlopeObject_NoChk:
 		lea	(v_ost_player).w,a1
 		btst	#status_platform_bit,ost_status(a1)	; is Sonic on a platform?
@@ -85,6 +83,3 @@ SlopeObject_NoChk:
 
 	@noplatform:
 		rts
-
-		endm
-		

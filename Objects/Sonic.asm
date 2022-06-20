@@ -1681,8 +1681,6 @@ Sonic_Animate:
 		or.b	d1,ost_render(a0)			; apply xflip from status
 		bra.w	@loadframe				; run animation
 
-include_Sonic_1:	macro
-
 ; ---------------------------------------------------------------------------
 ; Subroutine to load Sonic's graphics to RAM
 ; ---------------------------------------------------------------------------
@@ -1724,15 +1722,7 @@ Sonic_LoadGfx:
 		dbf	d1,@loop_entry				; repeat for number of entries
 
 	@nochange:
-		rts	
-
-		endm
-
-; ---------------------------------------------------------------------------
-; Object 01 - Sonic, part 2
-; ---------------------------------------------------------------------------
-
-include_Sonic_2:	macro
+		rts
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	change Sonic's angle & position as he walks along the floor
@@ -2121,14 +2111,6 @@ Sonic_WalkVertL:
 		move.b	#id_Run,ost_sonic_anim_next(a0)
 		rts
 
-		endm
-
-; ---------------------------------------------------------------------------
-; Object 01 - Sonic, part 3
-; ---------------------------------------------------------------------------
-
-include_Sonic_3:	macro
-
 ; ---------------------------------------------------------------------------
 ; Subroutine to	calculate distance from Sonic to the wall in front of him
 
@@ -2305,15 +2287,7 @@ Sonic_SnapAngle:
 		move.b	d2,d3					; snap angle to 0, $40, $80 or $C0
 
 	@no_angle_snap:
-		rts	
-
-		endm
-
-; ---------------------------------------------------------------------------
-; Object 01 - Sonic, part 4
-; ---------------------------------------------------------------------------
-
-include_Sonic_4:	macro
+		rts
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	find distance to wall when Sonic is moving vertically
@@ -2389,14 +2363,6 @@ Sonic_FindWallRight_Quick:
 		bsr.w	FindWall
 		move.b	#-$40,d2
 		bra.w	Sonic_SnapAngle				; check for snap to 90 degrees
-
-		endm
-
-; ---------------------------------------------------------------------------
-; Object 01 - Sonic, part 5
-; ---------------------------------------------------------------------------
-
-include_Sonic_5:	macro
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	find distance to ceiling
@@ -2475,14 +2441,6 @@ Sonic_FindCeiling_Quick:
 		move.b	#-$80,d2
 		bra.w	Sonic_SnapAngle				; check for snap to 90 degrees
 
-		endm
-
-; ---------------------------------------------------------------------------
-; Object 01 - Sonic, part 6
-; ---------------------------------------------------------------------------
-
-include_Sonic_6:	macro
-
 ; ---------------------------------------------------------------------------
 ; Subroutine to	find distance to wall when Sonic is moving vertically
 
@@ -2560,5 +2518,3 @@ Sonic_FindWallLeft_Quick:
 		bsr.w	FindWall
 		move.b	#$40,d2
 		bra.w	Sonic_SnapAngle				; check for snap to 90 degrees
-
-		endm

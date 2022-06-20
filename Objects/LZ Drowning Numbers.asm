@@ -342,8 +342,6 @@ Drown_Countdown:; Routine $A
 ; Animation script
 ; ---------------------------------------------------------------------------
 
-include_DrownCount_animation:	macro
-
 Ani_Drown:	index *
 		ptr ani_drown_zeroappear
 		ptr ani_drown_oneappear
@@ -513,5 +511,3 @@ ani_drown_mediumbubble:
 		dc.b id_frame_bubble_4
 		dc.b afRoutine
 		even
-
-		endm

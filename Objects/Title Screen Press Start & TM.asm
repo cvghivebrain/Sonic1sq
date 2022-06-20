@@ -47,8 +47,6 @@ PSB_Animate:	; Routine 2
 ; Animation script
 ; ---------------------------------------------------------------------------
 
-include_PSBTM_animation:	macro
-
 Ani_PSB:	index *
 		ptr ani_psb_flash
 		
@@ -57,5 +55,3 @@ ani_psb_flash:	dc.b $1F
 		dc.b id_frame_psb_psb
 		dc.b afEnd
 		even
-
-		endm

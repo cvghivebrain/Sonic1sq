@@ -85,8 +85,6 @@ Hog_Action:	; Routine 2
 ; Animation script
 ; ---------------------------------------------------------------------------
 
-include_BallHog_animation:	macro
-
 Ani_Hog:	index *
 		ptr ani_hog_0
 		
@@ -114,5 +112,3 @@ ani_hog_0:	dc.b 9
 		dc.b id_frame_hog_open
 		dc.b afEnd
 		even
-
-		endm

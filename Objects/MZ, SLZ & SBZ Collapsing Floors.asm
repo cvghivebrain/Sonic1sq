@@ -143,15 +143,11 @@ CFlo_Collapse_Now:
 	@type_0:
 		moveq	#8-1,d1
 		addq.b	#1,ost_frame(a0)			; use broken frame which comprises 8 sprites
-		bra.s	FragmentObject				; split into 8 fragments, goto CFlo_WaitFall next
+		bra.w	FragmentObject				; split into 8 fragments, goto CFlo_WaitFall next
 								; see GHZ Collapsing Ledge.asm
-
-include_CollapseFloor_fragtiming:	macro
 
 CFlo_FragTiming_0:
 		dc.b $1E, $16, $E, 6, $1A, $12,	$A, 2		; unused
 CFlo_FragTiming_1:
 		dc.b $16, $1E, $1A, $12, 6, $E,	$A, 2
 		even
-
-		endm

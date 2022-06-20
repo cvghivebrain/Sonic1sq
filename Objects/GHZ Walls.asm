@@ -5,8 +5,6 @@
 ;	ObjPos_GHZ1, ObjPos_GHZ2, ObjPos_GHZ3 - subtypes 0/1/2/$10/$11/$12
 ; ---------------------------------------------------------------------------
 
-include_EdgeWalls_1:	macro
-
 EdgeWalls:
 		moveq	#0,d0
 		move.b	ost_routine(a0),d0
@@ -42,15 +40,7 @@ Edge_Solid:	; Routine 2
 Edge_Display:	; Routine 4
 		bsr.w	DisplaySprite
 		out_of_range	DeleteObject
-		rts	
-		
-		endm
-
-; ---------------------------------------------------------------------------
-; Object 44 - edge walls (GHZ), part 2
-; ---------------------------------------------------------------------------
-
-include_EdgeWalls_2:	macro
+		rts
 
 ; ---------------------------------------------------------------------------
 ; Solid	object subroutine
@@ -176,8 +166,4 @@ Edge_TopBottom:
 
 Edge_Ignore:
 		moveq	#0,d4
-		rts	
-; End of function Edge_ChkCollision
-
-		endm
-		
+		rts

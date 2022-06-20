@@ -181,8 +181,6 @@ Geyser_Delete:	; Routine 6
 ; Animation script
 ; ---------------------------------------------------------------------------
 
-include_LavaGeyser_animation:	macro
-
 Ani_Geyser:	index *
 		ptr ani_geyser_bubble1
 		ptr ani_geyser_bubble2
@@ -237,5 +235,3 @@ ani_geyser_bubble4:
 		dc.b id_frame_geyser_bubble8
 		dc.b afEnd
 		even
-
-		endm

@@ -66,8 +66,6 @@ TSon_Animate:	; Routine 6
 ; Animation script
 ; ---------------------------------------------------------------------------
 
-include_TitleSonic_animation:	macro
-
 Ani_TSon:	index *
 		ptr ani_tson_0
 		
@@ -82,5 +80,3 @@ ani_tson_0:	dc.b 7
 		dc.b id_frame_tson_wag2
 		dc.b afBack, 2
 		even
-
-		endm

@@ -39,7 +39,7 @@ SolidObject:
 
 	@stand:
 		move.w	d4,d2
-		bsr.w	MoveWithPlatform
+		jsr	MoveWithPlatform
 		moveq	#0,d4					; clear flag for no new collision
 		rts
 
@@ -71,7 +71,7 @@ SolidObject_NoRenderChk:
 
 	@stand:
 		move.w	d4,d2
-		bsr.w	MoveWithPlatform
+		jsr	MoveWithPlatform
 		moveq	#0,d4
 		rts	
 

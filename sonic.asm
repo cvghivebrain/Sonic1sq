@@ -245,7 +245,6 @@ Pal_MZCyc:	incbin	"Palettes\Cycle - MZ (Unused).bin"
 Pal_SLZCyc:	incbin	"Palettes\Cycle - SLZ.bin"
 Pal_SYZCyc1:	incbin	"Palettes\Cycle - SYZ1.bin"
 Pal_SYZCyc2:	incbin	"Palettes\Cycle - SYZ2.bin"
-		include_Pal_SBZCycList				; "Includes\PaletteCycle.asm"
 Pal_SBZCyc1:	incbin	"Palettes\Cycle - SBZ 1.bin"
 Pal_SBZCyc2:	incbin	"Palettes\Cycle - SBZ 2.bin"
 Pal_SBZCyc3:	incbin	"Palettes\Cycle - SBZ 3.bin"
@@ -285,31 +284,16 @@ Pal_Ending:	incbin	"Palettes\Ending.bin"
 		include "Includes\WaitForVBlank.asm"
 		include "Objects\_RandomNumber.asm"
 		include "Objects\_CalcSine & CalcAngle.asm"
-Sine_Data:	incbin	"Misc Data\Sine & Cosine Waves.bin"	; values for a 256 degree sine wave
-		incbin	"Misc Data\Sine & Cosine Waves.bin",,$80 ; contains duplicate data at the end!
-		include_CalcAngle				; "Objects\_CalcSine & CalcAngle.asm"
 Angle_Data:	incbin	"Misc Data\Angle Table.bin"
-
-		include_Sega					; "Includes\GM_Sega.asm"
 		include "Includes\Demo Pointers.asm"
 		include "Includes\GM_Title.asm"
 
 		include "Includes\GM_Level.asm"
 		include "Includes\LZWaterFeatures.asm"
 
-; ---------------------------------------------------------------------------
-; Demo pointers and routines
-; ---------------------------------------------------------------------------
 		include "Includes\MoveSonicInDemo & DemoRecorder.asm"
-		include_demo_pointers				; Includes\Demo Pointers.asm
-		incbin	"Demos\Unused.bin"			; unused demo data
-		even
-
-		include_Level_colptrs				; Includes\GM_Level.asm
 		include "Includes\OscillateNumInit & OscillateNumDo.asm"
 		include "Includes\SynchroAnimate.asm"
-	
-		include_Level_signpost				; Includes\GM_Level.asm
 
 ; ---------------------------------------------------------------------------
 ; Normal demo data
@@ -329,8 +313,6 @@ Pal_SSCyc1:	incbin	"Palettes\Cycle - Special Stage 1.bin"
 		even
 Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 		even
-
-		include_Special_2				; Includes\GM_Special.asm
 
 		include "Includes\GM_Continue.asm"
 
@@ -388,24 +370,14 @@ Demo_EndGHZ2:	incbin	"Demos\Ending - GHZ2.bin"
 
 		include "Objects\GHZ, MZ & SLZ Swinging Platforms, SBZ Ball on Chain.asm" ; SwingingPlatform
 		
-		include_Bridge_2				; Objects\GHZ Bridge.asm
-
 		include "Objects\_ExitPlatform.asm"
 
-		include_Bridge_3				; Objects\GHZ Bridge.asm
 		include "Objects\GHZ Bridge [Mappings].asm"	; Map_Bri
-
-		include_SwingingPlatform_1			; Objects\GHZ, MZ & SLZ Swinging Platforms, SBZ Ball on Chain.asm
 
 		include "Objects\_MoveWithPlatform.asm"
 
-		include_SwingingPlatform_2			; Objects\GHZ, MZ & SLZ Swinging Platforms, SBZ Ball on Chain.asm
-
 		include "Objects\GHZ Boss Ball.asm"		; BossBall
-		include_BossBall_2
 
-		include_SwingingPlatform_3			; Objects\GHZ, MZ & SLZ Swinging Platforms, SBZ Ball on Chain.asm
-		
 		include "Objects\GHZ & MZ Swinging Platforms [Mappings].asm" ; Map_Swing_GHZ
 		include "Objects\SLZ Swinging Platforms [Mappings].asm" ; Map_Swing_SLZ
 
@@ -421,11 +393,6 @@ Demo_EndGHZ2:	incbin	"Demos\Ending - GHZ2.bin"
 
 		include "Objects\GHZ Collapsing Ledge.asm"	; CollapseLedge
 		include "Objects\MZ, SLZ & SBZ Collapsing Floors.asm" ; CollapseFloor
-		include_CollapseLedge_2				; Objects\GHZ Collapsing Ledge.asm
-
-		include_CollapseFloor_fragtiming
-
-		include_SlopeObject_NoChk			; Objects\_SlopeObject.asm
 
 Ledge_SlopeData:
 		incbin	"Collision\GHZ Collapsing Ledge Heightmap.bin" ; used by CollapseLedge
@@ -444,7 +411,6 @@ Ledge_SlopeData:
 		include "Objects\SBZ Door [Mappings].asm"	; Map_ADoor
 
 		include "Objects\GHZ Walls.asm"			; EdgeWalls
-		include_EdgeWalls_2
 
 		include "Objects\Ball Hog.asm"			; BallHog
 		include "Objects\Ball Hog Cannonball.asm"	; Cannonball
@@ -452,7 +418,6 @@ Ledge_SlopeData:
 		include "Objects\Buzz Bomber Missile Vanishing.asm" ; MissileDissolve
 
 		include "Objects\Explosions.asm"		; ExplosionItem & ExplosionBomb
-		include_BallHog_animation
 		include "Objects\Ball Hog [Mappings].asm"	; Map_Hog
 		include "Objects\Buzz Bomber Missile Vanishing [Mappings].asm" ; Map_MisDissolve
 		include "Objects\Explosions [Mappings].asm"	; Map_ExplodeItem & Map_ExplodeBomb
@@ -467,8 +432,6 @@ Ledge_SlopeData:
 
 		include "Objects\Buzz Bomber.asm"		; BuzzBomber
 		include "Objects\Buzz Bomber Missile.asm"	; Missile
-		include_BuzzBomber_animation
-		include_Missile_animation
 		include "Objects\Buzz Bomber [Mappings].asm"	; Map_Buzz
 		include "Objects\Buzz Bomber Missile [Mappings].asm" ; Map_Missile
 
@@ -477,22 +440,16 @@ Ledge_SlopeData:
 		include "Objects\Ring Loss.asm"			; RingLoss
 		include "Objects\Giant Ring.asm"		; GiantRing
 		include "Objects\Giant Ring Flash.asm"		; RingFlash
-		include_Rings_animation
 		include "Objects\Ring [Mappings].asm"		; Map_Ring
 		include "Objects\Giant Ring [Mappings].asm"	; Map_GRing
 		include "Objects\Giant Ring Flash [Mappings].asm" ; Map_Flash
 
 		include "Objects\Monitors.asm"			; Monitor
 		include "Objects\Monitor Contents.asm"		; PowerUp
-		include_Monitor_2				; Objects\Monitors.asm
-		include_Monitor_animation
 		include "Objects\Monitors [Mappings].asm"	; Map_Monitor
 
 		include "Objects\Title Screen Sonic.asm"	; TitleSonic
 		include "Objects\Title Screen Press Start & TM.asm" ; PSBTM
-
-		include_TitleSonic_animation
-		include_PSBTM_animation
 
 		include "Objects\_AnimateSprite.asm"
 
@@ -561,7 +518,7 @@ LGrass_Coll_Sloped:
 		include "Includes\ExecuteObjects & Object Pointers.asm"
 
 NullObject:
-		;jmp	(DeleteObject).l ; It would be safer to have this instruction here, but instead it just falls through to ObjectFall
+		jmp	(DeleteObject).l
 
 		include "Objects\_ObjectFall & SpeedToPos.asm"
 
@@ -584,7 +541,6 @@ NullObject:
 		include "Objects\Roller.asm"			; Roller
 		include "Objects\Roller [Mappings].asm"		; Map_Roll
 
-		include_EdgeWalls_1				; Objects\GHZ Walls.asm
 		include "Objects\GHZ Walls [Mappings].asm"	; Map_Edge
 
 		include "Objects\MZ & SLZ Fireball Launchers.asm"
@@ -610,14 +566,11 @@ NullObject:
 		include "Objects\MZ Lava Wall.asm"		; LavaWall
 		include "Objects\MZ Invisible Lava Tag.asm"	; LavaTag
 		include "Objects\MZ Invisible Lava Tag [Mappings].asm" ; Map_LTag
-		include_LavaGeyser_animation
-		include_LavaWall_animation
 		include "Objects\MZ Lava Geyser [Mappings].asm"	; Map_Geyser
 		include "Objects\MZ Lava Wall [Mappings].asm"	; Map_LWall
 
 		include "Objects\Moto Bug.asm"			; MotoBug
 		include "Objects\_DespawnObject.asm"
-		include_MotoBug_1
 		include "Objects\Moto Bug [Mappings].asm"	; Map_Moto
 
 		blankobj Obj4F
@@ -706,37 +659,24 @@ See_DataFlat:	incbin	"Collision\SLZ Seesaw Heightmap (Flat).bin" ; used by Seesa
 
 		include "Objects\Sonic.asm"			; SonicPlayer
 		include "Objects\Sonic [Animations].asm"	; Ani_Sonic
-		include_Sonic_1
 
 		include "Objects\LZ Drowning Numbers.asm"	; DrownCount
 		include "Objects\_ResumeMusic.asm"
 
-		include_DrownCount_animation
 		include "Objects\LZ Sonic's Drowning Face [Mappings].asm" ; Map_Drown
 
 		include "Objects\Shield & Invincibility.asm"	; ShieldItem
 		include "Objects\Unused Special Stage Warp.asm"	; VanishSonic
 		include "Objects\LZ Water Splash.asm"		; Splash
-		include_ShieldItem_animation
 		include "Objects\Shield & Invincibility [Mappings].asm" ; Map_Shield
-		include_VanishSonic_animation
 		include "Objects\Unused Special Stage Warp [Mappings].asm" ; Map_Vanish
-		include_Splash_animation
 		include "Objects\LZ Water Splash [Mappings].asm" ; Map_Splash
 
-		include_Sonic_2					; Objects\Sonic.asm
 		include "Objects\_FindNearestTile, FindFloor & FindWall.asm"
 
 		include	"Includes\ConvertCollisionArray.asm"
 
-		include_Sonic_3					; Objects\Sonic.asm
 		include "Objects\_FindFloorObj, FindWallRightObj, FindCeilingObj & FindWallLeftObj.asm"
-		include_Sonic_4					; Objects\Sonic.asm
-		include_FindWallRightObj			; Objects\_FindFloorObj, FindWallRightObj, FindCeilingObj & FindWallLeftObj.asm
-		include_Sonic_5					; Objects\Sonic.asm
-		include_FindCeilingObj				; Objects\_FindFloorObj, FindWallRightObj, FindCeilingObj & FindWallLeftObj.asm
-		include_Sonic_6					; Objects\Sonic.asm
-		include_FindWallLeftObj				; Objects\_FindFloorObj, FindWallRightObj, FindCeilingObj & FindWallLeftObj.asm
 
 		include "Objects\SBZ Rotating Disc Junction.asm" ; Junction
 		include "Objects\SBZ Rotating Disc Junction [Mappings].asm" ; Map_Jun
@@ -780,7 +720,6 @@ See_DataFlat:	incbin	"Collision\SLZ Seesaw Heightmap (Flat).bin" ; used by Seesa
 		include "Objects\Credits & Sonic Team Presents [Mappings].asm" ; Map_Cred
 
 		include "Objects\GHZ Boss, BossExplode & BossMove.asm" ; BossGreenHill
-		include_BossBall_1				; Objects\GHZ Boss Ball.asm; BossBall
 		include "Objects\Bosses [Animations].asm"	; Ani_Bosses
 		include "Objects\Bosses [Mappings].asm"		; Map_Bosses, Map_BossItems
 
@@ -809,16 +748,12 @@ See_DataFlat:	incbin	"Collision\SLZ Seesaw Heightmap (Flat).bin" ; used by Seesa
 
 		include "Objects\FZ Plasma Balls.asm"		; BossPlasma
 		include "Objects\FZ Plasma Launcher [Mappings].asm" ; Map_PLaunch
-		include_BossPlasma_animation
 		include "Objects\FZ Plasma Balls [Mappings].asm" ; Map_Plasma
 
 		include "Objects\Prison Capsule.asm"		; Prison
 		include "Objects\Prison Capsule [Mappings].asm"	; Map_Pri
 
 		include "Objects\_ReactToItem, HurtSonic & KillSonic.asm"
-
-		include_Special_3				; Includes\GM_Special.asm
-		include_Special_4				; Includes\GM_Special.asm
 
 		include "Objects\Special Stage R [Mappings].asm" ; Map_SS_R
 		include "Objects\Special Stage Breakable & Red-White Blocks [Mappings].asm" ; Map_SS_Glass
@@ -849,7 +784,6 @@ Art_LivesNums:	incbin	"Graphics\Lives Counter Numbers.bin"	; 8x8 pixel numbers o
 
 		include "Objects\_DebugMode.asm"
 
-		include_levelheaders				; Includes\LevelDataLoad, LevelLayoutLoad & LevelHeaders.asm
 		include "Pattern Load Cues.asm"
 
 		align	$200,$FF
@@ -1118,12 +1052,6 @@ Kos_EndFlowers:	incbin	"Graphics - Compressed\Ending Flowers.kos" ; ending seque
 		nemfile	Nem_EndFlower
 		nemfile	Nem_CreditText
 		nemfile	Nem_EndStH
-
-		if Revision=0
-			dcb.b $104,$FF				; why?
-		else
-			dcb.b $40,$FF
-		endc
 ; ---------------------------------------------------------------------------
 ; Collision data
 ; ---------------------------------------------------------------------------

@@ -145,8 +145,6 @@ Ring_Delete:	; Routine 8
 ; Animation script
 ; ---------------------------------------------------------------------------
 
-include_Rings_animation:	macro
-
 Ani_Ring:	index *
 		ptr ani_ring_sparkle
 		
@@ -158,5 +156,3 @@ ani_ring_sparkle:
 		dc.b id_frame_ring_sparkle4
 		dc.b afRoutine
 		even
-
-		endm

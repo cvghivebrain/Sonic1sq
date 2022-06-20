@@ -467,7 +467,7 @@ SSS_ChkItems:
 SSS_ChkRing:
 		cmpi.b	#id_SS_Item_Ring,d4			; is the item a	ring?
 		bne.s	SSS_Chk1Up				; if not, branch
-		bsr.w	SS_FindFreeUpdate			; find free item update slot
+		jsr	SS_FindFreeUpdate			; find free item update slot
 		bne.s	@noslot
 		move.b	#id_SS_UpdateRing,(a2)			; item sparkles and vanishes
 		move.l	a1,ss_update_levelptr(a2)		; address within layout to be updated
@@ -489,7 +489,7 @@ SSS_ChkRing:
 SSS_Chk1Up:
 		cmpi.b	#id_SS_Item_1Up,d4			; is the item an extra life?
 		bne.s	SSS_ChkEmerald
-		bsr.w	SS_FindFreeUpdate
+		jsr	SS_FindFreeUpdate
 		bne.s	@noslot
 		move.b	#id_SS_Update1Up,(a2)
 		move.l	a1,ss_update_levelptr(a2)
@@ -507,7 +507,7 @@ SSS_ChkEmerald:
 		bcs.s	SSS_ChkGhost
 		cmpi.b	#id_SS_Item_Em6,d4
 		bhi.s	SSS_ChkGhost
-		bsr.w	SS_FindFreeUpdate
+		jsr	SS_FindFreeUpdate
 		bne.s	@noslot
 		move.b	#id_SS_UpdateEmerald,(a2)
 		move.l	a1,ss_update_levelptr(a2)
@@ -612,7 +612,7 @@ SSS_ChkBumper:
 		asr.l	#8,d0
 		move.w	d0,ost_y_vel(a0)
 		bset	#status_air_bit,ost_status(a0)		; set Sonic's air flag
-		bsr.w	SS_FindFreeUpdate			; find free item update slot
+		jsr	SS_FindFreeUpdate			; find free item update slot
 		bne.s	@noslot					; branch if not found
 		move.b	#id_SS_UpdateBumper,(a2)		; set update type
 		move.l	ost_ss_item_address(a0),d0
@@ -671,7 +671,7 @@ SSS_Rblock:
 		tst.b	ost_ss_r_time(a0)			; check R cooldown
 		bne.w	SSS_ChkItems_End
 		move.b	#30,ost_ss_r_time(a0)
-		bsr.w	SS_FindFreeUpdate			; find free item update slot
+		jsr	SS_FindFreeUpdate			; find free item update slot
 		bne.s	@noslot					; branch if not found
 		move.b	#id_SS_UpdateR,(a2)
 		move.l	ost_ss_item_address(a0),d0
@@ -694,7 +694,7 @@ SSS_ChkGlass:
 		bne.s	SSS_ChkItems_End			; if not, branch
 
 	@glass:
-		bsr.w	SS_FindFreeUpdate			; find free item update slot
+		jsr	SS_FindFreeUpdate			; find free item update slot
 		bne.s	@noslot
 		move.b	#id_SS_UpdateGlass,(a2)
 		movea.l	ost_ss_item_address(a0),a1

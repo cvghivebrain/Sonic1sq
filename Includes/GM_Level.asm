@@ -377,8 +377,6 @@ Level_Demo:
 ;	uses d0
 ; ---------------------------------------------------------------------------
 
-include_Level_colptrs:	macro
-
 SetColIndexPtr:
 		moveq	#0,d0
 		move.b	(v_zone).w,d0
@@ -395,13 +393,9 @@ ColPointers:	dc.l Col_GHZ
 		zonewarning ColPointers,4
 ;		dc.l Col_GHZ					; pointer for Ending is missing by default
 
-		endm
-
 ; ---------------------------------------------------------------------------
 ; Subroutine to check Sonic's position and load signpost graphics
 ; ---------------------------------------------------------------------------
-
-include_Level_signpost:	macro
 
 SignpostArtLoad:
 		tst.w	(v_debug_active).w			; is debug mode	being used?
@@ -424,5 +418,3 @@ SignpostArtLoad:
 
 	@exit:
 		rts
-
-		endm

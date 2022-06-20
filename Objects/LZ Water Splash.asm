@@ -40,8 +40,6 @@ Spla_Delete:	; Routine 4
 ; Animation script
 ; ---------------------------------------------------------------------------
 
-include_Splash_animation:	macro
-
 Ani_Splash:	index *
 		ptr ani_splash_0
 		
@@ -51,5 +49,3 @@ ani_splash_0:	dc.b 4
 		dc.b id_frame_splash_2
 		dc.b afRoutine
 		even
-
-		endm

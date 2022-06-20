@@ -135,8 +135,6 @@ Buzz_Delete:	; Routine 4
 ; Animation script
 ; ---------------------------------------------------------------------------
 
-include_BuzzBomber_animation:	macro
-
 Ani_Buzz:	index *
 		ptr ani_buzz_fly1
 		ptr ani_buzz_fly2
@@ -157,5 +155,3 @@ ani_buzz_fire:	dc.b 1
 		dc.b id_frame_buzz_fire2
 		dc.b afEnd
 		even
-
-		endm

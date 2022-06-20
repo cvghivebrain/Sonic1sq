@@ -244,8 +244,6 @@ ani_plaunch_whitesparking:
 		dc.b afEnd
 		even
 
-include_BossPlasma_animation:	macro
-
 Ani_Plasma:	index *
 		ptr ani_plasma_full
 		ptr ani_plasma_short
@@ -298,5 +296,3 @@ ani_plasma_short:
 		dc.b id_frame_plasma_white4
 		dc.b afEnd
 		even
-
-		endm

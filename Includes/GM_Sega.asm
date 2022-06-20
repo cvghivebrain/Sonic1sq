@@ -2,8 +2,6 @@
 ; Sega screen
 ; ---------------------------------------------------------------------------
 
-include_Sega:	macro
-
 sega_bg_width:	equ $18						; bg dimensions - striped pattern behind logo
 sega_bg_height:	equ 8
 sega_fg_width:	equ $28						; fg dimensions - white box with logo cutout
@@ -75,9 +73,7 @@ Sega_WaitLoop:
 
 	@goto_title:
 		move.b	#id_Title,(v_gamemode).w		; go to title screen
-		rts	
-
-		endm
+		rts
 
 ; ---------------------------------------------------------------------------
 ; Palette cycling routine - Sega logo

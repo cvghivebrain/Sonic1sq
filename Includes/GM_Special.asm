@@ -424,12 +424,6 @@ SS_BG_Modes:
 		even
 
 ; ---------------------------------------------------------------------------
-; Special Stage, part 2
-; ---------------------------------------------------------------------------
-
-include_Special_2:	macro
-
-; ---------------------------------------------------------------------------
 ; Subroutine to	make the special stage background animated
 
 ;	uses d0, d1, d2, d3, a1, a3
@@ -546,14 +540,6 @@ SS_Bubble_WobbleData:
 		dc.b 2, 3
 		dc.b 2, -1
 		even
-		
-		endm
-
-; ---------------------------------------------------------------------------
-; Special Stage, part 3
-; ---------------------------------------------------------------------------
-
-include_Special_3:	macro
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	show the special stage layout
@@ -1133,8 +1119,6 @@ SS_LoadData:
 
 		rts
 
-		endm
-
 ; ---------------------------------------------------------------------------
 ; Special Stage sprite settings
 ; ---------------------------------------------------------------------------
@@ -1147,8 +1131,6 @@ ss_sprite:	macro *,map,tile,frame
 		dc.l map+(frame*$1000000)
 		dc.w tile
 		endm
-
-include_Special_4:	macro
 
 SS_ItemIndex:
 		ss_sprite Map_SSWalls,tile_Nem_SSWalls,0	; 1 - walls
@@ -1231,5 +1213,3 @@ SS_Item_Glass6:	ss_sprite Map_SS_Glass,tile_Nem_SSGlass+tile_pal4,0 ; $4C
 SS_Item_Glass7:	ss_sprite Map_SS_Glass,tile_Nem_SSGlass+tile_pal2,0 ; $4D
 SS_Item_Glass8:	ss_sprite Map_SS_Glass,tile_Nem_SSGlass+tile_pal3,0 ; $4E
 	SS_ItemIndex_end:
-
-		endm

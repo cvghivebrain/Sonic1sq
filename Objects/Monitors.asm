@@ -175,12 +175,6 @@ Mon_Explode:
 		bra.w	DisplaySprite
 
 ; ---------------------------------------------------------------------------
-; Object 26 - monitors, part 2
-; ---------------------------------------------------------------------------
-
-include_Monitor_2:	macro
-
-; ---------------------------------------------------------------------------
 ; Subroutine to	make the sides of a monitor solid
 
 ; input:
@@ -252,16 +246,11 @@ Mon_Solid_Detect:
 		cmp.w	d2,d1
 		bcc.s	@side_hit				; branch if Sonic is to the right
 		moveq	#-1,d1					; set top/bottom collision flag
-		rts	
-; End of function Mon_Solid_Detect
-
-		endm
+		rts
 		
 ; ---------------------------------------------------------------------------
 ; Animation script
 ; ---------------------------------------------------------------------------
-
-include_Monitor_animation:	macro
 
 Ani_Monitor:	index *
 		ptr ani_monitor_static				; 0
@@ -403,5 +392,3 @@ ani_monitor_breaking:
 		dc.b id_frame_monitor_broken
 		dc.b afBack, 1
 		even
-
-		endm

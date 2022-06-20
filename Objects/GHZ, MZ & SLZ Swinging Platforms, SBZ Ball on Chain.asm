@@ -9,33 +9,6 @@
 ;	ObjPosSBZ2 - subtypes 6/7
 ; ---------------------------------------------------------------------------
 
-; ---------------------------------------------------------------------------
-; Subroutine to detect collision with a platform, and update relevant flags
-;
-; input:
-;	d1 = platform width
-;	d3 = platform height
-; ---------------------------------------------------------------------------
-
-Swing_Solid:
-		lea	(v_ost_player).w,a1
-		tst.w	ost_y_vel(a1)				; is Sonic moving up/jumping?
-		bmi.w	Plat_Exit				; if yes, branch
-
-		move.w	ost_x_pos(a1),d0
-		sub.w	ost_x_pos(a0),d0
-		add.w	d1,d0
-		bmi.w	Plat_Exit				; branch if Sonic is left of the platform
-		add.w	d1,d1
-		cmp.w	d1,d0
-		bhs.w	Plat_Exit				; branch if Sonic is right of the platform
-		move.w	ost_y_pos(a0),d0
-		sub.w	d3,d0
-		bra.w	Plat_NoXCheck_AltY
-; End of function Swing_Solid
-
-include_SwingingPlatform_1:	macro
-
 SwingingPlatform:
 		moveq	#0,d0
 		move.b	ost_routine(a0),d0
@@ -183,15 +156,6 @@ Swing_Action2:	; Routine 4
 		bra.w	Swing_ChkDel
 
 		rts
-		
-		endm
-
-; ---------------------------------------------------------------------------
-; Object 15 - swinging platforms (GHZ, MZ, SLZ)
-;	    - spiked ball on a chain (SBZ), part 2
-; ---------------------------------------------------------------------------
-
-include_SwingingPlatform_2:	macro
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to update positions of all chainlinks and platform
@@ -206,17 +170,7 @@ Swing_Move:
 		add.w	d1,d0					; d0 = oscillating value, same for all platforms
 
 	@no_xflip:
-		bra.w	Swing_MoveAll
-; End of function Swing_Move
-
-		endm
-
-; ---------------------------------------------------------------------------
-; Object 15 - swinging platforms (GHZ, MZ, SLZ)
-;	    - spiked ball on a chain (SBZ), part 3
-; ---------------------------------------------------------------------------
-
-include_SwingingPlatform_3:	macro
+		;bra.w	Swing_MoveAll
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to convert angle to position for all chain links
@@ -251,8 +205,7 @@ Swing_MoveAll:
 		move.w	d4,ost_y_pos(a1)			; update position
 		move.w	d5,ost_x_pos(a1)
 		dbf	d6,@loop				; repeat for all chainlinks and platform
-		rts	
-; End of function Swing_MoveAll
+		rts
 
 ; ===========================================================================
 
@@ -283,7 +236,28 @@ Swing_Delete:	; Routine 6, 8
 ; ===========================================================================
 
 Swing_Display:	; Routine $A
-		bra.w	DisplaySprite
+		bra.w	DisplaySprite		
 
-		endm
-		
+; ---------------------------------------------------------------------------
+; Subroutine to detect collision with a platform, and update relevant flags
+;
+; input:
+;	d1 = platform width
+;	d3 = platform height
+; ---------------------------------------------------------------------------
+
+Swing_Solid:
+		lea	(v_ost_player).w,a1
+		tst.w	ost_y_vel(a1)				; is Sonic moving up/jumping?
+		bmi.w	Plat_Exit				; if yes, branch
+
+		move.w	ost_x_pos(a1),d0
+		sub.w	ost_x_pos(a0),d0
+		add.w	d1,d0
+		bmi.w	Plat_Exit				; branch if Sonic is left of the platform
+		add.w	d1,d1
+		cmp.w	d1,d0
+		bhs.w	Plat_Exit				; branch if Sonic is right of the platform
+		move.w	ost_y_pos(a0),d0
+		sub.w	d3,d0
+		bra.w	Plat_NoXCheck_AltY

@@ -55,8 +55,6 @@ FindFloorObj2:
 ;	uses d0, d3, d4, d5, d6
 ; ---------------------------------------------------------------------------
 
-include_FindWallRightObj:	macro
-
 FindWallRightObj:
 		add.w	ost_x_pos(a0),d3
 		move.w	ost_y_pos(a0),d2
@@ -74,8 +72,6 @@ FindWallRightObj:
 	@no_snap:
 		rts
 
-		endm
-
 ; ---------------------------------------------------------------------------
 ; Subroutine to find the distance of an object to the ceiling
 
@@ -89,8 +85,6 @@ FindWallRightObj:
 ;	(a4) = floor angle
 ;	uses d0, d2, d4, d5, d6
 ; ---------------------------------------------------------------------------
-
-include_FindCeilingObj:	macro
 
 FindCeilingObj:
 		move.w	ost_y_pos(a0),d2
@@ -113,8 +107,6 @@ FindCeilingObj:
 	@no_snap:
 		rts
 
-		endm
-
 ; ---------------------------------------------------------------------------
 ; Subroutine to find the distance of an object to the wall to its left
 
@@ -130,8 +122,6 @@ FindCeilingObj:
 ;	(a4) = floor angle
 ;	uses d0, d3, d4, d5, d6
 ; ---------------------------------------------------------------------------
-
-include_FindWallLeftObj:	macro
 
 FindWallLeftObj:
 		add.w	ost_x_pos(a0),d3
@@ -152,5 +142,3 @@ FindWallLeftObj:
 
 	@no_snap:
 		rts
-
-		endm
