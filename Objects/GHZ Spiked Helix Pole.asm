@@ -19,7 +19,7 @@ Hel_Index:	index *,,2
 		ptr Hel_Display
 
 		rsobj Helix
-ost_helix_child_list:	rs.b 21 ; ost_subtype+1			; list of child OST indices (up to 21 bytes)
+ost_helix_child_list:	rs.b 15 ; ost_subtype+1			; list of child OST indices (up to 15 bytes)
 ost_helix_frame:	rs.b 1 ; $3E				; start frame (different for each spike)
 		rsobjend
 ; ===========================================================================

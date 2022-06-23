@@ -119,7 +119,7 @@ SEgg_Leap:
 		bmi.s	@find_blocks				; if not, branch
 		cmpi.w	#$595,ost_y_pos(a0)			; has Eggman passed $595 on y axis?
 		bcs.s	@find_blocks				; if not, branch
-		move.w	#$5357,ost_subtype(a0)			; set flag for button to change to pressed
+		move.b	#$53,ost_subtype(a0)			; set flag for button to change to pressed
 		cmpi.w	#$59B,ost_y_pos(a0)			; has Eggman passed $59B on y axis?
 		bcs.s	@find_blocks				; if not, branch
 		move.w	#$59B,ost_y_pos(a0)			; stop at $59B
@@ -139,7 +139,7 @@ SEgg_Leap:
 		dbeq	d0,@loop				; if not, repeat (max $3E times)
 
 		bne.s	@update_pos
-		move.w	#$474F,ost_subtype(a1)			; set block to disintegrate
+		move.b	#$47,ost_subtype(a1)			; set block to disintegrate
 		addq.b	#2,ost_routine2(a0)			; goto SEgg_Move next
 		move.b	#id_ani_eggman_laugh,ost_anim(a0)
 
@@ -160,7 +160,7 @@ SEgg_BtnIndex:	index *,,2
 
 SEgg_BtnChk:
 		movea.l	ost_eggman_parent(a0),a1		; get address of parent OST (Eggman)
-		cmpi.w	#$5357,ost_subtype(a1)			; has subtype been changed?
+		cmpi.b	#$53,ost_subtype(a1)			; has subtype been changed?
 		bne.s	SEgg_BtnDisplay				; if not, branch
 		move.b	#id_frame_button_down,ost_frame(a0)	; use pressed frame
 		addq.b	#2,ost_routine2(a0)			; goto SEgg_BtnDisplay next

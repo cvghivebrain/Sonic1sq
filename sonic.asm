@@ -736,7 +736,6 @@ See_DataFlat:	incbin	"Collision\SLZ Seesaw Heightmap (Flat).bin" ; used by Seesa
 		include "Objects\SBZ2 Blocks That Eggman Breaks.asm" ; FalseFloor
 		include "Objects\SBZ2 Eggman.asm"		; ScrapEggman
 		include "Objects\SBZ2 Eggman [Mappings].asm"	; Map_SEgg
-		include_FalseFloor_1				; Objects\SBZ2 Blocks That Eggman Breaks.asm
 		include "Objects\SBZ2 Blocks That Eggman Breaks [Mappings].asm" ; Map_FFloor
 
 		include "Objects\FZ Boss.asm"			; BossFinal

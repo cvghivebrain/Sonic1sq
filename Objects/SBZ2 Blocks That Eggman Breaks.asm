@@ -9,8 +9,6 @@
 FFloor_Delete:
 		jmp	(DeleteObject).l
 
-include_FalseFloor_1:	macro
-
 FalseFloor:
 		moveq	#0,d0
 		move.b	ost_routine(a0),d0
@@ -65,7 +63,7 @@ FFloor_Main:	; Routine 0
 ; ===========================================================================
 
 FFloor_ChkBreak:; Routine 2
-		cmpi.w	#$474F,ost_subtype(a0)			; is object set to disintegrate? (by Eggman object)
+		cmpi.b	#$47,ost_subtype(a0)			; is object set to disintegrate? (by Eggman object)
 		bne.s	FFloor_Solid				; if not, branch
 		clr.b	ost_frame(a0)
 		addq.b	#2,ost_routine(a0)			; goto FFloor_Break next
@@ -97,7 +95,7 @@ FFloor_Break:	; Routine 4
 		add.w	d0,d0
 		move.w	ost_ffloor_children(a0,d0.w),d0		; get address of OST for next child block
 		movea.l	d0,a1
-		move.w	#$474F,ost_subtype(a1)			; set that block to break
+		move.b	#$47,ost_subtype(a1)			; set that block to break
 		addq.b	#1,ost_frame(a0)			; next frame
 		cmpi.b	#8,ost_frame(a0)			; have all blocks broken? (final frame)
 		beq.s	FFloor_AllGone				; if yes, branch
@@ -113,7 +111,7 @@ FFloor_AllGone:	; Routine 6
 ; ===========================================================================
 
 FFloor_Block:	; Routine 8
-		cmpi.w	#$474F,ost_subtype(a0)			; is block set to disintegrate?
+		cmpi.b	#$47,ost_subtype(a0)			; is block set to disintegrate?
 		beq.s	FFloor_BlockBreak			; if yes, branch
 		jmp	(DisplaySprite).l
 ; ===========================================================================
@@ -176,7 +174,4 @@ FFloor_FragSpeed:
 FFloor_FragPos:	dc.w -8, -8
 		dc.w $10, 0
 		dc.w 0,	$10
-		dc.w $10, $10
-
-		endm
-		
+		dc.w $10, $10		

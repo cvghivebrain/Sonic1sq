@@ -86,7 +86,7 @@ BMZ_ShipStart:
 		move.w	d0,ost_y_vel(a0)			; set as y speed
 		move.w	#-$100,ost_x_vel(a0)			; move ship left
 		bsr.w	BossMove				; update parent position
-		cmpi.w	#$1910,ost_boss_parent_x_pos(a0)		; has boss reached target position?
+		cmpi.w	#$1910,ost_boss_parent_x_pos(a0)	; has boss reached target position?
 		bne.s	@not_at_pos				; if not, branch
 		addq.b	#2,ost_routine2(a0)			; goto BMZ_ShipMove next
 		clr.b	ost_subtype(a0)
@@ -195,7 +195,7 @@ BMZ_ChgDir:
 		addi.w	#$1878,d0
 		move.w	d0,ost_x_pos(a1)			; randomise x pos
 		lsr.b	#7,d1
-		move.w	#$FF,ost_subtype(a1)			; flag fireball as being spawned by boss
+		move.b	#$FF,ost_fireball_mz_boss(a1)		; flag fireball as being spawned by boss
 
 	@fail:
 		jsr	(RandomNumber).l
@@ -206,9 +206,9 @@ BMZ_ChgDir:
 	@skip_fireball:
 		btst	#status_xflip_bit,ost_status(a0)	; is ship facing right?
 		beq.s	@chk_left				; if yes, branch
-		cmpi.w	#$1910,ost_boss_parent_x_pos(a0)		; is boss on far right of screen?
+		cmpi.w	#$1910,ost_boss_parent_x_pos(a0)	; is boss on far right of screen?
 		blt.s	@exit					; if not, branch
-		move.w	#$1910,ost_boss_parent_x_pos(a0)		; keep from moving further
+		move.w	#$1910,ost_boss_parent_x_pos(a0)	; keep from moving further
 		bra.s	@stop_moving_h
 ; ===========================================================================
 

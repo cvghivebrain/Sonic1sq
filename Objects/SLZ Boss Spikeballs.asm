@@ -35,6 +35,7 @@ ost_bspike_y_start:	rs.w 1 ; $34				; seesaw y position (2 bytes)
 ost_bspike_state:	rs.b 1 ; $3A				; seesaw state: 0 = left raised; 2 = right raised; 1/3 = flat
 ost_bspike_time_master:	rs.b 1 ; $3B
 ost_bspike_seesaw:	rs.l 1 ; $3C				; address of OST of seesaw (4 bytes)
+ost_bspike_time:	rs.w 1					; timer for explosion
 		rsobjend
 ; ===========================================================================
 
@@ -83,7 +84,7 @@ BSpike_Fall:	; Routine 2
 		moveq	#0,d1
 
 	@no_xflip:
-		move.w	#$F0,ost_subtype(a0)
+		move.w	#$F0,ost_bspike_time(a0)
 		move.b	#10,ost_bspike_time_master(a0)		; set frame duration to 10 frames
 		move.b	ost_bspike_time_master(a0),ost_anim_time(a0)
 		bra.w	BSpike_Update
@@ -124,7 +125,7 @@ BSpike_Bounce:	; Routine 4
 
 	@on_right:
 		move.b	#id_frame_seesaw_silver,ost_frame(a0)
-		move.w	#$20,ost_subtype(a0)			; set timer
+		move.w	#$20,ost_bspike_time(a0)		; set timer
 		addq.b	#2,ost_routine(a0)			; goto BSpike_HitBoss next
 		bra.w	BSpike_HitBoss
 ; ===========================================================================
@@ -149,20 +150,20 @@ BSpike_Bounce:	; Routine 4
 		move.w	d2,ost_x_pos(a0)			; update x pos
 		clr.w	ost_y_sub(a0)
 		clr.w	ost_x_sub(a0)
-		subq.w	#1,ost_subtype(a0)			; decrement timer
+		subq.w	#1,ost_bspike_time(a0)			; decrement timer
 		bne.s	BSpike_Animate				; branch if time remains
-		move.w	#$20,ost_subtype(a0)			; set subtype to allow spawning of shrapnel objects
+		move.w	#$20,ost_bspike_time(a0)		; set subtype to allow spawning of shrapnel objects
 		move.b	#id_BSpike_Explode,ost_routine(a0)	; goto BSpike_Explode next
 		rts	
 ; ===========================================================================
 
 BSpike_Animate:
-		cmpi.w	#$78,ost_subtype(a0)			; subtype decrements like a timer
+		cmpi.w	#$78,ost_bspike_time(a0)		; subtype decrements like a timer
 		bne.s	@not_fast				; branch if not at specified value
 		move.b	#5,ost_bspike_time_master(a0)		; use faster animation speed
 
 	@not_fast:
-		cmpi.w	#$3C,ost_subtype(a0)
+		cmpi.w	#$3C,ost_bspike_time(a0)
 		bne.s	@not_faster
 		move.b	#2,ost_bspike_time_master(a0)		; use fastest animation speed
 
@@ -232,7 +233,7 @@ BSpike_HitBoss:	; Routine 6
 		bcs.s	@boss_missed
 
 		addq.b	#2,ost_routine(a0)			; goto BSpike_Explode next
-		clr.w	ost_subtype(a0)
+		clr.w	ost_bspike_time(a0)
 		clr.b	ost_col_type(a1)			; make boss harmless
 		subq.b	#1,ost_col_property(a1)			; subtract hit point from boss
 		bne.s	@boss_missed				; branch if not 0
@@ -278,7 +279,7 @@ BSpike_HitBoss:	; Routine 6
 		moveq	#0,d1
 
 	@moving_left:
-		move.w	#0,ost_subtype(a0)
+		move.w	#0,ost_bspike_time(a0)
 
 BSpike_Update:
 		move.b	d1,ost_seesaw_state(a1)			; set new state for seesaw (0 or 2)
@@ -333,7 +334,7 @@ BSpike_Ball_Hitbox:
 BSpike_Explode:	; Routine 8
 		move.b	#id_ExplosionBomb,(a0)			; turn object into explosion
 		clr.b	ost_routine(a0)
-		cmpi.w	#$20,ost_subtype(a0)			; is shrapnel flag set?
+		cmpi.w	#$20,ost_bspike_time(a0)		; is shrapnel flag set?
 		beq.s	@make_frags				; if yes, branch
 		rts	
 ; ===========================================================================

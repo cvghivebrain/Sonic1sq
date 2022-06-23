@@ -222,12 +222,14 @@ BFZ_Eggman_Crush:
 @flash:
 		subq.b	#1,ost_fz_flash_num(a0)			; decrement flash counter
 		beq.s	@missed					; branch if 0
-		move.b	#id_ani_eggman_intube,ost_anim(a0)
+		moveq	#id_ani_eggman_intube,d0
+		jsr	NewAnim
 		bra.s	@animate
 ; ===========================================================================
 
 @missed:
-		move.b	#id_ani_eggman_laugh,ost_anim(a0)
+		moveq	#id_ani_eggman_laugh,d0
+		jsr	NewAnim
 
 @animate:
 		lea	Ani_SEgg(pc),a1

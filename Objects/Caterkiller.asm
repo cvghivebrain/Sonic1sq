@@ -26,8 +26,8 @@ Cat_Index:	index *,,2
 ost_cat_wait_time:	rs.b 1 ; $2A					; time to wait between actions
 ost_cat_mode:		rs.b 1 ; $2B					; bit 4 (+$10) = mouth is open/segment moving up; bit 7 (+$80) = update animation
 ost_cat_floormap:	rs.b 16 ; $2C					; height map of floor beneath caterkiller (16 bytes)
-ost_cat_parent:		rs.l 1 ; $3C					; address of OST of parent object (4 bytes - high byte is ost_cat_segment_pos)
 ost_cat_segment_pos:	rs.b 1 ; $3C					; segment position - starts as 0/4/8/$A, increments as it moves
+ost_cat_parent:		rs.w 1 ; $3C					; address of OST of parent object
 		rsobjend
 ; ===========================================================================
 
@@ -92,7 +92,7 @@ Cat_Loop:
 		move.b	ost_status(a0),ost_status(a1)
 		move.b	ost_status(a0),ost_render(a1)
 		move.b	#id_frame_cat_body1,ost_frame(a1)
-		move.l	a2,ost_cat_parent(a1)
+		move.w	a2,ost_cat_parent(a1)
 		move.b	d4,ost_cat_segment_pos(a1)
 		addq.b	#4,d4
 		movea.l	a1,a2					; make adjacent segment the parent object instead of head
@@ -266,7 +266,9 @@ Cat_Floor:
 ; ===========================================================================
 
 Cat_BodySeg2:	; Routine 6
-		movea.l	ost_cat_parent(a0),a1			; get OST of 1st body segment
+		moveq	#-1,d0
+		move.w	ost_cat_parent(a0),d0
+		movea.l	d0,a1					; get OST of 1st body segment
 		move.b	ost_cat_mode(a1),ost_cat_mode(a0)	; copy animation mode flags
 		bpl.s	Cat_BodySeg1				; branch if not updating
 
@@ -284,7 +286,9 @@ Cat_BodySeg2:	; Routine 6
 		move.b	d0,ost_frame(a0)			; update frame
 
 Cat_BodySeg1:	; Routine 4, 8
-		movea.l	ost_cat_parent(a0),a1			; get OST of head or previous body segment
+		moveq	#-1,d0
+		move.w	ost_cat_parent(a0),d0
+		movea.l	d0,a1					; get OST of head or previous body segment
 		tst.b	ost_status(a0)
 		bmi.w	Cat_Body_Break				; branch if caterkiller is broken
 		move.b	ost_cat_mode(a1),ost_cat_mode(a0)	; copy animation mode flags

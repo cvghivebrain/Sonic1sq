@@ -187,7 +187,8 @@ BSYZ_ShipMove:
 		move.w	d0,ost_boss_parent_x_pos(a0)		; align ship to block
 		bsr.w	BSYZ_FindBlock				; save address of OST of block to ost_boss_block
 		addq.b	#2,ost_routine2(a0)			; goto BSYZ_Attack next
-		clr.w	ost_subtype(a0)				; goto BSYZ_Descend next
+		clr.b	ost_subtype(a0)				; goto BSYZ_Descend next
+		clr.b	ost_boss_mode(a0)
 		clr.w	ost_x_vel(a0)				; stop moving horizontally
 
 	@update:

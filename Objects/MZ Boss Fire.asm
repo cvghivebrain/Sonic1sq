@@ -127,7 +127,7 @@ BFire_SpawnFire:
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		move.b	#id_BossFire,(a1)			; load fireball object
-		move.w	#$67,ost_subtype(a1)			; subtype 0, timer 1.7 seconds
+		move.b	#$67,ost_bfire_wait_time(a1)		; timer 1.7 seconds
 
 	@fail:
 		rts	
