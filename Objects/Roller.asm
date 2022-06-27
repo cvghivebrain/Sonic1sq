@@ -168,8 +168,7 @@ Roll_Stop:
 		bset	#7,ost_roller_mode(a0)			; set flag for roller stopped
 
 	@exit:
-		rts	
-; End of function Roll_Stop
+		rts
 
 ; ---------------------------------------------------------------------------
 ; Animation script

@@ -47,7 +47,7 @@ Plasma_Generator:
 		movea.l	ost_plasma_parent(a0),a1		; get address of OST of parent object
 		cmpi.b	#id_BFZ_Eggman_Fall,ost_fz_mode(a1)	; has boss been beaten?
 		bne.s	@not_beaten				; if not, branch
-		move.b	#id_ExplosionBomb,(a0)			; replace object with explosion
+		move.l	#ExplosionBomb,ost_id(a0)		; replace object with explosion
 		move.b	#id_ExBom_Main,ost_routine(a0)
 		jmp	(DisplaySprite).l
 ; ===========================================================================
@@ -92,7 +92,7 @@ Plasma_MakeBalls:
 	@loop:
 		jsr	(FindNextFreeObj).l			; find free OST slot
 		bne.w	@skip_balls				; branch if not found
-		move.b	#id_BossPlasma,(a1)			; load plasma ball object
+		move.l	#BossPlasma,ost_id(a1)			; load plasma ball object
 		move.w	ost_x_pos(a0),ost_x_pos(a1)		; start at same position as launcher object
 		move.w	#$53C,ost_y_pos(a1)
 		move.b	#id_Plasma_Balls,ost_routine(a1)	; goto Plasma_Balls next

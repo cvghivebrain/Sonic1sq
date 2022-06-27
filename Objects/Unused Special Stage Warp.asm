@@ -43,7 +43,7 @@ Van_RmvSonic:	; Routine 2
 
 		tst.b	(v_ost_player).w			; has Sonic already been removed?
 		beq.s	@display				; if yes, branch
-		move.b	#0,(v_ost_player).w			; remove Sonic
+		move.l	#0,(v_ost_player).w			; remove Sonic
 		play.w	1, jsr, sfx_Goal			; play Special Stage "GOAL" sound
 
 	@display:
@@ -53,7 +53,7 @@ Van_RmvSonic:	; Routine 2
 Van_LoadSonic:	; Routine 4
 		subq.w	#1,ost_vanish_time(a0)			; decrement timer
 		bne.s	@wait					; if time remains, branch
-		move.b	#id_SonicPlayer,(v_ost_player).w	; load Sonic object
+		move.l	#SonicPlayer,(v_ost_player).w		; load Sonic object
 		jmp	(DeleteObject).l
 
 	@wait:

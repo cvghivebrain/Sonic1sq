@@ -82,7 +82,7 @@ Pow_ChkShield:
 		bne.s	Pow_ChkInvinc
 
 		move.b	#1,(v_shield).w				; give Sonic a shield
-		move.b	#id_ShieldItem,(v_ost_shield).w		; load shield object ($38)
+		move.l	#ShieldItem,(v_ost_shield).w		; load shield object ($38)
 		play.w	0, jmp, sfx_Shield			; play shield sound
 ; ===========================================================================
 
@@ -92,13 +92,13 @@ Pow_ChkInvinc:
 
 		move.b	#1,(v_invincibility).w			; make Sonic invincible
 		move.w	#sonic_invincible_time,(v_ost_player+ost_sonic_invincible_time).w ; time limit for the power-up
-		move.b	#id_ShieldItem,(v_ost_stars1).w		; load stars object ($3801)
+		move.l	#ShieldItem,(v_ost_stars1).w		; load stars object ($3801)
 		move.b	#id_ani_stars1,(v_ost_stars1+ost_anim).w
-		move.b	#id_ShieldItem,(v_ost_stars2).w		; load stars object ($3802)
+		move.l	#ShieldItem,(v_ost_stars2).w		; load stars object ($3802)
 		move.b	#id_ani_stars2,(v_ost_stars2+ost_anim).w
-		move.b	#id_ShieldItem,(v_ost_stars3).w		; load stars object ($3803)
+		move.l	#ShieldItem,(v_ost_stars3).w		; load stars object ($3803)
 		move.b	#id_ani_stars3,(v_ost_stars3+ost_anim).w
-		move.b	#id_ShieldItem,(v_ost_stars4).w		; load stars object ($3804)
+		move.l	#ShieldItem,(v_ost_stars4).w		; load stars object ($3804)
 		move.b	#id_ani_stars4,(v_ost_stars4+ost_anim).w
 		tst.b	(f_boss_boundary).w			; is boss mode on?
 		bne.s	Pow_NoMusic				; if yes, branch

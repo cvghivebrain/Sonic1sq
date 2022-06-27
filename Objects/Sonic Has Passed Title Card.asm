@@ -66,7 +66,7 @@ Has_Main:	; Routine 0
 		moveq	#6,d1					; 6 additional items
 
 	@loop:
-		move.b	#id_HasPassedCard,ost_id(a1)
+		move.l	#HasPassedCard,ost_id(a1)
 		move.w	(a2),ost_x_pos(a1)			; set actual x position
 		move.w	(a2)+,ost_has_x_start(a1)		; set start x position (same as actual)
 		move.w	(a2)+,ost_has_x_stop(a1)		; set stop x position

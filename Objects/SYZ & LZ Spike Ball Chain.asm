@@ -79,7 +79,7 @@ SBall_Main:	; Routine 0
 		andi.w	#$7F,d5
 		move.b	d5,(a2)+				; add OST index to list of child objects
 		move.b	#id_SBall_Display,ost_routine(a1)
-		move.b	ost_id(a0),ost_id(a1)
+		move.l	ost_id(a0),ost_id(a1)
 		move.l	ost_mappings(a0),ost_mappings(a1)
 		move.w	ost_tile(a0),ost_tile(a1)
 		move.b	ost_render(a0),ost_render(a1)

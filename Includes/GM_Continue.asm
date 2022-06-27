@@ -35,12 +35,12 @@ GM_Continue:
 		move.w	#659,(v_countdown).w			; set timer to 11 seconds
 		clr.l	(v_camera_x_pos).w
 		move.l	#$1000000,(v_camera_y_pos).w
-		move.b	#id_ContSonic,(v_ost_player).w		; load Sonic object
-		move.b	#id_ContScrItem,(v_ost_cont_text).w	; load continue screen objects
-		move.b	#id_ContScrItem,(v_ost_cont_oval).w
+		move.l	#ContSonic,(v_ost_player).w		; load Sonic object
+		move.l	#ContScrItem,(v_ost_cont_text).w	; load continue screen objects
+		move.l	#ContScrItem,(v_ost_cont_oval).w
 		move.b	#3,(v_ost_cont_oval+ost_priority).w
 		move.b	#id_frame_cont_oval,(v_ost_cont_oval+ost_frame).w ; set frame for oval object
-		move.b	#id_ContScrItem,(v_ost_cont_minisonic).w ; load mini Sonic
+		move.l	#ContScrItem,(v_ost_cont_minisonic).w	; load mini Sonic
 		move.b	#id_CSI_MakeMiniSonic,(v_ost_cont_minisonic+ost_routine).w ; set routine for mini Sonic
 		jsr	(ExecuteObjects).l
 		jsr	(BuildSprites).l

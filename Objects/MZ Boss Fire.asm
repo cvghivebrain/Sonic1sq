@@ -126,7 +126,7 @@ BFire_SpawnFire:
 		bne.s	@fail					; branch if not found
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
-		move.b	#id_BossFire,(a1)			; load fireball object
+		move.l	#BossFire,ost_id(a1)			; load fireball object
 		move.b	#$67,ost_bfire_wait_time(a1)		; timer 1.7 seconds
 
 	@fail:

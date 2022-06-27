@@ -71,7 +71,7 @@ BFZ_Main:	; Routine 0
 		bne.s	@fail					; branch if not found
 
 @load_boss:
-		move.b	#id_BossFinal,(a1)
+		move.l	#BossFinal,ost_id(a1)
 		move.w	(a2)+,ost_x_pos(a1)
 		move.w	(a2)+,ost_y_pos(a1)
 		move.w	(a2)+,ost_tile(a1)
@@ -94,7 +94,7 @@ BFZ_Main:	; Routine 0
 		lea	ost_fz_plasma_child(a0),a2
 		jsr	(FindFreeObj).l				; find free OST slot
 		bne.s	@fail2					; branch if not found
-		move.b	#id_BossPlasma,(a1)			; load plasma ball launcher object
+		move.l	#BossPlasma,ost_id(a1)			; load plasma ball launcher object
 		move.w	a1,(a2)					; save address of OST of plasma launcher in parent OST
 		move.l	a0,ost_plasma_parent(a1)		; save parent OST in plasma OST
 
@@ -106,7 +106,7 @@ BFZ_Main:	; Routine 0
 		jsr	(FindNextFreeObj).l			; find free OST slot
 		bne.s	@fail2					; branch if not found
 		move.w	a1,(a2)+				; save address of OST of crusher in parent OST
-		move.b	#id_EggmanCylinder,(a1)			; load crushing	cylinder object
+		move.l	#EggmanCylinder,ost_id(a1)		; load crushing	cylinder object
 		move.l	a0,ost_cylinder_parent(a1)		; save parent OST in crusher OST
 		move.b	d2,ost_subtype(a1)			; set subtype to 0/2/4/6
 		addq.w	#2,d2					; next subtype
@@ -491,8 +491,8 @@ BFZ_Eggman_Escape:
 
 BFZ_Flame:	; Routine $C
 		movea.l	ost_fz_parent(a0),a1			; get address of OST of parent object
-		move.b	(a1),d0
-		cmp.b	(a0),d0					; has parent been deleted?
+		move.l	(a1),d0
+		cmp.l	(a0),d0					; has parent been deleted?
 		bne.w	BFZ_Delete				; if yes, branch
 		move.b	#id_ani_boss_blank,ost_anim(a0)		; invisible
 		cmpi.b	#id_BFZ_Eggman_Ship,ost_fz_mode(a1)	; is Eggman in his ship?
@@ -526,8 +526,8 @@ BFZ_Update_SkipPos:
 
 BFZ_Cockpit:	; Routine 8
 		movea.l	ost_fz_parent(a0),a1			; get address of OST of parent object
-		move.b	(a1),d0
-		cmp.b	(a0),d0					; has parent been deleted?
+		move.l	(a1),d0
+		cmp.l	(a0),d0					; has parent been deleted?
 		bne.w	BFZ_Delete				; if yes, branch
 		cmpi.l	#Map_Bosses,ost_mappings(a1)		; is Eggman in his ship?
 		beq.s	@chk_hit				; if yes, branch

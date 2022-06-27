@@ -30,7 +30,6 @@ Brick_Main:	; Routine 0
 		move.b	#3,ost_priority(a0)
 		move.b	#$10,ost_displaywidth(a0)
 		move.w	ost_y_pos(a0),ost_brick_y_start(a0)
-		move.w	#$5C0,$32(a0)
 
 Brick_Action:	; Routine 2
 		tst.b	ost_render(a0)

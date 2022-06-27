@@ -146,7 +146,7 @@ GM_Level:
 		lea	(MusicList).l,a1			; load music playlist
 		move.b	(a1,d0.w),d0
 		bsr.w	PlaySound0				; play music
-		move.b	#id_TitleCard,(v_ost_titlecard1).w	; load title card object
+		move.l	#TitleCard,(v_ost_titlecard1).w		; load title card object
 
 Level_TtlCardLoop:
 		move.b	#id_VBlank_TitleCard,(v_vblank_routine).w
@@ -172,10 +172,10 @@ Level_Skip_TtlCard:
 		jsr	(ConvertCollisionArray).l
 		bsr.w	SetColIndexPtr
 		bsr.w	LZWaterFeatures
-		move.b	#id_SonicPlayer,(v_ost_player).w	; load Sonic object
+		move.l	#SonicPlayer,(v_ost_player).w		; load Sonic object
 		tst.w	(v_demo_mode).w				; is this an ending demo?
 		bmi.s	@skip_hud				; if yes, branch
-		move.b	#id_HUD,(v_ost_hud).w			; load HUD object
+		move.l	#HUD,(v_ost_hud).w			; load HUD object
 
 	@skip_hud:
 		tst.b	(f_debug_cheat).w			; has debug cheat been entered?
@@ -189,9 +189,9 @@ Level_Skip_TtlCard:
 		move.w	#0,(v_joypad_hold_actual).w
 		cmpi.b	#id_LZ,(v_zone).w			; is level LZ?
 		bne.s	@skip_water_surface			; if not, branch
-		move.b	#id_WaterSurface,(v_ost_watersurface1).w ; load water surface object
+		move.l	#WaterSurface,(v_ost_watersurface1).w	; load water surface object
 		move.w	#$60,(v_ost_watersurface1+ost_x_pos).w
-		move.b	#id_WaterSurface,(v_ost_watersurface2).w
+		move.l	#WaterSurface,(v_ost_watersurface2).w
 		move.w	#$120,(v_ost_watersurface2+ost_x_pos).w
 
 	@skip_water_surface:

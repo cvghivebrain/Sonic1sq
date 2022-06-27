@@ -95,7 +95,7 @@ Lamp_Blue:	; Routine 2
 		addq.b	#2,ost_routine(a0)			; goto Lamp_Finish next
 		jsr	(FindFreeObj).l				; find free OST slot
 		bne.s	@fail					; branch if not found
-		move.b	#id_Lamppost,ost_id(a1)			; load twirling lamp object
+		move.l	#Lamppost,ost_id(a1)			; load twirling lamp object
 		move.b	#id_Lamp_Twirl,ost_routine(a1)		; child object goto Lamp_Twirl next
 		move.w	ost_x_pos(a0),ost_lamp_x_start(a1)
 		move.w	ost_y_pos(a0),ost_lamp_y_start(a1)

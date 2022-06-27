@@ -40,7 +40,7 @@ BMZ_Main:	; Routine 0
 @loop:
 		jsr	(FindNextFreeObj).l			; find free OST slot
 		bne.s	BMZ_ShipMain				; branch if not found
-		move.b	#id_BossMarble,ost_id(a1)
+		move.l	#BossMarble,ost_id(a1)
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 
@@ -186,7 +186,7 @@ BMZ_ChgDir:
 
 		jsr	(FindFreeObj).l				; find free OST slot
 		bne.s	@fail					; branch if not found
-		move.b	#id_FireBall,ost_id(a1)			; load fireball object that comes from lava
+		move.l	#FireBall,ost_id(a1)			; load fireball object that comes from lava
 		move.w	#$2E8,ost_y_pos(a1)			; set y position as beneath lava
 		jsr	(RandomNumber).l
 		andi.l	#$FFFF,d0
@@ -247,7 +247,7 @@ BMZ_DropFire:
 		move.w	ost_boss_parent_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_boss_parent_y_pos(a0),ost_y_pos(a1)
 		addi.w	#$18,ost_y_pos(a1)
-		move.b	#id_BossFire,(a1)			; load fireball object that comes from ship
+		move.l	#BossFire,ost_id(a1)			; load fireball object that comes from ship
 		move.b	#1,ost_subtype(a1)			; set type to vertical
 
 	@skip_fireball:

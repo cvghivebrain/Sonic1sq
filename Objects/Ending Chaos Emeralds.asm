@@ -40,7 +40,7 @@ ECha_CreateEms:
 		moveq	#emerald_count-1,d1
 
 	ECha_LoadLoop:
-		move.b	#id_EndChaos,(a1)			; load chaos emerald object
+		move.l	#EndChaos,ost_id(a1)			; load chaos emerald object
 		addq.b	#2,ost_routine(a1)			; goto ECha_Move next
 		move.l	#Map_ECha,ost_mappings(a1)
 		move.w	#tile_Nem_EndEm,ost_tile(a1)

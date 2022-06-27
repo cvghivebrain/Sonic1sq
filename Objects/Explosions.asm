@@ -22,7 +22,7 @@ ExItem_Animal:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto ExItem_Main next
 		bsr.w	FindFreeObj				; find free OST slot
 		bne.s	ExItem_Main				; branch if none found
-		move.b	#id_Animals,ost_id(a1)			; load animal object
+		move.l	#Animals,ost_id(a1)			; load animal object
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		move.w	ost_enemy_combo(a0),ost_enemy_combo(a1)

@@ -89,7 +89,7 @@ Ring_Main:	; Routine 0
 		bne.s	@fail					; branch if not found
 
 @load_first:
-		move.b	#id_Rings,ost_id(a1)			; load ring object
+		move.l	#Rings,ost_id(a1)			; load ring object
 		addq.b	#2,ost_routine(a1)			; goto Ring_Animate next
 		move.w	d2,ost_x_pos(a1)			; set x position based on d2
 		move.w	ost_x_pos(a0),ost_ring_x_main(a1)

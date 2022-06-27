@@ -118,7 +118,7 @@ objpos:		macro
 		if strcmp("\3","0")
 		obj_id: = 0
 		else
-		obj_id: = id_\3
+		obj_id: = \3
 		endc
 		obj_sub\@: equ \4
 		obj_xflip: = 0
@@ -137,7 +137,8 @@ objpos:		macro
 		endr
 		
 		dc.w obj_ypos+obj_xflip+obj_yflip
-		dc.b obj_id+obj_rem, obj_sub\@
+		dc.b obj_rem, obj_sub\@
+		dc.l obj_id
 		endm
 
 endobj:		macros
@@ -167,12 +168,3 @@ nemfile:	macro
 
 nemfolder:	equs "Graphics - Compressed\"
 nemfolderdec:	equs "Graphics - Compressed\Decompressed\"
-
-; ---------------------------------------------------------------------------
-; Declares a blank object
-; input: label
-; ---------------------------------------------------------------------------
-
-blankobj:	macro
-	\1:	rts
-		endm

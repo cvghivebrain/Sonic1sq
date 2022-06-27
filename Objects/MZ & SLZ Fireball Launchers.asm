@@ -48,7 +48,7 @@ FireM_MakeFire:	; Routine 2
 		bsr.w	FindFreeObj				; find free OST slot
 		bne.s	@wait					; branch if not found
 
-		move.b	#id_FireBall,ost_id(a1)			; load fireball object
+		move.l	#FireBall,ost_id(a1)			; load fireball object
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		move.b	ost_subtype(a0),ost_subtype(a1)		; subtype = speed/direction

@@ -53,7 +53,7 @@ See_Main:	; Routine 0
 
 		bsr.w	FindNextFreeObj				; find free OST slot
 		bne.s	@noball					; branch if not found
-		move.b	#id_Seesaw,ost_id(a1)			; load spikeball object
+		move.l	#Seesaw,ost_id(a1)			; load spikeball object
 		addq.b	#id_See_Spikeball,ost_routine(a1)	; goto See_Spikeball next
 		move.w	ost_x_pos(a0),ost_x_pos(a1)		; spikeball position is updated later
 		move.w	ost_y_pos(a0),ost_y_pos(a1)

@@ -11,7 +11,7 @@ FindFreeObj:
 		move.w	#countof_ost_ert-1,d0
 
 	@loop:
-		tst.b	(a1)					; is OST slot empty?
+		tst.l	ost_id(a1)				; is OST slot empty?
 		beq.s	@found					; if yes, branch
 		lea	sizeof_ost(a1),a1			; goto next OST
 		dbf	d0,@loop				; repeat $5F times
@@ -39,7 +39,7 @@ FindNextFreeObj:
 		bcs.s	@use_current				; branch if current OST is final
 
 	@loop:
-		tst.b	(a1)					; is OST slot empty?
+		tst.l	ost_id(a1)				; is OST slot empty?
 		beq.s	@found					; if yes, branch
 		lea	sizeof_ost(a1),a1			; goto next OST
 		dbf	d0,@loop				; repeat until end of OSTs

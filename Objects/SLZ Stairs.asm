@@ -49,10 +49,10 @@ Stair_Main:	; Routine 0
 	@loop:
 		bsr.w	FindNextFreeObj				; find free OST slot
 		bne.w	@fail					; branch if not found
-		move.b	#4,ost_routine(a1)			; goto Stair_Solid next
+		move.b	#id_Stair_Solid,ost_routine(a1)		; goto Stair_Solid next
 
 @makeblocks:
-		move.b	#id_Staircase,ost_id(a1)		; load another stair object
+		move.l	#Staircase,ost_id(a1)			; load another stair object
 		move.l	#Map_Stair,ost_mappings(a1)
 		move.w	#0+tile_pal3,ost_tile(a1)
 		move.b	#render_rel,ost_render(a1)

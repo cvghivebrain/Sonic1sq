@@ -36,7 +36,7 @@ BBlock_Main:	; Routine 0
 		bne.s	@fail					; branch if not found
 
 @load_block:
-		move.b	#id_BossBlock,(a1)
+		move.l	#BossBlock,ost_id(a1)
 		move.l	#Map_BossBlock,ost_mappings(a1)
 		move.w	#0+tile_pal3,ost_tile(a1)
 		move.b	#render_rel,ost_render(a1)

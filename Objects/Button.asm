@@ -26,7 +26,7 @@ But_Main:	; Routine 0
 		cmpi.b	#id_MZ,(v_zone).w			; is level Marble Zone?
 		beq.s	@is_marble				; if yes, branch
 
-		move.w	#tile_Nem_Button+4,ost_tile(a0)	; SYZ, LZ and SBZ specific code
+		move.w	#tile_Nem_Button+4,ost_tile(a0)		; SYZ, LZ and SBZ specific code
 
 	@is_marble:
 		move.b	#render_rel,ost_render(a0)
@@ -113,7 +113,7 @@ But_PBlock_Chk:
 @loop:
 		tst.b	ost_render(a1)				; is object on screen?
 		bpl.s	@next					; if not, branch
-		cmpi.b	#id_PushBlock,(a1)			; is the object a green MZ block?
+		cmpi.l	#PushBlock,ost_id(a1)			; is the object a green MZ block?
 		beq.s	@is_pblock				; if yes, branch
 
 	@next:

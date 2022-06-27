@@ -139,7 +139,7 @@ FragmentObject:
 		adda.w	(a3,d0.w),a3
 		addq.w	#1,a3					; jump to raw sprite data
 		bset	#render_rawmap_bit,ost_render(a0)	; use raw mappings
-		move.b	ost_id(a0),d4
+		move.l	ost_id(a0),d4
 		move.b	ost_render(a0),d5
 		movea.l	a0,a1					; replace ledge object with fragment
 		bra.s	@skip_findost
@@ -152,7 +152,7 @@ FragmentObject:
 
 @skip_findost:
 		move.b	#id_Ledge_WaitFall,ost_routine(a1)	; id_CFlo_WaitFall in CollapseFloor object
-		move.b	d4,ost_id(a1)
+		move.l	d4,ost_id(a1)
 		move.l	a3,ost_mappings(a1)
 		move.b	d5,ost_render(a1)
 		move.w	ost_x_pos(a0),ost_x_pos(a1)

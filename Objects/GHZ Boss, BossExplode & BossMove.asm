@@ -36,7 +36,7 @@ BGHZ_Main:	; Routine 0
 
 @load_boss:
 		move.b	(a2)+,ost_routine(a1)			; goto BGHZ_ShipMain/BGHZ_FaceMain/BGHZ_FlameMain next
-		move.b	#id_BossGreenHill,ost_id(a1)
+		move.l	#BossGreenHill,ost_id(a1)
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		move.l	#Map_Bosses,ost_mappings(a1)
@@ -138,7 +138,7 @@ BossExplode:
 		bne.s	@fail					; branch if any are set
 		jsr	(FindFreeObj).l				; find free OST slot
 		bne.s	@fail					; branch if not found
-		move.b	#id_ExplosionBomb,ost_id(a1)		; load explosion object every 8th frame
+		move.l	#ExplosionBomb,ost_id(a1)		; load explosion object every 8th frame
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		jsr	(RandomNumber).l
@@ -153,8 +153,7 @@ BossExplode:
 		add.w	d0,ost_y_pos(a1)
 
 	@fail:
-		rts	
-; End of function BossExplode
+		rts
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	translate a boss's speed to position
@@ -173,8 +172,7 @@ BossMove:
 		add.l	d0,d3
 		move.l	d2,ost_boss_parent_x_pos(a0)
 		move.l	d3,ost_boss_parent_y_pos(a0)
-		rts	
-; End of function BossMove
+		rts
 
 ; ===========================================================================
 
@@ -190,7 +188,7 @@ BGHZ_MakeBall:
 		addq.b	#2,ost_routine2(a0)			; goto BGHZ_ShipMove next
 		jsr	(FindNextFreeObj).l			; find free OST slot
 		bne.s	@fail					; branch if not found
-		move.b	#id_BossBall,ost_id(a1)			; load swinging ball object
+		move.l	#BossBall,ost_id(a1)			; load swinging ball object
 		move.w	ost_boss_parent_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_boss_parent_y_pos(a0),ost_y_pos(a1)
 		move.l	a0,ost_ball_parent(a1)

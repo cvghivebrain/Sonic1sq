@@ -96,7 +96,7 @@ Moto_FindFloor:
 		move.b	#$F,ost_moto_smoke_time(a0)		; reset timer
 		bsr.w	FindFreeObj				; find free OST slot
 		bne.s	@nosmoke				; branch if not found
-		move.b	#id_MotoBug,ost_id(a1)			; load exhaust smoke object
+		move.l	#MotoBug,ost_id(a1)			; load exhaust smoke object
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		move.b	ost_status(a0),ost_status(a1)

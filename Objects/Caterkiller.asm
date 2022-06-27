@@ -78,7 +78,7 @@ Cat_Loop:
 		else
 			bne.w	Cat_Despawn
 		endc
-		move.b	#id_Caterkiller,ost_id(a1)		; load body segment object
+		move.l	#Caterkiller,ost_id(a1)			; load body segment object
 		move.b	d6,ost_routine(a1)			; goto Cat_BodySeg1 or Cat_BodySeg2 next
 		addq.b	#2,d6					; alternate between the two
 		move.l	ost_mappings(a0),ost_mappings(a1)
@@ -358,7 +358,7 @@ Cat_BodySeg1:	; Routine 4, 8
 @chk_broken:
 		cmpi.b	#id_Cat_Fragment,ost_routine(a1)
 		beq.s	Cat_Body_Break				; branch if parent is broken body segment
-		cmpi.b	#id_ExplosionItem,ost_id(a1)
+		cmpi.l	#ExplosionItem,ost_id(a1)
 		beq.s	@head_broken				; branch if parent is broken head
 		cmpi.b	#id_Cat_Delete,ost_routine(a1)
 		bne.s	@deleted				; branch if parent is set to delete

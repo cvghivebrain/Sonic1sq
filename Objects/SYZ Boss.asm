@@ -44,7 +44,7 @@ BSYZ_Main:	; Routine 0
 @loop:
 		jsr	(FindNextFreeObj).l
 		bne.s	BSYZ_ShipMain
-		move.b	#id_BossSpringYard,(a1)
+		move.l	#BossSpringYard,ost_id(a1)
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 
@@ -360,11 +360,11 @@ BSYZ_FindBlock:
 		clr.w	ost_boss_block(a0)
 		lea	(v_ost_all+sizeof_ost).w,a1		; first OST slot excluding Sonic
 		moveq	#$3E,d0					; check first $40 OSTs (there are $80 total)
-		moveq	#id_BossBlock,d1
+		move.l	#BossBlock,d1
 		move.b	ost_boss_block_num(a0),d2		; id of block Eggman is above
 
 @loop:
-		cmp.b	(a1),d1					; is object a SYZ boss block?
+		cmp.l	(a1),d1					; is object a SYZ boss block?
 		bne.s	@next					; if not, branch
 		cmp.b	ost_subtype(a1),d2			; is Eggman above the block?
 		bne.s	@next					; if not, branch
@@ -470,8 +470,8 @@ BSYZ_FaceMain:	; Routine 4
 		jsr	BSYZ_Face_Index(pc,d0.w)		; set d1 as animation number
 		move.b	d1,d0					; set animation
 		jsr	NewAnim
-		move.b	(a0),d0
-		cmp.b	(a1),d0					; has ship been destroyed? (objects no longer match id)
+		move.l	ost_id(a0),d0
+		cmp.l	ost_id(a1),d0				; has ship been destroyed? (objects no longer match id)
 		bne.s	@delete					; if yes, branch
 		bra.w	BSYZ_Display
 ; ===========================================================================

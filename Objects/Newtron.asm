@@ -153,7 +153,7 @@ Newt_Type1:
 		move.b	#1,ost_newtron_fire_flag(a0)		; set fired flag
 		bsr.w	FindFreeObj				; find free OST slot
 		bne.s	@fail					; branch if not found
-		move.b	#id_Missile,ost_id(a1)			; load missile object
+		move.l	#Missile,ost_id(a1)			; load missile object
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		subq.w	#8,ost_y_pos(a1)

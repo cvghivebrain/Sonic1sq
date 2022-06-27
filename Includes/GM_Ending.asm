@@ -75,12 +75,12 @@ GM_Ending:
 		move.b	#1,(f_debug_enable).w			; enable debug mode
 
 	@no_debug:
-		move.b	#id_SonicPlayer,(v_ost_player).w	; load Sonic object
+		move.l	#SonicPlayer,(v_ost_player).w		; load Sonic object
 		bset	#status_xflip_bit,(v_ost_player+ost_status).w ; make Sonic face left
 		move.b	#1,(f_lock_controls).w			; lock controls
 		move.w	#(btnL<<8),(v_joypad_hold).w		; hold virtual left on d-pad
 		move.w	#-$800,(v_ost_player+ost_inertia).w	; set Sonic's speed
-		move.b	#id_HUD,(v_ost_hud).w			; load HUD object
+		move.l	#HUD,(v_ost_hud).w			; load HUD object
 		jsr	(ObjPosLoad).l				; load objects for level
 		jsr	(ExecuteObjects).l			; run all objects
 		jsr	(BuildSprites).l			; create sprite table
@@ -102,7 +102,6 @@ GM_Ending:
 		move.b	#id_VBlank_Ending,(v_vblank_routine).w
 		bsr.w	WaitForVBlank
 		enable_display
-		move.w	#palfade_all,(v_palfade_start).w	; unused - this is already in PaletteFadeIn
 		bsr.w	PaletteFadeIn				; fade in from black
 
 ; ---------------------------------------------------------------------------
@@ -219,7 +218,7 @@ End_Sonic_Replace:
 		bne.s	End_Sonic_Exit				; if not, branch
 		addq.b	#2,(v_end_sonic_routine).w		; goto End_Sonic_Exit next
 		move.w	#$A0,(v_ost_player+ost_x_pos).w		; centre Sonic on screen
-		move.b	#id_EndSonic,(v_ost_player).w		; load Sonic ending sequence object
+		move.l	#EndSonic,(v_ost_player).w		; load Sonic ending sequence object
 		clr.w	(v_ost_player+ost_routine).w		; clear Sonic object's routine counter
 
 End_Sonic_Exit:	; Routine 6

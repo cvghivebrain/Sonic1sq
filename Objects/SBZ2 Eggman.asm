@@ -46,7 +46,7 @@ SEgg_Main:	; Routine 0
 		jsr	(FindNextFreeObj).l			; find free OST slot
 		bne.s	SEgg_Eggman				; branch if not found
 		move.l	a0,ost_eggman_parent(a1)		; save address of OST of Eggman as parent
-		move.b	#id_ScrapEggman,(a1)			; load button object
+		move.l	#ScrapEggman,ost_id(a1)			; load button object
 		move.w	#$2130,ost_x_pos(a1)
 		move.w	#$5BC,ost_y_pos(a1)
 		clr.b	ost_routine2(a0)
@@ -135,7 +135,7 @@ SEgg_Leap:
 
 	@loop:	
 		adda.w	d1,a1					; next OST slot
-		cmpi.b	#id_FalseFloor,(a1)			; is object a block? (id $83)
+		cmp.l	#FalseFloor,ost_id(a1)			; is object a block? (id $83)
 		dbeq	d0,@loop				; if not, repeat (max $3E times)
 
 		bne.s	@update_pos

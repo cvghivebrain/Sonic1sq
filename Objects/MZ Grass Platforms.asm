@@ -198,7 +198,7 @@ LGrass_Type05:
 		bsr.w	FindNextFreeObj				; find free OST slot
 		bne.s	@skip_fire				; branch if not found
 
-		move.b	#id_GrassFire,ost_id(a1)		; load sitting flame object (this spreads itself)
+		move.l	#GrassFire,ost_id(a1)			; load sitting flame object (this spreads itself)
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_grass_y_start(a0),ost_burn_y_start(a1)
 		addq.w	#8,ost_burn_y_start(a1)

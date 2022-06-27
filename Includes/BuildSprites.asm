@@ -25,7 +25,7 @@ BuildSprites:
 
 	@object_loop:
 		movea.w	(a4,d6.w),a0				; load address of OST of object
-		tst.b	(a0)
+		tst.l	ost_id(a0)
 		beq.w	@next_object				; if object id is 0, branch
 
 		bclr	#render_onscreen_bit,ost_render(a0)	; set as not visible

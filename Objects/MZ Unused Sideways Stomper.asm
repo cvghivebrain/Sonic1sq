@@ -55,7 +55,7 @@ SStom_Main:	; Routine 0
 
 	@load:
 		move.b	(a2)+,ost_routine(a1)			; goto SStom_Solid/SStom_Spikes/SStom_Pole/SStom_Display next
-		move.b	#id_SideStomp,ost_id(a1)
+		move.l	#SideStomp,ost_id(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		move.b	(a2)+,d0				; get relative x pos
 		ext.w	d0

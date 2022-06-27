@@ -77,7 +77,7 @@ Sign_Spin:	; Routine 4
 		lea	Sign_SparkPos(pc,d0.w),a2		; load sparkle position data
 		bsr.w	FindFreeObj				; find free OST slot
 		bne.s	@fail					; branch if not found
-		move.b	#id_Rings,ost_id(a1)			; load rings object
+		move.l	#Rings,ost_id(a1)			; load rings object
 		move.b	#id_Ring_Sparkle,ost_routine(a1)	; jump to ring sparkle subroutine
 		move.b	(a2)+,d0				; get relative x position
 		ext.w	d0
@@ -132,13 +132,13 @@ Sign_SonicRun:	; Routine 6
 ; ---------------------------------------------------------------------------
 
 HasPassedAct:
-		tst.b	(v_ost_haspassed1).w			; has "Sonic Has Passed" title card loaded?
+		tst.l	(v_ost_haspassed1).w			; has "Sonic Has Passed" title card loaded?
 		bne.s	Sign_SonicRun_Exit			; if yes, branch
 
 		move.w	(v_boundary_right).w,(v_boundary_left).w
 		clr.b	(v_invincibility).w			; disable invincibility
 		clr.b	(f_hud_time_update).w			; stop time counter
-		move.b	#id_HasPassedCard,(v_ost_haspassed1).w	; load "Sonic Has Passed" title card
+		move.l	#HasPassedCard,(v_ost_haspassed1).w	; load "Sonic Has Passed" title card
 		moveq	#id_PLC_TitleCard,d0
 		jsr	(NewPLC).l				; load title card patterns
 		move.b	#1,(f_pass_bonus_update).w

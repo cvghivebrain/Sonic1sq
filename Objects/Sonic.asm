@@ -190,7 +190,7 @@ Sonic_Water:
 		bne.s	@exit					; branch if already set
 
 		bsr.w	ResumeMusic
-		move.b	#id_DrownCount,(v_ost_bubble).w		; load bubbles object from Sonic's mouth
+		move.l	#DrownCount,(v_ost_bubble).w		; load bubbles object from Sonic's mouth
 		move.b	#$81,(v_ost_bubble+ost_subtype).w
 		move.w	#sonic_max_speed_water,(v_sonic_max_speed).w ; change Sonic's top speed
 		move.w	#sonic_acceleration_water,(v_sonic_acceleration).w ; change Sonic's acceleration
@@ -199,7 +199,7 @@ Sonic_Water:
 		asr	ost_y_vel(a0)
 		asr	ost_y_vel(a0)				; slow Sonic
 		beq.s	@exit					; branch if Sonic stops moving
-		move.b	#id_Splash,(v_ost_splash).w		; load splash object
+		move.l	#Splash,(v_ost_splash).w		; load splash object
 		play.w	1, jmp, sfx_Splash			; play splash sound
 ; ===========================================================================
 
@@ -213,7 +213,7 @@ Sonic_Water:
 		move.w	#sonic_deceleration,(v_sonic_deceleration).w ; restore Sonic's deceleration
 		asl	ost_y_vel(a0)
 		beq.w	@exit
-		move.b	#id_Splash,(v_ost_splash).w		; load splash object
+		move.l	#Splash,(v_ost_splash).w		; load splash object
 		cmpi.w	#-sonic_max_speed_surface,ost_y_vel(a0)
 		bgt.s	@belowmaxspeed
 		move.w	#-sonic_max_speed_surface,ost_y_vel(a0)	; set maximum speed on leaving water
@@ -1386,8 +1386,8 @@ GameOver:
 		subq.b	#1,(v_lives).w				; subtract 1 from number of lives
 		bne.s	@lives_remain				; branch if some lives are remaining
 		move.w	#0,ost_sonic_restart_time(a0)
-		move.b	#id_GameOverCard,(v_ost_gameover1).w	; load GAME object
-		move.b	#id_GameOverCard,(v_ost_gameover2).w	; load OVER object
+		move.l	#GameOverCard,(v_ost_gameover1).w	; load GAME object
+		move.l	#GameOverCard,(v_ost_gameover2).w	; load OVER object
 		move.b	#id_frame_gameover_over,(v_ost_gameover2+ost_frame).w ; set OVER object to correct frame
 		clr.b	(f_time_over).w
 
@@ -1402,8 +1402,8 @@ GameOver:
 		tst.b	(f_time_over).w				; is TIME OVER tag set?
 		beq.s	@exit					; if not, branch
 		move.w	#0,ost_sonic_restart_time(a0)
-		move.b	#id_GameOverCard,(v_ost_gameover1).w	; load TIME object
-		move.b	#id_GameOverCard,(v_ost_gameover2).w	; load OVER object
+		move.l	#GameOverCard,(v_ost_gameover1).w	; load TIME object
+		move.l	#GameOverCard,(v_ost_gameover2).w	; load OVER object
 		move.b	#id_frame_gameover_time,(v_ost_gameover1+ost_frame).w
 		move.b	#id_frame_gameover_over2,(v_ost_gameover2+ost_frame).w
 		bra.s	@music_gfx

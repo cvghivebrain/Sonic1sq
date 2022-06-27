@@ -89,7 +89,7 @@ Card_Main:	; Routine 0
 		moveq	#4-1,d1					; there are 4 items (minus 1 for 1st loop)
 
 @loop:
-		move.b	#id_TitleCard,ost_id(a1)
+		move.l	#TitleCard,ost_id(a1)
 		move.w	(a3),ost_x_pos(a1)			; set initial x position
 		move.w	(a3)+,ost_card_x_start(a1)
 		move.w	(a3)+,ost_card_x_stop(a1)		; set target x position

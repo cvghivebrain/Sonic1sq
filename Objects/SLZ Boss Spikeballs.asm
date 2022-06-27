@@ -179,12 +179,12 @@ BSpike_Animate:
 
 BSpike_HitBoss:	; Routine 6
 		lea	(v_ost_all+sizeof_ost).w,a1		; start at first OST slot after Sonic
-		moveq	#id_BossStarLight,d0
+		move.l	#BossStarLight,d0
 		moveq	#sizeof_ost,d1
 		moveq	#$3E,d2					; check first $40 OST slots
 
 	@loop:
-		cmp.b	(a1),d0					; is object the boss?
+		cmp.l	ost_id(a1),d0				; is object the boss?
 		beq.s	@boss_found				; if yes, branch
 		adda.w	d1,a1					; next OST slot
 		dbf	d2,@loop				; repeat for all OST slots
@@ -332,7 +332,7 @@ BSpike_Ball_Hitbox:
 ; ===========================================================================
 
 BSpike_Explode:	; Routine 8
-		move.b	#id_ExplosionBomb,(a0)			; turn object into explosion
+		move.l	#ExplosionBomb,ost_id(a0)		; turn object into explosion
 		clr.b	ost_routine(a0)
 		cmpi.w	#$20,ost_bspike_time(a0)		; is shrapnel flag set?
 		beq.s	@make_frags				; if yes, branch
@@ -347,7 +347,7 @@ BSpike_Explode:	; Routine 8
 	@loop:
 		jsr	(FindFreeObj).l				; find free OST slot
 		bne.s	@fail					; branch if not found
-		move.b	#id_BossSpikeball,(a1)			; load shrapnel object
+		move.l	#BossSpikeball,ost_id(a1)		; load shrapnel object
 		move.b	#id_BSpike_MoveFrag,ost_routine(a1)	; goto BSpike_MoveFrag next
 		move.l	#Map_BSBall,ost_mappings(a1)
 		move.b	#3,ost_priority(a1)

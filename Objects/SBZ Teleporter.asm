@@ -27,8 +27,8 @@ ost_tele_time:		rs.w 1 ; $2E				; travel time between each bend (2 bytes; only h
 ost_tele_bump:		rs.b 1 ; $32				; counter for initial "bump" when Sonic enters teleport, 0-$80
 ost_tele_x_target:	rs.w 1 ; $36				; next x position to teleport to (2 bytes)
 ost_tele_y_target:	rs.w 1 ; $38				; next y position to teleport to (2 bytes)
-ost_tele_bends:		rs.b 1 ; $3A				; number of bends Sonic has passed in pipe, increments by 4
-ost_tele_data_size:	rs.b 1 ; $3B				; size of coordinate data in bytes
+ost_tele_bends:		rs.w 1 ; $3A				; number of bends Sonic has passed in pipe, increments by 4
+ost_tele_data_size:	equ ost_tele_bends+1 ; $3B		; size of coordinate data in bytes
 ost_tele_data_ptr:	rs.l 1 ; $3C				; address of coordinate data (4 bytes)
 		rsobjend
 ; ===========================================================================

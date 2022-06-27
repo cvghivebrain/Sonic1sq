@@ -119,7 +119,7 @@ Pri_Explosion:	; Routine 6, 8, $A
 
 		jsr	(FindFreeObj).l				; find free OST slot
 		bne.s	@noexplosion				; branch if not found
-		move.b	#id_ExplosionBomb,ost_id(a1)		; load explosion object every 8 frames
+		move.l	#ExplosionBomb,ost_id(a1)		; load explosion object every 8 frames
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		jsr	(RandomNumber).l
@@ -151,7 +151,7 @@ Pri_Explosion:	; Routine 6, 8, $A
 	@loop:
 		jsr	(FindFreeObj).l				; find free OST slot
 		bne.s	@fail					; branch if not found
-		move.b	#id_Animals,ost_id(a1)			; load animal object
+		move.l	#Animals,ost_id(a1)			; load animal object
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		add.w	d4,ost_x_pos(a1)
@@ -171,7 +171,7 @@ Pri_Animals:	; Routine $C
 
 		jsr	(FindFreeObj).l				; find free OST slot
 		bne.s	@noanimal				; branch if not found
-		move.b	#id_Animals,ost_id(a1)			; load animal object every 8 frames
+		move.l	#Animals,ost_id(a1)			; load animal object every 8 frames
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		jsr	(RandomNumber).l
@@ -189,7 +189,6 @@ Pri_Animals:	; Routine $C
 		subq.w	#1,ost_prison_time(a0)			; decrement timer
 		bne.s	@wait					; branch if time remains
 		addq.b	#2,ost_routine(a0)			; goto Pri_EndAct next
-		move.w	#180,ost_prison_time(a0)			; this does nothing
 
 	@wait:
 		rts	
@@ -197,12 +196,12 @@ Pri_Animals:	; Routine $C
 
 Pri_EndAct:	; Routine $E
 		moveq	#$40-2,d0
-		moveq	#id_Animals,d1
+		move.l	#Animals,d1
 		moveq	#sizeof_ost,d2				; d2 = $40
 		lea	(v_ost_player+sizeof_ost).w,a1		; start at first OST slot after Sonic
 
 	@findanimal:
-		cmp.b	(a1),d1					; is object $28	(animal) loaded?
+		cmp.l	ost_id(a1),d1				; is object $28	(animal) loaded?
 		beq.s	@found					; if yes, branch
 		adda.w	d2,a1					; next OST slot
 		dbf	d0,@findanimal				; repeat $3E times (this misses the last $40 OST slots)

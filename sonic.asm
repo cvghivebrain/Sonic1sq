@@ -387,8 +387,6 @@ Demo_EndGHZ2:	incbin	"Demos\Ending - GHZ2.bin"
 		include "Objects\Platforms.asm"			; BasicPlatform
 		include "Objects\Platforms [Mappings].asm"	; Map_Plat_Unused, Map_Plat_GHZ, Map_Plat_SYZ, Map_Plat_SLZ
 
-		blankobj Obj19
-		
 		include "Objects\GHZ Giant Ball [Mappings].asm"	; Map_GBall
 
 		include "Objects\GHZ Collapsing Ledge.asm"	; CollapseLedge
@@ -515,18 +513,13 @@ LGrass_Coll_Sloped:
 		include "Objects\GHZ & SLZ Smashable Walls & SmashObject.asm" ; SmashWall
 		include "Objects\GHZ & SLZ Smashable Walls [Mappings].asm" ; Map_Smash
 
-		include "Includes\ExecuteObjects & Object Pointers.asm"
-
-NullObject:
-		jmp	(DeleteObject).l
+		include "Includes\ExecuteObjects.asm"
 
 		include "Objects\_ObjectFall & SpeedToPos.asm"
-
 		include "Objects\_DisplaySprite.asm"
 		include "Objects\_DeleteObject & DeleteChild.asm"
 
 		include "Includes\BuildSprites.asm"
-
 		include "Objects\_CheckOffScreen.asm"
 
 		include "Includes\ObjPosLoad.asm"
@@ -572,8 +565,6 @@ NullObject:
 		include "Objects\Moto Bug.asm"			; MotoBug
 		include "Objects\_DespawnObject.asm"
 		include "Objects\Moto Bug [Mappings].asm"	; Map_Moto
-
-		blankobj Obj4F
 
 		include "Objects\Yadrin.asm"			; Yadrin
 		include "Objects\Yadrin [Mappings].asm"		; Map_Yad
@@ -761,8 +752,6 @@ See_DataFlat:	incbin	"Collision\SLZ Seesaw Heightmap (Flat).bin" ; used by Seesa
 		include "Objects\Special Stage Chaos Emeralds [Mappings].asm" ; Map_SS_Chaos1, Map_SS_Chaos2 & Map_SS_Chaos3
 
 		include "Objects\Special Stage Sonic.asm"	; SonicSpecial
-
-		blankobj Obj10
 
 		include "Includes\AnimateLevelGfx.asm"
 
@@ -1329,7 +1318,7 @@ Art_BigRing:	incbin	"Graphics\Giant Ring.bin"
 ; ---------------------------------------------------------------------------
 ; Object position index
 ; ---------------------------------------------------------------------------
-ObjPos_Index:	index *
+ObjPos_Index:	index.l 0
 		; GHZ
 		ptr ObjPos_GHZ1
 		ptr ObjPos_Null

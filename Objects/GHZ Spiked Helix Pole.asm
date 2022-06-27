@@ -34,7 +34,7 @@ Hel_Main:	; Routine 0
 		move.b	#8,ost_displaywidth(a0)
 		move.w	ost_y_pos(a0),d2
 		move.w	ost_x_pos(a0),d3
-		move.b	ost_id(a0),d4
+		move.l	ost_id(a0),d4
 		lea	ost_subtype(a0),a2			; (a2) = subtype, followed by child list
 		moveq	#0,d1
 		move.b	(a2),d1					; move helix length to d1
@@ -57,7 +57,7 @@ Hel_Main:	; Routine 0
 		andi.w	#$7F,d5
 		move.b	d5,(a2)+				; copy child OST index to byte list in parent OST
 		move.b	#id_Hel_Display,ost_routine(a1)
-		move.b	d4,ost_id(a1)
+		move.l	d4,ost_id(a1)
 		move.w	d2,ost_y_pos(a1)
 		move.w	d3,ost_x_pos(a1)
 		move.l	ost_mappings(a0),ost_mappings(a1)

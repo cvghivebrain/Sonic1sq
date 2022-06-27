@@ -171,14 +171,14 @@ Debug_ChgItem:
 		bne.s	@backtonormal
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
-		move.b	ost_mappings(a0),ost_id(a1)		; create object (object id is held in high byte of mappings pointer)
 		move.b	ost_render(a0),ost_render(a1)
 		move.b	ost_render(a0),ost_status(a1)
 		andi.b	#$FF-status_broken,ost_status(a1)	; remove broken flag from status
 		moveq	#0,d0
 		move.b	(v_debug_item_index).w,d0
-		lsl.w	#3,d0
+		mulu.w	#12,d0
 		move.b	4(a2,d0.w),ost_subtype(a1)		; get subtype from debug list
+		move.l	8(a2,d0.w),ost_id(a1)			; create object
 		rts	
 ; ===========================================================================
 
@@ -215,7 +215,7 @@ Debug_ChgItem:
 Debug_GetFrame:
 		moveq	#0,d0
 		move.b	(v_debug_item_index).w,d0
-		lsl.w	#3,d0
+		mulu.w	#12,d0
 		move.l	(a2,d0.w),ost_mappings(a0)		; load mappings for item
 		move.w	6(a2,d0.w),ost_tile(a0)			; load VRAM setting for item
 		move.b	5(a2,d0.w),ost_frame(a0)		; load frame number for item
@@ -236,9 +236,10 @@ DebugList:	index *
 		ptr DebugList_Ending
 
 dbug:		macro map,object,subtype,frame,vram
-		dc.l map+(id_\object<<24)
+		dc.l map
 		dc.b subtype,frame
 		dc.w vram
+		dc.l object
 		endm
 
 DebugList_GHZ:
@@ -257,7 +258,6 @@ DebugList_GHZ:
 		dbug	Map_Spring,	Springs,	type_spring_red+type_spring_up,	0,	tile_Nem_HSpring
 		dbug	Map_Newt,	Newtron,	0,	0,	tile_Nem_Newtron+tile_pal2
 		dbug	Map_Edge,	EdgeWalls,	type_edge_shadow,	0,	tile_Nem_GhzEdgeWall+tile_pal3
-		dbug	Map_GBall,	Obj19,		0,	0,	tile_Nem_Ball+tile_pal3
 		dbug	Map_Lamp,	Lamppost,	1,	0,	tile_Nem_Lamp
 		dbug	Map_GRing,	GiantRing,	0,	0,	(vram_giantring/sizeof_cell)+tile_pal2
 		dbug	Map_Bonus,	HiddenBonus,	type_bonus_10k,	id_frame_bonus_10000,	tile_Nem_Bonus+tile_hi

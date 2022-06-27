@@ -40,7 +40,7 @@ BLZ_Main:	; Routine 0
 @loop:
 		jsr	(FindNextFreeObj).l			; find free OST slot
 		bne.s	BLZ_ShipMain				; branch if not found
-		move.b	#id_BossLabyrinth,ost_id(a1)
+		move.l	#BossLabyrinth,ost_id(a1)
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 

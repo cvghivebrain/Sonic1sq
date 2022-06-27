@@ -63,7 +63,7 @@ Glass_Main:	; Routine 0
 
 @load:
 		move.b	(a2)+,ost_routine(a1)			; goto Glass_Block012/Glass_Reflect012/Glass_Block34/Glass_Reflect34 next
-		move.b	#id_GlassBlock,ost_id(a1)
+		move.l	#GlassBlock,ost_id(a1)
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.b	(a2)+,d0				; get relative y position (it's always 0)
 		ext.w	d0

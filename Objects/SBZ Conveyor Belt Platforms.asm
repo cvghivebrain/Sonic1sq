@@ -122,10 +122,9 @@ SpinC_LoadPlatforms:
 
 @not_set:
 		add.w	d0,d0
-		andi.w	#$1E,d0
-		addi.w	#ObjPosSBZPlatform_Index-ObjPos_Index,d0
-		lea	(ObjPos_Index).l,a2
-		adda.w	(a2,d0.w),a2				; get address of platform position data
+		add.w	d0,d0
+		lea	(ObjPosSBZPlatform_Index).l,a2
+		movea.l	(a2,d0.w),a2				; get address of platform position data
 		move.w	(a2)+,d1				; get object count
 		movea.l	a0,a1					; overwrite current object with 1st platform
 		bra.s	@make_first
@@ -136,7 +135,7 @@ SpinC_LoadPlatforms:
 		bne.s	@fail					; branch if not found
 
 @make_first:
-		move.b	#id_SpinConvey,ost_id(a1)		; load platform object
+		move.l	#SpinConvey,ost_id(a1)			; load platform object
 		move.w	(a2)+,ost_x_pos(a1)
 		move.w	(a2)+,ost_y_pos(a1)
 		move.w	(a2)+,d0

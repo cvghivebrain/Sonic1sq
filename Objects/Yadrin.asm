@@ -1,43 +1,4 @@
 ; ---------------------------------------------------------------------------
-; Subroutine to detect collision with a wall
-
-; input:
-;	d7 = current OST id (these are numbered backwards $7E to 0)
-
-; output:
-;	d0 = collision flag: 0 = none; 1 = yes
-; ---------------------------------------------------------------------------
-
-Yad_ChkWall:
-		move.w	(v_frame_counter).w,d0			; get word that increments every frame
-		add.w	d7,d0					; add OST id (so that multiple yadrins don't do wall check on the same frame)
-		andi.w	#3,d0					; read only bits 0-1
-		bne.s	@no_collision				; branch if either are set
-		moveq	#0,d3
-		move.b	ost_displaywidth(a0),d3
-		tst.w	ost_x_vel(a0)				; is yadrin moving to the left?
-		bmi.s	@moving_left				; if yes, branch
-		bsr.w	FindWallRightObj
-		tst.w	d1					; has yadrin hit wall to the right?
-		bpl.s	@no_collision				; if not, branch
-
-@collision:
-		moveq	#1,d0					; set collision flag
-		rts	
-; ===========================================================================
-
-@moving_left:
-		not.w	d3					; flip width
-		bsr.w	FindWallLeftObj
-		tst.w	d1					; has yadrin hit wall to the left?
-		bmi.s	@collision				; if yes, branch
-
-@no_collision:
-		moveq	#0,d0
-		rts	
-; End of function Yad_ChkWall
-
-; ---------------------------------------------------------------------------
 ; Object 50 - Yadrin enemy (SYZ)
 
 ; spawned by:
@@ -129,6 +90,44 @@ Yad_Pause:
 		move.w	#0,ost_x_vel(a0)			; stop moving
 		move.b	#id_ani_yadrin_stand,ost_anim(a0)	; use standing animation
 		rts	
+
+; ---------------------------------------------------------------------------
+; Subroutine to detect collision with a wall
+
+; input:
+;	d7 = current OST id (these are numbered backwards $7E to 0)
+
+; output:
+;	d0 = collision flag: 0 = none; 1 = yes
+; ---------------------------------------------------------------------------
+
+Yad_ChkWall:
+		move.w	(v_frame_counter).w,d0			; get word that increments every frame
+		add.w	d7,d0					; add OST id (so that multiple yadrins don't do wall check on the same frame)
+		andi.w	#3,d0					; read only bits 0-1
+		bne.s	@no_collision				; branch if either are set
+		moveq	#0,d3
+		move.b	ost_displaywidth(a0),d3
+		tst.w	ost_x_vel(a0)				; is yadrin moving to the left?
+		bmi.s	@moving_left				; if yes, branch
+		bsr.w	FindWallRightObj
+		tst.w	d1					; has yadrin hit wall to the right?
+		bpl.s	@no_collision				; if not, branch
+
+@collision:
+		moveq	#1,d0					; set collision flag
+		rts	
+; ===========================================================================
+
+@moving_left:
+		not.w	d3					; flip width
+		bsr.w	FindWallLeftObj
+		tst.w	d1					; has yadrin hit wall to the left?
+		bmi.s	@collision				; if yes, branch
+
+@no_collision:
+		moveq	#0,d0
+		rts
 
 ; ---------------------------------------------------------------------------
 ; Animation script

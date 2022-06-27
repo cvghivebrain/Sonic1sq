@@ -103,7 +103,7 @@ Elev_StoodOn:	; Routine 4
 		move.w	ost_x_pos(a0),-(sp)
 		bsr.w	Elev_Types
 		move.w	(sp)+,d2
-		tst.b	ost_id(a0)				; does object still exist?
+		tst.l	ost_id(a0)				; does object still exist?
 		beq.s	@deleted				; if not, branch
 		jmp	(MoveWithPlatform2).l			; update Sonic's position
 
@@ -269,7 +269,7 @@ Elev_MakeMulti:	; Routine 6
 		move.w	ost_elev_dist_master(a0),ost_elev_distance(a0) ; reset timer
 		bsr.w	FindFreeObj				; find free OST slot
 		bne.s	@chkdel					; branch if not found
-		move.b	#id_Elevator,ost_id(a1)			; create elevator object
+		move.l	#Elevator,ost_id(a1)			; create elevator object
 		move.w	ost_x_pos(a0),ost_x_pos(a1)		; match position
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		move.b	#type_elev_up_vanish_1,ost_subtype(a1)	; platform rises and vanishes

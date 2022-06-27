@@ -33,11 +33,11 @@ TCha_Main:	; Routine 0
 		move.l	(v_emeralds).w,d0			; get emerald bitfield
 
 @makeemerald:
-		move.b	#0,ost_id(a1)				; set object to none by default
+		move.l	#0,ost_id(a1)				; set object to none by default
 		btst	d2,d0					; check if emerald was collected
 		bne.s	@sonic_has_emerald			; branch if yes
 
-		move.b	#id_TryChaos,ost_id(a1)			; load emerald object
+		move.l	#TryChaos,ost_id(a1)			; load emerald object
 		move.b	#id_TCha_Move,ost_routine(a1)		; goto TCha_Move next
 		move.l	#Map_ECha,ost_mappings(a1)
 		move.w	#tile_Nem_EndEm_TryAgain,ost_tile(a1)

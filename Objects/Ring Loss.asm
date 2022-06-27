@@ -40,7 +40,7 @@ RLoss_Count:	; Routine 0
 		bne.w	@fail					; branch if not found
 
 @makerings:
-		move.b	#id_RingLoss,ost_id(a1)			; load bouncing ring object
+		move.l	#RingLoss,ost_id(a1)			; load bouncing ring object
 		addq.b	#2,ost_routine(a1)			; goto RLoss_Bounce next
 		move.b	#8,ost_height(a1)
 		move.b	#8,ost_width(a1)

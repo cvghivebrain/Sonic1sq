@@ -36,7 +36,7 @@ GM_Credits:
 
 		moveq	#id_Pal_Sonic,d0
 		bsr.w	PalLoad_Next				; load Sonic's palette
-		move.b	#id_CreditsText,(v_ost_credits).w	; load credits object
+		move.l	#CreditsText,(v_ost_credits).w		; load credits object
 		jsr	(ExecuteObjects).l
 		jsr	(BuildSprites).l
 		bsr.w	EndDemoSetup				; setup for next mini-demo
@@ -171,7 +171,7 @@ TryAgainEnd:
 		moveq	#id_Pal_Ending,d0
 		bsr.w	PalLoad_Next				; load ending palette
 		clr.w	(v_pal_dry_next+$40).w			; set bg colour to black
-		move.b	#id_EndEggman,(v_ost_endeggman).w	; load Eggman object
+		move.l	#EndEggman,(v_ost_endeggman).w		; load Eggman object
 		jsr	(ExecuteObjects).l
 		jsr	(BuildSprites).l
 		move.w	#1800,(v_countdown).w			; show screen for 30 seconds

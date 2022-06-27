@@ -281,7 +281,7 @@ Drown_Countdown:; Routine $A
 		move.w	d0,ost_drown_delay_time(a0)		; set timer as random 0-15 frames
 		jsr	(FindFreeObj).l				; find free OST slot
 		bne.w	@nocountdown				; branch if not found
-		move.b	#id_DrownCount,ost_id(a1)		; load object
+		move.l	#DrownCount,ost_id(a1)			; load object
 		move.w	(v_ost_player+ost_x_pos).w,ost_x_pos(a1)
 		moveq	#6,d0					; 6 pixels to right
 		btst	#status_xflip_bit,(v_ost_player+ost_status).w ; is Sonic facing left?

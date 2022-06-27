@@ -207,7 +207,7 @@ emerald_all:			equ (1<<emerald_count)-1	; value stored in emerald bitfield when 
 		pusho			; save options
 		opt	ae+		; enable auto evens
 			rsset 0
-ost_id:			rs.b 1		; 0 ; object id
+ost_id:			rs.l 1		; 0 ; object id
 ost_render:		rs.b 1		; 1 ; bitfield for x/y flip, display mode
 	render_xflip:		equ 1	; xflip
 	render_yflip:		equ 2	; yflip

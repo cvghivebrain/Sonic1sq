@@ -179,7 +179,7 @@ Bub_BblMaker:	; Routine $A
 		move.w	d0,ost_bubble_random_time(a0)		; set next random time (max 32 frames)
 		bsr.w	FindFreeObj				; find free OST slot
 		bne.s	@fail					; branch if not found
-		move.b	#id_Bubble,ost_id(a1)			; load bubble object
+		move.l	#Bubble,ost_id(a1)			; load bubble object
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		jsr	(RandomNumber).l
 		andi.w	#$F,d0

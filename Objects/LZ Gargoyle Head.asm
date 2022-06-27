@@ -56,7 +56,7 @@ Gar_MakeFire:	; Routine 2
 		bne.s	@nofire					; branch if off screen
 		bsr.w	FindFreeObj				; find free OST slot
 		bne.s	@nofire					; branch if not found
-		move.b	#id_Gargoyle,ost_id(a1)			; load fireball object
+		move.l	#Gargoyle,ost_id(a1)			; load fireball object
 		addq.b	#id_Gar_FireBall,ost_routine(a1)	; use Gar_FireBall routine
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)

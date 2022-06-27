@@ -67,7 +67,7 @@ GFire_Spread:	; Routine 2
 		bne.s	@no_fire
 		bsr.w	FindNextFreeObj				; find free OST slot
 		bne.s	@no_fire				; branch if not found
-		move.b	#id_GrassFire,ost_id(a1)		; create another fire
+		move.l	#GrassFire,ost_id(a1)			; create another fire
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	d2,ost_burn_y_start(a1)			; initial y pos (ignores platform sinking)
 		move.w	ost_burn_sink(a0),ost_burn_sink(a1)

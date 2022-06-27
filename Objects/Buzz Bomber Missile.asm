@@ -57,7 +57,7 @@ Msl_Animate:	; Routine 2
 
 Msl_ChkCancel:
 		movea.l	ost_missile_parent(a0),a1
-		cmpi.b	#id_ExplosionItem,ost_id(a1)		; has Buzz Bomber been destroyed?
+		cmpi.l	#ExplosionItem,ost_id(a1)		; has Buzz Bomber been destroyed?
 		beq.s	Msl_Delete				; if yes, branch
 		rts
 
@@ -80,7 +80,7 @@ Msl_FromBuzz:	; Routine 4
 ; ===========================================================================
 
 	@explode:
-		move.b	#id_MissileDissolve,ost_id(a0)		; change object to an explosion (Obj24)
+		move.l	#MissileDissolve,ost_id(a0)		; change object to an explosion (Obj24)
 		move.b	#id_MDis_Main,ost_routine(a0)
 		bra.w	MissileDissolve
 ; ===========================================================================

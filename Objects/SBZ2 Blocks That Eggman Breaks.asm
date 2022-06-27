@@ -44,7 +44,7 @@ FFloor_Main:	; Routine 0
 		jsr	(FindFreeObj).l				; find free OST slot
 		bne.s	@fail					; branch if not found
 		move.w	a1,(a2)+				; save child OST address to list in parent OST
-		move.b	#id_FalseFloor,(a1)			; load block object
+		move.l	#FalseFloor,ost_id(a1)			; load block object
 		move.l	#Map_FFloor,ost_mappings(a1)
 		move.w	#tile_Nem_SbzBlock_SBZ2+tile_pal3,ost_tile(a1)
 		move.b	#render_rel,ost_render(a1)

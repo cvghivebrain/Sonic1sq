@@ -47,7 +47,7 @@ BSLZ_Main:
 @loop:
 		jsr	(FindNextFreeObj).l			; find free OST slot
 		bne.s	@fail					; branch if not found
-		move.b	#id_BossStarLight,ost_id(a1)
+		move.l	#BossStarLight,ost_id(a1)
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 
@@ -67,11 +67,11 @@ BSLZ_Main:
 	@fail:
 		lea	(v_ost_all+sizeof_ost).w,a1		; start at first OST slot after Sonic
 		lea	ost_boss_seesaw(a0),a2			; where to save seesaw OST addresses
-		moveq	#id_Seesaw,d0
+		move.l	#Seesaw,d0
 		moveq	#$3E,d1					; check first $40 OSTs (there are $80 total)
 
 	@find_loop:
-		cmp.b	(a1),d0					; is object a seesaw?
+		cmp.l	ost_id(a1),d0				; is object a seesaw?
 		bne.s	@notgood				; if not, branch
 		tst.b	ost_subtype(a1)				; is seesaw empty?
 		beq.s	@notgood				; if not, branch
@@ -245,7 +245,7 @@ BSLZ_MakeBall:
 		movea.l	(sp)+,a0				; restore current OST
 		bne.s	@exit					; branch if free OST slot not found
 
-		move.b	#id_BossSpikeball,(a1)			; load spiked ball object
+		move.l	#BossSpikeball,ost_id(a1)		; load spiked ball object
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		addi.w	#$20,ost_y_pos(a1)

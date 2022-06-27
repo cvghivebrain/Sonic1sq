@@ -61,7 +61,7 @@ GM_Special:
 		jsr	(SS_Load).l				; load SS layout data
 		move.l	#0,(v_camera_x_pos).w
 		move.l	#0,(v_camera_y_pos).w
-		move.b	#id_SonicSpecial,(v_ost_player).w	; load special stage Sonic object
+		move.l	#SonicSpecial,(v_ost_player).w		; load special stage Sonic object
 		bsr.w	PalCycle_SS
 		clr.w	(v_ss_angle).w				; set stage angle to "upright"
 		move.w	#$40,(v_ss_rotation_speed).w		; set stage rotation speed
@@ -175,7 +175,7 @@ SS_FinishLoop:
 		move.l	d0,(a1)+
 		dbf	d1,@clear_ost				; clear object RAM
 
-		move.b	#id_SSResult,(v_ost_ssresult1).w	; load results screen object
+		move.l	#SSResult,(v_ost_ssresult1).w		; load results screen object
 
 SS_NormalExit:
 		bsr.w	PauseGame

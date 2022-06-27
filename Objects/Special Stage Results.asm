@@ -64,7 +64,7 @@ SSR_Main:	; Routine 0
 		addq.w	#1,d1					; if yes, add 1	item (continue)
 
 	@loop:
-		move.b	#id_SSResult,ost_id(a1)
+		move.l	#SSResult,ost_id(a1)
 		move.w	(a2)+,ost_x_pos(a1)			; set actual x position
 		move.w	(a2)+,ost_ssr_x_stop(a1)		; set stop x position
 		move.w	(a2)+,ost_y_screen(a1)			; set y position
@@ -118,7 +118,7 @@ SSR_Move:	; Routine 2
 
 		addq.b	#2,ost_routine(a0)			; goto SSR_Wait next, and then SSR_RingBonus
 		move.w	#180,ost_ssr_time(a0)			; set time delay to 3 seconds
-		move.b	#id_SSRChaos,(v_ost_ssres_emeralds).w	; load chaos emerald object
+		move.l	#SSRChaos,(v_ost_ssres_emeralds).w	; load chaos emerald object
 
 SSR_Wait:	; Routine 4, 8, $C, $10
 		subq.w	#1,ost_ssr_time(a0)			; decrement timer

@@ -120,10 +120,9 @@ LCon_LoadPlatforms:
 		bset	#0,(a2,d0.w)				; set flag to indicate object exists
 		bne.w	DeleteObject				; delete now if already set
 		add.w	d0,d0
-		andi.w	#$1E,d0
-		addi.w	#ObjPosLZPlatform_Index-ObjPos_Index,d0
-		lea	(ObjPos_Index).l,a2
-		adda.w	(a2,d0.w),a2				; get address of platform position data
+		add.w	d0,d0
+		lea	(ObjPosLZPlatform_Index).l,a2
+		movea.l	(a2,d0.w),a2				; get address of platform position data
 		move.w	(a2)+,d1				; get object count
 		movea.l	a0,a1					; overwrite current object with 1st platform
 		bra.s	@makefirst
@@ -134,7 +133,7 @@ LCon_LoadPlatforms:
 		bne.s	@fail					; branch if not found
 
 	@makefirst:
-		move.b	#id_LabyrinthConvey,ost_id(a1)		; load platform object
+		move.l	#LabyrinthConvey,ost_id(a1)		; load platform object
 		move.w	(a2)+,ost_x_pos(a1)
 		move.w	(a2)+,ost_y_pos(a1)
 		move.w	(a2)+,d0
@@ -227,8 +226,7 @@ LCon_Platform_Update:
 
 	@not_at_corner:
 		bsr.w	SpeedToPos
-		rts	
-; End of function LCon_Platform_Update
+		rts
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to set direction and speed of platform

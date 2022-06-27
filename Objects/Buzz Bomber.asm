@@ -67,7 +67,7 @@ Buzz_Move:
 	@fire:
 		bsr.w	FindFreeObj
 		bne.s	@fail
-		move.b	#id_Missile,ost_id(a1)			; load missile object
+		move.l	#Missile,ost_id(a1)			; load missile object
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		addi.w	#$1C,ost_y_pos(a1)

@@ -220,7 +220,7 @@ React_Enemy:
 
 	@lessthan16:
 		bsr.w	AddPoints				; update score
-		move.b	#id_ExplosionItem,ost_id(a1)		; change object to explosion
+		move.l	#ExplosionItem,ost_id(a1)		; change object to explosion
 		move.b	#id_ExItem_Animal,ost_routine(a1)	; explosion also spawns an animal
 		tst.w	ost_y_vel(a0)
 		bmi.s	@bouncedown				; branch if Sonic is moving upwards
@@ -287,7 +287,7 @@ HurtSonic:
 
 		jsr	(FindFreeObj).l				; find free OST slot
 		bne.s	@hasshield				; branch if not found
-		move.b	#id_RingLoss,ost_id(a1)			; load bouncing multi rings object
+		move.l	#RingLoss,ost_id(a1)			; load bouncing multi rings object
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 
@@ -315,9 +315,9 @@ HurtSonic:
 		move.b	#id_Hurt,ost_anim(a0)
 		move.w	#sonic_flash_time,ost_sonic_flash_time(a0) ; set temp invincible time to 2 seconds
 		move.w	#sfx_Death,d0				; load normal damage sound
-		cmpi.b	#id_Spikes,(a2)				; was damage caused by spikes?
+		cmp.l	#Spikes,ost_id(a2)			; was damage caused by spikes?
 		bne.s	@sound					; if not, branch
-		cmpi.b	#id_Harpoon,(a2)			; was damage caused by LZ harpoon?
+		cmp.l	#Harpoon,ost_id(a2)			; was damage caused by LZ harpoon?
 		bne.s	@sound					; if not, branch
 		move.w	#sfx_SpikeHit,d0			; load spikes damage sound
 
@@ -354,11 +354,10 @@ KillSonic:
 		move.w	#-$700,ost_y_vel(a0)			; move Sonic up
 		move.w	#0,ost_x_vel(a0)
 		move.w	#0,ost_inertia(a0)
-		move.w	ost_y_pos(a0),$38(a0)			; unused
 		move.b	#id_Death,ost_anim(a0)
 		bset	#tile_hi_bit,ost_tile(a0)
 		move.w	#sfx_Death,d0				; play normal death sound
-		cmpi.b	#id_Spikes,(a2)				; check	if you were killed by spikes
+		cmpi.l	#Spikes,(a2)				; check	if you were killed by spikes
 		bne.s	@sound
 		move.w	#sfx_SpikeHit,d0			; play spikes death sound
 

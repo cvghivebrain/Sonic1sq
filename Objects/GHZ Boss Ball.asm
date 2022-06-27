@@ -49,7 +49,7 @@ GBall_Main:	; Routine 0
 		bne.s	@fail					; branch if not found
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
-		move.b	#id_BossBall,ost_id(a1)			; load chain link object
+		move.l	#BossBall,ost_id(a1)			; load chain link object
 		move.b	#id_GBall_Link,ost_routine(a1)
 		move.l	#Map_Swing_GHZ,ost_mappings(a1)
 		move.w	#tile_Nem_Swing,ost_tile(a1)
@@ -147,7 +147,7 @@ GBall_UpdateBase:
 		move.b	ost_status(a1),ost_status(a0)
 		tst.b	ost_status(a1)				; has boss been beaten?
 		bpl.s	@not_beaten				; if not, branch
-		move.b	#id_ExplosionBomb,ost_id(a0)		; replace base with explosion object
+		move.l	#ExplosionBomb,ost_id(a0)		; replace base with explosion object
 		move.b	#id_ExBom_Main,ost_routine(a0)
 
 	@not_beaten:
@@ -160,7 +160,7 @@ GBall_Link:	; Routine 6
 		movea.l	ost_ball_parent(a0),a1			; get address of OST of parent (ship)
 		tst.b	ost_status(a1)				; has boss been beaten?
 		bpl.s	@not_beaten				; if not, branch
-		move.b	#id_ExplosionBomb,ost_id(a0)		; replace chain with explosion object
+		move.l	#ExplosionBomb,ost_id(a0)		; replace chain with explosion object
 		move.b	#id_ExBom_Main,ost_routine(a0)
 
 	@not_beaten:
@@ -182,7 +182,7 @@ GBall_Ball:	; Routine 8
 		jsr	BossExplode				; spawn explosions
 		subq.b	#1,ost_ball_radius(a0)			; use radius as timer, decrements from 96
 		bpl.s	@display				; branch if time remains
-		move.b	#id_ExplosionBomb,(a0)			; replace ball with explosion after 1.5 seconds
+		move.l	#ExplosionBomb,ost_id(a0)		; replace ball with explosion after 1.5 seconds
 		move.b	#id_ExBom_Main,ost_routine(a0)
 
 	@display:

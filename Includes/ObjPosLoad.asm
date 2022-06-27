@@ -23,15 +23,11 @@ OPL_Init:
 		addq.b	#2,(v_opl_routine).w			; goto OPL_Main next
 		move.w	(v_zone).w,d0				; get zone/act numbers
 		lsl.b	#6,d0
-		lsr.w	#4,d0					; combine zone/act into single number, times 4
+		lsr.w	#3,d0					; combine zone/act into single number, times 8
 		lea	(ObjPos_Index).l,a0
-		movea.l	a0,a1					; copy index pointer to a1
-		adda.w	(a0,d0.w),a0				; jump to objpos list for specified zone/act
+		movea.l	(a0,d0.w),a0				; jump to objpos list for specified zone/act
 		move.l	a0,(v_opl_ptr_right).w			; copy objpos list address
 		move.l	a0,(v_opl_ptr_left).w
-		adda.w	2(a1,d0.w),a1				; jump to secondary objpos list (this is always blank)
-		move.l	a1,(v_opl_ptr_alt_right).w		; copy objpos list address
-		move.l	a1,(v_opl_ptr_alt_left).w
 		lea	(v_respawn_list).w,a2
 		move.w	#$101,(a2)+				; start respawn counter at 1
 		move.w	#($17C/4)-1,d0				; deletes half the stack as well; should be $100
@@ -54,13 +50,13 @@ OPL_Init:
 @loop_find_right_init:
 		cmp.w	(a0),d6					; (a0) = x pos of object; d6 = edge of spawn window
 		bls.s	@found_right				; branch if object is right of edge (1st object outside spawn window)
-		tst.b	4(a0)					; 4(a0) = object id and remember state flag
+		tst.b	4(a0)					; 4(a0) = remember state flag
 		bpl.s	@no_respawn				; branch if no remember flag found
 		move.b	(a2),d2					; d2 = respawn state
 		addq.b	#1,(a2)					; increment respawn list counter
 
 	@no_respawn:
-		addq.w	#6,a0					; goto next object in objpos list
+		add.w	#10,a0					; goto next object in objpos list
 		bra.s	@loop_find_right_init			; loop until object is found within window
 ; ===========================================================================
 
@@ -73,12 +69,12 @@ OPL_Init:
 @loop_find_left_init:
 		cmp.w	(a0),d6					; (a0) = x pos of object; d6 = edge of spawn window
 		bls.s	@found_left				; branch if object is right of edge (1st object inside spawn window)
-		tst.b	4(a0)					; 4(a0) = object id and remember state flag
+		tst.b	4(a0)					; 4(a0) = remember state flag
 		bpl.s	@no_respawn2				; branch if no remember flag found
 		addq.b	#1,1(a2)				; increment second respawn list counter
 
 	@no_respawn2:
-		addq.w	#6,a0					; goto next object in objpos list
+		add.w	#10,a0					; goto next object in objpos list
 		bra.s	@loop_find_left_init			; loop until object is found within window
 ; ===========================================================================
 
@@ -102,10 +98,10 @@ OPL_MovedLeft:
 		bcs.s	@found_left				; branch if camera is close to left boundary
 
 @loop_find_left:
-		cmp.w	-6(a0),d6				; read objpos backwards
+		cmp.w	-10(a0),d6				; read objpos backwards
 		bge.s	@found_left				; branch if object is outside spawn window
-		subq.w	#6,a0					; update pointer
-		tst.b	4(a0)					; 4(a0) = object id and remember state flag
+		sub.w	#10,a0					; update pointer
+		tst.b	4(a0)					; 4(a0) = remember state flag
 		bpl.s	@no_respawn				; branch if no remember flag found
 		subq.b	#1,1(a2)				; decrement second respawn list counter
 		move.b	1(a2),d2				; get respawn counter
@@ -113,7 +109,7 @@ OPL_MovedLeft:
 	@no_respawn:
 		bsr.w	OPL_SpawnObj				; check respawn flag and spawn object
 		bne.s	@fail					; branch if spawn fails
-		subq.w	#6,a0					; goto previous object in objpos list
+		sub.w	#10,a0					; goto previous object in objpos list
 		bra.s	@loop_find_left				; loop until object is found within window
 ; ===========================================================================
 
@@ -123,7 +119,7 @@ OPL_MovedLeft:
 		addq.b	#1,1(a2)
 
 	@no_respawn2:
-		addq.w	#6,a0
+		add.w	#10,a0
 
 @found_left:
 		move.l	a0,(v_opl_ptr_left).w			; save pointer for objpos
@@ -131,14 +127,14 @@ OPL_MovedLeft:
 		addi.w	#128+320+320,d6				; d6 = 320px to right of screen
 
 @loop_find_right:
-		cmp.w	-6(a0),d6				; read objpos backwards
+		cmp.w	-10(a0),d6				; read objpos backwards
 		bgt.s	@found_right				; branch if object is within spawn window
-		tst.b	-2(a0)					; -2(a0) = object id and remember state flag
+		tst.b	-6(a0)					; -6(a0) = remember state flag
 		bpl.s	@no_respawn3				; branch if no remember flag found
 		subq.b	#1,(a2)					; decrement respawn list counter
 
 	@no_respawn3:
-		subq.w	#6,a0					; goto previous object in objpos list
+		sub.w	#10,a0					; goto previous object in objpos list
 		bra.s	@loop_find_right
 ; ===========================================================================
 
@@ -178,7 +174,7 @@ OPL_MovedRight:
 		addq.b	#1,1(a2)
 
 	@no_respawn2:
-		addq.w	#6,a0
+		add.w	#10,a0
 		bra.s	@loop_find_left
 ; ===========================================================================
 
@@ -207,7 +203,7 @@ OPL_SpawnObj:
 		bpl.s	OPL_MakeItem				; if not, branch
 		bset	#7,2(a2,d2.w)				; set flag so it isn't loaded more than once
 		beq.s	OPL_MakeItem				; branch if object hasn't already been destroyed
-		addq.w	#6,a0					; goto next object in objpos list
+		add.w	#10,a0					; goto next object in objpos list
 		moveq	#0,d0
 		rts	
 ; ===========================================================================
@@ -224,14 +220,13 @@ OPL_MakeItem:
 		andi.b	#render_xflip+render_yflip,d1		; read only x/yflip bits
 		move.b	d1,ost_render(a1)			; apply x/yflip
 		move.b	d1,ost_status(a1)
-		move.b	(a0)+,d0				; get object id
+		move.b	(a0)+,d0				; get respawn flag
 		bpl.s	@no_respawn_bit				; branch if remember respawn bit is not set
-		andi.b	#$7F,d0					; ignore respawn bit
 		move.b	d2,ost_respawn(a1)			; give object its place in the respawn table
 
 	@no_respawn_bit:
-		move.b	d0,ost_id(a1)				; load object
 		move.b	(a0)+,ost_subtype(a1)			; set subtype
+		move.l	(a0)+,ost_id(a1)			; load object
 		moveq	#0,d0
 
 	@fail:

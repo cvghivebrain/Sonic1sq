@@ -32,11 +32,11 @@ SSRC_Main:	; Routine 0
 		move.l	(v_emeralds).w,d0			; get emerald bitfield
 
 	@loop:
-		move.b	#0,ost_id(a1)				; set object to none by default
+		move.l	#0,ost_id(a1)				; set object to none by default
 		btst	d2,d0					; check if emerald was collected
 		beq.s	@emerald_not_got			; branch if not
 
-		move.b	#id_SSRChaos,ost_id(a1)
+		move.l	#SSRChaos,ost_id(a1)
 		move.w	(a2)+,ost_x_pos(a1)			; set x position from list
 		move.w	#$F0,ost_y_screen(a1)			; set y position
 		move.b	d2,ost_frame(a1)			; set frame number

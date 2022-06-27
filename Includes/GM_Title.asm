@@ -48,7 +48,7 @@ GM_Title:
 
 		moveq	#id_Pal_Sonic,d0			; load Sonic's palette
 		bsr.w	PalLoad_Next				; palette will be shown after fading in
-		move.b	#id_CreditsText,(v_ost_credits).w	; load "SONIC TEAM PRESENTS" object
+		move.l	#CreditsText,(v_ost_credits).w		; load "SONIC TEAM PRESENTS" object
 		jsr	(ExecuteObjects).l
 		jsr	(BuildSprites).l
 		bsr.w	PaletteFadeIn				; fade in to "SONIC TEAM PRESENTS" screen from black
@@ -113,15 +113,14 @@ GM_Title:
 		move.w	#$178,(v_countdown).w			; run title screen for $178 frames
 		lea	(v_ost_psb).w,a1
 		moveq	#0,d0
-		move.w	#7,d1					; should be $F; 7 only clears half the OST
+		move.w	#$F,d1					; should be $F; 7 only clears half the OST
 
 	@clear_ost_psb:
 		move.l	d0,(a1)+
 		dbf	d1,@clear_ost_psb
 
-		move.b	#id_TitleSonic,(v_ost_titlesonic).w	; load big Sonic object
-		move.b	#id_PSBTM,(v_ost_psb).w			; load "PRESS START BUTTON" object
-		;clr.b	(v_ost_psb+ost_routine).w		; The 'Mega Games 10' version of Sonic 1 added this line, to fix the "PRESS START BUTTON" object not appearing
+		move.l	#TitleSonic,(v_ost_titlesonic).w	; load big Sonic object
+		move.l	#PSBTM,(v_ost_psb).w			; load "PRESS START BUTTON" object
 
 		if Revision=0
 		else
@@ -129,10 +128,10 @@ GM_Title:
 			bpl.s   @isjap				; if yes, branch
 		endc
 
-		move.b	#id_PSBTM,(v_ost_tm).w			; load "TM" object
+		move.l	#PSBTM,(v_ost_tm).w			; load "TM" object
 		move.b	#id_frame_psb_tm,(v_ost_tm+ost_frame).w
 	@isjap:
-		move.b	#id_PSBTM,(v_ost_titlemask).w		; load object which hides part of Sonic
+		move.l	#PSBTM,(v_ost_titlemask).w		; load object which hides part of Sonic
 		move.b	#id_frame_psb_mask,(v_ost_titlemask+ost_frame).w
 		jsr	(ExecuteObjects).l
 		bsr.w	DeformLayers
