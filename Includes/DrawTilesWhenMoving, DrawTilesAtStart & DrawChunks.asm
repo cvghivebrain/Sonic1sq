@@ -744,14 +744,14 @@ DrawFlipXY:
 
 GetBlockData:
 		if Revision=0
-			lea	(v_16x16_tiles).w,a1
+			movea.l	(v_16x16_ptr).w,a1
 			add.w	4(a3),d4			; add camera y pos to relative coordinate
 			add.w	(a3),d5				; add camera x pos to relative coordinate
 		else
 			add.w	(a3),d5
 	GetBlockData_IgnoreX:
 			add.w	4(a3),d4
-			lea	(v_16x16_tiles).w,a1
+			movea.l	(v_16x16_ptr).w,a1
 		endc
 		; Turn y coordinate into index into level layout
 		move.w	d4,d3

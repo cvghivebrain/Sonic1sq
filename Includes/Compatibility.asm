@@ -31,7 +31,7 @@ v_256x256:		equ v_256x256_tiles
 v_lvllayout:		equ v_level_layout
 v_ngfx_buffer:		equ v_nem_gfx_buffer
 v_spritequeue:		equ v_sprite_queue
-v_16x16:		equ v_16x16_tiles
+;v_16x16:		equ v_16x16_tiles
 v_sgfx_buffer:		equ v_sonic_gfx_buffer
 v_tracksonic:		equ v_sonic_pos_tracker
 v_hscrolltablebuffer:	equ v_hscroll_buffer
@@ -402,7 +402,7 @@ object_size		equ sizeof_ost
 next_object		equ sizeof_ost
 Chunk_Table:		equ v_256x256_tiles
 Level_Layout:		equ v_level_layout
-Block_Table:		equ v_16x16_tiles
+;Block_Table:		equ v_16x16_tiles
 Object_RAM:		equ v_ost_all
 MainCharacter:		equ v_ost_player
 Horiz_Scroll_Buf:	equ v_hscroll_buffer

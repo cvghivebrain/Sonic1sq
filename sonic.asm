@@ -981,18 +981,18 @@ Eni_SSBg2:	incbin	"Tilemaps\SS Background 2.eni"		; special stage background (ma
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - primary patterns and block mappings
 ; ---------------------------------------------------------------------------
-Blk16_GHZ:	incbin	"16x16 Mappings\GHZ.eni"
+Blk16_GHZ:	incbin	"16x16 Mappings\GHZ.bin"
 		even
 		nemfile	Nem_GHZ_1st
 		nemfile	Nem_GHZ_2nd
 Blk256_GHZ:	incbin	"256x256 Mappings\GHZ.kos"
 		even
-Blk16_LZ:	incbin	"16x16 Mappings\LZ.eni"
+Blk16_LZ:	incbin	"16x16 Mappings\LZ.bin"
 		even
 		nemfile	Nem_LZ
 Blk256_LZ:	incbin	"256x256 Mappings\LZ.kos"
 		even
-Blk16_MZ:	incbin	"16x16 Mappings\MZ.eni"
+Blk16_MZ:	incbin	"16x16 Mappings\MZ.bin"
 		even
 		nemfile	Nem_MZ
 Blk256_MZ:	if Revision=0
@@ -1001,17 +1001,17 @@ Blk256_MZ:	if Revision=0
 			incbin	"256x256 Mappings\MZ.kos"
 		endc
 		even
-Blk16_SLZ:	incbin	"16x16 Mappings\SLZ.eni"
+Blk16_SLZ:	incbin	"16x16 Mappings\SLZ.bin"
 		even
 		nemfile	Nem_SLZ
 Blk256_SLZ:	incbin	"256x256 Mappings\SLZ.kos"
 		even
-Blk16_SYZ:	incbin	"16x16 Mappings\SYZ.eni"
+Blk16_SYZ:	incbin	"16x16 Mappings\SYZ.bin"
 		even
 		nemfile	Nem_SYZ
 Blk256_SYZ:	incbin	"256x256 Mappings\SYZ.kos"
 		even
-Blk16_SBZ:	incbin	"16x16 Mappings\SBZ.eni"
+Blk16_SBZ:	incbin	"16x16 Mappings\SBZ.bin"
 		even
 		nemfile	Nem_SBZ
 Blk256_SBZ:	if Revision=0

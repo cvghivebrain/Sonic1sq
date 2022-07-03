@@ -20,9 +20,8 @@ v_ghz_flower_buffer:		equ v_level_layout-sizeof_art_flowers ; $FFFF9400 ; graphi
 v_bgscroll_buffer:		rs.b $200 ; $FFFFA800 ; background scroll buffer
 v_nem_gfx_buffer:		rs.b $200 ; $FFFFAA00 ; Nemesis graphics decompression buffer
 v_sprite_queue:			rs.b sizeof_priority*8 ; $FFFFAC00 ; sprite display queue, first section is highest priority ($400 bytes; 8 sections of $80 bytes)
-v_16x16_tiles:			rs.b sizeof_16x16_all ; $FFFFB000 ; 16x16 tile mappings ($1800 bytes)
 v_sonic_gfx_buffer:		rs.b sizeof_vram_sonic ; $FFFFC800 ; buffered Sonic graphics ($17 cells) ($2E0 bytes)
-v_sonic_pos_tracker:		rs.l $40 ; $FFFFCB00 ; earlier position tracking list for Sonic, used by invinciblity stars ($100 bytes)
+v_sonic_pos_tracker:		rs.l $40 ; $FFFFCB00 ; earlier position tracking list for Sonic, used by invincibility stars ($100 bytes)
 				rsblock hscroll
 v_hscroll_buffer:		rs.b sizeof_vram_hscroll ; $FFFFCC00 ; scrolling table data ($380 bytes)
 				rsblockend hscroll
@@ -191,6 +190,7 @@ v_demo_input_counter:		rs.w 1 ; $FFFFF790 ; tracks progress in the demo input da
 v_demo_input_time:		rs.b 1 ; $FFFFF792 ; time remaining for current demo "button press"
 v_palfade_time:			rs.w 1 ; $FFFFF794 ; palette fading - time until next change
 v_collision_index_ptr:		rs.l 1 ; $FFFFF796 ; ROM address for collision index of current level
+v_16x16_ptr:			rs.l 1
 v_palcycle_ss_num:		rs.w 1 ; $FFFFF79A ; palette cycling in Special Stage - current index number
 v_palcycle_ss_time:		rs.w 1 ; $FFFFF79C ; palette cycling in Special Stage - time until next change
 v_palcycle_ss_unused:		rs.w 1 ; $FFFFF79E ; palette cycling in Special Stage - unused offset value, always 0

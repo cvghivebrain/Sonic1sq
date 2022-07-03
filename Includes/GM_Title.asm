@@ -79,10 +79,7 @@ GM_Title:
 		move.w	#0,(v_palcycle_time).w			; disable palette cycling
 		bsr.w	LevelParameterLoad			; set level boundaries and Sonic's start position
 		bsr.w	DeformLayers
-		lea	(v_16x16_tiles).w,a1
-		lea	(Blk16_GHZ).l,a0			; load GHZ 16x16 mappings
-		move.w	#0,d0
-		bsr.w	EniDec
+		move.l	#Blk16_GHZ,(v_16x16_ptr).w		; load 16x16 mappings pointer
 		lea	(Blk256_GHZ).l,a0			; load GHZ 256x256 mappings
 		lea	(v_256x256_tiles).l,a1
 		bsr.w	KosDec

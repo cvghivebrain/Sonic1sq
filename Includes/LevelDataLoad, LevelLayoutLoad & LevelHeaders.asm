@@ -10,10 +10,7 @@ LevelDataLoad:
 		lea	(a2,d0.w),a2				; jump to relevant level header
 		move.l	a2,-(sp)				; save address to stack
 		addq.l	#4,a2					; skip to 16x16 mappings pointer
-		movea.l	(a2)+,a0				; load pointer
-		lea	(v_16x16_tiles).w,a1			; RAM address for 16x16 mappings
-		move.w	#0,d0					; value to add to each tile = 0
-		bsr.w	EniDec
+		move.l	(a2)+,(v_16x16_ptr).w			; load pointer
 		movea.l	(a2)+,a0				; load 256x256 mappings pointer
 		lea	(v_256x256_tiles).l,a1			; RAM address for 256x256 mappings
 		bsr.w	KosDec
