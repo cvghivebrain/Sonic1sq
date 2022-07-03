@@ -86,7 +86,7 @@ v_sonspeedmax:		equ v_sonic_max_speed
 v_sonspeedacc:		equ v_sonic_acceleration
 v_sonspeeddec:		equ v_sonic_deceleration
 v_sonframenum:		equ v_sonic_last_frame_id
-f_sonframechg:		equ f_sonic_dma_gfx
+;f_sonframechg:		equ f_sonic_dma_gfx
 v_anglebuffer:		equ v_angle_right
 v_opl_screen:		equ v_opl_screen_x_pos
 v_opl_data:		equ v_opl_ptr_right

@@ -1700,7 +1700,6 @@ Sonic_LoadGfx:
 		subq.b	#1,d1					; minus 1 for number of loops
 		bmi.s	@nochange				; if zero, branch
 		lea	(v_sonic_gfx_buffer).w,a3		; RAM address to write gfx
-		move.b	#1,(f_sonic_dma_gfx).w			; set flag for Sonic graphics DMA
 
 	@loop_entry:
 		moveq	#0,d2
@@ -1720,9 +1719,20 @@ Sonic_LoadGfx:
 		dbf	d0,@loop_tile				; repeat for number of tiles
 
 		dbf	d1,@loop_entry				; repeat for number of entries
+		lea	DMA_Sonic(pc),a2
+		move.l	(a2)+,d1
+		move.l	(a2)+,d2
+		jsr	AddDMA
 
 	@nochange:
 		rts
+
+DMA_Sonic:
+		dc.l $40000080+((vram_sonic&$3FFF)<<16)+((vram_sonic&$C000)>>14)
+		dc.l $93009400+(((sizeof_vram_sonic>>1)&$FF)<<16)+(((sizeof_vram_sonic>>1)&$FF00)>>8)
+		dc.w $9500+((v_sonic_gfx_buffer>>1)&$FF)
+		dc.w $9600+(((v_sonic_gfx_buffer>>1)&$FF00)>>8)
+		dc.w $9700+(((v_sonic_gfx_buffer>>1)&$7F0000)>>16)
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	change Sonic's angle & position as he walks along the floor

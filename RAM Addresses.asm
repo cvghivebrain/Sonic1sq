@@ -135,6 +135,7 @@ v_nem_header:			rs.l 1 ; $FFFFF6F0 ; Nemesis register buffer - d5: 3rd & 4th byt
 v_nem_shift:			rs.l 1 ; $FFFFF6F4 ; Nemesis register buffer - d6: shift value
 v_nem_tile_count:		rs.w 1 ; $FFFFF6F8 ; number of 8x8 tiles in a Nemesis archive
 v_nem_tile_count_frame:		rs.w 1 ; $FFFFF6FA ; number of 8x8 tiles to process in 1 frame
+v_dma_queue:			rs.w (sizeof_dma/2)*countof_dma ; ROM/RAM to VRAM DMA transfer queue ($140 bytes)
 				rsblockend plc
 
 				rsblock levelinfo ; $F700-$F7FF cleared by GM_Level, GM_Special, GM_Ending
@@ -176,7 +177,6 @@ v_sonic_max_speed:		rs.w 1 ; $FFFFF760 ; Sonic's maximum speed
 v_sonic_acceleration:		rs.w 1 ; $FFFFF762 ; Sonic's acceleration
 v_sonic_deceleration:		rs.w 1 ; $FFFFF764 ; Sonic's deceleration
 v_sonic_last_frame_id:		rs.b 1 ; $FFFFF766 ; Sonic's last frame id, compared with current frame to determine if graphics need updating
-f_sonic_dma_gfx:		rs.b 1 ; $FFFFF767 ; flag set to DMA Sonic's graphics from RAM to VRAM
 v_angle_right:			rs.b 1 ; $FFFFF768 ; angle of floor on Sonic's right side
 v_angle_left:			rs.b 1 ; $FFFFF76A ; angle of floor on Sonic's left side
 v_opl_routine:			rs.b 1 ; $FFFFF76C ; ObjPosLoad - routine counter

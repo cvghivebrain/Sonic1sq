@@ -15,6 +15,8 @@ countof_ost_ert:	equ countof_ost-countof_ost_inert	; number of OSTs that do inte
 sizeof_plc:		equ 6					; size of one pattern load cue
 countof_plc:		equ $10					; number of pattern load cues in RAM
 sizeof_priority:	equ $80					; size of one priority section in sprite queue
+sizeof_dma:		equ 14					; size of one DMA command
+countof_dma:		equ $10					; number of DMA slots in queue
 
 level_max_width:	equ $40
 level_max_height:	equ 8

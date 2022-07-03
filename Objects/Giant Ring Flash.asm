@@ -63,7 +63,7 @@ Flash_Collect:
 
 @finish:
 		addq.b	#2,ost_routine(a0)			; goto Flash_Delete next
-		move.w	#0,(v_ost_player).w			; remove Sonic object
+		move.l	#0,(v_ost_player).w			; remove Sonic object
 		addq.l	#4,sp					; don't return to Flash_ChkDel
 		rts
 

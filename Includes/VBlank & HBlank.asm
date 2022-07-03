@@ -143,13 +143,7 @@ VBlank_Level:
 
 		dma	v_hscroll_buffer,sizeof_vram_hscroll,vram_hscroll
 		dma	v_sprite_buffer,sizeof_vram_sprites,vram_sprites
-		tst.b	(f_sonic_dma_gfx).w			; has Sonic's sprite changed?
-		beq.s	@nochg					; if not, branch
-
-		dma	v_sonic_gfx_buffer,sizeof_vram_sonic,vram_sonic ; copy new Sonic gfx to VRAM
-		move.b	#0,(f_sonic_dma_gfx).w
-
-	@nochg:
+		bsr.w	ProcessDMA
 		startZ80
 		movem.l	(v_camera_x_pos).w,d0-d7		; copy all camera & bg x/y positions to d0-d7
 		movem.l	d0-d7,(v_camera_x_pos_copy).w		; create duplicates in RAM
@@ -188,15 +182,9 @@ VBlank_Special:
 		dma	v_pal_dry,sizeof_pal_all,cram		; copy palette to CRAM
 		dma	v_sprite_buffer,sizeof_vram_sprites,vram_sprites
 		dma	v_hscroll_buffer,sizeof_vram_hscroll,vram_hscroll
+		bsr.w	ProcessDMA
 		startZ80
 		bsr.w	PalCycle_SS				; update cycling palette
-		tst.b	(f_sonic_dma_gfx).w			; has Sonic's sprite changed?
-		beq.s	@nochg					; if not, branch
-
-		dma	v_sonic_gfx_buffer,sizeof_vram_sonic,vram_sonic ; copy new Sonic gfx to VRAM
-		move.b	#0,(f_sonic_dma_gfx).w
-
-	@nochg:
 		tst.w	(v_countdown).w
 		beq.w	@end
 		subq.w	#1,(v_countdown).w			; decrement timer
@@ -225,13 +213,7 @@ VBlank_Ending:
 		move.w	(v_vdp_hint_counter).w,(a5)		; set water palette position by sending VDP register $8Axx to control port (vdp_control_port)
 		dma	v_hscroll_buffer,sizeof_vram_hscroll,vram_hscroll
 		dma	v_sprite_buffer,sizeof_vram_sprites,vram_sprites
-		tst.b	(f_sonic_dma_gfx).w			; has Sonic's sprite changed?
-		beq.s	@nochg					; if not, branch
-
-		dma	v_sonic_gfx_buffer,sizeof_vram_sonic,vram_sonic ; copy new Sonic gfx to VRAM
-		move.b	#0,(f_sonic_dma_gfx).w
-
-	@nochg:
+		bsr.w	ProcessDMA
 		startZ80
 		movem.l	(v_camera_x_pos).w,d0-d7		; copy all camera & bg x/y positions to d0-d7
 		movem.l	d0-d7,(v_camera_x_pos_copy).w		; create duplicates in RAM
@@ -264,14 +246,8 @@ VBlank_Continue:
 		dma	v_pal_dry,sizeof_pal_all,cram		; copy palette to CRAM
 		dma	v_sprite_buffer,sizeof_vram_sprites,vram_sprites
 		dma	v_hscroll_buffer,sizeof_vram_hscroll,vram_hscroll
+		bsr.w	ProcessDMA
 		startZ80
-		tst.b	(f_sonic_dma_gfx).w			; has Sonic's sprite changed?
-		beq.s	@nochg					; if not, branch
-
-		dma	v_sonic_gfx_buffer,sizeof_vram_sonic,vram_sonic ; copy new Sonic gfx to VRAM
-		move.b	#0,(f_sonic_dma_gfx).w
-
-	@nochg:
 		tst.w	(v_countdown).w
 		beq.w	@end
 		subq.w	#1,(v_countdown).w			; decrement timer

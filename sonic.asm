@@ -227,6 +227,7 @@ Art_Text:	incbin	"Graphics\Level Select & Debug Text.bin" ; text used in level s
 
 		include "Includes\Nemesis Decompression.asm"
 		include "Includes\AddPLC, NewPLC, RunPLC, ProcessPLC & QuickPLC.asm"
+		include "Includes\DMA.asm"
 
 		include "Includes\Enigma Decompression.asm"
 		include "Includes\Kosinski Decompression.asm"
