@@ -35,7 +35,6 @@ Revision:	equ 1
 
 ZoneCount:	equ 6						; discrete zones are: GHZ, MZ, SYZ, LZ, SLZ, and SBZ
 
-		include "Nemesis File List.asm"
 ; ===========================================================================
 
 ROM_Start:
@@ -773,27 +772,25 @@ Art_LivesNums:	incbin	"Graphics\Lives Counter Numbers.bin"	; 8x8 pixel numbers o
 
 		include "Objects\_DebugMode.asm"
 
-		include "Pattern Load Cues.asm"
-
 		align	$200,$FF
 		if Revision=0
-			nemfile	Nem_SegaLogo
+			incfile	Nem_SegaLogo,"Graphics - Compressed\Sega Logo",nem
 	Eni_SegaLogo:	incbin	"Tilemaps\Sega Logo (REV00).eni" ; large Sega logo (mappings)
 			even
 		else
 			dcb.b	$300,$FF
-			nemfile	Nem_SegaLogo
+			incfile	Nem_SegaLogo,"Graphics - Compressed\Sega Logo (JP1)",nem
 	Eni_SegaLogo:	incbin	"Tilemaps\Sega Logo.eni"	; large Sega logo (mappings)
 			even
 		endc
 Eni_Title:	incbin	"Tilemaps\Title Screen.eni"		; title screen foreground (mappings)
 		even
-		nemfile	Nem_TitleFg
-		nemfile	Nem_TitleSonic
-		nemfile	Nem_TitleTM
 Eni_JapNames:	incbin	"Tilemaps\Hidden Japanese Credits.eni"	; Japanese credits (mappings)
 		even
-		nemfile	Nem_JapNames
+		incfile	Nem_TitleFg,"Graphics - Compressed\Title Screen Foreground",nem
+		incfile	Nem_TitleSonic,"Graphics - Compressed\Title Screen Sonic",nem
+		incfile	Nem_TitleTM,"Graphics - Compressed\Title Screen TM",nem
+		incfile	Nem_JapNames,"Graphics - Compressed\Hidden Japanese Credits",nem
 
 		include "Objects\Sonic [Mappings].asm"		; Map_Sonic
 		include "Objects\Sonic DPLCs.asm"		; SonicDynPLC
@@ -806,195 +803,191 @@ Art_Sonic:	incbin	"Graphics\Sonic.bin"			; Sonic
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - various
 ; ---------------------------------------------------------------------------
-		if Revision=0
-			nemfile	Nem_Smoke
-			nemfile	Nem_SyzSparkle
-		endc
-		nemfile	Nem_Shield
-		nemfile	Nem_Stars
-		if Revision=0
-			nemfile	Nem_LzSonic
-			nemfile	Nem_UnkFire
-			nemfile	Nem_Warp
-			nemfile	Nem_Goggle
-		endc
+		incfile Nem_Smoke,"Graphics - Compressed\Unused - Smoke",nem
+		incfile Nem_SyzSparkle,"Graphics - Compressed\Unused - SYZ Sparkles",nem
+		incfile Nem_LzSonic,"Graphics - Compressed\Unused - LZ Sonic Holding Breath",nem
+		incfile Nem_UnkFire,"Graphics - Compressed\Unused - Fireball",nem
+		incfile Nem_Warp,"Graphics - Compressed\Unused - Special Stage Warp",nem
+		incfile Nem_Goggle,"Graphics - Compressed\Unused - Goggles",nem
 
 		include "Objects\Special Stage Walls [Mappings].asm" ; Map_SSWalls
 
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - special stage
 ; ---------------------------------------------------------------------------
-		nemfile	Nem_SSWalls
 Eni_SSBg1:	incbin	"Tilemaps\SS Background 1.eni"		; special stage background (mappings)
 		even
-		nemfile	Nem_SSBgFish
 Eni_SSBg2:	incbin	"Tilemaps\SS Background 2.eni"		; special stage background (mappings)
 		even
-		nemfile	Nem_SSBgCloud
-		nemfile	Nem_SSGOAL
-		nemfile	Nem_SSRBlock
-		nemfile	Nem_SS1UpBlock
-		nemfile	Nem_SSEmStars
-		nemfile	Nem_SSRedWhite
-		nemfile	Nem_SSZone1
-		nemfile	Nem_SSZone2
-		nemfile	Nem_SSZone3
-		nemfile	Nem_SSZone4
-		nemfile	Nem_SSZone5
-		nemfile	Nem_SSZone6
-		nemfile	Nem_SSUpDown
-		nemfile	Nem_SSEmerald
-		nemfile	Nem_SSGhost
-		nemfile	Nem_SSWBlock
-		nemfile	Nem_SSGlass
-		nemfile	Nem_ResultEm
+		incfile Nem_SSWalls,"Graphics - Compressed\Special Stage Walls",nem
+		incfile Nem_SSBgFish,"Graphics - Compressed\Special Stage Birds & Fish",nem
+		incfile Nem_SSBgCloud,"Graphics - Compressed\Special Stage Clouds",nem
+		incfile Nem_SSGOAL,"Graphics - Compressed\Special Stage GOAL",nem
+		incfile Nem_SSRBlock,"Graphics - Compressed\Special Stage R",nem
+		incfile Nem_SS1UpBlock,"Graphics - Compressed\Special Stage 1UP",nem
+		incfile Nem_SSEmStars,"Graphics - Compressed\Special Stage Emerald Twinkle",nem
+		incfile Nem_SSRedWhite,"Graphics - Compressed\Special Stage Red-White",nem
+		incfile Nem_SSZone1,"Graphics - Compressed\Special Stage ZONE1",nem
+		incfile Nem_SSZone2,"Graphics - Compressed\Special Stage ZONE2",nem
+		incfile Nem_SSZone3,"Graphics - Compressed\Special Stage ZONE3",nem
+		incfile Nem_SSZone4,"Graphics - Compressed\Special Stage ZONE4",nem
+		incfile Nem_SSZone5,"Graphics - Compressed\Special Stage ZONE5",nem
+		incfile Nem_SSZone6,"Graphics - Compressed\Special Stage ZONE6",nem
+		incfile Nem_SSUpDown,"Graphics - Compressed\Special Stage UP-DOWN",nem
+		incfile Nem_SSEmerald,"Graphics - Compressed\Special Stage Emeralds",nem
+		incfile Nem_SSGhost,"Graphics - Compressed\Special Stage Ghost",nem
+		incfile Nem_SSWBlock,"Graphics - Compressed\Special Stage W",nem
+		incfile Nem_SSGlass,"Graphics - Compressed\Special Stage Glass",nem
+		incfile Nem_ResultEm,"Graphics - Compressed\Special Stage Result Emeralds",nem
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - GHZ stuff
 ; ---------------------------------------------------------------------------
-		nemfile	Nem_Stalk
-		nemfile	Nem_Swing
-		nemfile	Nem_Bridge
-		nemfile	Nem_GhzUnkBlock
-		nemfile	Nem_Ball
-		nemfile	Nem_Spikes
-		nemfile	Nem_GhzUnkLog
-		nemfile	Nem_SpikePole
-		nemfile	Nem_PurpleRock
-		nemfile	Nem_GhzSmashWall
-		nemfile	Nem_GhzEdgeWall
+		incfile Nem_Stalk,"Graphics - Compressed\GHZ Flower Stalk",nem
+		incfile Nem_Swing,"Graphics - Compressed\GHZ Swinging Platform",nem
+		incfile Nem_Bridge,"Graphics - Compressed\GHZ Bridge",nem
+		incfile Nem_Ball,"Graphics - Compressed\GHZ Giant Ball",nem
+		incfile Nem_Spikes,"Graphics - Compressed\Spikes",nem
+		incfile Nem_SpikePole,"Graphics - Compressed\GHZ Spiked Helix Pole",nem
+		incfile Nem_PurpleRock,"Graphics - Compressed\GHZ Purple Rock",nem
+		incfile Nem_GhzSmashWall,"Graphics - Compressed\GHZ Smashable Wall",nem
+		incfile Nem_GhzEdgeWall,"Graphics - Compressed\GHZ Walls",nem
+		incfile Nem_GhzUnkLog,"Graphics - Compressed\Unused - GHZ Log",nem
+		incfile Nem_GhzUnkBlock,"Graphics - Compressed\Unused - GHZ Block",nem
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - LZ stuff
 ; ---------------------------------------------------------------------------
-		nemfile	Nem_Water
-		nemfile	Nem_Splash
-		nemfile	Nem_LzSpikeBall
-		nemfile	Nem_FlapDoor
-		nemfile	Nem_Bubbles
-		nemfile	Nem_LzHalfBlock
-		nemfile	Nem_LzDoorV
-		nemfile	Nem_Harpoon
-		nemfile	Nem_LzPole
-		nemfile	Nem_LzDoorH
-		nemfile	Nem_LzWheel
-		nemfile	Nem_Gargoyle
-		nemfile	Nem_Sbz3HugeDoor
-		nemfile	Nem_LzPlatform
-		nemfile	Nem_Cork
-		nemfile	Nem_LzBlock
+		incfile Nem_Water,"Graphics - Compressed\LZ Water Surface",nem
+		incfile Nem_Splash,"Graphics - Compressed\LZ Waterfall & Splashes",nem
+		incfile Nem_LzSpikeBall,"Graphics - Compressed\LZ Spiked Ball & Chain",nem
+		incfile Nem_FlapDoor,"Graphics - Compressed\LZ Flapping Door",nem
+		incfile Nem_Bubbles,"Graphics - Compressed\LZ Bubbles & Countdown",nem
+		incfile Nem_LzHalfBlock,"Graphics - Compressed\LZ 32x16 Block",nem
+		incfile Nem_LzDoorV,"Graphics - Compressed\LZ Vertical Door",nem
+		incfile Nem_Harpoon,"Graphics - Compressed\LZ Harpoon",nem
+		incfile Nem_LzPole,"Graphics - Compressed\LZ Breakable Pole",nem
+		incfile Nem_LzDoorH,"Graphics - Compressed\LZ Horizontal Door",nem
+		incfile Nem_LzWheel,"Graphics - Compressed\LZ Wheel",nem
+		incfile Nem_Gargoyle,"Graphics - Compressed\LZ Gargoyle & Fireball",nem
+		incfile Nem_LzPlatform,"Graphics - Compressed\LZ Rising Platform",nem
+		incfile Nem_Cork,"Graphics - Compressed\LZ Cork",nem
+		incfile Nem_LzBlock,"Graphics - Compressed\LZ 32x32 Block",nem
+		incfile Nem_Sbz3HugeDoor,"Graphics - Compressed\SBZ3 Huge Sliding Door",nem
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - MZ stuff
 ; ---------------------------------------------------------------------------
-		nemfile	Nem_MzMetal
-		nemfile	Nem_MzButton
-		nemfile	Nem_MzGlass
-		nemfile	Nem_MzUnkGrass
-		nemfile	Nem_Fireball
-		nemfile	Nem_Lava
-		nemfile	Nem_MzBlock
-		nemfile	Nem_MzUnkBlock
+		incfile Nem_MzMetal,"Graphics - Compressed\MZ Metal Blocks",nem
+		incfile Nem_MzButton,"Graphics - Compressed\MZ Button",nem
+		incfile Nem_MzGlass,"Graphics - Compressed\MZ Green Glass Block",nem
+		incfile Nem_Fireball,"Graphics - Compressed\Fireballs",nem
+		incfile Nem_Lava,"Graphics - Compressed\MZ Lava",nem
+		incfile Nem_MzBlock,"Graphics - Compressed\MZ Green Pushable Block",nem
+		incfile Nem_MzUnkBlock,"Graphics - Compressed\Unused - MZ Background",nem
+		incfile Nem_MzUnkGrass,"Graphics - Compressed\Unused - MZ Grass",nem
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - SLZ stuff
 ; ---------------------------------------------------------------------------
-		nemfile	Nem_Seesaw
-		nemfile	Nem_SlzSpike
-		nemfile	Nem_Fan
-		nemfile	Nem_SlzWall
-		nemfile	Nem_Pylon
-		nemfile	Nem_SlzSwing
-		nemfile	Nem_SlzBlock
-		nemfile	Nem_SlzCannon
+		incfile Nem_Seesaw,"Graphics - Compressed\SLZ Seesaw",nem
+		incfile Nem_SlzSpike,"Graphics - Compressed\SLZ Little Spikeball",nem
+		incfile Nem_Fan,"Graphics - Compressed\SLZ Fan",nem
+		incfile Nem_SlzWall,"Graphics - Compressed\SLZ Breakable Wall",nem
+		incfile Nem_Pylon,"Graphics - Compressed\SLZ Pylon",nem
+		incfile Nem_SlzSwing,"Graphics - Compressed\SLZ Swinging Platform",nem
+		incfile Nem_SlzBlock,"Graphics - Compressed\SLZ 32x32 Block",nem
+		incfile Nem_SlzCannon,"Graphics - Compressed\SLZ Cannon",nem
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - SYZ stuff
 ; ---------------------------------------------------------------------------
-		nemfile	Nem_Bumper
-		nemfile	Nem_SmallSpike
-		nemfile	Nem_Button
-		nemfile	Nem_BigSpike
+		incfile Nem_Bumper,"Graphics - Compressed\SYZ Bumper",nem
+		incfile Nem_SmallSpike,"Graphics - Compressed\SYZ Small Spikeball",nem
+		incfile Nem_Button,"Graphics - Compressed\Button",nem
+		incfile Nem_BigSpike,"Graphics - Compressed\SYZ Large Spikeball",nem
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - SBZ stuff
 ; ---------------------------------------------------------------------------
-		nemfile	Nem_SbzDisc
-		nemfile	Nem_SbzJunction
-		nemfile	Nem_Cutter
-		nemfile	Nem_Stomper
-		nemfile	Nem_SpinPlatform
-		nemfile	Nem_TrapDoor
-		nemfile	Nem_SbzFloor
-		nemfile	Nem_Electric
-		nemfile	Nem_SbzBlock
-		nemfile	Nem_FlamePipe
-		nemfile	Nem_SbzDoorV
-		nemfile	Nem_SlideFloor
-		nemfile	Nem_SbzDoorH
-		nemfile	Nem_Girder
+		incfile Nem_SbzDisc,"Graphics - Compressed\SBZ Running Disc",nem
+		incfile Nem_SbzJunction,"Graphics - Compressed\SBZ Junction Wheel",nem
+		incfile Nem_Cutter,"Graphics - Compressed\SBZ Pizza Cutter",nem
+		incfile Nem_Stomper,"Graphics - Compressed\SBZ Stomper",nem
+		incfile Nem_SpinPlatform,"Graphics - Compressed\SBZ Spinning Platform",nem
+		incfile Nem_TrapDoor,"Graphics - Compressed\SBZ Trapdoor",nem
+		incfile Nem_SbzFloor,"Graphics - Compressed\SBZ Collapsing Floor",nem
+		incfile Nem_Electric,"Graphics - Compressed\SBZ Electrocuter",nem
+		incfile Nem_SbzBlock,"Graphics - Compressed\SBZ Vanishing Block",nem
+		incfile Nem_FlamePipe,"Graphics - Compressed\SBZ Flaming Pipe",nem
+		incfile Nem_SbzDoorV,"Graphics - Compressed\SBZ Small Vertical Door",nem
+		incfile Nem_SlideFloor,"Graphics - Compressed\SBZ Sliding Floor Trap",nem
+		incfile Nem_SbzDoorH,"Graphics - Compressed\SBZ Large Horizontal Door",nem
+		incfile Nem_Girder,"Graphics - Compressed\SBZ Crushing Girder",nem
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - enemies
 ; ---------------------------------------------------------------------------
-		nemfile	Nem_BallHog
-		nemfile	Nem_Crabmeat
-		nemfile	Nem_Buzz
-		nemfile	Nem_UnkExplode
-		nemfile	Nem_Burrobot
-		nemfile	Nem_Chopper
-		nemfile	Nem_Jaws
-		nemfile	Nem_Roller
-		nemfile	Nem_Motobug
-		nemfile	Nem_Newtron
-		nemfile	Nem_Yadrin
-		nemfile	Nem_Batbrain
-		nemfile	Nem_Splats
-		nemfile	Nem_Bomb
-		nemfile	Nem_Orbinaut
-		nemfile	Nem_Cater
+		incfile Nem_BallHog,"Graphics - Compressed\Ball Hog",nem
+		incfile Nem_Crabmeat,"Graphics - Compressed\Crabmeat",nem
+		incfile Nem_Buzz,"Graphics - Compressed\Buzz Bomber",nem
+		incfile Nem_Burrobot,"Graphics - Compressed\Burrobot",nem
+		incfile Nem_Chopper,"Graphics - Compressed\Chopper",nem
+		incfile Nem_Jaws,"Graphics - Compressed\Jaws",nem
+		incfile Nem_Roller,"Graphics - Compressed\Roller",nem
+		incfile Nem_Motobug,"Graphics - Compressed\Motobug",nem
+		incfile Nem_Newtron,"Graphics - Compressed\Newtron",nem
+		incfile Nem_Yadrin,"Graphics - Compressed\Yadrin",nem
+		incfile Nem_Batbrain,"Graphics - Compressed\Batbrain",nem
+		incfile Nem_Bomb,"Graphics - Compressed\Bomb Enemy",nem
+		incfile Nem_Orbinaut,"Graphics - Compressed\Orbinaut",nem
+		incfile Nem_Cater,"Graphics - Compressed\Caterkiller",nem
+		incfile Nem_Splats,"Graphics - Compressed\Unused - Splats Enemy",nem
+		incfile Nem_UnkExplode,"Graphics - Compressed\Unused - Explosion",nem
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - various
 ; ---------------------------------------------------------------------------
-		nemfile	Nem_TitleCard
-		nemfile	Nem_Hud
-		nemfile	Nem_Lives
-		nemfile	Nem_Ring
-		nemfile	Nem_Monitors
-		nemfile	Nem_Explode
-		nemfile	Nem_Points
-		nemfile	Nem_GameOver
-		nemfile	Nem_HSpring
-		nemfile	Nem_VSpring
-		nemfile	Nem_SignPost
-		nemfile	Nem_Lamp
-		nemfile	Nem_BigFlash
-		nemfile	Nem_Bonus
+		incfile Nem_TitleCard,"Graphics - Compressed\Title Cards",nem
+		incfile Nem_Hud,"Graphics - Compressed\HUD",nem
+		incfile Nem_Lives,"Graphics - Compressed\HUD - Life Counter Icon",nem
+		incfile Nem_Ring,"Graphics - Compressed\Rings",nem
+		incfile Nem_Shield,"Graphics - Compressed\Shield",nem
+		incfile Nem_Stars,"Graphics - Compressed\Invincibility",nem
+		incfile Nem_Monitors,"Graphics - Compressed\Monitors",nem
+		incfile Nem_Explode,"Graphics - Compressed\Explosion",nem
+		incfile Nem_Points,"Graphics - Compressed\Points",nem
+		incfile Nem_GameOver,"Graphics - Compressed\Game Over",nem
+		incfile Nem_HSpring,"Graphics - Compressed\Spring Horizontal",nem
+		incfile Nem_VSpring,"Graphics - Compressed\Spring Vertical",nem
+		incfile Nem_SignPost,"Graphics - Compressed\Signpost",nem
+		incfile Nem_Lamp,"Graphics - Compressed\Lamppost",nem
+		incfile Nem_BigFlash,"Graphics - Compressed\Giant Ring Flash",nem
+		incfile Nem_Bonus,"Graphics - Compressed\Hidden Bonuses",nem
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - continue screen
 ; ---------------------------------------------------------------------------
-		nemfile	Nem_ContSonic
-		nemfile	Nem_MiniSonic
+		incfile	Nem_ContSonic,"Graphics - Compressed\Continue Screen Sonic",nem
+		incfile	Nem_MiniSonic,"Graphics - Compressed\Continue Screen Stuff",nem
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - animals
 ; ---------------------------------------------------------------------------
-		nemfile	Nem_Rabbit
-		nemfile	Nem_Chicken
-		nemfile	Nem_BlackBird
-		nemfile	Nem_Seal
-		nemfile	Nem_Pig
-		nemfile	Nem_Flicky
-		nemfile	Nem_Squirrel
+		incfile	Nem_Rabbit,"Graphics - Compressed\Animal Rabbit",nem
+		incfile	Nem_Chicken,"Graphics - Compressed\Animal Chicken",nem
+		incfile	Nem_BlackBird,"Graphics - Compressed\Animal Blackbird",nem
+		incfile	Nem_Seal,"Graphics - Compressed\Animal Seal",nem
+		incfile	Nem_Pig,"Graphics - Compressed\Animal Pig",nem
+		incfile	Nem_Flicky,"Graphics - Compressed\Animal Flicky",nem
+		incfile	Nem_Squirrel,"Graphics - Compressed\Animal Squirrel",nem
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - primary patterns and block mappings
 ; ---------------------------------------------------------------------------
 Blk16_GHZ:	incbin	"16x16 Mappings\GHZ.bin"
 		even
-		nemfile	Nem_GHZ_1st
-		nemfile	Nem_GHZ_2nd
+		incfile	Nem_GHZ_1st,"Graphics - Compressed\8x8 - GHZ1",nem
+		incfile	Nem_GHZ_2nd,"Graphics - Compressed\8x8 - GHZ2",nem
 Blk256_GHZ:	incbin	"256x256 Mappings\GHZ.kos"
 		even
 Blk16_LZ:	incbin	"16x16 Mappings\LZ.bin"
 		even
-		nemfile	Nem_LZ
+		incfile	Nem_LZ,"Graphics - Compressed\8x8 - LZ",nem
 Blk256_LZ:	incbin	"256x256 Mappings\LZ.kos"
 		even
 Blk16_MZ:	incbin	"16x16 Mappings\MZ.bin"
 		even
-		nemfile	Nem_MZ
+		incfile	Nem_MZ,"Graphics - Compressed\8x8 - MZ",nem
 Blk256_MZ:	if Revision=0
 			incbin	"256x256 Mappings\MZ (REV00).kos"
 		else
@@ -1003,17 +996,17 @@ Blk256_MZ:	if Revision=0
 		even
 Blk16_SLZ:	incbin	"16x16 Mappings\SLZ.bin"
 		even
-		nemfile	Nem_SLZ
+		incfile	Nem_SLZ,"Graphics - Compressed\8x8 - SLZ",nem
 Blk256_SLZ:	incbin	"256x256 Mappings\SLZ.kos"
 		even
 Blk16_SYZ:	incbin	"16x16 Mappings\SYZ.bin"
 		even
-		nemfile	Nem_SYZ
+		incfile	Nem_SYZ,"Graphics - Compressed\8x8 - SYZ",nem
 Blk256_SYZ:	incbin	"256x256 Mappings\SYZ.kos"
 		even
 Blk16_SBZ:	incbin	"16x16 Mappings\SBZ.bin"
 		even
-		nemfile	Nem_SBZ
+		incfile	Nem_SBZ,"Graphics - Compressed\8x8 - SBZ",nem
 Blk256_SBZ:	if Revision=0
 			incbin	"256x256 Mappings\SBZ (REV00).kos"
 		else
@@ -1023,24 +1016,22 @@ Blk256_SBZ:	if Revision=0
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - bosses and ending sequence
 ; ---------------------------------------------------------------------------
-		nemfile	Nem_Eggman
-		nemfile	Nem_Weapons
-		nemfile	Nem_Prison
-		nemfile	Nem_Sbz2Eggman
-		nemfile	Nem_FzBoss
-		nemfile	Nem_FzEggman
-		nemfile	Nem_Exhaust
-		nemfile	Nem_EndEm
-		nemfile	Nem_EndSonic
-		nemfile	Nem_TryAgain
-		if Revision=0
-			nemfile	Nem_EndEggman
-		endc
 Kos_EndFlowers:	incbin	"Graphics - Compressed\Ending Flowers.kos" ; ending sequence animated flowers
 		even
-		nemfile	Nem_EndFlower
-		nemfile	Nem_CreditText
-		nemfile	Nem_EndStH
+		incfile Nem_Eggman,"Graphics - Compressed\Boss - Main",nem
+		incfile Nem_Weapons,"Graphics - Compressed\Boss - Weapons",nem
+		incfile Nem_Prison,"Graphics - Compressed\Prison Capsule",nem
+		incfile Nem_Sbz2Eggman,"Graphics - Compressed\Boss - Eggman in SBZ2 & FZ",nem
+		incfile Nem_FzBoss,"Graphics - Compressed\Boss - Final Zone",nem
+		incfile Nem_FzEggman,"Graphics - Compressed\Boss - Eggman after FZ Fight",nem
+		incfile Nem_Exhaust,"Graphics - Compressed\Boss - Exhaust Flame",nem
+		incfile Nem_EndEm,"Graphics - Compressed\Ending - Emeralds",nem
+		incfile Nem_EndSonic,"Graphics - Compressed\Ending - Sonic",nem
+		incfile Nem_TryAgain,"Graphics - Compressed\Ending - Try Again",nem
+		incfile Nem_EndFlower,"Graphics - Compressed\Ending - Flowers",nem
+		incfile Nem_CreditText,"Graphics - Compressed\Ending - Credits",nem
+		incfile Nem_EndStH,"Graphics - Compressed\Ending - StH Logo",nem
+		incfile	Nem_EndEggman,"Graphics - Compressed\Unused - Eggman Ending",nem
 ; ---------------------------------------------------------------------------
 ; Collision data
 ; ---------------------------------------------------------------------------
@@ -1314,7 +1305,7 @@ Level_End_unused:	dc.b 0,	0, 0, 0
 Art_BigRing:	incbin	"Graphics\Giant Ring.bin"
 		even
 
-		align	$100,$FF
+		include "Pattern Load Cues.asm"
 
 ; ---------------------------------------------------------------------------
 ; Object position index
@@ -1374,7 +1365,6 @@ ObjPos_Index:	index.l 0
 		ptr ObjPos_Null
 		ptr ObjPos_SBZ1
 		ptr ObjPos_Null
-		zonewarning ObjPos_Index,$10
 		; Ending
 		ptr ObjPos_Ending
 		ptr ObjPos_Null

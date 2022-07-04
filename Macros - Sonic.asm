@@ -145,26 +145,13 @@ endobj:		macros
 		objpos $ffff,0,0,0
 
 ; ---------------------------------------------------------------------------
-; Declares a Nemesis compressed graphics file
-; input: label, file name without extension or folder
+; Incbins a file and records its (uncompressed) size
+; input: label, file name (without extension), extension
 ; ---------------------------------------------------------------------------
 
-nemesis:	macro
-		file_\1: equs \2
-		file_nem: equs \2
-		sizeof_\1: equ filesize("\nemfolderdec\\file_nem\.bin")
-		endm
-
-; ---------------------------------------------------------------------------
-; Incbins a Nemesis compressed graphics file
-; input: label (must have been declared)
-; ---------------------------------------------------------------------------
-
-nemfile:	macro
-		file_nem: equs file_\1
-	\1:	incbin	"\nemfolder\\file_nem\.nem"
+incfile:	macro label,name,extension
+		filename: equs \name				; remove quotes from file name
+	\label:	incbin	"\filename\.\extension"			; incbin actual file
 		even
+		sizeof_\label: equ filesize("\filename\.bin")	; save size of associated .bin file
 		endm
-
-nemfolder:	equs "Graphics - Compressed\"
-nemfolderdec:	equs "Graphics - Compressed\Decompressed\"
