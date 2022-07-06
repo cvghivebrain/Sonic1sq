@@ -360,6 +360,7 @@ Demo_EndGHZ2:	incbin	"Demos\Ending - GHZ2.bin"
 		include	"Includes\DeformLayers.asm"
 		include	"Includes\DrawTilesWhenMoving, DrawTilesAtStart & DrawChunks.asm"
 
+		include	"Zones.asm"
 		include "Includes\LevelDataLoad, LevelLayoutLoad & LevelHeaders.asm"
 		include "Includes\DynamicLevelEvents.asm"
 
@@ -1016,8 +1017,7 @@ Blk256_SBZ:	if Revision=0
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - bosses and ending sequence
 ; ---------------------------------------------------------------------------
-Kos_EndFlowers:	incbin	"Graphics - Compressed\Ending Flowers.kos" ; ending sequence animated flowers
-		even
+		incfile	Kos_EndFlowers,"Graphics - Compressed\Ending Flowers",kos
 		incfile Nem_Eggman,"Graphics - Compressed\Boss - Main",nem
 		incfile Nem_Weapons,"Graphics - Compressed\Boss - Weapons",nem
 		incfile Nem_Prison,"Graphics - Compressed\Prison Capsule",nem

@@ -37,7 +37,7 @@ GM_Level:
 		enable_ints
 		moveq	#0,d0
 		move.b	(v_zone).w,d0				; get zone number
-		lsl.w	#4,d0					; multiply by $10 (size of each level header)
+		add.w	d0,d0					; multiply by 2
 		lea	(LevelHeaders).l,a2
 		lea	(a2,d0.w),a2				; jump to relevant level header
 		moveq	#0,d0
@@ -147,6 +147,7 @@ GM_Level:
 		move.b	(a1,d0.w),d0
 		bsr.w	PlaySound0				; play music
 		move.l	#TitleCard,(v_ost_titlecard1).w		; load title card object
+		bsr.w	LoadPerZone
 
 Level_TtlCardLoop:
 		move.b	#id_VBlank_TitleCard,(v_vblank_routine).w
@@ -170,7 +171,6 @@ Level_Skip_TtlCard:
 		bsr.w	LevelDataLoad				; load block mappings and palettes
 		bsr.w	DrawTilesAtStart
 		jsr	(ConvertCollisionArray).l
-		bsr.w	SetColIndexPtr
 		bsr.w	LZWaterFeatures
 		move.l	#SonicPlayer,(v_ost_player).w		; load Sonic object
 		tst.w	(v_demo_mode).w				; is this an ending demo?
@@ -370,28 +370,6 @@ Level_Demo:
 		tst.w	(v_countdown).w				; has main timer hit 0?
 		bne.s	@fade_loop				; if not, branch
 		rts	
-
-; ---------------------------------------------------------------------------
-; Subroutine to set collision index pointer for current zone
-
-;	uses d0
-; ---------------------------------------------------------------------------
-
-SetColIndexPtr:
-		moveq	#0,d0
-		move.b	(v_zone).w,d0
-		lsl.w	#2,d0
-		move.l	ColPointers(pc,d0.w),(v_collision_index_ptr).w
-		rts
-
-ColPointers:	dc.l Col_GHZ
-		dc.l Col_LZ
-		dc.l Col_MZ
-		dc.l Col_SLZ
-		dc.l Col_SYZ
-		dc.l Col_SBZ
-		zonewarning ColPointers,4
-;		dc.l Col_GHZ					; pointer for Ending is missing by default
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to check Sonic's position and load signpost graphics

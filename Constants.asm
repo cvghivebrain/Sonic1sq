@@ -71,7 +71,6 @@ sizeof_vram_hscroll:	equ $380
 sizeof_vram_hscroll_padded:	equ $400
 sizeof_vram_row:	equ 64*2		; single row of fg/bg nametable, assuming 64 wide
 sizeof_art_text:	equ filesize("Graphics\Level Select & Debug Text.bin")
-sizeof_art_flowers:	equ filesize("Graphics - Compressed\Ending Flowers.unc")
 sizeof_art_giantring:	equ filesize("Graphics\Giant Ring.bin")
 
 countof_color:		equ 16				; colours per palette line
