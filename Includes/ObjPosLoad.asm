@@ -21,16 +21,12 @@ OPL_Index:	index *
 
 OPL_Init:
 		addq.b	#2,(v_opl_routine).w			; goto OPL_Main next
-		move.w	(v_zone).w,d0				; get zone/act numbers
-		lsl.b	#6,d0
-		lsr.w	#3,d0					; combine zone/act into single number, times 8
-		lea	(ObjPos_Index).l,a0
-		movea.l	(a0,d0.w),a0				; jump to objpos list for specified zone/act
+		movea.l	(v_opl_data_ptr).w,a0			; read objpos list for current zone/act
 		move.l	a0,(v_opl_ptr_right).w			; copy objpos list address
 		move.l	a0,(v_opl_ptr_left).w
 		lea	(v_respawn_list).w,a2
 		move.w	#$101,(a2)+				; start respawn counter at 1
-		move.w	#($17C/4)-1,d0				; deletes half the stack as well; should be $100
+		move.w	#($100/4)-1,d0
 
 	@clear_respawn_list:
 		clr.l	(a2)+

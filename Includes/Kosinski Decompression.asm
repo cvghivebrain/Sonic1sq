@@ -31,6 +31,7 @@ _Kos_RunBitStream macro
 ; ---------------------------------------------------------------------------
 
 KosDec:
+	movem.l	d0-d6/a0-a4,-(sp)
 	moveq	#7,d7
 	moveq	#0,d0
 	moveq	#0,d1
@@ -114,6 +115,7 @@ KosDec_largecopy:
 	bra.w	KosDec_FetchNewCode
 
 KosDec_Quit:
+	movem.l	(sp)+,d0-d6/a0-a4
 	rts
 
 ; ---------------------------------------------------------------------------

@@ -1310,72 +1310,8 @@ Art_BigRing:	incbin	"Graphics\Giant Ring.bin"
 ; ---------------------------------------------------------------------------
 ; Object position index
 ; ---------------------------------------------------------------------------
-ObjPos_Index:	index.l 0
-		; GHZ
-		ptr ObjPos_GHZ1
-		ptr ObjPos_Null
-		ptr ObjPos_GHZ2
-		ptr ObjPos_Null
-		ptr ObjPos_GHZ3
-		ptr ObjPos_Null
-		ptr ObjPos_GHZ1
-		ptr ObjPos_Null
-		; LZ
-		ptr ObjPos_LZ1
-		ptr ObjPos_Null
-		ptr ObjPos_LZ2
-		ptr ObjPos_Null
-		ptr ObjPos_LZ3
-		ptr ObjPos_Null
-		ptr ObjPos_SBZ3
-		ptr ObjPos_Null
-		; MZ
-		ptr ObjPos_MZ1
-		ptr ObjPos_Null
-		ptr ObjPos_MZ2
-		ptr ObjPos_Null
-		ptr ObjPos_MZ3
-		ptr ObjPos_Null
-		ptr ObjPos_MZ1
-		ptr ObjPos_Null
-		; SLZ
-		ptr ObjPos_SLZ1
-		ptr ObjPos_Null
-		ptr ObjPos_SLZ2
-		ptr ObjPos_Null
-		ptr ObjPos_SLZ3
-		ptr ObjPos_Null
-		ptr ObjPos_SLZ1
-		ptr ObjPos_Null
-		; SYZ
-		ptr ObjPos_SYZ1
-		ptr ObjPos_Null
-		ptr ObjPos_SYZ2
-		ptr ObjPos_Null
-		ptr ObjPos_SYZ3
-		ptr ObjPos_Null
-		ptr ObjPos_SYZ1
-		ptr ObjPos_Null
-		; SBZ
-		ptr ObjPos_SBZ1
-		ptr ObjPos_Null
-		ptr ObjPos_SBZ2
-		ptr ObjPos_Null
-		ptr ObjPos_FZ
-		ptr ObjPos_Null
-		ptr ObjPos_SBZ1
-		ptr ObjPos_Null
-		; Ending
-		ptr ObjPos_Ending
-		ptr ObjPos_Null
-		ptr ObjPos_Ending
-		ptr ObjPos_Null
-		ptr ObjPos_Ending
-		ptr ObjPos_Null
-		ptr ObjPos_Ending
-		ptr ObjPos_Null
-		; --- Put extra object data here. ---
 ObjPosLZPlatform_Index:
+		index.l 0
 		ptr ObjPos_LZ1pf1
 		ptr ObjPos_LZ1pf2
 		ptr ObjPos_LZ2pf1
