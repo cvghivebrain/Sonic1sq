@@ -42,7 +42,7 @@ GM_Credits:
 		bsr.w	EndDemoSetup				; setup for next mini-demo
 		moveq	#0,d0
 		move.b	(v_zone).w,d0				; get zone number
-		lsl.w	#4,d0					; multiply by $10 (size of each level header)
+		add.w	d0,d0					; multiply by 2
 		lea	(LevelHeaders).l,a2
 		lea	(a2,d0.w),a2				; jump to relevant level header
 		moveq	#0,d0

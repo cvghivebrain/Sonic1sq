@@ -190,8 +190,10 @@ v_demo_input_counter:		rs.w 1 ; $FFFFF790 ; tracks progress in the demo input da
 v_demo_input_time:		rs.b 1 ; $FFFFF792 ; time remaining for current demo "button press"
 v_palfade_time:			rs.w 1 ; $FFFFF794 ; palette fading - time until next change
 v_collision_index_ptr:		rs.l 1 ; $FFFFF796 ; ROM address for collision index of current level
-v_16x16_ptr:			rs.l 1
-v_opl_data_ptr:			rs.l 1
+v_16x16_ptr:			rs.l 1 ; pointer to 16x16 mappings
+v_opl_data_ptr:			rs.l 1 ; pointer to start of OPL data
+f_water_enable:			rs.b 1 ; flag set to enable water
+v_bgm:				rs.b 1 ; music track id for current zone
 v_palcycle_ss_num:		rs.w 1 ; $FFFFF79A ; palette cycling in Special Stage - current index number
 v_palcycle_ss_time:		rs.w 1 ; $FFFFF79C ; palette cycling in Special Stage - time until next change
 v_palcycle_ss_unused:		rs.w 1 ; $FFFFF79E ; palette cycling in Special Stage - unused offset value, always 0

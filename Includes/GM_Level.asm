@@ -96,14 +96,6 @@ GM_Level:
 		bne.s	@skip_water				; if not, branch
 
 		move.w	#$8014,(a6)				; enable horizontal interrupts
-		moveq	#0,d0
-		move.b	(v_act).w,d0
-		add.w	d0,d0
-		lea	(WaterHeight).l,a1			; load water height array
-		move.w	(a1,d0.w),d0
-		move.w	d0,(v_water_height_actual).w		; set water heights
-		move.w	d0,(v_water_height_normal).w
-		move.w	d0,(v_water_height_next).w
 		clr.b	(v_water_routine).w			; clear water routine counter
 		clr.b	(f_water_pal_full).w			; clear	water state
 		move.b	#1,(v_water_direction).w		; enable water
@@ -131,23 +123,10 @@ GM_Level:
 	@no_lamp:
 		tst.w	(v_demo_mode).w				; is this an ending demo?
 		bmi.s	Level_Skip_TtlCard			; if yes, branch
-		moveq	#0,d0
-		move.b	(v_zone).w,d0
-		cmpi.w	#id_SBZ_act3,(v_zone).w			; is level SBZ3?
-		bne.s	@not_sbz3_bgm				; if not, branch
-		moveq	#5,d0					; use 5th music (SBZ)
-
-	@not_sbz3_bgm:
-		cmpi.w	#id_FZ,(v_zone).w			; is level FZ?
-		bne.s	@not_fz_bgm				; if not, branch
-		moveq	#6,d0					; use 6th music (FZ)
-
-	@not_fz_bgm:
-		lea	(MusicList).l,a1			; load music playlist
-		move.b	(a1,d0.w),d0
-		bsr.w	PlaySound0				; play music
 		move.l	#TitleCard,(v_ost_titlecard1).w		; load title card object
 		bsr.w	LoadPerZone
+		move.b	(v_bgm).w,d0
+		bsr.w	PlaySound0				; play music
 
 Level_TtlCardLoop:
 		move.b	#id_VBlank_TitleCard,(v_vblank_routine).w
@@ -244,17 +223,6 @@ Level_Skip_TtlCard:
 		move.w	#510,(v_countdown).w			; run for 8.5 seconds instead
 
 	@not_endingdemo:
-		cmpi.b	#id_LZ,(v_zone).w			; is level LZ/SBZ3?
-		bne.s	@not_lz					; if not, branch
-		moveq	#id_Pal_LZWater,d0			; palette $B (LZ underwater)
-		cmpi.b	#3,(v_act).w				; is level SBZ3?
-		bne.s	@not_sbz3				; if not, branch
-		moveq	#id_Pal_SBZ3Water,d0			; palette $D (SBZ3 underwater)
-
-	@not_sbz3:
-		bsr.w	PalLoad_Water_Next			; load water palette that'll be shown after fading in
-
-	@not_lz:
 		move.w	#4-1,d1
 
 	@delayloop:

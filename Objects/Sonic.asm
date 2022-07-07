@@ -91,16 +91,6 @@ Sonic_Modes:	index *,,2
 		ptr Sonic_Mode_Air				; status_jump_bit = 0; status_air_bit = 1
 		ptr Sonic_Mode_Roll				; status_jump_bit = 1; status_air_bit = 0
 		ptr Sonic_Mode_Jump				; status_jump_bit = 1; status_air_bit = 1
-		
-; ---------------------------------------------------------------------------
-; Music	to play	after invincibility wears off
-; ---------------------------------------------------------------------------
-
-MusicList2:
-		include_MusicList				; see "Includes\GM_Level.asm"
-		zonewarning MusicList2,1
-		; The ending doesn't get an entry
-		even
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to display Sonic and update invincibility/speed shoes
@@ -127,15 +117,7 @@ Sonic_Display:
 		bne.s	@removeinvincible			; branch if at a boss
 		cmpi.w	#air_alert,(v_air).w			; is air < $C?
 		bcs.s	@removeinvincible			; if yes, branch
-		moveq	#0,d0
-		move.b	(v_zone).w,d0
-		cmpi.w	#id_SBZ_act3,(v_zone).w			; check if level is SBZ3
-		bne.s	@music					; if not, branch
-		moveq	#5,d0					; play SBZ music
-
-	@music:
-		lea	(MusicList2).l,a1
-		move.b	(a1,d0.w),d0
+		move.b	(v_bgm).w,d0
 		jsr	(PlaySound0).l				; play normal music
 
 	@removeinvincible:

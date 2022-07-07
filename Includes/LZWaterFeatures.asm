@@ -5,8 +5,8 @@
 ; ---------------------------------------------------------------------------
 
 LZWaterFeatures:
-		cmpi.b	#id_LZ,(v_zone).w			; check if level is LZ
-		bne.s	@notlabyrinth				; if not, branch
+		tst.b	(f_water_enable).w			; check if water is enabled
+		beq.s	@notlabyrinth				; if not, branch
 		if Revision=0
 		else
 			tst.b   (f_disable_scrolling).w
@@ -45,16 +45,6 @@ LZWaterFeatures:
 
 @notlabyrinth:
 		rts
-
-; ---------------------------------------------------------------------------
-; Initial water heights
-; ---------------------------------------------------------------------------
-
-WaterHeight:	dc.w $B8					; Labyrinth 1
-		dc.w $328					; Labyrinth 2
-		dc.w $900					; Labyrinth 3
-		dc.w $228					; Scrap Brain 3
-		even
 
 ; ---------------------------------------------------------------------------
 ; Labyrinth dynamic water height routines
