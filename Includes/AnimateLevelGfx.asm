@@ -8,108 +8,99 @@
 
 AnimateLevelGfx:
 		tst.w	(f_pause).w				; is the game paused?
-		bne.s	@ispaused				; if yes, branch
+		bne.s	@exit					; if yes, branch
 		lea	(vdp_data_port).l,a6
 		bsr.w	LoadArt_GiantRing			; load giant ring gfx if needed
-		moveq	#0,d0
-		move.b	(v_zone).w,d0
-		add.w	d0,d0
-		move.w	AniArt_Index(pc,d0.w),d0
-		jmp	AniArt_Index(pc,d0.w)
+		tst.l	(v_aniart_ptr).w
+		beq.s	@exit					; branch if pointer is empty
+		movea.l	(v_aniart_ptr).w,a1
+		jmp	(a1)
 
-	@ispaused:
-		rts	
-
-; ===========================================================================
-AniArt_Index:	index *
-		ptr AniArt_GHZ
-		ptr AniArt_none
-		ptr AniArt_MZ
-		ptr AniArt_none
-		ptr AniArt_none
-		ptr AniArt_SBZ
-		zonewarning AniArt_Index,2
-		ptr AniArt_Ending
+	@exit:
+		rts
 
 ; ---------------------------------------------------------------------------
 ; Animated pattern routine - Green Hill
 ; ---------------------------------------------------------------------------
 
 AniArt_GHZ:
+		lea	AniArt_GHZ_Script(pc),a3
+		
+AniArt_Run:
+		moveq	#0,d4
+		lea	(v_levelani_0_frame).w,a4
+		move.w	(a3)+,d4				; get script count
 
-AniArt_GHZ_Waterfall:
+	@loop:
+		movea.l	(a3)+,a2				; get script address
+		sub.w	#1,2(a4)				; decrement timer
+		bpl.s	@next					; branch if time remains
+		
+		add.w	#1,(a4)					; increment frame number
+		moveq	#0,d3
+		move.w	(a2)+,d3				; get frame count
+		cmp.w	(a4),d3					; compare frame number with max
+		bne.s	@valid_frame				; branch if valid
+		move.w	#0,(a4)					; otherwise reset to 0
+	@valid_frame:
+		move.l	(a2)+,d1				; get VRAM address
+		move.l	(a2)+,d2				; get size
+		move.w	(a4),d3
+		lsl.w	#3,d3					; multiply frame number by 8
+		adda.l	d3,a2					; jump to duration for relevant frame
+		move.w	(a2)+,2(a4)				; reset timer
+		jsr	AddDMA					; add to DMA queue
+		
+	@next:
+		lea	4(a4),a4				; next time/frame counter in RAM
+		dbf	d4,@loop				; repeat for all scripts
+		rts
 
-tilecount:	= 8						; number of tiles per frame
+set_dma_dest:	macros
+		dc.l $40000080+(((\1)&$3FFF)<<16)+(((\1)&$C000)>>14)
 
-		subq.b	#1,(v_levelani_0_time).w		; decrement timer
-		bpl.s	AniArt_GHZ_Bigflower			; branch if not 0
+set_dma_size:	macros
+		dc.l $93009400+((((\1)>>1)&$FF)<<16)+((((\1)>>1)&$FF00)>>8)
 
-		move.b	#5,(v_levelani_0_time).w		; time to display each frame
-		lea	(Art_GhzWater).l,a1			; load waterfall patterns
-		move.b	(v_levelani_0_frame).w,d0
-		addq.b	#1,(v_levelani_0_frame).w		; increment frame counter
-		andi.w	#1,d0					; there are only 2 frames
-		beq.s	@isframe0				; branch if frame 0
-		lea	tilecount*sizeof_cell(a1),a1		; use graphics for frame 1
+set_dma_src:	macro
+		dc.w $9500+(((\1)>>1)&$FF)
+		dc.w $9600+((((\1)>>1)&$FF00)>>8)
+		dc.w $9700+((((\1)>>1)&$7F0000)>>16)
+		endm
 
-	@isframe0:
-		locVRAM	$6F00					; VRAM address
-		move.w	#tilecount-1,d1				; number of 8x8	tiles
-		bra.w	LoadTiles
-; ===========================================================================
-
-AniArt_GHZ_Bigflower:
-
-tilecount:	= 16						; number of tiles per frame
-
-		subq.b	#1,(v_levelani_1_time).w
-		bpl.s	AniArt_GHZ_Smallflower
-
-		move.b	#$F,(v_levelani_1_time).w
-		lea	(Art_GhzFlower1).l,a1			; load big flower patterns
-		move.b	(v_levelani_1_frame).w,d0
-		addq.b	#1,(v_levelani_1_frame).w
-		andi.w	#1,d0					; there are only 2 frames
-		beq.s	@isframe0
-		lea	tilecount*sizeof_cell(a1),a1
-
-	@isframe0:
-		locVRAM	$6B80
-		move.w	#tilecount-1,d1
-		bra.w	LoadTiles
-; ===========================================================================
-
-AniArt_GHZ_Smallflower:
-
-tilecount:	= 12						; number of tiles per frame
-
-		subq.b	#1,(v_levelani_2_time).w		; decrement timer
-		bpl.s	@end					; branch if not -1
-
-		move.b	#7,(v_levelani_2_time).w
-		move.b	(v_levelani_2_frame).w,d0
-		addq.b	#1,(v_levelani_2_frame).w		; increment frame counter
-		andi.w	#3,d0					; there are 4 frames
-		move.b	@sequence(pc,d0.w),d0			; get actual frame number from list
-		btst	#0,d0					; is frame 0 or 2? (actual frame, not frame counter)
-		bne.s	@isframe1				; if not, branch
-		move.b	#$7F,(v_levelani_2_time).w		; set longer duration for frames 0 and 2
-
-	@isframe1:
-		lsl.w	#7,d0					; multiply frame num by $80
-		move.w	d0,d1
-		add.w	d0,d0
-		add.w	d1,d0					; multiply that by 3 (i.e. 12 tiles per frame)
-		locVRAM	$6D80
-		lea	(Art_GhzFlower2).l,a1			; load small flower patterns
-		lea	(a1,d0.w),a1				; jump to appropriate tile
-		move.w	#tilecount-1,d1
-		bsr.w	LoadTiles
-
-	@end:
-		rts	
-
-@sequence:	dc.b 0,	1, 2, 1
+AniArt_GHZ_Script:
+		dc.w 3-1					; number of scripts
+		dc.l @waterfall
+		dc.l @big_flower
+		dc.l @small_flower
+	@waterfall:
+		dc.w 2						; frame count
+		set_dma_dest $6F00				; VRAM destination
+		set_dma_size 8*sizeof_cell			; size
+		dc.w 5						; duration
+		set_dma_src Art_GhzWater			; ROM source
+		dc.w 5
+		set_dma_src Art_GhzWater+(8*sizeof_cell)
+	@big_flower:
+		dc.w 2
+		set_dma_dest $6B80
+		set_dma_size 16*sizeof_cell
+		dc.w 15
+		set_dma_src Art_GhzFlower1
+		dc.w 15
+		set_dma_src Art_GhzFlower1+(16*sizeof_cell)
+	@small_flower:
+		dc.w 4
+		set_dma_dest $6D80
+		set_dma_size 12*sizeof_cell
+		dc.w $7F
+		set_dma_src Art_GhzFlower2
+		dc.w 7
+		set_dma_src Art_GhzFlower2+(12*sizeof_cell)
+		dc.w $7F
+		set_dma_src Art_GhzFlower2+(12*sizeof_cell*2)
+		dc.w 7
+		set_dma_src Art_GhzFlower2+(12*sizeof_cell)
 
 ; ---------------------------------------------------------------------------
 ; Animated pattern routine - Marble

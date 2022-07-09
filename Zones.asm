@@ -46,6 +46,8 @@ LoadPerZone:
 		
 		movea.l	(a4)+,a1				; get pointer for music list
 		move.b	(a1,d1.w),(v_bgm).w			; set music id
+		
+		move.l	(a4)+,(v_aniart_ptr).w			; load animated level art routine pointer
 		rts
 		
 ; ---------------------------------------------------------------------------
@@ -62,6 +64,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_WHeight_LZ				; water height list
 		dc.l Zone_OPL_GHZ				; object position list
 		dc.l Zone_Music_GHZ				; background music id list
+		dc.l AniArt_GHZ					; animated level art routine
 		even
 	ZoneDefs_size:
 
@@ -75,6 +78,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_WHeight_LZ
 		dc.l Zone_OPL_LZ
 		dc.l Zone_Music_LZ
+		dc.l AniArt_none
 		even
 		
 		; Marble Zone
@@ -87,6 +91,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_WHeight_LZ
 		dc.l Zone_OPL_MZ
 		dc.l Zone_Music_MZ
+		dc.l AniArt_MZ
 		even
 		
 		; Star Light Zone
@@ -99,6 +104,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_WHeight_LZ
 		dc.l Zone_OPL_SLZ
 		dc.l Zone_Music_SLZ
+		dc.l AniArt_none
 		even
 		
 		; Spring Yard Zone
@@ -111,6 +117,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_WHeight_LZ
 		dc.l Zone_OPL_SYZ
 		dc.l Zone_Music_SYZ
+		dc.l AniArt_none
 		even
 		
 		; Scrap Brain Zone
@@ -123,6 +130,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_WHeight_LZ
 		dc.l Zone_OPL_SBZ
 		dc.l Zone_Music_SBZ
+		dc.l AniArt_SBZ
 		even
 		
 		; Ending
@@ -135,6 +143,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_WHeight_LZ
 		dc.l Zone_OPL_End
 		dc.l Zone_Music_End
+		dc.l AniArt_Ending
 		even
 
 ; ---------------------------------------------------------------------------
