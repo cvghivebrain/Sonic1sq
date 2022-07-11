@@ -3,3 +3,5 @@
 *.txt
 *.lst
 s1built.prev.bin
+*.sym
+*.symcmp

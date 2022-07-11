@@ -16,7 +16,6 @@ v_error_type:			equ $FFFFFC44 ; error type - v_respawn_list uses same space
 v_256x256_tiles:		equ   $FF0000 ; 256x256 tile mappings ($A400 bytes)
 				rsset $FFFF0000+sizeof_256x256_all
 v_level_layout:			rs.b sizeof_level ; $FFFFA400 ; level and background layouts ($400 bytes)
-v_ghz_flower_buffer:		equ v_level_layout-sizeof_Kos_EndFlowers ; $FFFF9400 ; graphics buffer for GHZ flowers in ending ($1000 bytes)
 v_bgscroll_buffer:		rs.b $200 ; $FFFFA800 ; background scroll buffer
 v_nem_gfx_buffer:		rs.b $200 ; $FFFFAA00 ; Nemesis graphics decompression buffer
 v_sprite_queue:			rs.b sizeof_priority*8 ; $FFFFAC00 ; sprite display queue, first section is highest priority ($400 bytes; 8 sections of $80 bytes)
@@ -208,18 +207,18 @@ v_256x256_with_loop_1:		rs.l 1 ; $FFFFF7AC ; 256x256 level tile which contains a
 v_256x256_with_loop_2:		equ __rs-3 ; $FFFFF7AD ; 256x256 level tile which contains a loop (GHZ/SLZ)
 v_256x256_with_tunnel_1:	equ __rs-2 ; $FFFFF7AE ; 256x256 level tile which contains a roll tunnel (GHZ)
 v_256x256_with_tunnel_2:	equ __rs-1 ; $FFFFF7AF ; 256x256 level tile which contains a roll tunnel (GHZ)
-v_levelani_0_frame:		rs.b 1 ; $FFFFF7B0 ; level graphics animation 0 - current frame
-v_levelani_0_time:		rs.b 1 ; $FFFFF7B1 ; level graphics animation 0 - time until next frame
-v_levelani_1_frame:		rs.b 1 ; $FFFFF7B2 ; level graphics animation 1 - current frame
-v_levelani_1_time:		rs.b 1 ; $FFFFF7B3 ; level graphics animation 1 - time until next frame
-v_levelani_2_frame:		rs.b 1 ; $FFFFF7B4 ; level graphics animation 2 - current frame
-v_levelani_2_time:		rs.b 1 ; $FFFFF7B5 ; level graphics animation 2 - time until next frame
-v_levelani_3_frame:		rs.b 1 ; $FFFFF7B6 ; level graphics animation 3 - current frame
-v_levelani_3_time:		rs.b 1 ; $FFFFF7B7 ; level graphics animation 3 - time until next frame
-v_levelani_4_frame:		rs.b 1 ; $FFFFF7B8 ; level graphics animation 4 - current frame
-v_levelani_4_time:		rs.b 1 ; $FFFFF7B9 ; level graphics animation 4 - time until next frame
-v_levelani_5_frame:		rs.b 1 ; $FFFFF7BA ; level graphics animation 5 - current frame
-v_levelani_5_time:		rs.b 1 ; $FFFFF7BB ; level graphics animation 5 - time until next frame
+v_levelani_0_frame:		rs.w 1 ; $FFFFF7B0 ; level graphics animation 0 - current frame
+v_levelani_0_time:		rs.w 1 ; $FFFFF7B1 ; level graphics animation 0 - time until next frame
+v_levelani_1_frame:		rs.w 1 ; $FFFFF7B2 ; level graphics animation 1 - current frame
+v_levelani_1_time:		rs.w 1 ; $FFFFF7B3 ; level graphics animation 1 - time until next frame
+v_levelani_2_frame:		rs.w 1 ; $FFFFF7B4 ; level graphics animation 2 - current frame
+v_levelani_2_time:		rs.w 1 ; $FFFFF7B5 ; level graphics animation 2 - time until next frame
+v_levelani_3_frame:		rs.w 1 ; $FFFFF7B6 ; level graphics animation 3 - current frame
+v_levelani_3_time:		rs.w 1 ; $FFFFF7B7 ; level graphics animation 3 - time until next frame
+v_levelani_4_frame:		rs.w 1 ; $FFFFF7B8 ; level graphics animation 4 - current frame
+v_levelani_4_time:		rs.w 1 ; $FFFFF7B9 ; level graphics animation 4 - time until next frame
+v_levelani_5_frame:		rs.w 1 ; $FFFFF7BA ; level graphics animation 5 - current frame
+v_levelani_5_time:		rs.w 1 ; $FFFFF7BB ; level graphics animation 5 - time until next frame
 v_giantring_gfx_offset:		rs.w 1 ; $FFFFF7BE ; address of art for next giant ring frame, relative to Art_BigRing (counts backwards from $C40; 0 means no more art)
 f_convey_reverse:		rs.b 1 ; $FFFFF7C0 ; flag set to reverse conveyor belts in LZ/SBZ
 v_convey_init_list:		rs.b 6 ; $FFFFF7C1 ; LZ/SBZ conveyor belt platform flags set when the parent object is loaded - 1 byte per conveyor set

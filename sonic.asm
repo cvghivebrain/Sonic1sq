@@ -211,8 +211,6 @@ CheckSumError:
 		bra.s	@endlessloop
 ; ===========================================================================
 
-		include	"Includes\Errors.asm"
-
 Art_Text:	incbin	"Graphics\Level Select & Debug Text.bin" ; text used in level select and debug mode
 		even
 
@@ -1017,7 +1015,7 @@ Blk256_SBZ:	if Revision=0
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - bosses and ending sequence
 ; ---------------------------------------------------------------------------
-		incfile	Kos_EndFlowers,"Graphics - Compressed\Ending Flowers",kos
+		incfile	Art_EndFlowers,"Graphics\Ending Flowers",bin
 		incfile Nem_Eggman,"Graphics - Compressed\Boss - Main",nem
 		incfile Nem_Weapons,"Graphics - Compressed\Boss - Weapons",nem
 		incfile Nem_Prison,"Graphics - Compressed\Prison Capsule",nem
@@ -1329,9 +1327,11 @@ ObjPosSBZPlatform_Index:
 		ptr ObjPos_SBZ1pf6
 		ptr ObjPos_SBZ1pf1
 		ptr ObjPos_SBZ1pf2
-		endobj
+		include	"Object Placement\LZ Platforms.asm"
+		include	"Object Placement\SBZ Platforms.asm"
 		
 		include "Object Subtypes.asm"
+		endobj
 		include	"Object Placement\GHZ1.asm"
 		include	"Object Placement\GHZ2.asm"
 		include	"Object Placement\GHZ3.asm"
@@ -1339,7 +1339,6 @@ ObjPosSBZPlatform_Index:
 		include	"Object Placement\LZ2.asm"
 		include	"Object Placement\LZ3.asm"
 		include	"Object Placement\SBZ3.asm"
-		include	"Object Placement\LZ Platforms.asm"
 		include	"Object Placement\MZ1.asm"
 		include	"Object Placement\MZ2.asm"
 		include	"Object Placement\MZ3.asm"
@@ -1352,7 +1351,6 @@ ObjPosSBZPlatform_Index:
 		include	"Object Placement\SBZ1.asm"
 		include	"Object Placement\SBZ2.asm"
 		include	"Object Placement\FZ.asm"
-		include	"Object Placement\SBZ Platforms.asm"
 		include	"Object Placement\Ending.asm"
 ObjPos_Null:	endobj
 
@@ -1361,5 +1359,54 @@ ObjPos_Null:	endobj
 ; ---------------------------------------------------------------------------
 		include "sound/Sound Data.asm"
 
+; ---------------------------------------------------------------
+; Error handling module
+; ---------------------------------------------------------------
+ 
+BusError:	jsr ErrorHandler(pc)
+		dc.b "BUS ERROR",0				; text
+		dc.b 1						; extended stack frame
+		even
+AddressError:	jsr ErrorHandler(pc)
+		dc.b "ADDRESS ERROR",0				; text
+		dc.b 1						; extended stack frame
+		even
+IllegalInstr:	jsr ErrorHandler(pc)
+		dc.b "ILLEGAL INSTRUCTION",0			; text
+		dc.b 0						; extended stack frame
+		even
+ZeroDivide:	jsr ErrorHandler(pc)
+		dc.b "ZERO DIVIDE",0  				; text
+		dc.b 0						; extended stack frame
+		even
+ChkInstr:	jsr ErrorHandler(pc)
+		dc.b "CHK INSTRUCTION",0  			; text
+		dc.b 0						; extended stack frame
+		even
+TrapvInstr:	jsr ErrorHandler(pc)
+		dc.b "TRAPV INSTRUCTION",0			; text
+		dc.b 0						; extended stack frame
+		even
+PrivilegeViol:	jsr ErrorHandler(pc)
+		dc.b "PRIVILEGE VIOLATION",0			; text
+		dc.b 0						; extended stack frame
+		even
+Trace:		jsr ErrorHandler(pc)
+		dc.b "TRACE",0    				; text
+		dc.b 0						; extended stack frame
+		even
+Line1010Emu:	jsr ErrorHandler(pc)
+		dc.b "LINE 1010 EMULATOR",0			; text
+		dc.b 0						; extended stack frame
+		even
+Line1111Emu:	jsr ErrorHandler(pc)
+		dc.b "LINE 1111 EMULATOR",0			; text
+		dc.b 0						; extended stack frame
+		even
+ErrorExcept:	jsr ErrorHandler(pc)
+		dc.b "ERROR EXCEPTION",0  			; text
+		dc.b 0						; extended stack frame
+		even
+ErrorHandler:   incbin	"ErrorHandler.bin"
 ROM_End:
 		END

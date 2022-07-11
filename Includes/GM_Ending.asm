@@ -62,14 +62,12 @@ GM_Ending:
 		bset	#redraw_left_bit,(v_fg_redraw_direction).w
 		bsr.w	LevelDataLoad				; load block mappings and palettes
 		bsr.w	DrawTilesAtStart
-		move.l	#Col_GHZ,(v_collision_index_ptr).w	; set pointer to GHZ collision index
 		enable_ints
-		lea	(Kos_EndFlowers).l,a0			; load extra flower patterns
-		lea	(v_ghz_flower_buffer).w,a1		; RAM address to buffer the patterns ($FFFF9400)
-		bsr.w	KosDec
 		moveq	#id_Pal_Sonic,d0
 		bsr.w	PalLoad_Next				; load Sonic's palette
-		play.w	0, bsr.w, mus_Ending			; play ending sequence music
+		bsr.w	LoadPerZone
+		move.b	(v_bgm).w,d0
+		bsr.w	PlaySound0				; play music
 		btst	#bitA,(v_joypad_hold_actual).w		; is button A being held?
 		beq.s	@no_debug				; if not, branch
 		move.b	#1,(f_debug_enable).w			; enable debug mode
@@ -207,7 +205,8 @@ End_Sonic_Stop:	; Routine 2
 		move.w	d0,(v_ost_player+ost_inertia).w
 		move.b	#$81,(v_lock_multi).w			; lock controls & position
 		move.b	#id_frame_Wait2,(v_ost_player+ost_frame).w
-		move.w	#(id_Wait<<8)+id_Wait,(v_ost_player+ost_anim).w ; use "standing" animation
+		move.b	#id_Wait,(v_ost_player+ost_anim).w	; use "standing" animation
+		move.b	#id_Wait,(v_ost_player+ost_sonic_anim_next).w
 		move.b	#3,(v_ost_player+ost_anim_time).w
 		rts	
 ; ===========================================================================

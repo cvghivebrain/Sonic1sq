@@ -317,7 +317,7 @@ ost_boss_wobble:	rs.b 1					; wobble state as Eggman moves back & forth (1 byte 
 		rsobjend
 
 ; Boss constants
-hitcount_all:		equ 8
+hitcount_all:		equ 1
 hitcount_ghz:		equ hitcount_all
 hitcount_mz:		equ hitcount_all
 hitcount_syz:		equ hitcount_all

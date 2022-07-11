@@ -200,16 +200,7 @@ VBlank_Ending:
 		stopZ80
 		waitZ80
 		bsr.w	ReadJoypads
-		tst.b	(f_water_pal_full).w			; is water covering the whole screen?
-		bne.s	@allwater				; if yes, branch
-
-		dma	v_pal_dry,sizeof_pal_all,cram		; copy normal palette to CRAM (water palette will be copied by HBlank later)
-		bra.s	@waterbelow
-
-	@allwater:
-		dma	v_pal_water,sizeof_pal_all,cram		; copy water palette to CRAM
-
-	@waterbelow:
+		dma	v_pal_dry,sizeof_pal_all,cram		; copy palette to CRAM
 		move.w	(v_vdp_hint_counter).w,(a5)		; set water palette position by sending VDP register $8Axx to control port (vdp_control_port)
 		dma	v_hscroll_buffer,sizeof_vram_hscroll,vram_hscroll
 		dma	v_sprite_buffer,sizeof_vram_sprites,vram_sprites

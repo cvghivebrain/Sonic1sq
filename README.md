@@ -7,7 +7,10 @@ _Sonic 1-squared_ is an enhanced version of the original _Sonic the Hedgehog_ ga
 * Modified the way animation works to save 2 bytes in RAM per object. The high bit of ost_anim now serves as an update flag instead of ost_anim_restart.
 * Object scratch RAM is assigned automatically with __rsobj__ macro. If you attempt to use more RAM than is available ($40 bytes), assembly will fail.
 * obj_id is now a longword pointer instead of a single byte (as is the case in _Sonic 3 & Knuckles_). This allows for unlimited object types, and slightly improves performance.
+* LoadPerZone subroutine consolidates all pointers and parameters for zones and acts. This simplifies the process of adding levels. (incomplete)
+* DMA queue system for loading uncompressed graphics.
+* Animated level graphics use a script instead of being hard-coded. The exception is Marble Zone's magma, which works somewhat differently to other animations.
 
 # Credits
 * [flamewing](https://github.com/flamewing) for [mdcomp](https://github.com/flamewing/mdcomp).
-* [vladikomper](https://github.com/vladikcomper) for the optimised Kosinski decompressor.
+* [vladikcomper](https://github.com/vladikcomper) for the optimised Kosinski decompressor and advanced error handler.
