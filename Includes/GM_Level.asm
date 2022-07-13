@@ -103,28 +103,19 @@ GM_Level:
 	@skip_water:
 		move.w	#air_full,(v_air).w
 		enable_ints
-		moveq	#id_Pal_Sonic,d0
-		bsr.w	PalLoad_Now				; load Sonic's palette
 		cmpi.b	#id_LZ,(v_zone).w			; is level LZ?
 		bne.s	@skip_waterpal				; if not, branch
 
-		moveq	#id_Pal_LZSonWater,d0			; palette number $F (LZ)
-		cmpi.b	#3,(v_act).w				; is act number 3?
-		bne.s	@not_sbz3				; if not, branch
-		moveq	#id_Pal_SBZ3SonWat,d0			; palette number $10 (SBZ3)
-
-	@not_sbz3:
-		bsr.w	PalLoad_Water				; load underwater palette
 		tst.b	(v_last_lamppost).w			; has a lamppost been used?
 		beq.s	@no_lamp				; if not, branch
 		move.b	(f_water_pal_full_lampcopy).w,(f_water_pal_full).w ; retrieve flag for whole screen being underwater
 
 	@skip_waterpal:
 	@no_lamp:
+		bsr.w	LoadPerZone
 		tst.w	(v_demo_mode).w				; is this an ending demo?
 		bmi.s	Level_Skip_TtlCard			; if yes, branch
 		move.l	#TitleCard,(v_ost_titlecard1).w		; load title card object
-		bsr.w	LoadPerZone
 		move.b	(v_bgm).w,d0
 		bsr.w	PlaySound0				; play music
 

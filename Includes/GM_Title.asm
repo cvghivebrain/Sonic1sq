@@ -77,12 +77,9 @@ GM_Title:
 		move.w	#0,(v_demo_mode).w			; disable debug mode
 		move.w	#id_GHZ_act1,(v_zone).w			; set level to GHZ act 1 (0000)
 		move.w	#0,(v_palcycle_time).w			; disable palette cycling
+		bsr.w	LoadPerZone
 		bsr.w	LevelParameterLoad			; set level boundaries and Sonic's start position
 		bsr.w	DeformLayers
-		move.l	#Blk16_GHZ,(v_16x16_ptr).w		; load 16x16 mappings pointer
-		lea	(Blk256_GHZ).l,a0			; load GHZ 256x256 mappings
-		lea	(v_256x256_tiles).l,a1
-		bsr.w	KosDec
 		bsr.w	LevelLayoutLoad				; load GHZ1 level layout including background
 		bsr.w	PaletteFadeOut				; fade out "SONIC TEAM PRESENTS" screen to black
 		disable_ints

@@ -57,15 +57,15 @@ GM_Ending:
 		moveq	#id_PLC_Ending,d0
 		bsr.w	QuickPLC				; load ending sequence graphics in 1 frame
 		jsr	(Hud_Base).l				; load uncompressed portion of HUD graphics
-		bsr.w	LevelParameterLoad			; load level boundaries and start positions
 		bsr.w	DeformLayers
 		bset	#redraw_left_bit,(v_fg_redraw_direction).w
 		bsr.w	LevelDataLoad				; load block mappings and palettes
-		bsr.w	DrawTilesAtStart
 		enable_ints
 		moveq	#id_Pal_Sonic,d0
 		bsr.w	PalLoad_Next				; load Sonic's palette
 		bsr.w	LoadPerZone
+		bsr.w	LevelParameterLoad			; load level boundaries and start positions
+		bsr.w	DrawTilesAtStart
 		move.b	(v_bgm).w,d0
 		bsr.w	PlaySound0				; play music
 		btst	#bitA,(v_joypad_hold_actual).w		; is button A being held?
