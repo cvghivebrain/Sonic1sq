@@ -33,25 +33,17 @@ LPL_StartPos:
 		beq.s	@no_lamppost				; if not, branch
 
 		jsr	(Lamp_LoadInfo).l			; load lamppost variables
-		move.w	(v_ost_player+ost_x_pos).w,d1
-		move.w	(v_ost_player+ost_y_pos).w,d0		; d0/d1 = Sonic's position from lamppost variables
 		bra.s	LPL_Camera
 ; ===========================================================================
 
 @no_lamppost:
-		move.w	(v_zone).w,d0				; get zone/act number
-		lsl.b	#6,d0
-		lsr.w	#4,d0					; convert to 1-byte id, multiplied by 4
-		lea	StartPosList(pc,d0.w),a1		; load Sonic's start position
 		tst.w	(v_demo_mode).w				; is ending demo mode on?
-		bpl.s	@no_ending_demo				; if not, branch
+		bpl.s	LPL_Camera				; if not, branch
 
 		move.w	(v_credits_num).w,d0
 		subq.w	#1,d0
 		lsl.w	#2,d0
 		lea	EndingStartPosList(pc,d0.w),a1		; load Sonic's start position
-
-	@no_ending_demo:
 		moveq	#0,d1
 		move.w	(a1)+,d1
 		move.w	d1,(v_ost_player+ost_x_pos).w		; set Sonic's x position
@@ -60,6 +52,8 @@ LPL_StartPos:
 		move.w	d0,(v_ost_player+ost_y_pos).w		; set Sonic's y position
 
 LPL_Camera:
+		move.w	(v_ost_player+ost_x_pos).w,d1
+		move.w	(v_ost_player+ost_y_pos).w,d0		; d0/d1 = Sonic's position
 		subi.w	#160,d1					; is Sonic more than 160px from left edge?
 		bcc.s	@chk_right				; if yes, branch
 		moveq	#0,d1
@@ -94,50 +88,6 @@ LPL_Camera:
 		else
 			rts
 		endc
-
-; ---------------------------------------------------------------------------
-; Sonic start position list - each zone has four acts, of which the fourth is
-; unused (except LZ4 = SBZ3)
-; ---------------------------------------------------------------------------
-
-StartPosList:
-		dc.l startpos_ghz1
-		dc.l startpos_ghz2
-		dc.l startpos_ghz3
-		dc.l startpos_unused
-
-		dc.l startpos_lz1
-		dc.l startpos_lz2
-		dc.l startpos_lz3
-		dc.l startpos_sbz3
-
-		dc.l startpos_mz1
-		dc.l startpos_mz2
-		dc.l startpos_mz3
-		dc.l startpos_unused
-
-		dc.l startpos_slz1
-		dc.l startpos_slz2
-		dc.l startpos_slz3
-		dc.l startpos_unused
-
-		dc.l startpos_syz1
-		dc.l startpos_syz2
-		dc.l startpos_syz3
-		dc.l startpos_unused
-
-		dc.l startpos_sbz1
-		dc.l startpos_sbz2
-		dc.l startpos_fz
-		dc.l startpos_unused
-
-		zonewarning StartPosList,$10
-
-		dc.l startpos_ending1				; Ending (extra flowers)
-		dc.l startpos_ending2				; Ending
-		dc.l startpos_unused
-		dc.l startpos_unused
-		even
 
 ; ---------------------------------------------------------------------------
 ; Which	256x256	tiles contain loops or roll-tunnels

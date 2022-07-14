@@ -24,24 +24,8 @@ Debug_Main:	; Routine 0
 		andi.w	#$3FF,(v_bg1_y_pos).w
 		move.b	#0,ost_frame(a0)
 		move.b	#0,ost_anim(a0)
-		cmpi.b	#id_Special,(v_gamemode).w		; is game mode $10 (special stage)?
-		bne.s	@islevel				; if not, branch
-
-		move.w	#0,(v_ss_rotation_speed).w		; stop special stage rotating
-		move.w	#0,(v_ss_angle).w			; make special stage "upright"
-		moveq	#6,d0					; use 6th debug	item list
-		bra.s	@selectlist
-; ===========================================================================
-
-@islevel:
-		moveq	#0,d0
-		move.b	(v_zone).w,d0
-
-@selectlist:
-		lea	(DebugList).l,a2
-		add.w	d0,d0
-		adda.w	(a2,d0.w),a2				; get address of debug list
-		move.w	(a2)+,d6				; get number of items in list
+		movea.l	(v_debug_ptr).w,a2
+		move.w	(v_debug_count).w,d6			; get number of items in list
 		cmp.b	(v_debug_item_index).w,d6		; have you gone past the last item?
 		bhi.s	@noreset				; if not, branch
 		move.b	#0,(v_debug_item_index).w		; back to start of list
@@ -52,19 +36,9 @@ Debug_Main:	; Routine 0
 		move.b	#1,(v_debug_move_speed).w
 
 Debug_Action:	; Routine 2
-		moveq	#6,d0
-		cmpi.b	#id_Special,(v_gamemode).w
-		beq.s	@isntlevel
-
-		moveq	#0,d0
-		move.b	(v_zone).w,d0
-
-	@isntlevel:
-		lea	(DebugList).l,a2
-		add.w	d0,d0
-		adda.w	(a2,d0.w),a2				; get address of debug list
-		move.w	(a2)+,d6				; get number of items in list
-		bsr.w	Debug_Control
+		movea.l	(v_debug_ptr).w,a2
+		move.w	(v_debug_count).w,d6
+		bsr.s	Debug_Control
 		jmp	(DisplaySprite).l
 
 ; ---------------------------------------------------------------------------
@@ -188,7 +162,7 @@ Debug_ChgItem:
 		moveq	#0,d0
 		move.w	d0,(v_debug_active).w			; deactivate debug mode
 		move.l	#Map_Sonic,(v_ost_player+ost_mappings).w
-		move.w	#vram_sonic/$20,(v_ost_player+ost_tile).w
+		move.w	#tile_sonic,(v_ost_player+ost_tile).w
 		move.b	d0,(v_ost_player+ost_anim).w
 		move.w	d0,ost_x_sub(a0)
 		move.w	d0,ost_y_sub(a0)
@@ -200,7 +174,7 @@ Debug_ChgItem:
 		clr.w	(v_ss_angle).w
 		move.w	#$40,(v_ss_rotation_speed).w		; set new level rotation speed
 		move.l	#Map_Sonic,(v_ost_player+ost_mappings).w
-		move.w	#vram_sonic/$20,(v_ost_player+ost_tile).w
+		move.w	#tile_sonic,(v_ost_player+ost_tile).w
 		move.b	#id_Roll,(v_ost_player+ost_anim).w
 		bset	#status_jump_bit,(v_ost_player+ost_status).w
 		bset	#status_air_bit,(v_ost_player+ost_status).w
@@ -225,16 +199,6 @@ Debug_GetFrame:
 ; Debug	mode item lists
 ; ---------------------------------------------------------------------------
 
-DebugList:	index *
-		ptr DebugList_GHZ
-		ptr DebugList_LZ
-		ptr DebugList_MZ
-		ptr DebugList_SLZ
-		ptr DebugList_SYZ
-		ptr DebugList_SBZ
-		zonewarning DebugList,2
-		ptr DebugList_Ending
-
 dbug:		macro map,object,subtype,frame,vram
 		dc.l map
 		dc.b subtype,frame
@@ -243,7 +207,7 @@ dbug:		macro map,object,subtype,frame,vram
 		endm
 
 DebugList_GHZ:
-		dc.w (DebugList_GHZ_end-DebugList_GHZ-2)/8
+		dc.w (DebugList_GHZ_end-DebugList_GHZ-2)/12
 
 ;			mappings	object		subtype	frame	VRAM setting
 		dbug 	Map_Ring,	Rings,		0,	0,	tile_Nem_Ring+tile_pal2
@@ -264,7 +228,7 @@ DebugList_GHZ:
 	DebugList_GHZ_end:
 
 DebugList_LZ:
-		dc.w (DebugList_LZ_end-DebugList_LZ-2)/8
+		dc.w (DebugList_LZ_end-DebugList_LZ-2)/12
 
 ;			mappings	object		subtype	frame	VRAM setting
 		dbug	Map_Ring,	Rings,		0,	0,	tile_Nem_Ring+tile_pal2
@@ -295,7 +259,7 @@ DebugList_LZ:
 	DebugList_LZ_end:
 
 DebugList_MZ:
-		dc.w (DebugList_MZ_end-DebugList_MZ-2)/8
+		dc.w (DebugList_MZ_end-DebugList_MZ-2)/12
 
 ;			mappings	object		subtype	frame	VRAM setting
 		dbug	Map_Ring,	Rings,		0,	0,	tile_Nem_Ring+tile_pal2
@@ -319,7 +283,7 @@ DebugList_MZ:
 	DebugList_MZ_end:
 
 DebugList_SLZ:
-		dc.w (DebugList_SLZ_end-DebugList_SLZ-2)/8
+		dc.w (DebugList_SLZ_end-DebugList_SLZ-2)/12
 
 ;			mappings	object		subtype	frame	VRAM setting
 		dbug	Map_Ring,	Rings,		0,	0,	tile_Nem_Ring+tile_pal2
@@ -340,7 +304,7 @@ DebugList_SLZ:
 	DebugList_SLZ_end:
 
 DebugList_SYZ:
-		dc.w (DebugList_SYZ_end-DebugList_SYZ-2)/8
+		dc.w (DebugList_SYZ_end-DebugList_SYZ-2)/12
 
 ;			mappings	object		subtype	frame	VRAM setting
 		dbug	Map_Ring,	Rings,		0,	0,	tile_Nem_Ring+tile_pal2
@@ -361,7 +325,7 @@ DebugList_SYZ:
 	DebugList_SYZ_end:
 
 DebugList_SBZ:
-		dc.w (DebugList_SBZ_end-DebugList_SBZ-2)/8
+		dc.w (DebugList_SBZ_end-DebugList_SBZ-2)/12
 
 ;			mappings	object		subtype	frame	VRAM setting
 		dbug	Map_Ring,	Rings,		0,	0,	tile_Nem_Ring+tile_pal2
@@ -396,7 +360,7 @@ DebugList_SBZ:
 	DebugList_SBZ_end:
 
 DebugList_Ending:
-		dc.w (DebugList_Ending_end-DebugList_Ending-2)/8
+		dc.w (DebugList_Ending_end-DebugList_Ending-2)/12
 
 ;			mappings	object		subtype	frame	VRAM setting
 		dbug	Map_Ring,	Rings,		0,	0,	tile_Nem_Ring+tile_pal2

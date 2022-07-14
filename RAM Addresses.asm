@@ -192,6 +192,8 @@ v_collision_index_ptr:		rs.l 1 ; $FFFFF796 ; ROM address for collision index of 
 v_16x16_ptr:			rs.l 1 ; pointer to 16x16 mappings
 v_opl_data_ptr:			rs.l 1 ; pointer to start of OPL data
 v_aniart_ptr:			rs.l 1 ; pointer to animated level art routine
+v_debug_ptr:			rs.l 1 ; pointer to debug list
+v_debug_count:			rs.w 1 ; number of items in debug list
 f_water_enable:			rs.b 1 ; flag set to enable water
 v_bgm:				rs.b 1 ; music track id for current zone
 v_palcycle_ss_num:		rs.w 1 ; $FFFFF79A ; palette cycling in Special Stage - current index number

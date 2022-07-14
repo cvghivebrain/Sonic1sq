@@ -65,6 +65,16 @@ LoadPerZone:
 		move.l	(a1)+,(v_boundary_left_next).w
 		move.l	(a1),(v_boundary_top).w			; set top & bottom boundaries
 		move.l	(a1)+,(v_boundary_top_next).w
+		
+		movea.l	(a4)+,a1				; get pointer for start position list
+		lea	(a1,d4.w),a1
+		move.w	(a1)+,(v_ost_player+ost_x_pos).w	; set Sonic's x pos
+		move.w	(a1)+,(v_ost_player+ost_y_pos).w	; set Sonic's y pos
+		
+		movea.l	(a4),a1					; get pointer for debug list
+		move.w	(a1),(v_debug_count).w			; get number of items in list
+		move.l	(a4)+,(v_debug_ptr).w
+		add.l	#2,(v_debug_ptr).w			; skip to first item in list
 		rts
 		
 ; ---------------------------------------------------------------------------
@@ -85,6 +95,8 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Music_GHZ				; background music id list (act specific)
 		dc.l AniArt_GHZ					; animated level art routine
 		dc.l Zone_Bound_GHZ				; level boundary list (act specific)
+		dc.l Zone_SPos_GHZ				; start position list (act specific)
+		dc.l DebugList_GHZ				; debug list
 		even
 	ZoneDefs_size:
 
@@ -102,6 +114,8 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Music_LZ
 		dc.l AniArt_none
 		dc.l Zone_Bound_LZ
+		dc.l Zone_SPos_LZ
+		dc.l DebugList_LZ
 		even
 		
 		; Marble Zone
@@ -118,6 +132,8 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Music_MZ
 		dc.l AniArt_MZ
 		dc.l Zone_Bound_MZ
+		dc.l Zone_SPos_MZ
+		dc.l DebugList_MZ
 		even
 		
 		; Star Light Zone
@@ -134,6 +150,8 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Music_SLZ
 		dc.l AniArt_none
 		dc.l Zone_Bound_SLZ
+		dc.l Zone_SPos_SLZ
+		dc.l DebugList_SLZ
 		even
 		
 		; Spring Yard Zone
@@ -150,6 +168,8 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Music_SYZ
 		dc.l AniArt_none
 		dc.l Zone_Bound_SYZ
+		dc.l Zone_SPos_SYZ
+		dc.l DebugList_SYZ
 		even
 		
 		; Scrap Brain Zone
@@ -166,6 +186,8 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Music_SBZ
 		dc.l AniArt_SBZ
 		dc.l Zone_Bound_SBZ
+		dc.l Zone_SPos_SBZ
+		dc.l DebugList_SBZ
 		even
 		
 		; Ending
@@ -182,6 +204,8 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Music_End
 		dc.l AniArt_Ending
 		dc.l Zone_Bound_End
+		dc.l Zone_SPos_End
+		dc.l DebugList_Ending
 		even
 
 ; ---------------------------------------------------------------------------
@@ -263,4 +287,31 @@ Zone_Bound_SBZ:	dc.w $0000, $21C0, $0000, $0720
 		dc.w $2080, $2460, $0510, $0510			; FZ
 Zone_Bound_End:	dc.w $0000, $0500, $0110, $0110
 		dc.w $0000, $0DC0, $0110, $0110
+		even
+
+; ---------------------------------------------------------------------------
+; Start positions
+; ---------------------------------------------------------------------------
+
+Zone_SPos_GHZ:	dc.w $0050, $03B0
+		dc.w $0050, $00FC
+		dc.w $0050, $03B0
+Zone_SPos_LZ:	dc.w $0060, $006C
+		dc.w $0050, $00EC
+		dc.w $0050, $02EC
+		dc.w $0B80, $0000				; SBZ3
+Zone_SPos_MZ:	dc.w $0030, $0266
+		dc.w $0030, $0266
+		dc.w $0030, $0166
+Zone_SPos_SLZ:	dc.w $0040, $02CC
+		dc.w $0040, $014C
+		dc.w $0040, $014C
+Zone_SPos_SYZ:	dc.w $0030, $03BD
+		dc.w $0030, $01BD
+		dc.w $0030, $00EC
+Zone_SPos_SBZ:	dc.w $0030, $048C
+		dc.w $0030, $074C
+		dc.w $2140, $05AC				; FZ
+Zone_SPos_End:	dc.w $0620, $016B
+		dc.w $0EE0, $016C
 		even
