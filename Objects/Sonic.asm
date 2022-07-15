@@ -1506,7 +1506,7 @@ Sonic_Animate:
 	@do:
 		add.w	d0,d0
 		adda.w	(a1,d0.w),a1				; jump to appropriate animation	script
-		move.b	(a1),d0					; get frame duration (or special $Fx flag)
+		move.w	(a1),d0					; get frame duration (or special $FFFx flag)
 		bmi.s	@walkrunroll				; if animation is walk/run/roll/jump, branch
 		move.b	ost_status(a0),d1
 		andi.b	#status_xflip,d1			; read xflip from status
@@ -1519,39 +1519,40 @@ Sonic_Animate:
 @loadframe:
 		moveq	#0,d1
 		move.b	ost_anim_frame(a0),d1			; load current frame number
-		move.b	1(a1,d1.w),d0				; read sprite number from script
+		move.w	2(a1,d1.w),d0				; read sprite number from script
 		bmi.s	@end_FF					; if animation is complete, branch
 
 	@next:
-		move.b	d0,ost_frame(a0)			; load sprite number
-		addq.b	#1,ost_anim_frame(a0)			; next frame number
+		move.w	d0,ost_frame_hi(a0)			; load sprite number
+		addq.b	#2,ost_anim_frame(a0)			; next frame number
 
 	@delay:
 		rts	
 ; ===========================================================================
 
 @end_FF:
-		addq.b	#1,d0					; is the end flag = $FF	?
+		addq.w	#1,d0					; is the end flag = $FFFF ?
 		bne.s	@end_FE					; if not, branch
 		move.b	#0,ost_anim_frame(a0)			; restart the animation
-		move.b	1(a1),d0				; read sprite number
+		move.w	2(a1),d0				; read sprite number
 		bra.s	@next
 ; ===========================================================================
 
 @end_FE:
-		addq.b	#1,d0					; is the end flag = $FE	?
+		addq.w	#1,d0					; is the end flag = $FFFE ?
 		bne.s	@end_FD					; if not, branch
-		move.b	2(a1,d1.w),d0				; read the next	byte in	the script
+		move.w	4(a1,d1.w),d0				; read the next	word in	the script
 		sub.b	d0,ost_anim_frame(a0)			; jump back d0 bytes in the script
 		sub.b	d0,d1
-		move.b	1(a1,d1.w),d0				; read sprite number
+		move.w	2(a1,d1.w),d0				; read sprite number
 		bra.s	@next
 ; ===========================================================================
 
 @end_FD:
-		addq.b	#1,d0					; is the end flag = $FD	?
+		addq.w	#1,d0					; is the end flag = $FD	?
 		bne.s	@end					; if not, branch
-		move.b	2(a1,d1.w),ost_anim(a0)			; read next byte, run that animation
+		move.w	4(a1,d1.w),d0
+		move.b	d0,ost_anim(a0)				; read next byte, run that animation
 
 	@end:
 		rts	
@@ -1560,7 +1561,7 @@ Sonic_Animate:
 @walkrunroll:
 		subq.b	#1,ost_anim_time(a0)			; decrement frame duration
 		bpl.s	@delay					; if time remains, branch
-		addq.b	#1,d0					; is animation walking/running?
+		addq.w	#1,d0					; is animation walking/running?
 		bne.w	@rolljump				; if not, branch
 
 		moveq	#0,d1
@@ -1600,6 +1601,7 @@ Sonic_Animate:
 
 	@running:
 		add.b	d0,d0					; d0 = 0, 4, 8 or 12 if running; 0, 6, 12 or 18 if walking
+		moveq	#0,d3
 		move.b	d0,d3
 		neg.w	d2
 		addi.w	#$800,d2				; d2 = $800 minus Sonic's speed
@@ -1610,7 +1612,7 @@ Sonic_Animate:
 		lsr.w	#8,d2
 		move.b	d2,ost_anim_time(a0)			; set frame duration
 		bsr.w	@loadframe				; run animation
-		add.b	d3,ost_frame(a0)			; modify frame number for rotated animations
+		add.w	d3,ost_frame_hi(a0)			; modify frame number for rotated animations
 		rts	
 ; ===========================================================================
 

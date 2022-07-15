@@ -35,223 +35,223 @@ Ani_Sonic:	index *
 		ptr Float3
 		ptr Float4
 
-Walk:		dc.b $FF
-		dc.b id_frame_walk13
-		dc.b id_frame_walk14
-		dc.b id_frame_walk15
-		dc.b id_frame_walk16
-		dc.b id_frame_walk11
-		dc.b id_frame_walk12
-		dc.b afEnd
+Walk:		dc.w $FFFF
+		dc.w id_frame_walk13
+		dc.w id_frame_walk14
+		dc.w id_frame_walk15
+		dc.w id_frame_walk16
+		dc.w id_frame_walk11
+		dc.w id_frame_walk12
+		dc.w afEnd
 		even
 
-Run:		dc.b $FF
-		dc.b id_frame_run11
-		dc.b id_frame_run12
-		dc.b id_frame_run13
-		dc.b id_frame_run14
-		dc.b afEnd
-		dc.b afEnd
-		dc.b afEnd
+Run:		dc.w $FFFF
+		dc.w id_frame_run11
+		dc.w id_frame_run12
+		dc.w id_frame_run13
+		dc.w id_frame_run14
+		dc.w afEnd
+		dc.w afEnd
+		dc.w afEnd
 		even
 
-Roll:		dc.b $FE
-		dc.b id_frame_Roll1
-		dc.b id_frame_Roll2
-		dc.b id_frame_Roll3
-		dc.b id_frame_Roll4
-		dc.b id_frame_Roll5
-		dc.b afEnd
-		dc.b afEnd
+Roll:		dc.w $FFFE
+		dc.w id_frame_Roll1
+		dc.w id_frame_Roll2
+		dc.w id_frame_Roll3
+		dc.w id_frame_Roll4
+		dc.w id_frame_Roll5
+		dc.w afEnd
+		dc.w afEnd
 		even
 
-Roll2:		dc.b $FE
-		dc.b id_frame_Roll1
-		dc.b id_frame_Roll2
-		dc.b id_frame_Roll5
-		dc.b id_frame_Roll3
-		dc.b id_frame_Roll4
-		dc.b id_frame_Roll5
-		dc.b afEnd
+Roll2:		dc.w $FFFE
+		dc.w id_frame_Roll1
+		dc.w id_frame_Roll2
+		dc.w id_frame_Roll5
+		dc.w id_frame_Roll3
+		dc.w id_frame_Roll4
+		dc.w id_frame_Roll5
+		dc.w afEnd
 		even
 
-Pushing:	dc.b $FD
-		dc.b id_frame_push1
-		dc.b id_frame_push2
-		dc.b id_frame_push3
-		dc.b id_frame_push4
-		dc.b afEnd
-		dc.b afEnd
-		dc.b afEnd
+Pushing:	dc.w $FFFD
+		dc.w id_frame_push1
+		dc.w id_frame_push2
+		dc.w id_frame_push3
+		dc.w id_frame_push4
+		dc.w afEnd
+		dc.w afEnd
+		dc.w afEnd
 		even
 
-Wait:		dc.b $17
-		dc.b id_frame_stand
-		dc.b id_frame_stand
-		dc.b id_frame_stand
-		dc.b id_frame_stand
-		dc.b id_frame_stand
-		dc.b id_frame_stand
-		dc.b id_frame_stand
-		dc.b id_frame_stand
-		dc.b id_frame_stand
-		dc.b id_frame_stand
-		dc.b id_frame_stand
-		dc.b id_frame_stand
-		dc.b id_frame_wait2
-		dc.b id_frame_wait1
-		dc.b id_frame_wait1
-		dc.b id_frame_wait1
-		dc.b id_frame_wait2
-		dc.b id_frame_wait3
-		dc.b afBack, 2
+Wait:		dc.w $17
+		dc.w id_frame_stand
+		dc.w id_frame_stand
+		dc.w id_frame_stand
+		dc.w id_frame_stand
+		dc.w id_frame_stand
+		dc.w id_frame_stand
+		dc.w id_frame_stand
+		dc.w id_frame_stand
+		dc.w id_frame_stand
+		dc.w id_frame_stand
+		dc.w id_frame_stand
+		dc.w id_frame_stand
+		dc.w id_frame_wait2
+		dc.w id_frame_wait1
+		dc.w id_frame_wait1
+		dc.w id_frame_wait1
+		dc.w id_frame_wait2
+		dc.w id_frame_wait3
+		dc.w afBack, 2*2
 		even
 
-Balance:	dc.b $1F
-		dc.b id_frame_balance1
-		dc.b id_frame_balance2
-		dc.b afEnd
+Balance:	dc.w $1F
+		dc.w id_frame_balance1
+		dc.w id_frame_balance2
+		dc.w afEnd
 		even
 
-LookUp:		dc.b $3F
-		dc.b id_frame_lookup
-		dc.b afEnd
+LookUp:		dc.w $3F
+		dc.w id_frame_lookup
+		dc.w afEnd
 		even
 
-Duck:		dc.b $3F
-		dc.b id_frame_duck
-		dc.b afEnd
+Duck:		dc.w $3F
+		dc.w id_frame_duck
+		dc.w afEnd
 		even
 
-Warp1:		dc.b $3F
-		dc.b id_frame_warp1
-		dc.b afEnd
+Warp1:		dc.w $3F
+		dc.w id_frame_warp1
+		dc.w afEnd
 		even
 
-Warp2:		dc.b $3F
-		dc.b id_frame_warp2
-		dc.b afEnd
+Warp2:		dc.w $3F
+		dc.w id_frame_warp2
+		dc.w afEnd
 		even
 
-Warp3:		dc.b $3F
-		dc.b id_frame_warp3
-		dc.b afEnd
+Warp3:		dc.w $3F
+		dc.w id_frame_warp3
+		dc.w afEnd
 		even
 
-Warp4:		dc.b $3F
-		dc.b id_frame_warp4
-		dc.b afEnd
+Warp4:		dc.w $3F
+		dc.w id_frame_warp4
+		dc.w afEnd
 		even
 
-Stop:		dc.b 7
-		dc.b id_frame_stop1
-		dc.b id_frame_stop2
-		dc.b afEnd
+Stop:		dc.w 7
+		dc.w id_frame_stop1
+		dc.w id_frame_stop2
+		dc.w afEnd
 		even
 
-Float1:		dc.b 7
-		dc.b id_frame_float1
-		dc.b id_frame_float4
-		dc.b afEnd
+Float1:		dc.w 7
+		dc.w id_frame_float1
+		dc.w id_frame_float4
+		dc.w afEnd
 		even
 
-Float2:		dc.b 7
-		dc.b id_frame_float1
-		dc.b id_frame_float2
-		dc.b id_frame_float5
-		dc.b id_frame_float3
-		dc.b id_frame_float6
-		dc.b afEnd
+Float2:		dc.w 7
+		dc.w id_frame_float1
+		dc.w id_frame_float2
+		dc.w id_frame_float5
+		dc.w id_frame_float3
+		dc.w id_frame_float6
+		dc.w afEnd
 		even
 
-Spring:		dc.b $2F
-		dc.b id_frame_spring
-		dc.b afChange, id_Walk
+Spring:		dc.w $2F
+		dc.w id_frame_spring
+		dc.w afChange, id_Walk
 		even
 
-Hang:		dc.b 4
-		dc.b id_frame_hang1
-		dc.b id_frame_hang2
-		dc.b afEnd
+Hang:		dc.w 4
+		dc.w id_frame_hang1
+		dc.w id_frame_hang2
+		dc.w afEnd
 		even
 
-Leap1:		dc.b $F
-		dc.b id_frame_leap1
-		dc.b id_frame_leap1
-		dc.b id_frame_leap1
-		dc.b afBack, 1
+Leap1:		dc.w $F
+		dc.w id_frame_leap1
+		dc.w id_frame_leap1
+		dc.w id_frame_leap1
+		dc.w afBack, 1*2
 		even
 
-Leap2:		dc.b $F
-		dc.b id_frame_leap1
-		dc.b id_frame_leap2
-		dc.b afBack, 1
+Leap2:		dc.w $F
+		dc.w id_frame_leap1
+		dc.w id_frame_leap2
+		dc.w afBack, 1*2
 		even
 
-Surf:		dc.b $3F
-		dc.b id_frame_surf
-		dc.b afEnd
+Surf:		dc.w $3F
+		dc.w id_frame_surf
+		dc.w afEnd
 		even
 
-GetAir:		dc.b $B
-		dc.b id_frame_getair
-		dc.b id_frame_getair
-		dc.b id_frame_walk15
-		dc.b id_frame_walk16
-		dc.b afChange, id_Walk
+GetAir:		dc.w $B
+		dc.w id_frame_getair
+		dc.w id_frame_getair
+		dc.w id_frame_walk15
+		dc.w id_frame_walk16
+		dc.w afChange, id_Walk
 		even
 
-Burnt:		dc.b $20
-		dc.b id_frame_burnt
-		dc.b afEnd
+Burnt:		dc.w $20
+		dc.w id_frame_burnt
+		dc.w afEnd
 		even
 
-Drown:		dc.b $2F
-		dc.b id_frame_drown
-		dc.b afEnd
+Drown:		dc.w $2F
+		dc.w id_frame_drown
+		dc.w afEnd
 		even
 
-Death:		dc.b 3
-		dc.b id_frame_death
-		dc.b afEnd
+Death:		dc.w 3
+		dc.w id_frame_death
+		dc.w afEnd
 		even
 
-Shrink:		dc.b 3
-		dc.b id_frame_shrink1
-		dc.b id_frame_shrink2
-		dc.b id_frame_shrink3
-		dc.b id_frame_shrink4
-		dc.b id_frame_shrink5
-		dc.b id_frame_blank
-		dc.b afBack, 1
+Shrink:		dc.w 3
+		dc.w id_frame_shrink1
+		dc.w id_frame_shrink2
+		dc.w id_frame_shrink3
+		dc.w id_frame_shrink4
+		dc.w id_frame_shrink5
+		dc.w id_frame_blank
+		dc.w afBack, 1*2
 		even
 
-Hurt:		dc.b 3
-		dc.b id_frame_injury
-		dc.b afEnd
+Hurt:		dc.w 3
+		dc.w id_frame_injury
+		dc.w afEnd
 		even
 
-WaterSlide:	dc.b 7
-		dc.b id_frame_injury
-		dc.b id_frame_waterslide
-		dc.b afEnd
+WaterSlide:	dc.w 7
+		dc.w id_frame_injury
+		dc.w id_frame_waterslide
+		dc.w afEnd
 		even
 
-Blank:		dc.b $77
-		dc.b id_frame_blank
-		dc.b afChange, id_Walk
+Blank:		dc.w $77
+		dc.w id_frame_blank
+		dc.w afChange, id_Walk
 		even
 
-Float3:		dc.b 3
-		dc.b id_frame_float1
-		dc.b id_frame_float2
-		dc.b id_frame_float5
-		dc.b id_frame_float3
-		dc.b id_frame_float6
-		dc.b afEnd
+Float3:		dc.w 3
+		dc.w id_frame_float1
+		dc.w id_frame_float2
+		dc.w id_frame_float5
+		dc.w id_frame_float3
+		dc.w id_frame_float6
+		dc.w afEnd
 		even
 
-Float4:		dc.b 3
-		dc.b id_frame_float1
-		dc.b afChange, id_Walk
+Float4:		dc.w 3
+		dc.w id_frame_float1
+		dc.w afChange, id_Walk
 		even

@@ -22,7 +22,7 @@ Debug_Main:	; Routine 0
 		andi.w	#$7FF,(v_ost_player+ost_y_pos).w
 		andi.w	#$7FF,(v_camera_y_pos).w
 		andi.w	#$3FF,(v_bg1_y_pos).w
-		move.b	#0,ost_frame(a0)
+		move.w	#0,ost_frame_hi(a0)
 		move.b	#0,ost_anim(a0)
 		movea.l	(v_debug_ptr).w,a2
 		move.w	(v_debug_count).w,d6			; get number of items in list

@@ -44,7 +44,7 @@ ESon_Main2:
 		move.b	#render_rel,ost_render(a0)
 		clr.b	ost_status(a0)
 		move.b	#2,ost_priority(a0)
-		move.b	#id_frame_esonic_hold1,ost_frame(a0)
+		move.w	#id_frame_esonic_hold1,ost_frame_hi(a0)
 		move.w	#80,ost_esonic_wait_time(a0)		; set delay to 1.3 seconds
 
 ESon_MakeEmeralds:
@@ -118,7 +118,7 @@ ESon_Leap:	; Routine $10
 		move.b	#render_rel,ost_render(a0)
 		clr.b	ost_status(a0)
 		move.b	#2,ost_priority(a0)
-		move.b	#id_frame_esonic_leap1,ost_frame(a0)
+		move.w	#id_frame_esonic_leap1,ost_frame_hi(a0)
 		move.b	#id_ani_esonic_leap,ost_anim(a0)	; use "leaping" animation
 		move.l	#EndSTH,(v_ost_end_emeralds).w		; load "SONIC THE HEDGEHOG" object
 		bra.s	ESon_Animate

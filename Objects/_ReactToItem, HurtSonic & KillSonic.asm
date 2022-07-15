@@ -19,7 +19,7 @@ ReactToItem:
 		move.b	ost_height(a0),d5
 		subq.b	#sonic_height-sonic_height_hitbox,d5	; d5 = Sonic's height minus 3
 		sub.w	d5,d3					; d3 = y pos of Sonic's top edge
-		cmpi.b	#id_frame_Duck,ost_frame(a0)		; is Sonic ducking?
+		cmpi.w	#id_frame_Duck,ost_frame_hi(a0)		; is Sonic ducking?
 		bne.s	@notducking				; if not, branch
 		addi.w	#(sonic_height_hitbox-sonic_height_hitbox_duck)*2,d3 ; lower top edge when ducking (by 12px)
 		moveq	#sonic_height_hitbox_duck,d5		; use smaller height

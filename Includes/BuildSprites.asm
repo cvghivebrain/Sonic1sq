@@ -87,9 +87,10 @@ BuildSprites:
 		btst	#render_rawmap_bit,d4			; is raw mappings flag on?
 		bne.s	@draw_now				; if yes, branch
 
-		move.b	ost_frame(a0),d1
-		add.b	d1,d1
+		move.w	ost_frame_hi(a0),d1
+		add.w	d1,d1
 		adda.w	(a1,d1.w),a1				; jump to frame within mappings
+		moveq	#0,d1
 		move.b	(a1)+,d1				; number of sprite pieces
 		subq.b	#1,d1					; subtract 1 for loops
 		bmi.s	@skip_draw				; branch if frame contained 0 sprite pieces

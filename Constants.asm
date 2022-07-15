@@ -209,24 +209,6 @@ emerald_all:			equ (1<<emerald_count)-1	; value stored in emerald bitfield when 
 		opt	ae+		; enable auto evens
 			rsset 0
 ost_id:			rs.l 1		; 0 ; object id
-ost_render:		rs.b 1		; 1 ; bitfield for x/y flip, display mode
-	render_xflip:		equ 1	; xflip
-	render_yflip:		equ 2	; yflip
-	render_rel:		equ 4	; relative screen position - coordinates are based on the level
-	render_abs:		equ 0	; absolute screen position - coordinates are based on the screen (e.g. the HUD)
-	render_bg:		equ 8	; align to background
-	render_useheight:	equ $10	; use ost_height to decide if object is on screen, otherwise height is assumed to be $20 (used for large objects)
-	render_rawmap:		equ $20	; sprites use raw mappings - i.e. object consists of a single sprite instead of multipart sprite mappings (e.g. broken block fragments)
-	render_behind:		equ $40	; object is behind a loop (Sonic only)
-	render_onscreen:	equ $80	; object is on screen
-	render_xflip_bit:	equ 0
-	render_yflip_bit:	equ 1
-	render_rel_bit:		equ 2
-	render_bg_bit:		equ 3
-	render_useheight_bit:	equ 4
-	render_rawmap_bit:	equ 5
-	render_behind_bit:	equ 6
-	render_onscreen_bit:	equ 7
 ost_tile:		rs.w 1		; 2 ; palette line & VRAM setting (2 bytes)
 	tile_xflip:	equ $800
 	tile_yflip:	equ $1000
@@ -249,11 +231,31 @@ ost_y_sub:		equ __rs-2	; $E ; y-axis subpixel position (2 bytes)
 ost_x_vel:		rs.l 1		; $10 ; x-axis velocity (2 bytes)
 ost_y_vel:		equ __rs-2	; $12 ; y-axis velocity (2 bytes)
 ost_inertia:		rs.w 1		; $14 ; potential speed (2 bytes)
+ost_angle:		rs.w 1		; $26 ; angle of floor or rotation - 0 = flat; $40 = vertical left; $80 = ceiling; $C0 = vertical right
+ost_frame_hi:		rs.w 1		; $1A ; current frame displayed
+ost_frame:		equ __rs-1
+ost_render:		rs.b 1		; 1 ; bitfield for x/y flip, display mode
+	render_xflip:		equ 1	; xflip
+	render_yflip:		equ 2	; yflip
+	render_rel:		equ 4	; relative screen position - coordinates are based on the level
+	render_abs:		equ 0	; absolute screen position - coordinates are based on the screen (e.g. the HUD)
+	render_bg:		equ 8	; align to background
+	render_useheight:	equ $10	; use ost_height to decide if object is on screen, otherwise height is assumed to be $20 (used for large objects)
+	render_rawmap:		equ $20	; sprites use raw mappings - i.e. object consists of a single sprite instead of multipart sprite mappings (e.g. broken block fragments)
+	render_behind:		equ $40	; object is behind a loop (Sonic only)
+	render_onscreen:	equ $80	; object is on screen
+	render_xflip_bit:	equ 0
+	render_yflip_bit:	equ 1
+	render_rel_bit:		equ 2
+	render_bg_bit:		equ 3
+	render_useheight_bit:	equ 4
+	render_rawmap_bit:	equ 5
+	render_behind_bit:	equ 6
+	render_onscreen_bit:	equ 7
 ost_height:		rs.b 1		; $16 ; height/2
 ost_width:		rs.b 1		; $17 ; width/2
-ost_priority:		rs.w 1		; $18 ; sprite stack priority - 0 is highest, 7 is lowest
-ost_displaywidth:	equ __rs-1	; $19 ; display width/2
-ost_frame:		rs.b 1		; $1A ; current frame displayed
+ost_priority:		rs.b 1		; $18 ; sprite stack priority - 0 is highest, 7 is lowest
+ost_displaywidth:	rs.b 1		; $19 ; display width/2
 ost_anim_frame:		rs.b 1		; $1B ; current frame in animation script
 ost_anim:		rs.b 1		; $1C ; current animation
 ost_anim_time:		rs.b 1		; $1E ; time to next frame (1 byte) / general timer (2 bytes)
@@ -282,7 +284,6 @@ ost_respawn:		rs.b 1		; $23 ; respawn list index number
 ost_routine:		rs.b 1		; $24 ; routine number
 ost_routine2:		rs.b 1		; $25 ; secondary routine number
 ost_solid:		equ ost_routine2 ; $25 ; solid status flag
-ost_angle:		rs.w 1		; $26 ; angle of floor or rotation - 0 = flat; $40 = vertical left; $80 = ceiling; $C0 = vertical right
 ost_subtype:		rs.b 1		; $28 ; object subtype
 ost_used:		equ __rs	; bytes used by regular OST, everything after this is scratch RAM
 		popo			; restore options
@@ -326,12 +327,12 @@ hitcount_slz:		equ hitcount_all
 hitcount_fz:		equ hitcount_all
 
 ; Animation flags
-afEnd:		equ $FF	; return to beginning of animation
-afBack:		equ $FE	; go back (specified number) bytes
-afChange:	equ $FD	; run specified animation
-afRoutine:	equ $FC	; increment routine counter
-afReset:	equ $FB	; reset animation and 2nd object routine counter
-af2ndRoutine:	equ $FA	; increment 2nd routine counter
+afEnd:		equ -1						; $FF ; return to beginning of animation
+afBack:		equ -2						; $FE ; go back (specified number) bytes
+afChange:	equ -3						; $FD ; run specified animation
+afRoutine:	equ -4						; $FC ; increment routine counter
+afReset:	equ -5						; $FB ; reset animation and 2nd object routine counter
+af2ndRoutine:	equ -6						; $FA ; increment 2nd routine counter
 afxflip:	equ $20
 afyflip:	equ $40
 

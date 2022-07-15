@@ -95,6 +95,7 @@ Card_Main:	; Routine 0
 		move.w	(a3)+,ost_card_x_stop(a1)		; set target x position
 		move.w	(a2)+,ost_y_screen(a1)			; set y position
 		move.b	(a2)+,ost_routine(a1)			; goto Card_Move next
+		moveq	#0,d0
 		move.b	(a2)+,d0				; set frame number
 		bne.s	@not_ghz				; branch if not 0 (GREEN HILL)
 		move.b	d2,d0					; use zone number instead (or $B for FZ)
@@ -108,7 +109,7 @@ Card_Main:	; Routine 0
 		subq.b	#1,d0					; use act 3 frame if act 4 (for SBZ3)
 
 	@not_act:
-		move.b	d0,ost_frame(a1)			; display frame number d0
+		move.w	d0,ost_frame_hi(a1)			; display frame number d0
 		move.l	#Map_Card,ost_mappings(a1)
 		move.w	#tile_Nem_TitleCard+tile_hi,ost_tile(a1)
 		move.b	#$78,ost_displaywidth(a1)
