@@ -239,7 +239,6 @@ Pal_LZCyc1:	incbin	"Palettes\Cycle - LZ Waterfall.bin"
 Pal_LZCyc2:	incbin	"Palettes\Cycle - LZ Conveyor Belt.bin"
 Pal_LZCyc3:	incbin	"Palettes\Cycle - LZ Conveyor Belt Underwater.bin"
 Pal_SBZ3Cyc1:	incbin	"Palettes\Cycle - SBZ3 Waterfall.bin"
-Pal_MZCyc:	incbin	"Palettes\Cycle - MZ (Unused).bin"
 Pal_SLZCyc:	incbin	"Palettes\Cycle - SLZ.bin"
 Pal_SYZCyc1:	incbin	"Palettes\Cycle - SYZ1.bin"
 Pal_SYZCyc2:	incbin	"Palettes\Cycle - SYZ2.bin"
@@ -1015,7 +1014,7 @@ Blk256_SBZ:	if Revision=0
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - bosses and ending sequence
 ; ---------------------------------------------------------------------------
-		incfile	Art_EndFlowers,"Graphics\Ending Flowers",bin
+		incfile	Art_EndFlowers,"Graphics\Ending Flowers",bin,dma_safe
 		incfile Nem_Eggman,"Graphics - Compressed\Boss - Main",nem
 		incfile Nem_Weapons,"Graphics - Compressed\Boss - Weapons",nem
 		incfile Nem_Prison,"Graphics - Compressed\Prison Capsule",nem
@@ -1075,20 +1074,13 @@ SS_4:		incbin	"Special Stage Layouts\4.eni"
 ; ---------------------------------------------------------------------------
 ; Animated uncompressed graphics
 ; ---------------------------------------------------------------------------
-Art_GhzWater:	incbin	"Graphics\GHZ Waterfall.bin"
-		even
-Art_GhzFlower1:	incbin	"Graphics\GHZ Flower Large.bin"
-		even
-Art_GhzFlower2:	incbin	"Graphics\GHZ Flower Small.bin"
-		even
-Art_MzLava1:	incbin	"Graphics\MZ Lava Surface.bin"
-		even
-Art_MzLava2:	incbin	"Graphics\MZ Lava.bin"
-		even
-Art_MzTorch:	incbin	"Graphics\MZ Background Torch.bin"
-		even
-Art_SbzSmoke:	incbin	"Graphics\SBZ Background Smoke.bin"
-		even
+		incfile	Art_GhzWater,"Graphics\GHZ Waterfall",bin,dma_safe
+		incfile	Art_GhzFlower1,"Graphics\GHZ Flower Large",bin,dma_safe
+		incfile	Art_GhzFlower2,"Graphics\GHZ Flower Small",bin,dma_safe
+		incfile	Art_MzLava1,"Graphics\MZ Lava Surface",bin,dma_safe
+		incfile	Art_MzLava2,"Graphics\MZ Lava",bin,dma_safe
+		incfile	Art_MzTorch,"Graphics\MZ Background Torch",bin,dma_safe
+		incfile	Art_SbzSmoke,"Graphics\SBZ Background Smoke",bin,dma_safe
 
 ; ---------------------------------------------------------------------------
 ; Level	layout index

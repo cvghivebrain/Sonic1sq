@@ -56,8 +56,8 @@ VBlank_Lag:
 		bne.w	VBlank_Music				; if not, branch
 
 	@islevel:
-		cmpi.b	#id_LZ,(v_zone).w			; is level LZ ?
-		bne.w	VBlank_Music				; if not, branch
+		tst.b	(f_water_enable).w			; is water enabled?
+		beq.w	VBlank_Music				; if not, branch
 
 		move.w	(vdp_control_port).l,d0
 		btst	#6,(v_console_region).w			; is Mega Drive PAL?

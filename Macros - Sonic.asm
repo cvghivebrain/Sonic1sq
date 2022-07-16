@@ -147,11 +147,17 @@ endobj:		macros
 ; ---------------------------------------------------------------------------
 ; Incbins a file and records its (uncompressed) size
 ; input: label, file name (without extension), extension
+; optional: dma_safe - keep within a 128kB section
 ; ---------------------------------------------------------------------------
 
 incfile:	macro label,name,extension
 		filename: equs \name				; remove quotes from file name
+		sizeof_\label: equ filesize("\filename\.bin")	; save size of associated .bin file
+		if strcmp("\4","dma_safe")			; is DMA safe flag set?
+			if (*&$1FFFF) + sizeof_\label > $20000	; does file occupy two 128kB sections?
+			align $20000				; add padding so that it doesn't
+			endc
+		endc
 	\label:	incbin	"\filename\.\extension"			; incbin actual file
 		even
-		sizeof_\label: equ filesize("\filename\.bin")	; save size of associated .bin file
 		endm
