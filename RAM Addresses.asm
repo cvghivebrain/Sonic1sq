@@ -119,7 +119,7 @@ v_water_direction:		rs.b 1 ; $FFFFF64C ; water setting - 0 = no water; 1 = water
 v_water_routine:		rs.b 1 ; $FFFFF64D ; water event routine counter
 f_water_pal_full:		rs.b 1 ; $FFFFF64E ; flag set when water covers the entire screen (00 = partly/all dry; 01 = all underwater)
 f_hblank_run_snd:		rs.b 1 ; $FFFFF64F ; flag set when sound driver should be run from HBlank
-v_palcycle_buffer:		rs.w $18 ; $FFFFF650 ; palette data buffer (used for palette cycling) ($30 bytes)
+v_palcycle_buffer:		rs.w $20 ; $FFFFF650 ; palette data buffer (used for palette cycling)
 				rsblockend vblankstuff
 
 				rsblock plc
@@ -193,6 +193,7 @@ v_16x16_ptr:			rs.l 1 ; pointer to 16x16 mappings
 v_opl_data_ptr:			rs.l 1 ; pointer to start of OPL data
 v_aniart_ptr:			rs.l 1 ; pointer to animated level art routine
 v_debug_ptr:			rs.l 1 ; pointer to debug list
+v_palcycle_ptr:			rs.l 1 ; pointer to palette cycling routine
 v_debug_count:			rs.w 1 ; number of items in debug list
 f_water_enable:			rs.b 1 ; flag set to enable water
 v_bgm:				rs.b 1 ; music track id for current zone

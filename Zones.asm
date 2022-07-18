@@ -32,6 +32,9 @@ LoadPerZone:
 		move.b	(a1,d1.w),d0				; get palette id
 		bsr.w	PalLoad_Next				; load palette
 
+		movea.l	(a4)+,a1				; get pointer for palette cycling routine list
+		move.l	(a1,d4.w),(v_palcycle_ptr).w		; get pointer for palette cycling routine
+
 		moveq	#0,d0
 		move.w	(a4)+,d0				; get water flag
 		beq.s	@no_water				; branch if 0
@@ -87,6 +90,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Col_GHZ					; collision index
 		dc.l Zone_SPal_GHZ				; palette id list for Sonic & title cards (act specific)
 		dc.l Zone_Pal_GHZ				; palette id list for level (act specific)
+		dc.l Zone_PCyc_GHZ				; palette cycling routine list (act specific)
 		dc.w 0						; 1 to enable water
 		dc.l Zone_WSPal_LZ				; water palette id list for Sonic (act specific)
 		dc.l Zone_WPal_LZ				; water palette id list (act specific)
@@ -106,6 +110,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Col_LZ
 		dc.l Zone_SPal_GHZ
 		dc.l Zone_Pal_LZ
+		dc.l Zone_PCyc_LZ
 		dc.w 1
 		dc.l Zone_WSPal_LZ
 		dc.l Zone_WPal_LZ
@@ -124,6 +129,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Col_MZ
 		dc.l Zone_SPal_GHZ
 		dc.l Zone_Pal_MZ
+		dc.l Zone_PCyc_MZ
 		dc.w 0
 		dc.l Zone_WSPal_LZ
 		dc.l Zone_WPal_LZ
@@ -142,6 +148,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Col_SLZ
 		dc.l Zone_SPal_GHZ
 		dc.l Zone_Pal_SLZ
+		dc.l Zone_PCyc_SLZ
 		dc.w 0
 		dc.l Zone_WSPal_LZ
 		dc.l Zone_WPal_LZ
@@ -160,6 +167,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Col_SYZ
 		dc.l Zone_SPal_GHZ
 		dc.l Zone_Pal_SYZ
+		dc.l Zone_PCyc_SYZ
 		dc.w 0
 		dc.l Zone_WSPal_LZ
 		dc.l Zone_WPal_LZ
@@ -178,6 +186,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Col_SBZ
 		dc.l Zone_SPal_GHZ
 		dc.l Zone_Pal_SBZ
+		dc.l Zone_PCyc_SBZ
 		dc.w 0
 		dc.l Zone_WSPal_LZ
 		dc.l Zone_WPal_LZ
@@ -196,6 +205,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Col_GHZ
 		dc.l Zone_SPal_GHZ
 		dc.l Zone_Pal_End
+		dc.l Zone_PCyc_GHZ
 		dc.w 0
 		dc.l Zone_WSPal_LZ
 		dc.l Zone_WPal_LZ
@@ -226,6 +236,17 @@ Zone_WSPal_LZ:	dc.b id_Pal_LZSonWater,id_Pal_LZSonWater,id_Pal_LZSonWater,id_Pal
 
 Zone_WPal_LZ:	dc.b id_Pal_LZWater,id_Pal_LZWater,id_Pal_LZWater,id_Pal_SBZ3Water
 		even
+
+; ---------------------------------------------------------------------------
+; Palette cycling routine pointers
+; ---------------------------------------------------------------------------
+
+Zone_PCyc_GHZ:	dc.l PCycle_GHZ,PCycle_GHZ,PCycle_GHZ
+Zone_PCyc_MZ:	dc.l PCycle_MZ,PCycle_MZ,PCycle_MZ
+Zone_PCyc_SYZ:	dc.l PCycle_SYZ,PCycle_SYZ,PCycle_SYZ
+Zone_PCyc_LZ:	dc.l PCycle_LZ,PCycle_LZ,PCycle_LZ,PCycle_SBZ3
+Zone_PCyc_SLZ:	dc.l PCycle_SLZ,PCycle_SLZ,PCycle_SLZ
+Zone_PCyc_SBZ:	dc.l PCycle_SBZ,PCycle_SBZ2,PCycle_SBZ2
 
 ; ---------------------------------------------------------------------------
 ; Water heights
