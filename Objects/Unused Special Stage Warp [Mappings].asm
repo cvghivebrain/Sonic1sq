@@ -100,7 +100,9 @@ frame_vanish_sparkle4:
 		piece	$48, -4, 1x1, $26, yflip
 		piece	$48, $C, 1x1, $27, xflip
 		piece	$50, 4, 1x1, $26, xflip, yflip
-frame_vanish_blank: equ	*+1
 		piece	$58, 4, 1x1, $27, xflip
 		endsprite
-		even
+		
+frame_vanish_blank:
+		spritemap
+		endsprite

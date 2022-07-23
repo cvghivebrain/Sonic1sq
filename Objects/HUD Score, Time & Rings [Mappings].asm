@@ -20,7 +20,6 @@ frame_hud_allyellow:
 		piece	0, $40, 2x2, $10A, hi
 		piece	$10, $40, 4x2, $10E, hi
 		endsprite
-		dc.b 0
 		
 frame_hud_ringred:
 		spritemap
@@ -35,7 +34,6 @@ frame_hud_ringred:
 		piece	0, $40, 2x2, $10A, hi
 		piece	$10, $40, 4x2, $10E, hi
 		endsprite
-		dc.b 0
 		
 frame_hud_timered:
 		spritemap
@@ -50,7 +48,6 @@ frame_hud_timered:
 		piece	0, $40, 2x2, $10A, hi
 		piece	$10, $40, 4x2, $10E, hi
 		endsprite
-		dc.b 0
 		
 frame_hud_allred:
 		spritemap

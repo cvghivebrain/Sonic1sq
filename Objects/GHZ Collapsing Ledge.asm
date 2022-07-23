@@ -137,7 +137,7 @@ FragmentObject:
 		add.w	d0,d0
 		movea.l	ost_mappings(a0),a3
 		adda.w	(a3,d0.w),a3
-		addq.w	#1,a3					; jump to raw sprite data
+		addq.w	#2,a3					; jump to raw sprite data
 		bset	#render_rawmap_bit,ost_render(a0)	; use raw mappings
 		move.l	ost_id(a0),d4
 		move.b	ost_render(a0),d5
@@ -148,7 +148,7 @@ FragmentObject:
 @loop:
 		bsr.w	FindFreeObj				; find free OST slot
 		bne.s	@display				; branch if not found
-		addq.w	#5,a3					; next sprite piece
+		addq.w	#6,a3					; next sprite piece
 
 @skip_findost:
 		move.b	#id_Ledge_WaitFall,ost_routine(a1)	; id_CFlo_WaitFall in CollapseFloor object

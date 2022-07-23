@@ -54,7 +54,7 @@ spritemap:	macro
 		current_sprite: = 1
 		endc
 		sprite_start: = *+1
-		dc.b (sprite_\#current_sprite-sprite_start)/5
+		dc.w (sprite_\#current_sprite-sprite_start)/6
 		endm
 
 endsprite:	macro
@@ -103,7 +103,7 @@ piece:		macro
 		endr
 		
 		dc.w (sprite_tile+sprite_xflip+sprite_yflip+sprite_hi+sprite_pal)&$FFFF
-		dc.b sprite_xpos
+		dc.w sprite_xpos
 		endm
 
 ; ---------------------------------------------------------------------------

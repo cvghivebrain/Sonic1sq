@@ -91,8 +91,8 @@ BuildSprites:
 		add.w	d1,d1
 		adda.w	(a1,d1.w),a1				; jump to frame within mappings
 		moveq	#0,d1
-		move.b	(a1)+,d1				; number of sprite pieces
-		subq.b	#1,d1					; subtract 1 for loops
+		move.w	(a1)+,d1				; number of sprite pieces
+		subq.w	#1,d1					; subtract 1 for loops
 		bmi.s	@skip_draw				; branch if frame contained 0 sprite pieces
 
 	@draw_now:
@@ -157,14 +157,11 @@ BuildSpr_Normal:
 		addq.b	#1,d5					; increment sprite counter
 		move.b	d5,(a2)+				; write link to next sprite in buffer
 
-		move.b	(a1)+,d0				; get high byte of tile number from mappings
-		lsl.w	#8,d0					; move to high byte of word
-		move.b	(a1)+,d0				; get low byte
+		move.w	(a1)+,d0				; get tile number from mappings
 		add.w	a3,d0					; add VRAM setting
 		move.w	d0,(a2)+				; write to buffer
 
-		move.b	(a1)+,d0				; get relative x pos from mappings
-		ext.w	d0
+		move.w	(a1)+,d0				; get relative x pos from mappings
 		add.w	d3,d0					; add VDP x pos
 		andi.w	#$1FF,d0				; keep within 512px
 		bne.s	@x_not_0				; branch if x pos isn't 0
@@ -194,14 +191,11 @@ BuildSpr_FlipX:
 		move.b	d4,(a2)+	
 		addq.b	#1,d5					; link
 		move.b	d5,(a2)+
-		move.b	(a1)+,d0				; art tile
-		lsl.w	#8,d0
-		move.b	(a1)+,d0	
+		move.w	(a1)+,d0				; art tile
 		add.w	a3,d0
 		eori.w	#$800,d0				; toggle xflip in VDP
 		move.w	d0,(a2)+				; write to buffer
-		move.b	(a1)+,d0				; get x-offset
-		ext.w	d0
+		move.w	(a1)+,d0				; get x-offset
 		neg.w	d0					; negate it
 		add.b	d4,d4					; calculate flipped position by size
 		andi.w	#$18,d4
@@ -237,14 +231,11 @@ BuildSpr_FlipY:
 		move.b	(a1)+,(a2)+				; size
 		addq.b	#1,d5
 		move.b	d5,(a2)+				; link
-		move.b	(a1)+,d0				; art tile
-		lsl.w	#8,d0
-		move.b	(a1)+,d0
+		move.w	(a1)+,d0				; art tile
 		add.w	a3,d0
 		eori.w	#$1000,d0				; toggle yflip in VDP
 		move.w	d0,(a2)+
-		move.b	(a1)+,d0				; x-position
-		ext.w	d0
+		move.w	(a1)+,d0				; x-position
 		add.w	d3,d0
 		andi.w	#$1FF,d0
 		bne.s	@x_not_0
@@ -275,15 +266,12 @@ BuildSpr_FlipXY:
 		move.b	(a1)+,d4				; size
 		move.b	d4,(a2)+				; link
 		addq.b	#1,d5
-		move.b	d5,(a2)+				; art tile
-		move.b	(a1)+,d0
-		lsl.w	#8,d0
-		move.b	(a1)+,d0
+		move.b	d5,(a2)+
+		move.w	(a1)+,d0				; art tile
 		add.w	a3,d0
 		eori.w	#$1800,d0				; toggle x/yflip in VDP
 		move.w	d0,(a2)+
-		move.b	(a1)+,d0				; calculate flipped x
-		ext.w	d0
+		move.w	(a1)+,d0				; calculate flipped x
 		neg.w	d0
 		add.b	d4,d4
 		andi.w	#$18,d4

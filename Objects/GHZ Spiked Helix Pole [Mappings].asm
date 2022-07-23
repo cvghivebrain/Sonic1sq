@@ -43,7 +43,9 @@ frame_helix_down45bg:
 		
 frame_helix_up45bg:
 		spritemap					; 45 degree
-frame_helix_bg:	equ *+1						; not visible (reads 0 byte from below)
 		piece	-3, -$C, 1x1, $11
 		endsprite
-		even
+		
+frame_helix_bg:	
+		spritemap
+		endsprite

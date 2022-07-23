@@ -33,7 +33,7 @@ Pow_Main:	; Routine 0
 		movea.l	#Map_Monitor,a1
 		add.b	d0,d0
 		adda.w	(a1,d0.w),a1				; jump to relevant sprite
-		addq.w	#1,a1					; jump to sprite piece
+		addq.w	#2,a1					; jump to sprite piece
 		move.l	a1,ost_mappings(a0)
 
 Pow_Move:	; Routine 2

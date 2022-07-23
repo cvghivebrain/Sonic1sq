@@ -6,9 +6,11 @@ Map_PSB:	index *
 		ptr frame_psb_psb
 		ptr frame_psb_mask
 		ptr frame_psb_tm
-		
-frame_psb_psb:	spritemap					; "PRESS START BUTTON"
+
 frame_psb_blank:
+		spritemap
+		endsprite
+frame_psb_psb:	spritemap					; "PRESS START BUTTON"
 		piece	0, 0, 4x1, $F0
 		piece	$20, 0, 1x1, $F3
 		piece	$30, 0, 1x1, $F3

@@ -654,8 +654,8 @@ SS_ShowLayout:
 		adda.w	(a1,d1.w),a1				; apply frame id to mappings pointer
 		movea.w	(a5)+,a3				; get tile id
 		moveq	#0,d1
-		move.b	(a1)+,d1				; get number of sprite pieces from mappings
-		subq.b	#1,d1
+		move.w	(a1)+,d1				; get number of sprite pieces from mappings
+		subq.w	#1,d1
 		bmi.s	@skip					; branch if 0
 		jsr	(BuildSpr_Normal).l			; build sprites from mappings
 

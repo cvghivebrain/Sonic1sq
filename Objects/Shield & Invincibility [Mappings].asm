@@ -11,10 +11,12 @@ Map_Shield:	index *
 		ptr frame_stars3
 		ptr frame_stars4
 		
+frame_shield_blank:
+		spritemap
+		endsprite
 frame_shield_1:	spritemap
 		piece	-$18, -$18, 3x3, 0
 		piece	0, -$18, 3x3, 9
-frame_shield_blank:
 		piece	-$18, 0, 3x3, 0, yflip
 		piece	0, 0, 3x3, 9, yflip
 		endsprite

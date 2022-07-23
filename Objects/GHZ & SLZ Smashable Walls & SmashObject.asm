@@ -95,7 +95,7 @@ SmashObject:
 		add.w	d0,d0
 		movea.l	ost_mappings(a0),a3			; get mappings address
 		adda.w	(a3,d0.w),a3				; jump to frame
-		addq.w	#1,a3					; use first sprite piece from that frame
+		addq.w	#2,a3					; use first sprite piece from that frame
 		bset	#render_rawmap_bit,ost_render(a0)	; raw sprite
 		move.l	ost_id(a0),d4
 		move.b	ost_render(a0),d5
@@ -106,7 +106,7 @@ SmashObject:
 	@loop:
 		bsr.w	FindFreeObj				; find free OST slot
 		bne.s	@playsnd				; branch if not found
-		addq.w	#5,a3					; next sprite in mappings frame
+		addq.w	#6,a3					; next sprite in mappings frame
 
 @loadfrag:
 		move.b	#id_Smash_FragMove,ost_routine(a1)
