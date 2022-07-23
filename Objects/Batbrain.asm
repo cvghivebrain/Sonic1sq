@@ -163,12 +163,11 @@ Bat_ChkDist:
 		cmp.w	d2,d0
 		rts	
 ; ===========================================================================
-; unused crap
+; unused code
 		bsr.w	SpeedToPos
-		bsr.w	DisplaySprite
 		tst.b	ost_render(a0)
 		bpl.w	DeleteObject
-		rts	
+		bra.w	DisplaySprite
 
 ; ---------------------------------------------------------------------------
 ; Animation script

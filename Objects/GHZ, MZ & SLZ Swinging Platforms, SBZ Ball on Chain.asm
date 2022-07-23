@@ -81,7 +81,7 @@ Swing_Main:	; Routine 0
 		subq.w	#1,d1
 
 @makechain:
-		bsr.w	FindFreeObj				; find free OST slot
+		bsr.w	FindNextFreeObj				; find free OST slot
 		bne.s	@fail					; branch if not found
 		addq.b	#1,ost_subtype(a0)
 		move.w	a1,d5
@@ -137,7 +137,6 @@ Swing_SetSolid:	; Routine 2
 
 Swing_Action:	; Routine $C
 		bsr.w	Swing_Move				; update positions of chainlinks and platform
-		bsr.w	DisplaySprite
 		bra.w	Swing_ChkDel
 ; ===========================================================================
 
@@ -152,10 +151,7 @@ Swing_Action2:	; Routine 4
 		move.b	ost_height(a0),d3
 		addq.b	#1,d3
 		bsr.w	MoveWithPlatform
-		bsr.w	DisplaySprite
 		bra.w	Swing_ChkDel
-
-		rts
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to update positions of all chainlinks and platform
@@ -210,8 +206,8 @@ Swing_MoveAll:
 ; ===========================================================================
 
 Swing_ChkDel:
-		out_of_range	Swing_DelAll,ost_swing_x_start(a0)
-		rts	
+		out_of_range.s	Swing_DelAll,ost_swing_x_start(a0)
+		bra.w	DisplaySprite
 ; ===========================================================================
 
 Swing_DelAll:
@@ -231,8 +227,7 @@ Swing_DelAll:
 ; ===========================================================================
 
 Swing_Delete:	; Routine 6, 8
-		bsr.w	DeleteObject
-		rts	
+		bra.w	DeleteObject	
 ; ===========================================================================
 
 Swing_Display:	; Routine $A

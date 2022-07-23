@@ -83,7 +83,6 @@ Hel_Main:	; Routine 0
 
 Hel_Action:	; Routine 2, 4
 		bsr.w	Hel_RotateSpikes
-		bsr.w	DisplaySprite
 		bra.w	Hel_ChkDel
 
 ; ---------------------------------------------------------------------------
@@ -106,8 +105,8 @@ Hel_RotateSpikes:
 ; ===========================================================================
 
 Hel_ChkDel:
-		out_of_range	Hel_DelAll
-		rts	
+		out_of_range.s	Hel_DelAll
+		bra.w	DisplaySprite
 ; ===========================================================================
 
 Hel_DelAll:
@@ -127,8 +126,7 @@ Hel_DelAll:
 		dbf	d2,@loop				; repeat d2 times (helix length)
 
 Hel_Delete:	; Routine 6
-		bsr.w	DeleteObject
-		rts	
+		bra.w	DeleteObject
 ; ===========================================================================
 
 Hel_Display:	; Routine 8

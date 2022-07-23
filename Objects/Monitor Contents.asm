@@ -9,8 +9,7 @@ PowerUp:
 		moveq	#0,d0
 		move.b	ost_routine(a0),d0
 		move.w	Pow_Index(pc,d0.w),d1
-		jsr	Pow_Index(pc,d1.w)
-		bra.w	DisplaySprite
+		jmp	Pow_Index(pc,d1.w)
 ; ===========================================================================
 Pow_Index:	index *,,2
 		ptr Pow_Main
@@ -37,6 +36,10 @@ Pow_Main:	; Routine 0
 		move.l	a1,ost_mappings(a0)
 
 Pow_Move:	; Routine 2
+		bsr.s	@move
+		bra.w	DisplaySprite
+
+	@move:
 		tst.w	ost_y_vel(a0)				; is object moving?
 		bpl.w	Pow_Checks				; if not, branch
 		bsr.w	SpeedToPos				; update position
@@ -144,4 +147,4 @@ Pow_ChkEnd:
 Pow_Delete:	; Routine 4
 		subq.b	#1,ost_anim_time(a0)
 		bmi.w	DeleteObject				; delete after half a second
-		rts	
+		bra.w	DisplaySprite

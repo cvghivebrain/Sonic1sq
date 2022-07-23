@@ -85,7 +85,6 @@ CFlo_WalkOff:	; Routine $A
 		move.w	ost_x_pos(a0),d2
 		bsr.w	MoveWithPlatform2
 		bra.w	DespawnObject
-; End of function CFlo_WalkOff
 
 ; ===========================================================================
 
@@ -120,15 +119,13 @@ CFlo_WaitFall:	; Routine 6
 
 CFlo_FallNow:
 		bsr.w	ObjectFall				; apply gravity & update position
-		bsr.w	DisplaySprite
 		tst.b	ost_render(a0)				; is object on-screen?
 		bpl.s	CFlo_Delete				; if not, branch
-		rts	
+		bra.w	DisplaySprite
 ; ===========================================================================
 
 CFlo_Delete:	; Routine 8
-		bsr.w	DeleteObject
-		rts	
+		bra.w	DeleteObject
 ; ===========================================================================
 
 CFlo_Fragment:

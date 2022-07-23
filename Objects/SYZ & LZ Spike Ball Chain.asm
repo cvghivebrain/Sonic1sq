@@ -70,7 +70,7 @@ SBall_Main:	; Routine 0
 		bcs.s	@fail
 
 @makechain:
-		bsr.w	FindFreeObj				; find free OST slot
+		bsr.w	FindNextFreeObj				; find free OST slot
 		bne.s	@fail					; branch if not found
 		addq.b	#1,ost_sball_child_count(a0)		; increment child object counter
 		move.w	a1,d5					; get RAM address of OST of child object

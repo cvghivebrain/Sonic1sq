@@ -1,6 +1,6 @@
 ; ---------------------------------------------------------------------------
 ; Object 1D - switch that activates when Sonic touches it
-; (this	is not used anywhere in	the game)
+; (this is not used anywhere in the game)
 ; ---------------------------------------------------------------------------
 
 MagicSwitch:
@@ -39,14 +39,12 @@ Swi_Action:	; Routine 2
 		move.w	d0,(v_button_state).w			; set button 0 as "pressed"
 
 	@display:
-		bsr.w	DisplaySprite
-		out_of_range	Swi_Delete
-		rts	
+		out_of_range.s	Swi_Delete
+		bra.w	DisplaySprite
 ; ===========================================================================
 
 Swi_Delete:	; Routine 4
-		bsr.w	DeleteObject
-		rts	
+		bra.w	DeleteObject
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	check if Sonic touches the object

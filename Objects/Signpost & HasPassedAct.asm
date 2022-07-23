@@ -14,9 +14,8 @@ Signpost:
 		jsr	Sign_Index(pc,d1.w)
 		lea	(Ani_Sign).l,a1
 		bsr.w	AnimateSprite
-		bsr.w	DisplaySprite
 		out_of_range	DeleteObject
-		rts	
+		bra.w	DisplaySprite
 ; ===========================================================================
 Sign_Index:	index *,,2
 		ptr Sign_Main

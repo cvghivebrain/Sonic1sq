@@ -9,8 +9,7 @@ SmashBlock:
 		moveq	#0,d0
 		move.b	ost_routine(a0),d0
 		move.w	Smab_Index(pc,d0.w),d1
-		jsr	Smab_Index(pc,d1.w)
-		bra.w	DespawnObject
+		jmp	Smab_Index(pc,d1.w)
 ; ===========================================================================
 Smab_Index:	index *,,2
 		ptr Smab_Main
@@ -45,7 +44,7 @@ Smab_Solid:	; Routine 2
 		bne.s	@smash					; if yes, branch
 
 	@notspinning:
-		rts	
+		bra.w	DespawnObject
 ; ===========================================================================
 
 @smash:
@@ -95,10 +94,9 @@ Smab_Solid:	; Routine 2
 Smab_FragMove:	; Routine 4
 		bsr.w	SpeedToPos				; update position
 		addi.w	#$38,ost_y_vel(a0)			; apply gravity
-		bsr.w	DisplaySprite
 		tst.b	ost_render(a0)
 		bpl.w	DeleteObject
-		rts	
+		bra.w	DisplaySprite
 ; ===========================================================================
 Smab_Speeds:	dc.w -$200, -$200				; x speed, y speed
 		dc.w -$100, -$100

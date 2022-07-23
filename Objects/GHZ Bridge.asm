@@ -93,7 +93,6 @@ Bri_Action:	; Routine 2
 		bsr.w	Bri_UpdateY
 
 	@display:
-		bsr.w	DisplaySprite
 		bra.w	Bri_ChkDel
 
 ; ---------------------------------------------------------------------------
@@ -122,7 +121,6 @@ Bri_Detect:
 
 Bri_Platform:	; Routine 4
 		bsr.s	Bri_ChkPosition
-		bsr.w	DisplaySprite
 		bra.w	Bri_ChkDel
 
 ; ---------------------------------------------------------------------------
@@ -293,8 +291,8 @@ Bri_Data_Align:
 ; ===========================================================================
 
 Bri_ChkDel:
-		out_of_range	@deletebridge
-		rts
+		out_of_range.s	@deletebridge
+		bra.w	DisplaySprite
 
 @deletebridge:
 		moveq	#0,d2
@@ -317,15 +315,12 @@ Bri_ChkDel:
 		dbf	d2,@loop				; repeat d2 times (bridge length)
 
 @delparent:
-		bsr.w	DeleteObject
-		rts	
+		bra.w	DeleteObject
 ; ===========================================================================
 
 Bri_Delete:	; Routine 6, 8
-		bsr.w	DeleteObject
-		rts	
+		bra.w	DeleteObject
 ; ===========================================================================
 
 Bri_Display:	; Routine $A
-		bsr.w	DisplaySprite
-		rts		
+		bra.w	DisplaySprite

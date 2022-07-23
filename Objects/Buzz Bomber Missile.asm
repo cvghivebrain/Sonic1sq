@@ -45,14 +45,16 @@ Msl_Main:	; Routine 0
 ; ===========================================================================
 
 Msl_Animate:	; Routine 2
-		bsr.s	Msl_ChkCancel
+		movea.l	ost_missile_parent(a0),a1
+		cmpi.l	#ExplosionItem,ost_id(a1)		; has Buzz Bomber been destroyed?
+		beq.s	Msl_Delete				; if yes, branch
 		lea	(Ani_Missile).l,a1
 		bsr.w	AnimateSprite				; goto Msl_FromBuzz after animation is finished
 		bra.w	DisplaySprite
 
 ; ---------------------------------------------------------------------------
-; Subroutine to	check if the Buzz Bomber which fired the missile has been
-; destroyed, and if it has, then cancel	the missile
+; Subroutine to check if the Buzz Bomber which fired the missile has been
+; destroyed, and if it has, then cancel the missile
 ; ---------------------------------------------------------------------------
 
 Msl_ChkCancel:
@@ -71,12 +73,11 @@ Msl_FromBuzz:	; Routine 4
 		bsr.w	SpeedToPos
 		lea	(Ani_Missile).l,a1
 		bsr.w	AnimateSprite
-		bsr.w	DisplaySprite
 		move.w	(v_boundary_bottom).w,d0
 		addi.w	#224,d0
 		cmp.w	ost_y_pos(a0),d0			; has object moved below the level boundary?
 		bcs.s	Msl_Delete				; if yes, branch
-		rts	
+		bra.w	DisplaySprite
 ; ===========================================================================
 
 	@explode:
@@ -86,8 +87,7 @@ Msl_FromBuzz:	; Routine 4
 ; ===========================================================================
 
 Msl_Delete:	; Routine 6
-		bsr.w	DeleteObject
-		rts	
+		bra.w	DeleteObject	
 ; ===========================================================================
 
 Msl_FromNewt:	; Routine 8
@@ -98,8 +98,7 @@ Msl_FromNewt:	; Routine 8
 Msl_Animate2:
 		lea	(Ani_Missile).l,a1
 		bsr.w	AnimateSprite
-		bsr.w	DisplaySprite
-		rts	
+		bra.w	DisplaySprite	
 
 ; ---------------------------------------------------------------------------
 ; Animation script

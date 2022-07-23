@@ -15,9 +15,8 @@ Springs:
 		move.b	ost_routine(a0),d0
 		move.w	Spring_Index(pc,d0.w),d1
 		jsr	Spring_Index(pc,d1.w)
-		bsr.w	DisplaySprite
 		out_of_range	DeleteObject
-		rts	
+		bra.w	DisplaySprite
 ; ===========================================================================
 Spring_Index:	index *,,2
 		ptr Spring_Main					; 0
