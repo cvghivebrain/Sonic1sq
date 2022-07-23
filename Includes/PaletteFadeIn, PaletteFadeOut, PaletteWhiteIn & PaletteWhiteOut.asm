@@ -43,8 +43,8 @@ FadeIn_FromBlack:
 		bsr.s	FadeIn_AddColour			; raise RGB levels (until they match target palette)
 		dbf	d0,@addcolour				; repeat for size of palette
 
-		cmpi.b	#id_LZ,(v_zone).w			; is level Labyrinth?
-		bne.s	@exit					; if not, branch
+		tst.b	(f_water_enable).w			; does level have water?
+		beq.s	@exit					; if not, branch
 
 		moveq	#0,d0
 		lea	(v_pal_water).w,a0
@@ -212,8 +212,8 @@ WhiteIn_FromWhite:
 		bsr.s	WhiteIn_DecColour			; lower RGB levels (until they match target palette)
 		dbf	d0,@decolour				; repeat for size of palette
 
-		cmpi.b	#id_LZ,(v_zone).w			; is level Labyrinth?
-		bne.s	@exit					; if not, branch
+		tst.b	(f_water_enable).w			; does level have water?
+		beq.s	@exit					; if not, branch
 
 		moveq	#0,d0
 		lea	(v_pal_water).w,a0

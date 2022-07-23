@@ -78,6 +78,11 @@ LoadPerZone:
 		move.w	(a1),(v_debug_count).w			; get number of items in list
 		move.l	(a4)+,(v_debug_ptr).w
 		add.l	#2,(v_debug_ptr).w			; skip to first item in list
+		
+		movea.l	(a4)+,a1				; get pointer for title card list
+		lea	(a1,d4.w),a1
+		move.w	(a1)+,(v_titlecard_zone).w		; set zone name
+		move.w	(a1)+,(v_titlecard_act).w		; set act number
 		rts
 		
 ; ---------------------------------------------------------------------------
@@ -101,6 +106,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Bound_GHZ				; level boundary list (act specific)
 		dc.l Zone_SPos_GHZ				; start position list (act specific)
 		dc.l DebugList_GHZ				; debug list
+		dc.l Zone_Card_GHZ				; title card list (act specific)
 		even
 	ZoneDefs_size:
 
@@ -121,6 +127,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Bound_LZ
 		dc.l Zone_SPos_LZ
 		dc.l DebugList_LZ
+		dc.l Zone_Card_LZ
 		even
 		
 		; Marble Zone
@@ -140,6 +147,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Bound_MZ
 		dc.l Zone_SPos_MZ
 		dc.l DebugList_MZ
+		dc.l Zone_Card_MZ
 		even
 		
 		; Star Light Zone
@@ -159,6 +167,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Bound_SLZ
 		dc.l Zone_SPos_SLZ
 		dc.l DebugList_SLZ
+		dc.l Zone_Card_SLZ
 		even
 		
 		; Spring Yard Zone
@@ -178,6 +187,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Bound_SYZ
 		dc.l Zone_SPos_SYZ
 		dc.l DebugList_SYZ
+		dc.l Zone_Card_SYZ
 		even
 		
 		; Scrap Brain Zone
@@ -197,6 +207,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Bound_SBZ
 		dc.l Zone_SPos_SBZ
 		dc.l DebugList_SBZ
+		dc.l Zone_Card_SBZ
 		even
 		
 		; Ending
@@ -216,6 +227,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Bound_End
 		dc.l Zone_SPos_End
 		dc.l DebugList_Ending
+		dc.l Zone_Card_GHZ
 		even
 
 ; ---------------------------------------------------------------------------
@@ -336,3 +348,27 @@ Zone_SPos_SBZ:	dc.w $0030, $048C
 Zone_SPos_End:	dc.w $0620, $016B
 		dc.w $0EE0, $016C
 		even
+
+; ---------------------------------------------------------------------------
+; Title card ids
+; ---------------------------------------------------------------------------
+
+Zone_Card_GHZ:	dc.w id_frame_card_ghz,id_frame_card_act1
+		dc.w id_frame_card_ghz,id_frame_card_act2
+		dc.w id_frame_card_ghz,id_frame_card_act3
+Zone_Card_MZ:	dc.w id_frame_card_mz,id_frame_card_act1
+		dc.w id_frame_card_mz,id_frame_card_act2
+		dc.w id_frame_card_mz,id_frame_card_act3
+Zone_Card_SYZ:	dc.w id_frame_card_syz,id_frame_card_act1
+		dc.w id_frame_card_syz,id_frame_card_act2
+		dc.w id_frame_card_syz,id_frame_card_act3
+Zone_Card_LZ:	dc.w id_frame_card_lz,id_frame_card_act1
+		dc.w id_frame_card_lz,id_frame_card_act2
+		dc.w id_frame_card_lz,id_frame_card_act3
+		dc.w id_frame_card_sbz,id_frame_card_act3	; SBZ3
+Zone_Card_SLZ:	dc.w id_frame_card_slz,id_frame_card_act1
+		dc.w id_frame_card_slz,id_frame_card_act2
+		dc.w id_frame_card_slz,id_frame_card_act3
+Zone_Card_SBZ:	dc.w id_frame_card_sbz,id_frame_card_act1
+		dc.w id_frame_card_sbz,id_frame_card_act2
+		dc.w id_frame_card_fz,id_frame_card_act1	; FZ

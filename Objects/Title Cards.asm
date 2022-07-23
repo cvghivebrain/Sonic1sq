@@ -23,7 +23,6 @@ ost_card_x_start:	rs.w 1 ; $32				; start & finish x position (2 bytes)
 ost_card_time:		rs.w 1 ; $3E
 		rsobjend
 
-include_Card_Data:	macro
 Card_ItemData:	; y position, routine number, frame number
 		dc.w $D0
 		dc.b id_Card_Move, id_frame_card_ghz		; zone name (frame number changes)
@@ -63,7 +62,6 @@ Card_PosData:	; y pos, x pos
 		dc.w -$11C, $124
 		dc.w $3EC, $3EC
 		dc.w $1EC, $12C
-		endm
 ; ===========================================================================
 
 Card_Main:	; Routine 0
@@ -97,16 +95,14 @@ Card_Main:	; Routine 0
 		move.b	(a2)+,ost_routine(a1)			; goto Card_Move next
 		moveq	#0,d0
 		move.b	(a2)+,d0				; set frame number
-		bne.s	@not_ghz				; branch if not 0 (GREEN HILL)
-		move.b	d2,d0					; use zone number instead (or $B for FZ)
+		cmpi.b	#id_frame_card_ghz,d0
+		bne.s	@not_zone
+		move.w	(v_titlecard_zone).w,d0			; get frame id for zone
 
-	@not_ghz:
-		cmpi.b	#id_frame_card_act1,d0			; is sprite the act number?
-		bne.s	@not_act				; if not, branch
-		add.b	(v_act).w,d0				; add act number to frame
-		cmpi.b	#3,(v_act).w				; is this act 4? (SBZ3 only)
-		bne.s	@not_act				; if not, branch
-		subq.b	#1,d0					; use act 3 frame if act 4 (for SBZ3)
+	@not_zone:
+		cmpi.b	#id_frame_card_act1,d0
+		bne.s	@not_act
+		move.w	(v_titlecard_act).w,d0			; get frame id for act
 
 	@not_act:
 		move.w	d0,ost_frame_hi(a1)			; display frame number d0
@@ -187,5 +183,3 @@ Card_ChangeArt:
 
 	@delete:
 		bra.w	DeleteObject
-; ===========================================================================
-		include_Card_Data
