@@ -482,6 +482,7 @@ BFZ_Eggman_Escape:
 		tst.b	ost_render(a0)				; is ship on-screen?
 		bmi.s	@animate				; if not, branch
 		move.b	#id_Ending,(v_gamemode).w		; goto ending sequence
+		addq.l	#4,sp
 		bra.w	BFZ_Delete				; delete ship
 ; ===========================================================================
 

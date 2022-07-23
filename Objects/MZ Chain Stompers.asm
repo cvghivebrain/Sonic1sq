@@ -149,7 +149,6 @@ CStom_Block:	; Routine 2
 		movea.l	a2,a0
 
 	@display:
-		bsr.w	DisplaySprite
 		bra.w	CStom_ChkDel
 ; ===========================================================================
 
@@ -170,11 +169,9 @@ CStom_Spikes:	; Routine 4
 		move.w	d0,ost_y_pos(a0)			; update y position (chain and spikes)
 
 CStom_Ceiling:	; Routine 6
-		bsr.w	DisplaySprite
-
 CStom_ChkDel:
 		out_of_range	DeleteObject
-		rts	
+		bra.w	DisplaySprite
 ; ===========================================================================
 
 CStom_Types:

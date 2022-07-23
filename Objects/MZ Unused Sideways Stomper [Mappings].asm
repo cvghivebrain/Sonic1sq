@@ -69,7 +69,7 @@ frame_mash_pole4:
 		endsprite
 		
 frame_mash_pole5:
-		spritemap					; incorrect: this should be $A
+		spritemap
 		piece	-$20, -8, 2x2, $41
 		piece	-$10, -8, 2x2, $41
 		piece	0, -8, 2x2, $41
@@ -78,7 +78,7 @@ frame_mash_pole5:
 		piece	$30, -8, 2x2, $41
 		piece	$40, -8, 2x2, $41
 		piece	$50, -8, 2x2, $41
-		endsprite
+		endsprite					; incorrect: this should be moved down 2 lines
 		piece	$60, -8, 2x2, $41
 		piece	$70, -8, 2x2, $41
 		; frame_mash_pole6 should be here, but it isn't...

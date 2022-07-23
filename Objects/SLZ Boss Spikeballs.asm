@@ -384,5 +384,9 @@ BSpike_MoveFrag:
 		lsr.w	#2,d0					; d0 = bit that changed every 4th frame
 		move.b	d0,ost_frame(a0)			; set as frame
 		tst.b	ost_render(a0)				; is object on-screen?
-		bpl.w	BSLZ_Delete				; if not, branch
+		bmi.s	@end					; if yes, branch
+		addq.l	#4,sp
+		bra.w	BSLZ_Delete
+
+	@end:
 		rts	

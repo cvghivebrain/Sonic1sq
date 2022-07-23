@@ -116,9 +116,8 @@ Ring_Main:	; Routine 0
 
 Ring_Animate:	; Routine 2
 		move.b	(v_syncani_1_frame).w,ost_frame(a0)	; set synchronised frame
-		bsr.w	DisplaySprite
 		out_of_range.s	Ring_Delete,ost_ring_x_main(a0)
-		rts	
+		bra.w	DisplaySprite
 ; ===========================================================================
 
 Ring_Collect:	; Routine 4

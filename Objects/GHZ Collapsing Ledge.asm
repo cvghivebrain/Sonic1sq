@@ -104,15 +104,13 @@ Ledge_WaitFall:	; Routine 6
 
 Ledge_FallNow:
 		bsr.w	ObjectFall				; apply gravity and update position
-		bsr.w	DisplaySprite
 		tst.b	ost_render(a0)				; is object on-screen?
 		bpl.s	Ledge_Delete				; if not, branch
-		rts	
+		bra.w	DisplaySprite
 ; ===========================================================================
 
 Ledge_Delete:	; Routine 8
-		bsr.w	DeleteObject
-		rts	
+		bra.w	DeleteObject
 ; ===========================================================================
 
 Ledge_Fragment:

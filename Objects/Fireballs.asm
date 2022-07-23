@@ -10,8 +10,7 @@ FireBall:
 		moveq	#0,d0
 		move.b	ost_routine(a0),d0
 		move.w	FBall_Index(pc,d0.w),d1
-		jsr	FBall_Index(pc,d1.w)
-		bra.w	DisplaySprite
+		jmp	FBall_Index(pc,d1.w)
 ; ===========================================================================
 FBall_Index:	index *,,2
 		ptr FBall_Main
@@ -87,7 +86,7 @@ FBall_Action:	; Routine 2
 
 FBall_ChkDel:
 		out_of_range	DeleteObject
-		rts	
+		bra.w	DisplaySprite
 ; ===========================================================================
 FBall_TypeIndex:index *
 		ptr FBall_Type_UpDown

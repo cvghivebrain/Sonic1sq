@@ -92,7 +92,6 @@ SStom_Solid:	; Routine 2
 		move.w	#$20,d3
 		move.w	(sp)+,d4
 		bsr.w	SolidObject
-		bsr.w	DisplaySprite
 		bra.w	SStom_ChkDel
 ; ===========================================================================
 
@@ -113,11 +112,9 @@ SStom_Spikes:	; Routine 4
 		move.w	d0,ost_x_pos(a0)			; update x pos
 
 SStom_Display:	; Routine 6
-		bsr.w	DisplaySprite
-
 SStom_ChkDel:
 		out_of_range	DeleteObject,ost_mash_y_start(a0)
-		rts	
+		bra.w	DisplaySprite
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to move the main metal block
@@ -129,7 +126,6 @@ SStom_Move:
 		add.w	d0,d0
 		move.w	SStom_Move_Index(pc,d0.w),d1
 		jmp	SStom_Move_Index(pc,d1.w)
-; End of function SStom_Move
 
 ; ===========================================================================
 SStom_Move_Index:

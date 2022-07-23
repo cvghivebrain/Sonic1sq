@@ -331,7 +331,9 @@ BSLZ_Escape:
 
 @chkdel:
 		tst.b	ost_render(a0)				; is ship on-screen?
-		bpl.w	BSLZ_Delete				; if not, branch
+		bmi.s	@update					; if yes, branch
+		addq.l	#4,sp
+		bra.w	BSLZ_Delete
 
 @update:
 		bsr.w	BossMove				; update parent position

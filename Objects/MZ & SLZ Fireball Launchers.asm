@@ -10,8 +10,7 @@ FireMaker:
 		moveq	#0,d0
 		move.b	ost_routine(a0),d0
 		move.w	FireM_Index(pc,d0.w),d1
-		jsr	FireM_Index(pc,d1.w)
-		bra.w	FBall_ChkDel
+		jmp	FireM_Index(pc,d1.w)
 ; ===========================================================================
 FireM_Index:	index *,,2
 		ptr FireM_Main
@@ -54,4 +53,5 @@ FireM_MakeFire:	; Routine 2
 		move.b	ost_subtype(a0),ost_subtype(a1)		; subtype = speed/direction
 
 	@wait:
-		rts	
+		out_of_range	DeleteObject
+		rts

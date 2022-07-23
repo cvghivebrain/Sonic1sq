@@ -95,7 +95,6 @@ LGrass_Solid:
 		bsr.w	SolidObject_Heightmap
 
 LGrass_Display:
-		bsr.w	DisplaySprite
 		bra.w	LGrass_ChkDel
 
 ; ---------------------------------------------------------------------------
@@ -260,7 +259,7 @@ LGrass_ChkDel:
 
 	@not_burning:
 		out_of_range	DeleteObject,ost_grass_x_start(a0)
-		rts	
+		bra.w	DisplaySprite
 ; ===========================================================================
 
 LGrass_DelFlames:

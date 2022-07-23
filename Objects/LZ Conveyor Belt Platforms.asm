@@ -118,7 +118,12 @@ LCon_LoadPlatforms:
 		andi.w	#$7F,d0					; d0 = bits 0-6 of subtype
 		lea	(v_convey_init_list).w,a2
 		bset	#0,(a2,d0.w)				; set flag to indicate object exists
-		bne.w	DeleteObject				; delete now if already set
+		beq.s	@not_set				; branch if not previously set
+		addq.l	#4,sp
+		bra.w	DeleteObject
+; ===========================================================================
+
+	@not_set:
 		add.w	d0,d0
 		add.w	d0,d0
 		lea	(ObjPosLZPlatform_Index).l,a2

@@ -11,7 +11,8 @@ GeyserMaker:
 		move.b	ost_routine(a0),d0
 		move.w	GMake_Index(pc,d0.w),d1
 		jsr	GMake_Index(pc,d1.w)
-		bra.w	Geyser_ChkDel
+		out_of_range	DeleteObject
+		rts
 ; ===========================================================================
 GMake_Index:	index *,,2
 		ptr GMake_Main
@@ -90,8 +91,7 @@ GMake_ChkType:	; Routine 4
 GMake_Display:	; Routine 8
 		lea	(Ani_Geyser).l,a1
 		bsr.w	AnimateSprite				; animate and goto next routine if specified
-		bsr.w	DisplaySprite
-		rts	
+		bra.w	DisplaySprite
 ; ===========================================================================
 
 GMake_Delete:	; Routine $A

@@ -9,8 +9,7 @@ LavaGeyser:
 		moveq	#0,d0
 		move.b	ost_routine(a0),d0
 		move.w	Geyser_Index(pc,d0.w),d1
-		jsr	Geyser_Index(pc,d1.w)
-		bra.w	DisplaySprite
+		jmp	Geyser_Index(pc,d1.w)
 ; ===========================================================================
 Geyser_Index:	index *,,2
 		ptr Geyser_Main
@@ -106,7 +105,7 @@ Geyser_Action:	; Routine 2
 
 Geyser_ChkDel:
 		out_of_range	DeleteObject
-		rts	
+		bra.w	DisplaySprite
 ; ===========================================================================
 Geyser_Types:	index *
 		ptr Geyser_Type00

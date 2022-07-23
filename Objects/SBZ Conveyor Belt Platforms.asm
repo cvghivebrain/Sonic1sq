@@ -117,6 +117,7 @@ SpinC_LoadPlatforms:
 		lea	(v_convey_init_list).w,a2
 		bset	#0,(a2,d0.w)				; set flag to indicate object exists
 		beq.s	@not_set				; branch if not previously set
+		addq.l	#4,sp
 		jmp	(DeleteObject).l
 ; ===========================================================================
 

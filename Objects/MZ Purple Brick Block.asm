@@ -47,14 +47,8 @@ Brick_Action:	; Routine 2
 		bsr.w	SolidObject
 
 	@chkdel:
-		if Revision=0
-			bsr.w	DisplaySprite
-			out_of_range	DeleteObject
-			rts	
-		else
-			out_of_range	DeleteObject
-			bra.w	DisplaySprite
-		endc
+		out_of_range	DeleteObject
+		bra.w	DisplaySprite
 ; ===========================================================================
 Brick_TypeIndex:index *
 		ptr Brick_Still					; doesn't move

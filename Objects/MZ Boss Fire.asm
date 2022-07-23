@@ -63,6 +63,7 @@ BFire_Action:	; Routine 2
 ; ===========================================================================
 
 BFire_Delete:
+		addq.l	#4,sp
 		jmp	(DeleteObject).l
 ; ===========================================================================
 BFire_Index2:	index *,,2
@@ -131,7 +132,6 @@ BFire_SpawnFire:
 
 	@fail:
 		rts	
-; End of function BFire_SpawnFire
 
 ; ===========================================================================
 
@@ -197,6 +197,7 @@ BFire_FallEdge:
 ; ===========================================================================
 
 @delete:
+		addq.l	#4,sp
 		jmp	(DeleteObject).l
 ; ===========================================================================
 
@@ -215,4 +216,5 @@ BFire_TempFire:	; Routine 4
 
 BFire_TempFireDel:
 		; Routine 6
+		addq.l	#4,sp
 		jmp	(DeleteObject).l

@@ -30,6 +30,5 @@ Rock_Solid:	; Routine 2
 		move.w	#$10,d3					; height
 		move.w	ost_x_pos(a0),d4
 		bsr.w	SolidObject
-		bsr.w	DisplaySprite
 		out_of_range	DeleteObject
-		rts	
+		bra.w	DisplaySprite

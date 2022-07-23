@@ -83,14 +83,12 @@ But_Flash:
 		bchg	#1,ost_frame(a0)			; use frame 2/3
 
 But_Display:
-		bsr.w	DisplaySprite
-		out_of_range	But_Delete
-		rts	
+		out_of_range.s	But_Delete
+		bra.w	DisplaySprite
 ; ===========================================================================
 
 But_Delete:
-		bsr.w	DeleteObject
-		rts	
+		bra.w	DeleteObject
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to detect collision with MZ pushable green block

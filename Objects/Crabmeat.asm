@@ -186,8 +186,7 @@ Crab_SetAni:
 ; ===========================================================================
 
 Crab_Delete:	; Routine 4
-		bsr.w	DeleteObject
-		rts
+		bra.w	DeleteObject
 
 ; ---------------------------------------------------------------------------
 ; Sub-object - missile that the	Crabmeat throws
@@ -208,15 +207,11 @@ Crab_BallMove:	; Routine 8
 		lea	(Ani_Crab).l,a1
 		bsr.w	AnimateSprite
 		bsr.w	ObjectFall
-		bsr.w	DisplaySprite
 		move.w	(v_boundary_bottom).w,d0
 		addi.w	#224,d0
 		cmp.w	ost_y_pos(a0),d0			; has object moved below the level boundary?
-		bcs.s	@delete					; if yes, branch
-		rts	
-
-	@delete:
-		bra.w	DeleteObject
+		bcs.w	DeleteObject				; if yes, branch
+		bra.w	DisplaySprite
 
 ; ---------------------------------------------------------------------------
 ; Animation script
