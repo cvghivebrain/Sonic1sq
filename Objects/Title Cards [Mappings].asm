@@ -27,7 +27,11 @@ frame_card_ghz:
 		piece $2C, -8, 2x2, $26
 		piece $3C, -8, 2x2, $26
 		endsprite
-		even
+		
+		dc.w 0,	$120					; GREEN HILL
+		dc.w -$104, $13C				; ZONE
+		dc.w $414, $154					; ACT x
+		dc.w $214, $154					; oval
 		
 frame_card_lz:
 		spritemap					; LABYRINTH
@@ -41,7 +45,11 @@ frame_card_lz:
 		piece $24, -8, 2x2, $42
 		piece $34, -8, 2x2, $1C
 		endsprite
-		even
+		
+		dc.w 0,	$120					; LABYRINTH
+		dc.w -$10C, $134
+		dc.w $40C, $14C
+		dc.w $20C, $14C
 		
 frame_card_mz:
 		spritemap					; MARBLE
@@ -52,7 +60,11 @@ frame_card_mz:
 		piece $10, -8, 2x2, $26
 		piece $20, -8, 2x2, $10
 		endsprite
-		even
+		
+		dc.w 0,	$120					; MARBLE
+		dc.w -$120, $120
+		dc.w $3F8, $138
+		dc.w $1F8, $138
 		
 frame_card_slz:
 		spritemap					; STAR LIGHT
@@ -66,7 +78,11 @@ frame_card_slz:
 		piece $2C, -8, 2x2, $1C
 		piece $3C, -8, 2x2, $42
 		endsprite
-		even
+		
+		dc.w 0,	$120					; STAR LIGHT
+		dc.w -$104, $13C
+		dc.w $414, $154
+		dc.w $214, $154
 		
 frame_card_syz:
 		spritemap					; SPRING YARD
@@ -81,7 +97,11 @@ frame_card_syz:
 		piece $34, -8, 2x2, $3A
 		piece $44, -8, 2x2, $C
 		endsprite
-		even
+		
+		dc.w 0,	$120					; SPRING YARD
+		dc.w -$FC, $144
+		dc.w $41C, $15C
+		dc.w $21C, $15C
 		
 frame_card_sbz:
 		spritemap					; SCRAP BRAIN
@@ -96,7 +116,11 @@ frame_card_sbz:
 		piece $3C, -8, 1x2, $20
 		piece $44, -8, 2x2, $2E
 		endsprite
-		even
+		
+		dc.w 0,	$120					; SCRAP BRAIN
+		dc.w -$FC, $144
+		dc.w $41C, $15C
+		dc.w $21C, $15C
 		
 frame_card_zone:
 		spritemap					; ZONE
@@ -151,4 +175,8 @@ frame_card_fz:
 		piece 4, -8, 2x2, 0
 		piece $14, -8, 2x2, $26
 		endsprite
-		even
+		
+		dc.w 0,	$120					; FINAL
+		dc.w -$11C, $124
+		dc.w $3EC, $3EC
+		dc.w $1EC, $12C

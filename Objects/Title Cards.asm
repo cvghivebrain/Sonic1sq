@@ -32,57 +32,21 @@ Card_ItemData:	; y position, routine number, frame number
 		dc.b id_Card_Move, id_frame_card_act1		; act number (frame number changes)
 		dc.w $E0
 		dc.b id_Card_Move, id_frame_card_oval		; oval
-
-Card_PosData:	; y pos, x pos
-		dc.w 0,	$120					; GREEN HILL
-		dc.w -$104, $13C				; ZONE
-		dc.w $414, $154					; ACT x
-		dc.w $214, $154					; oval
-		dc.w 0,	$120					; LABYRINTH
-		dc.w -$10C, $134
-		dc.w $40C, $14C
-		dc.w $20C, $14C
-		dc.w 0,	$120					; MARBLE
-		dc.w -$120, $120
-		dc.w $3F8, $138
-		dc.w $1F8, $138
-		dc.w 0,	$120					; STAR LIGHT
-		dc.w -$104, $13C
-		dc.w $414, $154
-		dc.w $214, $154
-		dc.w 0,	$120					; SPRING YARD
-		dc.w -$FC, $144
-		dc.w $41C, $15C
-		dc.w $21C, $15C
-		dc.w 0,	$120					; SCRAP BRAIN
-		dc.w -$FC, $144
-		dc.w $41C, $15C
-		dc.w $21C, $15C
-		dc.w 0,	$120					; FINAL
-		dc.w -$11C, $124
-		dc.w $3EC, $3EC
-		dc.w $1EC, $12C
 ; ===========================================================================
 
 Card_Main:	; Routine 0
 		movea.l	a0,a1					; replace current object with 1st item in list
 		moveq	#0,d0
-		move.b	(v_zone).w,d0
-		cmpi.w	#id_SBZ_act3,(v_zone).w			; check if level is SBZ3
-		bne.s	@not_sbz3				; if not, branch
-		moveq	#5,d0					; load title card number 5 (SBZ)
-
-	@not_sbz3:
-		move.w	d0,d2
-		cmpi.w	#id_FZ,(v_zone).w			; check if level is FZ
-		bne.s	@not_fz					; if not, branch
-		moveq	#6,d0					; load title card number 6 (FZ)
-		moveq	#id_frame_card_fz,d2			; use "FINAL" frame ($B)
-
-	@not_fz:
-		lea	(Card_PosData).l,a3			; x/y pos data for all items
-		lsl.w	#4,d0					; multiply zone by 8
-		adda.w	d0,a3					; jump to relevant data
+		move.w	(v_titlecard_zone).w,d0
+		movea.l	#Map_Card,a3				; goto mappings
+		add.w	d0,d0
+		adda.w	(a3,d0.w),a3				; jump to mappings for frame
+		move.w	(a3)+,d0				; read sprite count from mappings
+		add.w	d0,d0
+		move.w	d0,d1
+		add.w	d0,d0
+		add.w	d1,d0					; multiply by 6
+		lea	(a3,d0.w),a3				; jump to data immediately after mappings
 		lea	(Card_ItemData).l,a2			; y pos/routine/frame for each item
 		moveq	#4-1,d1					; there are 4 items (minus 1 for 1st loop)
 

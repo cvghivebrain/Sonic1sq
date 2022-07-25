@@ -8,8 +8,6 @@
 ;	a0 = source address
 ;	a1 = destination address
 
-;	uses d0, d1, d2, d3, d4, d5, d6, a0, a1, a3, a4
-
 ; usage:
 ;	lea	(source).l,a0
 ;	lea	(destination).l,a1

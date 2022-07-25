@@ -5,6 +5,14 @@
 LoadPerZone:
 		moveq	#0,d0
 		move.b	(v_zone).w,d0				; get zone number
+		moveq	#0,d1
+		move.b	(v_act).w,d1				; d1 = act
+		move.l	d1,d2
+		add.l	d2,d2					; d2 = act * 2
+		move.l	d2,d4
+		add.l	d4,d4					; d4 = act * 4
+		move.l	d4,d5
+		add.l	d5,d5					; d5 = act * 8
 		mulu.w	#ZoneDefs_size-ZoneDefs,d0		; get offset for zone
 		lea	(ZoneDefs).l,a4
 		adda.l	d0,a4					; jump to relevant zone data
@@ -16,14 +24,6 @@ LoadPerZone:
 		move.l	(a4)+,(v_collision_index_ptr).w		; load collision index pointer
 		
 		moveq	#0,d0
-		moveq	#0,d1
-		move.b	(v_act).w,d1				; d1 = act
-		move.l	d1,d2
-		add.l	d2,d2					; d2 = act * 2
-		move.l	d2,d4
-		add.l	d4,d4					; d4 = act * 4
-		move.l	d4,d5
-		add.l	d5,d5					; d5 = act * 8
 		movea.l	(a4)+,a1				; get pointer for palette id list for Sonic & title cards
 		move.b	(a1,d1.w),d0				; get palette id
 		bsr.w	PalLoad_Now				; load palette

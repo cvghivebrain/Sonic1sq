@@ -41,7 +41,7 @@ Msl_Main:	; Routine 0
 		move.b	#id_Msl_FromNewt,ost_routine(a0)	; goto Msl_FromNewt next
 		move.b	#id_col_6x6+id_col_hurt,ost_col_type(a0)
 		move.b	#id_ani_buzz_missile,ost_anim(a0)
-		bra.s	Msl_Animate2
+		bra.w	Msl_Animate2
 ; ===========================================================================
 
 Msl_Animate:	; Routine 2
