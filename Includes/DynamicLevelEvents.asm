@@ -6,10 +6,8 @@
 
 DynamicLevelEvents:
 		moveq	#0,d0
-		move.b	(v_zone).w,d0
-		add.w	d0,d0
-		move.w	DLE_Index(pc,d0.w),d0
-		jsr	DLE_Index(pc,d0.w)			; run level-specific events
+		movea.l	(v_dle_ptr).w,a1
+		jsr	(a1)
 		moveq	#2,d1
 		move.w	(v_boundary_bottom_next).w,d0		; new boundary y pos is written here
 		sub.w	(v_boundary_bottom).w,d0
@@ -47,34 +45,8 @@ DynamicLevelEvents:
 		rts
 
 ; ---------------------------------------------------------------------------
-; Offset index for dynamic level events
-; ---------------------------------------------------------------------------
-DLE_Index:	index *
-		ptr DLE_GHZ
-		ptr DLE_LZ
-		ptr DLE_MZ
-		ptr DLE_SLZ
-		ptr DLE_SYZ
-		ptr DLE_SBZ
-		zonewarning DLE_Index,2
-		ptr DLE_Ending
-
-; ---------------------------------------------------------------------------
 ; Green	Hill Zone dynamic level events
 ; ---------------------------------------------------------------------------
-
-DLE_GHZ:
-		moveq	#0,d0
-		move.b	(v_act).w,d0
-		add.w	d0,d0
-		move.w	DLE_GHZx(pc,d0.w),d0
-		jmp	DLE_GHZx(pc,d0.w)
-; ===========================================================================
-DLE_GHZx:	index *
-		ptr DLE_GHZ1
-		ptr DLE_GHZ2
-		ptr DLE_GHZ3
-; ===========================================================================
 
 DLE_GHZ1:
 		move.w	#$300,(v_boundary_bottom_next).w	; initial boundary
@@ -185,20 +157,6 @@ DLE_GHZ3_End:
 ; Labyrinth Zone dynamic level events
 ; ---------------------------------------------------------------------------
 
-DLE_LZ:
-		moveq	#0,d0
-		move.b	(v_act).w,d0
-		add.w	d0,d0
-		move.w	DLE_LZx(pc,d0.w),d0
-		jmp	DLE_LZx(pc,d0.w)
-; ===========================================================================
-DLE_LZx:	index *
-		ptr DLE_LZ12
-		ptr DLE_LZ12
-		ptr DLE_LZ3
-		ptr DLE_SBZ3
-; ===========================================================================
-
 DLE_LZ12:
 		rts						; no events for acts 1/2
 ; ===========================================================================
@@ -257,19 +215,6 @@ DLE_SBZ3:
 ; ---------------------------------------------------------------------------
 ; Marble Zone dynamic level events
 ; ---------------------------------------------------------------------------
-
-DLE_MZ:
-		moveq	#0,d0
-		move.b	(v_act).w,d0
-		add.w	d0,d0
-		move.w	DLE_MZx(pc,d0.w),d0
-		jmp	DLE_MZx(pc,d0.w)
-; ===========================================================================
-DLE_MZx:	index *
-		ptr DLE_MZ1
-		ptr DLE_MZ2
-		ptr DLE_MZ3
-; ===========================================================================
 
 DLE_MZ1:
 		moveq	#0,d0
@@ -447,19 +392,6 @@ DLE_MZ3_End:
 ; Star Light Zone dynamic level events
 ; ---------------------------------------------------------------------------
 
-DLE_SLZ:
-		moveq	#0,d0
-		move.b	(v_act).w,d0
-		add.w	d0,d0
-		move.w	DLE_SLZx(pc,d0.w),d0
-		jmp	DLE_SLZx(pc,d0.w)
-; ===========================================================================
-DLE_SLZx:	index *
-		ptr DLE_SLZ12
-		ptr DLE_SLZ12
-		ptr DLE_SLZ3
-; ===========================================================================
-
 DLE_SLZ12:
 		rts						; no events for acts 1/2
 ; ===========================================================================
@@ -515,19 +447,6 @@ DLE_SLZ3_End:
 ; ---------------------------------------------------------------------------
 ; Spring Yard Zone dynamic level events
 ; ---------------------------------------------------------------------------
-
-DLE_SYZ:
-		moveq	#0,d0
-		move.b	(v_act).w,d0
-		add.w	d0,d0
-		move.w	DLE_SYZx(pc,d0.w),d0
-		jmp	DLE_SYZx(pc,d0.w)
-; ===========================================================================
-DLE_SYZx:	index *
-		ptr DLE_SYZ1
-		ptr DLE_SYZ2
-		ptr DLE_SYZ3
-; ===========================================================================
 
 DLE_SYZ1:
 		rts						; no events for act 1	
@@ -601,19 +520,6 @@ DLE_SYZ3_End:
 ; ---------------------------------------------------------------------------
 ; Scrap	Brain Zone dynamic level events
 ; ---------------------------------------------------------------------------
-
-DLE_SBZ:
-		moveq	#0,d0
-		move.b	(v_act).w,d0
-		add.w	d0,d0
-		move.w	DLE_SBZx(pc,d0.w),d0
-		jmp	DLE_SBZx(pc,d0.w)
-; ===========================================================================
-DLE_SBZx:	index *
-		ptr DLE_SBZ1
-		ptr DLE_SBZ2
-		ptr DLE_FZ
-; ===========================================================================
 
 DLE_SBZ1:
 		move.w	#$720,(v_boundary_bottom_next).w

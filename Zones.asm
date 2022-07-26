@@ -83,6 +83,9 @@ LoadPerZone:
 		lea	(a1,d4.w),a1
 		move.w	(a1)+,(v_titlecard_zone).w		; set zone name
 		move.w	(a1)+,(v_titlecard_act).w		; set act number
+
+		movea.l	(a4)+,a1				; get pointer for DLE list
+		move.l	(a1,d4.w),(v_dle_ptr).w			; get pointer for DLE routine
 		rts
 		
 ; ---------------------------------------------------------------------------
@@ -107,6 +110,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_SPos_GHZ				; start position list (act specific)
 		dc.l DebugList_GHZ				; debug list
 		dc.l Zone_Card_GHZ				; title card list (act specific)
+		dc.l Zone_DLE_GHZ				; dynamic level event list (act specific)
 		even
 	ZoneDefs_size:
 
@@ -128,6 +132,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_SPos_LZ
 		dc.l DebugList_LZ
 		dc.l Zone_Card_LZ
+		dc.l Zone_DLE_LZ
 		even
 		
 		; Marble Zone
@@ -148,6 +153,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_SPos_MZ
 		dc.l DebugList_MZ
 		dc.l Zone_Card_MZ
+		dc.l Zone_DLE_MZ
 		even
 		
 		; Star Light Zone
@@ -168,6 +174,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_SPos_SLZ
 		dc.l DebugList_SLZ
 		dc.l Zone_Card_SLZ
+		dc.l Zone_DLE_SLZ
 		even
 		
 		; Spring Yard Zone
@@ -188,6 +195,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_SPos_SYZ
 		dc.l DebugList_SYZ
 		dc.l Zone_Card_SYZ
+		dc.l Zone_DLE_SYZ
 		even
 		
 		; Scrap Brain Zone
@@ -208,6 +216,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_SPos_SBZ
 		dc.l DebugList_SBZ
 		dc.l Zone_Card_SBZ
+		dc.l Zone_DLE_SBZ
 		even
 		
 		; Ending
@@ -228,6 +237,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_SPos_End
 		dc.l DebugList_Ending
 		dc.l Zone_Card_GHZ
+		dc.l Zone_DLE_End
 		even
 
 ; ---------------------------------------------------------------------------
@@ -372,3 +382,15 @@ Zone_Card_SLZ:	dc.w id_frame_card_slz,id_frame_card_act1
 Zone_Card_SBZ:	dc.w id_frame_card_sbz,id_frame_card_act1
 		dc.w id_frame_card_sbz,id_frame_card_act2
 		dc.w id_frame_card_fz,id_frame_card_act1	; FZ
+
+; ---------------------------------------------------------------------------
+; Dynamic level event list pointers
+; ---------------------------------------------------------------------------
+
+Zone_DLE_GHZ:	dc.l DLE_GHZ1,DLE_GHZ2,DLE_GHZ3
+Zone_DLE_MZ:	dc.l DLE_MZ1,DLE_MZ2,DLE_MZ3
+Zone_DLE_SYZ:	dc.l DLE_SYZ1,DLE_SYZ2,DLE_SYZ3
+Zone_DLE_LZ:	dc.l DLE_LZ12,DLE_LZ12,DLE_LZ3,DLE_SBZ3
+Zone_DLE_SLZ:	dc.l DLE_SLZ12,DLE_SLZ12,DLE_SLZ3
+Zone_DLE_SBZ:	dc.l DLE_SBZ1,DLE_SBZ2,DLE_FZ
+Zone_DLE_End:	dc.l DLE_Ending,DLE_Ending
