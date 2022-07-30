@@ -16,7 +16,14 @@ LoadPerZone:
 		mulu.w	#ZoneDefs_size-ZoneDefs,d0		; get offset for zone
 		lea	(ZoneDefs).l,a4
 		adda.l	d0,a4					; jump to relevant zone data
-		
+
+		movea.l	(a4)+,a1				; get pointer for Kosinski PLC list
+		cmpi.b	#id_Title,(v_gamemode).w
+		beq.s	@no_kplc				; skip KPLC if on title screen
+		move.w	(a1,d2.w),d0				; get id of KPLC
+		jsr	KosPLC					; run KPLC
+
+	@no_kplc:
 		move.l	(a4)+,(v_16x16_ptr).w			; load 16x16 mappings pointer
 		movea.l	(a4)+,a0				; load 256x256 mappings pointer
 		lea	(v_256x256_tiles).l,a1			; RAM address for 256x256 mappings
@@ -93,6 +100,7 @@ LoadPerZone:
 ; ---------------------------------------------------------------------------
 
 ZoneDefs:	; Green Hill Zone
+		dc.l Zone_KPLC_GHZ				; Kosinski PLC list (act specific)
 		dc.l Blk16_GHZ					; 16x16 mappings
 		dc.l Blk256_GHZ					; 256x256 mappings
 		dc.l Col_GHZ					; collision index
@@ -115,6 +123,7 @@ ZoneDefs:	; Green Hill Zone
 	ZoneDefs_size:
 
 		; Labyrinth Zone
+		dc.l Zone_KPLC_LZ
 		dc.l Blk16_LZ
 		dc.l Blk256_LZ
 		dc.l Col_LZ
@@ -136,6 +145,7 @@ ZoneDefs:	; Green Hill Zone
 		even
 		
 		; Marble Zone
+		dc.l Zone_KPLC_MZ
 		dc.l Blk16_MZ
 		dc.l Blk256_MZ
 		dc.l Col_MZ
@@ -157,6 +167,7 @@ ZoneDefs:	; Green Hill Zone
 		even
 		
 		; Star Light Zone
+		dc.l Zone_KPLC_SLZ
 		dc.l Blk16_SLZ
 		dc.l Blk256_SLZ
 		dc.l Col_SLZ
@@ -178,6 +189,7 @@ ZoneDefs:	; Green Hill Zone
 		even
 		
 		; Spring Yard Zone
+		dc.l Zone_KPLC_SYZ
 		dc.l Blk16_SYZ
 		dc.l Blk256_SYZ
 		dc.l Col_SYZ
@@ -199,6 +211,7 @@ ZoneDefs:	; Green Hill Zone
 		even
 		
 		; Scrap Brain Zone
+		dc.l Zone_KPLC_SBZ
 		dc.l Blk16_SBZ
 		dc.l Blk256_SBZ
 		dc.l Col_SBZ
@@ -220,6 +233,7 @@ ZoneDefs:	; Green Hill Zone
 		even
 		
 		; Ending
+		dc.l Zone_KPLC_End
 		dc.l Blk16_GHZ
 		dc.l Blk256_GHZ
 		dc.l Col_GHZ
@@ -239,6 +253,18 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Card_GHZ
 		dc.l Zone_DLE_End
 		even
+
+; ---------------------------------------------------------------------------
+; Kosinski PLC id list
+; ---------------------------------------------------------------------------
+
+Zone_KPLC_GHZ:	dc.w id_KPLC_GHZ,id_KPLC_GHZ,id_KPLC_GHZ
+Zone_KPLC_MZ:	dc.w id_KPLC_MZ,id_KPLC_MZ,id_KPLC_MZ
+Zone_KPLC_SYZ:	dc.w id_KPLC_SYZ,id_KPLC_SYZ,id_KPLC_SYZ
+Zone_KPLC_LZ:	dc.w id_KPLC_LZ,id_KPLC_LZ,id_KPLC_LZ,id_KPLC_LZ ; SBZ3
+Zone_KPLC_SLZ:	dc.w id_KPLC_SLZ,id_KPLC_SLZ,id_KPLC_SLZ
+Zone_KPLC_SBZ:	dc.w id_KPLC_SBZ,id_KPLC_SBZ,id_KPLC_SBZ	; FZ
+Zone_KPLC_End:	dc.w id_KPLC_End,id_KPLC_End
 
 ; ---------------------------------------------------------------------------
 ; Palette ids

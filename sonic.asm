@@ -972,20 +972,23 @@ Eni_SSBg2:	incbin	"Tilemaps\SS Background 2.eni"		; special stage background (ma
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - primary patterns and block mappings
 ; ---------------------------------------------------------------------------
+		incfile	Kos_GHZ_1st,"Graphics Kosinski\GHZ Main",kos
+		incfile	Kos_GHZ_2nd,"Graphics Kosinski\GHZ Main2",kos
+		incfile	Kos_MZ,"Graphics Kosinski\MZ Main",kos
+		incfile	Kos_SYZ,"Graphics Kosinski\SYZ Main",kos
+		incfile	Kos_LZ,"Graphics Kosinski\LZ Main",kos
+		incfile	Kos_SLZ,"Graphics Kosinski\SLZ Main",kos
+		incfile	Kos_SBZ,"Graphics Kosinski\SBZ Main",kos
 Blk16_GHZ:	incbin	"16x16 Mappings\GHZ.bin"
 		even
-		incfile	Nem_GHZ_1st,"Graphics - Compressed\8x8 - GHZ1",nem
-		incfile	Nem_GHZ_2nd,"Graphics - Compressed\8x8 - GHZ2",nem
 Blk256_GHZ:	incbin	"256x256 Mappings\GHZ.kos"
 		even
 Blk16_LZ:	incbin	"16x16 Mappings\LZ.bin"
 		even
-		incfile	Nem_LZ,"Graphics - Compressed\8x8 - LZ",nem
 Blk256_LZ:	incbin	"256x256 Mappings\LZ.kos"
 		even
 Blk16_MZ:	incbin	"16x16 Mappings\MZ.bin"
 		even
-		incfile	Nem_MZ,"Graphics - Compressed\8x8 - MZ",nem
 Blk256_MZ:	if Revision=0
 			incbin	"256x256 Mappings\MZ (REV00).kos"
 		else
@@ -994,17 +997,14 @@ Blk256_MZ:	if Revision=0
 		even
 Blk16_SLZ:	incbin	"16x16 Mappings\SLZ.bin"
 		even
-		incfile	Nem_SLZ,"Graphics - Compressed\8x8 - SLZ",nem
 Blk256_SLZ:	incbin	"256x256 Mappings\SLZ.kos"
 		even
 Blk16_SYZ:	incbin	"16x16 Mappings\SYZ.bin"
 		even
-		incfile	Nem_SYZ,"Graphics - Compressed\8x8 - SYZ",nem
 Blk256_SYZ:	incbin	"256x256 Mappings\SYZ.kos"
 		even
 Blk16_SBZ:	incbin	"16x16 Mappings\SBZ.bin"
 		even
-		incfile	Nem_SBZ,"Graphics - Compressed\8x8 - SBZ",nem
 Blk256_SBZ:	if Revision=0
 			incbin	"256x256 Mappings\SBZ (REV00).kos"
 		else
@@ -1296,6 +1296,7 @@ Art_BigRing:	incbin	"Graphics\Giant Ring.bin"
 		even
 
 		include "Pattern Load Cues.asm"
+		include "Includes\KosPLC.asm"
 
 ; ---------------------------------------------------------------------------
 ; Object position index

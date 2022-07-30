@@ -56,18 +56,6 @@ AniArt_Run:
 		dbf	d4,@loop				; repeat for all scripts
 		rts
 
-set_dma_dest:	macros
-		dc.l $40000080+(((\1)&$3FFF)<<16)+(((\1)&$C000)>>14)
-
-set_dma_size:	macros
-		dc.l $93009400+((((\1)>>1)&$FF)<<16)+((((\1)>>1)&$FF00)>>8)
-
-set_dma_src:	macro
-		dc.w $9500+(((\1)>>1)&$FF)
-		dc.w $9600+((((\1)>>1)&$FF00)>>8)
-		dc.w $9700+((((\1)>>1)&$7F0000)>>16)
-		endm
-
 AniArt_GHZ_Script:
 		dc.w 3-1					; number of scripts
 		dc.l @waterfall

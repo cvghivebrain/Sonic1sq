@@ -100,8 +100,6 @@ PLC_GameOver:	plcheader
 ; Pattern load cues - Green Hill
 ; ---------------------------------------------------------------------------
 PLC_GHZ:	plcheader
-		plcm	Nem_GHZ_1st, 0				; GHZ main patterns
-		plcm	Nem_GHZ_2nd, $39A0			; GHZ secondary	patterns
 		plcm	Nem_Stalk, $6B00			; flower stalk
 		plcm	Nem_PurpleRock, $7A00			; purple rock
 		plcm	Nem_Crabmeat, vram_crabmeat		; crabmeat enemy ($8000)
@@ -126,7 +124,6 @@ PLC_GHZ2:	plcheader
 ; Pattern load cues - Labyrinth
 ; ---------------------------------------------------------------------------
 PLC_LZ:		plcheader
-		plcm	Nem_LZ,0				; LZ main patterns
 		plcm	Nem_LzBlock, $3C00			; block
 		plcm	Nem_Sbz3HugeDoor				; blocks ($3E00)
 		plcm	Nem_Splash, $4B20			; waterfalls and splash
@@ -161,7 +158,6 @@ PLC_LZ2:	plcheader
 ; Pattern load cues - Marble
 ; ---------------------------------------------------------------------------
 PLC_MZ:		plcheader
-		plcm	Nem_MZ,0				; MZ main patterns
 		plcm	Nem_MzMetal, $6000			; metal	blocks
 		plcm	Nem_Fireball				; fireballs ($68A0)
 		plcm	Nem_Swing, $7000			; swinging platform
@@ -184,7 +180,6 @@ PLC_MZ2:	plcheader
 ; Pattern load cues - Star Light
 ; ---------------------------------------------------------------------------
 PLC_SLZ:	plcheader
-		plcm	Nem_SLZ,0				; SLZ main patterns
 		plcm	Nem_Bomb, vram_bomb			; bomb enemy ($8000)
 		plcm	Nem_Orbinaut, vram_orbinaut		; orbinaut enemy ($8520)
 		plcm	Nem_Fireball, $9000,SLZ			; fireballs
@@ -207,7 +202,6 @@ PLC_SLZ2:	plcheader
 ; Pattern load cues - Spring Yard
 ; ---------------------------------------------------------------------------
 PLC_SYZ:	plcheader
-		plcm	Nem_SYZ,0				; SYZ main patterns
 		plcm	Nem_Crabmeat, vram_crabmeat		; crabmeat enemy ($8000)
 		plcm	Nem_Buzz, vram_buzz			; buzz bomber enemy ($8880)
 		plcm	Nem_Yadrin, vram_yadrin			; yadrin enemy ($8F60)
@@ -228,7 +222,6 @@ PLC_SYZ2:	plcheader
 ; Pattern load cues - Scrap Brain
 ; ---------------------------------------------------------------------------
 PLC_SBZ:	plcheader
-		plcm	Nem_SBZ,0				; SBZ main patterns
 		plcm	Nem_Stomper, $5800			; moving platform and stomper
 		plcm	Nem_SbzDoorV				; door ($5D00)
 		plcm	Nem_Girder				; girder ($5E00)
@@ -370,8 +363,6 @@ PLC_SSResult:	plcheader
 ; Pattern load cues - ending sequence
 ; ---------------------------------------------------------------------------
 PLC_Ending:	plcheader
-		plcm	Nem_GHZ_1st,0				; GHZ main patterns
-		plcm	Nem_GHZ_2nd, $39A0			; GHZ secondary	patterns
 		plcm	Nem_Stalk, $6B00			; flower stalk
 		plcm	Nem_EndFlower, $7400			; flowers
 		plcm	Nem_EndEm				; emeralds ($78A0)
