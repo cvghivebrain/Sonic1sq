@@ -24,7 +24,7 @@ ost_chopper_y_start:	rs.w 1 ; $30				; original y position (2 bytes)
 Chop_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)
 		move.l	#Map_Chop,ost_mappings(a0)
-		move.w	#tile_Nem_Chopper,ost_tile(a0)
+		move.w	(v_tile_chopper).w,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#4,ost_priority(a0)
 		move.b	#id_col_12x16,ost_col_type(a0)

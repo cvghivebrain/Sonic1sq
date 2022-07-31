@@ -14,15 +14,24 @@ KosPLC:
 		lea	(a2,d0.w),a2				; jump to relevant KPLC
 		move.w	(a2)+,d0				; get length of KPLC
 		bmi.s	@exit					; branch if empty
+		movem.l	d1-d2,-(sp)				; save d1 and d2 to stack
 
 	@loop:
 		lea	($FF0000).l,a1				; RAM buffer start address
 		adda.w	(a2)+,a1				; jump to current position in buffer
 		movea.l	(a2)+,a0				; get pointer for compressed gfx
 		jsr	KosDec					; decompress
+		move.w	(a2)+,d1				; get tile setting
+		moveq	#-1,d2
+		move.w	(a2)+,d2				; get RAM address to save tile setting
+		tst.w	d2
+		beq.s	@skip_tileram				; branch if tile setting shouldn't be saved
+		movea.l	d2,a0
+		move.w	d1,(a0)					; save tile setting to RAM
+	
+	@skip_tileram:
 		dbf	d0,@loop				; repeat for length of KPLC
 		
-		movem.l	d1-d2,-(sp)
 		move.l	#$40000080,d1				; destination = 0 in VRAM
 		move.l	(a2),d2					; read size from end of KPLC
 		lea	KPLC_Src(pc),a2				; source = $FF0000 in RAM
@@ -37,16 +46,25 @@ KPLC_Src:	set_dma_src $FF0000
 
 kplcheader:	macro *
 		\*: equ *
-		kplc_count\@: equ (\*_end-*-2)/6		; number if items in KPLC
+		kplc_count\@: equ (\*_end-*-2)/10		; number if items in KPLC
 		dc.w kplc_count\@-1				; number of loops
 		last_vram: = 0					; start address in VRAM
+		last_label: equs "\*"
 		endm
 
-kplc:		macro gfx
+kplc:		macro gfx,tileram
 		dc.w last_vram					; RAM address to use as buffer
 		dc.l gfx					; pointer to compressed gfx
+		dc.w last_vram/sizeof_cell			; tile setting
+		if narg=1
+		dc.w 0
+		else
+		dc.w tileram&$FFFF				; RAM address to store tile setting
+		endc
 		if ~def(tile_\gfx)
 		tile_\gfx: equ last_vram/sizeof_cell		; remember tile setting for gfx
+		else
+		tile_\gfx\_\last_label: equ last_vram/sizeof_cell
 		endc
 		last_vram: = last_vram+sizeof_\gfx		; update last_vram for next item
 		endm
@@ -69,6 +87,20 @@ KosLoadCues:
 KPLC_GHZ:	kplcheader
 		kplc Kos_GHZ_1st
 		kplc Kos_GHZ_2nd
+		kplc Kos_GhzEdgeWall
+		kplc Kos_Swing,v_tile_swing
+		kplc Kos_Bridge
+		kplc Kos_SpikePole
+		kplc Kos_PurpleRock
+		kplc Kos_Crabmeat,v_tile_crabmeat
+		kplc Kos_Buzz,v_tile_buzzbomber
+		kplc Kos_Chopper,v_tile_chopper
+		kplc Kos_Newtron,v_tile_newtron
+		kplc Kos_Motobug,v_tile_motobug
+		kplc Kos_GhzSmashWall
+		kplc Kos_Spikes,v_tile_spikes
+		kplc Kos_HSpring,v_tile_hspring
+		kplc Kos_VSpring,v_tile_vspring
 	KPLC_GHZ_end:
 		set_dma_size last_vram
 

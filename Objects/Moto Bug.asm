@@ -26,7 +26,7 @@ ost_moto_smoke_time:	rs.b 1 ; $33					; time delay between smoke puffs
 
 Moto_Main:	; Routine 0
 		move.l	#Map_Moto,ost_mappings(a0)
-		move.w	#tile_Nem_Motobug,ost_tile(a0)
+		move.w	(v_tile_motobug).w,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#4,ost_priority(a0)
 		move.b	#$14,ost_displaywidth(a0)

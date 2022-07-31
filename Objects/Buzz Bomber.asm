@@ -27,7 +27,7 @@ ost_buzz_mode:		rs.b 1 ; $34				; current action - 0 = flying; 1 = recently fire
 Buzz_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)
 		move.l	#Map_Buzz,ost_mappings(a0)
-		move.w	#tile_Nem_Buzz,ost_tile(a0)
+		move.w	(v_tile_buzzbomber).w,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#3,ost_priority(a0)
 		move.b	#id_col_24x12,ost_col_type(a0)

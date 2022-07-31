@@ -840,17 +840,14 @@ Eni_SSBg2:	incbin	"Tilemaps\SS Background 2.eni"		; special stage background (ma
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - GHZ stuff
 ; ---------------------------------------------------------------------------
-		incfile Nem_Stalk,"Graphics - Compressed\GHZ Flower Stalk",nem
-		incfile Nem_Swing,"Graphics - Compressed\GHZ Swinging Platform",nem
-		incfile Nem_Bridge,"Graphics - Compressed\GHZ Bridge",nem
+		incfile Kos_Swing,"Graphics Kosinski\GHZ Swinging Platform",kos
+		incfile Kos_Bridge,"Graphics Kosinski\GHZ Bridge",kos
 		incfile Nem_Ball,"Graphics - Compressed\GHZ Giant Ball",nem
-		incfile Nem_Spikes,"Graphics - Compressed\Spikes",nem
-		incfile Nem_SpikePole,"Graphics - Compressed\GHZ Spiked Helix Pole",nem
-		incfile Nem_PurpleRock,"Graphics - Compressed\GHZ Purple Rock",nem
-		incfile Nem_GhzSmashWall,"Graphics - Compressed\GHZ Smashable Wall",nem
-		incfile Nem_GhzEdgeWall,"Graphics - Compressed\GHZ Walls",nem
-		incfile Nem_GhzUnkLog,"Graphics - Compressed\Unused - GHZ Log",nem
-		incfile Nem_GhzUnkBlock,"Graphics - Compressed\Unused - GHZ Block",nem
+		incfile Kos_Spikes,"Graphics Kosinski\Spikes",kos
+		incfile Kos_SpikePole,"Graphics Kosinski\GHZ Spiked Helix Pole",kos
+		incfile Kos_PurpleRock,"Graphics Kosinski\GHZ Purple Rock",kos
+		incfile Kos_GhzSmashWall,"Graphics Kosinski\GHZ Smashable Wall",kos
+		incfile Kos_GhzEdgeWall,"Graphics Kosinski\GHZ Walls",kos
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - LZ stuff
 ; ---------------------------------------------------------------------------
@@ -920,14 +917,14 @@ Eni_SSBg2:	incbin	"Tilemaps\SS Background 2.eni"		; special stage background (ma
 ; Compressed graphics - enemies
 ; ---------------------------------------------------------------------------
 		incfile Nem_BallHog,"Graphics - Compressed\Ball Hog",nem
-		incfile Nem_Crabmeat,"Graphics - Compressed\Crabmeat",nem
-		incfile Nem_Buzz,"Graphics - Compressed\Buzz Bomber",nem
+		incfile Kos_Crabmeat,"Graphics Kosinski\Crabmeat",kos
+		incfile Kos_Buzz,"Graphics Kosinski\Buzz Bomber",kos
 		incfile Nem_Burrobot,"Graphics - Compressed\Burrobot",nem
-		incfile Nem_Chopper,"Graphics - Compressed\Chopper",nem
+		incfile Kos_Chopper,"Graphics Kosinski\Chopper",kos
 		incfile Nem_Jaws,"Graphics - Compressed\Jaws",nem
 		incfile Nem_Roller,"Graphics - Compressed\Roller",nem
-		incfile Nem_Motobug,"Graphics - Compressed\Motobug",nem
-		incfile Nem_Newtron,"Graphics - Compressed\Newtron",nem
+		incfile Kos_Motobug,"Graphics Kosinski\Motobug",kos
+		incfile Kos_Newtron,"Graphics Kosinski\Newtron",kos
 		incfile Nem_Yadrin,"Graphics - Compressed\Yadrin",nem
 		incfile Nem_Batbrain,"Graphics - Compressed\Batbrain",nem
 		incfile Nem_Bomb,"Graphics - Compressed\Bomb Enemy",nem
@@ -948,8 +945,8 @@ Eni_SSBg2:	incbin	"Tilemaps\SS Background 2.eni"		; special stage background (ma
 		incfile Nem_Explode,"Graphics - Compressed\Explosion",nem
 		incfile Nem_Points,"Graphics - Compressed\Points",nem
 		incfile Nem_GameOver,"Graphics - Compressed\Game Over",nem
-		incfile Nem_HSpring,"Graphics - Compressed\Spring Horizontal",nem
-		incfile Nem_VSpring,"Graphics - Compressed\Spring Vertical",nem
+		incfile Kos_HSpring,"Graphics Kosinski\Spring Horizontal",kos
+		incfile Kos_VSpring,"Graphics Kosinski\Spring Vertical",kos
 		incfile Nem_SignPost,"Graphics - Compressed\Signpost",nem
 		incfile Nem_Lamp,"Graphics - Compressed\Lamppost",nem
 		incfile Nem_BigFlash,"Graphics - Compressed\Giant Ring Flash",nem

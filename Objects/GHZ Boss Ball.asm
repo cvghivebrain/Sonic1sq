@@ -52,7 +52,7 @@ GBall_Main:	; Routine 0
 		move.l	#BossBall,ost_id(a1)			; load chain link object
 		move.b	#id_GBall_Link,ost_routine(a1)
 		move.l	#Map_Swing_GHZ,ost_mappings(a1)
-		move.w	#tile_Nem_Swing,ost_tile(a1)
+		move.w	(v_tile_swing).w,ost_tile(a1)
 		move.b	#id_frame_swing_chain,ost_frame(a1)
 		addq.b	#1,ost_subtype(a0)			; increment parent's subtype (ends up being 5)
 
@@ -71,7 +71,7 @@ GBall_Main:	; Routine 0
 	@fail:
 		move.b	#id_GBall_Ball,ost_routine(a1)
 		move.l	#Map_GBall,ost_mappings(a1)		; replace last object with ball
-		move.w	#tile_Nem_Ball+tile_pal3,ost_tile(a1)
+		move.w	#0+tile_pal3,ost_tile(a1)
 		move.b	#id_frame_ball_check1,ost_frame(a1)
 		move.b	#5,ost_priority(a1)
 		move.b	#id_col_20x20+id_col_hurt,ost_col_type(a1) ; make object hurt Sonic

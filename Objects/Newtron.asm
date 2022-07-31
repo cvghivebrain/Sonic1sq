@@ -24,7 +24,7 @@ ost_newtron_fire_flag:	rs.b 1 ; $32				; set to 1 after newtron fires a missile
 Newt_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Newt_Action next
 		move.l	#Map_Newt,ost_mappings(a0)
-		move.w	#tile_Nem_Newtron,ost_tile(a0)
+		move.w	(v_tile_newtron).w,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#4,ost_priority(a0)
 		move.b	#$14,ost_displaywidth(a0)
@@ -65,7 +65,7 @@ Newt_ChkDist:
 		tst.b	ost_subtype(a0)				; check	object type
 		beq.s	@istype00				; if type is 00, branch
 
-		move.w	#tile_Nem_Newtron+tile_pal2,ost_tile(a0)
+		add.w	#tile_pal2,ost_tile(a0)
 		move.b	#id_Newt_Type1,ost_routine2(a0)		; goto Newt_Type1 next
 		move.b	#id_ani_newt_firing,ost_anim(a0)	; use different animation
 

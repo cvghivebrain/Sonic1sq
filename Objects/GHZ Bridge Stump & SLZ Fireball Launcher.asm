@@ -54,6 +54,6 @@ Scen_Values_2:	dc.l Map_Scen
 		dc.b id_frame_scen_cannon, 8, 2, 0
 		
 Scen_Values_3:	dc.l Map_Bri
-		dc.w tile_Nem_Bridge+tile_pal3
+		dc.w tile_Kos_Bridge+tile_pal3
 		dc.b id_frame_bridge_stump, $10, 1, 0
 		even

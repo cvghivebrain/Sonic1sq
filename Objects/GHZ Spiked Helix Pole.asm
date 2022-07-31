@@ -27,7 +27,7 @@ ost_helix_frame:	rs.b 1 ; $3E				; start frame (different for each spike)
 Hel_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Hel_Action next
 		move.l	#Map_Hel,ost_mappings(a0)
-		move.w	#tile_Nem_SpikePole+tile_pal3,ost_tile(a0)
+		move.w	#tile_Kos_SpikePole+tile_pal3,ost_tile(a0)
 		move.b	#status_xflip+status_yflip+status_jump,ost_status(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#3,ost_priority(a0)
@@ -61,7 +61,7 @@ Hel_Main:	; Routine 0
 		move.w	d2,ost_y_pos(a1)
 		move.w	d3,ost_x_pos(a1)
 		move.l	ost_mappings(a0),ost_mappings(a1)
-		move.w	#tile_Nem_SpikePole+tile_pal3,ost_tile(a1)
+		move.w	#tile_Kos_SpikePole+tile_pal3,ost_tile(a1)
 		move.b	#render_rel,ost_render(a1)
 		move.b	#3,ost_priority(a1)
 		move.b	#8,ost_displaywidth(a1)

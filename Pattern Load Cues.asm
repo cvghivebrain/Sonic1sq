@@ -100,25 +100,10 @@ PLC_GameOver:	plcheader
 ; Pattern load cues - Green Hill
 ; ---------------------------------------------------------------------------
 PLC_GHZ:	plcheader
-		plcm	Nem_Stalk, $6B00			; flower stalk
-		plcm	Nem_PurpleRock, $7A00			; purple rock
-		plcm	Nem_Crabmeat, vram_crabmeat		; crabmeat enemy ($8000)
-		plcm	Nem_Buzz, vram_buzz			; buzz bomber enemy ($8880)
-		plcm	Nem_Chopper				; chopper enemy ($8F60)
-		plcm	Nem_Newtron				; newtron enemy ($9360)
-		plcm	Nem_Motobug				; motobug enemy ($9E00)
-		plcm	Nem_Spikes, vram_spikes			; spikes ($A360)
-		plcm	Nem_HSpring, vram_hspring		; horizontal spring ($A460)
-		plcm	Nem_VSpring, vram_vspring		; vertical spring ($A660)
 	PLC_GHZ_end:
 
 PLC_GHZ2:	plcheader
-		plcm	Nem_Swing, $7000			; swinging platform
-		plcm	Nem_Bridge				; bridge ($71C0)
-		plcm	Nem_SpikePole				; spiked pole ($7300)
-		plcm	Nem_Ball				; giant	ball ($7540)
-		plcm	Nem_GhzSmashWall, $A1E0			; breakable wall
-		plcm	Nem_GhzEdgeWall, $6980			; normal wall
+		;plcm	Nem_Ball				; giant	ball ($7540)
 	PLC_GHZ2_end:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - Labyrinth
@@ -150,9 +135,9 @@ PLC_LZ2:	plcheader
 		plcm	Nem_Jaws				; jaws enemy ($90C0)
 		plcm	Nem_Button, vram_button		; button ($A1E0)
 		plcm	Nem_Cork, $A000				; cork block
-		plcm	Nem_Spikes, vram_spikes			; spikes ($A360)
-		plcm	Nem_HSpring, vram_hspring		; horizontal spring ($A460)
-		plcm	Nem_VSpring, vram_vspring		; vertical spring ($A660)
+		;plcm	Nem_Spikes, vram_spikes			; spikes ($A360)
+		;plcm	Nem_HSpring, vram_hspring		; horizontal spring ($A460)
+		;plcm	Nem_VSpring, vram_vspring		; vertical spring ($A660)
 	PLC_LZ2_end:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - Marble
@@ -160,10 +145,10 @@ PLC_LZ2:	plcheader
 PLC_MZ:		plcheader
 		plcm	Nem_MzMetal, $6000			; metal	blocks
 		plcm	Nem_Fireball				; fireballs ($68A0)
-		plcm	Nem_Swing, $7000			; swinging platform
-		plcm	Nem_MzGlass				; green	glassy block ($71C0)
+		;plcm	Nem_Swing, $7000			; swinging platform
+		plcm	Nem_MzGlass,$71C0
 		plcm	Nem_Lava				; lava ($7500)
-		plcm	Nem_Buzz, vram_buzz			; buzz bomber enemy ($8880)
+		;plcm	Nem_Buzz, vram_buzz			; buzz bomber enemy ($8880)
 		plcm	Nem_Yadrin, vram_yadrin			; yadrin enemy ($8F60)
 		plcm	Nem_Batbrain				; basaran enemy ($9700)
 		plcm	Nem_Cater, vram_cater			; caterkiller enemy ($9FE0)
@@ -171,9 +156,9 @@ PLC_MZ:		plcheader
 
 PLC_MZ2:	plcheader
 		plcm	Nem_MzButton, $A260			; button
-		plcm	Nem_Spikes, vram_spikes			; spikes ($A360)
-		plcm	Nem_HSpring, vram_hspring		; horizontal spring ($A460)
-		plcm	Nem_VSpring, vram_vspring		; vertical spring ($A660)
+		;plcm	Nem_Spikes, vram_spikes			; spikes ($A360)
+		;plcm	Nem_HSpring, vram_hspring		; horizontal spring ($A460)
+		;plcm	Nem_VSpring, vram_vspring		; vertical spring ($A660)
 		plcm	Nem_MzBlock, $5700			; green	stone block
 	PLC_MZ2_end:
 ; ---------------------------------------------------------------------------
@@ -185,9 +170,9 @@ PLC_SLZ:	plcheader
 		plcm	Nem_Fireball, $9000,SLZ			; fireballs
 		plcm	Nem_SlzBlock, $9C00			; block
 		plcm	Nem_SlzWall, $A260			; breakable wall
-		plcm	Nem_Spikes, vram_spikes			; spikes ($A360)
-		plcm	Nem_HSpring, vram_hspring		; horizontal spring ($A460)
-		plcm	Nem_VSpring, vram_vspring		; vertical spring ($A660)
+		;plcm	Nem_Spikes, vram_spikes			; spikes ($A360)
+		;plcm	Nem_HSpring, vram_hspring		; horizontal spring ($A460)
+		;plcm	Nem_VSpring, vram_vspring		; vertical spring ($A660)
 	PLC_SLZ_end:
 
 PLC_SLZ2:	plcheader
@@ -202,8 +187,8 @@ PLC_SLZ2:	plcheader
 ; Pattern load cues - Spring Yard
 ; ---------------------------------------------------------------------------
 PLC_SYZ:	plcheader
-		plcm	Nem_Crabmeat, vram_crabmeat		; crabmeat enemy ($8000)
-		plcm	Nem_Buzz, vram_buzz			; buzz bomber enemy ($8880)
+		;plcm	Nem_Crabmeat, vram_crabmeat		; crabmeat enemy ($8000)
+		;plcm	Nem_Buzz, vram_buzz			; buzz bomber enemy ($8880)
 		plcm	Nem_Yadrin, vram_yadrin			; yadrin enemy ($8F60)
 		plcm	Nem_Roller				; roller enemy ($9700)
 	PLC_SYZ_end:
@@ -214,9 +199,9 @@ PLC_SYZ2:	plcheader
 		plcm	Nem_SmallSpike				; small	spikeball ($7740)
 		plcm	Nem_Cater, vram_cater			; caterkiller enemy ($9FE0)
 		plcm	Nem_Button, vram_button		; button ($A1E0)
-		plcm	Nem_Spikes, vram_spikes			; spikes ($A360)
-		plcm	Nem_HSpring, vram_hspring		; horizontal spring ($A460)
-		plcm	Nem_VSpring, vram_vspring		; vertical spring ($A660)
+		;plcm	Nem_Spikes, vram_spikes			; spikes ($A360)
+		;plcm	Nem_HSpring, vram_hspring		; horizontal spring ($A460)
+		;plcm	Nem_VSpring, vram_vspring		; vertical spring ($A660)
 	PLC_SYZ2_end:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - Scrap Brain
@@ -246,9 +231,9 @@ PLC_SBZ2:	plcheader
 		plcm	Nem_SbzFloor, $7F20			; collapsing floor
 		plcm	Nem_SpinPlatform, $9BE0			; small	spinning platform
 		plcm	Nem_Button, vram_button		; button ($A1E0)
-		plcm	Nem_Spikes, vram_spikes			; spikes ($A360)
-		plcm	Nem_HSpring, vram_hspring		; horizontal spring ($A460)
-		plcm	Nem_VSpring, vram_vspring		; vertical spring ($A660)
+		;plcm	Nem_Spikes, vram_spikes			; spikes ($A360)
+		;plcm	Nem_HSpring, vram_hspring		; horizontal spring ($A460)
+		;plcm	Nem_VSpring, vram_vspring		; vertical spring ($A660)
 	PLC_SBZ2_end:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - title card
@@ -363,7 +348,6 @@ PLC_SSResult:	plcheader
 ; Pattern load cues - ending sequence
 ; ---------------------------------------------------------------------------
 PLC_Ending:	plcheader
-		plcm	Nem_Stalk, $6B00			; flower stalk
 		plcm	Nem_EndFlower, $7400			; flowers
 		plcm	Nem_EndEm				; emeralds ($78A0)
 		plcm	Nem_EndSonic				; Sonic ($7C20)

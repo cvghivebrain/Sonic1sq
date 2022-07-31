@@ -30,7 +30,7 @@ Crab_Main:	; Routine 0
 		move.b	#$10,ost_height(a0)
 		move.b	#8,ost_width(a0)
 		move.l	#Map_Crab,ost_mappings(a0)
-		move.w	#tile_Nem_Crabmeat,ost_tile(a0)
+		move.w	(v_tile_crabmeat).w,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#3,ost_priority(a0)
 		move.b	#id_col_16x16,ost_col_type(a0)
@@ -195,7 +195,7 @@ Crab_Delete:	; Routine 4
 Crab_BallMain:	; Routine 6
 		addq.b	#2,ost_routine(a0)			; goto Crab_BallMove next
 		move.l	#Map_Crab,ost_mappings(a0)
-		move.w	#tile_Nem_Crabmeat,ost_tile(a0)
+		move.w	(v_tile_crabmeat).w,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#3,ost_priority(a0)
 		move.b	#id_col_6x6+id_col_hurt,ost_col_type(a0)

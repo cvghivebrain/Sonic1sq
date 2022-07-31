@@ -35,7 +35,8 @@ ost_swing_radius:	rs.b 1 ; $3C				; distance of chainlink from anchor
 Swing_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Swing_SetSolid next
 		move.l	#Map_Swing_GHZ,ost_mappings(a0)		; GHZ and MZ specific code
-		move.w	#tile_Nem_Swing+tile_pal3,ost_tile(a0)
+		move.w	(v_tile_swing).w,ost_tile(a0)
+		add.w	#tile_pal3,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#3,ost_priority(a0)
 		move.b	#$18,ost_displaywidth(a0)
@@ -119,7 +120,7 @@ Swing_Main:	; Routine 0
 		beq.s	@not1x					; if not, branch
 
 		move.l	#Map_GBall,ost_mappings(a0)		; use GHZ ball mappings
-		move.w	#tile_Nem_Ball+tile_pal3,ost_tile(a0)
+		move.w	#0+tile_pal3,ost_tile(a0)
 		move.b	#id_frame_ball_check1,ost_frame(a0)
 		move.b	#2,ost_priority(a0)
 		move.b	#id_col_20x20+id_col_hurt,ost_col_type(a0) ; make object hurt when touched

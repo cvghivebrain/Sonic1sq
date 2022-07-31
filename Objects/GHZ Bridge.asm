@@ -30,7 +30,7 @@ ost_bridge_current_log:	rs.b 1 ; $3F				; log Sonic is currently standing on (le
 Bri_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Bri_Action next
 		move.l	#Map_Bri,ost_mappings(a0)
-		move.w	#tile_Nem_Bridge+tile_pal3,ost_tile(a0)
+		move.w	#tile_Kos_Bridge+tile_pal3,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#3,ost_priority(a0)
 		move.b	#$80,ost_displaywidth(a0)
@@ -78,7 +78,7 @@ Bri_Main:	; Routine 0
 		move.w	d2,ost_bridge_y_start(a1)
 		move.w	d3,ost_x_pos(a1)
 		move.l	#Map_Bri,ost_mappings(a1)
-		move.w	#tile_Nem_Bridge+tile_pal3,ost_tile(a1)
+		move.w	#tile_Kos_Bridge+tile_pal3,ost_tile(a1)
 		move.b	#render_rel,ost_render(a1)
 		move.b	#3,ost_priority(a1)
 		move.b	#8,ost_displaywidth(a1)
