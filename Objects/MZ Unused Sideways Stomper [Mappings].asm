@@ -22,9 +22,9 @@ frame_mash_block:
 		
 frame_mash_spikes:
 		spritemap					; three spikes
-		piece	-$10, -$18, 4x1, $21B, yflip
-		piece	-$10, -4, 4x1, $21B, yflip
-		piece	-$10, $10, 4x1, $21B, yflip
+		piece	-$10, -$18, 4x1, 0, yflip
+		piece	-$10, -4, 4x1, 0, yflip
+		piece	-$10, $10, 4x1, 0, yflip
 		endsprite
 		
 frame_mash_wallbracket:

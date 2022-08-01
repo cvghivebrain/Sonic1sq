@@ -23,7 +23,8 @@ ost_bat_sonic_y_pos:	rs.w 1 ; $36				; Sonic's y position (2 bytes)
 Bat_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Bat_Action next
 		move.l	#Map_Bat,ost_mappings(a0)
-		move.w	#tile_Nem_Batbrain+tile_hi,ost_tile(a0)
+		move.w	(v_tile_batbrain).w,ost_tile(a0)
+		add.w	#tile_hi,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#$C,ost_height(a0)
 		move.b	#2,ost_priority(a0)

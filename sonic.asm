@@ -558,7 +558,6 @@ LGrass_Coll_Sloped:
 		include "Objects\MZ Invisible Lava Tag.asm"	; LavaTag
 		include "Objects\MZ Invisible Lava Tag [Mappings].asm" ; Map_LTag
 		include "Objects\MZ Lava Geyser [Mappings].asm"	; Map_Geyser
-		include "Objects\MZ Lava Wall [Mappings].asm"	; Map_LWall
 
 		include "Objects\Moto Bug.asm"			; MotoBug
 		include "Objects\_DespawnObject.asm"
@@ -870,14 +869,12 @@ Eni_SSBg2:	incbin	"Tilemaps\SS Background 2.eni"		; special stage background (ma
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - MZ stuff
 ; ---------------------------------------------------------------------------
-		incfile Nem_MzMetal,"Graphics - Compressed\MZ Metal Blocks",nem
-		incfile Nem_MzButton,"Graphics - Compressed\MZ Button",nem
-		incfile Nem_MzGlass,"Graphics - Compressed\MZ Green Glass Block",nem
-		incfile Nem_Fireball,"Graphics - Compressed\Fireballs",nem
-		incfile Nem_Lava,"Graphics - Compressed\MZ Lava",nem
-		incfile Nem_MzBlock,"Graphics - Compressed\MZ Green Pushable Block",nem
-		incfile Nem_MzUnkBlock,"Graphics - Compressed\Unused - MZ Background",nem
-		incfile Nem_MzUnkGrass,"Graphics - Compressed\Unused - MZ Grass",nem
+		incfile Kos_MzMetal,"Graphics Kosinski\MZ Metal Blocks",kos
+		incfile Kos_MzButton,"Graphics Kosinski\MZ Button",kos
+		incfile Kos_MzGlass,"Graphics Kosinski\MZ Green Glass Block",kos
+		incfile Kos_Fireball,"Graphics Kosinski\Fireballs",kos
+		incfile Kos_Lava,"Graphics Kosinski\MZ Lava",kos
+		incfile Kos_MzBlock,"Graphics Kosinski\MZ Green Pushable Block",kos
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - SLZ stuff
 ; ---------------------------------------------------------------------------
@@ -926,10 +923,10 @@ Eni_SSBg2:	incbin	"Tilemaps\SS Background 2.eni"		; special stage background (ma
 		incfile Kos_Motobug,"Graphics Kosinski\Motobug",kos
 		incfile Kos_Newtron,"Graphics Kosinski\Newtron",kos
 		incfile Nem_Yadrin,"Graphics - Compressed\Yadrin",nem
-		incfile Nem_Batbrain,"Graphics - Compressed\Batbrain",nem
+		incfile Kos_Batbrain,"Graphics Kosinski\Batbrain",kos
 		incfile Nem_Bomb,"Graphics - Compressed\Bomb Enemy",nem
 		incfile Nem_Orbinaut,"Graphics - Compressed\Orbinaut",nem
-		incfile Nem_Cater,"Graphics - Compressed\Caterkiller",nem
+		incfile Kos_Cater,"Graphics Kosinski\Caterkiller",kos
 		incfile Nem_Splats,"Graphics - Compressed\Unused - Splats Enemy",nem
 		incfile Nem_UnkExplode,"Graphics - Compressed\Unused - Explosion",nem
 ; ---------------------------------------------------------------------------
@@ -1294,6 +1291,7 @@ Art_BigRing:	incbin	"Graphics\Giant Ring.bin"
 
 		include "Pattern Load Cues.asm"
 		include "Includes\KosPLC.asm"
+		include "Objects\MZ Lava Wall [Mappings].asm"	; Map_LWall
 
 ; ---------------------------------------------------------------------------
 ; Object position index

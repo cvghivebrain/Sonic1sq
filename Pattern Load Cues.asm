@@ -143,23 +143,9 @@ PLC_LZ2:	plcheader
 ; Pattern load cues - Marble
 ; ---------------------------------------------------------------------------
 PLC_MZ:		plcheader
-		plcm	Nem_MzMetal, $6000			; metal	blocks
-		plcm	Nem_Fireball				; fireballs ($68A0)
-		;plcm	Nem_Swing, $7000			; swinging platform
-		plcm	Nem_MzGlass,$71C0
-		plcm	Nem_Lava				; lava ($7500)
-		;plcm	Nem_Buzz, vram_buzz			; buzz bomber enemy ($8880)
-		plcm	Nem_Yadrin, vram_yadrin			; yadrin enemy ($8F60)
-		plcm	Nem_Batbrain				; basaran enemy ($9700)
-		plcm	Nem_Cater, vram_cater			; caterkiller enemy ($9FE0)
 	PLC_MZ_end:
 
 PLC_MZ2:	plcheader
-		plcm	Nem_MzButton, $A260			; button
-		;plcm	Nem_Spikes, vram_spikes			; spikes ($A360)
-		;plcm	Nem_HSpring, vram_hspring		; horizontal spring ($A460)
-		;plcm	Nem_VSpring, vram_vspring		; vertical spring ($A660)
-		plcm	Nem_MzBlock, $5700			; green	stone block
 	PLC_MZ2_end:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - Star Light
@@ -167,7 +153,7 @@ PLC_MZ2:	plcheader
 PLC_SLZ:	plcheader
 		plcm	Nem_Bomb, vram_bomb			; bomb enemy ($8000)
 		plcm	Nem_Orbinaut, vram_orbinaut		; orbinaut enemy ($8520)
-		plcm	Nem_Fireball, $9000,SLZ			; fireballs
+		;plcm	Nem_Fireball, $9000,SLZ			; fireballs
 		plcm	Nem_SlzBlock, $9C00			; block
 		plcm	Nem_SlzWall, $A260			; breakable wall
 		;plcm	Nem_Spikes, vram_spikes			; spikes ($A360)
@@ -197,7 +183,6 @@ PLC_SYZ2:	plcheader
 		plcm	Nem_Bumper, $7000			; bumper
 		plcm	Nem_BigSpike				; large	spikeball ($72C0)
 		plcm	Nem_SmallSpike				; small	spikeball ($7740)
-		plcm	Nem_Cater, vram_cater			; caterkiller enemy ($9FE0)
 		plcm	Nem_Button, vram_button		; button ($A1E0)
 		;plcm	Nem_Spikes, vram_spikes			; spikes ($A360)
 		;plcm	Nem_HSpring, vram_hspring		; horizontal spring ($A460)
@@ -221,7 +206,7 @@ PLC_SBZ:	plcheader
 	PLC_SBZ_end:
 
 PLC_SBZ2:	plcheader
-		plcm	Nem_Cater, $5600, SBZ			; caterkiller enemy
+		;plcm	Nem_Cater, $5600, SBZ			; caterkiller enemy
 		plcm	Nem_Bomb, vram_bomb			; bomb enemy ($8000)
 		plcm	Nem_Orbinaut, vram_orbinaut		; orbinaut enemy ($8520)
 		plcm	Nem_SlideFloor, $8C00			; floor	that slides away

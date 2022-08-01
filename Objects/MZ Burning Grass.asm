@@ -30,7 +30,7 @@ ost_burn_sink:		rs.w 1 ; $3C				; pixels the platform has sunk when stood on
 GFire_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto GFire_Spread next
 		move.l	#Map_Fire,ost_mappings(a0)
-		move.w	#tile_Nem_Fireball,ost_tile(a0)
+		move.w	(v_tile_fireball).w,ost_tile(a0)
 		move.w	ost_x_pos(a0),ost_burn_x_start(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#1,ost_priority(a0)

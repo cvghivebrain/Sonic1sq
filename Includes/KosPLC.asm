@@ -106,6 +106,19 @@ KPLC_GHZ:	kplcheader
 
 KPLC_MZ:	kplcheader
 		kplc Kos_MZ
+		kplc Kos_MzBlock
+		kplc Kos_Swing,v_tile_swing
+		kplc Kos_MzMetal
+		kplc Kos_Fireball,v_tile_fireball
+		kplc Kos_MzGlass
+		kplc Kos_Lava
+		kplc Kos_Buzz,v_tile_buzzbomber
+		kplc Kos_Batbrain,v_tile_batbrain
+		kplc Kos_Cater,v_tile_caterkiller
+		kplc Kos_MzButton,v_tile_button
+		kplc Kos_Spikes,v_tile_spikes
+		kplc Kos_HSpring,v_tile_hspring
+		kplc Kos_VSpring,v_tile_vspring
 	KPLC_MZ_end:
 		set_dma_size last_vram
 

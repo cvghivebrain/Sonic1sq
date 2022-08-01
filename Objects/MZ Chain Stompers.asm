@@ -86,7 +86,7 @@ CStom_MakeStomper:
 		add.w	ost_y_pos(a0),d0			; add to initial y position
 		move.w	d0,ost_y_pos(a1)
 		move.l	#Map_CStom,ost_mappings(a1)
-		move.w	#tile_Nem_MzMetal,ost_tile(a1)
+		move.w	#tile_Kos_MzMetal,ost_tile(a1)
 		move.b	#render_rel,ost_render(a1)
 		move.w	ost_y_pos(a1),ost_cstomp_y_start(a1)
 		move.b	ost_subtype(a0),ost_subtype(a1)
@@ -103,6 +103,7 @@ CStom_MakeStomper:
 		beq.s	CStom_MakeStomper			; if yes, branch
 		move.b	#$38,ost_displaywidth(a1)
 		move.b	#id_col_40x16+id_col_hurt,ost_col_type(a1) ; make spikes harmful
+		move.w	(v_tile_spikes).w,ost_tile(a1)
 		addq.w	#1,d1
 
 	@not_spikes:

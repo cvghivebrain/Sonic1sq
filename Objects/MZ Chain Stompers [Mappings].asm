@@ -25,11 +25,11 @@ frame_cstomp_wideblock:
 		
 frame_cstomp_spikes:
 		spritemap
-		piece	-$2C, -$10, 1x4, $21F, yflip
-		piece	-$18, -$10, 1x4, $21F, yflip
-		piece	-4, -$10, 1x4, $21F, yflip
-		piece	$10, -$10, 1x4, $21F, yflip
-		piece	$24, -$10, 1x4, $21F, yflip
+		piece	-$2C, -$10, 1x4, 4, yflip
+		piece	-$18, -$10, 1x4, 4, yflip
+		piece	-4, -$10, 1x4, 4, yflip
+		piece	$10, -$10, 1x4, 4, yflip
+		piece	$24, -$10, 1x4, 4, yflip
 		endsprite
 		
 frame_cstomp_ceiling:

@@ -46,12 +46,8 @@ Cat_Main:	; Routine 0
 		clr.w	ost_y_vel(a0)
 		addq.b	#2,ost_routine(a0)			; goto Cat_Head next
 		move.l	#Map_Cat,ost_mappings(a0)
-		move.w	#tile_Nem_Cater_SBZ+tile_pal2,ost_tile(a0)
-		cmpi.b	#id_SBZ,(v_zone).w
-		beq.s	@isscrapbrain				; if zone is SBZ, branch
-		move.w	#tile_Nem_Cater+tile_pal2,ost_tile(a0)	; MZ specific code
-
-	@isscrapbrain:
+		move.w	(v_tile_caterkiller).w,ost_tile(a0)
+		add.w	#tile_pal2,ost_tile(a0)
 		andi.b	#render_xflip+render_yflip,ost_render(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.b	ost_render(a0),ost_status(a0)

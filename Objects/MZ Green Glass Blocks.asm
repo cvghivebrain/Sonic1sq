@@ -70,7 +70,7 @@ Glass_Main:	; Routine 0
 		add.w	ost_y_pos(a0),d0
 		move.w	d0,ost_y_pos(a1)
 		move.l	#Map_Glass,ost_mappings(a1)
-		move.w	#tile_Nem_MzGlass+tile_pal3+tile_hi,ost_tile(a1)
+		move.w	#tile_Kos_MzGlass+tile_pal3+tile_hi,ost_tile(a1)
 		move.b	#render_rel,ost_render(a1)
 		move.w	ost_y_pos(a1),ost_glass_y_start(a1)
 		move.b	ost_subtype(a0),ost_subtype(a1)

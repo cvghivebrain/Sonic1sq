@@ -32,7 +32,7 @@ ost_gmake_parent:	rs.l 1 ; $3C				; address of OST of parent object (4 bytes)
 GMake_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto GMake_Wait next
 		move.l	#Map_Geyser,ost_mappings(a0)
-		move.w	#tile_Nem_Lava+tile_pal4+tile_hi,ost_tile(a0)
+		move.w	#tile_Kos_Lava+tile_pal4+tile_hi,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#1,ost_priority(a0)
 		move.b	#$38,ost_displaywidth(a0)

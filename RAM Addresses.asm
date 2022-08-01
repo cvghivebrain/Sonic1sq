@@ -209,6 +209,10 @@ v_tile_motobug			rs.w 1
 v_tile_spikes			rs.w 1
 v_tile_hspring			rs.w 1
 v_tile_vspring			rs.w 1
+v_tile_fireball			rs.w 1
+v_tile_batbrain			rs.w 1
+v_tile_caterkiller		rs.w 1
+v_tile_button			rs.w 1
 v_palcycle_ss_num:		rs.w 1 ; $FFFFF79A ; palette cycling in Special Stage - current index number
 v_palcycle_ss_time:		rs.w 1 ; $FFFFF79C ; palette cycling in Special Stage - time until next change
 v_palcycle_ss_unused:		rs.w 1 ; $FFFFF79E ; palette cycling in Special Stage - unused offset value, always 0

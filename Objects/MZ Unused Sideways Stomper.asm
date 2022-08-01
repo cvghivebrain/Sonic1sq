@@ -62,7 +62,7 @@ SStom_Main:	; Routine 0
 		add.w	ost_x_pos(a0),d0			; add to actual x pos
 		move.w	d0,ost_x_pos(a1)
 		move.l	#Map_SStom,ost_mappings(a1)
-		move.w	#tile_Nem_MzMetal,ost_tile(a1)
+		move.w	#tile_Kos_MzMetal,ost_tile(a1)
 		move.b	#render_rel,ost_render(a1)
 		move.w	ost_x_pos(a1),ost_mash_x_start(a1)
 		move.w	ost_x_pos(a0),ost_mash_y_start(a1)
@@ -73,6 +73,7 @@ SStom_Main:	; Routine 0
 		cmpi.b	#id_frame_mash_spikes,(a2)		; is subobject spikes?
 		bne.s	@notspikes				; if not, branch
 		move.b	#id_col_16x24+id_col_hurt,ost_col_type(a1) ; use harmful collision type
+		move.w	(v_tile_spikes).w,ost_tile(a1)
 
 	@notspikes:
 		move.b	(a2)+,ost_frame(a1)

@@ -22,7 +22,8 @@ But_Index:	index *,,2
 But_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto But_Action next
 		move.l	#Map_But,ost_mappings(a0)
-		move.w	#tile_Nem_MzButton+tile_pal3,ost_tile(a0) ; MZ specific code
+		move.w	(v_tile_button).w,ost_tile(a0)
+		add.w	#tile_pal3,ost_tile(a0)
 		cmpi.b	#id_MZ,(v_zone).w			; is level Marble Zone?
 		beq.s	@is_marble				; if yes, branch
 

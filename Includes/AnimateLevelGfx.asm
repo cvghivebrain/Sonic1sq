@@ -100,7 +100,7 @@ AniArt_MZ_Script:
 		dc.l @torch
 	@lava:
 		dc.w 3						; frame count
-		set_dma_dest $5C40				; VRAM destination
+		set_dma_dest $55A0				; VRAM destination
 		set_dma_size 8*sizeof_cell			; size
 		dc.w 19						; duration
 		set_dma_src Art_MzLava1				; ROM source
@@ -110,7 +110,7 @@ AniArt_MZ_Script:
 		set_dma_src Art_MzLava1+(8*sizeof_cell*2)
 	@torch:
 		dc.w 4
-		set_dma_dest $5E40
+		set_dma_dest $52E0
 		set_dma_size 6*sizeof_cell
 		dc.w 7
 		set_dma_src Art_MzTorch
@@ -138,7 +138,7 @@ tilecount:	= 4						; 4 per column, 16 total
 		lea	(Art_MzLava2).l,a4			; magma gfx
 		ror.w	#7,d0					; multiply frame num by $200
 		adda.w	d0,a4					; jump to appropriate tile
-		locVRAM	$5A40
+		locVRAM	$53A0
 		moveq	#0,d3
 		move.w	(v_levelani_2_frame).w,d3
 		addq.w	#1,(v_levelani_2_frame).w		; increment frame counter (unused)

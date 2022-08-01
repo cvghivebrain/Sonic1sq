@@ -264,21 +264,20 @@ DebugList_MZ:
 ;			mappings	object		subtype	frame	VRAM setting
 		dbug	Map_Ring,	Rings,		0,	0,	tile_Nem_Ring+tile_pal2
 		dbug	Map_Monitor,	Monitor,	0,	0,	tile_Nem_Monitors
-		dbug	Map_Buzz,	BuzzBomber,	0,	0,	tile_Kos_Buzz
-		dbug	Map_Spike,	Spikes,		type_spike_3up+type_spike_still,	0,	tile_Kos_Spikes
-		dbug	Map_Spring,	Springs,	type_spring_red+type_spring_up,	0,	tile_Kos_HSpring
-		dbug	Map_Fire,	FireMaker,	0,	0,	tile_Nem_Fireball
+		dbug	Map_Buzz,	BuzzBomber,	0,	0,	tile_Kos_Buzz_KPLC_MZ
+		dbug	Map_Spike,	Spikes,		type_spike_3up+type_spike_still,	0,	tile_Kos_Spikes_KPLC_MZ
+		dbug	Map_Spring,	Springs,	type_spring_red+type_spring_up,	0,	tile_Kos_HSpring_KPLC_MZ
+		dbug	Map_Fire,	FireMaker,	0,	0,	tile_Kos_Fireball
 		dbug	Map_Brick,	MarbleBrick,	type_brick_still,	0,	0+tile_pal3
-		dbug	Map_Geyser,	GeyserMaker,	0,	0,	tile_Nem_Lava+tile_pal4
-		dbug	Map_LWall,	LavaWall,	0,	0,	tile_Nem_Lava+tile_pal4
-		dbug	Map_Push,	PushBlock,	type_pblock_single,	0,	tile_Nem_MzBlock+tile_pal3
-		dbug	Map_Yad,	Yadrin,		0,	0,	tile_Nem_Yadrin+tile_pal2
-		dbug	Map_Smab,	SmashBlock,	0,	0,	tile_Nem_MzBlock+tile_pal3
-		dbug	Map_MBlock,	MovingBlock,	type_mblock_1+type_mblock_still,	0,	tile_Nem_MzBlock
-		dbug	Map_CFlo,	CollapseFloor,	0,	0,	tile_Nem_MzBlock+tile_pal4
+		dbug	Map_Geyser,	GeyserMaker,	0,	0,	tile_Kos_Lava+tile_pal4
+		dbug	Map_LWall,	LavaWall,	0,	0,	tile_Kos_Lava+tile_pal4
+		dbug	Map_Push,	PushBlock,	type_pblock_single,	0,	tile_Kos_MzBlock+tile_pal3
+		dbug	Map_Smab,	SmashBlock,	0,	0,	tile_Kos_MzBlock+tile_pal3
+		dbug	Map_MBlock,	MovingBlock,	type_mblock_1+type_mblock_still,	0,	tile_Kos_MzBlock
+		dbug	Map_CFlo,	CollapseFloor,	0,	0,	tile_Kos_MzBlock+tile_pal4
 		dbug	Map_LTag,	LavaTag,	0,	0,	tile_Nem_Monitors+tile_hi
-		dbug	Map_Bat,	Batbrain,	0,	0,	tile_Nem_Batbrain
-		dbug	Map_Cat,	Caterkiller,	0,	0,	tile_Nem_Cater+tile_pal2
+		dbug	Map_Bat,	Batbrain,	0,	0,	tile_Kos_Batbrain
+		dbug	Map_Cat,	Caterkiller,	0,	0,	tile_Kos_Cater+tile_pal2
 		dbug	Map_Lamp,	Lamppost,	1,	0,	tile_Nem_Lamp
 	DebugList_MZ_end:
 
@@ -296,7 +295,7 @@ DebugList_SLZ:
 		dbug	Map_Fan,	Fan,		type_fan_left_onoff,	0,	tile_Nem_Fan+tile_pal3
 		dbug	Map_Seesaw,	Seesaw,		0,	0,	tile_Nem_Seesaw
 		dbug	Map_Spring,	Springs,	type_spring_red+type_spring_up,	0,	tile_Kos_HSpring
-		dbug	Map_Fire,	FireMaker,	0,	0,	tile_Nem_Fireball_SLZ
+		dbug	Map_Fire,	FireMaker,	0,	0,	tile_Kos_Fireball
 		dbug	Map_Scen,	Scenery,	type_scen_cannon,	0,	tile_Nem_SlzCannon+tile_pal3
 		dbug	Map_Bomb,	Bomb,		0,	0,	tile_Nem_Bomb
 		dbug	Map_Orb,	Orbinaut,	0,	0,	tile_Nem_Orbinaut+tile_pal2
@@ -320,7 +319,6 @@ DebugList_SYZ:
 		dbug	Map_Plat_SYZ,	BasicPlatform,	type_plat_still,	0,	0+tile_pal3
 		dbug	Map_FBlock,	FloatingBlock,	type_fblock_syz1x1+type_fblock_still,	0,	0+tile_pal3
 		dbug	Map_But,	Button,		0,	0,	tile_Nem_Button+4
-		dbug	Map_Cat,	Caterkiller,	0,	0,	tile_Nem_Cater+tile_pal2
 		dbug	Map_Lamp,	Lamppost,	1,	0,	tile_Nem_Lamp
 	DebugList_SYZ_end:
 
@@ -332,7 +330,7 @@ DebugList_SBZ:
 		dbug	Map_Monitor,	Monitor,	0,	0,	tile_Nem_Monitors
 		dbug	Map_Bomb,	Bomb,		0,	0,	tile_Nem_Bomb
 		dbug	Map_Orb,	Orbinaut,	0,	0,	tile_Nem_Orbinaut
-		dbug	Map_Cat,	Caterkiller,	0,	0,	tile_Nem_Cater_SBZ+tile_pal2
+		dbug	Map_Cat,	Caterkiller,	0,	0,	tile_Kos_Cater+tile_pal2
 		dbug	Map_BBall,	SwingingPlatform, 7,	id_frame_bball_anchor,	tile_Nem_BigSpike_SBZ+tile_pal3
 		dbug	Map_Disc,	RunningDisc,	$E0,	0,	tile_Nem_SbzDisc+tile_pal3+tile_hi
 		dbug	Map_MBlock,	MovingBlock,	type_mblock_sbz+type_mblock_updown,	id_frame_mblock_sbz,	tile_Nem_Stomper+tile_pal2

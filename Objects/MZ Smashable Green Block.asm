@@ -25,7 +25,7 @@ ost_smash_count:	rs.w 1 ; $34				; number of blocks hit + enemies previously hit
 Smab_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Smab_Solid next
 		move.l	#Map_Smab,ost_mappings(a0)
-		move.w	#tile_Nem_MzBlock+tile_pal3,ost_tile(a0)
+		move.w	#tile_Kos_MzBlock+tile_pal3,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#$10,ost_displaywidth(a0)
 		move.b	#4,ost_priority(a0)
