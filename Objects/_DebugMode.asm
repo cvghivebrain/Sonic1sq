@@ -239,7 +239,7 @@ DebugList_LZ:
 		dbug	Map_Harp,	Harpoon,	type_harp_h,	id_frame_harp_h_retracted,	tile_Nem_Harpoon
 		dbug	Map_Harp,	Harpoon,	type_harp_v,	id_frame_harp_v_retracted,	tile_Nem_Harpoon
 		dbug	Map_Push,	PushBlock,	0,	0,	tile_Nem_LzPole+tile_pal3
-		dbug	Map_But,	Button,		0,	0,	tile_Nem_Button+4
+		dbug	Map_But,	Button,		0,	0,	tile_Kos_Button
 		dbug	Map_Spike,	Spikes,		type_spike_3up+type_spike_still,	0,	tile_Kos_Spikes
 		dbug	Map_MBlockLZ,	MovingBlock,	type_mblock_1+type_mblock_rightdrop,	0,	tile_Nem_LzHalfBlock+tile_pal3
 		dbug	Map_LBlock,	LabyrinthBlock, type_lblock_sink,	id_frame_lblock_sinkblock,	tile_Nem_LzDoorH+tile_pal3
@@ -308,17 +308,17 @@ DebugList_SYZ:
 ;			mappings	object		subtype	frame	VRAM setting
 		dbug	Map_Ring,	Rings,		0,	0,	tile_Nem_Ring+tile_pal2
 		dbug	Map_Monitor,	Monitor,	0,	0,	tile_Nem_Monitors
-		dbug	Map_Spike,	Spikes,		type_spike_3up+type_spike_still,	0,	tile_Kos_Spikes
-		dbug	Map_Spring,	Springs,	type_spring_red+type_spring_up,	0,	tile_Kos_HSpring
-		dbug	Map_Roll,	Roller,		0,	0,	tile_Nem_Roller
+		dbug	Map_Spike,	Spikes,		type_spike_3up+type_spike_still,	0,	tile_Kos_Spikes_KPLC_SYZ
+		dbug	Map_Spring,	Springs,	type_spring_red+type_spring_up,	0,	tile_Kos_HSpring_KPLC_SYZ
+		dbug	Map_Roll,	Roller,		0,	0,	tile_Kos_Roller
 		dbug	Map_Light,	SpinningLight,	0,	0,	0
-		dbug	Map_Bump,	Bumper,		0,	0,	tile_Nem_Bumper
-		dbug	Map_Crab,	Crabmeat,	0,	0,	tile_Kos_Crabmeat
-		dbug	Map_Buzz,	BuzzBomber,	0,	0,	tile_Kos_Buzz
-		dbug	Map_Yad,	Yadrin,		0,	0,	tile_Nem_Yadrin+tile_pal2
+		dbug	Map_Bump,	Bumper,		0,	0,	tile_Kos_Bumper
+		dbug	Map_Crab,	Crabmeat,	0,	0,	tile_Kos_Crabmeat_KPLC_SYZ
+		dbug	Map_Buzz,	BuzzBomber,	0,	0,	tile_Kos_Buzz_KPLC_SYZ
+		dbug	Map_Yad,	Yadrin,		0,	0,	tile_Kos_Yadrin+tile_pal2
 		dbug	Map_Plat_SYZ,	BasicPlatform,	type_plat_still,	0,	0+tile_pal3
 		dbug	Map_FBlock,	FloatingBlock,	type_fblock_syz1x1+type_fblock_still,	0,	0+tile_pal3
-		dbug	Map_But,	Button,		0,	0,	tile_Nem_Button+4
+		dbug	Map_But,	Button,		0,	0,	tile_Kos_Button
 		dbug	Map_Lamp,	Lamppost,	1,	0,	tile_Nem_Lamp
 	DebugList_SYZ_end:
 
@@ -331,10 +331,10 @@ DebugList_SBZ:
 		dbug	Map_Bomb,	Bomb,		0,	0,	tile_Nem_Bomb
 		dbug	Map_Orb,	Orbinaut,	0,	0,	tile_Nem_Orbinaut
 		dbug	Map_Cat,	Caterkiller,	0,	0,	tile_Kos_Cater+tile_pal2
-		dbug	Map_BBall,	SwingingPlatform, 7,	id_frame_bball_anchor,	tile_Nem_BigSpike_SBZ+tile_pal3
+		dbug	Map_BBall,	SwingingPlatform, 7,	id_frame_bball_anchor,	tile_Kos_BigSpike+tile_pal3
 		dbug	Map_Disc,	RunningDisc,	$E0,	0,	tile_Nem_SbzDisc+tile_pal3+tile_hi
 		dbug	Map_MBlock,	MovingBlock,	type_mblock_sbz+type_mblock_updown,	id_frame_mblock_sbz,	tile_Nem_Stomper+tile_pal2
-		dbug	Map_But,	Button,		0,	0,	tile_Nem_Button+4
+		dbug	Map_But,	Button,		0,	0,	tile_Kos_Button
 		dbug	Map_Trap,	SpinPlatform,	3,	0,	tile_Nem_TrapDoor+tile_pal3
 		dbug	Map_Spin,	SpinPlatform,	$83,	0,	tile_Nem_SpinPlatform
 		dbug	Map_Saw,	Saws,		type_saw_pizza_updown,	0,	tile_Nem_Cutter+tile_pal3

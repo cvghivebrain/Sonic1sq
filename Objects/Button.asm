@@ -23,13 +23,12 @@ But_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto But_Action next
 		move.l	#Map_But,ost_mappings(a0)
 		move.w	(v_tile_button).w,ost_tile(a0)
-		add.w	#tile_pal3,ost_tile(a0)
 		cmpi.b	#id_MZ,(v_zone).w			; is level Marble Zone?
-		beq.s	@is_marble				; if yes, branch
+		bne.s	@not_marble				; if not, branch
 
-		move.w	#tile_Nem_Button+4,ost_tile(a0)		; SYZ, LZ and SBZ specific code
+		add.w	#tile_pal3,ost_tile(a0)
 
-	@is_marble:
+	@not_marble:
 		move.b	#render_rel,ost_render(a0)
 		move.b	#$10,ost_displaywidth(a0)
 		move.b	#4,ost_priority(a0)

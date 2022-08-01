@@ -22,7 +22,8 @@ ost_yadrin_wait_time:	rs.w 1 ; $30				; time to wait before changing direction (
 
 Yad_Main:	; Routine 0
 		move.l	#Map_Yad,ost_mappings(a0)
-		move.w	#tile_Nem_Yadrin+tile_pal2,ost_tile(a0)
+		move.w	(v_tile_yadrin).w,ost_tile(a0)
+		add.w	#tile_pal2,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#4,ost_priority(a0)
 		move.b	#$14,ost_displaywidth(a0)

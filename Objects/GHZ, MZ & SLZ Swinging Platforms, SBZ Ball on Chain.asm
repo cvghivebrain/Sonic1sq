@@ -57,7 +57,7 @@ Swing_Main:	; Routine 0
 		bne.s	@length
 
 		move.l	#Map_BBall,ost_mappings(a0)		; SBZ specific code
-		move.w	#tile_Nem_BigSpike_SBZ,ost_tile(a0)
+		move.w	(v_tile_spikeball).w,ost_tile(a0)
 		move.b	#$18,ost_displaywidth(a0)
 		move.b	#$18,ost_height(a0)
 		move.b	#id_col_16x16+id_col_hurt,ost_col_type(a0)

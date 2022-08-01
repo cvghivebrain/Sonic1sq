@@ -31,7 +31,7 @@ ost_sball_speed:	rs.w 1 ; $3E				; rate of spin (2 bytes)
 SBall_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto SBall_Move next
 		move.l	#Map_SBall,ost_mappings(a0)
-		move.w	#tile_Nem_SmallSpike,ost_tile(a0)
+		move.w	(v_tile_spikechain).w,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#4,ost_priority(a0)
 		move.b	#8,ost_displaywidth(a0)
@@ -42,7 +42,6 @@ SBall_Main:	; Routine 0
 		bne.s	@notlz
 
 		move.b	#0,ost_col_type(a0)			; LZ specific code (chain doesn't hurt)
-		move.w	#tile_Nem_LzSpikeBall,ost_tile(a0)
 		move.l	#Map_SBall2,ost_mappings(a0)
 
 	@notlz:

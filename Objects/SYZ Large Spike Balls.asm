@@ -26,7 +26,7 @@ ost_bball_speed:	rs.w 1 ; $3E				; speed (2 bytes)
 BBall_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto BBall_Move next
 		move.l	#Map_BBall,ost_mappings(a0)
-		move.w	#tile_Nem_BigSpike,ost_tile(a0)
+		move.w	(v_tile_spikeball).w,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#4,ost_priority(a0)
 		move.b	#$18,ost_displaywidth(a0)

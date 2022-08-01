@@ -133,7 +133,7 @@ PLC_LZ2:	plcheader
 		plcm	Nem_LzPlatform, $89E0			; rising platform
 		plcm	Nem_Orbinaut,,LZ			; orbinaut enemy ($8CE0)
 		plcm	Nem_Jaws				; jaws enemy ($90C0)
-		plcm	Nem_Button, vram_button		; button ($A1E0)
+		;plcm	Nem_Button, vram_button		; button ($A1E0)
 		plcm	Nem_Cork, $A000				; cork block
 		;plcm	Nem_Spikes, vram_spikes			; spikes ($A360)
 		;plcm	Nem_HSpring, vram_hspring		; horizontal spring ($A460)
@@ -173,20 +173,9 @@ PLC_SLZ2:	plcheader
 ; Pattern load cues - Spring Yard
 ; ---------------------------------------------------------------------------
 PLC_SYZ:	plcheader
-		;plcm	Nem_Crabmeat, vram_crabmeat		; crabmeat enemy ($8000)
-		;plcm	Nem_Buzz, vram_buzz			; buzz bomber enemy ($8880)
-		plcm	Nem_Yadrin, vram_yadrin			; yadrin enemy ($8F60)
-		plcm	Nem_Roller				; roller enemy ($9700)
 	PLC_SYZ_end:
 
 PLC_SYZ2:	plcheader
-		plcm	Nem_Bumper, $7000			; bumper
-		plcm	Nem_BigSpike				; large	spikeball ($72C0)
-		plcm	Nem_SmallSpike				; small	spikeball ($7740)
-		plcm	Nem_Button, vram_button		; button ($A1E0)
-		;plcm	Nem_Spikes, vram_spikes			; spikes ($A360)
-		;plcm	Nem_HSpring, vram_hspring		; horizontal spring ($A460)
-		;plcm	Nem_VSpring, vram_vspring		; vertical spring ($A660)
 	PLC_SYZ2_end:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - Scrap Brain
@@ -198,7 +187,7 @@ PLC_SBZ:	plcheader
 		plcm	Nem_BallHog				; ball hog enemy ($6040)
 		plcm	Nem_SbzDisc, $6880			; spot on large	wheel
 		plcm	Nem_SbzJunction				; wheel	that grabs Sonic ($6900)
-		plcm	Nem_BigSpike,,SBZ			; large	spikeball ($7220)
+		;plcm	Nem_BigSpike,,SBZ			; large	spikeball ($7220)
 		plcm	Nem_Cutter				; pizza	cutter ($76A0)
 		plcm	Nem_FlamePipe				; flaming pipe ($7B20)
 		plcm	Nem_SbzFloor				; collapsing floor ($7EA0)
@@ -215,7 +204,7 @@ PLC_SBZ2:	plcheader
 		plcm	Nem_TrapDoor				; trapdoor ($9240)
 		plcm	Nem_SbzFloor, $7F20			; collapsing floor
 		plcm	Nem_SpinPlatform, $9BE0			; small	spinning platform
-		plcm	Nem_Button, vram_button		; button ($A1E0)
+		;plcm	Nem_Button, vram_button		; button ($A1E0)
 		;plcm	Nem_Spikes, vram_spikes			; spikes ($A360)
 		;plcm	Nem_HSpring, vram_hspring		; horizontal spring ($A460)
 		;plcm	Nem_VSpring, vram_vspring		; vertical spring ($A660)
@@ -262,7 +251,7 @@ PLC_SpecialStage:	plcheader
 		plcm	Nem_SSBgCloud, 0			; bubble and cloud background
 		plcm	Nem_SSBgFish				; bird and fish	background ($A20)
 		plcm	Nem_SSWalls				; walls ($2840)
-		plcm	Nem_Bumper,,SS				; bumper ($4760)
+		;plcm	Nem_Bumper,,SS				; bumper ($4760)
 		plcm	Nem_SSGOAL				; GOAL block ($4A20)
 		plcm	Nem_SSUpDown				; UP and DOWN blocks ($4C60)
 		plcm	Nem_SSRBlock, $5E00			; R block
@@ -362,7 +351,7 @@ PLC_TryAgain:	plcheader
 PLC_EggmanSBZ2:	plcheader
 		plcm	Nem_SbzBlock, $A300, SBZ2		; block
 		plcm	Nem_Sbz2Eggman, $8000			; Eggman
-		plcm	Nem_Button, $9400, SBZ2		; button
+		;plcm	Nem_Button, $9400, SBZ2		; button
 	PLC_EggmanSBZ2_end:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - final boss

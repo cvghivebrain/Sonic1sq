@@ -1170,7 +1170,7 @@ SS_ItemIndex:
 		ss_sprite Map_SSWalls,tile_Nem_SSWalls+tile_pal4,0
 		ss_sprite Map_SSWalls,tile_Nem_SSWalls+tile_pal4,0
 	SS_ItemIndex_wall_end:
-SS_Item_Bumper:	ss_sprite Map_Bump,tile_Nem_Bumper_SS,0		; $25 - bumper
+SS_Item_Bumper:	ss_sprite Map_Bump,tile_Kos_Bumper,0		; $25 - bumper
 SS_Item_W:	ss_sprite Map_SS_R,tile_Nem_SSWBlock,0		; $26 - W
 SS_Item_GOAL:	ss_sprite Map_SS_R,tile_Nem_SSGOAL,0		; $27 - GOAL
 SS_Item_1Up:	ss_sprite Map_SS_R,tile_Nem_SS1UpBlock,0	; $28 - 1UP
@@ -1183,8 +1183,8 @@ SS_Item_Glass2:	ss_sprite Map_SS_Glass,tile_Nem_SSGlass+tile_pal4,0 ; $2E - brea
 SS_Item_Glass3:	ss_sprite Map_SS_Glass,tile_Nem_SSGlass+tile_pal2,0 ; $2F - breakable glass gem (yellow)
 SS_Item_Glass4:	ss_sprite Map_SS_Glass,tile_Nem_SSGlass+tile_pal3,0 ; $30 - breakable glass gem (pink)
 SS_Item_R2:	ss_sprite Map_SS_R,tile_Nem_SSRBlock,0		; $31 - R
-SS_Item_Bump1:	ss_sprite Map_Bump,tile_Nem_Bumper_SS,id_frame_bump_bumped1
-SS_Item_Bump2:	ss_sprite Map_Bump,tile_Nem_Bumper_SS,id_frame_bump_bumped2
+SS_Item_Bump1:	ss_sprite Map_Bump,tile_Kos_Bumper,id_frame_bump_bumped1
+SS_Item_Bump2:	ss_sprite Map_Bump,tile_Kos_Bumper,id_frame_bump_bumped2
 SS_Item_Zone1:	ss_sprite Map_SS_R,tile_Nem_SSZone1,0		; $34 - Zone 1
 SS_Item_Zone2:	ss_sprite Map_SS_R,tile_Nem_SSZone2,0		; $35 - Zone 2
 SS_Item_Zone3:	ss_sprite Map_SS_R,tile_Nem_SSZone3,0		; $36 - Zone 3

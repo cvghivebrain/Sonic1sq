@@ -32,7 +32,7 @@ Roll_Main:	; Routine 0
 		move.w	#0,ost_y_vel(a0)			; stop falling
 		addq.b	#2,ost_routine(a0)			; goto Roll_Action next
 		move.l	#Map_Roll,ost_mappings(a0)
-		move.w	#tile_Nem_Roller,ost_tile(a0)
+		move.w	(v_tile_roller).w,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#4,ost_priority(a0)
 		move.b	#$10,ost_displaywidth(a0)

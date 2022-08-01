@@ -889,10 +889,10 @@ Eni_SSBg2:	incbin	"Tilemaps\SS Background 2.eni"		; special stage background (ma
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - SYZ stuff
 ; ---------------------------------------------------------------------------
-		incfile Nem_Bumper,"Graphics - Compressed\SYZ Bumper",nem
-		incfile Nem_SmallSpike,"Graphics - Compressed\SYZ Small Spikeball",nem
-		incfile Nem_Button,"Graphics - Compressed\Button",nem
-		incfile Nem_BigSpike,"Graphics - Compressed\SYZ Large Spikeball",nem
+		incfile Kos_Bumper,"Graphics Kosinski\SYZ Bumper",kos
+		incfile Kos_SmallSpike,"Graphics Kosinski\SYZ Small Spikeball",kos
+		incfile Kos_Button,"Graphics Kosinski\Button",kos
+		incfile Kos_BigSpike,"Graphics Kosinski\SYZ Large Spikeball",kos
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - SBZ stuff
 ; ---------------------------------------------------------------------------
@@ -919,10 +919,10 @@ Eni_SSBg2:	incbin	"Tilemaps\SS Background 2.eni"		; special stage background (ma
 		incfile Nem_Burrobot,"Graphics - Compressed\Burrobot",nem
 		incfile Kos_Chopper,"Graphics Kosinski\Chopper",kos
 		incfile Nem_Jaws,"Graphics - Compressed\Jaws",nem
-		incfile Nem_Roller,"Graphics - Compressed\Roller",nem
+		incfile Kos_Roller,"Graphics Kosinski\Roller",kos
 		incfile Kos_Motobug,"Graphics Kosinski\Motobug",kos
 		incfile Kos_Newtron,"Graphics Kosinski\Newtron",kos
-		incfile Nem_Yadrin,"Graphics - Compressed\Yadrin",nem
+		incfile Kos_Yadrin,"Graphics Kosinski\Yadrin",kos
 		incfile Kos_Batbrain,"Graphics Kosinski\Batbrain",kos
 		incfile Nem_Bomb,"Graphics - Compressed\Bomb Enemy",nem
 		incfile Nem_Orbinaut,"Graphics - Compressed\Orbinaut",nem
