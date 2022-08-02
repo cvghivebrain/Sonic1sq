@@ -233,28 +233,28 @@ DebugList_LZ:
 ;			mappings	object		subtype	frame	VRAM setting
 		dbug	Map_Ring,	Rings,		0,	0,	tile_Nem_Ring+tile_pal2
 		dbug	Map_Monitor,	Monitor,	0,	0,	tile_Nem_Monitors
-		dbug	Map_Spring,	Springs,	type_spring_red+type_spring_up,	0,	tile_Kos_HSpring
-		dbug	Map_Jaws,	Jaws,		8,	0,	tile_Nem_Jaws+tile_pal2
-		dbug	Map_Burro,	Burrobot,	0,	id_frame_burro_dig1,	tile_Nem_Burrobot+tile_hi
-		dbug	Map_Harp,	Harpoon,	type_harp_h,	id_frame_harp_h_retracted,	tile_Nem_Harpoon
-		dbug	Map_Harp,	Harpoon,	type_harp_v,	id_frame_harp_v_retracted,	tile_Nem_Harpoon
-		dbug	Map_Push,	PushBlock,	0,	0,	tile_Nem_LzPole+tile_pal3
-		dbug	Map_But,	Button,		0,	0,	tile_Kos_Button
-		dbug	Map_Spike,	Spikes,		type_spike_3up+type_spike_still,	0,	tile_Kos_Spikes
-		dbug	Map_MBlockLZ,	MovingBlock,	type_mblock_1+type_mblock_rightdrop,	0,	tile_Nem_LzHalfBlock+tile_pal3
-		dbug	Map_LBlock,	LabyrinthBlock, type_lblock_sink,	id_frame_lblock_sinkblock,	tile_Nem_LzDoorH+tile_pal3
-		dbug	Map_LBlock,	LabyrinthBlock, type_lblock_rise,	id_frame_lblock_riseplatform,	tile_Nem_LzDoorH+tile_pal3
-		dbug	Map_LBlock,	LabyrinthBlock, 5,	id_frame_lblock_sinkblock,	tile_Nem_LzDoorH+tile_pal3
-		dbug	Map_Gar,	Gargoyle,	0,	0,	$43E+tile_pal3
-		dbug	Map_LBlock,	LabyrinthBlock, type_lblock_cork,	id_frame_lblock_cork,	tile_Nem_LzDoorH+tile_pal3
-		dbug	Map_LBlock,	LabyrinthBlock, type_lblock_solid,	id_frame_lblock_block,	tile_Nem_LzDoorH+tile_pal3
-		dbug	Map_LConv,	LabyrinthConvey, type_lcon_wheel,	0,	tile_Nem_LzWheel
-		dbug	Map_Orb,	Orbinaut,	0,	0,	tile_Nem_Orbinaut_LZ
-		dbug	Map_Bub,	Bubble,		$84,	id_frame_bubble_bubmaker1,	tile_Nem_Bubbles+tile_hi
-		dbug	Map_WFall,	Waterfall,	type_wfall_cornermedium,	id_frame_wfall_cornermedium,	tile_Nem_Splash+tile_pal3+tile_hi
-		dbug	Map_WFall,	Waterfall,	type_wfall_splash,	id_frame_wfall_splash1,	tile_Nem_Splash+tile_pal3+tile_hi
-		dbug	Map_Pole,	Pole,		0,	0,	tile_Nem_LzPole+tile_pal3
-		dbug	Map_Flap,	FlapDoor,	2,	0,	tile_Nem_FlapDoor+tile_pal3
+		dbug	Map_Spring,	Springs,	type_spring_red+type_spring_up,	0,	tile_Kos_HSpring_KPLC_LZ
+		dbug	Map_Jaws,	Jaws,		8,	0,	tile_Kos_Jaws+tile_pal2
+		dbug	Map_Burro,	Burrobot,	0,	id_frame_burro_dig1,	tile_Kos_Burrobot+tile_hi
+		dbug	Map_Harp,	Harpoon,	type_harp_h,	id_frame_harp_h_retracted,	tile_Kos_Harpoon
+		dbug	Map_Harp,	Harpoon,	type_harp_v,	id_frame_harp_v_retracted,	tile_Kos_Harpoon
+		dbug	Map_Push,	PushBlock,	0,	0,	tile_Kos_LzHalfBlock+tile_pal3
+		dbug	Map_But,	Button,		0,	0,	tile_Kos_Button_KPLC_LZ
+		dbug	Map_Spike,	Spikes,		type_spike_3up+type_spike_still,	0,	tile_Kos_Spikes_KPLC_LZ
+		dbug	Map_MBlockLZ,	MovingBlock,	type_mblock_1+type_mblock_rightdrop,	0,	tile_Kos_LzHalfBlock+tile_pal3
+		dbug	Map_LBlock,	LabyrinthBlock, type_lblock_sink,	id_frame_lblock_sinkblock,	tile_Kos_LzDoorH+tile_pal3
+		dbug	Map_LBlock,	LabyrinthBlock, type_lblock_rise,	id_frame_lblock_riseplatform,	tile_Kos_LzPlatform+tile_pal3
+		dbug	Map_LBlock,	LabyrinthBlock, 5,	id_frame_lblock_sinkblock,	tile_Kos_LzDoorH+tile_pal3
+		dbug	Map_Gar,	Gargoyle,	0,	0,	tile_Kos_Gargoyle+tile_pal3
+		dbug	Map_LBlock,	LabyrinthBlock, type_lblock_cork,	id_frame_lblock_cork,	tile_Kos_Cork+tile_pal3
+		dbug	Map_LBlock,	LabyrinthBlock, type_lblock_solid,	id_frame_lblock_block,	tile_Kos_LzBlock+tile_pal3
+		dbug	Map_LConv,	LabyrinthConvey, type_lcon_wheel,	0,	tile_Kos_LzWheel
+		dbug	Map_Orb,	Orbinaut,	0,	0,	tile_Kos_Orbinaut
+		dbug	Map_Bub,	Bubble,		$84,	id_frame_bubble_bubmaker1,	tile_Kos_Bubbles+tile_hi
+		dbug	Map_WFall,	Waterfall,	type_wfall_cornermedium,	id_frame_wfall_cornermedium,	tile_Kos_Splash+tile_pal3+tile_hi
+		dbug	Map_WFall,	Waterfall,	type_wfall_splash,	id_frame_wfall_splash1,	tile_Kos_Splash+tile_pal3+tile_hi
+		dbug	Map_Pole,	Pole,		0,	0,	tile_Kos_LzPole+tile_pal3
+		dbug	Map_Flap,	FlapDoor,	2,	0,	tile_Kos_FlapDoor+tile_pal3
 		dbug	Map_Lamp,	Lamppost,	1,	0,	tile_Nem_Lamp
 	DebugList_LZ_end:
 
@@ -298,7 +298,7 @@ DebugList_SLZ:
 		dbug	Map_Fire,	FireMaker,	0,	0,	tile_Kos_Fireball
 		dbug	Map_Scen,	Scenery,	type_scen_cannon,	0,	tile_Nem_SlzCannon+tile_pal3
 		dbug	Map_Bomb,	Bomb,		0,	0,	tile_Nem_Bomb
-		dbug	Map_Orb,	Orbinaut,	0,	0,	tile_Nem_Orbinaut+tile_pal2
+		dbug	Map_Orb,	Orbinaut,	0,	0,	tile_Kos_Orbinaut+tile_pal2
 		dbug	Map_Lamp,	Lamppost,	1,	0,	tile_Nem_Lamp
 	DebugList_SLZ_end:
 
@@ -329,7 +329,6 @@ DebugList_SBZ:
 		dbug	Map_Ring,	Rings,		0,	0,	tile_Nem_Ring+tile_pal2
 		dbug	Map_Monitor,	Monitor,	0,	0,	tile_Nem_Monitors
 		dbug	Map_Bomb,	Bomb,		0,	0,	tile_Nem_Bomb
-		dbug	Map_Orb,	Orbinaut,	0,	0,	tile_Nem_Orbinaut
 		dbug	Map_Cat,	Caterkiller,	0,	0,	tile_Kos_Cater+tile_pal2
 		dbug	Map_BBall,	SwingingPlatform, 7,	id_frame_bball_anchor,	tile_Kos_BigSpike+tile_pal3
 		dbug	Map_Disc,	RunningDisc,	$E0,	0,	tile_Nem_SbzDisc+tile_pal3+tile_hi

@@ -24,7 +24,7 @@ ost_harp_time:	rs.w 1 ; $30					; time between stabbing/retracting (2 bytes)
 Harp_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Harp_Move next
 		move.l	#Map_Harp,ost_mappings(a0)
-		move.w	#tile_Nem_Harpoon,ost_tile(a0)
+		move.w	#tile_Kos_Harpoon,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#4,ost_priority(a0)
 		move.b	ost_subtype(a0),ost_anim(a0)		; get type (vert/horiz)

@@ -22,7 +22,7 @@ WFall_Index:	index *,,2
 WFall_Main:	; Routine 0
 		addq.b	#4,ost_routine(a0)			; goto WFall_ChkDel next
 		move.l	#Map_WFall,ost_mappings(a0)
-		move.w	#tile_Nem_Splash+tile_pal3,ost_tile(a0)
+		move.w	#tile_Kos_Splash+tile_pal3,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#$18,ost_displaywidth(a0)
 		move.b	#1,ost_priority(a0)

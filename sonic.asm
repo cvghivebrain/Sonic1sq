@@ -79,7 +79,7 @@ Vectors:	dc.l v_stack_pointer&$FFFFFF			; Initial stack pointer value
 			dcb.l 3,ErrorTrap
 		endc
 		dc.b "SEGA MEGA DRIVE "				; Hardware system ID (Console name)
-		dc.b "(C)SEGA 2022.JUN"				; Copyright holder and release date (generally year)
+		dc.b "(C)SEGA 2022.AUG"				; Copyright holder and release date (generally year)
 		dc.b "SONIC 1-SQUARED                                 " ; Domestic name
 		dc.b "SONIC 1-SQUARED                                 " ; International name
 
@@ -802,7 +802,7 @@ Art_Sonic:	incbin	"Graphics\Sonic.bin"			; Sonic
 ; ---------------------------------------------------------------------------
 		incfile Nem_Smoke,"Graphics - Compressed\Unused - Smoke",nem
 		incfile Nem_SyzSparkle,"Graphics - Compressed\Unused - SYZ Sparkles",nem
-		incfile Nem_LzSonic,"Graphics - Compressed\Unused - LZ Sonic Holding Breath",nem
+		incfile Kos_LzSonic,"Graphics Kosinski\Unused - LZ Sonic Holding Breath",kos
 		incfile Nem_UnkFire,"Graphics - Compressed\Unused - Fireball",nem
 		incfile Nem_Warp,"Graphics - Compressed\Unused - Special Stage Warp",nem
 		incfile Nem_Goggle,"Graphics - Compressed\Unused - Goggles",nem
@@ -850,22 +850,22 @@ Eni_SSBg2:	incbin	"Tilemaps\SS Background 2.eni"		; special stage background (ma
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - LZ stuff
 ; ---------------------------------------------------------------------------
-		incfile Nem_Water,"Graphics - Compressed\LZ Water Surface",nem
-		incfile Nem_Splash,"Graphics - Compressed\LZ Waterfall & Splashes",nem
-		incfile Nem_LzSpikeBall,"Graphics - Compressed\LZ Spiked Ball & Chain",nem
-		incfile Nem_FlapDoor,"Graphics - Compressed\LZ Flapping Door",nem
-		incfile Nem_Bubbles,"Graphics - Compressed\LZ Bubbles & Countdown",nem
-		incfile Nem_LzHalfBlock,"Graphics - Compressed\LZ 32x16 Block",nem
-		incfile Nem_LzDoorV,"Graphics - Compressed\LZ Vertical Door",nem
-		incfile Nem_Harpoon,"Graphics - Compressed\LZ Harpoon",nem
-		incfile Nem_LzPole,"Graphics - Compressed\LZ Breakable Pole",nem
-		incfile Nem_LzDoorH,"Graphics - Compressed\LZ Horizontal Door",nem
-		incfile Nem_LzWheel,"Graphics - Compressed\LZ Wheel",nem
-		incfile Nem_Gargoyle,"Graphics - Compressed\LZ Gargoyle & Fireball",nem
-		incfile Nem_LzPlatform,"Graphics - Compressed\LZ Rising Platform",nem
-		incfile Nem_Cork,"Graphics - Compressed\LZ Cork",nem
-		incfile Nem_LzBlock,"Graphics - Compressed\LZ 32x32 Block",nem
-		incfile Nem_Sbz3HugeDoor,"Graphics - Compressed\SBZ3 Huge Sliding Door",nem
+		incfile Kos_Water,"Graphics Kosinski\LZ Water Surface",kos
+		incfile Kos_Splash,"Graphics Kosinski\LZ Waterfall & Splashes",kos
+		incfile Kos_LzSpikeBall,"Graphics Kosinski\LZ Spiked Ball & Chain",kos
+		incfile Kos_FlapDoor,"Graphics Kosinski\LZ Flapping Door",kos
+		incfile Kos_Bubbles,"Graphics Kosinski\LZ Bubbles & Countdown",kos
+		incfile Kos_LzHalfBlock,"Graphics Kosinski\LZ 32x16 Block",kos
+		incfile Kos_LzDoorV,"Graphics Kosinski\LZ Vertical Door",kos
+		incfile Kos_Harpoon,"Graphics Kosinski\LZ Harpoon",kos
+		incfile Kos_LzPole,"Graphics Kosinski\LZ Breakable Pole",kos
+		incfile Kos_LzDoorH,"Graphics Kosinski\LZ Horizontal Door",kos
+		incfile Kos_LzWheel,"Graphics Kosinski\LZ Wheel",kos
+		incfile Kos_Gargoyle,"Graphics Kosinski\LZ Gargoyle & Fireball",kos
+		incfile Kos_LzPlatform,"Graphics Kosinski\LZ Rising Platform",kos
+		incfile Kos_Cork,"Graphics Kosinski\LZ Cork",kos
+		incfile Kos_LzBlock,"Graphics Kosinski\LZ 32x32 Block",kos
+		incfile Kos_Sbz3HugeDoor,"Graphics Kosinski\SBZ3 Huge Sliding Door",kos
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - MZ stuff
 ; ---------------------------------------------------------------------------
@@ -916,16 +916,16 @@ Eni_SSBg2:	incbin	"Tilemaps\SS Background 2.eni"		; special stage background (ma
 		incfile Nem_BallHog,"Graphics - Compressed\Ball Hog",nem
 		incfile Kos_Crabmeat,"Graphics Kosinski\Crabmeat",kos
 		incfile Kos_Buzz,"Graphics Kosinski\Buzz Bomber",kos
-		incfile Nem_Burrobot,"Graphics - Compressed\Burrobot",nem
+		incfile Kos_Burrobot,"Graphics Kosinski\Burrobot",kos
 		incfile Kos_Chopper,"Graphics Kosinski\Chopper",kos
-		incfile Nem_Jaws,"Graphics - Compressed\Jaws",nem
+		incfile Kos_Jaws,"Graphics Kosinski\Jaws",kos
 		incfile Kos_Roller,"Graphics Kosinski\Roller",kos
 		incfile Kos_Motobug,"Graphics Kosinski\Motobug",kos
 		incfile Kos_Newtron,"Graphics Kosinski\Newtron",kos
 		incfile Kos_Yadrin,"Graphics Kosinski\Yadrin",kos
 		incfile Kos_Batbrain,"Graphics Kosinski\Batbrain",kos
 		incfile Nem_Bomb,"Graphics - Compressed\Bomb Enemy",nem
-		incfile Nem_Orbinaut,"Graphics - Compressed\Orbinaut",nem
+		incfile Kos_Orbinaut,"Graphics Kosinski\Orbinaut",kos
 		incfile Kos_Cater,"Graphics Kosinski\Caterkiller",kos
 		incfile Nem_Splats,"Graphics - Compressed\Unused - Splats Enemy",nem
 		incfile Nem_UnkExplode,"Graphics - Compressed\Unused - Explosion",nem

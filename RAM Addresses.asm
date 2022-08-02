@@ -218,6 +218,9 @@ v_tile_spikechain		rs.w 1
 v_tile_spikeball		rs.w 1
 v_tile_yadrin			rs.w 1
 v_tile_roller			rs.w 1
+v_tile_orbinaut			rs.w 1
+v_tile_jaws			rs.w 1
+v_tile_burrobot			rs.w 1
 v_palcycle_ss_num:		rs.w 1 ; $FFFFF79A ; palette cycling in Special Stage - current index number
 v_palcycle_ss_time:		rs.w 1 ; $FFFFF79C ; palette cycling in Special Stage - time until next change
 v_palcycle_ss_unused:		rs.w 1 ; $FFFFF79E ; palette cycling in Special Stage - unused offset value, always 0

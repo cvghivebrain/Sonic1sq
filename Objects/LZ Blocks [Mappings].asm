@@ -14,17 +14,17 @@ frame_lblock_sinkblock:
 		
 frame_lblock_riseplatform:
 		spritemap					; platform, rises when stood on
-		piece	-$20, -$C, 4x3, $69
-		piece	0, -$C, 4x3, $75
+		piece	-$20, -$C, 4x3, 0
+		piece	0, -$C, 4x3, $C
 		endsprite
 		
 frame_lblock_cork:
 		spritemap					; cork, floats on water
-		piece	-$10, -$10, 4x4, $11A
+		piece	-$10, -$10, 4x4, 0
 		endsprite
 		
 frame_lblock_block:
 		spritemap					; block
-		piece	-$10, -$10, 4x4, -$206
+		piece	-$10, -$10, 4x4, 0
 		endsprite
 		even

@@ -45,7 +45,7 @@ MBlock_Main:	; Routine 0
 		bne.s	@not_lz
 
 		move.l	#Map_MBlockLZ,ost_mappings(a0)		; LZ specific code
-		move.w	#tile_Nem_LzHalfBlock+tile_pal3,ost_tile(a0)
+		move.w	#tile_Kos_LzHalfBlock+tile_pal3,ost_tile(a0)
 		move.b	#7,ost_height(a0)
 
 	@not_lz:

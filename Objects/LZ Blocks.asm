@@ -15,11 +15,15 @@ LBlk_Index:	index *,,2
 		ptr LBlk_Main
 		ptr LBlk_Action
 
-LBlk_Var:	; width, height
-		dc.b $10, $10					; $0x
-		dc.b $20, $C					; $1x
-		dc.b $10, $10					; $2x
-		dc.b $10, $10					; $3x
+LBlk_Var:	; width, height, tile setting
+		dc.b $10, $10
+		dc.w tile_Kos_LzDoorH+tile_pal3			; $0x
+		dc.b $20, $C
+		dc.w tile_Kos_LzPlatform+tile_pal3		; $1x
+		dc.b $10, $10
+		dc.w tile_Kos_Cork+tile_pal3			; $2x
+		dc.b $10, $10
+		dc.w tile_Kos_LzBlock+tile_pal3			; $3x
 
 		rsobj LabyrinthBlock
 ost_lblock_y_start:	rs.w 1 ; $30				; original y-axis position (2 bytes)
@@ -34,17 +38,17 @@ ost_lblock_coll_flag:	rs.b 1 ; $3F				; 0 = none; 1 = side collision; -1 = top/b
 LBlk_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto LBlk_Action next
 		move.l	#Map_LBlock,ost_mappings(a0)
-		move.w	#tile_Nem_LzDoorH+tile_pal3,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#3,ost_priority(a0)
 		moveq	#0,d0
 		move.b	ost_subtype(a0),d0			; get block type
-		lsr.w	#3,d0					; read only the high nybble
-		andi.w	#$E,d0
+		andi.w	#$F0,d0					; read only the high nybble
+		lsr.w	#2,d0
 		lea	LBlk_Var(pc,d0.w),a2
 		move.b	(a2)+,ost_displaywidth(a0)		; set width
-		move.b	(a2),ost_height(a0)			; set height
-		lsr.w	#1,d0
+		move.b	(a2)+,ost_height(a0)			; set height
+		move.w	(a2),ost_tile(a0)			; set tile setting
+		lsr.w	#2,d0
 		move.b	d0,ost_frame(a0)
 		move.w	ost_x_pos(a0),ost_lblock_x_start(a0)
 		move.w	ost_y_pos(a0),ost_lblock_y_start(a0)

@@ -37,7 +37,7 @@ Gar_SpitRate:	dc.b 30						; 0 - 0.5 seconds (unused)
 Gar_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Gar_MakeFire next
 		move.l	#Map_Gar,ost_mappings(a0)
-		move.w	#tile_Nem_Gargoyle+tile_pal3,ost_tile(a0)
+		move.w	#tile_Kos_Gargoyle+tile_pal3,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#3,ost_priority(a0)
 		move.b	#$10,ost_displaywidth(a0)
@@ -72,7 +72,7 @@ Gar_FireBall:	; Routine 4
 		move.b	#8,ost_height(a0)
 		move.b	#8,ost_width(a0)
 		move.l	#Map_Gar,ost_mappings(a0)
-		move.w	#tile_Nem_Gargoyle,ost_tile(a0)
+		move.w	#tile_Kos_Gargoyle,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#4,ost_priority(a0)
 		move.b	#id_col_4x4+id_col_hurt,ost_col_type(a0)

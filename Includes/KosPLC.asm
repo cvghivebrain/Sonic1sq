@@ -140,6 +140,30 @@ KPLC_SYZ:	kplcheader
 
 KPLC_LZ:	kplcheader
 		kplc Kos_LZ
+		kplc Kos_LzBlock
+		kplc Kos_Sbz3HugeDoor
+		kplc Kos_Splash
+		kplc Kos_Water
+		kplc Kos_Gargoyle
+		kplc Kos_LzSpikeBall,v_tile_spikechain
+		kplc Kos_FlapDoor
+		kplc Kos_Bubbles
+		kplc Kos_LzHalfBlock
+		kplc Kos_LzDoorV
+		kplc Kos_Harpoon
+		kplc Kos_LzPole
+		kplc Kos_LzDoorH
+		kplc Kos_LzWheel
+		kplc Kos_LzSonic
+		kplc Kos_LzPlatform
+		kplc Kos_Cork
+		kplc Kos_Burrobot,v_tile_burrobot
+		kplc Kos_Orbinaut,v_tile_orbinaut
+		kplc Kos_Jaws,v_tile_jaws
+		kplc Kos_Button,v_tile_button
+		kplc Kos_Spikes,v_tile_spikes
+		kplc Kos_HSpring,v_tile_hspring
+		kplc Kos_VSpring,v_tile_vspring			; $A3E0 used
 	KPLC_LZ_end:
 		set_dma_size last_vram
 

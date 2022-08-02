@@ -38,7 +38,7 @@ PushB_Main:	; Routine 0
 		move.w	#tile_Kos_MzBlock+tile_pal3,ost_tile(a0) ; MZ specific code
 		cmpi.b	#id_LZ,(v_zone).w			; is current zone Labyrinth?
 		bne.s	@notLZ					; if not, branch
-		move.w	#$3DE+tile_pal3,ost_tile(a0)		; LZ specific code
+		move.w	#tile_Kos_LzHalfBlock+tile_pal3,ost_tile(a0) ; LZ specific code
 
 	@notLZ:
 		move.b	#render_rel,ost_render(a0)
@@ -54,7 +54,7 @@ PushB_Main:	; Routine 0
 		move.b	(a2)+,ost_frame(a0)
 		tst.b	ost_subtype(a0)				; is subtype 0?
 		beq.s	@chkgone				; if yes, branch
-		move.w	#tile_Kos_MzBlock+tile_pal3+tile_hi,ost_tile(a0) ; make sprite appear in foreground
+		bset	#tile_hi_bit,ost_tile(a0)		; make sprite appear in foreground
 
 	@chkgone:
 		lea	(v_respawn_list).w,a2

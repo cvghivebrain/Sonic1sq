@@ -109,35 +109,9 @@ PLC_GHZ2:	plcheader
 ; Pattern load cues - Labyrinth
 ; ---------------------------------------------------------------------------
 PLC_LZ:		plcheader
-		plcm	Nem_LzBlock, $3C00			; block
-		plcm	Nem_Sbz3HugeDoor				; blocks ($3E00)
-		plcm	Nem_Splash, $4B20			; waterfalls and splash
-		plcm	Nem_Water, $6000			; water	surface
-		plcm	Nem_LzSpikeBall				; spiked ball ($6200)
-		plcm	Nem_FlapDoor				; flapping door ($6500)
-		plcm	Nem_Bubbles				; bubbles and numbers ($6900)
-		plcm	Nem_LzHalfBlock				; block ($7780)
-		plcm	Nem_LzDoorV				; vertical door ($7880)
-		plcm	Nem_Harpoon				; harpoon ($7980)
-		plcm	Nem_Burrobot, $94C0			; burrobot enemy
 	PLC_LZ_end:
 
 PLC_LZ2:	plcheader
-		plcm	Nem_LzPole, $7BC0			; pole that breaks
-		plcm	Nem_LzDoorH				; large	horizontal door ($7CC0)
-		plcm	Nem_LzWheel				; wheel ($7EC0)
-		plcm	Nem_Gargoyle, $5D20			; gargoyle head
-		if Revision=0
-		plcm	Nem_LzSonic, $8800			; Sonic	holding	his breath
-		endc
-		plcm	Nem_LzPlatform, $89E0			; rising platform
-		plcm	Nem_Orbinaut,,LZ			; orbinaut enemy ($8CE0)
-		plcm	Nem_Jaws				; jaws enemy ($90C0)
-		;plcm	Nem_Button, vram_button		; button ($A1E0)
-		plcm	Nem_Cork, $A000				; cork block
-		;plcm	Nem_Spikes, vram_spikes			; spikes ($A360)
-		;plcm	Nem_HSpring, vram_hspring		; horizontal spring ($A460)
-		;plcm	Nem_VSpring, vram_vspring		; vertical spring ($A660)
 	PLC_LZ2_end:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - Marble
@@ -152,7 +126,7 @@ PLC_MZ2:	plcheader
 ; ---------------------------------------------------------------------------
 PLC_SLZ:	plcheader
 		plcm	Nem_Bomb, vram_bomb			; bomb enemy ($8000)
-		plcm	Nem_Orbinaut, vram_orbinaut		; orbinaut enemy ($8520)
+		;plcm	Nem_Orbinaut, vram_orbinaut		; orbinaut enemy ($8520)
 		;plcm	Nem_Fireball, $9000,SLZ			; fireballs
 		plcm	Nem_SlzBlock, $9C00			; block
 		plcm	Nem_SlzWall, $A260			; breakable wall
@@ -197,7 +171,6 @@ PLC_SBZ:	plcheader
 PLC_SBZ2:	plcheader
 		;plcm	Nem_Cater, $5600, SBZ			; caterkiller enemy
 		plcm	Nem_Bomb, vram_bomb			; bomb enemy ($8000)
-		plcm	Nem_Orbinaut, vram_orbinaut		; orbinaut enemy ($8520)
 		plcm	Nem_SlideFloor, $8C00			; floor	that slides away
 		plcm	Nem_SbzDoorH				; horizontal door ($8DE0)
 		plcm	Nem_Electric				; electric orb ($8FC0)

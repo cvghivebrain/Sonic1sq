@@ -39,7 +39,7 @@ ost_drown_delay_time	rs.w 1 ; $3A				; delay between bubbles (2 bytes)
 Drown_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Drown_Animate next
 		move.l	#Map_Bub,ost_mappings(a0)
-		move.w	#tile_Nem_Bubbles+tile_hi,ost_tile(a0)
+		move.w	#tile_Kos_Bubbles+tile_hi,ost_tile(a0)
 		move.b	#render_onscreen+render_rel,ost_render(a0)
 		move.b	#$10,ost_displaywidth(a0)
 		move.b	#1,ost_priority(a0)
@@ -48,7 +48,7 @@ Drown_Main:	; Routine 0
 
 		addq.b	#8,ost_routine(a0)			; goto Drown_Countdown next
 		move.l	#Map_Drown,ost_mappings(a0)
-		move.w	#$440,ost_tile(a0)			; VRAM $8800 - Sonic's face holding his breath (REV00 only)
+		move.w	#tile_Kos_LzSonic,ost_tile(a0)		; Sonic's face holding his breath (REV00 only)
 		andi.w	#$7F,d0					; ignore high bit of type
 		move.b	d0,ost_drown_type(a0)			; type should be 1
 		bra.w	Drown_Countdown

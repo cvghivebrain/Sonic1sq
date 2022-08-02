@@ -26,7 +26,7 @@ Burro_Main:	; Routine 0
 		move.b	#$13,ost_height(a0)
 		move.b	#8,ost_width(a0)
 		move.l	#Map_Burro,ost_mappings(a0)
-		move.w	#tile_Nem_Burrobot,ost_tile(a0)
+		move.w	(v_tile_burrobot).w,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#4,ost_priority(a0)
 		move.b	#id_col_12x18,ost_col_type(a0)

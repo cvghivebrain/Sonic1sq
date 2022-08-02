@@ -57,7 +57,7 @@ LCon_Main:	; Routine 0
 		bmi.w	LCon_LoadPlatforms			; branch if subtype is $80+
 		addq.b	#2,ost_routine(a0)			; goto LCon_Platform next
 		move.l	#Map_LConv,ost_mappings(a0)
-		move.w	#tile_Nem_LzWheel+tile_pal3,ost_tile(a0)
+		move.w	#tile_Kos_LzWheel+tile_pal3,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#$10,ost_displaywidth(a0)
 		move.b	#4,ost_priority(a0)
@@ -65,7 +65,7 @@ LCon_Main:	; Routine 0
 		bne.s	LCon_Platform_Init			; if not, branch
 		
 		addq.b	#4,ost_routine(a0)			; goto LCon_Wheel next
-		move.w	#tile_Nem_LzWheel,ost_tile(a0)
+		move.w	#tile_Kos_LzWheel,ost_tile(a0)
 		move.b	#1,ost_priority(a0)
 		bra.w	LCon_Wheel
 ; ===========================================================================

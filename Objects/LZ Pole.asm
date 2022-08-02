@@ -25,7 +25,7 @@ ost_pole_grabbed:	rs.b 1 ; $32				; flag set when Sonic grabs the pole
 Pole_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Pole_Action next
 		move.l	#Map_Pole,ost_mappings(a0)
-		move.w	#tile_Nem_LzPole+tile_pal3,ost_tile(a0)
+		move.w	#tile_Kos_LzPole+tile_pal3,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#8,ost_displaywidth(a0)
 		move.b	#4,ost_priority(a0)
