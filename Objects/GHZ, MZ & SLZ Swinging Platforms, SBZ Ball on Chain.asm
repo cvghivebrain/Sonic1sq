@@ -47,7 +47,6 @@ Swing_Main:	; Routine 0
 		bne.s	@notSLZ
 
 		move.l	#Map_Swing_SLZ,ost_mappings(a0)		; SLZ specific code
-		move.w	#tile_Nem_SlzSwing+tile_pal3,ost_tile(a0)
 		move.b	#$20,ost_displaywidth(a0)
 		move.b	#$10,ost_height(a0)
 		move.b	#id_col_32x8+id_col_hurt,ost_col_type(a0)

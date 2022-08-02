@@ -34,7 +34,7 @@ CFlo_Main:	; Routine 0
 		cmpi.b	#id_SLZ,(v_zone).w			; check if level is SLZ
 		bne.s	@notSLZ
 
-		move.w	#tile_Nem_SlzBlock+tile_pal3,ost_tile(a0) ; SLZ specific code
+		move.w	#tile_Kos_SlzBlock+tile_pal3,ost_tile(a0) ; SLZ specific code
 		addq.b	#id_frame_cfloor_slz,ost_frame(a0)
 
 	@notSLZ:

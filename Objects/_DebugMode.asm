@@ -288,17 +288,17 @@ DebugList_SLZ:
 		dbug	Map_Ring,	Rings,		0,	0,	tile_Nem_Ring+tile_pal2
 		dbug	Map_Monitor,	Monitor,	0,	0,	tile_Nem_Monitors
 		dbug	Map_Elev,	Elevator,	type_elev_up_short,	0,	0+tile_pal3
-		dbug	Map_CFlo,	CollapseFloor,	0,	id_frame_cfloor_slz,	tile_Nem_SlzBlock+tile_pal3
+		dbug	Map_CFlo,	CollapseFloor,	0,	id_frame_cfloor_slz,	tile_Kos_SlzBlock+tile_pal3
 		dbug	Map_Plat_SLZ,	BasicPlatform,	type_plat_still,	0,	0+tile_pal3
 		dbug	Map_Circ,	CirclingPlatform, 0,	0,	0+tile_pal3
 		dbug	Map_Stair,	Staircase,	type_stair_above,	0,	0+tile_pal3
-		dbug	Map_Fan,	Fan,		type_fan_left_onoff,	0,	tile_Nem_Fan+tile_pal3
-		dbug	Map_Seesaw,	Seesaw,		0,	0,	tile_Nem_Seesaw
-		dbug	Map_Spring,	Springs,	type_spring_red+type_spring_up,	0,	tile_Kos_HSpring
-		dbug	Map_Fire,	FireMaker,	0,	0,	tile_Kos_Fireball
-		dbug	Map_Scen,	Scenery,	type_scen_cannon,	0,	tile_Nem_SlzCannon+tile_pal3
-		dbug	Map_Bomb,	Bomb,		0,	0,	tile_Nem_Bomb
-		dbug	Map_Orb,	Orbinaut,	0,	0,	tile_Kos_Orbinaut+tile_pal2
+		dbug	Map_Fan,	Fan,		type_fan_left_onoff,	0,	tile_Kos_Fan+tile_pal3
+		dbug	Map_Seesaw,	Seesaw,		0,	0,	tile_Kos_Seesaw
+		dbug	Map_Spring,	Springs,	type_spring_red+type_spring_up,	0,	tile_Kos_HSpring_KPLC_SLZ
+		dbug	Map_Fire,	FireMaker,	0,	0,	tile_Kos_Fireball_KPLC_SLZ
+		dbug	Map_Scen,	Scenery,	type_scen_cannon,	0,	tile_Kos_SlzCannon+tile_pal3
+		dbug	Map_Bomb,	Bomb,		0,	0,	tile_Kos_Bomb
+		dbug	Map_Orb,	Orbinaut,	0,	0,	tile_Kos_Orbinaut_KPLC_SLZ+tile_pal2
 		dbug	Map_Lamp,	Lamppost,	1,	0,	tile_Nem_Lamp
 	DebugList_SLZ_end:
 
@@ -328,7 +328,7 @@ DebugList_SBZ:
 ;			mappings	object		subtype	frame	VRAM setting
 		dbug	Map_Ring,	Rings,		0,	0,	tile_Nem_Ring+tile_pal2
 		dbug	Map_Monitor,	Monitor,	0,	0,	tile_Nem_Monitors
-		dbug	Map_Bomb,	Bomb,		0,	0,	tile_Nem_Bomb
+		dbug	Map_Bomb,	Bomb,		0,	0,	tile_Kos_Bomb
 		dbug	Map_Cat,	Caterkiller,	0,	0,	tile_Kos_Cater+tile_pal2
 		dbug	Map_BBall,	SwingingPlatform, 7,	id_frame_bball_anchor,	tile_Kos_BigSpike+tile_pal3
 		dbug	Map_Disc,	RunningDisc,	$E0,	0,	tile_Nem_SbzDisc+tile_pal3+tile_hi

@@ -125,23 +125,9 @@ PLC_MZ2:	plcheader
 ; Pattern load cues - Star Light
 ; ---------------------------------------------------------------------------
 PLC_SLZ:	plcheader
-		plcm	Nem_Bomb, vram_bomb			; bomb enemy ($8000)
-		;plcm	Nem_Orbinaut, vram_orbinaut		; orbinaut enemy ($8520)
-		;plcm	Nem_Fireball, $9000,SLZ			; fireballs
-		plcm	Nem_SlzBlock, $9C00			; block
-		plcm	Nem_SlzWall, $A260			; breakable wall
-		;plcm	Nem_Spikes, vram_spikes			; spikes ($A360)
-		;plcm	Nem_HSpring, vram_hspring		; horizontal spring ($A460)
-		;plcm	Nem_VSpring, vram_vspring		; vertical spring ($A660)
 	PLC_SLZ_end:
 
 PLC_SLZ2:	plcheader
-		plcm	Nem_Seesaw, $6E80			; seesaw
-		plcm	Nem_Fan					; fan ($7400)
-		plcm	Nem_Pylon				; foreground pylon ($7980)
-		plcm	Nem_SlzSwing				; swinging platform ($7B80)
-		plcm	Nem_SlzCannon, $9B00			; fireball launcher
-		plcm	Nem_SlzSpike, $9E00			; spikeball
 	PLC_SLZ2_end:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - Spring Yard
@@ -170,7 +156,7 @@ PLC_SBZ:	plcheader
 
 PLC_SBZ2:	plcheader
 		;plcm	Nem_Cater, $5600, SBZ			; caterkiller enemy
-		plcm	Nem_Bomb, vram_bomb			; bomb enemy ($8000)
+		;plcm	Nem_Bomb, vram_bomb			; bomb enemy ($8000)
 		plcm	Nem_SlideFloor, $8C00			; floor	that slides away
 		plcm	Nem_SbzDoorH				; horizontal door ($8DE0)
 		plcm	Nem_Electric				; electric orb ($8FC0)
@@ -195,8 +181,7 @@ PLC_Boss:	plcheader
 		plcm	Nem_Eggman, $8000			; Eggman main patterns
 		plcm	Nem_Weapons				; Eggman's weapons ($8D80)
 		plcm	Nem_Prison, $93A0			; prison capsule
-		plcm	Nem_Bomb, $A300, Boss			; bomb enemy (partially overwritten - shrapnel remains)
-		plcm	Nem_SlzSpike, $A300, Boss		; spikeball (SLZ boss)
+		;plcm	Nem_Bomb, $A300, Boss			; bomb enemy (partially overwritten - shrapnel remains)
 		plcm	Nem_Exhaust, $A540			; exhaust flame
 	PLC_Boss_end:
 ; ---------------------------------------------------------------------------

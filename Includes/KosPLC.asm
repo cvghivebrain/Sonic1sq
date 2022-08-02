@@ -97,7 +97,7 @@ KPLC_GHZ:	kplcheader
 		kplc Kos_Chopper,v_tile_chopper
 		kplc Kos_Newtron,v_tile_newtron
 		kplc Kos_Motobug,v_tile_motobug
-		kplc Kos_GhzSmashWall
+		kplc Kos_GhzSmashWall,v_tile_wall
 		kplc Kos_Spikes,v_tile_spikes
 		kplc Kos_HSpring,v_tile_hspring
 		kplc Kos_VSpring,v_tile_vspring			; $A1A0 used
@@ -154,7 +154,6 @@ KPLC_LZ:	kplcheader
 		kplc Kos_LzPole
 		kplc Kos_LzDoorH
 		kplc Kos_LzWheel
-		kplc Kos_LzSonic
 		kplc Kos_LzPlatform
 		kplc Kos_Cork
 		kplc Kos_Burrobot,v_tile_burrobot
@@ -163,12 +162,26 @@ KPLC_LZ:	kplcheader
 		kplc Kos_Button,v_tile_button
 		kplc Kos_Spikes,v_tile_spikes
 		kplc Kos_HSpring,v_tile_hspring
-		kplc Kos_VSpring,v_tile_vspring			; $A3E0 used
+		kplc Kos_VSpring,v_tile_vspring			; $A200 used
 	KPLC_LZ_end:
 		set_dma_size last_vram
 
 KPLC_SLZ:	kplcheader
 		kplc Kos_SLZ
+		kplc Kos_Seesaw
+		kplc Kos_SlzSpike
+		kplc Kos_Bomb,v_tile_bomb
+		kplc Kos_Fan
+		kplc Kos_Pylon
+		kplc Kos_SlzSwing,v_tile_swing
+		kplc Kos_SlzCannon
+		kplc Kos_Orbinaut,v_tile_orbinaut
+		kplc Kos_Fireball,v_tile_fireball
+		kplc Kos_SlzBlock
+		kplc Kos_SlzWall,v_tile_wall
+		kplc Kos_Spikes,v_tile_spikes
+		kplc Kos_HSpring,v_tile_hspring
+		kplc Kos_VSpring,v_tile_vspring			; $97C0 used
 	KPLC_SLZ_end:
 		set_dma_size last_vram
 

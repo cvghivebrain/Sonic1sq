@@ -48,7 +48,7 @@ Drown_Main:	; Routine 0
 
 		addq.b	#8,ost_routine(a0)			; goto Drown_Countdown next
 		move.l	#Map_Drown,ost_mappings(a0)
-		move.w	#tile_Kos_LzSonic,ost_tile(a0)		; Sonic's face holding his breath (REV00 only)
+		move.w	#0,ost_tile(a0)				; Sonic's face holding his breath (REV00 only)
 		andi.w	#$7F,d0					; ignore high bit of type
 		move.b	d0,ost_drown_type(a0)			; type should be 1
 		bra.w	Drown_Countdown

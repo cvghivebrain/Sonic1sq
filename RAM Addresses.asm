@@ -201,6 +201,7 @@ v_bgm:				rs.b 1 ; music track id for current zone
 v_titlecard_zone:		rs.w 1 ; frame id of title card (zone name)
 v_titlecard_act:		rs.w 1 ; frame id of title card (act number)
 v_tile_swing:			rs.w 1
+v_tile_wall:			rs.w 1
 v_tile_crabmeat			rs.w 1
 v_tile_buzzbomber		rs.w 1
 v_tile_chopper			rs.w 1
@@ -221,6 +222,7 @@ v_tile_roller			rs.w 1
 v_tile_orbinaut			rs.w 1
 v_tile_jaws			rs.w 1
 v_tile_burrobot			rs.w 1
+v_tile_bomb			rs.w 1
 v_palcycle_ss_num:		rs.w 1 ; $FFFFF79A ; palette cycling in Special Stage - current index number
 v_palcycle_ss_time:		rs.w 1 ; $FFFFF79C ; palette cycling in Special Stage - time until next change
 v_palcycle_ss_unused:		rs.w 1 ; $FFFFF79E ; palette cycling in Special Stage - unused offset value, always 0

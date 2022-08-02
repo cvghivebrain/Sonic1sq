@@ -24,7 +24,7 @@ ost_fan_flag:		rs.b 1 ; $32				; 0 = on; 1 = off
 Fan_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Fan_Delay next
 		move.l	#Map_Fan,ost_mappings(a0)
-		move.w	#tile_Nem_Fan+tile_pal3,ost_tile(a0)
+		move.w	#tile_Kos_Fan+tile_pal3,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#$10,ost_displaywidth(a0)
 		move.b	#4,ost_priority(a0)

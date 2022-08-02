@@ -802,7 +802,6 @@ Art_Sonic:	incbin	"Graphics\Sonic.bin"			; Sonic
 ; ---------------------------------------------------------------------------
 		incfile Nem_Smoke,"Graphics - Compressed\Unused - Smoke",nem
 		incfile Nem_SyzSparkle,"Graphics - Compressed\Unused - SYZ Sparkles",nem
-		incfile Kos_LzSonic,"Graphics Kosinski\Unused - LZ Sonic Holding Breath",kos
 		incfile Nem_UnkFire,"Graphics - Compressed\Unused - Fireball",nem
 		incfile Nem_Warp,"Graphics - Compressed\Unused - Special Stage Warp",nem
 		incfile Nem_Goggle,"Graphics - Compressed\Unused - Goggles",nem
@@ -878,14 +877,14 @@ Eni_SSBg2:	incbin	"Tilemaps\SS Background 2.eni"		; special stage background (ma
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - SLZ stuff
 ; ---------------------------------------------------------------------------
-		incfile Nem_Seesaw,"Graphics - Compressed\SLZ Seesaw",nem
-		incfile Nem_SlzSpike,"Graphics - Compressed\SLZ Little Spikeball",nem
-		incfile Nem_Fan,"Graphics - Compressed\SLZ Fan",nem
-		incfile Nem_SlzWall,"Graphics - Compressed\SLZ Breakable Wall",nem
-		incfile Nem_Pylon,"Graphics - Compressed\SLZ Pylon",nem
-		incfile Nem_SlzSwing,"Graphics - Compressed\SLZ Swinging Platform",nem
-		incfile Nem_SlzBlock,"Graphics - Compressed\SLZ 32x32 Block",nem
-		incfile Nem_SlzCannon,"Graphics - Compressed\SLZ Cannon",nem
+		incfile Kos_Seesaw,"Graphics Kosinski\SLZ Seesaw",kos
+		incfile Kos_SlzSpike,"Graphics Kosinski\SLZ Little Spikeball",kos
+		incfile Kos_Fan,"Graphics Kosinski\SLZ Fan",kos
+		incfile Kos_SlzWall,"Graphics Kosinski\SLZ Breakable Wall",kos
+		incfile Kos_Pylon,"Graphics Kosinski\SLZ Pylon",kos
+		incfile Kos_SlzSwing,"Graphics Kosinski\SLZ Swinging Platform",kos
+		incfile Kos_SlzBlock,"Graphics Kosinski\SLZ 32x32 Block",kos
+		incfile Kos_SlzCannon,"Graphics Kosinski\SLZ Cannon",kos
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - SYZ stuff
 ; ---------------------------------------------------------------------------
@@ -924,7 +923,7 @@ Eni_SSBg2:	incbin	"Tilemaps\SS Background 2.eni"		; special stage background (ma
 		incfile Kos_Newtron,"Graphics Kosinski\Newtron",kos
 		incfile Kos_Yadrin,"Graphics Kosinski\Yadrin",kos
 		incfile Kos_Batbrain,"Graphics Kosinski\Batbrain",kos
-		incfile Nem_Bomb,"Graphics - Compressed\Bomb Enemy",nem
+		incfile Kos_Bomb,"Graphics Kosinski\Bomb Enemy",kos
 		incfile Kos_Orbinaut,"Graphics Kosinski\Orbinaut",kos
 		incfile Kos_Cater,"Graphics Kosinski\Caterkiller",kos
 		incfile Nem_Splats,"Graphics - Compressed\Unused - Splats Enemy",nem

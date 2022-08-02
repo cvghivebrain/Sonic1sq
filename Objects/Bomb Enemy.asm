@@ -28,7 +28,7 @@ ost_bomb_parent:	rs.l 1 ; $3C				; address of OST of parent object (4 bytes)
 Bom_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Bom_Action next
 		move.l	#Map_Bomb,ost_mappings(a0)
-		move.w	#tile_Nem_Bomb,ost_tile(a0)
+		move.w	(v_tile_bomb).w,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#3,ost_priority(a0)
 		move.b	#$C,ost_displaywidth(a0)
