@@ -48,7 +48,6 @@ ObjPos_SBZ2:
 		objpos $04B0,$05B0,RunningDisc,$40
 		objpos $04C1,$06C4,ScrapStomp,type_stomp_door+0
 		objpos $04E0,$0508,Button,$01
-		objpos $04F0,$03D0,Monitor,$15,rem
 		objpos $0510,$0127,SpinPlatform,type_spin_platform_alt+$E
 		objpos $0530,$0127,SpinPlatform,type_spin_platform_alt+$C
 		objpos $0540,$01E8,Electro,$04
@@ -59,7 +58,6 @@ ObjPos_SBZ2:
 		objpos $0576,$0390,Flamethrower,$43,yflip
 		objpos $0590,$0127,SpinPlatform,type_spin_platform_alt+6
 		objpos $0590,$0167,SpinPlatform,type_spin_platform_alt+6
-		objpos $0590,$03D0,Monitor,$15,rem
 		objpos $0590,$04C0,Invisibarrier,$12
 		objpos $05A0,$06A0,Caterkiller,$00,rem
 		objpos $05A8,$0394,Rings,$12,rem
@@ -71,8 +69,6 @@ ObjPos_SBZ2:
 		objpos $05D0,$01E8,Electro,$04
 		objpos $05D0,$06B2,Rings,$14,rem
 		objpos $05F0,$0167,SpinPlatform,type_spin_platform_alt+0
-		objpos $05F0,$03D0,Monitor,$15,rem
-		objpos $05F0,$04D0,Monitor,$15,rem
 		objpos $0610,$0167,SpinPlatform,type_spin_platform_alt+$E
 		objpos $0610,$01A7,SpinPlatform,type_spin_platform_alt+$E
 		objpos $0628,$0490,Rings,$12,rem
@@ -88,13 +84,10 @@ ObjPos_SBZ2:
 		objpos $0670,$01A7,SpinPlatform,type_spin_platform_alt+8
 		objpos $0676,$0390,Flamethrower,$43,yflip
 		objpos $0690,$01A7,SpinPlatform,type_spin_platform_alt+6
-		objpos $0690,$03D0,Monitor,$15,rem
-		objpos $0690,$04D0,Monitor,$15,rem
 		objpos $06B0,$01A7,SpinPlatform,type_spin_platform_alt+4
 		objpos $06D0,$01A7,SpinPlatform,type_spin_platform_alt+2
 		objpos $06D0,$0690,Caterkiller,$00,rem
 		objpos $06F0,$01F1,Monitor,type_monitor_rings,rem
-		objpos $0710,$01B0,Monitor,$11,rem
 		objpos $0728,$0140,Rings,$12,rem
 		objpos $0730,$0340,Rings,$12,rem
 		objpos $0740,$0418,Electro,$04,yflip
@@ -129,7 +122,6 @@ ObjPos_SBZ2:
 		objpos $09F0,$03D0,Bomb,$00,yflip,rem
 		objpos $0A10,$0291,Monitor,type_monitor_rings,rem
 		objpos $0A10,$04F1,Monitor,type_monitor_rings,rem
-		objpos $0A30,$0200,Monitor,$17,rem
 		objpos $0A30,$0291,Monitor,type_monitor_rings,rem
 		objpos $0A50,$0450,RunningDisc,$40
 		objpos $0A60,$01C7,SpinPlatform,type_spin_platform+0
@@ -139,8 +131,6 @@ ObjPos_SBZ2:
 		objpos $0A80,$0267,SpinPlatform,type_spin_platform+0
 		objpos $0AA0,$01C7,SpinPlatform,type_spin_platform+0
 		objpos $0AA0,$0267,SpinPlatform,type_spin_platform+0
-		objpos $0AD0,$01E0,Monitor,$13,rem
-		objpos $0AD0,$0270,Monitor,$15,rem
 		objpos $0AD0,$0390,SwingingPlatform,$07
 		objpos $0AD0,$0690,Caterkiller,$00,rem
 		objpos $0AE0,$01C1,Saws,type_saw_ground_right

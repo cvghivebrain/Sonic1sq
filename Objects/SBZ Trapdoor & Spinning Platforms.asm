@@ -27,7 +27,7 @@ ost_spin_sync:		rs.w 1 ; $36				; bitmask used to synchronise timing: subtype $8
 Spin_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Spin_Trapdoor next
 		move.l	#Map_Trap,ost_mappings(a0)
-		move.w	#tile_Nem_TrapDoor+tile_pal3,ost_tile(a0)
+		move.w	#tile_Kos_TrapDoor+tile_pal3,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#$80,ost_displaywidth(a0)
 		moveq	#0,d0
@@ -40,7 +40,7 @@ Spin_Main:	; Routine 0
 
 		addq.b	#2,ost_routine(a0)			; goto Spin_Spinner next
 		move.l	#Map_Spin,ost_mappings(a0)
-		move.w	#tile_Nem_SpinPlatform,ost_tile(a0)
+		move.w	#tile_Kos_SpinPlatform,ost_tile(a0)
 		move.b	#$10,ost_displaywidth(a0)
 		move.b	#id_ani_spin_1,ost_anim(a0)
 		moveq	#0,d0

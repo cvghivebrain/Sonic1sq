@@ -27,7 +27,7 @@ ost_girder_wait_time:	rs.w 1 ; $3A				; delay for movement (2 bytes)
 Gird_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Gird_Action next
 		move.l	#Map_Gird,ost_mappings(a0)
-		move.w	#tile_Nem_Girder+tile_pal3,ost_tile(a0)
+		move.w	#tile_Kos_Girder+tile_pal3,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#4,ost_priority(a0)
 		move.b	#$60,ost_displaywidth(a0)

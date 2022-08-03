@@ -16,12 +16,22 @@ Sto_Index:	index *,,2
 		ptr Sto_Main
 		ptr Sto_Action
 
-Sto_Var:	; width, height, move distance, type number
-Sto_Var_0:	dc.b  $40,  $C,	$80,   id_Sto_SlideOpen		; $0x/$8x - door
-Sto_Var_1:	dc.b  $1C, $20,	$38,   id_Sto_Drop_RiseSlow	; $1x - stomper
-Sto_Var_2:	dc.b  $1C, $20,	$40,   id_Sto_Drop_RiseFast	; $2x - stomper
-Sto_Var_3:	dc.b  $1C, $20,	$60,   id_Sto_Drop_RiseFast	; $3x - stomper
-Sto_Var_4:	dc.b  $80, $40,	  0,   id_Sto_SlideDiagonal	; $4x/$Cx - huge sliding door in SBZ3
+Sto_Var:	; width, height, tile setting, move distance, type number
+Sto_Var_0:	dc.b $40, $C					; $0x/$8x - door
+		dc.w tile_Kos_SbzDoorH+tile_pal2
+		dc.b $80, id_Sto_SlideOpen
+Sto_Var_1:	dc.b $1C, $20					; $1x - stomper
+		dc.w tile_Kos_Stomper+tile_pal2
+		dc.b $38, id_Sto_Drop_RiseSlow
+Sto_Var_2:	dc.b $1C, $20					; $2x - stomper
+		dc.w tile_Kos_Stomper+tile_pal2
+		dc.b $40, id_Sto_Drop_RiseFast
+Sto_Var_3:	dc.b $1C, $20					; $3x - stomper
+		dc.w tile_Kos_Stomper+tile_pal2
+		dc.b $60, id_Sto_Drop_RiseFast
+Sto_Var_4:	dc.b $80, $40				  	; $4x/$Cx - huge sliding door in SBZ3
+		dc.w tile_Kos_Sbz3HugeDoor+tile_pal3
+		dc.b 0, id_Sto_SlideDiagonal
 
 sizeof_Sto_Var:	equ Sto_Var_1-Sto_Var
 
@@ -40,15 +50,15 @@ Sto_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Sto_Action next
 		moveq	#0,d0
 		move.b	ost_subtype(a0),d0			; get subtype
-		lsr.w	#2,d0
-		andi.w	#$1C,d0					; read only high nybble without bit 7
+		andi.w	#$70,d0					; read only high nybble without bit 7
+		lsr.w	#4,d0
+		move.b	d0,ost_frame(a0)			; high nybble without bit 7 = frame
+		mulu.w	#6,d0
 		lea	Sto_Var(pc,d0.w),a3			; get variables from list
 		move.b	(a3)+,ost_displaywidth(a0)
 		move.b	(a3)+,ost_height(a0)
-		lsr.w	#2,d0
-		move.b	d0,ost_frame(a0)			; high nybble without bit 7 = frame
+		move.w	(a3)+,ost_tile(a0)
 		move.l	#Map_Stomp,ost_mappings(a0)
-		move.w	#tile_Nem_Stomper+tile_pal2,ost_tile(a0)
 		cmpi.b	#id_LZ,(v_zone).w			; check if level is LZ/SBZ3
 		bne.s	@skip_sbz3_init				; if not, branch
 		bset	#0,(f_stomp_sbz3_init).w		; flag object as loaded
@@ -66,7 +76,6 @@ Sto_Main:	; Routine 0
 ; ===========================================================================
 
 @sbz3_init:
-		move.w	#tile_Kos_Sbz3HugeDoor+tile_pal3,ost_tile(a0)
 		cmpi.w	#$A80,ost_x_pos(a0)			; is object in its starting position?
 		bne.s	@skip_sbz3_init				; if not, branch
 		lea	(v_respawn_list).w,a2

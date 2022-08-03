@@ -40,7 +40,7 @@ CFlo_Main:	; Routine 0
 	@notSLZ:
 		cmpi.b	#id_SBZ,(v_zone).w			; check if level is SBZ
 		bne.s	@notSBZ
-		move.w	#tile_Nem_SbzFloor+tile_pal3,ost_tile(a0) ; SBZ specific code
+		move.w	#tile_Kos_SbzFloor+tile_pal3,ost_tile(a0) ; SBZ specific code
 
 	@notSBZ:
 		ori.b	#render_rel,ost_render(a0)

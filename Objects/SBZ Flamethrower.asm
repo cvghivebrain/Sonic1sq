@@ -26,7 +26,7 @@ ost_flame_last_frame:	rs.b 1 ; $36				; last frame of animation
 Flame_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Flame_Action next
 		move.l	#Map_Flame,ost_mappings(a0)
-		move.w	#tile_Nem_FlamePipe+tile_hi,ost_tile(a0)
+		move.w	#tile_Kos_FlamePipe+tile_hi,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#1,ost_priority(a0)
 		move.w	ost_y_pos(a0),ost_flame_time(a0)	; store ost_y_pos (gets overwritten later though)

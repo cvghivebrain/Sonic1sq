@@ -46,7 +46,7 @@ FFloor_Main:	; Routine 0
 		move.w	a1,(a2)+				; save child OST address to list in parent OST
 		move.l	#FalseFloor,ost_id(a1)			; load block object
 		move.l	#Map_FFloor,ost_mappings(a1)
-		move.w	#tile_Nem_SbzBlock_SBZ2+tile_pal3,ost_tile(a1)
+		move.w	#tile_Kos_SbzBlock+tile_pal3,ost_tile(a1)
 		move.b	#render_rel,ost_render(a1)
 		move.b	#$10,ost_displaywidth(a1)
 		move.b	#$10,ost_height(a1)

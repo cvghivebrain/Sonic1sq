@@ -28,7 +28,6 @@ frame_eggman_laugh1:
 		piece	-$10, 0, 4x4, $6F
 		piece	-$18, -4, 1x1, $8F
 		endsprite
-		dc.b 0
 		
 frame_eggman_laugh2:
 		spritemap
@@ -37,7 +36,6 @@ frame_eggman_laugh2:
 		piece	-$10, 1, 4x4, $7F
 		piece	-$18, -3, 1x1, $8F
 		endsprite
-		dc.b 0
 		
 frame_eggman_jump1:
 		spritemap
@@ -46,7 +44,6 @@ frame_eggman_jump1:
 		piece	-$10, 8, 3x2, $4E, xflip
 		piece	-$10, -$14, 4x3, 0
 		endsprite
-		dc.b 0
 		
 frame_eggman_jump2:
 		spritemap
@@ -55,7 +52,6 @@ frame_eggman_jump2:
 		piece	-8, 8, 2x3, $3E, xflip
 		piece	-$10, -$18, 4x3, 0
 		endsprite
-		dc.b 0
 		
 frame_eggman_surprise:
 		spritemap
@@ -64,7 +60,6 @@ frame_eggman_surprise:
 		piece	-$10, -$18, 4x3, 0
 		piece	-$10, 0, 4x4, $6F
 		endsprite
-		dc.b 0
 		
 frame_eggman_jump:
 		spritemap
@@ -95,7 +90,6 @@ frame_eggman_running2:
 		piece	-$18, $B, 2x2, $4A, xflip
 		piece	-$10, -$1A, 4x3, 0
 		endsprite
-		dc.b 0
 		
 frame_eggman_intube:
 		spritemap					; Eggman inside tube in Final Zone

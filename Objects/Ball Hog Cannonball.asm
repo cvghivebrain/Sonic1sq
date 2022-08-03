@@ -24,7 +24,8 @@ Cbal_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Cbal_Bounce next
 		move.b	#7,ost_height(a0)
 		move.l	#Map_Hog,ost_mappings(a0)
-		move.w	#tile_Nem_BallHog+tile_pal2,ost_tile(a0)
+		move.w	(v_tile_ballhog).w,ost_tile(a0)
+		add.w	#tile_pal2,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#3,ost_priority(a0)
 		move.b	#id_col_6x6+id_col_hurt,ost_col_type(a0)

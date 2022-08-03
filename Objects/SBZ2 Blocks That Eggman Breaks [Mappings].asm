@@ -18,21 +18,18 @@ frame_ffloor_topleft:
 		piece	-8, -8, 1x2, 0
 		piece	0, -8, 1x2, 4
 		endsprite
-		dc.b 0
 		
 frame_ffloor_topright:
 		spritemap
 		piece	-8, -8, 1x2, 8
 		piece	0, -8, 1x2, $C
 		endsprite
-		dc.b 0
 		
 frame_ffloor_bottomleft:
 		spritemap
 		piece	-8, -8, 1x2, 2
 		piece	0, -8, 1x2, 6
 		endsprite
-		dc.b 0
 		
 frame_ffloor_bottomright:
 		spritemap

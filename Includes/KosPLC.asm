@@ -187,6 +187,28 @@ KPLC_SLZ:	kplcheader
 
 KPLC_SBZ:	kplcheader
 		kplc Kos_SBZ
+		kplc Kos_Button,v_tile_button
+		kplc Kos_SbzBlock
+		kplc Kos_Stomper
+		kplc Kos_SbzDoorV
+		kplc Kos_Girder
+		kplc Kos_SbzDisc
+		kplc Kos_SbzJunction
+		kplc Kos_BigSpike,v_tile_spikeball
+		kplc Kos_Cutter
+		kplc Kos_FlamePipe
+		kplc Kos_SbzFloor
+		kplc Kos_SlideFloor
+		kplc Kos_SbzDoorH
+		kplc Kos_Electric
+		kplc Kos_TrapDoor
+		kplc Kos_SpinPlatform
+		kplc Kos_BallHog,v_tile_ballhog
+		kplc Kos_Cater,v_tile_caterkiller
+		kplc Kos_Bomb,v_tile_bomb
+		kplc Kos_Spikes,v_tile_spikes
+		kplc Kos_HSpring,v_tile_hspring
+		kplc Kos_VSpring,v_tile_vspring			; $A0A0 used
 	KPLC_SBZ_end:
 		set_dma_size last_vram
 

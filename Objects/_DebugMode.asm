@@ -328,31 +328,31 @@ DebugList_SBZ:
 ;			mappings	object		subtype	frame	VRAM setting
 		dbug	Map_Ring,	Rings,		0,	0,	tile_Nem_Ring+tile_pal2
 		dbug	Map_Monitor,	Monitor,	0,	0,	tile_Nem_Monitors
-		dbug	Map_Bomb,	Bomb,		0,	0,	tile_Kos_Bomb
-		dbug	Map_Cat,	Caterkiller,	0,	0,	tile_Kos_Cater+tile_pal2
-		dbug	Map_BBall,	SwingingPlatform, 7,	id_frame_bball_anchor,	tile_Kos_BigSpike+tile_pal3
-		dbug	Map_Disc,	RunningDisc,	$E0,	0,	tile_Nem_SbzDisc+tile_pal3+tile_hi
-		dbug	Map_MBlock,	MovingBlock,	type_mblock_sbz+type_mblock_updown,	id_frame_mblock_sbz,	tile_Nem_Stomper+tile_pal2
-		dbug	Map_But,	Button,		0,	0,	tile_Kos_Button
-		dbug	Map_Trap,	SpinPlatform,	3,	0,	tile_Nem_TrapDoor+tile_pal3
-		dbug	Map_Spin,	SpinPlatform,	$83,	0,	tile_Nem_SpinPlatform
-		dbug	Map_Saw,	Saws,		type_saw_pizza_updown,	0,	tile_Nem_Cutter+tile_pal3
-		dbug	Map_CFlo,	CollapseFloor,	0,	0,	tile_Nem_SbzFloor+tile_pal3
-		dbug	Map_MBlock,	MovingBlock,	type_mblock_sbzwide+type_mblock_slide,	id_frame_mblock_sbzwide,	tile_Nem_SlideFloor+tile_pal3
-		dbug	Map_Stomp,	ScrapStomp,	0,	id_frame_stomp_door,	tile_Nem_Stomper+tile_pal2
-		dbug	Map_ADoor,	AutoDoor,	0,	0,	tile_Nem_SbzDoorV+tile_pal3
-		dbug	Map_Stomp,	ScrapStomp,	type_stomp_slow,	id_frame_stomp_stomper,	tile_Nem_Stomper+tile_pal2
-		dbug	Map_Saw,	Saws,		type_saw_pizza_sideways,	id_frame_saw_pizzacutter1,	tile_Nem_Cutter+tile_pal3
-		dbug	Map_Stomp,	ScrapStomp,	type_stomp_fast_short,	id_frame_stomp_stomper,	tile_Nem_Stomper+tile_pal2
-		dbug	Map_Saw,	Saws,		type_saw_ground_left,	id_frame_saw_groundsaw1,	tile_Nem_Cutter+tile_pal3
-		dbug	Map_Stomp,	ScrapStomp,	type_stomp_fast_long,	id_frame_stomp_stomper,	tile_Nem_Stomper+tile_pal2
-		dbug	Map_VanP,	VanishPlatform, 0,	0,	tile_Nem_SbzBlock+tile_pal3
-		dbug	Map_Flame,	Flamethrower,	$64,	id_frame_flame_pipe1,	tile_Nem_FlamePipe+tile_hi
-		dbug	Map_Flame,	Flamethrower,	$64,	id_frame_flame_valve1,	tile_Nem_FlamePipe+tile_hi
-		dbug	Map_Elec,	Electro,	4,	0,	tile_Nem_Electric
-		dbug	Map_Gird,	Girder,		0,	0,	tile_Nem_Girder+tile_pal3
+		dbug	Map_Bomb,	Bomb,		0,	0,	tile_Kos_Bomb_KPLC_SBZ
+		dbug	Map_Cat,	Caterkiller,	0,	0,	tile_Kos_Cater_KPLC_SBZ+tile_pal2
+		dbug	Map_BBall,	SwingingPlatform, 7,	id_frame_bball_anchor,	tile_Kos_BigSpike_KPLC_SBZ+tile_pal3
+		dbug	Map_Disc,	RunningDisc,	$E0,	0,	tile_Kos_SbzDisc+tile_pal3+tile_hi
+		dbug	Map_MBlock,	MovingBlock,	type_mblock_sbz+type_mblock_updown,	id_frame_mblock_sbz,	tile_Kos_Stomper+tile_pal2
+		dbug	Map_But,	Button,		0,	0,	tile_Kos_Button_KPLC_SBZ
+		dbug	Map_Trap,	SpinPlatform,	3,	0,	tile_Kos_TrapDoor+tile_pal3
+		dbug	Map_Spin,	SpinPlatform,	$83,	0,	tile_Kos_SpinPlatform
+		dbug	Map_Saw,	Saws,		type_saw_pizza_updown,	0,	tile_Kos_Cutter+tile_pal3
+		dbug	Map_CFlo,	CollapseFloor,	0,	0,	tile_Kos_SbzFloor+tile_pal3
+		dbug	Map_MBlock,	MovingBlock,	type_mblock_sbzwide+type_mblock_slide,	id_frame_mblock_sbzwide,	tile_Kos_SlideFloor+tile_pal3
+		dbug	Map_Stomp,	ScrapStomp,	0,	id_frame_stomp_door,	tile_Kos_Stomper+tile_pal2
+		dbug	Map_ADoor,	AutoDoor,	0,	0,	tile_Kos_SbzDoorV+tile_pal3
+		dbug	Map_Stomp,	ScrapStomp,	type_stomp_slow,	id_frame_stomp_stomper,	tile_Kos_Stomper+tile_pal2
+		dbug	Map_Saw,	Saws,		type_saw_pizza_sideways,	id_frame_saw_pizzacutter1,	tile_Kos_Cutter+tile_pal3
+		dbug	Map_Stomp,	ScrapStomp,	type_stomp_fast_short,	id_frame_stomp_stomper,	tile_Kos_Stomper+tile_pal2
+		dbug	Map_Saw,	Saws,		type_saw_ground_left,	id_frame_saw_groundsaw1,	tile_Kos_Cutter+tile_pal3
+		dbug	Map_Stomp,	ScrapStomp,	type_stomp_fast_long,	id_frame_stomp_stomper,	tile_Kos_Stomper+tile_pal2
+		dbug	Map_VanP,	VanishPlatform, 0,	0,	tile_Kos_SbzBlock+tile_pal3
+		dbug	Map_Flame,	Flamethrower,	$64,	id_frame_flame_pipe1,	tile_Kos_FlamePipe+tile_hi
+		dbug	Map_Flame,	Flamethrower,	$64,	id_frame_flame_valve1,	tile_Kos_FlamePipe+tile_hi
+		dbug	Map_Elec,	Electro,	4,	0,	tile_Kos_Electric
+		dbug	Map_Gird,	Girder,		0,	0,	tile_Kos_Girder+tile_pal3
 		dbug	Map_Invis,	Invisibarrier,	$11,	0,	tile_Nem_Monitors+tile_hi
-		dbug	Map_Hog,	BallHog,	4,	0,	tile_Nem_BallHog+tile_pal2
+		dbug	Map_Hog,	BallHog,	4,	0,	tile_Kos_BallHog+tile_pal2
 		dbug	Map_Lamp,	Lamppost,	1,	0,	tile_Nem_Lamp
 	DebugList_SBZ_end:
 

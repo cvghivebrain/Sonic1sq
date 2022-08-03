@@ -895,24 +895,24 @@ Eni_SSBg2:	incbin	"Tilemaps\SS Background 2.eni"		; special stage background (ma
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - SBZ stuff
 ; ---------------------------------------------------------------------------
-		incfile Nem_SbzDisc,"Graphics - Compressed\SBZ Running Disc",nem
-		incfile Nem_SbzJunction,"Graphics - Compressed\SBZ Junction Wheel",nem
-		incfile Nem_Cutter,"Graphics - Compressed\SBZ Pizza Cutter",nem
-		incfile Nem_Stomper,"Graphics - Compressed\SBZ Stomper",nem
-		incfile Nem_SpinPlatform,"Graphics - Compressed\SBZ Spinning Platform",nem
-		incfile Nem_TrapDoor,"Graphics - Compressed\SBZ Trapdoor",nem
-		incfile Nem_SbzFloor,"Graphics - Compressed\SBZ Collapsing Floor",nem
-		incfile Nem_Electric,"Graphics - Compressed\SBZ Electrocuter",nem
-		incfile Nem_SbzBlock,"Graphics - Compressed\SBZ Vanishing Block",nem
-		incfile Nem_FlamePipe,"Graphics - Compressed\SBZ Flaming Pipe",nem
-		incfile Nem_SbzDoorV,"Graphics - Compressed\SBZ Small Vertical Door",nem
-		incfile Nem_SlideFloor,"Graphics - Compressed\SBZ Sliding Floor Trap",nem
-		incfile Nem_SbzDoorH,"Graphics - Compressed\SBZ Large Horizontal Door",nem
-		incfile Nem_Girder,"Graphics - Compressed\SBZ Crushing Girder",nem
+		incfile Kos_SbzDisc,"Graphics Kosinski\SBZ Running Disc",kos
+		incfile Kos_SbzJunction,"Graphics Kosinski\SBZ Junction Wheel",kos
+		incfile Kos_Cutter,"Graphics Kosinski\SBZ Pizza Cutter",kos
+		incfile Kos_Stomper,"Graphics Kosinski\SBZ Stomper",kos
+		incfile Kos_SpinPlatform,"Graphics Kosinski\SBZ Spinning Platform",kos
+		incfile Kos_TrapDoor,"Graphics Kosinski\SBZ Trapdoor",kos
+		incfile Kos_SbzFloor,"Graphics Kosinski\SBZ Collapsing Floor",kos
+		incfile Kos_Electric,"Graphics Kosinski\SBZ Electrocuter",kos
+		incfile Kos_SbzBlock,"Graphics Kosinski\SBZ Vanishing Block",kos
+		incfile Kos_FlamePipe,"Graphics Kosinski\SBZ Flaming Pipe",kos
+		incfile Kos_SbzDoorV,"Graphics Kosinski\SBZ Small Vertical Door",kos
+		incfile Kos_SlideFloor,"Graphics Kosinski\SBZ Sliding Floor Trap",kos
+		incfile Kos_SbzDoorH,"Graphics Kosinski\SBZ Large Horizontal Door",kos
+		incfile Kos_Girder,"Graphics Kosinski\SBZ Crushing Girder",kos
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - enemies
 ; ---------------------------------------------------------------------------
-		incfile Nem_BallHog,"Graphics - Compressed\Ball Hog",nem
+		incfile Kos_BallHog,"Graphics Kosinski\Ball Hog",kos
 		incfile Kos_Crabmeat,"Graphics Kosinski\Crabmeat",kos
 		incfile Kos_Buzz,"Graphics Kosinski\Buzz Bomber",kos
 		incfile Kos_Burrobot,"Graphics Kosinski\Burrobot",kos

@@ -6,8 +6,12 @@
 
 DynamicLevelEvents:
 		moveq	#0,d0
+		tst.l	(v_dle_ptr).w
+		beq.s	@skip_events				; branch if pointer is empty
 		movea.l	(v_dle_ptr).w,a1
 		jsr	(a1)
+		
+	@skip_events:
 		moveq	#2,d1
 		move.w	(v_boundary_bottom_next).w,d0		; new boundary y pos is written here
 		sub.w	(v_boundary_bottom).w,d0

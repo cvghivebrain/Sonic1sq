@@ -141,32 +141,9 @@ PLC_SYZ2:	plcheader
 ; Pattern load cues - Scrap Brain
 ; ---------------------------------------------------------------------------
 PLC_SBZ:	plcheader
-		plcm	Nem_Stomper, $5800			; moving platform and stomper
-		plcm	Nem_SbzDoorV				; door ($5D00)
-		plcm	Nem_Girder				; girder ($5E00)
-		plcm	Nem_BallHog				; ball hog enemy ($6040)
-		plcm	Nem_SbzDisc, $6880			; spot on large	wheel
-		plcm	Nem_SbzJunction				; wheel	that grabs Sonic ($6900)
-		;plcm	Nem_BigSpike,,SBZ			; large	spikeball ($7220)
-		plcm	Nem_Cutter				; pizza	cutter ($76A0)
-		plcm	Nem_FlamePipe				; flaming pipe ($7B20)
-		plcm	Nem_SbzFloor				; collapsing floor ($7EA0)
-		plcm	Nem_SbzBlock, $9860			; vanishing block
 	PLC_SBZ_end:
 
 PLC_SBZ2:	plcheader
-		;plcm	Nem_Cater, $5600, SBZ			; caterkiller enemy
-		;plcm	Nem_Bomb, vram_bomb			; bomb enemy ($8000)
-		plcm	Nem_SlideFloor, $8C00			; floor	that slides away
-		plcm	Nem_SbzDoorH				; horizontal door ($8DE0)
-		plcm	Nem_Electric				; electric orb ($8FC0)
-		plcm	Nem_TrapDoor				; trapdoor ($9240)
-		plcm	Nem_SbzFloor, $7F20			; collapsing floor
-		plcm	Nem_SpinPlatform, $9BE0			; small	spinning platform
-		;plcm	Nem_Button, vram_button		; button ($A1E0)
-		;plcm	Nem_Spikes, vram_spikes			; spikes ($A360)
-		;plcm	Nem_HSpring, vram_hspring		; horizontal spring ($A460)
-		;plcm	Nem_VSpring, vram_vspring		; vertical spring ($A660)
 	PLC_SBZ2_end:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - title card
@@ -307,9 +284,7 @@ PLC_TryAgain:	plcheader
 ; Pattern load cues - Eggman on SBZ 2
 ; ---------------------------------------------------------------------------
 PLC_EggmanSBZ2:	plcheader
-		plcm	Nem_SbzBlock, $A300, SBZ2		; block
 		plcm	Nem_Sbz2Eggman, $8000			; Eggman
-		;plcm	Nem_Button, $9400, SBZ2		; button
 	PLC_EggmanSBZ2_end:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - final boss

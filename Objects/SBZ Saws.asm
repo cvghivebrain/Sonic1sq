@@ -25,7 +25,7 @@ ost_saw_flag:		rs.b 1 ; $3D				; flag set when the ground saw appears
 Saw_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Saw_Action next
 		move.l	#Map_Saw,ost_mappings(a0)
-		move.w	#tile_Nem_Cutter+tile_pal3,ost_tile(a0)
+		move.w	#tile_Kos_Cutter+tile_pal3,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#4,ost_priority(a0)
 		move.b	#$20,ost_displaywidth(a0)

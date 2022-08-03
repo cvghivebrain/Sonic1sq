@@ -10,10 +10,10 @@ Map_Stomp:	index *
 		
 frame_stomp_door:
 		spritemap					; horizontal sliding door
-		piece	-$40, -$C, 4x3, $1AF, pal2
-		piece	-$20, -$C, 4x3, $1B2, pal2
-		piece	0, -$C, 4x3, $1B2, pal2
-		piece	$20, -$C, 4x3, $1AF, pal2, xflip
+		piece	-$40, -$C, 4x3, 0, pal2
+		piece	-$20, -$C, 4x3, 3, pal2
+		piece	0, -$C, 4x3, 3, pal2
+		piece	$20, -$C, 4x3, 0, pal2, xflip
 		endsprite
 		
 frame_stomp_stomper:

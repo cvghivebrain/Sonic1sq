@@ -180,7 +180,7 @@ AniArt_SBZ_Script:
 		dc.l @puff2
 	@puff1:
 		dc.w 8						; frame count
-		set_dma_dest $8900				; VRAM destination
+		set_dma_dest $5520				; VRAM destination
 		set_dma_size 12*sizeof_cell			; size
 		dc.w 180					; duration
 		set_dma_src Art_SbzSmoke			; ROM source
@@ -200,7 +200,7 @@ AniArt_SBZ_Script:
 		set_dma_src Art_SbzSmoke+(12*sizeof_cell*7)
 	@puff2:
 		dc.w 8
-		set_dma_dest $8A80
+		set_dma_dest $56A0
 		set_dma_size 12*sizeof_cell
 		dc.w 120
 		set_dma_src Art_SbzSmoke
