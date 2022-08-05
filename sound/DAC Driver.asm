@@ -7,25 +7,18 @@
 ;  Adapted to s1disasm by Aurora Fields
 ; ===========================================================================
 
-		opt	l.					; . is the local label symbol
-		opt	ae-					; automatic even's are disabled by default
-		opt	ws+					; allow statements to contain white-spaces
-		opt	w+					; print warnings
-		opt	m+					; do not expand macros - if enabled, this can break assembling
-
-		org	0					; z80 Align, handled by the build process
-		include	"Macros - More CPUs.asm"		; include language macros
 		cpu	z80					; also start a new z80 program
+		phase	0
 
-SEGAPCM:	equ $DEADBEEF					; give Sega PCM an arbitary value. Basically, just avoid getting optimized by Kosinski
-SEGAPCM_Len:	equ $AC1D					; give Sega PCM an arbitary size. Basically, just avoid getting optimized by Kosinski
-SEGAPCM_Pitch:	equ 0Bh						; the pitch of the SEGA sound
+SEGA_PCM:	equ SegaPCM
+SEGA_PCM_Len:	equ filesize("\SegaPCM_File")
+SEGA_PCM_Pitch:	equ 0Bh						; the pitch of the SEGA sound
 
 		rsset 1FFCh					; extra RAM variables
 z80_stack:	rs.b 1						; stack pointer
 zDAC_Status:	rs.b 1						; bit 7 set if the driver is not accepting new samples, it is clear otherwise
 		rs.b 1						; unused
-zDAC_Sample:	rs.b 1						; sample to play, the 68K will move into this locatiton whatever sample that's supposed to be played.
+zDAC_Sample:	rs.b 1						; sample to play, the 68K will move into this location whatever sample that's supposed to be played.
 
 YMREG1:		equ 4000h					; YM2612/YM2428 port 1 address register
 zBankSelect:	equ 6000h					; ROM bank shift register
@@ -43,16 +36,16 @@ Z80Driver_Start:
 		xor	a					; a=0
 		ld	(zDAC_Status),a				; Disable DAC
 		ld	(zDAC_Sample),a				; Clear sample
-		ld	a,(SEGAPCM>>24)&$FF			; least significant bit from ROM bank ID
+		ld	a,(SEGA_PCM>>24)&$FF			; least significant bit from ROM bank ID
 		ld	(zBankSelect),a				; Latch it to bank register, initializing bank switch
 
 		ld	b,8					; Number of bits to latch to ROM bank
-		ld	a,(SEGAPCM>>16)&$FF			; Bank ID without the least significant bit
+		ld	a,(SEGA_PCM>>16)&$FF			; Bank ID without the least significant bit
 
-.bankswitch:
+@bankswitch:
 		ld	(zBankSelect),a				; Latch another bit to bank register.
 		rrca						; Move next bit into position
-		djnz	.bankswitch				; decrement and loop if not zero
+		djnz	@bankswitch				; decrement and loop if not zero
 		jr	CheckForSamples
 
 ; ---------------------------------------------------------------------------
@@ -191,16 +184,16 @@ PlaySampleLoop:
 ; ---------------------------------------------------------------------------
 
 Play_Sega:
-		ld	de,SEGAPCM&$FFFF			; de = bank-relative location of the SEGA sound
-		ld	hl,SEGAPCM_Len&$FFFF			; hl = size of the SEGA sound
+		ld	de,SEGA_PCM&$FFFF			; de = bank-relative location of the SEGA sound
+		ld	hl,SEGA_PCM_Len&$FFFF			; hl = size of the SEGA sound
 		ld	c,2Ah					; c = DAC data register
 
-.play:
+@play:
 		ld	a,(de)					; a = next byte of the SEGA PCM
 		ld	(ix+0),c				; select the DAC data register (2Ah)
 		ld	(ix+1),a				; send DAC value to YM
 
-		ld	b,SEGAPCM_Pitch				; b = pitch of the SEGA sample
+		ld	b,SEGA_PCM_Pitch			; b = pitch of the SEGA sample
 		djnz	*					; delay the z80 to allow for pitch variations
 
 		inc	de					; go to the next byte in the sample
@@ -208,7 +201,7 @@ Play_Sega:
 
 		ld	a,l					; check if hl is 0
 		or	h					; this does the actual check - if not, then a will be nonzero
-		jp	nz,.play				; if hl is not 0, keep playing the sample
+		jp	nz,@play				; if hl is not 0, keep playing the sample
 		jp	CheckForSamples				; SEGA sound is done; wait for new samples
 
 ; ---------------------------------------------------------------------------
@@ -226,28 +219,28 @@ zsample:	macro	name, pitch
 		endm
 
 PCM_Table:
-		zsample	dKick, 17h				; Kick sample
-		zsample	dSnare, 1h				; Snare sample
-		zsample	dTimpani, 1Bh				; Kick sample
+		zsample	dac_dKick, 17h				; Kick sample
+		zsample	dac_dSnare, 1h				; Snare sample
+		zsample	dac_dTimpani, 1Bh			; Timpani sample
 Sample3_Pitch:	= *-4						; this is the location of timpani pitch
 
 ; ---------------------------------------------------------------------------
 ; Includes for all the samples
 ; ---------------------------------------------------------------------------
 
-dKick:		incbin "sound/dac/kick.dpcm"
-dKick_End:
+dac_dKick:	incbin "sound/dac/kick.dpcm"
+dac_dKick_End:
 
-dSnare:		incbin "sound/dac/snare.dpcm"
-dSnare_End:
+dac_dSnare:	incbin "sound/dac/snare.dpcm"
+dac_dSnare_End:
 
-dTimpani:	incbin "sound/dac/timpani.dpcm"
-dTimpani_End:
+dac_dTimpani:	incbin "sound/dac/timpani.dpcm"
+dac_dTimpani_End:
 ; ---------------------------------------------------------------------------
 
 EndOfDriver:
 		if *>z80_stack
 		inform 2,"The sound driver, including samples, may at most be $\$z80_stack bytes, but is currently $\$* bytes in size."
 		endc
-
-		END
+		cpu	68000
+		dephase

@@ -36,17 +36,7 @@ draw_base:		equ vram_fg			; base address for nametables, used by Calc_VRAM_Pos (
 draw_fg:		equ $4000+(vram_fg-draw_base)	; VRAM write command + fg nametable address relative to base
 draw_bg:		equ $4000+(vram_bg-draw_base)	; VRAM write command + bg nametable address relative to base
 
-vram_crabmeat:		equ $8000	; crabmeat graphics
-vram_bomb:		equ $8000	; bomb enemy graphics
 vram_giantring:		equ $8000	; giant ring graphics
-vram_orbinaut:		equ $8520	; orbinaut graphics
-vram_buzz:		equ $8880	; buzz bomber graphics
-vram_yadrin:		equ $8F60	; yadrin graphics
-vram_cater:		equ $9FE0	; caterkiller graphics
-vram_button:		equ $A1E0	; button graphics
-vram_spikes:		equ $A360	; spikes graphics
-vram_hspring:		equ $A460	; horizontal spring graphics
-vram_vspring:		equ $A660	; vertical spring graphics
 vram_animal1:		equ $B000	; animal graphics
 vram_animal2:		equ $B240	; animal graphics
 vram_credits:		equ $B400	; credits font graphics

@@ -1,14 +1,8 @@
 @echo off
 
-rem assemble Z80 sound driver
-axm68k /m /k /p "sound\DAC Driver.asm", "sound\DAC Driver.unc" >"sound\errors.txt", , "sound\DAC Driver.lst"
-type "sound\errors.txt"
-IF NOT EXIST "sound\DAC Driver.unc" PAUSE & EXIT 2
-
 rem compress kosinski files
-for %%f in ("256x256 Mappings\*.unc") do "mdcomp\koscmp" "%%f" "256x256 Mappings\%%~nf.kos"
-for %%f in ("Graphics Kosinski\*.bin") do "mdcomp\koscmp" "%%f" "Graphics Kosinski\%%~nf.kos"
-"mdcomp\koscmp" "sound\DAC Driver.unc" "sound\DAC Driver.kos"
+for %%f in ("256x256 Mappings\*.unc") do "mdcomp\kosplus" "%%f" "256x256 Mappings\%%~nf.kos"
+for %%f in ("Graphics Kosinski\*.bin") do "mdcomp\kosplus" "%%f" "Graphics Kosinski\%%~nf.kos"
 
 rem assemble final rom
 IF EXIST s1built.bin move /Y s1built.bin s1built.prev.bin >NUL
