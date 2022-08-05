@@ -40,7 +40,7 @@ TCha_Main:	; Routine 0
 		move.l	#TryChaos,ost_id(a1)			; load emerald object
 		move.b	#id_TCha_Move,ost_routine(a1)		; goto TCha_Move next
 		move.l	#Map_ECha,ost_mappings(a1)
-		move.w	#tile_Nem_EndEm_TryAgain,ost_tile(a1)
+		move.w	(v_tile_emeralds).w,ost_tile(a1)
 		move.b	#render_abs,ost_render(a1)
 		move.b	#1,ost_priority(a1)
 		move.w	#$104,ost_x_pos(a1)

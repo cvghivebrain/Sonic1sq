@@ -81,6 +81,7 @@ KosLoadCues:
 		ptr KPLC_LZ
 		ptr KPLC_SLZ
 		ptr KPLC_SBZ
+		ptr KPLC_FZ
 		ptr KPLC_Title
 		ptr KPLC_End
 
@@ -212,9 +213,19 @@ KPLC_SBZ:	kplcheader
 	KPLC_SBZ_end:
 		set_dma_size last_vram
 
+KPLC_FZ:	kplcheader
+		kplc Kos_SBZ
+		kplc Kos_FzBoss
+		kplc Kos_FzEggman
+	KPLC_FZ_end:
+		set_dma_size last_vram
+
 KPLC_End:	kplcheader
 		kplc Kos_GHZ_1st
 		kplc Kos_GHZ_2nd
+		kplc Kos_EndFlower
+		kplc Kos_EndEm,v_tile_emeralds
+		kplc Kos_EndSonic
 	KPLC_End_end:
 		set_dma_size last_vram
 

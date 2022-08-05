@@ -1012,16 +1012,15 @@ Blk256_SBZ:	if Revision=0
 		incfile Nem_Weapons,"Graphics - Compressed\Boss - Weapons",nem
 		incfile Nem_Prison,"Graphics - Compressed\Prison Capsule",nem
 		incfile Nem_Sbz2Eggman,"Graphics - Compressed\Boss - Eggman in SBZ2 & FZ",nem
-		incfile Nem_FzBoss,"Graphics - Compressed\Boss - Final Zone",nem
-		incfile Nem_FzEggman,"Graphics - Compressed\Boss - Eggman after FZ Fight",nem
+		incfile Kos_FzBoss,"Graphics Kosinski\Boss - Final Zone",kos
+		incfile Kos_FzEggman,"Graphics Kosinski\Boss - Eggman after FZ Fight",kos
 		incfile Nem_Exhaust,"Graphics - Compressed\Boss - Exhaust Flame",nem
-		incfile Nem_EndEm,"Graphics - Compressed\Ending - Emeralds",nem
-		incfile Nem_EndSonic,"Graphics - Compressed\Ending - Sonic",nem
+		incfile Kos_EndEm,"Graphics Kosinski\Ending - Emeralds",kos
+		incfile Kos_EndSonic,"Graphics Kosinski\Ending - Sonic",kos
 		incfile Nem_TryAgain,"Graphics - Compressed\Ending - Try Again",nem
-		incfile Nem_EndFlower,"Graphics - Compressed\Ending - Flowers",nem
+		incfile Kos_EndFlower,"Graphics Kosinski\Ending - Flowers",kos
 		incfile Nem_CreditText,"Graphics - Compressed\Ending - Credits",nem
 		incfile Nem_EndStH,"Graphics - Compressed\Ending - StH Logo",nem
-		incfile	Nem_EndEggman,"Graphics - Compressed\Unused - Eggman Ending",nem
 ; ---------------------------------------------------------------------------
 ; Collision data
 ; ---------------------------------------------------------------------------

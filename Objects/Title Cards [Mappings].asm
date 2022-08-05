@@ -122,6 +122,20 @@ frame_card_sbz:
 		dc.w $41C, $15C
 		dc.w $21C, $15C
 		
+frame_card_fz:
+		spritemap					; FINAL
+		piece -$24, -8, 2x2, $14
+		piece -$14, -8, 1x2, $20
+		piece -$C, -8, 2x2, $2E
+		piece 4, -8, 2x2, 0
+		piece $14, -8, 2x2, $26
+		endsprite
+		
+		dc.w 0,	$120					; FINAL
+		dc.w -$11C, $124
+		dc.w $3EC, $3EC
+		dc.w $1EC, $12C
+		
 frame_card_zone:
 		spritemap					; ZONE
 		piece -$20, -8, 2x2, $4E
@@ -166,17 +180,3 @@ frame_card_oval:
 		piece -$14, $C, 3x1, $7C
 		endsprite
 		even
-		
-frame_card_fz:
-		spritemap					; FINAL
-		piece -$24, -8, 2x2, $14
-		piece -$14, -8, 1x2, $20
-		piece -$C, -8, 2x2, $2E
-		piece 4, -8, 2x2, 0
-		piece $14, -8, 2x2, $26
-		endsprite
-		
-		dc.w 0,	$120					; FINAL
-		dc.w -$11C, $124
-		dc.w $3EC, $3EC
-		dc.w $1EC, $12C

@@ -125,9 +125,18 @@ Level_TtlCardLoop:
 		jsr	(ExecuteObjects).l
 		jsr	(BuildSprites).l
 		bsr.w	RunPLC
-		move.w	(v_ost_titlecard3+ost_x_pos).w,d0
-		cmp.w	(v_ost_titlecard3+ost_card_x_stop).w,d0	; has title card sequence finished?
+		move.w	(v_ost_titlecard1+ost_x_pos).w,d0
+		cmp.w	(v_ost_titlecard1+ost_card_x_stop).w,d0	; has title card sequence finished?
 		bne.s	Level_TtlCardLoop			; if not, branch
+		move.w	(v_ost_titlecard2+ost_x_pos).w,d0
+		cmp.w	(v_ost_titlecard2+ost_card_x_stop).w,d0
+		bne.s	Level_TtlCardLoop
+		move.w	(v_ost_titlecard3+ost_x_pos).w,d0
+		cmp.w	(v_ost_titlecard3+ost_card_x_stop).w,d0
+		bne.s	Level_TtlCardLoop
+		move.w	(v_ost_titlecard4+ost_x_pos).w,d0
+		cmp.w	(v_ost_titlecard4+ost_card_x_stop).w,d0
+		bne.s	Level_TtlCardLoop
 		tst.l	(v_plc_buffer).w			; are there any items in the pattern load cue?
 		bne.s	Level_TtlCardLoop			; if yes, branch
 		jsr	(Hud_Base).l				; load basic HUD gfx

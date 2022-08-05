@@ -263,7 +263,7 @@ Zone_KPLC_MZ:	dc.w id_KPLC_MZ,id_KPLC_MZ,id_KPLC_MZ
 Zone_KPLC_SYZ:	dc.w id_KPLC_SYZ,id_KPLC_SYZ,id_KPLC_SYZ
 Zone_KPLC_LZ:	dc.w id_KPLC_LZ,id_KPLC_LZ,id_KPLC_LZ,id_KPLC_LZ ; SBZ3
 Zone_KPLC_SLZ:	dc.w id_KPLC_SLZ,id_KPLC_SLZ,id_KPLC_SLZ
-Zone_KPLC_SBZ:	dc.w id_KPLC_SBZ,id_KPLC_SBZ,id_KPLC_SBZ	; FZ
+Zone_KPLC_SBZ:	dc.w id_KPLC_SBZ,id_KPLC_SBZ,id_KPLC_FZ
 Zone_KPLC_End:	dc.w id_KPLC_End,id_KPLC_End
 
 ; ---------------------------------------------------------------------------

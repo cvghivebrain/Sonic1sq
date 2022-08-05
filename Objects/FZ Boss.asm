@@ -28,9 +28,9 @@ BFZ_Index:	index *,,2
 BFZ_ObjData:	; x pos, y pos,	VRAM setting, mappings pointer
 		dc.w $100, $100, tile_Nem_Sbz2Eggman_FZ
 		dc.l Map_SEgg
-		dc.w $25B0, $590, tile_Nem_FzBoss
+		dc.w $25B0, $590, tile_Kos_FzBoss
 		dc.l Map_EggCyl
-		dc.w $26E0, $596, tile_Nem_FzEggman
+		dc.w $26E0, $596, tile_Kos_FzEggman
 		dc.l Map_FZLegs
 		dc.w $26E0, $596, tile_Nem_Sbz2Eggman_FZ
 		dc.l Map_SEgg
@@ -555,7 +555,7 @@ BFZ_Cockpit:	; Routine 8
 		move.b	#2,ost_priority(a0)
 		move.b	#id_ani_fzeggman_0,ost_anim(a0)
 		move.l	#Map_FZDamaged,ost_mappings(a0)		; use mappings for damaged ship
-		move.w	#tile_Nem_FzEggman,ost_tile(a0)
+		move.w	#tile_Kos_FzEggman,ost_tile(a0)
 		lea	Ani_FZEgg(pc),a1
 		jsr	(AnimateSprite).l
 		bra.w	BFZ_Update

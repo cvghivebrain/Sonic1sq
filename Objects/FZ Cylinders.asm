@@ -43,7 +43,7 @@ Cyl_Main:	; Routine 0
 		move.b	#render_rel,ost_render(a0)
 		bset	#render_onscreen_bit,ost_render(a0)
 		bset	#render_useheight_bit,ost_render(a0)
-		move.w	#tile_Nem_FzBoss,ost_tile(a0)
+		move.w	#tile_Kos_FzBoss,ost_tile(a0)
 		move.l	#Map_EggCyl,ost_mappings(a0)
 		move.w	(a1)+,ost_x_pos(a0)
 		move.w	(a1),ost_y_pos(a0)

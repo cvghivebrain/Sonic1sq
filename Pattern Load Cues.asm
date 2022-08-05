@@ -158,7 +158,6 @@ PLC_Boss:	plcheader
 		plcm	Nem_Eggman, $8000			; Eggman main patterns
 		plcm	Nem_Weapons				; Eggman's weapons ($8D80)
 		plcm	Nem_Prison, $93A0			; prison capsule
-		;plcm	Nem_Bomb, $A300, Boss			; bomb enemy (partially overwritten - shrapnel remains)
 		plcm	Nem_Exhaust, $A540			; exhaust flame
 	PLC_Boss_end:
 ; ---------------------------------------------------------------------------
@@ -257,12 +256,6 @@ PLC_SSResult:	plcheader
 ; Pattern load cues - ending sequence
 ; ---------------------------------------------------------------------------
 PLC_Ending:	plcheader
-		plcm	Nem_EndFlower, $7400			; flowers
-		plcm	Nem_EndEm				; emeralds ($78A0)
-		plcm	Nem_EndSonic				; Sonic ($7C20)
-		if Revision=0
-		plcm	Nem_EndEggman, $A480			; Eggman's death (unused)
-		endc
 		plcm	Nem_Rabbit, $AA60, End			; rabbit
 		plcm	Nem_Chicken,, End			; chicken ($ACA0)
 		plcm	Nem_BlackBird,, End			; blackbird ($AE60)
@@ -276,8 +269,8 @@ PLC_Ending:	plcheader
 ; Pattern load cues - "TRY AGAIN" and "END" screens
 ; ---------------------------------------------------------------------------
 PLC_TryAgain:	plcheader
-		plcm	Nem_EndEm, $78A0, TryAgain		; emeralds
-		plcm	Nem_TryAgain				; Eggman ($7C20)
+		;plcm	Nem_EndEm, $78A0, TryAgain		; emeralds
+		plcm	Nem_TryAgain,$7C20
 		plcm	Nem_CreditText, vram_credits		; credits alphabet ($B400)
 	PLC_TryAgain_end:
 ; ---------------------------------------------------------------------------
@@ -290,8 +283,6 @@ PLC_EggmanSBZ2:	plcheader
 ; Pattern load cues - final boss
 ; ---------------------------------------------------------------------------
 PLC_FZBoss:	plcheader
-		plcm	Nem_FzEggman, $7400			; Eggman after boss
-		plcm	Nem_FzBoss, $6000			; FZ boss
 		plcm	Nem_Eggman, $8000			; Eggman main patterns
 		plcm	Nem_Sbz2Eggman, $8E00, FZ		; Eggman without ship
 		plcm	Nem_Exhaust, $A540			; exhaust flame

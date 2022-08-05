@@ -32,7 +32,7 @@ ost_plasma_time:	rs.w 1
 Plasma_Main:	; Routine 0
 		move.w	#$2588,ost_x_pos(a0)
 		move.w	#$53C,ost_y_pos(a0)
-		move.w	#tile_Nem_FzBoss,ost_tile(a0)
+		move.w	#tile_Kos_FzBoss,ost_tile(a0)
 		move.l	#Map_PLaunch,ost_mappings(a0)
 		move.b	#id_ani_plaunch_red,ost_anim(a0)
 		move.b	#3,ost_priority(a0)
@@ -96,7 +96,7 @@ Plasma_MakeBalls:
 		move.w	ost_x_pos(a0),ost_x_pos(a1)		; start at same position as launcher object
 		move.w	#$53C,ost_y_pos(a1)
 		move.b	#id_Plasma_Balls,ost_routine(a1)	; goto Plasma_Balls next
-		move.w	#tile_Nem_FzBoss+tile_pal2,ost_tile(a1)
+		move.w	#tile_Kos_FzBoss+tile_pal2,ost_tile(a1)
 		move.l	#Map_Plasma,ost_mappings(a1)
 		move.b	#$C,ost_height(a1)
 		move.b	#$C,ost_width(a1)

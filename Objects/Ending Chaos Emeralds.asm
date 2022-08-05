@@ -43,7 +43,7 @@ ECha_CreateEms:
 		move.l	#EndChaos,ost_id(a1)			; load chaos emerald object
 		addq.b	#2,ost_routine(a1)			; goto ECha_Move next
 		move.l	#Map_ECha,ost_mappings(a1)
-		move.w	#tile_Nem_EndEm,ost_tile(a1)
+		move.w	(v_tile_emeralds).w,ost_tile(a1)
 		move.b	#render_rel,ost_render(a1)
 		move.b	#1,ost_priority(a1)
 		move.w	ost_x_pos(a0),ost_echaos_x_start(a1)

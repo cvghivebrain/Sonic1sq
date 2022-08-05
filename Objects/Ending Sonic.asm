@@ -40,7 +40,7 @@ ESon_Main:	; Routine 0
 ESon_Main2:
 		addq.b	#2,ost_routine2(a0)			; goto ESon_MakeEmeralds next
 		move.l	#Map_ESon,ost_mappings(a0)
-		move.w	#tile_Nem_EndSonic,ost_tile(a0)
+		move.w	#tile_Kos_EndSonic,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		clr.b	ost_status(a0)
 		move.b	#2,ost_priority(a0)
@@ -114,7 +114,7 @@ ESon_Leap:	; Routine $10
 		bne.s	@wait
 		addq.b	#2,ost_routine2(a0)			; goto ESon_Animate next
 		move.l	#Map_ESon,ost_mappings(a0)
-		move.w	#tile_Nem_EndSonic,ost_tile(a0)
+		move.w	#tile_Kos_EndSonic,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		clr.b	ost_status(a0)
 		move.b	#2,ost_priority(a0)
