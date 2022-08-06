@@ -30,7 +30,7 @@ ExItem_Animal:	; Routine 0
 ExItem_Main:	; Routine 2
 		addq.b	#2,ost_routine(a0)			; goto ExItem_Animate next
 		move.l	#Map_ExplodeItem,ost_mappings(a0)
-		move.w	#tile_Nem_Explode,ost_tile(a0)
+		move.w	#tile_Art_Explode,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#1,ost_priority(a0)
 		move.b	#0,ost_col_type(a0)
@@ -72,7 +72,7 @@ ExBom_Index:	index *,,2
 ExBom_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto ExBom_Animate next
 		move.l	#Map_ExplodeBomb,ost_mappings(a0)
-		move.w	#tile_Nem_Explode,ost_tile(a0)
+		move.w	#tile_Art_Explode,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#1,ost_priority(a0)
 		move.b	#0,ost_col_type(a0)

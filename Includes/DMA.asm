@@ -33,7 +33,7 @@ FindFreeDMA:
 AddDMA:
 		bsr.s	FindFreeDMA				; find free DMA slot (overwrites last slot if none are found)
 		move.l	(a2)+,(a1)+				; write source address
-		move.w	(a2),(a1)+				; write source address
+		move.w	(a2)+,(a1)+				; write source address
 		move.l	d2,(a1)+				; write length
 		move.l	d1,(a1)					; write destination address
 		rts
@@ -52,7 +52,7 @@ AddDMA2:
 		bsr.s	FindFreeDMA				; find free DMA slot (overwrites last slot if none are found)
 		move.l	(a2)+,(a1)+				; write source address
 		move.w	(a2)+,(a1)+				; write source address
-		move.l	(a2),(a1)+				; write length
+		move.l	(a2)+,(a1)+				; write length
 		move.l	d1,(a1)					; write destination address
 		rts
 

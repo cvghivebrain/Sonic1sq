@@ -5,8 +5,6 @@ PatternLoadCues:
 		index *
 		ptr PLC_Main
 		ptr PLC_Main2
-		ptr PLC_Explode
-		ptr PLC_GameOver
 PLC_Levels:
 		ptr PLC_GHZ
 		ptr PLC_GHZ2
@@ -20,8 +18,6 @@ PLC_Levels:
 		ptr PLC_SYZ2
 		ptr PLC_SBZ
 		ptr PLC_SBZ2
-		zonewarning PLC_Levels,4
-		ptr PLC_TitleCard
 		ptr PLC_Boss
 		ptr PLC_Signpost
 		ptr PLC_Warp
@@ -33,7 +29,6 @@ PLC_Animals:
 		ptr PLC_SLZAnimals
 		ptr PLC_SYZAnimals
 		ptr PLC_SBZAnimals
-		zonewarning PLC_Animals,2
 		ptr PLC_SSResult
 		ptr PLC_Ending
 		ptr PLC_TryAgain
@@ -85,18 +80,6 @@ PLC_Main2:	plcheader
 		plcm	Nem_Stars				; invincibility	stars ($AB80)
 	PLC_Main2_end:
 ; ---------------------------------------------------------------------------
-; Pattern load cues - explosion
-; ---------------------------------------------------------------------------
-PLC_Explode:	plcheader
-		plcm	Nem_Explode, $B400			; explosion
-	PLC_Explode_end:
-; ---------------------------------------------------------------------------
-; Pattern load cues - game/time	over
-; ---------------------------------------------------------------------------
-PLC_GameOver:	plcheader
-		plcm	Nem_GameOver, $ABC0			; game/time over
-	PLC_GameOver_end:
-; ---------------------------------------------------------------------------
 ; Pattern load cues - Green Hill
 ; ---------------------------------------------------------------------------
 PLC_GHZ:	plcheader
@@ -145,12 +128,6 @@ PLC_SBZ:	plcheader
 
 PLC_SBZ2:	plcheader
 	PLC_SBZ2_end:
-; ---------------------------------------------------------------------------
-; Pattern load cues - title card
-; ---------------------------------------------------------------------------
-PLC_TitleCard:	plcheader
-		plcm	Nem_TitleCard, $B000
-	PLC_TitleCard_end:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - act 3 boss
 ; ---------------------------------------------------------------------------

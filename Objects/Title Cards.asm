@@ -35,6 +35,8 @@ Card_ItemData:	; y position, routine number, frame number
 ; ===========================================================================
 
 Card_Main:	; Routine 0
+		moveq	#id_UPLC_TitleCard,d0
+		jsr	UncPLC					; load title card patterns
 		movea.l	a0,a1					; replace current object with 1st item in list
 		moveq	#0,d0
 		move.w	(v_titlecard_zone).w,d0
@@ -71,7 +73,8 @@ Card_Main:	; Routine 0
 	@not_act:
 		move.w	d0,ost_frame_hi(a1)			; display frame number d0
 		move.l	#Map_Card,ost_mappings(a1)
-		move.w	#tile_Nem_TitleCard+tile_hi,ost_tile(a1)
+		move.w	(v_tile_titlecard).w,ost_tile(a1)
+		add.w	#tile_hi,ost_tile(a1)
 		move.b	#$78,ost_displaywidth(a1)
 		move.b	#render_abs,ost_render(a1)
 		move.b	#0,ost_priority(a1)
@@ -138,8 +141,8 @@ Card_ChangeArt:
 		cmpi.b	#id_Card_Wait,ost_routine(a0)		; is this the main object? (routine 4)
 		bne.s	@delete					; if not, branch
 
-		moveq	#id_PLC_Explode,d0
-		jsr	(AddPLC).l				; load explosion gfx
+		moveq	#id_UPLC_Explode,d0
+		jsr	UncPLC					; load explosion gfx
 		moveq	#0,d0
 		move.b	(v_zone).w,d0
 		addi.w	#id_PLC_GHZAnimals,d0

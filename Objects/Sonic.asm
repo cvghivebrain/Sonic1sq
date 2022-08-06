@@ -1377,9 +1377,7 @@ GameOver:
 		clr.b	(f_time_over).w
 
 @music_gfx:
-		play.w	0, jsr, mus_GameOver			; play game over music
-		moveq	#id_PLC_GameOver,d0
-		jmp	(AddPLC).l				; load game over patterns
+		play.w	0, jmp, mus_GameOver			; play game over music
 ; ===========================================================================
 
 @lives_remain:

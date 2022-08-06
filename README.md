@@ -13,7 +13,9 @@ _Sonic 1-squared_ is an enhanced version of the original _Sonic the Hedgehog_ ga
 * Animated level graphics use a script instead of being hard-coded. The exception is Marble Zone's magma, which works somewhat differently to other animations.
 * Palette cycling uses a script.
 * Sprite mappings use 6 bytes per piece instead of 5, and the piece count is a word instead of a byte. This ensures the data is always aligned to even.
+* KosPLC subroutine loads Kosinski-compressed graphics at the beginning of a level.
+* UncPLC subroutine load uncompressed graphics at any time. This complements KosPLC by loading graphics during a level. Both this and KosPLC use the DMA queue.
 
 # Credits
 * [flamewing](https://github.com/flamewing) for [mdcomp](https://github.com/flamewing/mdcomp).
-* [vladikcomper](https://github.com/vladikcomper) for the optimised Kosinski decompressor and advanced error handler.
+* [vladikcomper](https://github.com/vladikcomper) for the advanced error handler.

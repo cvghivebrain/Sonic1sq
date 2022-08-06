@@ -233,3 +233,86 @@ KPLC_Title:	kplcheader
 		kplc Kos_GHZ_1st
 	KPLC_Title_end:
 		set_dma_size last_vram
+
+; ---------------------------------------------------------------------------
+; Subroutine to	load uncompressed graphics
+
+; input:
+;	d0 = UPLC index id
+
+; uses d0, d1, d2, a1, a2, a3
+; ---------------------------------------------------------------------------
+
+UncPLC:
+		lea	UncLoadCues(pc),a2
+		move.w	d0,d2
+		add.w	d2,d2
+		move.w	(a2,d2.w),d2
+		lea	(a2,d2.w),a2				; jump to relevant UPLC
+		move.w	(a2)+,d2				; get length of UPLC
+		bmi.s	@exit					; branch if empty
+
+	@loop:
+		move.l	(a2)+,d1				; get destination VRAM address
+		jsr	AddDMA2					; add to DMA queue (source/size already in a2)
+		move.w	(a2)+,d1				; get tile setting
+		moveq	#-1,d0
+		move.w	(a2)+,d0				; get RAM address to save tile setting
+		tst.w	d0
+		beq.s	@skip_tileram				; branch if tile setting shouldn't be saved
+		movea.l	d0,a3
+		move.w	d1,(a3)					; save tile setting to RAM
+	
+	@skip_tileram:
+		dbf	d2,@loop				; repeat for length of UPLC
+	
+	@exit:
+		rts
+
+uplcheader:	macro *,vram
+		\*: equ *
+		uplc_count\@: equ (\*_end-*-2)/18		; number if items in UPLC
+		dc.w uplc_count\@-1				; number of loops
+		last_vram: = vram				; start address in VRAM
+		last_label: equs "\*"
+		endm
+
+uplc:		macro gfx,tileram
+		set_dma_dest last_vram				; destination in VRAM
+		set_dma_src \gfx				; source in ROM
+		set_dma_size sizeof_\gfx			; size of gfx
+		dc.w last_vram/sizeof_cell			; tile setting
+		if narg=1
+		dc.w 0
+		else
+		dc.w tileram&$FFFF				; RAM address to store tile setting
+		endc
+		if ~def(tile_\gfx)
+		tile_\gfx: equ last_vram/sizeof_cell		; remember tile setting for gfx
+		else
+		tile_\gfx\_\last_label: equ last_vram/sizeof_cell
+		endc
+		last_vram: = last_vram+sizeof_\gfx		; update last_vram for next item
+		endm
+
+; ---------------------------------------------------------------------------
+; Pattern load cues
+; ---------------------------------------------------------------------------
+
+UncLoadCues:
+		index *
+		ptr UPLC_TitleCard
+		ptr UPLC_GameOver
+		ptr UPLC_Explode
+
+UPLC_TitleCard:	uplcheader $B000
+		uplc Art_TitleCard,v_tile_titlecard
+	UPLC_TitleCard_end:
+
+UPLC_GameOver:	uplcheader $ABC0
+		uplc Art_GameOver
+	UPLC_GameOver_end:
+
+UPLC_Explode:	uplcheader $B400
+		uplc Art_Explode
+	UPLC_Explode_end:

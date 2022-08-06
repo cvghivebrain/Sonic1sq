@@ -931,16 +931,16 @@ Eni_SSBg2:	incbin	"Tilemaps\SS Background 2.eni"		; special stage background (ma
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - various
 ; ---------------------------------------------------------------------------
-		incfile Nem_TitleCard,"Graphics - Compressed\Title Cards",nem
+		incfile Art_TitleCard,"Graphics\Title Cards",bin
 		incfile Nem_Hud,"Graphics - Compressed\HUD",nem
 		incfile Nem_Lives,"Graphics - Compressed\HUD - Life Counter Icon",nem
 		incfile Nem_Ring,"Graphics - Compressed\Rings",nem
 		incfile Nem_Shield,"Graphics - Compressed\Shield",nem
 		incfile Nem_Stars,"Graphics - Compressed\Invincibility",nem
 		incfile Nem_Monitors,"Graphics - Compressed\Monitors",nem
-		incfile Nem_Explode,"Graphics - Compressed\Explosion",nem
+		incfile Art_Explode,"Graphics\Explosion",bin
 		incfile Nem_Points,"Graphics - Compressed\Points",nem
-		incfile Nem_GameOver,"Graphics - Compressed\Game Over",nem
+		incfile Art_GameOver,"Graphics\Game Over",bin
 		incfile Kos_HSpring,"Graphics Kosinski\Spring Horizontal",kos
 		incfile Kos_VSpring,"Graphics Kosinski\Spring Vertical",kos
 		incfile Nem_SignPost,"Graphics - Compressed\Signpost",nem
@@ -1288,7 +1288,7 @@ Art_BigRing:	incbin	"Graphics\Giant Ring.bin"
 		even
 
 		include "Pattern Load Cues.asm"
-		include "Includes\KosPLC.asm"
+		include "Includes\KosPLC & UncPLC.asm"
 		include "Objects\MZ Lava Wall [Mappings].asm"	; Map_LWall
 
 ; ---------------------------------------------------------------------------

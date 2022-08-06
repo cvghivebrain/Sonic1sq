@@ -33,11 +33,13 @@ Over_Main:
 		btst	#0,ost_frame(a0)			; is the object "OVER"?
 		beq.s	@not_over				; if not, branch
 		move.w	#$1F0,ost_x_pos(a0)			; set x position for "OVER"
+		moveq	#id_UPLC_GameOver,d0
+		jsr	UncPLC					; load GAME/TIME OVER gfx
 
 	@not_over:
 		move.w	#$F0,ost_y_screen(a0)
 		move.l	#Map_Over,ost_mappings(a0)
-		move.w	#tile_Nem_GameOver+tile_hi,ost_tile(a0)
+		move.w	#tile_Art_GameOver+tile_hi,ost_tile(a0)
 		move.b	#render_abs,ost_render(a0)
 		move.b	#0,ost_priority(a0)
 

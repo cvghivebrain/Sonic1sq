@@ -80,7 +80,8 @@ Has_Main:	; Routine 0
 	@not_act:
 		move.b	d0,ost_frame(a1)			; set frame number
 		move.l	#Map_Has,ost_mappings(a1)
-		move.w	#tile_Nem_TitleCard+tile_hi,ost_tile(a1)
+		move.w	(v_tile_titlecard).w,ost_tile(a1)
+		add.w	#tile_hi,ost_tile(a1)
 		move.b	#render_abs,ost_render(a1)
 		lea	sizeof_ost(a1),a1			; next OST slot in RAM
 		dbf	d1,@loop				; repeat 6 times

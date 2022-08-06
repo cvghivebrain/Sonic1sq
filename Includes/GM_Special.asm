@@ -150,9 +150,8 @@ SS_FinishLoop:
 		move.w	#$8400+(vram_bg>>13),(a6)		; set background nametable address
 		move.w	#$9001,(a6)				; 64x32 cell plane size
 		bsr.w	ClearScreen
-		locVRAM	vram_Nem_TitleCard			; $B000 - Pattern Load Cues.asm
-		lea	(Nem_TitleCard).l,a0			; load title card patterns
-		bsr.w	NemDec
+		moveq	#id_UPLC_TitleCard,d0
+		jsr	UncPLC					; load title card patterns
 		jsr	(Hud_Base).l
 		enable_ints
 		moveq	#id_Pal_SSResult,d0

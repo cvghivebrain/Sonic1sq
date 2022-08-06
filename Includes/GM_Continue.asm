@@ -18,9 +18,8 @@ GM_Continue:
 		move.l	d0,(a1)+
 		dbf	d1,@clear_ost				; clear object RAM
 
-		locVRAM	vram_Nem_TitleCard			; $B000
-		lea	(Nem_TitleCard).l,a0			; load title card patterns
-		bsr.w	NemDec
+		moveq	#id_UPLC_TitleCard,d0
+		jsr	UncPLC					; load title card patterns
 		locVRAM	vram_cont_sonic				; $A000
 		lea	(Nem_ContSonic).l,a0			; load oval & Sonic patterns
 		bsr.w	NemDec

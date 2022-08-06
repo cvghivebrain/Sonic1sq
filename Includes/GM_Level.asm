@@ -30,11 +30,6 @@ GM_Level:
 		bsr.w	PaletteFadeOut				; fade out from previous gamemode
 		tst.w	(v_demo_mode).w				; is this an ending demo?
 		bmi.s	@skip_gfx				; if yes, branch
-		disable_ints
-		locVRAM	vram_Nem_TitleCard			; $B000
-		lea	(Nem_TitleCard).l,a0			; load title card patterns
-		bsr.w	NemDec
-		enable_ints
 		moveq	#0,d0
 		move.b	(v_zone).w,d0				; get zone number
 		add.w	d0,d0					; multiply by 2
@@ -242,8 +237,8 @@ Level_Skip_TtlCard:
 ; ===========================================================================
 
 @skip_titlecard:
-		moveq	#id_PLC_Explode,d0
-		jsr	(AddPLC).l				; load explosion gfx
+		moveq	#id_UPLC_Explode,d0
+		jsr	UncPLC					; load explosion gfx
 		moveq	#0,d0
 		move.b	(v_zone).w,d0
 		addi.w	#id_PLC_GHZAnimals,d0
