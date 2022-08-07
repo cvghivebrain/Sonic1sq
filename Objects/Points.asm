@@ -19,7 +19,8 @@ Poi_Index:	index *,,2
 Poi_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Poi_Slower next
 		move.l	#Map_Points,ost_mappings(a0)
-		move.w	#tile_Nem_Points+tile_pal2,ost_tile(a0)
+		move.w	(v_tile_points).w,ost_tile(a0)
+		add.w	#tile_pal2,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#1,ost_priority(a0)
 		move.b	#8,ost_displaywidth(a0)

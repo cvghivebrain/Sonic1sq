@@ -1190,7 +1190,7 @@ SS_Item_Zone3:	ss_sprite Map_SS_R,tile_Nem_SSZone3,0		; $36 - Zone 3
 SS_Item_Zone4:	ss_sprite Map_SS_R,tile_Nem_SSZone1,0		; $37 - Zone 4
 SS_Item_Zone5:	ss_sprite Map_SS_R,tile_Nem_SSZone2,0		; $38 - Zone 5
 SS_Item_Zone6:	ss_sprite Map_SS_R,tile_Nem_SSZone3,0		; $39 - Zone 6
-SS_Item_Ring:	ss_sprite Map_Ring,tile_Nem_Ring+tile_pal2,0	; $3A - ring
+SS_Item_Ring:	ss_sprite Map_Ring,tile_Kos_Ring+tile_pal2,0	; $3A - ring
 SS_Item_Em1:	ss_sprite Map_SS_Chaos3,tile_Nem_SSEmerald,0	; $3B - emerald (blue)
 SS_Item_Em2:	ss_sprite Map_SS_Chaos3,tile_Nem_SSEmerald+tile_pal2,0 ; $3C - emerald (yellow)
 SS_Item_Em3:	ss_sprite Map_SS_Chaos3,tile_Nem_SSEmerald+tile_pal3,0 ; $3D - emerald (pink)
@@ -1198,10 +1198,10 @@ SS_Item_Em4:	ss_sprite Map_SS_Chaos3,tile_Nem_SSEmerald+tile_pal4,0 ; $3E - emer
 SS_Item_Em5:	ss_sprite Map_SS_Chaos1,tile_Nem_SSEmerald,0	; $3F - emerald (red)
 SS_Item_Em6:	ss_sprite Map_SS_Chaos2,tile_Nem_SSEmerald,0	; $40 - emerald (grey)
 SS_Item_Ghost:	ss_sprite Map_SS_R,tile_Nem_SSGhost,0		; $41 - ghost block
-SS_Item_Spark1:	ss_sprite Map_Ring,tile_Nem_Ring+tile_pal2,id_frame_ring_sparkle1 ; $42 - sparkle
-SS_Item_Spark2:	ss_sprite Map_Ring,tile_Nem_Ring+tile_pal2,id_frame_ring_sparkle2 ; $43 - sparkle
-SS_Item_Spark3:	ss_sprite Map_Ring,tile_Nem_Ring+tile_pal2,id_frame_ring_sparkle3 ; $44 - sparkle
-SS_Item_Spark4:	ss_sprite Map_Ring,tile_Nem_Ring+tile_pal2,id_frame_ring_sparkle4 ; $45 - sparkle
+SS_Item_Spark1:	ss_sprite Map_Ring,tile_Kos_Ring+tile_pal2,id_frame_ring_sparkle1 ; $42 - sparkle
+SS_Item_Spark2:	ss_sprite Map_Ring,tile_Kos_Ring+tile_pal2,id_frame_ring_sparkle2 ; $43 - sparkle
+SS_Item_Spark3:	ss_sprite Map_Ring,tile_Kos_Ring+tile_pal2,id_frame_ring_sparkle3 ; $44 - sparkle
+SS_Item_Spark4:	ss_sprite Map_Ring,tile_Kos_Ring+tile_pal2,id_frame_ring_sparkle4 ; $45 - sparkle
 SS_Item_EmSp1:	ss_sprite Map_SS_Glass,tile_Nem_SSEmStars+tile_pal2,0 ; $46 - emerald sparkle
 SS_Item_EmSp2:	ss_sprite Map_SS_Glass,tile_Nem_SSEmStars+tile_pal2,1 ; $47 - emerald sparkle
 SS_Item_EmSp3:	ss_sprite Map_SS_Glass,tile_Nem_SSEmStars+tile_pal2,2 ; $48 - emerald sparkle

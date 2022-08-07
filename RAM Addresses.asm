@@ -226,6 +226,9 @@ v_tile_bomb			rs.w 1
 v_tile_ballhog			rs.w 1
 v_tile_emeralds			rs.w 1
 v_tile_titlecard		rs.w 1
+v_tile_lamppost			rs.w 1
+v_tile_points			rs.w 1
+v_tile_rings			rs.w 1
 v_palcycle_ss_num:		rs.w 1 ; $FFFFF79A ; palette cycling in Special Stage - current index number
 v_palcycle_ss_time:		rs.w 1 ; $FFFFF79C ; palette cycling in Special Stage - time until next change
 v_palcycle_ss_unused:		rs.w 1 ; $FFFFF79E ; palette cycling in Special Stage - unused offset value, always 0

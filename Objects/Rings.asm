@@ -95,7 +95,8 @@ Ring_Main:	; Routine 0
 		move.w	ost_x_pos(a0),ost_ring_x_main(a1)
 		move.w	d3,ost_y_pos(a1)			; set y position based on d3
 		move.l	#Map_Ring,ost_mappings(a1)
-		move.w	#tile_Nem_Ring+tile_pal2,ost_tile(a1)
+		move.w	(v_tile_rings).w,ost_tile(a1)
+		add.w	#tile_pal2,ost_tile(a1)
 		move.b	#render_rel,ost_render(a1)
 		move.b	#2,ost_priority(a1)
 		move.b	#id_col_6x6+id_col_item,ost_col_type(a1) ; goto Ring_Collect when touched

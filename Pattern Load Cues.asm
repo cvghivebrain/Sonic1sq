@@ -52,11 +52,8 @@ plcheader:	macro *
 ; Pattern load cues - standard block 1
 ; ---------------------------------------------------------------------------
 PLC_Main:	plcheader
-		plcm	Nem_Lamp, $F400				; lamppost
 		plcm	Nem_Hud, $D940				; HUD
 		plcm	Nem_Lives, $FA80			; lives	counter
-		plcm	Nem_Ring, $F640				; rings
-		plcm	Nem_Points, $F2E0			; points from enemy
 	PLC_Main_end:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - standard block 2

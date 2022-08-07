@@ -87,7 +87,8 @@ Sign_Spin:	; Routine 4
 		add.w	ost_y_pos(a0),d0
 		move.w	d0,ost_y_pos(a1)
 		move.l	#Map_Ring,ost_mappings(a1)
-		move.w	#tile_Nem_Ring+tile_pal2,ost_tile(a1)
+		move.w	(v_tile_rings).w,ost_tile(a1)
+		add.w	#tile_pal2,ost_tile(a1)
 		move.b	#render_rel,ost_render(a1)
 		move.b	#2,ost_priority(a1)
 		move.b	#8,ost_displaywidth(a1)

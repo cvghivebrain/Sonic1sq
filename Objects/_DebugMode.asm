@@ -210,7 +210,7 @@ DebugList_GHZ:
 		dc.w (DebugList_GHZ_end-DebugList_GHZ-2)/12
 
 ;			mappings	object		subtype	frame	VRAM setting
-		dbug 	Map_Ring,	Rings,		0,	0,	tile_Nem_Ring+tile_pal2
+		dbug 	Map_Ring,	Rings,		0,	0,	tile_Kos_Ring+tile_pal2
 		dbug	Map_Monitor,	Monitor,	0,	0,	tile_Nem_Monitors
 		dbug	Map_Crab,	Crabmeat,	0,	0,	tile_Kos_Crabmeat
 		dbug	Map_Buzz,	BuzzBomber,	0,	0,	tile_Kos_Buzz
@@ -222,7 +222,7 @@ DebugList_GHZ:
 		dbug	Map_Spring,	Springs,	type_spring_red+type_spring_up,	0,	tile_Kos_HSpring
 		dbug	Map_Newt,	Newtron,	0,	0,	tile_Kos_Newtron+tile_pal2
 		dbug	Map_Edge,	EdgeWalls,	type_edge_shadow,	0,	tile_Kos_GhzEdgeWall+tile_pal3
-		dbug	Map_Lamp,	Lamppost,	1,	0,	tile_Nem_Lamp
+		dbug	Map_Lamp,	Lamppost,	1,	0,	tile_Kos_Lamp
 		dbug	Map_GRing,	GiantRing,	0,	0,	(vram_giantring/sizeof_cell)+tile_pal2
 		dbug	Map_Bonus,	HiddenBonus,	type_bonus_10k,	id_frame_bonus_10000,	tile_Nem_Bonus+tile_hi
 	DebugList_GHZ_end:
@@ -231,7 +231,7 @@ DebugList_LZ:
 		dc.w (DebugList_LZ_end-DebugList_LZ-2)/12
 
 ;			mappings	object		subtype	frame	VRAM setting
-		dbug	Map_Ring,	Rings,		0,	0,	tile_Nem_Ring+tile_pal2
+		dbug	Map_Ring,	Rings,		0,	0,	tile_Kos_Ring_KPLC_LZ+tile_pal2
 		dbug	Map_Monitor,	Monitor,	0,	0,	tile_Nem_Monitors
 		dbug	Map_Spring,	Springs,	type_spring_red+type_spring_up,	0,	tile_Kos_HSpring_KPLC_LZ
 		dbug	Map_Jaws,	Jaws,		8,	0,	tile_Kos_Jaws+tile_pal2
@@ -255,14 +255,14 @@ DebugList_LZ:
 		dbug	Map_WFall,	Waterfall,	type_wfall_splash,	id_frame_wfall_splash1,	tile_Kos_Splash+tile_pal3+tile_hi
 		dbug	Map_Pole,	Pole,		0,	0,	tile_Kos_LzPole+tile_pal3
 		dbug	Map_Flap,	FlapDoor,	2,	0,	tile_Kos_FlapDoor+tile_pal3
-		dbug	Map_Lamp,	Lamppost,	1,	0,	tile_Nem_Lamp
+		dbug	Map_Lamp,	Lamppost,	1,	0,	tile_Kos_Lamp_KPLC_LZ
 	DebugList_LZ_end:
 
 DebugList_MZ:
 		dc.w (DebugList_MZ_end-DebugList_MZ-2)/12
 
 ;			mappings	object		subtype	frame	VRAM setting
-		dbug	Map_Ring,	Rings,		0,	0,	tile_Nem_Ring+tile_pal2
+		dbug	Map_Ring,	Rings,		0,	0,	tile_Kos_Ring_KPLC_MZ+tile_pal2
 		dbug	Map_Monitor,	Monitor,	0,	0,	tile_Nem_Monitors
 		dbug	Map_Buzz,	BuzzBomber,	0,	0,	tile_Kos_Buzz_KPLC_MZ
 		dbug	Map_Spike,	Spikes,		type_spike_3up+type_spike_still,	0,	tile_Kos_Spikes_KPLC_MZ
@@ -278,14 +278,14 @@ DebugList_MZ:
 		dbug	Map_LTag,	LavaTag,	0,	0,	tile_Nem_Monitors+tile_hi
 		dbug	Map_Bat,	Batbrain,	0,	0,	tile_Kos_Batbrain
 		dbug	Map_Cat,	Caterkiller,	0,	0,	tile_Kos_Cater+tile_pal2
-		dbug	Map_Lamp,	Lamppost,	1,	0,	tile_Nem_Lamp
+		dbug	Map_Lamp,	Lamppost,	1,	0,	tile_Kos_Lamp_KPLC_MZ
 	DebugList_MZ_end:
 
 DebugList_SLZ:
 		dc.w (DebugList_SLZ_end-DebugList_SLZ-2)/12
 
 ;			mappings	object		subtype	frame	VRAM setting
-		dbug	Map_Ring,	Rings,		0,	0,	tile_Nem_Ring+tile_pal2
+		dbug	Map_Ring,	Rings,		0,	0,	tile_Kos_Ring_KPLC_SLZ+tile_pal2
 		dbug	Map_Monitor,	Monitor,	0,	0,	tile_Nem_Monitors
 		dbug	Map_Elev,	Elevator,	type_elev_up_short,	0,	0+tile_pal3
 		dbug	Map_CFlo,	CollapseFloor,	0,	id_frame_cfloor_slz,	tile_Kos_SlzBlock+tile_pal3
@@ -299,14 +299,14 @@ DebugList_SLZ:
 		dbug	Map_Scen,	Scenery,	type_scen_cannon,	0,	tile_Kos_SlzCannon+tile_pal3
 		dbug	Map_Bomb,	Bomb,		0,	0,	tile_Kos_Bomb
 		dbug	Map_Orb,	Orbinaut,	0,	0,	tile_Kos_Orbinaut_KPLC_SLZ+tile_pal2
-		dbug	Map_Lamp,	Lamppost,	1,	0,	tile_Nem_Lamp
+		dbug	Map_Lamp,	Lamppost,	1,	0,	tile_Kos_Lamp_KPLC_SLZ
 	DebugList_SLZ_end:
 
 DebugList_SYZ:
 		dc.w (DebugList_SYZ_end-DebugList_SYZ-2)/12
 
 ;			mappings	object		subtype	frame	VRAM setting
-		dbug	Map_Ring,	Rings,		0,	0,	tile_Nem_Ring+tile_pal2
+		dbug	Map_Ring,	Rings,		0,	0,	tile_Kos_Ring_KPLC_SYZ+tile_pal2
 		dbug	Map_Monitor,	Monitor,	0,	0,	tile_Nem_Monitors
 		dbug	Map_Spike,	Spikes,		type_spike_3up+type_spike_still,	0,	tile_Kos_Spikes_KPLC_SYZ
 		dbug	Map_Spring,	Springs,	type_spring_red+type_spring_up,	0,	tile_Kos_HSpring_KPLC_SYZ
@@ -319,14 +319,14 @@ DebugList_SYZ:
 		dbug	Map_Plat_SYZ,	BasicPlatform,	type_plat_still,	0,	0+tile_pal3
 		dbug	Map_FBlock,	FloatingBlock,	type_fblock_syz1x1+type_fblock_still,	0,	0+tile_pal3
 		dbug	Map_But,	Button,		0,	0,	tile_Kos_Button
-		dbug	Map_Lamp,	Lamppost,	1,	0,	tile_Nem_Lamp
+		dbug	Map_Lamp,	Lamppost,	1,	0,	tile_Kos_Lamp_KPLC_SYZ
 	DebugList_SYZ_end:
 
 DebugList_SBZ:
 		dc.w (DebugList_SBZ_end-DebugList_SBZ-2)/12
 
 ;			mappings	object		subtype	frame	VRAM setting
-		dbug	Map_Ring,	Rings,		0,	0,	tile_Nem_Ring+tile_pal2
+		dbug	Map_Ring,	Rings,		0,	0,	tile_Kos_Ring_KPLC_SBZ+tile_pal2
 		dbug	Map_Monitor,	Monitor,	0,	0,	tile_Nem_Monitors
 		dbug	Map_Bomb,	Bomb,		0,	0,	tile_Kos_Bomb_KPLC_SBZ
 		dbug	Map_Cat,	Caterkiller,	0,	0,	tile_Kos_Cater_KPLC_SBZ+tile_pal2
@@ -353,14 +353,14 @@ DebugList_SBZ:
 		dbug	Map_Gird,	Girder,		0,	0,	tile_Kos_Girder+tile_pal3
 		dbug	Map_Invis,	Invisibarrier,	$11,	0,	tile_Nem_Monitors+tile_hi
 		dbug	Map_Hog,	BallHog,	4,	0,	tile_Kos_BallHog+tile_pal2
-		dbug	Map_Lamp,	Lamppost,	1,	0,	tile_Nem_Lamp
+		dbug	Map_Lamp,	Lamppost,	1,	0,	tile_Kos_Lamp_KPLC_SBZ
 	DebugList_SBZ_end:
 
 DebugList_Ending:
 		dc.w (DebugList_Ending_end-DebugList_Ending-2)/12
 
 ;			mappings	object		subtype	frame	VRAM setting
-		dbug	Map_Ring,	Rings,		0,	0,	tile_Nem_Ring+tile_pal2
+		dbug	Map_Ring,	Rings,		0,	0,	tile_Kos_Ring+tile_pal2
 	if Revision=0
 		dbug	Map_Bump,	Bumper,		0,	0,	$380
 		dbug	Map_Animal2,	Animals,	$A,	0,	$5A0
@@ -375,7 +375,7 @@ DebugList_Ending:
 		dbug	Map_Animal2,	Animals,	$13,	0,	tile_Nem_Chicken_End
 		dbug	Map_Animal3,	Animals,	$14,	0,	tile_Nem_Squirrel_End
 	else
-		dbug	Map_Ring,	Rings,		0,	id_frame_ring_blank,	tile_Nem_Ring+tile_pal2
+		dbug	Map_Ring,	Rings,		0,	id_frame_ring_blank,	tile_Kos_Ring+tile_pal2
 	endc
 	DebugList_Ending_end:
 

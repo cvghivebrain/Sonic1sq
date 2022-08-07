@@ -927,24 +927,23 @@ Eni_SSBg2:	incbin	"Tilemaps\SS Background 2.eni"		; special stage background (ma
 		incfile Kos_Orbinaut,"Graphics Kosinski\Orbinaut",kos
 		incfile Kos_Cater,"Graphics Kosinski\Caterkiller",kos
 		incfile Nem_Splats,"Graphics - Compressed\Unused - Splats Enemy",nem
-		incfile Nem_UnkExplode,"Graphics - Compressed\Unused - Explosion",nem
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - various
 ; ---------------------------------------------------------------------------
 		incfile Art_TitleCard,"Graphics\Title Cards",bin,dma_safe
 		incfile Nem_Hud,"Graphics - Compressed\HUD",nem
 		incfile Nem_Lives,"Graphics - Compressed\HUD - Life Counter Icon",nem
-		incfile Nem_Ring,"Graphics - Compressed\Rings",nem
+		incfile Kos_Ring,"Graphics Kosinski\Rings",kos
 		incfile Nem_Shield,"Graphics - Compressed\Shield",nem
 		incfile Nem_Stars,"Graphics - Compressed\Invincibility",nem
 		incfile Nem_Monitors,"Graphics - Compressed\Monitors",nem
 		incfile Art_Explode,"Graphics\Explosion",bin,dma_safe
-		incfile Nem_Points,"Graphics - Compressed\Points",nem
+		incfile Kos_Points,"Graphics Kosinski\Points",kos
 		incfile Art_GameOver,"Graphics\Game Over",bin,dma_safe
 		incfile Kos_HSpring,"Graphics Kosinski\Spring Horizontal",kos
 		incfile Kos_VSpring,"Graphics Kosinski\Spring Vertical",kos
 		incfile Nem_SignPost,"Graphics - Compressed\Signpost",nem
-		incfile Nem_Lamp,"Graphics - Compressed\Lamppost",nem
+		incfile Kos_Lamp,"Graphics Kosinski\Lamppost",kos
 		incfile Nem_BigFlash,"Graphics - Compressed\Giant Ring Flash",nem
 		incfile Nem_Bonus,"Graphics - Compressed\Hidden Bonuses",nem
 ; ---------------------------------------------------------------------------
@@ -982,11 +981,7 @@ Blk256_LZ:	incbin	"256x256 Mappings\LZ.kos"
 		even
 Blk16_MZ:	incbin	"16x16 Mappings\MZ.bin"
 		even
-Blk256_MZ:	if Revision=0
-			incbin	"256x256 Mappings\MZ (REV00).kos"
-		else
-			incbin	"256x256 Mappings\MZ.kos"
-		endc
+Blk256_MZ:	incbin	"256x256 Mappings\MZ.kos"
 		even
 Blk16_SLZ:	incbin	"16x16 Mappings\SLZ.bin"
 		even
@@ -998,11 +993,7 @@ Blk256_SYZ:	incbin	"256x256 Mappings\SYZ.kos"
 		even
 Blk16_SBZ:	incbin	"16x16 Mappings\SBZ.bin"
 		even
-Blk256_SBZ:	if Revision=0
-			incbin	"256x256 Mappings\SBZ (REV00).kos"
-		else
-			incbin	"256x256 Mappings\SBZ.kos"
-		endc
+Blk256_SBZ:	incbin	"256x256 Mappings\SBZ.kos"
 		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - bosses and ending sequence
