@@ -40,17 +40,6 @@ GM_Credits:
 		jsr	(ExecuteObjects).l
 		jsr	(BuildSprites).l
 		bsr.w	EndDemoSetup				; setup for next mini-demo
-		moveq	#0,d0
-		move.b	(v_zone).w,d0				; get zone number
-		add.w	d0,d0					; multiply by 2
-		lea	(LevelHeaders).l,a2
-		lea	(a2,d0.w),a2				; jump to relevant level header
-		moveq	#0,d0
-		move.b	(a2),d0					; get 1st PLC id for level
-		beq.s	@no_plc					; branch if 0
-		bsr.w	AddPLC					; load level graphics over next few frames
-
-	@no_plc:
 		moveq	#id_PLC_Main2,d0
 		bsr.w	AddPLC					; load graphics for monitors/shield/stars over next few frames
 		move.w	#120,(v_countdown).w			; display a credit for 2 seconds

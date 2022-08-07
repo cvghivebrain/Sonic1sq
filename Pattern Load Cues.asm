@@ -5,19 +5,6 @@ PatternLoadCues:
 		index *
 		ptr PLC_Main
 		ptr PLC_Main2
-PLC_Levels:
-		ptr PLC_GHZ
-		ptr PLC_GHZ2
-		ptr PLC_LZ
-		ptr PLC_LZ2
-		ptr PLC_MZ
-		ptr PLC_MZ2
-		ptr PLC_SLZ
-		ptr PLC_SLZ2
-		ptr PLC_SYZ
-		ptr PLC_SYZ2
-		ptr PLC_SBZ
-		ptr PLC_SBZ2
 		ptr PLC_Boss
 		ptr PLC_Signpost
 		ptr PLC_Warp
@@ -82,52 +69,9 @@ PLC_Main2:	plcheader
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - Green Hill
 ; ---------------------------------------------------------------------------
-PLC_GHZ:	plcheader
-	PLC_GHZ_end:
-
 PLC_GHZ2:	plcheader
 		;plcm	Nem_Ball				; giant	ball ($7540)
 	PLC_GHZ2_end:
-; ---------------------------------------------------------------------------
-; Pattern load cues - Labyrinth
-; ---------------------------------------------------------------------------
-PLC_LZ:		plcheader
-	PLC_LZ_end:
-
-PLC_LZ2:	plcheader
-	PLC_LZ2_end:
-; ---------------------------------------------------------------------------
-; Pattern load cues - Marble
-; ---------------------------------------------------------------------------
-PLC_MZ:		plcheader
-	PLC_MZ_end:
-
-PLC_MZ2:	plcheader
-	PLC_MZ2_end:
-; ---------------------------------------------------------------------------
-; Pattern load cues - Star Light
-; ---------------------------------------------------------------------------
-PLC_SLZ:	plcheader
-	PLC_SLZ_end:
-
-PLC_SLZ2:	plcheader
-	PLC_SLZ2_end:
-; ---------------------------------------------------------------------------
-; Pattern load cues - Spring Yard
-; ---------------------------------------------------------------------------
-PLC_SYZ:	plcheader
-	PLC_SYZ_end:
-
-PLC_SYZ2:	plcheader
-	PLC_SYZ2_end:
-; ---------------------------------------------------------------------------
-; Pattern load cues - Scrap Brain
-; ---------------------------------------------------------------------------
-PLC_SBZ:	plcheader
-	PLC_SBZ_end:
-
-PLC_SBZ2:	plcheader
-	PLC_SBZ2_end:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - act 3 boss
 ; ---------------------------------------------------------------------------

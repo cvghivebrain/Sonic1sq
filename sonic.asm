@@ -931,16 +931,16 @@ Eni_SSBg2:	incbin	"Tilemaps\SS Background 2.eni"		; special stage background (ma
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - various
 ; ---------------------------------------------------------------------------
-		incfile Art_TitleCard,"Graphics\Title Cards",bin
+		incfile Art_TitleCard,"Graphics\Title Cards",bin,dma_safe
 		incfile Nem_Hud,"Graphics - Compressed\HUD",nem
 		incfile Nem_Lives,"Graphics - Compressed\HUD - Life Counter Icon",nem
 		incfile Nem_Ring,"Graphics - Compressed\Rings",nem
 		incfile Nem_Shield,"Graphics - Compressed\Shield",nem
 		incfile Nem_Stars,"Graphics - Compressed\Invincibility",nem
 		incfile Nem_Monitors,"Graphics - Compressed\Monitors",nem
-		incfile Art_Explode,"Graphics\Explosion",bin
+		incfile Art_Explode,"Graphics\Explosion",bin,dma_safe
 		incfile Nem_Points,"Graphics - Compressed\Points",nem
-		incfile Art_GameOver,"Graphics\Game Over",bin
+		incfile Art_GameOver,"Graphics\Game Over",bin,dma_safe
 		incfile Kos_HSpring,"Graphics Kosinski\Spring Horizontal",kos
 		incfile Kos_VSpring,"Graphics Kosinski\Spring Vertical",kos
 		incfile Nem_SignPost,"Graphics - Compressed\Signpost",nem

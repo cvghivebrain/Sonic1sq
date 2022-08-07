@@ -1,30 +1,11 @@
 ; ---------------------------------------------------------------------------
-; Subroutine to load basic level data
-; ---------------------------------------------------------------------------
-
-LevelDataLoad:
-		moveq	#0,d0
-		move.b	(v_zone).w,d0				; get zone number
-		add.w	d0,d0					; multiply by 2
-		lea	(LevelHeaders).l,a2			; address of level headers
-		lea	(a2,d0.w),a2				; jump to relevant level header
-		bsr.w	LevelLayoutLoad				; load level layout (doesn't involve level headers)
-		addq.w	#1,a2					; jump to 2nd PLC
-		moveq	#0,d0
-		move.b	(a2),d0					; read 2nd PLC id
-		beq.s	@skipPLC				; if 2nd PLC is 0 (i.e. the ending sequence), branch
-		bsr.w	AddPLC					; load pattern load cues
-
-	@skipPLC:
-		rts
-
-; ---------------------------------------------------------------------------
 ; Level	layout loading subroutine
 
 ; Levels are "cropped" in ROM. In RAM the level and background each comprise
 ; eight $40 byte rows, which are stored alternately.
 ; ---------------------------------------------------------------------------
 
+LevelDataLoad:
 LevelLayoutLoad:
 		lea	(v_level_layout).w,a3
 		move.w	#((v_sprite_queue-v_level_layout)/4)-1,d1
@@ -68,17 +49,3 @@ LevelLayoutLoad2:
 		lea	sizeof_levelrow(a3),a3			; do next row
 		dbf	d2,@loop_row				; repeat for number of rows
 		rts
-
-; ---------------------------------------------------------------------------
-; Level Headers
-; ---------------------------------------------------------------------------
-
-LevelHeaders:
-		dc.b	id_PLC_GHZ, id_PLC_GHZ2
-		dc.b	id_PLC_LZ, id_PLC_LZ2
-		dc.b	id_PLC_MZ, id_PLC_MZ2
-		dc.b	id_PLC_SLZ, id_PLC_SLZ2
-		dc.b	id_PLC_SYZ, id_PLC_SYZ2
-		dc.b	id_PLC_SBZ, id_PLC_SBZ2
-		dc.b	0, 0
-		even
