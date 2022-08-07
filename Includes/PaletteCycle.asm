@@ -37,30 +37,30 @@ PCycle_Run:
 		move.w	(a0)+,d0				; get script count
 		lea	(v_palcycle_buffer).w,a1
 
-	@loop:
+	.loop:
 		sub.w	#1,(a1)					; decrement timer
-		bpl.s	@next					; branch if time remains
+		bpl.s	.next					; branch if time remains
 
 		move.w	(a0),(a1)				; reset timer
 		moveq	#1,d2
 		btst.b	#0,5(a0)				; check for reversibility
-		beq.s	@ignore_rev
+		beq.s	.ignore_rev
 		tst.b	(f_convey_reverse).w			; check if reverse flag is set
-		beq.s	@ignore_rev
+		beq.s	.ignore_rev
 		moveq	#-1,d2					; decrement frame counter instead
-	@ignore_rev:
+	.ignore_rev:
 		add.w	d2,2(a1)				; increment frame counter
 		moveq	#0,d1
 		move.w	2(a0),d1				; get frame count
 		cmp.w	2(a1),d1				; compare current frame with max
-		bne.s	@not_at_max				; branch if not at max
+		bne.s	.not_at_max				; branch if not at max
 		move.w	#0,2(a1)				; reset frame counter
-	@not_at_max:
+	.not_at_max:
 		tst.w	2(a1)					; check if -1
-		bpl.s	@valid_frame				; branch if not
+		bpl.s	.valid_frame				; branch if not
 		move.w	d1,2(a1)
 		sub.w	#1,2(a1)				; jump to final frame if reversed
-	@valid_frame:
+	.valid_frame:
 		moveq	#0,d1
 		move.b	4(a0),d1				; get colour count
 		move.w	d1,d2
@@ -70,15 +70,15 @@ PCycle_Run:
 		movea.l	6(a0),a2				; get palette data source address
 		movea.l	10(a0),a3				; get palette destination RAM address
 
-	@loop_colour:
+	.loop_colour:
 		move.w	(a2,d2.w),(a3)+				; copy 1 colour
 		add.w	#2,d2
-		dbf	d1,@loop_colour				; repeat for number of colours
+		dbf	d1,.loop_colour				; repeat for number of colours
 
-	@next:
+	.next:
 		lea	14(a0),a0				; next script
 		lea	4(a1),a1				; next timer/frame counter
-		dbf	d0,@loop				; repeat for all scripts
+		dbf	d0,.loop				; repeat for all scripts
 		rts
 
 PCycle_GHZ_Script:

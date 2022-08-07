@@ -36,10 +36,10 @@ Pow_Main:	; Routine 0
 		move.l	a1,ost_mappings(a0)
 
 Pow_Move:	; Routine 2
-		bsr.s	@move
+		bsr.s	.move
 		bra.w	DisplaySprite
 
-	@move:
+	.move:
 		tst.w	ost_y_vel(a0)				; is object moving?
 		bpl.w	Pow_Checks				; if not, branch
 		bsr.w	SpeedToPos				; update position

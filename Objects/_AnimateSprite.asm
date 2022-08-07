@@ -103,8 +103,8 @@ NewAnim:
 		move.b	ost_anim(a0),d1				; get previous animation id
 		andi.b	#$7F,d1					; ignore high bit (the no-restart flag)
 		cmp.b	d0,d1					; compare with new id
-		beq.s	@keepanim				; branch if same
+		beq.s	.keepanim				; branch if same
 		move.b	d0,ost_anim(a0)				; update animation id (and clear high bit)
 
-	@keepanim:
+	.keepanim:
 		rts

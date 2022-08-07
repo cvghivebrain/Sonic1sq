@@ -13,10 +13,10 @@ KosPLC:
 		move.w	(a2,d0.w),d0
 		lea	(a2,d0.w),a2				; jump to relevant KPLC
 		move.w	(a2)+,d0				; get length of KPLC
-		bmi.s	@exit					; branch if empty
+		bmi.s	.exit					; branch if empty
 		movem.l	d1-d2,-(sp)				; save d1 and d2 to stack
 
-	@loop:
+	.loop:
 		lea	($FF0000).l,a1				; RAM buffer start address
 		adda.w	(a2)+,a1				; jump to current position in buffer
 		movea.l	(a2)+,a0				; get pointer for compressed gfx
@@ -25,12 +25,12 @@ KosPLC:
 		moveq	#-1,d2
 		move.w	(a2)+,d2				; get RAM address to save tile setting
 		tst.w	d2
-		beq.s	@skip_tileram				; branch if tile setting shouldn't be saved
+		beq.s	.skip_tileram				; branch if tile setting shouldn't be saved
 		movea.l	d2,a0
 		move.w	d1,(a0)					; save tile setting to RAM
 	
-	@skip_tileram:
-		dbf	d0,@loop				; repeat for length of KPLC
+	.skip_tileram:
+		dbf	d0,.loop				; repeat for length of KPLC
 		
 		move.l	#$40000080,d1				; destination = 0 in VRAM
 		move.l	(a2),d2					; read size from end of KPLC
@@ -39,7 +39,7 @@ KosPLC:
 		jsr	ProcessDMA				; process queue now
 		movem.l	(sp)+,d1-d2
 	
-	@exit:
+	.exit:
 		rts
 
 KPLC_Src:	set_dma_src $FF0000
@@ -250,23 +250,23 @@ UncPLC:
 		move.w	(a2,d2.w),d2
 		lea	(a2,d2.w),a2				; jump to relevant UPLC
 		move.w	(a2)+,d2				; get length of UPLC
-		bmi.s	@exit					; branch if empty
+		bmi.s	.exit					; branch if empty
 
-	@loop:
+	.loop:
 		move.l	(a2)+,d1				; get destination VRAM address
 		jsr	AddDMA2					; add to DMA queue (source/size already in a2)
 		move.w	(a2)+,d1				; get tile setting
 		moveq	#-1,d0
 		move.w	(a2)+,d0				; get RAM address to save tile setting
 		tst.w	d0
-		beq.s	@skip_tileram				; branch if tile setting shouldn't be saved
+		beq.s	.skip_tileram				; branch if tile setting shouldn't be saved
 		movea.l	d0,a3
 		move.w	d1,(a3)					; save tile setting to RAM
 	
-	@skip_tileram:
-		dbf	d2,@loop				; repeat for length of UPLC
+	.skip_tileram:
+		dbf	d2,.loop				; repeat for length of UPLC
 	
-	@exit:
+	.exit:
 		rts
 
 uplcheader:	macro *,vram

@@ -17,10 +17,10 @@
 _KosPlus_LoopUnroll = 3
 
 _KosPlus_ReadBit macro
-	dbra	d2,@skip\@
+	dbra	d2,.skip\@
 	moveq	#7,d2						; We have 8 new bits, but will use one up below.
 	move.b	(a0)+,d0					; Get desc field low-byte.
-@skip\@:
+.skip\@:
 	add.b	d0,d0						; Get a bit from the bitstream.
 	endm
 ; ===========================================================================
@@ -32,21 +32,21 @@ KosPlusDec:
 		moveq	#(1<<_KosPlus_LoopUnroll)-1,d1
 	endc
 	moveq	#0,d2						; Flag as having no bits left.
-	bra.s	@FetchNewCode
+	bra.s	.FetchNewCode
 ; ---------------------------------------------------------------------------
-@FetchCodeLoop:
+.FetchCodeLoop:
 	; Code 1 (Uncompressed byte).
 	move.b	(a0)+,(a1)+
 
-@FetchNewCode:
+.FetchNewCode:
 	_KosPlus_ReadBit
-	bcs.s	@FetchCodeLoop				; If code = 1, branch.
+	bcs.s	.FetchCodeLoop				; If code = 1, branch.
 
 	; Codes 00 and 01.
 	moveq	#-1,d5
 	lea	(a1),a2
 	_KosPlus_ReadBit
-	bcs.s	@Code_01
+	bcs.s	.Code_01
 
 	; Code 00 (Dictionary ref. short).
 	move.b	(a0)+,d5					; d5 = displacement.
@@ -55,17 +55,17 @@ KosPlusDec:
 	move.b	(a2)+,(a1)+
 	move.b	(a2)+,(a1)+
 	_KosPlus_ReadBit
-	bcc.s	@Copy_01
+	bcc.s	.Copy_01
 	move.b	(a2)+,(a1)+
 	move.b	(a2)+,(a1)+
 
-@Copy_01:
+.Copy_01:
 	_KosPlus_ReadBit
-	bcc.s	@FetchNewCode
+	bcc.s	.FetchNewCode
 	move.b	(a2)+,(a1)+
-	bra.s	@FetchNewCode
+	bra.s	.FetchNewCode
 ; ---------------------------------------------------------------------------
-@Code_01:
+.Code_01:
 	moveq	#0,d4						; d4 will contain copy count.
 	; Code 01 (Dictionary ref. long / special).
 	move.b	(a0)+,d4					; d4 = %HHHHHCCC.
@@ -78,11 +78,11 @@ KosPlusDec:
 		andi.w	#7,d4
 	endc
 	if _KosPlus_LoopUnroll>0
-		bne.s	@StreamCopy				; if CCC=0, branch.
+		bne.s	.StreamCopy				; if CCC=0, branch.
 
 		; special mode (extended counter)
 		move.b	(a0)+,d4				; Read cnt
-		beq.s	@Quit					; If cnt=0, quit decompression.
+		beq.s	.Quit					; If cnt=0, quit decompression.
 
 		adda.w	d5,a2
 		move.w	d4,d6
@@ -90,37 +90,37 @@ KosPlusDec:
 		and.w	d1,d6
 		add.w	d6,d6
 		lsr.w	#_KosPlus_LoopUnroll,d4
-		jmp	@largecopy(pc,d6.w)
+		jmp	.largecopy(pc,d6.w)
 	else
-		beq.s	@dolargecopy
+		beq.s	.dolargecopy
 	endc
 ; ---------------------------------------------------------------------------
-@StreamCopy:
+.StreamCopy:
 	adda.w	d5,a2
 	move.b	(a2)+,(a1)+					; Do 1 extra copy (to compensate +1 to copy counter).
 	add.w	d4,d4
-	jmp	@mediumcopy-2(pc,d4.w)
+	jmp	.mediumcopy-2(pc,d4.w)
 ; ---------------------------------------------------------------------------
 	if _KosPlus_LoopUnroll=0
-@dolargecopy:
+.dolargecopy:
 		; special mode (extended counter)
 		move.b	(a0)+,d4				; Read cnt
-		beq.s	@Quit					; If cnt=0, quit decompression.
+		beq.s	.Quit					; If cnt=0, quit decompression.
 		adda.w	d5,a2
 	endc
 
-@largecopy:
+.largecopy:
 	rept (1<<_KosPlus_LoopUnroll)
 		move.b	(a2)+,(a1)+
 	endr
-	dbra	d4,@largecopy
+	dbra	d4,.largecopy
 
-@mediumcopy:
+.mediumcopy:
 	rept 8
 		move.b	(a2)+,(a1)+
 	endr
-	bra.w	@FetchNewCode
+	bra.w	.FetchNewCode
 ; ---------------------------------------------------------------------------
-@Quit:
+.Quit:
 	movem.l	(sp)+,d0-d6/a0-a2
 	rts

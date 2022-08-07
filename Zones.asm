@@ -19,11 +19,11 @@ LoadPerZone:
 
 		movea.l	(a4)+,a1				; get pointer for Kosinski PLC list
 		cmpi.b	#id_Title,(v_gamemode).w
-		beq.s	@no_kplc				; skip KPLC if on title screen
+		beq.s	.no_kplc				; skip KPLC if on title screen
 		move.w	(a1,d2.w),d0				; get id of KPLC
 		jsr	KosPLC					; run KPLC
 
-	@no_kplc:
+	.no_kplc:
 		move.l	(a4)+,(v_16x16_ptr).w			; load 16x16 mappings pointer
 		movea.l	(a4)+,a0				; load 256x256 mappings pointer
 		lea	(v_256x256_tiles).l,a1			; RAM address for 256x256 mappings
@@ -44,7 +44,7 @@ LoadPerZone:
 
 		moveq	#0,d0
 		move.w	(a4)+,d0				; get water flag
-		beq.s	@no_water				; branch if 0
+		beq.s	.no_water				; branch if 0
 		move.b	d0,(f_water_enable).w			; set water enable flag
 		movea.l	(a4),a1					; get pointer for water palette id list for Sonic
 		move.b	(a1,d1.w),d0				; get palette id
@@ -58,7 +58,7 @@ LoadPerZone:
 		move.w	d0,(v_water_height_actual).w		; set water heights
 		move.w	d0,(v_water_height_normal).w
 		move.w	d0,(v_water_height_next).w
-	@no_water:
+	.no_water:
 		adda.l	#12,a4
 
 		movea.l	(a4)+,a1				; get pointer for OPL list

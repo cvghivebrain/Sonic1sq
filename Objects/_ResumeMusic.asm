@@ -7,21 +7,21 @@
 
 ResumeMusic:
 		cmpi.w	#air_alert,(v_air).w			; more than 12 seconds of air left?
-		bhi.s	@over12					; if yes, branch
+		bhi.s	.over12					; if yes, branch
 		move.b	(v_bgm).w,d0
 		tst.b	(v_invincibility).w			; is Sonic invincible?
-		beq.s	@notinvinc				; if not, branch
+		beq.s	.notinvinc				; if not, branch
 		move.w	#mus_Invincible,d0
 
-	@notinvinc:
+	.notinvinc:
 		tst.b	(f_boss_boundary).w			; is Sonic at a boss?
-		beq.s	@playselected				; if not, branch
+		beq.s	.playselected				; if not, branch
 		move.w	#mus_Boss,d0
 
-	@playselected:
+	.playselected:
 		jsr	(PlaySound0).l
 
-	@over12:
+	.over12:
 		move.w	#air_full,(v_air).w			; reset air to 30 seconds
 		clr.b	(v_ost_bubble+ost_drown_disp_time).w
 		rts

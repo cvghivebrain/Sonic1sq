@@ -52,7 +52,7 @@ Card_Main:	; Routine 0
 		lea	(Card_ItemData).l,a2			; y pos/routine/frame for each item
 		moveq	#4-1,d1					; there are 4 items (minus 1 for 1st loop)
 
-@loop:
+.loop:
 		move.l	#TitleCard,ost_id(a1)
 		move.w	(a3),ost_x_pos(a1)			; set initial x position
 		move.w	(a3)+,ost_card_x_start(a1)
@@ -62,15 +62,15 @@ Card_Main:	; Routine 0
 		moveq	#0,d0
 		move.b	(a2)+,d0				; set frame number
 		cmpi.b	#id_frame_card_ghz,d0
-		bne.s	@not_zone
+		bne.s	.not_zone
 		move.w	(v_titlecard_zone).w,d0			; get frame id for zone
 
-	@not_zone:
+	.not_zone:
 		cmpi.b	#id_frame_card_act1,d0
-		bne.s	@not_act
+		bne.s	.not_act
 		move.w	(v_titlecard_act).w,d0			; get frame id for act
 
-	@not_act:
+	.not_act:
 		move.w	d0,ost_frame_hi(a1)			; display frame number d0
 		move.l	#Map_Card,ost_mappings(a1)
 		move.w	(v_tile_titlecard).w,ost_tile(a1)
@@ -80,28 +80,28 @@ Card_Main:	; Routine 0
 		move.b	#0,ost_priority(a1)
 		move.w	#60,ost_card_time(a1)			; set time delay to 1 second
 		lea	sizeof_ost(a1),a1			; next object
-		dbf	d1,@loop				; repeat sequence 3 times
+		dbf	d1,.loop				; repeat sequence 3 times
 
 Card_Move:	; Routine 2
 		moveq	#$10,d1					; set to move 16px right
 		move.w	ost_card_x_stop(a0),d0
 		cmp.w	ost_x_pos(a0),d0			; has item reached the target position?
-		beq.s	@at_target				; if yes, branch
-		bge.s	@is_left				; branch if item is left of target
+		beq.s	.at_target				; if yes, branch
+		bge.s	.is_left				; branch if item is left of target
 		neg.w	d1					; move left instead
 
-	@is_left:
+	.is_left:
 		add.w	d1,ost_x_pos(a0)			; update position
 
-	@at_target:
+	.at_target:
 		move.w	ost_x_pos(a0),d0
-		bmi.s	@no_display				; branch if item is outside left of screen
+		bmi.s	.no_display				; branch if item is outside left of screen
 		cmpi.w	#$200,d0				; is item right of $200 on x-axis?
-		bcc.s	@no_display				; if yes, branch
+		bcc.s	.no_display				; if yes, branch
 		bra.w	DisplaySprite
 ; ===========================================================================
 
-@no_display:
+.no_display:
 		rts	
 ; ===========================================================================
 
@@ -121,25 +121,25 @@ Card_MoveBack:
 		move.w	ost_card_x_start(a0),d0
 		cmp.w	ost_x_pos(a0),d0			; has item reached the finish position?
 		beq.s	Card_ChangeArt				; if yes, branch
-		bge.s	@is_left				; branch if item is left of target
+		bge.s	.is_left				; branch if item is left of target
 		neg.w	d1					; move left instead
 
-	@is_left:
+	.is_left:
 		add.w	d1,ost_x_pos(a0)			; update position
 		move.w	ost_x_pos(a0),d0
-		bmi.s	@no_display				; branch if item is outside left of screen
+		bmi.s	.no_display				; branch if item is outside left of screen
 		cmpi.w	#$200,d0				; is item right of $200 on x-axis?
-		bcc.s	@no_display				; if yes, branch
+		bcc.s	.no_display				; if yes, branch
 		bra.w	DisplaySprite
 ; ===========================================================================
 
-@no_display:
+.no_display:
 		rts	
 ; ===========================================================================
 
 Card_ChangeArt:
 		cmpi.b	#id_Card_Wait,ost_routine(a0)		; is this the main object? (routine 4)
-		bne.s	@delete					; if not, branch
+		bne.s	.delete					; if not, branch
 
 		moveq	#id_UPLC_Explode,d0
 		jsr	UncPLC					; load explosion gfx
@@ -148,5 +148,5 @@ Card_ChangeArt:
 		addi.w	#id_PLC_GHZAnimals,d0
 		jsr	(AddPLC).l				; load animal gfx
 
-	@delete:
+	.delete:
 		bra.w	DeleteObject

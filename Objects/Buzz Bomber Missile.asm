@@ -68,7 +68,7 @@ Msl_ChkCancel:
 
 Msl_FromBuzz:	; Routine 4
 		btst	#status_broken_bit,ost_status(a0)	; is high bit of status set? (it never is)
-		bne.s	@explode				; if yes, branch
+		bne.s	.explode				; if yes, branch
 		move.b	#id_col_6x6+id_col_hurt,ost_col_type(a0)
 		move.b	#id_ani_buzz_missile,ost_anim(a0)
 		bsr.w	SpeedToPos
@@ -81,7 +81,7 @@ Msl_FromBuzz:	; Routine 4
 		bra.w	DisplaySprite
 ; ===========================================================================
 
-	@explode:
+	.explode:
 		move.l	#MissileDissolve,ost_id(a0)		; change object to an explosion (Obj24)
 		move.b	#id_MDis_Main,ost_routine(a0)
 		bra.w	MissileDissolve

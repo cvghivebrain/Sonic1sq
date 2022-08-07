@@ -10,13 +10,13 @@ FindFreeDMA:
 		lea	(v_dma_queue).w,a1			; start address for DMA queue
 		move.w	#countof_dma-1,d0			; number of DMA slots in total
 
-	@loop:
+	.loop:
 		tst.b	(a1)					; is DMA slot empty?
-		beq.s	@found					; if yes, branch
+		beq.s	.found					; if yes, branch
 		lea	sizeof_dma(a1),a1			; goto next DMA slot
-		dbf	d0,@loop				; repeat 15 times
+		dbf	d0,.loop				; repeat 15 times
 
-	@found:
+	.found:
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -67,9 +67,9 @@ ProcessDMA:
 		lea	(vdp_control_port).l,a5			; control port
 		move.w	#countof_dma-1,d0			; number of DMA slots in total
 
-	@loop:
+	.loop:
 		tst.b	(a1)					; is DMA slot empty?
-		beq.s	@empty					; if yes, branch
+		beq.s	.empty					; if yes, branch
 		move.l	(a1),(a5)				; write source address
 		move.w	4(a1),(a5)				; write source address
 		move.l	6(a1),(a5)				; write length
@@ -80,7 +80,7 @@ ProcessDMA:
 		move.l	#0,6(a1)
 		move.l	#0,10(a1)				; delete from queue
 	
-	@empty:
+	.empty:
 		lea	sizeof_dma(a1),a1			; goto next DMA slot
-		dbf	d0,@loop				; repeat 15 times
+		dbf	d0,.loop				; repeat 15 times
 		rts

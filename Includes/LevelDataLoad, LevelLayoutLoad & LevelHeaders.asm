@@ -11,9 +11,9 @@ LevelLayoutLoad:
 		move.w	#((v_sprite_queue-v_level_layout)/4)-1,d1
 		moveq	#0,d0
 
-	@clear_ram:
+	.clear_ram:
 		move.l	d0,(a3)+
-		dbf	d1,@clear_ram				; clear the RAM ($A400-ABFF)
+		dbf	d1,.clear_ram				; clear the RAM ($A400-ABFF)
 
 		lea	(v_level_layout).w,a3			; RAM address for level layout
 		moveq	#0,d1
@@ -39,13 +39,13 @@ LevelLayoutLoad2:
 		move.b	(a1)+,d1				; load cropped level width (in tiles)
 		move.b	(a1)+,d2				; load cropped level height (in tiles)
 
-	@loop_row:
+	.loop_row:
 		move.w	d1,d0
 		movea.l	a3,a0
 
-	@loop_tile:
+	.loop_tile:
 		move.b	(a1)+,(a0)+
-		dbf	d0,@loop_tile				; load 1 row
+		dbf	d0,.loop_tile				; load 1 row
 		lea	sizeof_levelrow(a3),a3			; do next row
-		dbf	d2,@loop_row				; repeat for number of rows
+		dbf	d2,.loop_row				; repeat for number of rows
 		rts

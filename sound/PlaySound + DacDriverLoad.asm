@@ -10,9 +10,9 @@ DacDriverLoad:
 		lea	(Kos_DacDriver).l,a0			; compressed DAC driver address
 		lea	(z80_ram).l,a1				; load into start of z80 RAM
 		move.w	#Kos_DacDriver_end-Kos_DacDriver-1,d0
-	@loop:
+	.loop:
 		move.b	(a0)+,(a1)+
-		dbf	d0,@loop
+		dbf	d0,.loop
 
 		resetZ80_assert					; assert z80 reset
 		rept 4

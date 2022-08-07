@@ -42,10 +42,10 @@ Z80Driver_Start:
 		ld	b,8					; Number of bits to latch to ROM bank
 		ld	a,(SEGA_PCM>>16)&$FF			; Bank ID without the least significant bit
 
-@bankswitch:
+.bankswitch:
 		ld	(zBankSelect),a				; Latch another bit to bank register.
 		rrca						; Move next bit into position
-		djnz	@bankswitch				; decrement and loop if not zero
+		djnz	.bankswitch				; decrement and loop if not zero
 		jr	CheckForSamples
 
 ; ---------------------------------------------------------------------------
@@ -64,10 +64,10 @@ zDACDecodeTbl:
 CheckForSamples:
 		ld	hl,zDAC_Sample				; Load the address of next sample.
 
-@nullsample:
+.nullsample:
 		ld	a,(hl)					; a = next sample to play.
 		or	a					; Do we have a valid sample?
-		jp	p,@nullsample				; Loop until we do
+		jp	p,.nullsample				; Loop until we do
 
 		sub	81h					; Make 0-based index
 		ld	(hl),a					; Store it back into sample index (i.e., mark it as being played)
@@ -188,7 +188,7 @@ Play_Sega:
 		ld	hl,SEGA_PCM_Len&$FFFF			; hl = size of the SEGA sound
 		ld	c,2Ah					; c = DAC data register
 
-@play:
+.play:
 		ld	a,(de)					; a = next byte of the SEGA PCM
 		ld	(ix+0),c				; select the DAC data register (2Ah)
 		ld	(ix+1),a				; send DAC value to YM
@@ -201,7 +201,7 @@ Play_Sega:
 
 		ld	a,l					; check if hl is 0
 		or	h					; this does the actual check - if not, then a will be nonzero
-		jp	nz,@play				; if hl is not 0, keep playing the sample
+		jp	nz,.play				; if hl is not 0, keep playing the sample
 		jp	CheckForSamples				; SEGA sound is done; wait for new samples
 
 ; ---------------------------------------------------------------------------

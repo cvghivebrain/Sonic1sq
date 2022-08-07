@@ -32,10 +32,10 @@ TCha_Main:	; Routine 0
 		moveq	#emerald_count-1,d1
 		move.l	(v_emeralds).w,d0			; get emerald bitfield
 
-@makeemerald:
+.makeemerald:
 		move.l	#0,ost_id(a1)				; set object to none by default
 		btst	d2,d0					; check if emerald was collected
-		bne.s	@sonic_has_emerald			; branch if yes
+		bne.s	.sonic_has_emerald			; branch if yes
 
 		move.l	#TryChaos,ost_id(a1)			; load emerald object
 		move.b	#id_TCha_Move,ost_routine(a1)		; goto TCha_Move next
@@ -54,35 +54,35 @@ TCha_Main:	; Routine 0
 		move.b	d3,ost_anim_time(a1)
 		move.b	d3,ost_ectry_time_master(a1)
 
-	@sonic_has_emerald:
+	.sonic_has_emerald:
 		addq.b	#1,d2					; next emerald
 		addi.w	#10,d3
 		lea	sizeof_ost(a1),a1			; next OST slot
-		dbf	d1,@makeemerald				; repeat for remaining emeralds
+		dbf	d1,.makeemerald				; repeat for remaining emeralds
 
 TCha_Move:	; Routine 2
 		tst.w	ost_ectry_speed(a0)			; should be 0, 2 or -2 (changed by Eggman object)
-		beq.s	@no_move				; branch if 0
+		beq.s	.no_move				; branch if 0
 		tst.b	ost_anim_time(a0)
-		beq.s	@update_angle				; branch if timer is 0
+		beq.s	.update_angle				; branch if timer is 0
 		subq.b	#1,ost_anim_time(a0)			; decrement timer
-		bne.s	@chk_angle				; branch if not 0
+		bne.s	.chk_angle				; branch if not 0
 
-	@update_angle:
+	.update_angle:
 		move.w	ost_ectry_speed(a0),d0			; 2 or -2
 		add.w	d0,ost_angle(a0)			; update angle
 
-	@chk_angle:
+	.chk_angle:
 		move.b	ost_angle(a0),d0			; get angle
-		beq.s	@angle_0				; branch if 0
+		beq.s	.angle_0				; branch if 0
 		cmpi.b	#$80,d0
-		bne.s	@angle_not_80				; branch if not $80
+		bne.s	.angle_not_80				; branch if not $80
 
-	@angle_0:
+	.angle_0:
 		clr.w	ost_ectry_speed(a0)
 		move.b	ost_ectry_time_master(a0),ost_anim_time(a0)
 
-	@angle_not_80:
+	.angle_not_80:
 		jsr	(CalcSine).l				; convert angle (d0) to sine (d0) and cosine (d1)
 		moveq	#0,d4
 		move.b	ost_ectry_radius(a0),d4
@@ -95,5 +95,5 @@ TCha_Move:	; Routine 2
 		move.w	d1,ost_x_pos(a0)
 		move.w	d0,ost_y_screen(a0)
 
-	@no_move:
+	.no_move:
 		rts	

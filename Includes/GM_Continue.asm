@@ -14,9 +14,9 @@ GM_Continue:
 		lea	(v_ost_all).w,a1			; RAM address to start clearing
 		moveq	#0,d0
 		move.w	#loops_to_clear_ost,d1			; size of RAM block to clear
-	@clear_ost:
+	.clear_ost:
 		move.l	d0,(a1)+
-		dbf	d1,@clear_ost				; clear object RAM
+		dbf	d1,.clear_ost				; clear object RAM
 
 		moveq	#id_UPLC_TitleCard,d0
 		jsr	UncPLC					; load title card patterns
@@ -54,7 +54,7 @@ Cont_MainLoop:
 		move.b	#id_VBlank_Continue,(v_vblank_routine).w
 		bsr.w	WaitForVBlank
 		cmpi.b	#id_CSon_Run,(v_ost_player+ost_routine).w ; is Sonic running?
-		bhs.s	@sonic_running				; if yes, branch
+		bhs.s	.sonic_running				; if yes, branch
 		disable_ints
 		move.w	(v_countdown).w,d1			; get counter
 		divu.w	#60,d1					; convert to seconds
@@ -62,11 +62,11 @@ Cont_MainLoop:
 		jsr	(ContScrCounter).l			; display countdown on screen
 		enable_ints
 
-	@sonic_running:
+	.sonic_running:
 		jsr	(ExecuteObjects).l
 		jsr	(BuildSprites).l
 		cmpi.w	#$180,(v_ost_player+ost_x_pos).w	; has Sonic run off screen?
-		bhs.s	@goto_level				; if yes, branch
+		bhs.s	.goto_level				; if yes, branch
 		cmpi.b	#id_CSon_Run,(v_ost_player+ost_routine).w
 		bhs.s	Cont_MainLoop
 		tst.w	(v_countdown).w				; is time left on countdown?
@@ -75,7 +75,7 @@ Cont_MainLoop:
 		rts	
 ; ===========================================================================
 
-@goto_level:
+.goto_level:
 		move.b	#id_Level,(v_gamemode).w		; set screen mode to $0C (level)
 		move.b	#3,(v_lives).w				; set lives to 3
 		moveq	#0,d0

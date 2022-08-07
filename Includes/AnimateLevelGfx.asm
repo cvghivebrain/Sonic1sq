@@ -8,15 +8,15 @@
 
 AnimateLevelGfx:
 		tst.w	(f_pause).w				; is the game paused?
-		bne.s	@exit					; if yes, branch
+		bne.s	.exit					; if yes, branch
 		lea	(vdp_data_port).l,a6
 		bsr.w	LoadArt_GiantRing			; load giant ring gfx if needed
 		tst.l	(v_aniart_ptr).w
-		beq.s	@exit					; branch if pointer is empty
+		beq.s	.exit					; branch if pointer is empty
 		movea.l	(v_aniart_ptr).w,a1
 		jmp	(a1)
 
-	@exit:
+	.exit:
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -31,18 +31,18 @@ AniArt_Run:
 		lea	(v_levelani_0_frame).w,a4
 		move.w	(a3)+,d4				; get script count
 
-	@loop:
+	.loop:
 		movea.l	(a3)+,a2				; get script address
 		sub.w	#1,2(a4)				; decrement timer
-		bpl.s	@next					; branch if time remains
+		bpl.s	.next					; branch if time remains
 		
 		add.w	#1,(a4)					; increment frame number
 		moveq	#0,d3
 		move.w	(a2)+,d3				; get frame count
 		cmp.w	(a4),d3					; compare frame number with max
-		bne.s	@valid_frame				; branch if valid
+		bne.s	.valid_frame				; branch if valid
 		move.w	#0,(a4)					; otherwise reset to 0
-	@valid_frame:
+	.valid_frame:
 		move.l	(a2)+,d1				; get VRAM address
 		move.l	(a2)+,d2				; get size
 		move.w	(a4),d3
@@ -51,17 +51,17 @@ AniArt_Run:
 		move.w	(a2)+,2(a4)				; reset timer
 		jsr	AddDMA					; add to DMA queue
 		
-	@next:
+	.next:
 		lea	4(a4),a4				; next time/frame counter in RAM
-		dbf	d4,@loop				; repeat for all scripts
+		dbf	d4,.loop				; repeat for all scripts
 		rts
 
 AniArt_GHZ_Script:
 		dc.w 3-1					; number of scripts
-		dc.l @waterfall
-		dc.l @big_flower
-		dc.l @small_flower
-	@waterfall:
+		dc.l .waterfall
+		dc.l .big_flower
+		dc.l .small_flower
+	.waterfall:
 		dc.w 2						; frame count
 		set_dma_dest $6F00				; VRAM destination
 		set_dma_size 8*sizeof_cell			; size
@@ -69,7 +69,7 @@ AniArt_GHZ_Script:
 		set_dma_src Art_GhzWater			; ROM source
 		dc.w 5
 		set_dma_src Art_GhzWater+(8*sizeof_cell)
-	@big_flower:
+	.big_flower:
 		dc.w 2
 		set_dma_dest $6B80
 		set_dma_size 16*sizeof_cell
@@ -77,7 +77,7 @@ AniArt_GHZ_Script:
 		set_dma_src Art_GhzFlower1
 		dc.w 15
 		set_dma_src Art_GhzFlower1+(16*sizeof_cell)
-	@small_flower:
+	.small_flower:
 		dc.w 4
 		set_dma_dest $6D80
 		set_dma_size 12*sizeof_cell
@@ -96,9 +96,9 @@ AniArt_GHZ_Script:
 
 AniArt_MZ_Script:
 		dc.w 2-1					; number of scripts
-		dc.l @lava
-		dc.l @torch
-	@lava:
+		dc.l .lava
+		dc.l .torch
+	.lava:
 		dc.w 3						; frame count
 		set_dma_dest $55A0				; VRAM destination
 		set_dma_size 8*sizeof_cell			; size
@@ -108,7 +108,7 @@ AniArt_MZ_Script:
 		set_dma_src Art_MzLava1+(8*sizeof_cell)
 		dc.w 19
 		set_dma_src Art_MzLava1+(8*sizeof_cell*2)
-	@torch:
+	.torch:
 		dc.w 4
 		set_dma_dest $52E0
 		set_dma_size 6*sizeof_cell
@@ -130,7 +130,7 @@ AniArt_MZ_Magma:
 tilecount:	= 4						; 4 per column, 16 total
 
 		subq.w	#1,(v_levelani_2_time).w		; decrement timer
-		bpl.s	@exit					; branch if not -1
+		bpl.s	.exit					; branch if not -1
 		
 		move.w	#1,(v_levelani_2_time).w		; time between each gfx change
 		moveq	#0,d0
@@ -145,7 +145,7 @@ tilecount:	= 4						; 4 per column, 16 total
 		move.b	(v_oscillating_0_to_40).w,d3		; get oscillating value
 		move.w	#4-1,d2					; number of columns of tiles
 
-	@loop:
+	.loop:
 		move.w	d3,d0
 		add.w	d0,d0
 		andi.w	#$1E,d0					; d0 = low nybble of oscillating value * 2
@@ -156,9 +156,9 @@ tilecount:	= 4						; 4 per column, 16 total
 		move.w	#((tilecount*sizeof_cell)/4)-1,d1	; $1F
 		jsr	(a3)					; copy gfx to VRAM
 		addq.w	#4,d3					; increment initial oscillating value
-		dbf	d2,@loop				; repeat 3 times
+		dbf	d2,.loop				; repeat 3 times
 	
-	@exit:
+	.exit:
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -167,18 +167,18 @@ tilecount:	= 4						; 4 per column, 16 total
 
 AniArt_SBZ:
 		tst.b	(v_act).w
-		bne.s	@exit					; branch if not act 1
+		bne.s	.exit					; branch if not act 1
 		lea	AniArt_SBZ_Script(pc),a3
 		bsr.w	AniArt_Run
 
-	@exit:
+	.exit:
 		rts
 
 AniArt_SBZ_Script:
 		dc.w 2-1					; number of scripts
-		dc.l @puff1
-		dc.l @puff2
-	@puff1:
+		dc.l .puff1
+		dc.l .puff2
+	.puff1:
 		dc.w 8						; frame count
 		set_dma_dest $5520				; VRAM destination
 		set_dma_size 12*sizeof_cell			; size
@@ -198,7 +198,7 @@ AniArt_SBZ_Script:
 		set_dma_src Art_SbzSmoke+(12*sizeof_cell*6)
 		dc.w 7
 		set_dma_src Art_SbzSmoke+(12*sizeof_cell*7)
-	@puff2:
+	.puff2:
 		dc.w 8
 		set_dma_dest $56A0
 		set_dma_size 12*sizeof_cell
@@ -229,12 +229,12 @@ AniArt_Ending:
 
 AniArt_Ending_Script:
 		dc.w 5-1					; number of scripts
-		dc.l @big_flower1
-		dc.l @big_flower2
-		dc.l @small_flower
-		dc.l @round_flower1
-		dc.l @round_flower2
-	@big_flower1:
+		dc.l .big_flower1
+		dc.l .big_flower2
+		dc.l .small_flower
+		dc.l .round_flower1
+		dc.l .round_flower2
+	.big_flower1:
 		dc.w 2
 		set_dma_dest $6B80
 		set_dma_size 16*sizeof_cell
@@ -242,7 +242,7 @@ AniArt_Ending_Script:
 		set_dma_src Art_GhzFlower1
 		dc.w 7
 		set_dma_src Art_GhzFlower1+(16*sizeof_cell)
-	@big_flower2:
+	.big_flower2:
 		dc.w 2
 		set_dma_dest $7200
 		set_dma_size 16*sizeof_cell
@@ -250,7 +250,7 @@ AniArt_Ending_Script:
 		set_dma_src Art_EndFlowers
 		dc.w 7
 		set_dma_src Art_EndFlowers+(16*sizeof_cell)
-	@small_flower:
+	.small_flower:
 		dc.w 4
 		set_dma_dest $6D80
 		set_dma_size 12*sizeof_cell
@@ -262,7 +262,7 @@ AniArt_Ending_Script:
 		set_dma_src Art_GhzFlower2+(12*sizeof_cell*2)
 		dc.w 7
 		set_dma_src Art_GhzFlower2+(12*sizeof_cell)
-	@round_flower1:
+	.round_flower1:
 		dc.w 4
 		set_dma_dest $7000
 		set_dma_size 16*sizeof_cell
@@ -274,7 +274,7 @@ AniArt_Ending_Script:
 		set_dma_src Art_EndFlowers+(16*sizeof_cell*2)+$400
 		dc.w 14
 		set_dma_src Art_EndFlowers+(16*sizeof_cell)+$400
-	@round_flower2:
+	.round_flower2:
 		dc.w 4
 		set_dma_dest $6800
 		set_dma_size 16*sizeof_cell
@@ -491,11 +491,11 @@ LoadArt_GiantRing:
 tilecount:	= (sizeof_art_giantring/sizeof_cell)/7		; number of tiles to load per frame over 7 frames (14)
 
 		tst.w	(v_giantring_gfx_offset).w		; $C40 is written here by GiantRing (98 tiles)
-		bne.s	@loadTiles				; branch if not 0
+		bne.s	.loadTiles				; branch if not 0
 		rts	
 ; ===========================================================================
 
-@loadTiles:
+.loadTiles:
 		subi.w	#tilecount*sizeof_cell,(v_giantring_gfx_offset).w ; count down the 14 tiles we're going to load now
 		lea	(Art_BigRing).l,a1			; giant ring gfx
 		moveq	#0,d0
