@@ -567,6 +567,7 @@ LGrass_Coll_Sloped:
 		include "Objects\Yadrin [Mappings].asm"		; Map_Yad
 
 		include "Objects\_SolidObject.asm"
+		include "Objects\_SkipMappings.asm"
 
 		include "Objects\MZ Smashable Green Block.asm"	; SmashBlock
 		include "Objects\MZ Smashable Green Block [Mappings].asm" ; Map_Smab
@@ -840,7 +841,7 @@ Eni_SSBg2:	incbin	"Tilemaps\SS Background 2.eni"		; special stage background (ma
 ; ---------------------------------------------------------------------------
 		incfile Kos_Swing,"Graphics Kosinski\GHZ Swinging Platform",kos
 		incfile Kos_Bridge,"Graphics Kosinski\GHZ Bridge",kos
-		incfile Nem_Ball,"Graphics - Compressed\GHZ Giant Ball",nem
+		incfile Art_Ball,"Graphics\GHZ Giant Ball",bin,dma_safe
 		incfile Kos_Spikes,"Graphics Kosinski\Spikes",kos
 		incfile Kos_SpikePole,"Graphics Kosinski\GHZ Spiked Helix Pole",kos
 		incfile Kos_PurpleRock,"Graphics Kosinski\GHZ Purple Rock",kos

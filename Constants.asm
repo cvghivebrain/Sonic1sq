@@ -36,6 +36,7 @@ draw_base:		equ vram_fg			; base address for nametables, used by Calc_VRAM_Pos (
 draw_fg:		equ $4000+(vram_fg-draw_base)	; VRAM write command + fg nametable address relative to base
 draw_bg:		equ $4000+(vram_bg-draw_base)	; VRAM write command + bg nametable address relative to base
 
+vram_ball:		equ $67C0	; GHZ ball graphics
 vram_giantring:		equ $8000	; giant ring graphics
 vram_animal1:		equ $B000	; animal graphics
 vram_animal2:		equ $B240	; animal graphics

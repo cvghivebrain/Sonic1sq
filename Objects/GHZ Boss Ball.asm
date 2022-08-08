@@ -71,7 +71,7 @@ GBall_Main:	; Routine 0
 	.fail:
 		move.b	#id_GBall_Ball,ost_routine(a1)
 		move.l	#Map_GBall,ost_mappings(a1)		; replace last object with ball
-		move.w	#0+tile_pal3,ost_tile(a1)
+		move.w	#(vram_ball/sizeof_cell)+tile_pal3,ost_tile(a1)
 		move.b	#id_frame_ball_check1,ost_frame(a1)
 		move.b	#5,ost_priority(a1)
 		move.b	#id_col_20x20+id_col_hurt,ost_col_type(a1) ; make object hurt Sonic
@@ -168,13 +168,11 @@ GBall_Link:	; Routine 6
 ; ===========================================================================
 
 GBall_Ball:	; Routine 8
-		moveq	#0,d0
-		tst.b	ost_frame(a0)				; is frame 0 displayed?
-		bne.s	.frame_1				; if not, branch
-		addq.b	#id_frame_ball_check1,d0
-
-	.frame_1:
-		move.b	d0,ost_frame(a0)			; use frame 0 or 1
+		lea	(Ani_Ball).l,a1
+		bsr.w	AnimateSprite
+		set_dma_dest vram_ball,d1			; set VRAM address to write gfx
+		bsr.w	DPLCSprite				; write gfx if frame has changed
+		
 		movea.l	ost_ball_parent(a0),a1			; get address of OST of parent (ship)
 		tst.b	ost_status(a1)				; has boss been beaten?
 		bpl.s	.display				; if not, branch
@@ -187,6 +185,20 @@ GBall_Ball:	; Routine 8
 
 	.display:
 		jmp	(DisplaySprite).l
+
+; ---------------------------------------------------------------------------
+; Animation script
+; ---------------------------------------------------------------------------
+
+Ani_Ball:	index *
+		ptr ani_ball_boss
+		
+ani_ball_boss:
+		dc.b 0
+		dc.b id_frame_ball_shiny
+		dc.b id_frame_ball_check1
+		dc.b afEnd
+		even
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to update swinging angle and positions for chain links and ball

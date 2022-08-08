@@ -238,8 +238,13 @@ dma_fill:	macro value,length,loc
 ; DMA destination, source and size
 ; ---------------------------------------------------------------------------
 
-set_dma_dest:	macros
+set_dma_dest:	macro
+		if narg=1
 		dc.l $40000080+(((\1)&$3FFF)<<16)+(((\1)&$C000)>>14)
+		else
+		move.l	#$40000080+(((\1)&$3FFF)<<16)+(((\1)&$C000)>>14),\2
+		endc
+		endm
 
 set_dma_size:	macros
 		dc.l $93009400+((((\1)>>1)&$FF)<<16)+((((\1)>>1)&$FF00)>>8)

@@ -9,35 +9,46 @@ Map_GBall:	index *
 		
 frame_ball_shiny:
 		spritemap
-		piece	-$10, -$10, 2x1, $24
-		piece	-$10, -8, 2x1, $24, yflip
+		piece	-$10, -$10, 2x1, 0
+		piece	-$10, -8, 2x1, 0, yflip
+		piece	-$18, -$18, 3x3, 2
+		piece	0, -$18, 3x3, 2, xflip
+		piece	-$18, 0, 3x3, 2, yflip
+		piece	0, 0, 3x3, 2, xflip, yflip
+		endsprite
+		
+		set_dma_src Art_Ball
+		set_dma_size 11*sizeof_cell
+		
+frame_ball_check1:
+		spritemap
 		piece	-$18, -$18, 3x3, 0
 		piece	0, -$18, 3x3, 0, xflip
 		piece	-$18, 0, 3x3, 0, yflip
 		piece	0, 0, 3x3, 0, xflip, yflip
 		endsprite
 		
-frame_ball_check1:
-		spritemap
-		piece	-$18, -$18, 3x3, 9
-		piece	0, -$18, 3x3, 9, xflip
-		piece	-$18, 0, 3x3, 9, yflip
-		piece	0, 0, 3x3, 9, xflip, yflip
-		endsprite
+		set_dma_src Art_Ball+(11*sizeof_cell)
+		set_dma_size 9*sizeof_cell
 		
 frame_ball_check2:
 		spritemap
-		piece	-$18, -$18, 3x3, $12
-		piece	0, -$18, 3x3, $1B
-		piece	-$18, 0, 3x3, $1B, xflip, yflip
-		piece	0, 0, 3x3, $12, xflip, yflip
+		piece	-$18, -$18, 3x3, 0
+		piece	0, -$18, 3x3, 9
+		piece	-$18, 0, 3x3, 9, xflip, yflip
+		piece	0, 0, 3x3, 0, xflip, yflip
 		endsprite
+		
+		set_dma_src Art_Ball+(20*sizeof_cell)
+		set_dma_size 18*sizeof_cell
 		
 frame_ball_check3:
 		spritemap
-		piece	-$18, -$18, 3x3, $1B, xflip
-		piece	0, -$18, 3x3, $12, xflip
-		piece	-$18, 0, 3x3, $12, yflip
-		piece	0, 0, 3x3, $1B, yflip
+		piece	-$18, -$18, 3x3, 9, xflip
+		piece	0, -$18, 3x3, 0, xflip
+		piece	-$18, 0, 3x3, 0, yflip
+		piece	0, 0, 3x3, 9, yflip
 		endsprite
-		even
+		
+		set_dma_src Art_Ball+(20*sizeof_cell)
+		set_dma_size 18*sizeof_cell

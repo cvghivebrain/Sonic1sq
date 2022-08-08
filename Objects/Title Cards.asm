@@ -39,28 +39,21 @@ Card_Main:	; Routine 0
 		jsr	UncPLC					; load title card patterns
 		movea.l	a0,a1					; replace current object with 1st item in list
 		moveq	#0,d0
-		move.w	(v_titlecard_zone).w,d0
-		movea.l	#Map_Card,a3				; goto mappings
-		add.w	d0,d0
-		adda.w	(a3,d0.w),a3				; jump to mappings for frame
-		move.w	(a3)+,d0				; read sprite count from mappings
-		add.w	d0,d0
-		move.w	d0,d1
-		add.w	d0,d0
-		add.w	d1,d0					; multiply by 6
-		lea	(a3,d0.w),a3				; jump to data immediately after mappings
-		lea	(Card_ItemData).l,a2			; y pos/routine/frame for each item
+		move.w	(v_titlecard_zone).w,d0			; get frame number for zone
+		movea.l	#Map_Card,a2				; goto mappings
+		bsr.w	SkipMappings				; jump to data immediately after mappings
+		lea	(Card_ItemData).l,a3			; y pos/routine/frame for each item
 		moveq	#4-1,d1					; there are 4 items (minus 1 for 1st loop)
 
 .loop:
 		move.l	#TitleCard,ost_id(a1)
-		move.w	(a3),ost_x_pos(a1)			; set initial x position
-		move.w	(a3)+,ost_card_x_start(a1)
-		move.w	(a3)+,ost_card_x_stop(a1)		; set target x position
-		move.w	(a2)+,ost_y_screen(a1)			; set y position
-		move.b	(a2)+,ost_routine(a1)			; goto Card_Move next
+		move.w	(a2),ost_x_pos(a1)			; set initial x position
+		move.w	(a2)+,ost_card_x_start(a1)
+		move.w	(a2)+,ost_card_x_stop(a1)		; set target x position
+		move.w	(a3)+,ost_y_screen(a1)			; set y position
+		move.b	(a3)+,ost_routine(a1)			; goto Card_Move next
 		moveq	#0,d0
-		move.b	(a2)+,d0				; set frame number
+		move.b	(a3)+,d0				; set frame number
 		cmpi.b	#id_frame_card_ghz,d0
 		bne.s	.not_zone
 		move.w	(v_titlecard_zone).w,d0			; get frame id for zone

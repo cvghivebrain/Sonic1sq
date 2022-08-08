@@ -64,12 +64,6 @@ PLC_Main2:	plcheader
 		plcm	Nem_Stars				; invincibility	stars ($AB80)
 	PLC_Main2_end:
 ; ---------------------------------------------------------------------------
-; Pattern load cues - Green Hill
-; ---------------------------------------------------------------------------
-PLC_GHZ2:	plcheader
-		;plcm	Nem_Ball				; giant	ball ($7540)
-	PLC_GHZ2_end:
-; ---------------------------------------------------------------------------
 ; Pattern load cues - act 3 boss
 ; ---------------------------------------------------------------------------
 PLC_Boss:	plcheader

@@ -108,3 +108,27 @@ NewAnim:
 
 	.keepanim:
 		rts
+
+; ---------------------------------------------------------------------------
+; Subroutine to	run DPLC when an object's animation updates
+;
+; input:
+;	d1 = destination address (as DMA instruction)
+;	a1 = animation script (e.g. ani_crab_stand)
+
+; output:
+;	uses d0, d1, d2, a1, a2
+; ---------------------------------------------------------------------------
+
+DPLCSprite:
+		move.b	(a1),d0
+		cmp.b	ost_anim_time(a0),d0			; has animation just updated?
+		bne.s	.exit					; branch if not
+		
+		move.w	ost_frame_hi(a0),d0			; get frame number
+		movea.l	ost_mappings(a0),a2			; get mappings pointer
+		bsr.w	SkipMappings				; jump to data after mappings
+		jsr	AddDMA2					; add to DMA queue
+		
+	.exit:
+		rts
