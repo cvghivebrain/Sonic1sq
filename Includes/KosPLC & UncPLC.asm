@@ -322,6 +322,7 @@ UncLoadCues:
 		ptr UPLC_TitleCard
 		ptr UPLC_GameOver
 		ptr UPLC_Explode
+		ptr UPLC_Stars
 
 UPLC_TitleCard:	uplcheader $B000
 		uplc Art_TitleCard,v_tile_titlecard
@@ -334,3 +335,7 @@ UPLC_GameOver:	uplcheader $ABC0
 UPLC_Explode:	uplcheader $B400
 		uplc Art_Explode
 	UPLC_Explode_end:
+
+UPLC_Stars:	uplcheader vram_shield
+		uplc Art_Stars
+	UPLC_Stars_end:

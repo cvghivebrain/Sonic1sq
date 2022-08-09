@@ -103,12 +103,12 @@ Pow_ChkInvinc:
 		move.b	#id_ani_stars3,(v_ost_stars3+ost_anim).w
 		move.l	#ShieldItem,(v_ost_stars4).w		; load stars object ($3804)
 		move.b	#id_ani_stars4,(v_ost_stars4+ost_anim).w
+		moveq	#id_UPLC_Stars,d0
+		jsr	UncPLC					; load stars gfx
 		tst.b	(f_boss_boundary).w			; is boss mode on?
 		bne.s	Pow_NoMusic				; if yes, branch
-		if Revision<>0
-			cmpi.w	#air_alert,(v_air).w
-			bls.s	Pow_NoMusic
-		endc
+		cmpi.w	#air_alert,(v_air).w
+		bls.s	Pow_NoMusic
 		play.w	0, jmp, mus_Invincible			; play invincibility music
 ; ===========================================================================
 

@@ -17,8 +17,8 @@ frame_ball_shiny:
 		piece	0, 0, 3x3, 2, xflip, yflip
 		endsprite
 		
-		set_dma_src Art_Ball
-		set_dma_size 11*sizeof_cell
+		dplcinit Art_Ball				; address of ball gfx
+		dplc 0,11					; offset, size (in tiles)
 		
 frame_ball_check1:
 		spritemap
@@ -28,8 +28,7 @@ frame_ball_check1:
 		piece	0, 0, 3x3, 0, xflip, yflip
 		endsprite
 		
-		set_dma_src Art_Ball+(11*sizeof_cell)
-		set_dma_size 9*sizeof_cell
+		dplc 11,9
 		
 frame_ball_check2:
 		spritemap
@@ -39,8 +38,7 @@ frame_ball_check2:
 		piece	0, 0, 3x3, 0, xflip, yflip
 		endsprite
 		
-		set_dma_src Art_Ball+(20*sizeof_cell)
-		set_dma_size 18*sizeof_cell
+		dplc 20,18
 		
 frame_ball_check3:
 		spritemap
@@ -50,5 +48,4 @@ frame_ball_check3:
 		piece	0, 0, 3x3, 9, yflip
 		endsprite
 		
-		set_dma_src Art_Ball+(20*sizeof_cell)
-		set_dma_size 18*sizeof_cell
+		dplc 20,18

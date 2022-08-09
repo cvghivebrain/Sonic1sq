@@ -385,8 +385,6 @@ Demo_EndGHZ2:	incbin	"Demos\Ending - GHZ2.bin"
 		include "Objects\Platforms.asm"			; BasicPlatform
 		include "Objects\Platforms [Mappings].asm"	; Map_Plat_Unused, Map_Plat_GHZ, Map_Plat_SYZ, Map_Plat_SLZ
 
-		include "Objects\GHZ Giant Ball [Mappings].asm"	; Map_GBall
-
 		include "Objects\GHZ Collapsing Ledge.asm"	; CollapseLedge
 		include "Objects\MZ, SLZ & SBZ Collapsing Floors.asm" ; CollapseFloor
 
@@ -657,7 +655,6 @@ See_DataFlat:	incbin	"Collision\SLZ Seesaw Heightmap (Flat).bin" ; used by Seesa
 		include "Objects\Shield & Invincibility.asm"	; ShieldItem
 		include "Objects\Unused Special Stage Warp.asm"	; VanishSonic
 		include "Objects\LZ Water Splash.asm"		; Splash
-		include "Objects\Shield & Invincibility [Mappings].asm" ; Map_Shield
 		include "Objects\Unused Special Stage Warp [Mappings].asm" ; Map_Vanish
 		include "Objects\LZ Water Splash [Mappings].asm" ; Map_Splash
 
@@ -935,8 +932,8 @@ Eni_SSBg2:	incbin	"Tilemaps\SS Background 2.eni"		; special stage background (ma
 		incfile Nem_Hud,"Graphics - Compressed\HUD",nem
 		incfile Nem_Lives,"Graphics - Compressed\HUD - Life Counter Icon",nem
 		incfile Kos_Ring,"Graphics Kosinski\Rings",kos
-		incfile Nem_Shield,"Graphics - Compressed\Shield",nem
-		incfile Nem_Stars,"Graphics - Compressed\Invincibility",nem
+		incfile Art_Shield,"Graphics\Shield",bin,dma_safe
+		incfile Art_Stars,"Graphics\Invincibility",bin,dma_safe
 		incfile Nem_Monitors,"Graphics - Compressed\Monitors",nem
 		incfile Art_Explode,"Graphics\Explosion",bin,dma_safe
 		incfile Kos_Points,"Graphics Kosinski\Points",kos
@@ -1282,6 +1279,8 @@ Art_BigRing:	incbin	"Graphics\Giant Ring.bin"
 		include "Pattern Load Cues.asm"
 		include "Includes\KosPLC & UncPLC.asm"
 		include "Objects\MZ Lava Wall [Mappings].asm"	; Map_LWall
+		include "Objects\GHZ Giant Ball [Mappings].asm"	; Map_GBall
+		include "Objects\Shield & Invincibility [Mappings].asm" ; Map_Shield
 
 ; ---------------------------------------------------------------------------
 ; Object position index

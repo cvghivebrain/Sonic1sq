@@ -27,15 +27,14 @@ Shi_Main:	; Routine 0
 		move.b	#render_rel,ost_render(a0)
 		move.b	#1,ost_priority(a0)
 		move.b	#$10,ost_displaywidth(a0)
+		move.w	#vram_shield/sizeof_cell,ost_tile(a0)
 		tst.b	ost_anim(a0)				; is object a shield?
 		bne.s	.stars					; if not, branch
-		move.w	#tile_Nem_Shield,ost_tile(a0)		; shield specific code
 		rts	
 ; ===========================================================================
 
 .stars:
 		addq.b	#2,ost_routine(a0)			; goto Shi_Stars next
-		move.w	#tile_Nem_Stars,ost_tile(a0)
 		rts	
 ; ===========================================================================
 
@@ -50,6 +49,8 @@ Shi_Shield:	; Routine 2
 		move.b	(v_ost_player+ost_status).w,ost_status(a0)
 		lea	(Ani_Shield).l,a1
 		jsr	(AnimateSprite).l
+		set_dma_dest vram_shield,d1			; set VRAM address to write gfx
+		jsr	DPLCSprite				; write gfx if frame has changed
 		jmp	(DisplaySprite).l
 
 	.hide:

@@ -256,6 +256,19 @@ set_dma_src:	macro
 		endm
 
 ; ---------------------------------------------------------------------------
+; Dynamic PLCs
+; ---------------------------------------------------------------------------
+
+dplcinit:	macro
+		dplc_base: = \1
+		endm
+
+dplc:		macro src,size
+		set_dma_src dplc_base+((\src)*sizeof_cell)	; src = tile number within source data
+		set_dma_size (size)*sizeof_cell			; size = number of tiles to load
+		endm
+
+; ---------------------------------------------------------------------------
 ; Disable display
 ; ---------------------------------------------------------------------------
 

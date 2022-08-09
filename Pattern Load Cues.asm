@@ -60,8 +60,6 @@ PLC_Main:	plcheader
 ; ---------------------------------------------------------------------------
 PLC_Main2:	plcheader
 		plcm	Nem_Monitors, $D000			; monitors
-		plcm	Nem_Shield, $A820			; shield
-		plcm	Nem_Stars				; invincibility	stars ($AB80)
 	PLC_Main2_end:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - act 3 boss

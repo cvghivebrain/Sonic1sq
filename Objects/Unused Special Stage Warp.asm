@@ -29,7 +29,7 @@ Van_Main:	; Routine 0
 		move.b	#render_rel,ost_render(a0)
 		move.b	#1,ost_priority(a0)
 		move.b	#$38,ost_displaywidth(a0)
-		move.w	#tile_Nem_Shield,ost_tile(a0)
+		move.w	#vram_shield/sizeof_cell,ost_tile(a0)
 		move.w	#120,ost_vanish_time(a0)		; set time for Sonic's disappearance to 2 seconds
 
 Van_RmvSonic:	; Routine 2

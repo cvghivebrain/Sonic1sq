@@ -40,6 +40,7 @@ vram_ball:		equ $67C0	; GHZ ball graphics
 vram_giantring:		equ $8000	; giant ring graphics
 vram_animal1:		equ $B000	; animal graphics
 vram_animal2:		equ $B240	; animal graphics
+vram_shield:		equ $A800	; shield graphics
 vram_credits:		equ $B400	; credits font graphics
 
 vram_title_credits:	equ $14C0	; "Sonic Team Presents" title screen graphics

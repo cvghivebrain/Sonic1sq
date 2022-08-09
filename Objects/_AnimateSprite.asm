@@ -128,6 +128,8 @@ DPLCSprite:
 		move.w	ost_frame_hi(a0),d0			; get frame number
 		movea.l	ost_mappings(a0),a2			; get mappings pointer
 		bsr.w	SkipMappings				; jump to data after mappings
+		tst.w	d0
+		beq.s	.exit					; branch if mappings contained 0 pieces (i.e. blank)
 		jsr	AddDMA2					; add to DMA queue
 		
 	.exit:
