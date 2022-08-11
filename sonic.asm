@@ -435,8 +435,6 @@ Ledge_SlopeData:
 		include "Objects\Giant Ring.asm"		; GiantRing
 		include "Objects\Giant Ring Flash.asm"		; RingFlash
 		include "Objects\Ring [Mappings].asm"		; Map_Ring
-		include "Objects\Giant Ring [Mappings].asm"	; Map_GRing
-		include "Objects\Giant Ring Flash [Mappings].asm" ; Map_Flash
 
 		include "Objects\Monitors.asm"			; Monitor
 		include "Objects\Monitor Contents.asm"		; PowerUp
@@ -548,7 +546,6 @@ LGrass_Coll_Sloped:
 		include "Objects\SYZ Bumper [Mappings].asm"	; Map_Bump
 
 		include "Objects\Signpost & HasPassedAct.asm"	; Signpost & HasPassedAct
-		include "Objects\Signpost [Mappings].asm"	; Map_Sign
 
 		include "Objects\MZ Lava Geyser Maker.asm"	; GeyserMaker
 		include "Objects\MZ Lava Geyser.asm"		; LavaGeyser
@@ -940,9 +937,9 @@ Eni_SSBg2:	incbin	"Tilemaps\SS Background 2.eni"		; special stage background (ma
 		incfile Art_GameOver,"Graphics\Game Over",bin,dma_safe
 		incfile Kos_HSpring,"Graphics Kosinski\Spring Horizontal",kos
 		incfile Kos_VSpring,"Graphics Kosinski\Spring Vertical",kos
-		incfile Nem_SignPost,"Graphics - Compressed\Signpost",nem
+		incfile Art_Signpost,"Graphics\Signpost",bin,dma_safe
 		incfile Kos_Lamp,"Graphics Kosinski\Lamppost",kos
-		incfile Nem_BigFlash,"Graphics - Compressed\Giant Ring Flash",nem
+		incfile Art_BigFlash,"Graphics\Giant Ring Flash",bin,dma_safe
 		incfile Nem_Bonus,"Graphics - Compressed\Hidden Bonuses",nem
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - continue screen
@@ -1273,14 +1270,16 @@ Level_End:	incbin	"Level Layouts\ending.bin"
 		even
 Level_End_unused:	dc.b 0,	0, 0, 0
 
-Art_BigRing:	incbin	"Graphics\Giant Ring.bin"
-		even
+		incfile	Art_BigRing,"Graphics\Giant Ring",bin,dma_safe
 
 		include "Pattern Load Cues.asm"
 		include "Includes\KosPLC & UncPLC.asm"
 		include "Objects\MZ Lava Wall [Mappings].asm"	; Map_LWall
 		include "Objects\GHZ Giant Ball [Mappings].asm"	; Map_GBall
 		include "Objects\Shield & Invincibility [Mappings].asm" ; Map_Shield
+		include "Objects\Signpost [Mappings].asm"	; Map_Sign
+		include "Objects\Giant Ring [Mappings].asm"	; Map_GRing
+		include "Objects\Giant Ring Flash [Mappings].asm" ; Map_Flash
 
 ; ---------------------------------------------------------------------------
 ; Object position index

@@ -24,7 +24,7 @@ ost_flash_parent:	rs.l 1 ; $3C				; address of OST of parent object (4 bytes)
 Flash_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Flash_ChkDel next
 		move.l	#Map_Flash,ost_mappings(a0)
-		move.w	#((vram_giantring+sizeof_art_giantring)/sizeof_cell)+tile_pal2,ost_tile(a0)
+		move.w	#(vram_giantring/sizeof_cell)+tile_pal2,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#0,ost_priority(a0)
 		move.b	#$20,ost_displaywidth(a0)
@@ -40,13 +40,12 @@ Flash_ChkDel:	; Routine 2
 ; ---------------------------------------------------------------------------
 
 Flash_Collect:
-		subq.b	#1,ost_anim_time(a0)			; decrement timer
-		bpl.s	.exit					; branch if time remains
-
-		move.b	#1,ost_anim_time(a0)			; set timer to 1
-		addq.b	#1,ost_frame(a0)			; next frame
-		cmpi.b	#id_frame_flash_final+1,ost_frame(a0)	; has animation finished?
-		bcc.s	.finish					; if yes, branch
+		lea	(Ani_Flash).l,a1
+		bsr.w	AnimateSprite
+		set_dma_dest vram_giantring,d1			; set VRAM address to write gfx
+		jsr	DPLCSprite				; write gfx if frame has changed
+		tst.b	ost_routine2(a0)			; has animation finished?
+		bne.s	.finish					; if yes, branch
 
 		cmpi.b	#id_frame_flash_full,ost_frame(a0)	; is 3rd frame displayed?
 		bne.s	.exit					; if not, branch
@@ -71,3 +70,23 @@ Flash_Collect:
 
 Flash_Delete:	; Routine 4
 		bra.w	DeleteObject
+
+; ---------------------------------------------------------------------------
+; Animation script
+; ---------------------------------------------------------------------------
+
+Ani_Flash:	index *
+		ptr ani_flash_0
+		
+ani_flash_0:
+		dc.b 1
+		dc.b id_frame_flash_0
+		dc.b id_frame_flash_1
+		dc.b id_frame_flash_2
+		dc.b id_frame_flash_full
+		dc.b id_frame_flash_4
+		dc.b id_frame_flash_5
+		dc.b id_frame_flash_6
+		dc.b id_frame_flash_final
+		dc.b af2ndRoutine
+		even

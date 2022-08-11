@@ -14,6 +14,8 @@ Signpost:
 		jsr	Sign_Index(pc,d1.w)
 		lea	(Ani_Sign).l,a1
 		bsr.w	AnimateSprite
+		set_dma_dest vram_signpost,d1			; set VRAM address to write gfx
+		jsr	DPLCSprite				; write gfx if frame has changed
 		out_of_range	DeleteObject
 		bra.w	DisplaySprite
 ; ===========================================================================
@@ -34,7 +36,7 @@ ost_sign_sparkle_id:	rs.b 1 ; $34				; counter to keep track of sparkles
 Sign_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Sign_Touch next
 		move.l	#Map_Sign,ost_mappings(a0)
-		move.w	#tile_Nem_SignPost,ost_tile(a0)
+		move.w	#vram_signpost/sizeof_cell,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#$18,ost_displaywidth(a0)
 		move.b	#4,ost_priority(a0)

@@ -38,10 +38,12 @@ GRing_Okay:
 		addq.b	#2,ost_routine(a0)			; goto GRing_Animate next
 		move.b	#2,ost_priority(a0)
 		move.b	#id_col_8x16+id_col_item,ost_col_type(a0) ; when Sonic hits the item, goto GRing_Collect next (see ReactToItem)
-		move.w	#sizeof_art_giantring,(v_giantring_gfx_offset).w ; signal that Art_BigRing should be loaded ($C40 is the size of Art_BigRing)
 
 GRing_Animate:	; Routine 2
-		move.b	(v_syncani_1_frame).w,ost_frame(a0)
+		lea	(Ani_BigRing).l,a1
+		bsr.w	AnimateSprite
+		set_dma_dest vram_giantring,d1			; set VRAM address to write gfx
+		jsr	DPLCSprite				; write gfx if frame has changed
 		out_of_range	DeleteObject
 		bra.w	DisplaySprite
 ; ===========================================================================
@@ -68,3 +70,19 @@ GRing_Collect:	; Routine 4
 
 GRing_Delete:	; Routine 6
 		bra.w	DeleteObject
+
+; ---------------------------------------------------------------------------
+; Animation script
+; ---------------------------------------------------------------------------
+
+Ani_BigRing:	index *
+		ptr ani_bigring_0
+		
+ani_bigring_0:
+		dc.b 7
+		dc.b id_frame_bigring_front
+		dc.b id_frame_bigring_45_1
+		dc.b id_frame_bigring_side
+		dc.b id_frame_bigring_45_2
+		dc.b afEnd
+		even

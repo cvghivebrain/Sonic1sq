@@ -21,35 +21,43 @@ frame_bigring_front:
 		piece	0, $18, 3x1, $29
 		endsprite
 		
+		dplcinit Art_BigRing				; address of giant ring gfx
+		dplc 0,$2C					; offset, size (in tiles)
+		
 frame_bigring_45_1:
 		spritemap					; ring angle
-		piece	-$10, -$20, 4x1, $2C
-		piece	-$18, -$18, 3x1, $30
-		piece	0, -$18, 3x2, $33
-		piece	-$18, -$10, 2x4, $39
-		piece	8, -8, 2x2, $41
-		piece	0, 8, 3x2, $45
-		piece	-$18, $10, 3x1, $4B
-		piece	-$10, $18, 4x1, $4E
+		piece	-$10, -$20, 4x1, 0
+		piece	-$18, -$18, 3x1, 4
+		piece	0, -$18, 3x2, 7
+		piece	-$18, -$10, 2x4, $D
+		piece	8, -8, 2x2, $15
+		piece	0, 8, 3x2, $19
+		piece	-$18, $10, 3x1, $1F
+		piece	-$10, $18, 4x1, $22
 		endsprite
+		
+		dplc $2C,$26
 		
 frame_bigring_side:
 		spritemap					; ring perpendicular
-		piece	-$C, -$20, 2x4, $52
-		piece	4, -$20, 1x4, $52, xflip
-		piece	-$C, 0, 2x4, $5A
-		piece	4, 0, 1x4, $5A, xflip
+		piece	-$C, -$20, 2x4, 0
+		piece	4, -$20, 1x4, 0, xflip
+		piece	-$C, 0, 2x4, 8
+		piece	4, 0, 1x4, 8, xflip
 		endsprite
+		
+		dplc $52,$10
 		
 frame_bigring_45_2:
 		spritemap					; ring angle
-		piece	-$10, -$20, 4x1, $2C, xflip
-		piece	0, -$18, 3x1, $30, xflip
-		piece	-$18, -$18, 3x2, $33, xflip
-		piece	8, -$10, 2x4, $39, xflip
-		piece	-$18, -8, 2x2, $41, xflip
-		piece	-$18, 8, 3x2, $45, xflip
-		piece	0, $10, 3x1, $4B, xflip
-		piece	-$10, $18, 4x1, $4E, xflip
+		piece	-$10, -$20, 4x1, 0, xflip
+		piece	0, -$18, 3x1, 4, xflip
+		piece	-$18, -$18, 3x2, 7, xflip
+		piece	8, -$10, 2x4, $D, xflip
+		piece	-$18, -8, 2x2, $15, xflip
+		piece	-$18, 8, 3x2, $19, xflip
+		piece	0, $10, 3x1, $1F, xflip
+		piece	-$10, $18, 4x1, $22, xflip
 		endsprite
-		even
+		
+		dplc $2C,$26

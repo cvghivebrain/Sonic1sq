@@ -254,7 +254,6 @@ v_levelani_4_frame:		rs.w 1 ; $FFFFF7B8 ; level graphics animation 4 - current f
 v_levelani_4_time:		rs.w 1 ; $FFFFF7B9 ; level graphics animation 4 - time until next frame
 v_levelani_5_frame:		rs.w 1 ; $FFFFF7BA ; level graphics animation 5 - current frame
 v_levelani_5_time:		rs.w 1 ; $FFFFF7BB ; level graphics animation 5 - time until next frame
-v_giantring_gfx_offset:		rs.w 1 ; $FFFFF7BE ; address of art for next giant ring frame, relative to Art_BigRing (counts backwards from $C40; 0 means no more art)
 f_convey_reverse:		rs.b 1 ; $FFFFF7C0 ; flag set to reverse conveyor belts in LZ/SBZ
 v_convey_init_list:		rs.b 6 ; $FFFFF7C1 ; LZ/SBZ conveyor belt platform flags set when the parent object is loaded - 1 byte per conveyor set
 f_water_tunnel_now:		rs.b 1 ; $FFFFF7C7 ; flag set when Sonic is in a LZ water tunnel

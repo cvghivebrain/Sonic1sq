@@ -37,11 +37,12 @@ draw_fg:		equ $4000+(vram_fg-draw_base)	; VRAM write command + fg nametable addr
 draw_bg:		equ $4000+(vram_bg-draw_base)	; VRAM write command + bg nametable address relative to base
 
 vram_ball:		equ $67C0	; GHZ ball graphics
-vram_giantring:		equ $8000	; giant ring graphics
+vram_shield:		equ $A800	; shield graphics (up to $AC80)
 vram_animal1:		equ $B000	; animal graphics
 vram_animal2:		equ $B240	; animal graphics
-vram_shield:		equ $A800	; shield graphics
 vram_credits:		equ $B400	; credits font graphics
+vram_signpost:		equ $D000	; signpost graphics
+vram_giantring:		equ $D340	; giant ring graphics
 
 vram_title_credits:	equ $14C0	; "Sonic Team Presents" title screen graphics
 vram_title:		equ $4000	; main title screen graphics
@@ -63,7 +64,6 @@ sizeof_vram_hscroll:	equ $380
 sizeof_vram_hscroll_padded:	equ $400
 sizeof_vram_row:	equ 64*2		; single row of fg/bg nametable, assuming 64 wide
 sizeof_art_text:	equ filesize("Graphics\Level Select & Debug Text.bin")
-sizeof_art_giantring:	equ filesize("Graphics\Giant Ring.bin")
 
 countof_color:		equ 16				; colours per palette line
 countof_colour:		equ countof_color

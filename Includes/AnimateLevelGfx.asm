@@ -10,7 +10,6 @@ AnimateLevelGfx:
 		tst.w	(f_pause).w				; is the game paused?
 		bne.s	.exit					; if yes, branch
 		lea	(vdp_data_port).l,a6
-		bsr.w	LoadArt_GiantRing			; load giant ring gfx if needed
 		tst.l	(v_aniart_ptr).w
 		beq.s	.exit					; branch if pointer is empty
 		movea.l	(v_aniart_ptr).w,a1
@@ -475,38 +474,4 @@ AniArt_MZ_Magma_Shift3_Col3:
 		move.l	d0,(a6)
 		lea	$10(a1),a1
 		dbf	d1,AniArt_MZ_Magma_Shift3_Col3
-		rts	
-
-; ---------------------------------------------------------------------------
-; Subroutine to load gfx for giant ring, 14 tiles per frame over 7 frames
-
-; input:
-;	a6 = vdp_data_port
-
-;	uses d0, d1, a1
-; ---------------------------------------------------------------------------
-
-LoadArt_GiantRing:
-
-tilecount:	= (sizeof_art_giantring/sizeof_cell)/7		; number of tiles to load per frame over 7 frames (14)
-
-		tst.w	(v_giantring_gfx_offset).w		; $C40 is written here by GiantRing (98 tiles)
-		bne.s	.loadTiles				; branch if not 0
-		rts	
-; ===========================================================================
-
-.loadTiles:
-		subi.w	#tilecount*sizeof_cell,(v_giantring_gfx_offset).w ; count down the 14 tiles we're going to load now
-		lea	(Art_BigRing).l,a1			; giant ring gfx
-		moveq	#0,d0
-		move.w	(v_giantring_gfx_offset).w,d0
-		lea	(a1,d0.w),a1				; jump to gfx for relevant section (this counts backwards)
-		addi.w	#vram_giantring,d0
-		lsl.l	#2,d0
-		lsr.w	#2,d0
-		ori.w	#$4000,d0
-		swap	d0					; d0 = VDP command for address vram_giantring + v_giantring_gfx_offset
-		move.l	d0,4(a6)				; write to control port
-
-		move.w	#tilecount-1,d1
-		bra.w	LoadTiles				; load 14 tiles each time this subroutine runs
+		rts
