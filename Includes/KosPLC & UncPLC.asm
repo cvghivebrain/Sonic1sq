@@ -81,6 +81,7 @@ KosLoadCues:
 		ptr KPLC_LZ
 		ptr KPLC_SLZ
 		ptr KPLC_SBZ
+		ptr KPLC_SBZ3
 		ptr KPLC_FZ
 		ptr KPLC_Title
 		ptr KPLC_End
@@ -149,9 +150,9 @@ KPLC_SYZ:	kplcheader
 		set_dma_size last_vram
 
 KPLC_LZ:	kplcheader
+		KPLC_LZ_common:	macro				; these gfx are also used in SBZ3
 		kplc Kos_LZ
 		kplc Kos_LzBlock
-		kplc Kos_Sbz3HugeDoor
 		kplc Kos_Splash
 		kplc Kos_Water
 		kplc Kos_Gargoyle
@@ -161,10 +162,12 @@ KPLC_LZ:	kplcheader
 		kplc Kos_LzHalfBlock
 		kplc Kos_LzDoorV
 		kplc Kos_Harpoon
-		kplc Kos_LzPole
 		kplc Kos_LzDoorH
-		kplc Kos_LzWheel
 		kplc Kos_LzPlatform
+		endm
+		KPLC_LZ_common
+		kplc Kos_LzPole
+		kplc Kos_LzWheel
 		kplc Kos_Cork
 		kplc Kos_Burrobot,v_tile_burrobot
 		kplc Kos_Orbinaut,v_tile_orbinaut
@@ -175,7 +178,7 @@ KPLC_LZ:	kplcheader
 		kplc Kos_Ring,v_tile_rings
 		kplc Kos_Spikes,v_tile_spikes
 		kplc Kos_HSpring,v_tile_hspring
-		kplc Kos_VSpring,v_tile_vspring			; $A620 used
+		kplc Kos_VSpring,v_tile_vspring			; $9740 used
 	KPLC_LZ_end:
 		set_dma_size last_vram
 
@@ -229,6 +232,22 @@ KPLC_SBZ:	kplcheader
 		kplc Kos_HSpring,v_tile_hspring
 		kplc Kos_VSpring,v_tile_vspring			; $A4C0 used
 	KPLC_SBZ_end:
+		set_dma_size last_vram
+
+KPLC_SBZ3:	kplcheader
+		KPLC_LZ_common					; same as LZ
+		kplc Kos_Sbz3HugeDoor
+		kplc Kos_Burrobot,v_tile_burrobot
+		kplc Kos_Orbinaut,v_tile_orbinaut
+		kplc Kos_Jaws,v_tile_jaws
+		kplc Kos_Button,v_tile_button
+		kplc Kos_Lamp,v_tile_lamppost
+		kplc Kos_Points,v_tile_points
+		kplc Kos_Ring,v_tile_rings
+		kplc Kos_Spikes,v_tile_spikes
+		kplc Kos_HSpring,v_tile_hspring
+		kplc Kos_VSpring,v_tile_vspring			; $9840 used
+	KPLC_SBZ3_end:
 		set_dma_size last_vram
 
 KPLC_FZ:	kplcheader
