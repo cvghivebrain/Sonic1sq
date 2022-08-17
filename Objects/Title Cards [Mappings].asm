@@ -145,24 +145,29 @@ frame_card_zone:
 		endsprite
 		even
 		
+frame_has_act1:
 frame_card_act1:
 		spritemap					; ACT 1
 		piece -$14, 4, 4x1, $53
 		piece $C, -$C, 1x3, $57
 		endsprite
 		
+frame_has_act2:
 frame_card_act2:
 		spritemap					; ACT 2
 		piece -$14, 4, 4x1, $53
 		piece 8, -$C, 2x3, $5A
 		endsprite
 		
+frame_has_act3:
 frame_card_act3:
 		spritemap					; ACT 3
 		piece -$14, 4, 4x1, $53
 		piece 8, -$C, 2x3, $60
 		endsprite
 		
+frame_has_oval:
+frame_ssr_oval:
 frame_card_oval:
 		spritemap					; Oval
 		piece -$C, -$1C, 4x1, $70

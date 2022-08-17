@@ -200,6 +200,7 @@ f_water_enable:			rs.b 1 ; flag set to enable water
 v_bgm:				rs.b 1 ; music track id for current zone
 v_titlecard_zone:		rs.w 1 ; frame id of title card (zone name)
 v_titlecard_act:		rs.w 1 ; frame id of title card (act number)
+v_tile_hud:			rs.w 1
 v_tile_swing:			rs.w 1
 v_tile_wall:			rs.w 1
 v_tile_crabmeat			rs.w 1

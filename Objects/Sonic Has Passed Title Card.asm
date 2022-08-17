@@ -38,7 +38,7 @@ Has_Config:	dc.w 4, $124, $BC				; "SONIC HAS"
 		dc.b id_Has_Move, id_frame_has_passed
 
 		dc.w $40C, $14C, $D6				; "ACT" 1/2/3
-		dc.b id_Has_Move, id_frame_card_act1_6
+		dc.b id_Has_Move, id_frame_has_act1
 
 		dc.w $520, $120, $EC				; score
 		dc.b id_Has_Move, id_frame_has_score
@@ -50,7 +50,7 @@ Has_Config:	dc.w 4, $124, $BC				; "SONIC HAS"
 		dc.b id_Has_Move, id_frame_has_ringbonus
 
 		dc.w $20C, $14C, $CC				; oval
-		dc.b id_Has_Move, id_frame_card_oval_5
+		dc.b id_Has_Move, id_frame_has_oval
 		endm
 ; ===========================================================================
 
@@ -73,7 +73,7 @@ Has_Main:	; Routine 0
 		move.w	(a2)+,ost_y_screen(a1)			; set y position
 		move.b	(a2)+,ost_routine(a1)			; goto Has_Move next
 		move.b	(a2)+,d0				; get frame number
-		cmpi.b	#id_frame_card_act1_6,d0		; is object the act number?
+		cmpi.b	#id_frame_has_act1,d0			; is object the act number?
 		bne.s	.not_act				; if not, branch
 		add.b	(v_act).w,d0				; add act number to frame number
 

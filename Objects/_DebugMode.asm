@@ -224,7 +224,7 @@ DebugList_GHZ:
 		dbug	Map_Edge,	EdgeWalls,	type_edge_shadow,	0,	tile_Kos_GhzEdgeWall+tile_pal3
 		dbug	Map_Lamp,	Lamppost,	1,	0,	tile_Kos_Lamp
 		dbug	Map_GRing,	GiantRing,	0,	0,	(vram_giantring/sizeof_cell)+tile_pal2
-		dbug	Map_Bonus,	HiddenBonus,	type_bonus_10k,	id_frame_bonus_10000,	tile_Nem_Bonus+tile_hi
+		dbug	Map_Bonus,	HiddenBonus,	type_bonus_10k,	id_frame_bonus_10000,	(vram_bonus/sizeof_cell)+tile_hi
 	DebugList_GHZ_end:
 
 DebugList_LZ:

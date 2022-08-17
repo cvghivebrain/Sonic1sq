@@ -5,13 +5,16 @@ Map_SSR:	index *
 		ptr frame_ssr_chaos
 		ptr frame_ssr_score
 		ptr frame_ssr_ringbonus
-		ptr frame_card_oval
+		ptr frame_ssr_oval
 		ptr frame_ssr_contsonic1
 		ptr frame_ssr_contsonic2
 		ptr frame_ssr_continue
 		ptr frame_ssr_specialstage
 		ptr frame_ssr_gotthemall
-		
+
+ssr_tile_hud:	equ sizeof_Art_TitleCard/sizeof_cell
+ssr_tile_cont:	equ ssr_tile_hud+(sizeof_Art_HUDMain/sizeof_cell)
+
 frame_ssr_chaos:
 		spritemap					; "CHAOS EMERALDS"
 		piece -$70, -8, 2x2, 8
@@ -31,8 +34,8 @@ frame_ssr_chaos:
 		
 frame_ssr_score:
 		spritemap					; "SCORE"
-		piece -$50, -8, 4x2, $14A
-		piece -$30, -8, 1x2, $162
+		piece -$50, -8, 4x2, ssr_tile_hud
+		piece -$30, -8, 1x2, ssr_tile_hud+$16
 		piece $18, -8, 3x2, $164
 		piece $30, -8, 4x2, $16A
 		piece -$33, -9, 2x1, $6E
@@ -41,36 +44,36 @@ frame_ssr_score:
 		
 frame_ssr_ringbonus:
 		spritemap					; "RING BONUS"
-		piece -$50, -8, 4x2, $152
+		piece -$50, -8, 4x2, ssr_tile_hud+8
 		piece -$27, -8, 4x2, $66
-		piece -7, -8, 1x2, $14A
+		piece -7, -8, 1x2, ssr_tile_hud
 		piece -$A, -9, 2x1, $6E
 		piece -$A, -1, 2x1, $6E, xflip, yflip
-		piece $28, -8, 4x2, -8
-		piece $48, -8, 1x2, $170
+		;piece $28, -8, 4x2, -8
+		;piece $48, -8, 1x2, $170
 		endsprite
 		
 frame_ssr_contsonic1:
 		spritemap					; "CONTINUE" + Sonic
-		piece -$50, -8, 4x2, -$2F
-		piece -$30, -8, 4x2, -$27
-		piece -$10, -8, 1x2, -$1F
-		piece $40, -8, 2x3, -$1D, pal2
+		piece -$50, -8, 4x2, ssr_tile_cont
+		piece -$30, -8, 4x2, ssr_tile_cont+8
+		piece -$10, -8, 1x2, ssr_tile_cont+$10
+		piece $40, -8, 2x3, ssr_tile_cont+$12, pal2
 		endsprite
 		
 frame_ssr_contsonic2:
 		spritemap					; "CONTINUE" + Sonic
-		piece -$50, -8, 4x2, -$2F
-		piece -$30, -8, 4x2, -$27
-		piece -$10, -8, 1x2, -$1F
-		piece $40, -8, 2x3, -$17, pal2
+		piece -$50, -8, 4x2, ssr_tile_cont
+		piece -$30, -8, 4x2, ssr_tile_cont+8
+		piece -$10, -8, 1x2, ssr_tile_cont+$10
+		piece $40, -8, 2x3, ssr_tile_cont+$18, pal2
 		endsprite
 		
 frame_ssr_continue:
 		spritemap					; "CONTINUE"
-		piece -$50, -8, 4x2, -$2F
-		piece -$30, -8, 4x2, -$27
-		piece -$10, -8, 1x2, -$1F
+		piece -$50, -8, 4x2, ssr_tile_cont
+		piece -$30, -8, 4x2, ssr_tile_cont+8
+		piece -$10, -8, 1x2, ssr_tile_cont+$10
 		endsprite
 		
 frame_ssr_specialstage:

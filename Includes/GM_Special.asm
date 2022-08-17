@@ -158,8 +158,8 @@ SS_FinishLoop:
 		bsr.w	PalLoad_Now				; load results screen palette
 		moveq	#id_PLC_Main,d0
 		bsr.w	NewPLC
-		moveq	#id_PLC_SSResult,d0
-		bsr.w	AddPLC					; load results screen patterns
+		moveq	#id_UPLC_SSResult,d0
+		jsr	UncPLC					; load results screen patterns
 		move.b	#1,(f_hud_score_update).w		; update score counter
 		move.b	#1,(f_pass_bonus_update).w		; update ring bonus counter
 		move.w	(v_rings).w,d0

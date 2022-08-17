@@ -23,9 +23,9 @@ GM_Continue:
 		locVRAM	vram_cont_sonic				; $A000
 		lea	(Nem_ContSonic).l,a0			; load oval & Sonic patterns
 		bsr.w	NemDec
-		locVRAM	vram_cont_minisonic			; $AA20
-		lea	(Nem_MiniSonic).l,a0			; load mini Sonic patterns
-		bsr.w	NemDec
+		;locVRAM	vram_cont_minisonic			; $AA20
+		;lea	(Nem_MiniSonic).l,a0			; load mini Sonic patterns
+		;bsr.w	NemDec
 		moveq	#10,d1
 		jsr	(ContScrCounter).l			; run countdown	(start from 10)
 		moveq	#id_Pal_Continue,d0

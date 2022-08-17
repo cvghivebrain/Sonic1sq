@@ -45,7 +45,7 @@ Bonus_Main:	; Routine 0
 
 		addq.b	#2,ost_routine(a0)			; goto Bonus_Display next
 		move.l	#Map_Bonus,ost_mappings(a0)
-		move.w	#tile_Nem_Bonus+tile_hi,ost_tile(a0)
+		move.w	#(vram_bonus/sizeof_cell)+tile_hi,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#0,ost_priority(a0)
 		move.b	#$10,ost_displaywidth(a0)

@@ -36,11 +36,11 @@ Z80Driver_Start:
 		xor	a					; a=0
 		ld	(zDAC_Status),a				; Disable DAC
 		ld	(zDAC_Sample),a				; Clear sample
-		ld	a,(SEGA_PCM>>24)&$FF			; least significant bit from ROM bank ID
+		ld	a,((SEGA_PCM&$FF8000)/$8000)&1		; least significant bit from ROM bank ID
 		ld	(zBankSelect),a				; Latch it to bank register, initializing bank switch
 
 		ld	b,8					; Number of bits to latch to ROM bank
-		ld	a,(SEGA_PCM>>16)&$FF			; Bank ID without the least significant bit
+		ld	a,((SEGA_PCM&$FF8000)/$8000)>>1		; Bank ID without the least significant bit
 
 .bankswitch:
 		ld	(zBankSelect),a				; Latch another bit to bank register.
@@ -184,7 +184,7 @@ PlaySampleLoop:
 ; ---------------------------------------------------------------------------
 
 Play_Sega:
-		ld	de,SEGA_PCM&$FFFF			; de = bank-relative location of the SEGA sound
+		ld	de,(SEGA_PCM&$FFFF)|$8000		; de = bank-relative location of the SEGA sound
 		ld	hl,SEGA_PCM_Len&$FFFF			; hl = size of the SEGA sound
 		ld	c,2Ah					; c = DAC data register
 

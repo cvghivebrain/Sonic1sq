@@ -21,7 +21,9 @@ HUD_Main:	; Routine 0
 		move.w	#$90,ost_x_pos(a0)
 		move.w	#$108,ost_y_screen(a0)
 		move.l	#Map_HUD,ost_mappings(a0)
-		move.w	#tile_Nem_Hud,ost_tile(a0)
+		moveq	#id_UPLC_HUD,d0
+		jsr	UncPLC
+		move.w	(v_tile_hud).w,ost_tile(a0)
 		move.b	#render_abs,ost_render(a0)
 		move.b	#0,ost_priority(a0)
 

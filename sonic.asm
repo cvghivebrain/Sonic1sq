@@ -491,10 +491,7 @@ LGrass_Coll_Sloped:
 
 		include "Objects\Special Stage Results.asm"	; SSResult
 		include "Objects\Special Stage Results Chaos Emeralds.asm" ; SSRChaos
-		include "Objects\Title Cards [Mappings].asm"	; Map_Card
 		include "Objects\Game Over & Time Over [Mappings].asm" ; Map_Over
-		include "Objects\Title Cards Sonic Has Passed [Mappings].asm" ; Map_Has
-		include "Objects\Special Stage Results [Mappings].asm" ; Map_SSR
 		include "Objects\Special Stage Results Chaos Emeralds [Mappings].asm" ; Map_SSRC
 
 		include "Objects\Spikes.asm"			; Spikes
@@ -829,7 +826,7 @@ Eni_SSBg2:	incbin	"Tilemaps\SS Background 2.eni"		; special stage background (ma
 		incfile Nem_SSGhost,"Graphics - Compressed\Special Stage Ghost",nem
 		incfile Nem_SSWBlock,"Graphics - Compressed\Special Stage W",nem
 		incfile Nem_SSGlass,"Graphics - Compressed\Special Stage Glass",nem
-		incfile Nem_ResultEm,"Graphics - Compressed\Special Stage Result Emeralds",nem
+		incfile Art_ResultEm,"Graphics\Special Stage Result Emeralds",bin,dma_safe
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - GHZ stuff
 ; ---------------------------------------------------------------------------
@@ -926,7 +923,7 @@ Eni_SSBg2:	incbin	"Tilemaps\SS Background 2.eni"		; special stage background (ma
 ; Compressed graphics - various
 ; ---------------------------------------------------------------------------
 		incfile Art_TitleCard,"Graphics\Title Cards",bin,dma_safe
-		incfile Nem_Hud,"Graphics - Compressed\HUD",nem
+		incfile Art_HUDMain,"Graphics\HUD",bin,dma_safe
 		incfile Nem_Lives,"Graphics - Compressed\HUD - Life Counter Icon",nem
 		incfile Kos_Ring,"Graphics Kosinski\Rings",kos
 		incfile Art_Shield,"Graphics\Shield",bin,dma_safe
@@ -940,12 +937,12 @@ Eni_SSBg2:	incbin	"Tilemaps\SS Background 2.eni"		; special stage background (ma
 		incfile Art_Signpost,"Graphics\Signpost",bin,dma_safe
 		incfile Kos_Lamp,"Graphics Kosinski\Lamppost",kos
 		incfile Art_BigFlash,"Graphics\Giant Ring Flash",bin,dma_safe
-		incfile Nem_Bonus,"Graphics - Compressed\Hidden Bonuses",nem
+		incfile Art_Bonus,"Graphics\Hidden Bonuses",bin,dma_safe
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - continue screen
 ; ---------------------------------------------------------------------------
 		incfile	Nem_ContSonic,"Graphics - Compressed\Continue Screen Sonic",nem
-		incfile	Nem_MiniSonic,"Graphics - Compressed\Continue Screen Stuff",nem
+		incfile	Art_MiniSonic,"Graphics\Continue Screen Stuff",bin,dma_safe
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - animals
 ; ---------------------------------------------------------------------------
@@ -1280,6 +1277,9 @@ Level_End_unused:	dc.b 0,	0, 0, 0
 		include "Objects\Signpost [Mappings].asm"	; Map_Sign
 		include "Objects\Giant Ring [Mappings].asm"	; Map_GRing
 		include "Objects\Giant Ring Flash [Mappings].asm" ; Map_Flash
+		include "Objects\Special Stage Results [Mappings].asm" ; Map_SSR
+		include "Objects\Title Cards Sonic Has Passed [Mappings].asm" ; Map_Has
+		include "Objects\Title Cards [Mappings].asm"	; Map_Card
 
 ; ---------------------------------------------------------------------------
 ; Object position index

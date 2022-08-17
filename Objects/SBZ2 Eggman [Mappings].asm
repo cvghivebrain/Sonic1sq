@@ -97,10 +97,6 @@ frame_eggman_intube:
 		piece	$C, -$18, 1x2, $1E
 		piece	-$10, -$18, 4x3, 0
 		piece	-$10, 0, 4x4, $6F
-		piece	-$10, -$20, 4x2, $6F0, xflip, yflip, pal2
-		piece	-$10, -$10, 4x2, $6F0, xflip, yflip, pal2
-		piece	-$10, 0, 4x2, $6F0, xflip, yflip, pal2
-		piece	-$10, $10, 4x2, $6F0, xflip, yflip, pal2
 		endsprite
 		
 frame_eggman_cockpit:

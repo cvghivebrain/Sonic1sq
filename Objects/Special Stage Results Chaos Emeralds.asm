@@ -43,7 +43,7 @@ SSRC_Main:	; Routine 0
 		move.b	d2,ost_anim(a1)				; copy frame number (not an animation number)
 		addq.b	#2,ost_routine(a1)			; goto SSRC_Flash next
 		move.l	#Map_SSRC,ost_mappings(a1)
-		move.w	#tile_Nem_ResultEm+tile_hi,ost_tile(a1)
+		move.w	#tile_Art_ResultEm+tile_hi,ost_tile(a1)
 		move.b	#render_abs,ost_render(a1)
 
 	.emerald_not_got:

@@ -40,6 +40,8 @@ Sign_Main:	; Routine 0
 		move.b	#render_rel,ost_render(a0)
 		move.b	#$18,ost_displaywidth(a0)
 		move.b	#4,ost_priority(a0)
+		moveq	#id_UPLC_Bonus,d0
+		jsr	UncPLC					; load hidden bonus gfx
 
 Sign_Touch:	; Routine 2
 		move.w	(v_ost_player+ost_x_pos).w,d0

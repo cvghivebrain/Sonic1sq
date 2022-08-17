@@ -7,10 +7,10 @@ Map_Has:	index *
 		ptr frame_has_score
 		ptr frame_has_timebonus
 		ptr frame_has_ringbonus
-		ptr frame_card_oval
-		ptr frame_card_act1
-		ptr frame_card_act2
-		ptr frame_card_act3
+		ptr frame_has_oval
+		ptr frame_has_act1
+		ptr frame_has_act2
+		ptr frame_has_act3
 		
 frame_has_sonichas:
 		spritemap					; SONIC HAS

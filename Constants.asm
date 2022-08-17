@@ -37,6 +37,7 @@ draw_fg:		equ $4000+(vram_fg-draw_base)	; VRAM write command + fg nametable addr
 draw_bg:		equ $4000+(vram_bg-draw_base)	; VRAM write command + bg nametable address relative to base
 
 vram_ball:		equ $67C0	; GHZ ball graphics
+vram_bonus:		equ $A200	; hidden bonus graphics
 vram_shield:		equ $A800	; shield graphics (up to $AC80)
 vram_animal1:		equ $B000	; animal graphics
 vram_animal2:		equ $B240	; animal graphics

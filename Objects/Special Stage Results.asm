@@ -42,7 +42,7 @@ SSR_Config:	dc.w $20, $120,	$C4
 		dc.b id_SSR_Move, id_frame_ssr_ringbonus
 
 		dc.w $1EC, $11C, $C4
-		dc.b id_SSR_Move, id_frame_card_oval_3
+		dc.b id_SSR_Move, id_frame_ssr_oval
 
 		dc.w $3A0, $120, $138
 		dc.b id_SSR_Move, id_frame_ssr_continue
@@ -59,8 +59,8 @@ SSR_Main:	; Routine 0
 		movea.l	a0,a1					; replace current object with 1st from list
 		lea	(SSR_Config).l,a2			; position, routine & frame settings
 		moveq	#3,d1					; 3 additional items
-		cmpi.w	#50,(v_rings).w				; do you have 50 or more rings?
-		bcs.s	.loop					; if no, branch
+		;cmpi.w	#50,(v_rings).w				; do you have 50 or more rings?
+		;bcs.s	.loop					; if no, branch
 		addq.w	#1,d1					; if yes, add 1	item (continue)
 
 	.loop:

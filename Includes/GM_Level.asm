@@ -343,8 +343,6 @@ SignpostArtLoad:
 		cmp.w	(v_boundary_left).w,d1
 		beq.s	.exit
 		move.w	d1,(v_boundary_left).w			; move left boundary to current screen position
-		moveq	#id_PLC_Signpost,d0
-		bra.w	NewPLC					; load signpost	gfx
 
 	.exit:
 		rts

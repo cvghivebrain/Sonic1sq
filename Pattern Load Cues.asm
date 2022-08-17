@@ -6,7 +6,6 @@ PatternLoadCues:
 		ptr PLC_Main
 		ptr PLC_Main2
 		ptr PLC_Boss
-		ptr PLC_Signpost
 		ptr PLC_Warp
 		ptr PLC_SpecialStage
 PLC_Animals:
@@ -16,7 +15,6 @@ PLC_Animals:
 		ptr PLC_SLZAnimals
 		ptr PLC_SYZAnimals
 		ptr PLC_SBZAnimals
-		ptr PLC_SSResult
 		ptr PLC_Ending
 		ptr PLC_TryAgain
 		ptr PLC_EggmanSBZ2
@@ -52,7 +50,6 @@ plcheader:	macro *
 ; Pattern load cues - standard block 1
 ; ---------------------------------------------------------------------------
 PLC_Main:	plcheader
-		plcm	Nem_Hud, $D940				; HUD
 		plcm	Nem_Lives, $FA80			; lives	counter
 	PLC_Main_end:
 ; ---------------------------------------------------------------------------
@@ -70,12 +67,6 @@ PLC_Boss:	plcheader
 		plcm	Nem_Prison, $93A0			; prison capsule
 		plcm	Nem_Exhaust, $A540			; exhaust flame
 	PLC_Boss_end:
-; ---------------------------------------------------------------------------
-; Pattern load cues - act 1/2 signpost
-; ---------------------------------------------------------------------------
-PLC_Signpost:	plcheader
-		plcm	Nem_Bonus, $96C0			; hidden bonus points
-	PLC_Signpost_end:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - beta special stage warp effect
 ; ---------------------------------------------------------------------------
@@ -153,13 +144,6 @@ PLC_SBZAnimals:	plcheader
 		plcm	Nem_Rabbit, vram_animal1		; rabbit ($B000)
 		plcm	Nem_Chicken, vram_animal2		; chicken ($B240)
 	PLC_SBZAnimals_end:
-; ---------------------------------------------------------------------------
-; Pattern load cues - special stage results screen
-; ---------------------------------------------------------------------------
-PLC_SSResult:	plcheader
-		plcm	Nem_ResultEm, $A820			; emeralds
-		plcm	Nem_MiniSonic				; mini Sonic ($AA20)
-	PLC_SSResult_end:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - ending sequence
 ; ---------------------------------------------------------------------------

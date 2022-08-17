@@ -338,10 +338,17 @@ uplc:		macro gfx,tileram
 
 UncLoadCues:
 		index *
+		ptr UPLC_HUD
 		ptr UPLC_TitleCard
 		ptr UPLC_GameOver
 		ptr UPLC_Explode
 		ptr UPLC_Stars
+		ptr UPLC_Bonus
+		ptr UPLC_SSResult
+
+UPLC_HUD:	uplcheader $D940
+		uplc Art_HUDMain,v_tile_hud
+	UPLC_HUD_end:
 
 UPLC_TitleCard:	uplcheader $B000
 		uplc Art_TitleCard,v_tile_titlecard
@@ -358,3 +365,14 @@ UPLC_Explode:	uplcheader $B400
 UPLC_Stars:	uplcheader vram_shield
 		uplc Art_Stars
 	UPLC_Stars_end:
+
+UPLC_Bonus:	uplcheader vram_bonus
+		uplc Art_Bonus
+	UPLC_Bonus_end:
+
+UPLC_SSResult:	uplcheader $20
+		uplc Art_TitleCard,v_tile_titlecard
+		uplc Art_HUDMain,v_tile_hud
+		uplc Art_MiniSonic
+		uplc Art_ResultEm
+	UPLC_SSResult_end:
