@@ -79,7 +79,7 @@ Vectors:	dc.l v_stack_pointer&$FFFFFF			; Initial stack pointer value
 			dcb.l 3,ErrorTrap
 		endc
 		dc.b "SEGA MEGA DRIVE "				; Hardware system ID (Console name)
-		dc.b "(C)SEGA 2022.AUG"				; Copyright holder and release date (generally year)
+		dc.b "(C)SEGA \date"				; Copyright holder and release date (generally year)
 		dc.b "SONIC 1-SQUARED                                 " ; Domestic name
 		dc.b "SONIC 1-SQUARED                                 " ; International name
 
@@ -772,13 +772,12 @@ Art_LivesNums:	incbin	"Graphics\Lives Counter Numbers.bin"	; 8x8 pixel numbers o
 	Eni_SegaLogo:	incbin	"Tilemaps\Sega Logo.eni"	; large Sega logo (mappings)
 			even
 		endc
-Eni_Title:	incbin	"Tilemaps\Title Screen.eni"		; title screen foreground (mappings)
-		even
+		incfile	KosMap_Title,"Other Kosinski\Title Screen",kos
 Eni_JapNames:	incbin	"Tilemaps\Hidden Japanese Credits.eni"	; Japanese credits (mappings)
 		even
-		incfile	Nem_TitleFg,"Graphics - Compressed\Title Screen Foreground",nem
-		incfile	Nem_TitleSonic,"Graphics - Compressed\Title Screen Sonic",nem
-		incfile	Nem_TitleTM,"Graphics - Compressed\Title Screen TM",nem
+		incfile	Kos_TitleFg,"Graphics Kosinski\Title Screen Foreground",kos
+		incfile	Kos_TitleSonic,"Graphics Kosinski\Title Screen Sonic",kos
+		incfile	Kos_TitleTM,"Graphics Kosinski\Title Screen TM",kos
 		incfile	Nem_JapNames,"Graphics - Compressed\Hidden Japanese Credits",nem
 
 		include "Objects\Sonic [Mappings].asm"		; Map_Sonic
@@ -795,7 +794,7 @@ Art_Sonic:	incbin	"Graphics\Sonic.bin"			; Sonic
 		incfile Nem_Smoke,"Graphics - Compressed\Unused - Smoke",nem
 		incfile Nem_SyzSparkle,"Graphics - Compressed\Unused - SYZ Sparkles",nem
 		incfile Nem_UnkFire,"Graphics - Compressed\Unused - Fireball",nem
-		incfile Nem_Warp,"Graphics - Compressed\Unused - Special Stage Warp",nem
+		incfile Art_Warp,"Graphics\Unused - Special Stage Warp",bin,dma_safe
 		incfile Nem_Goggle,"Graphics - Compressed\Unused - Goggles",nem
 
 		include "Objects\Special Stage Walls [Mappings].asm" ; Map_SSWalls

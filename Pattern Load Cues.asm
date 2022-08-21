@@ -6,7 +6,6 @@ PatternLoadCues:
 		ptr PLC_Main
 		ptr PLC_Main2
 		ptr PLC_Boss
-		ptr PLC_Warp
 		ptr PLC_SpecialStage
 PLC_Animals:
 		ptr PLC_GHZAnimals
@@ -67,16 +66,6 @@ PLC_Boss:	plcheader
 		plcm	Nem_Prison, $93A0			; prison capsule
 		plcm	Nem_Exhaust, $A540			; exhaust flame
 	PLC_Boss_end:
-; ---------------------------------------------------------------------------
-; Pattern load cues - beta special stage warp effect
-; ---------------------------------------------------------------------------
-		if Revision=0
-PLC_Warp:	plcheader
-		plcm	Nem_Warp, $A820
-		else
-PLC_Warp:
-		endc
-	PLC_Warp_end:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - special stage
 ; ---------------------------------------------------------------------------

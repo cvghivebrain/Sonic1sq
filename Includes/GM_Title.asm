@@ -54,15 +54,6 @@ GM_Title:
 		bsr.w	PaletteFadeIn				; fade in to "SONIC TEAM PRESENTS" screen from black
 		disable_ints
 
-		locVRAM	vram_title
-		lea	(Nem_TitleFg).l,a0			; load title screen gfx
-		bsr.w	NemDec
-		locVRAM	vram_title_sonic
-		lea	(Nem_TitleSonic).l,a0			; load Sonic title screen gfx
-		bsr.w	NemDec
-		locVRAM	vram_title_tm
-		lea	(Nem_TitleTM).l,a0			; load "TM" gfx
-		bsr.w	NemDec
 		lea	(vdp_data_port).l,a6
 		locVRAM	vram_text,4(a6)
 		lea	(Art_Text).l,a5				; load level select font
@@ -77,6 +68,8 @@ GM_Title:
 		move.w	#0,(v_demo_mode).w			; disable debug mode
 		move.w	#id_GHZ_act1,(v_zone).w			; set level to GHZ act 1 (0000)
 		move.w	#0,(v_palcycle_time).w			; disable palette cycling
+		moveq	#id_KPLC_Title,d0
+		jsr	KosPLC
 		bsr.w	LoadPerZone
 		bsr.w	LevelParameterLoad			; set level boundaries and Sonic's start position
 		bsr.w	DeformLayers
@@ -91,14 +84,16 @@ GM_Title:
 		move.w	#draw_bg,d2
 		bsr.w	DrawChunks				; draw background
 		lea	($FF0000).l,a1
-		lea	(Eni_Title).l,a0			; load title screen mappings
-		move.w	#0,d0
-		bsr.w	EniDec
+		lea	(KosMap_Title).l,a0			; load title screen mappings
+		bsr.w	KosDec
+		move.w	#(sizeof_KosMap_Title/2)-1,d0
+		
+	.loop_titlemap:
+		add.w	#tile_Kos_TitleFg,(a1)+			; update tilemap with address of gfx
+		dbf	d0,.loop_titlemap
 
 		copyTilemap	$FF0000,vram_fg,3,4,$22,$16	; copy title screen mappings to fg nametable in VRAM
 
-		moveq	#id_KPLC_Title,d0
-		jsr	KosPLC
 		moveq	#id_Pal_Title,d0			; load title screen palette
 		bsr.w	PalLoad_Next
 		play.b	1, bsr.w, mus_TitleScreen		; play title screen music

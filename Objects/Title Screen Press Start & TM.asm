@@ -23,7 +23,7 @@ PSB_Main:	; Routine 0
 		move.w	#$D0,ost_x_pos(a0)
 		move.w	#$130,ost_y_screen(a0)
 		move.l	#Map_PSB,ost_mappings(a0)
-		move.w	#vram_title/sizeof_cell,ost_tile(a0)
+		move.w	#tile_Kos_TitleFg,ost_tile(a0)
 		cmpi.b	#id_frame_psb_mask,ost_frame(a0)	; is object the sprite mask or "TM"?
 		bcs.s	PSB_Animate				; if not, branch
 
@@ -31,7 +31,7 @@ PSB_Main:	; Routine 0
 		cmpi.b	#id_frame_psb_tm,ost_frame(a0)		; is the object "TM"?
 		bne.s	PSB_Exit				; if not, branch
 
-		move.w	#(vram_title_tm/sizeof_cell)+tile_pal2,ost_tile(a0) ; "TM" specific code
+		move.w	#tile_Kos_TitleTM+tile_pal2,ost_tile(a0) ; "TM" specific code
 		move.w	#$170,ost_x_pos(a0)
 		move.w	#$F8,ost_y_screen(a0)
 

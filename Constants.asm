@@ -46,9 +46,6 @@ vram_signpost:		equ $D000	; signpost graphics
 vram_giantring:		equ $D340	; giant ring graphics
 
 vram_title_credits:	equ $14C0	; "Sonic Team Presents" title screen graphics
-vram_title:		equ $4000	; main title screen graphics
-vram_title_sonic:	equ $6000	; Sonic title screen graphics
-vram_title_tm:		equ $A200	; "TM" graphics
 vram_text:		equ $D000	; level select text graphics
 vram_cont_sonic:	equ $A000	; oval & Sonic continue screen graphics
 vram_cont_minisonic:	equ $AA20	; mini Sonic continue screen graphics
@@ -379,3 +376,8 @@ ss_update_frame:	equ 3		; frame within update data
 ss_update_levelptr:	equ 4		; pointer to item in level layout being updated
 sizeof_ss_update:	equ 8		; bytes in one update slot
 countof_ss_update:	equ $20		; number of update slots
+
+; Date
+year:		equ _year+1900
+month:		substr ((_month-1)*3)+1,((_month-1)*3)+3,"JANFEBMARAPRMAYJUNJULAUGSEPOCTNOVDEC"
+date:		equs "\#year\.\month"				; e.g. "1991.APR" for use in header

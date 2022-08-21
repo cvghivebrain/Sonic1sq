@@ -3,6 +3,7 @@
 rem compress kosinski files
 for %%f in ("256x256 Mappings\*.unc") do "mdcomp\kosplus" "%%f" "256x256 Mappings\%%~nf.kos"
 for %%f in ("Graphics Kosinski\*.bin") do "mdcomp\kosplus" "%%f" "Graphics Kosinski\%%~nf.kos"
+for %%f in ("Other Kosinski\*.bin") do "mdcomp\kosplus" "%%f" "Other Kosinski\%%~nf.kos"
 
 rem assemble final rom
 IF EXIST s1built.bin move /Y s1built.bin s1built.prev.bin >NUL

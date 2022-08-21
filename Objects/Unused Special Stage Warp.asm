@@ -19,11 +19,8 @@ ost_vanish_time:	rs.w 1 ; $30				; time for Sonic to disappear (2 bytes)
 ; ===========================================================================
 
 Van_Main:	; Routine 0
-		tst.l	(v_plc_buffer).w			; are pattern load cues empty?
-		beq.s	.isempty				; if yes, branch
-		rts	
-
-	.isempty:
+		moveq	#id_UPLC_Warp,d0
+		jsr	UncPLC
 		addq.b	#2,ost_routine(a0)			; goto Van_RmvSonic next
 		move.l	#Map_Vanish,ost_mappings(a0)
 		move.b	#render_rel,ost_render(a0)

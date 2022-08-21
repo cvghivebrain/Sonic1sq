@@ -46,7 +46,7 @@ KPLC_Src:	set_dma_src $FF0000
 
 kplcheader:	macro *
 		\*: equ *
-		kplc_count\@: equ (\*_end-*-2)/10		; number if items in KPLC
+		kplc_count\@: equ (.end-*-2)/10			; number if items in KPLC
 		dc.w kplc_count\@-1				; number of loops
 		last_vram: = 0					; start address in VRAM
 		last_label: equs "\*"
@@ -106,7 +106,7 @@ KPLC_GHZ:	kplcheader
 		kplc Kos_Spikes,v_tile_spikes
 		kplc Kos_HSpring,v_tile_hspring
 		kplc Kos_VSpring,v_tile_vspring			; $A5C0 used
-	KPLC_GHZ_end:
+	.end:
 		set_dma_size last_vram
 
 KPLC_MZ:	kplcheader
@@ -127,7 +127,7 @@ KPLC_MZ:	kplcheader
 		kplc Kos_Spikes,v_tile_spikes
 		kplc Kos_HSpring,v_tile_hspring
 		kplc Kos_VSpring,v_tile_vspring			; $9820 used
-	KPLC_MZ_end:
+	.end:
 		set_dma_size last_vram
 
 KPLC_SYZ:	kplcheader
@@ -146,7 +146,7 @@ KPLC_SYZ:	kplcheader
 		kplc Kos_Spikes,v_tile_spikes
 		kplc Kos_HSpring,v_tile_hspring
 		kplc Kos_VSpring,v_tile_vspring			; $A160 used
-	KPLC_SYZ_end:
+	.end:
 		set_dma_size last_vram
 
 KPLC_LZ:	kplcheader
@@ -179,7 +179,7 @@ KPLC_LZ:	kplcheader
 		kplc Kos_Spikes,v_tile_spikes
 		kplc Kos_HSpring,v_tile_hspring
 		kplc Kos_VSpring,v_tile_vspring			; $9740 used
-	KPLC_LZ_end:
+	.end:
 		set_dma_size last_vram
 
 KPLC_SLZ:	kplcheader
@@ -201,7 +201,7 @@ KPLC_SLZ:	kplcheader
 		kplc Kos_Spikes,v_tile_spikes
 		kplc Kos_HSpring,v_tile_hspring
 		kplc Kos_VSpring,v_tile_vspring			; $9BE0 used
-	KPLC_SLZ_end:
+	.end:
 		set_dma_size last_vram
 
 KPLC_SBZ:	kplcheader
@@ -231,7 +231,7 @@ KPLC_SBZ:	kplcheader
 		kplc Kos_Spikes,v_tile_spikes
 		kplc Kos_HSpring,v_tile_hspring
 		kplc Kos_VSpring,v_tile_vspring			; $A4C0 used
-	KPLC_SBZ_end:
+	.end:
 		set_dma_size last_vram
 
 KPLC_SBZ3:	kplcheader
@@ -247,14 +247,14 @@ KPLC_SBZ3:	kplcheader
 		kplc Kos_Spikes,v_tile_spikes
 		kplc Kos_HSpring,v_tile_hspring
 		kplc Kos_VSpring,v_tile_vspring			; $9840 used
-	KPLC_SBZ3_end:
+	.end:
 		set_dma_size last_vram
 
 KPLC_FZ:	kplcheader
 		kplc Kos_SBZ
 		kplc Kos_FzBoss
 		kplc Kos_FzEggman
-	KPLC_FZ_end:
+	.end:
 		set_dma_size last_vram
 
 KPLC_End:	kplcheader
@@ -263,12 +263,15 @@ KPLC_End:	kplcheader
 		kplc Kos_EndFlower
 		kplc Kos_EndEm,v_tile_emeralds
 		kplc Kos_EndSonic
-	KPLC_End_end:
+	.end:
 		set_dma_size last_vram
 
 KPLC_Title:	kplcheader
 		kplc Kos_GHZ_1st
-	KPLC_Title_end:
+		kplc Kos_TitleFg
+		kplc Kos_TitleSonic
+		kplc Kos_TitleTM
+	.end:
 		set_dma_size last_vram
 
 ; ---------------------------------------------------------------------------
@@ -308,7 +311,7 @@ UncPLC:
 
 uplcheader:	macro *,vram
 		\*: equ *
-		uplc_count\@: equ (\*_end-*-2)/18		; number if items in UPLC
+		uplc_count\@: equ (.end-*-2)/18			; number if items in UPLC
 		dc.w uplc_count\@-1				; number of loops
 		last_vram: = vram				; start address in VRAM
 		last_label: equs "\*"
@@ -345,34 +348,39 @@ UncLoadCues:
 		ptr UPLC_Stars
 		ptr UPLC_Bonus
 		ptr UPLC_SSResult
+		ptr UPLC_Warp
 
 UPLC_HUD:	uplcheader $D940
 		uplc Art_HUDMain,v_tile_hud
-	UPLC_HUD_end:
+	.end:
 
 UPLC_TitleCard:	uplcheader $B000
 		uplc Art_TitleCard,v_tile_titlecard
-	UPLC_TitleCard_end:
+	.end:
 
 UPLC_GameOver:	uplcheader $ABC0
 		uplc Art_GameOver
-	UPLC_GameOver_end:
+	.end:
 
 UPLC_Explode:	uplcheader $B400
 		uplc Art_Explode
-	UPLC_Explode_end:
+	.end:
 
 UPLC_Stars:	uplcheader vram_shield
 		uplc Art_Stars
-	UPLC_Stars_end:
+	.end:
 
 UPLC_Bonus:	uplcheader vram_bonus
 		uplc Art_Bonus
-	UPLC_Bonus_end:
+	.end:
 
 UPLC_SSResult:	uplcheader $20
 		uplc Art_TitleCard,v_tile_titlecard
 		uplc Art_HUDMain,v_tile_hud
 		uplc Art_MiniSonic
 		uplc Art_ResultEm
-	UPLC_SSResult_end:
+	.end:
+
+UPLC_Warp:	uplcheader vram_shield
+		uplc Art_Warp
+	.end:
