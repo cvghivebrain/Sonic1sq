@@ -211,8 +211,7 @@ CheckSumError:
 		bra.s	.endlessloop
 ; ===========================================================================
 
-Art_Text:	incbin	"Graphics\Level Select & Debug Text.bin" ; text used in level select and debug mode
-		even
+		incfile	Kos_Text,"Graphics Kosinski\Level Select & Debug Text",kos
 
 		include	"Includes\VBlank & HBlank.asm"
 		include	"Includes\JoypadInit & ReadJoypads.asm"

@@ -54,15 +54,6 @@ GM_Title:
 		bsr.w	PaletteFadeIn				; fade in to "SONIC TEAM PRESENTS" screen from black
 		disable_ints
 
-		lea	(vdp_data_port).l,a6
-		locVRAM	vram_text,4(a6)
-		lea	(Art_Text).l,a5				; load level select font
-		move.w	#(sizeof_art_text/2)-1,d1
-
-	.load_text:
-		move.w	(a5)+,(a6)
-		dbf	d1,.load_text				; load level select font
-
 		move.b	#0,(v_last_lamppost).w			; clear lamppost counter
 		move.w	#0,(v_debug_active).w			; disable debug item placement mode
 		move.w	#0,(v_demo_mode).w			; disable debug mode
@@ -235,7 +226,7 @@ Title_PressedStart:
 		move.l	d0,(a6)
 		dbf	d1,.clear_bg				; clear bg nametable (in VRAM)
 
-		bsr.w	LevSel_ShowText
+		bsr.w	LevSel_Display
 
 ; ---------------------------------------------------------------------------
 ; Level	Select loop
@@ -244,71 +235,184 @@ Title_PressedStart:
 LevelSelect:
 		move.b	#id_VBlank_Title,(v_vblank_routine).w
 		bsr.w	WaitForVBlank
-		bsr.w	LevSel_Navigate				; detect d-pad usage and change selection accordingly
-		bsr.w	RunPLC
-		tst.l	(v_plc_buffer).w
-		bne.s	LevelSelect
-		andi.b	#btnABC+btnStart,(v_joypad_press_actual).w ; is A, B, C, or Start pressed?
-		beq.s	LevelSelect				; if not, branch
-		move.w	(v_levelselect_item).w,d0
-		cmpi.w	#(LevSel_Ptr_ST-LevSel_Ptrs)/2,d0	; have you selected item $14 (sound test)?
-		bne.s	LevSel_Level_SS				; if not, go to	Level/SS subroutine
-
-		move.w	(v_levelselect_sound).w,d0
-		addi.w	#$80,d0
-		tst.b	(f_credits_cheat).w			; is Japanese credits cheat on?
-		beq.s	.nocheat				; if not, branch
-		cmpi.w	#$9F,d0					; is sound $9F being played?
-		beq.s	LevSel_Ending				; if yes, branch
-		cmpi.w	#$9E,d0					; is sound $9E being played?
-		beq.s	LevSel_Credits				; if yes, branch
-
-	.nocheat:
-		; This is a workaround for a bug, see Sound_ChkValue for more.
-		; Once you've fixed the bugs there, comment these four instructions out
-		cmpi.w	#_lastMusic+1,d0			; is sound $80-$93 being played?
-		blo.s	.play					; if yes, branch
-		cmpi.w	#_firstSfx,d0				; is sound $94-$9F being played?
-		blo.s	LevelSelect				; if yes, branch
-
-	.play:
-		bsr.w	PlaySound1
+		bsr.s	LevSel_Control
+		bsr.s	LevSel_Hold
+		bsr.w	LevSel_Select
+		beq.s	.stay					; branch if d0 is 0
+		rts						; exit level select if do is 1
+	.stay:
 		bra.s	LevelSelect
-; ===========================================================================
 
-LevSel_Ending:
-		move.b	#id_Ending,(v_gamemode).w		; set gamemode to $18 (Ending)
-		move.w	#id_EndZ_good,(v_zone).w		; set level to 0600 (Ending)
-		rts	
-; ===========================================================================
+linesize:	equ LevSel_Strings_end1-LevSel_Strings-6	; characters per line
+linecount:	equ (LevSel_Strings_end2-LevSel_Strings)/(linesize+6) ; number of lines
+lineleft:	equ 1						; where on screen to start drawing
+linetop:	equ 4
+linestart:	equ (sizeof_vram_row*linetop)+(lineleft*2)	; address in nametable
+linecolumn:	equ 19						; lines per column (set as linecount for 1 column)
+columnwidth:	equ linesize+2					; spacing between columns
+linesound:	equ (LevSel_Strings_sound-LevSel_Strings)/(linesize+6) ; line number with sound test
 
-LevSel_Credits:
-		move.b	#id_Credits,(v_gamemode).w		; set gamemode to $1C (Credits)
-		play.b	1, bsr.w, mus_Credits			; play credits music
-		move.w	#0,(v_credits_num).w
-		rts	
-; ===========================================================================
+LevSel_Control:
+		move.w	(v_levelselect_item).w,d0
+		move.b	(v_joypad_press_actual).w,d1
+		beq.s	.exit					; branch if nothing is pressed
+		move.w	#8,(v_levelselect_hold_delay).w		; reset timer for autoscroll
+		
+		btst	#bitDn,d1
+		beq.s	.not_down				; branch if down isn't pressed
+		bsr.s	LevSel_Down
+		
+	.not_down:
+		btst	#bitUp,d1
+		beq.s	.not_up					; branch if up isn't pressed
+		bsr.s	LevSel_Up
+		
+	.not_up:
+		btst	#bitR,d1
+		beq.s	.not_right				; branch if right isn't pressed
+		bsr.s	LevSel_Right
+		
+	.not_right:
+		btst	#bitL,d1
+		beq.s	.not_left				; branch if right isn't pressed
+		bsr.s	LevSel_Left
+		
+	.not_left:
+		move.w	d0,(v_levelselect_item).w		; set new selection
+		bra.s	LevSel_Display
+		
+	.exit:
+		rts
 
-LevSel_Level_SS:
-		add.w	d0,d0
-		move.w	LevSel_Ptrs(pc,d0.w),d0			; load zone/act number
-		bmi.w	LevelSelect				; branch if it's $8000+ (sound test)
-		cmpi.w	#id_SS*$100,d0				; check	if level is 0700 (Special Stage)
-		bne.s	LevSel_Level				; if not, branch
-		move.b	#id_Special,(v_gamemode).w		; set gamemode to $10 (Special Stage)
-		clr.w	(v_zone).w				; clear	level
-		move.b	#3,(v_lives).w				; set lives to 3
+LevSel_Hold:
+		move.w	(v_levelselect_item).w,d0
+		move.b	(v_joypad_hold_actual).w,d1
+		andi.b	#btnUp+btnDn,d1				; is up/down currently held?
+		beq.s	.exit					; branch if not
+		subq.w	#1,(v_levelselect_hold_delay).w		; decrement timer
+		bpl.s	.exit					; branch if time remains
+		move.w	#8,(v_levelselect_hold_delay).w		; reset timer
+		
+		btst	#bitDn,d1
+		beq.s	.not_down				; branch if down isn't held
+		bsr.s	LevSel_Down
+		
+	.not_down:
+		btst	#bitUp,d1
+		beq.s	.not_up					; branch if up isn't held
+		bsr.s	LevSel_Up
+		
+	.not_up:
+		move.w	d0,(v_levelselect_item).w		; set new selection
+		bra.s	LevSel_Display
+		
+	.exit:
+		rts
+
+LevSel_Down:
+		add.w	#1,d0					; goto next item
+		cmp.w	#linecount,d0
+		bne.s	.exit					; branch if item is valid
+		moveq	#0,d0					; jump to start after last item
+	.exit:
+		rts
+
+LevSel_Up:
+		sub.w	#1,d0					; goto previous item
+		bpl.s	.exit					; branch if item is valid
+		move.w	#linecount-1,d0				; jump to end before first item
+	.exit:
+		rts
+
+LevSel_Right:
+		add.w	#linecolumn,d0				; goto next column
+		cmp.w	#linecount,d0
+		blt.s	.exit					; branch if item is valid
+		sub.w	#linecolumn,d0				; undo
+	.exit:
+		rts
+
+LevSel_Left:
+		sub.w	#linecolumn,d0				; goto previous column
+		bpl.s	.exit					; branch if item is valid
+		add.w	#linecolumn,d0				; undo
+	.exit:
+		rts
+
+LevSel_Display:
+		lea	(LevSel_Strings).l,a1
+		lea	(vdp_data_port).l,a6
+		locVRAM	vram_bg+linestart,d3
+		move.l	d3,d4
+		move.w	#linecount-1,d0
+		moveq	#0,d5
+		moveq	#0,d6
+	
+	.loop:
+		move.l	d3,4(a6)
+		bsr.w	LevSel_Line				; draw line of text
+		lea	6(a1),a1				; next string
+		addi.l	#sizeof_vram_row<<16,d3			; jump to next line in nametable
+		add.w	#1,d5					; count line number in current column
+		add.w	#1,d6					; count line number overall
+		cmp.w	#linecolumn,d5
+		bne.s	.not_last				; branch if not last line in column
+		add.l	#(columnwidth*2)<<16,d4			; jump to next column
+		move.l	d4,d3					; update drawing position
+		moveq	#0,d5
+	
+	.not_last:
+		dbf	d0,.loop				; repeat for all lines
+		rts
+		
+LevSel_Line:
+		move.w	#linesize-1,d1
+		
+	.loop:
+		moveq	#0,d2
+		move.b	(a1)+,d2				; get character
+		add.w	#tile_Kos_Text+tile_pal4+tile_hi-$20,d2	; convert to tile
+		cmp.w	(v_levelselect_item).w,d6		; d6 = current line being drawn
+		bne.s	.unselected				; branch if line is not selected
+		sub.w	#$2000,d2				; use yellow text
+		
+	.unselected:
+		move.w	d2,(a6)					; write to nametable in VRAM
+		dbf	d1,.loop				; repeat for all characters in line
+		rts
+		
+LevSel_Select:
+		move.b	(v_joypad_press_actual).w,d0
+		andi.b	#btnABC+btnStart,d0			; is A, B, C, or Start pressed?
+		beq.s	.exit					; branch if not
+		lea	(LevSel_Strings).l,a1
+		move.w	(v_levelselect_item).w,d1
+		mulu.w	#linesize+6,d1
+		add.w	#linesize,d1
+		lea	(a1,d1.w),a1				; jump to data after string for current line
+		move.w	(a1)+,d2				; get item type
+		add.w	d2,d2
+		move.w	LevSel_Index(pc,d2.w),d2
+		jsr	LevSel_Index(pc,d2.w)
+		moveq	#1,d0					; set flag to exit level select
+		rts
+		
+	.exit:
 		moveq	#0,d0
-		move.w	d0,(v_rings).w				; clear rings
-		move.l	d0,(v_time).w				; clear time
-		move.l	d0,(v_score).w				; clear score
-		move.l	#5000,(v_score_next_life).w		; extra life is awarded at 50000 points
-		rts	
-; ===========================================================================
-
+		rts
+		
+LevSel_Index:	index *
+		ptr LevSel_Level
+		ptr LevSel_Special
+		ptr LevSel_Ending
+		ptr LevSel_Credits
+		ptr LevSel_Gamemode
+		
 LevSel_Level:
-		andi.w	#$3FFF,d0
-		move.w	d0,(v_zone).w				; set level number
+		move.w	(a1)+,d0
+		move.b	d0,(v_zone).w				; set zone
+		move.w	(a1)+,d0
+		move.b	d0,(v_act).w				; set act
 
 PlayLevel:
 		move.b	#id_Level,(v_gamemode).w		; set gamemode to $0C (level)
@@ -322,58 +426,39 @@ PlayLevel:
 		move.b	d0,(v_continues).w			; clear continues
 		move.l	#5000,(v_score_next_life).w		; extra life is awarded at 50000 points
 		play.b	1, bsr.w, cmd_Fade			; fade out music
-		rts	
-; ===========================================================================
-; ---------------------------------------------------------------------------
-; Level	select - level pointers
-; ---------------------------------------------------------------------------
-LevSel_Ptrs:	if Revision=0
-		; old level order
-		dc.b id_GHZ, 0
-		dc.b id_GHZ, 1
-		dc.b id_GHZ, 2
-		dc.b id_LZ, 0
-		dc.b id_LZ, 1
-		dc.b id_LZ, 2
-		dc.b id_MZ, 0
-		dc.b id_MZ, 1
-		dc.b id_MZ, 2
-		dc.b id_SLZ, 0
-		dc.b id_SLZ, 1
-		dc.b id_SLZ, 2
-		dc.b id_SYZ, 0
-		dc.b id_SYZ, 1
-		dc.b id_SYZ, 2
-		dc.b id_SBZ, 0
-		dc.b id_SBZ, 1
-		dc.b id_LZ, 3					; Scrap Brain Zone 3
-		dc.b id_SBZ, 2					; Final Zone
-		else
-		; correct level order
-		dc.b id_GHZ, 0
-		dc.b id_GHZ, 1
-		dc.b id_GHZ, 2
-		dc.b id_MZ, 0
-		dc.b id_MZ, 1
-		dc.b id_MZ, 2
-		dc.b id_SYZ, 0
-		dc.b id_SYZ, 1
-		dc.b id_SYZ, 2
-		dc.b id_LZ, 0
-		dc.b id_LZ, 1
-		dc.b id_LZ, 2
-		dc.b id_SLZ, 0
-		dc.b id_SLZ, 1
-		dc.b id_SLZ, 2
-		dc.b id_SBZ, 0
-		dc.b id_SBZ, 1
-		dc.b id_LZ, 3
-		dc.b id_SBZ, 2
-		endc
-LevSel_Ptr_SS:	dc.b id_SS, 0					; Special Stage ($13)
-LevSel_Ptr_ST:	dc.w $8000					; Sound Test ($14)
-LevSel_Ptr_End:
-		even
+		rts
+		
+LevSel_Special:
+		move.w	(a1)+,d0
+		move.b	d0,(v_last_ss_levelid).w		; set Special Stage number
+		move.b	#id_Special,(v_gamemode).w		; set gamemode to $10 (Special Stage)
+		clr.w	(v_zone).w				; clear	level
+		move.b	#3,(v_lives).w				; set lives to 3
+		moveq	#0,d0
+		move.w	d0,(v_rings).w				; clear rings
+		move.l	d0,(v_time).w				; clear time
+		move.l	d0,(v_score).w				; clear score
+		move.l	#5000,(v_score_next_life).w		; extra life is awarded at 50000 points
+		rts
+		
+LevSel_Ending:
+		move.w	(a1)+,d0
+		move.b	d0,(v_zone).w				; set zone
+		move.w	(a1)+,d0
+		move.b	d0,(v_act).w				; set act
+		move.b	#id_Ending,(v_gamemode).w		; set gamemode to $18 (Ending)
+		rts
+		
+LevSel_Gamemode:
+		move.w	(a1)+,d0
+		move.b	d0,(v_gamemode).w			; set gamemode
+		rts
+		
+LevSel_Credits:
+		move.w	(a1)+,d0
+		move.b	d0,(v_credits_num).w			; set credits number
+		move.b	#id_Credits,(v_gamemode).w		; set gamemode to credits
+		rts
 ; ---------------------------------------------------------------------------
 ; Level	select codes
 ; ---------------------------------------------------------------------------
@@ -450,215 +535,48 @@ PlayDemo:
 		include_demo_list				; Includes\Demo Pointers.asm
 
 ; ---------------------------------------------------------------------------
-; Subroutine to	change what you're selecting in the level select
-; ---------------------------------------------------------------------------
-
-LevSel_Navigate:
-		move.b	(v_joypad_press_actual).w,d1
-		andi.b	#btnUp+btnDn,d1				; is up/down currently pressed?
-		bne.s	.updown					; if yes, branch
-		subq.w	#1,(v_levelselect_hold_delay).w		; decrement cooldown timer
-		bpl.s	LevSel_SndTest				; if time remains, branch
-
-	.updown:
-		move.w	#11,(v_levelselect_hold_delay).w	; reset time delay to 1/5th of a second
-		move.b	(v_joypad_hold_actual).w,d1
-		andi.b	#btnUp+btnDn,d1				; is up/down pressed?
-		beq.s	LevSel_SndTest				; if not, branch
-		move.w	(v_levelselect_item).w,d0
-		btst	#bitUp,d1				; is up	pressed?
-		beq.s	.down					; if not, branch
-		subq.w	#1,d0					; move up 1 selection
-		bhs.s	.down
-		moveq	#(LevSel_Ptr_ST-LevSel_Ptrs)/2,d0	; if selection moves below 0, jump to selection	$14
-
-	.down:
-		btst	#bitDn,d1				; is down pressed?
-		beq.s	.set_item				; if not, branch
-		addq.w	#1,d0					; move down 1 selection
-		cmpi.w	#(LevSel_Ptr_End-LevSel_Ptrs)/2,d0
-		blo.s	.set_item
-		moveq	#0,d0					; if selection moves above $14,	jump to	selection 0
-
-	.set_item:
-		move.w	d0,(v_levelselect_item).w		; set new selection
-		bsr.w	LevSel_ShowText				; refresh text
-		rts	
-; ===========================================================================
-
-LevSel_SndTest:
-		cmpi.w	#(LevSel_Ptr_ST-LevSel_Ptrs)/2,(v_levelselect_item).w ; is item $14 selected?
-		bne.s	.exit					; if not, branch
-		move.b	(v_joypad_press_actual).w,d1
-		andi.b	#btnR+btnL,d1				; is left/right	pressed?
-		beq.s	.exit					; if not, branch
-		move.w	(v_levelselect_sound).w,d0
-		btst	#bitL,d1				; is left pressed?
-		beq.s	.right					; if not, branch
-		subq.w	#1,d0					; subtract 1 from sound	test
-		bhs.s	.right
-		moveq	#$4F,d0					; if sound test	moves below 0, set to $4F
-
-	.right:
-		btst	#bitR,d1				; is right pressed?
-		beq.s	.refresh_text				; if not, branch
-		addq.w	#1,d0					; add 1	to sound test
-		cmpi.w	#$50,d0
-		blo.s	.refresh_text
-		moveq	#0,d0					; if sound test	moves above $4F, set to	0
-
-	.refresh_text:
-		move.w	d0,(v_levelselect_sound).w		; set sound test number
-		bsr.w	LevSel_ShowText				; refresh text
-
-	.exit:
-		rts
-
-; ---------------------------------------------------------------------------
-; Subroutine to load level select text
-; ---------------------------------------------------------------------------
-
-LevSel_ShowText:
-
-text_x:		= 8
-text_y:		= 4
-text_pos:	= (sizeof_vram_row*text_y)+(text_x*2)		; position to draw text (in 8x8 cells)
-soundtest_pos:	= (sizeof_vram_row*$18)+($18*2)
-
-		lea	(LevSel_Strings).l,a1
-		lea	(vdp_data_port).l,a6
-		locVRAM	vram_bg+text_pos,d4			; $E210
-		move.w	#(vram_text/sizeof_cell)+tile_pal4+tile_hi,d3 ; VRAM setting ($E680: 4th palette, $680th tile)
-		moveq	#$14,d1					; number of lines of text
-
-	.loop_lines:
-		move.l	d4,4(a6)
-		bsr.w	LevSel_DrawLine				; draw line of text
-		addi.l	#sizeof_vram_row<<16,d4			; jump to next line
-		dbf	d1,.loop_lines
-
-		moveq	#0,d0
-		move.w	(v_levelselect_item).w,d0		; get number of line currently highlighted
-		move.w	d0,d1					; copy to d1
-		locVRAM	vram_bg+text_pos,d4			; $E210
-		lsl.w	#7,d0					; multiply by $80
-		swap	d0					; convert to VDP format
-		add.l	d0,d4					; d4 = VDP address of highlighted line
-		lea	(LevSel_Strings).l,a1			; get strings
-		lsl.w	#3,d1
-		move.w	d1,d0
-		add.w	d1,d1
-		add.w	d0,d1					; d1 = line number * 24
-		adda.w	d1,a1					; jump to string for highlighted line
-		move.w	#(vram_text/sizeof_cell)+tile_pal3+tile_hi,d3 ; VRAM setting ($C680: 3rd palette, $680th tile)
-		move.l	d4,4(a6)
-		bsr.w	LevSel_DrawLine				; recolour selected line
-
-		move.w	#(vram_text/sizeof_cell)+tile_pal4+tile_hi,d3 ; white text for sound test
-		cmpi.w	#(LevSel_Ptr_ST-LevSel_Ptrs)/2,(v_levelselect_item).w ; is highlighted line the sound test? ($14)
-		bne.s	.soundtest				; if not, branch
-		move.w	#(vram_text/sizeof_cell)+tile_pal3+tile_hi,d3 ; yellow text for sound test
-
-	.soundtest:
-		locVRAM	vram_bg+soundtest_pos			; $EC30	- sound test position on screen
-		move.w	(v_levelselect_sound).w,d0		; get sound test number
-		addi.w	#$80,d0					; add $80
-		move.b	d0,d2					; copy to d2
-		lsr.b	#4,d0					; divide by $10
-		bsr.w	LevSel_DrawSound			; draw low digit
-		move.b	d2,d0					; retrieve from d2
-		bsr.w	LevSel_DrawSound			; draw high digit
-		rts
-
-; ---------------------------------------------------------------------------
-; Subroutine to draw sound test number
-; ---------------------------------------------------------------------------
-
-LevSel_DrawSound:
-		andi.w	#$F,d0					; read only low nybble
-		cmpi.b	#$A,d0					; is digit $A-$F?
-		blo.s	.is_0_9					; if not, branch
-		addi.b	#7,d0					; graphics for A-F start 7 cells later
-
-	.is_0_9:
-		add.w	d3,d0					; d0 = character + VRAM setting ($EC30)
-		move.w	d0,(a6)					; write to nametable in VRAM
-		rts
-
-; ---------------------------------------------------------------------------
-; Subroutine to draw a line of text
-; ---------------------------------------------------------------------------
-
-LevSel_DrawLine:
-		moveq	#$17,d2					; number of characters per line
-
-	.loop:
-		moveq	#0,d0
-		move.b	(a1)+,d0				; get character
-		bpl.s	.isvalid				; branch if valid (0-$7F)
-		move.w	#0,(a6)					; use blank character instead
-		dbf	d2,.loop
-		rts	
-
-
-	.isvalid:
-		add.w	d3,d0					; combine char with VRAM setting
-		move.w	d0,(a6)					; send to VRAM
-		dbf	d2,.loop
-		rts
-
-; ---------------------------------------------------------------------------
 ; Level	select menu text strings
 ; ---------------------------------------------------------------------------
-lsline:		macro
-		ls_str:	equs \1
-		rept strlen(\1)
-		ls_chr:	substr ,1,"\ls_str"
-		ls_str:	substr 2,,"\ls_str"
-		if instr("YZ","\ls_chr")
-			dc.b "\ls_chr"-$4A			; Y and Z gfx are stored before A
-		elseif instr(" ","\ls_chr")
-			dc.b $FF				; space = $FF
-		else
-			dc.b "\ls_chr"-$30
-		endc
-		endr
+
+lsline:		macro string,type,zone,act
+		dc.b \string
+		even
+		dc.w type,zone,act
 		endm
 
-LevSel_Strings:	lsline "GREEN HILL ZONE  STAGE 1"
-		lsline "                 STAGE 2"
-		lsline "                 STAGE 3"
-		if Revision=0
-		lsline "LABYRINTH ZONE   STAGE 1"
-		lsline "                 STAGE 2"
-		lsline "                 STAGE 3"
-		lsline "MARBLE ZONE      STAGE 1"
-		lsline "                 STAGE 2"
-		lsline "                 STAGE 3"
-		lsline "STAR LIGHT ZONE  STAGE 1"
-		lsline "                 STAGE 2"
-		lsline "                 STAGE 3"
-		lsline "SPRING YARD ZONE STAGE 1"
-		lsline "                 STAGE 2"
-		lsline "                 STAGE 3"
-		else
-		lsline "MARBLE ZONE      STAGE 1"
-		lsline "                 STAGE 2"
-		lsline "                 STAGE 3"
-		lsline "SPRING YARD ZONE STAGE 1"
-		lsline "                 STAGE 2"
-		lsline "                 STAGE 3"
-		lsline "LABYRINTH ZONE   STAGE 1"
-		lsline "                 STAGE 2"
-		lsline "                 STAGE 3"
-		lsline "STAR LIGHT ZONE  STAGE 1"
-		lsline "                 STAGE 2"
-		lsline "                 STAGE 3"
-		endc
-		lsline "SCRAP BRAIN ZONE STAGE 1"
-		lsline "                 STAGE 2"
-		lsline "                 STAGE 3"
-		lsline "FINAL ZONE              "
-		lsline "SPECIAL STAGE           "
-		lsline "SOUND SELECT            "
-		even
+LevSel_Strings:	lsline "GREEN HILL ZONE  1",id_LevSel_Level,id_GHZ,0
+	LevSel_Strings_end1:
+		lsline "                 2",id_LevSel_Level,id_GHZ,1
+		lsline "                 3",id_LevSel_Level,id_GHZ,2
+		lsline "MARBLE ZONE      1",id_LevSel_Level,id_MZ,0
+		lsline "                 2",id_LevSel_Level,id_MZ,1
+		lsline "                 3",id_LevSel_Level,id_MZ,2
+		lsline "SPRING YARD ZONE 1",id_LevSel_Level,id_SYZ,0
+		lsline "                 2",id_LevSel_Level,id_SYZ,1
+		lsline "                 3",id_LevSel_Level,id_SYZ,2
+		lsline "LABYRINTH ZONE   1",id_LevSel_Level,id_LZ,0
+		lsline "                 2",id_LevSel_Level,id_LZ,1
+		lsline "                 3",id_LevSel_Level,id_LZ,2
+		lsline "STAR LIGHT ZONE  1",id_LevSel_Level,id_SLZ,0
+		lsline "                 2",id_LevSel_Level,id_SLZ,1
+		lsline "                 3",id_LevSel_Level,id_SLZ,2
+		lsline "SCRAP BRAIN ZONE 1",id_LevSel_Level,id_SBZ,0
+		lsline "                 2",id_LevSel_Level,id_SBZ,1
+		lsline "                 3",id_LevSel_Level,id_LZ,3
+		lsline "FINAL ZONE        ",id_LevSel_Level,id_SBZ,2
+		lsline "SPECIAL STAGE    1",id_LevSel_Special,0,0
+		lsline "                 2",id_LevSel_Special,1,0
+		lsline "                 3",id_LevSel_Special,2,0
+		lsline "                 4",id_LevSel_Special,3,0
+		lsline "                 5",id_LevSel_Special,4,0
+		lsline "                 6",id_LevSel_Special,5,0
+		lsline "GOOD ENDING       ",id_LevSel_Ending,id_EndZ,0
+		lsline "BAD ENDING        ",id_LevSel_Ending,id_EndZ,1
+		lsline "CREDITS           ",id_LevSel_Credits,0,0
+		lsline "HIDDEN CREDITS    ",id_LevSel_Gamemode,0,0
+		lsline "END SCREEN        ",id_LevSel_Credits,0,0
+		lsline "TRY AGAIN SCREEN  ",id_LevSel_Credits,0,0
+		lsline "CONTINUE SCREEN   ",id_LevSel_Gamemode,id_Continue,0
+	LevSel_Strings_sound:
+		lsline "SOUND SELECT   $80",id_LevSel_Level,id_GHZ,0
+	LevSel_Strings_end2:

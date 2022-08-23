@@ -271,6 +271,7 @@ KPLC_Title:	kplcheader
 		kplc Kos_TitleFg
 		kplc Kos_TitleSonic
 		kplc Kos_TitleTM
+		kplc Kos_Text
 	.end:
 		set_dma_size last_vram
 

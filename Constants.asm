@@ -49,7 +49,6 @@ vram_title_credits:	equ $14C0	; "Sonic Team Presents" title screen graphics
 vram_text:		equ $D000	; level select text graphics
 vram_cont_sonic:	equ $A000	; oval & Sonic continue screen graphics
 vram_cont_minisonic:	equ $AA20	; mini Sonic continue screen graphics
-vram_error:		equ $F800	; error text graphics
 
 sizeof_cell:		equ $20			; single 8x8 tile
 sizeof_vram_fg:		equ sizeof_vram_row*32	; fg nametable, assuming 64x32 ($1000 bytes)

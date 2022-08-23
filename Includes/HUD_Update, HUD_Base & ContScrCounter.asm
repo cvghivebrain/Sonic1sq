@@ -208,6 +208,7 @@ Hud_TilesRings:	dc.b $FF, $FF, 0				; "  0" in rings
 ; ---------------------------------------------------------------------------
 
 HudDb_XY:
+		rts
 		locVRAM	$DC40					; VRAM address, starts at "E" in score
 		move.w	(v_camera_x_pos).w,d1
 		swap	d1					; camera x pos in high word
@@ -219,7 +220,7 @@ HudDb_XY:
 
 HudDb_XY2:
 		moveq	#8-1,d6					; number of digits
-		lea	(Art_Text).l,a1				; debug number gfx
+		;lea	(Art_Text).l,a1				; debug number gfx
 
 	.loop:
 		rol.w	#4,d1
