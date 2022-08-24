@@ -275,11 +275,11 @@ LevSel_Control:
 	.not_right:
 		btst	#bitL,d1
 		beq.s	.not_left				; branch if right isn't pressed
-		bsr.s	LevSel_Left
+		bsr.w	LevSel_Left
 		
 	.not_left:
 		move.w	d0,(v_levelselect_item).w		; set new selection
-		bra.s	LevSel_Display
+		bra.w	LevSel_Display
 		
 	.exit:
 		rts
@@ -325,6 +325,14 @@ LevSel_Up:
 		rts
 
 LevSel_Right:
+		cmp.w	#linesound,d0
+		bne.s	.not_soundtest				; branch if not on sound test
+		add.w	#1,(v_levelselect_sound).w		; increment sound test
+		cmp.w	#$50,(v_levelselect_sound).w
+		bne.s	.exit					; branch if valid
+		move.w	#0,(v_levelselect_sound).w		; reset to 0 if above max
+		bra.s	.exit
+	.not_soundtest:
 		add.w	#linecolumn,d0				; goto next column
 		cmp.w	#linecount,d0
 		blt.s	.exit					; branch if item is valid
@@ -333,6 +341,13 @@ LevSel_Right:
 		rts
 
 LevSel_Left:
+		cmp.w	#linesound,d0
+		bne.s	.not_soundtest				; branch if not on sound test
+		sub.w	#1,(v_levelselect_sound).w		; increment sound test
+		bpl.s	.exit					; branch if valid
+		move.w	#$4F,(v_levelselect_sound).w		; jump to $4F if below 0
+		bra.s	.exit
+	.not_soundtest:
 		sub.w	#linecolumn,d0				; goto previous column
 		bpl.s	.exit					; branch if item is valid
 		add.w	#linecolumn,d0				; undo
@@ -371,6 +386,19 @@ LevSel_Line:
 	.loop:
 		moveq	#0,d2
 		move.b	(a1)+,d2				; get character
+		cmp.w	#linesound,d6				; d6 = current line being drawn
+		bne.s	.not_soundtest				; branch if not the sound test
+		cmp.w	#1,d1
+		bgt.s	.not_soundtest				; branch if not the last 2 characters on the line
+		move.w	(v_levelselect_sound).w,d2		; get current sound test
+		add.b	#$80,d2
+		lsl.w	#2,d1					; multiply character number by 4 (so it's either 4 or 0)
+		lsr.b	d1,d2					; move high nybble to low if d1 is 4
+		and.b	#$F,d2					; read single nybble
+		add.b	#$30,d2					; convert to character
+		lsr.w	#2,d1					; restore d1
+		
+	.not_soundtest:
 		add.w	#tile_Kos_Text+tile_pal4+tile_hi-$20,d2	; convert to tile
 		cmp.w	(v_levelselect_item).w,d6		; d6 = current line being drawn
 		bne.s	.unselected				; branch if line is not selected
@@ -384,7 +412,7 @@ LevSel_Line:
 LevSel_Select:
 		move.b	(v_joypad_press_actual).w,d0
 		andi.b	#btnABC+btnStart,d0			; is A, B, C, or Start pressed?
-		beq.s	.exit					; branch if not
+		beq.s	.nothing				; branch if not
 		lea	(LevSel_Strings).l,a1
 		move.w	(v_levelselect_item).w,d1
 		mulu.w	#linesize+6,d1
@@ -394,10 +422,12 @@ LevSel_Select:
 		add.w	d2,d2
 		move.w	LevSel_Index(pc,d2.w),d2
 		jsr	LevSel_Index(pc,d2.w)
+		cmp.w	#linesound,(v_levelselect_item).w
+		beq.s	.nothing				; don't exit if on the sound test
 		moveq	#1,d0					; set flag to exit level select
 		rts
 		
-	.exit:
+	.nothing:
 		moveq	#0,d0
 		rts
 		
@@ -407,6 +437,7 @@ LevSel_Index:	index *
 		ptr LevSel_Ending
 		ptr LevSel_Credits
 		ptr LevSel_Gamemode
+		ptr LevSel_Sound
 		
 LevSel_Level:
 		move.w	(a1)+,d0
@@ -459,6 +490,21 @@ LevSel_Credits:
 		move.b	d0,(v_credits_num).w			; set credits number
 		move.b	#id_Credits,(v_gamemode).w		; set gamemode to credits
 		rts
+		
+LevSel_Sound:
+		btst.b	#bitA,(v_joypad_press_actual).w		; is button A pressed?
+		beq.s	.play					; branch if not
+		add.w	#$10,(v_levelselect_sound).w		; skip $10
+		cmp.w	#$4F,(v_levelselect_sound).w
+		ble.s	.exit					; branch if valid
+		move.w	#0,(v_levelselect_sound).w		; reset to 0
+	.exit:
+		bra.w	LevSel_Display				; update number
+		
+	.play:
+		move.w	(v_levelselect_sound).w,d0
+		addi.w	#$80,d0
+		bra.w	PlaySound1
 ; ---------------------------------------------------------------------------
 ; Level	select codes
 ; ---------------------------------------------------------------------------
@@ -539,6 +585,9 @@ PlayDemo:
 ; ---------------------------------------------------------------------------
 
 lsline:		macro string,type,zone,act
+		if strlen(\string)&1=1
+		inform	3,"Level select strings must be of even length."
+		endc
 		dc.b \string
 		even
 		dc.w type,zone,act
@@ -578,5 +627,5 @@ LevSel_Strings:	lsline "GREEN HILL ZONE  1",id_LevSel_Level,id_GHZ,0
 		lsline "TRY AGAIN SCREEN  ",id_LevSel_Credits,0,0
 		lsline "CONTINUE SCREEN   ",id_LevSel_Gamemode,id_Continue,0
 	LevSel_Strings_sound:
-		lsline "SOUND SELECT   $80",id_LevSel_Level,id_GHZ,0
+		lsline "SOUND SELECT   $XX",id_LevSel_Sound,0,0
 	LevSel_Strings_end2:

@@ -524,7 +524,7 @@ PlaySoundID:
 		; DANGER! Music ends at $93, yet this checks until $9F; attempting to
 		; play sounds $94-$9F will cause a crash! Remove the '+$C' to fix this.
 		; See LevSel_NoCheat for more.
-		cmpi.b	#_lastMusic+$C,d7			; Is this music ($81-$9F)?
+		cmpi.b	#_lastMusic,d7				; Is this music ($81-$9F)?
 		bls.w	Sound_PlayBGM				; Branch if yes
 		cmpi.b	#_firstSfx,d7				; Is this after music but before sfx? (redundant check)
 		blo.w	.locret					; Return if yes
@@ -535,10 +535,10 @@ PlaySoundID:
 		; DANGER! Special SFXes end at $D0, yet this checks until $DF; attempting to
 		; play sounds $D1-$DF will cause a crash! Remove the '+$10' and change the 'blo' to a 'bls'
 		; and uncomment the two lines below to fix this.
-		cmpi.b	#_lastSpecSfx+$10,d7			; Is this special sfx ($D0-$DF)?
-		blo.w	Sound_PlaySpecial			; Branch if yes
-		;cmpi.b	#_firstCmd,d7		; Is this after special sfx but before $E0?
-		;blo.w	.locret			; Return if yes
+		cmpi.b	#_lastSpecSfx,d7			; Is this special sfx ($D0-$DF)?
+		bls.w	Sound_PlaySpecial			; Branch if yes
+		cmpi.b	#_firstCmd,d7				; Is this after special sfx but before $E0?
+		blo.w	.locret					; Return if yes
 		cmpi.b	#_lastCmd,d7				; Is this $E0-$E4?
 		bls.s	Sound_E0toE4				; Branch if yes
 
