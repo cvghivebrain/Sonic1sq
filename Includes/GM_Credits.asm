@@ -23,10 +23,6 @@ GM_Credits:
 		move.l	d0,(a1)+
 		dbf	d1,.clear_ost				; clear object RAM
 
-		locVRAM	vram_credits
-		lea	(Nem_CreditText).l,a0			; load credits alphabet graphics
-		bsr.w	NemDec
-
 		lea	(v_pal_dry_next).w,a1
 		moveq	#0,d0
 		move.w	#loops_to_clear_pal,d1

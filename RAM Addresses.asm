@@ -278,8 +278,9 @@ v_scroll_block_3_height:	equ __rs-4 ; $FFFFF7F4 ; scroll block height - always $
 v_scroll_block_4_height:	equ __rs-2 ; $FFFFF7F6 ; scroll block height - $100 for GHZ; 0 for all others, unused
 				rsblockend levelinfo
 
-				rsalign 2
-v_sprite_buffer:		rs.b sizeof_vram_sprites-$80 ; $FFFFF800 ; sprite table ($280 bytes, last $80 bytes are overwritten by v_pal_water_next)
+				rsblock sprites
+v_sprite_buffer:		rs.b sizeof_vram_sprites ; $FFFFF800 ; sprite table ($280 bytes)
+				rsblockend sprites
 v_pal_water_next:		rs.w countof_color*4 ; $FFFFFA00 ; target underwater palette, used for transitions
 v_pal_water:			rs.w countof_color*4 ; $FFFFFA80 ; main underwater palette
 v_pal_water_line1:		equ v_pal_water

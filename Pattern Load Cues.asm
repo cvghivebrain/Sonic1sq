@@ -152,7 +152,7 @@ PLC_Ending:	plcheader
 PLC_TryAgain:	plcheader
 		;plcm	Nem_EndEm, $78A0, TryAgain		; emeralds
 		plcm	Nem_TryAgain,$7C20
-		plcm	Nem_CreditText, vram_credits		; credits alphabet ($B400)
+		;plcm	Nem_CreditText, vram_credits		; credits alphabet ($B400)
 	PLC_TryAgain_end:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - Eggman on SBZ 2

@@ -105,6 +105,7 @@ VBlank_Title:
 		bsr.w	ReadPad_Palette_Sprites_HScroll		; read joypad, DMA palettes, sprites and hscroll
 		bsr.w	DrawTilesWhenMoving_BGOnly		; update background
 		bsr.w	ProcessPLC				; decompress up to 9 cells of Nemesis gfx if needed
+		bsr.w	ProcessDMA
 		tst.w	(v_countdown).w
 		beq.w	.end
 		subq.w	#1,(v_countdown).w			; decrement timer

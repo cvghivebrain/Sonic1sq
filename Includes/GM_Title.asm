@@ -20,31 +20,22 @@ GM_Title:
 		bsr.w	ClearScreen
 
 		lea	(v_ost_all).w,a1			; RAM address to start clearing
-		moveq	#0,d0
 		move.w	#loops_to_clear_ost,d1			; size of RAM block to clear
-	.clear_ost:
-		move.l	d0,(a1)+
-		dbf	d1,.clear_ost				; fill OST ($D000-$EFFF) with 0
+		bsr.w	ClearRAM				; fill OST with 0
 
-		locVRAM	0
-		lea	(Nem_JapNames).l,a0			; load Japanese credits
-		bsr.w	NemDec
-		locVRAM	vram_title_credits			; $14C0
-		lea	(Nem_CreditText).l,a0			; load alphabet
-		bsr.w	NemDec
-		lea	($FF0000).l,a1
-		lea	(Eni_JapNames).l,a0			; load mappings for Japanese credits
-		move.w	#0,d0
-		bsr.w	EniDec
+		;locVRAM	0
+		;lea	(Nem_JapNames).l,a0			; load Japanese credits
+		;bsr.w	NemDec
+		;lea	($FF0000).l,a1
+		;lea	(Eni_JapNames).l,a0			; load mappings for Japanese credits
+		;move.w	#0,d0
+		;bsr.w	EniDec
 
-		copyTilemap	$FF0000,vram_fg,0,0,$28,$1C	; copy Japanese credits mappings to fg nametable in VRAM
+		;copyTilemap	$FF0000,vram_fg,0,0,$28,$1C	; copy Japanese credits mappings to fg nametable in VRAM
 
 		lea	(v_pal_dry_next).w,a1
-		moveq	#0,d0
 		move.w	#loops_to_clear_pal,d1
-	.clear_pal:
-		move.l	d0,(a1)+
-		dbf	d1,.clear_pal				; clear next palette
+		bsr.w	ClearRAM				; clear next palette
 
 		moveq	#id_Pal_Sonic,d0			; load Sonic's palette
 		bsr.w	PalLoad_Next				; palette will be shown after fading in
@@ -52,6 +43,9 @@ GM_Title:
 		jsr	(ExecuteObjects).l
 		jsr	(BuildSprites).l
 		bsr.w	PaletteFadeIn				; fade in to "SONIC TEAM PRESENTS" screen from black
+		moveq	#id_VBlank_Title,d1
+		move.w	#120,d0
+		bsr.w	WaitLoop				; freeze for 2 seconds
 		disable_ints
 
 		move.b	#0,(v_last_lamppost).w			; clear lamppost counter
@@ -59,13 +53,13 @@ GM_Title:
 		move.w	#0,(v_demo_mode).w			; disable debug mode
 		move.w	#id_GHZ_act1,(v_zone).w			; set level to GHZ act 1 (0000)
 		move.w	#0,(v_palcycle_time).w			; disable palette cycling
+		bsr.w	PaletteFadeOut				; fade out "SONIC TEAM PRESENTS" screen to black
 		moveq	#id_KPLC_Title,d0
 		jsr	KosPLC
-		bsr.w	LoadPerZone
+		bsr.w	LoadPerZone				; this must go after KosPLC
 		bsr.w	LevelParameterLoad			; set level boundaries and Sonic's start position
 		bsr.w	DeformLayers
 		bsr.w	LevelLayoutLoad				; load GHZ1 level layout including background
-		bsr.w	PaletteFadeOut				; fade out "SONIC TEAM PRESENTS" screen to black
 		disable_ints
 		bsr.w	ClearScreen
 		lea	(vdp_control_port).l,a5
@@ -74,16 +68,14 @@ GM_Title:
 		lea	(v_level_layout+level_max_width).w,a4	; background layout start address ($FFFFA440)
 		move.w	#draw_bg,d2
 		bsr.w	DrawChunks				; draw background
-		lea	($FF0000).l,a1
-		lea	(KosMap_Title).l,a0			; load title screen mappings
-		bsr.w	KosDec
-		move.w	#(sizeof_KosMap_Title/2)-1,d0
 		
-	.loop_titlemap:
-		add.w	#tile_Kos_TitleFg,(a1)+			; update tilemap with address of gfx
-		dbf	d0,.loop_titlemap
-
-		copyTilemap	$FF0000,vram_fg,3,4,$22,$16	; copy title screen mappings to fg nametable in VRAM
+		lea	($FF0000).l,a1				; RAM buffer
+		lea	(KosMap_Title).l,a0			; title screen mappings
+		locVRAM	vram_fg+(sizeof_vram_row*4)+(3*2),d0	; foreground, x=3, y=4
+		moveq	#$22,d1					; width
+		moveq	#$16,d2					; height
+		move.w	#tile_Kos_TitleFg,d3			; tile setting
+		bsr.w	LoadTilemap
 
 		moveq	#id_Pal_Title,d0			; load title screen palette
 		bsr.w	PalLoad_Next
@@ -91,12 +83,7 @@ GM_Title:
 		move.b	#0,(f_debug_enable).w			; disable debug mode
 		move.w	#$178,(v_countdown).w			; run title screen for $178 frames
 		lea	(v_ost_psb).w,a1
-		moveq	#0,d0
-		move.w	#$F,d1					; should be $F; 7 only clears half the OST
-
-	.clear_ost_psb:
-		move.l	d0,(a1)+
-		dbf	d1,.clear_ost_psb
+		jsr	DeleteChild
 
 		move.l	#TitleSonic,(v_ost_titlesonic).w	; load big Sonic object
 		move.l	#PSBTM,(v_ost_psb).w			; load "PRESS START BUTTON" object
@@ -209,12 +196,8 @@ Title_PressedStart:
 		moveq	#id_Pal_LevelSel,d0
 		bsr.w	PalLoad_Now				; load level select palette
 		lea	(v_hscroll_buffer).w,a1
-		moveq	#0,d0
 		move.w	#loops_to_clear_hscroll,d1
-
-	.clear_hscroll:
-		move.l	d0,(a1)+
-		dbf	d1,.clear_hscroll			; clear hscroll buffer (in RAM)
+		bsr.w	ClearRAM				; clear hscroll buffer (in RAM)
 
 		move.l	d0,(v_fg_y_pos_vsram).w
 		disable_ints

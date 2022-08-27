@@ -9,3 +9,17 @@ WaitForVBlank:
 		tst.b	(v_vblank_routine).w			; has VBlank routine finished?
 		bne.s	.wait					; if not, branch
 		rts
+
+; ---------------------------------------------------------------------------
+; Subroutine to	freeze the game for a set time
+
+; inputs:
+;	d0 = number of frames to wait
+;	d1 = VBlank routine
+; ---------------------------------------------------------------------------
+
+WaitLoop:
+		move.b	d1,(v_vblank_routine).w
+		bsr.w	WaitForVBlank				; wait for frame to end
+		dbf	d0,WaitLoop				; repeat for d0 frames
+		rts
