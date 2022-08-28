@@ -23,16 +23,6 @@ GM_Title:
 		move.w	#loops_to_clear_ost,d1			; size of RAM block to clear
 		bsr.w	ClearRAM				; fill OST with 0
 
-		;locVRAM	0
-		;lea	(Nem_JapNames).l,a0			; load Japanese credits
-		;bsr.w	NemDec
-		;lea	($FF0000).l,a1
-		;lea	(Eni_JapNames).l,a0			; load mappings for Japanese credits
-		;move.w	#0,d0
-		;bsr.w	EniDec
-
-		;copyTilemap	$FF0000,vram_fg,0,0,$28,$1C	; copy Japanese credits mappings to fg nametable in VRAM
-
 		lea	(v_pal_dry_next).w,a1
 		move.w	#loops_to_clear_pal,d1
 		bsr.w	ClearRAM				; clear next palette
@@ -44,8 +34,8 @@ GM_Title:
 		jsr	(BuildSprites).l
 		bsr.w	PaletteFadeIn				; fade in to "SONIC TEAM PRESENTS" screen from black
 		moveq	#id_VBlank_Title,d1
-		move.w	#120,d0
-		bsr.w	WaitLoop				; freeze for 2 seconds
+		move.w	#60,d0
+		bsr.w	WaitLoop				; freeze for 1 second
 		disable_ints
 
 		move.b	#0,(v_last_lamppost).w			; clear lamppost counter
@@ -605,7 +595,7 @@ LevSel_Strings:	lsline "GREEN HILL ZONE  1",id_LevSel_Level,id_GHZ,0
 		lsline "GOOD ENDING       ",id_LevSel_Ending,id_EndZ,0
 		lsline "BAD ENDING        ",id_LevSel_Ending,id_EndZ,1
 		lsline "CREDITS           ",id_LevSel_Credits,0,0
-		lsline "HIDDEN CREDITS    ",id_LevSel_Gamemode,0,0
+		lsline "HIDDEN CREDITS    ",id_LevSel_Gamemode,id_HiddenCredits,0
 		lsline "END SCREEN        ",id_LevSel_Credits,0,0
 		lsline "TRY AGAIN SCREEN  ",id_LevSel_Credits,0,0
 		lsline "CONTINUE SCREEN   ",id_LevSel_Gamemode,id_Continue,0

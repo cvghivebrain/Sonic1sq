@@ -107,6 +107,7 @@ PalPointers:
 		palp	Pal_Title,v_pal_dry_line1,$40		; 1 - title screen
 		palp	Pal_LevelSel,v_pal_dry_line1,$40	; 2 - level select
 		palp	Pal_Sonic,v_pal_dry_line1,$10		; 3 - Sonic
+		palp	Pal_HidCred,v_pal_dry_line3,$10		; Hidden Japanese credits
 PalPointers_Levels:
 		palp	Pal_GHZ,v_pal_dry_line2,$30		; 4 - GHZ
 		palp	Pal_LZ,v_pal_dry_line2,$30		; 5 - LZ
@@ -114,7 +115,6 @@ PalPointers_Levels:
 		palp	Pal_SLZ,v_pal_dry_line2,$30		; 7 - SLZ
 		palp	Pal_SYZ,v_pal_dry_line2,$30		; 8 - SYZ
 		palp	Pal_SBZ1,v_pal_dry_line2,$30		; 9 - SBZ1
-		zonewarning PalPointers_Levels,8
 		palp	Pal_Special,v_pal_dry_line1,$40		; $A (10) - special stage
 		palp	Pal_LZWater,v_pal_dry_line1,$40		; $B (11) - LZ underwater
 		palp	Pal_SBZ3,v_pal_dry_line2,$30		; $C (12) - SBZ3

@@ -85,6 +85,7 @@ KosLoadCues:
 		ptr KPLC_FZ
 		ptr KPLC_Title
 		ptr KPLC_End
+		ptr KPLC_HiddenCredits
 
 KPLC_GHZ:	kplcheader
 		kplc Kos_GHZ_1st
@@ -272,6 +273,11 @@ KPLC_Title:	kplcheader
 		kplc Kos_TitleSonic
 		kplc Kos_TitleTM
 		kplc Kos_Text
+	.end:
+		set_dma_size last_vram
+
+KPLC_HiddenCredits:	kplcheader
+		kplc Kos_JapNames
 	.end:
 		set_dma_size last_vram
 

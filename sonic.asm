@@ -169,33 +169,37 @@ GameInit:
 		move.b	#id_Sega,(v_gamemode).w			; set Game Mode to Sega Screen
 
 MainGameLoop:
-		move.b	(v_gamemode).w,d0			; load Game Mode
-		andi.w	#$1C,d0					; limit Game Mode value to $1C max (change to $7C to add more game modes)
-		jsr	GameModeArray(pc,d0.w)			; jump to apt location in ROM
+		moveq	#0,d0
+		move.b	(v_gamemode).w,d0			; load gamemode
+		add.b	d0,d0
+		add.b	d0,d0					; multiply by 4
+		movea.l	GameModeArray(pc,d0.w),a1		; get pointer
+		jsr	(a1)					; jump to gamemode
 		bra.s	MainGameLoop				; loop indefinitely
 
 ; ---------------------------------------------------------------------------
 ; Main game mode array
 ; ---------------------------------------------------------------------------
-gmptr:		macro
-		id_\1:	equ *-GameModeArray
-		if narg=1
-		bra.w	GM_\1
-		else
-		bra.w	GM_\2
-		endc
-		endm
+GameModeArray:	index.l 0
+		ptr GM_Sega					; Sega Screen
+		ptr GM_Title					; Title	Screen
+		ptr GM_Demo					; Demo Mode
+		ptr GM_Level					; Normal Level
+		ptr GM_Special					; Special Stage
+		ptr GM_Continue					; Continue Screen
+		ptr GM_Ending					; End of game sequence
+		ptr GM_Credits					; Credits
+		ptr GM_HiddenCredits				; Hidden Japanese credits screen
 
-GameModeArray:
-		gmptr Sega					; Sega Screen ($00)
-		gmptr Title					; Title	Screen ($04)
-		gmptr Demo, Level				; Demo Mode ($08)
-		gmptr Level					; Normal Level ($0C)
-		gmptr Special					; Special Stage	($10)
-		gmptr Continue					; Continue Screen ($14)
-		gmptr Ending					; End of game sequence ($18)
-		gmptr Credits					; Credits ($1C)
-		rts
+id_Sega:	equ id_GM_Sega
+id_Title:	equ id_GM_Title
+id_Demo:	equ id_GM_Demo
+id_Level:	equ id_GM_Level
+id_Special:	equ id_GM_Special
+id_Continue:	equ id_GM_Continue
+id_Ending:	equ id_GM_Ending
+id_Credits:	equ id_GM_Credits
+id_HiddenCredits: equ id_GM_HiddenCredits
 ; ===========================================================================
 
 CheckSumError:
@@ -257,6 +261,7 @@ Pal_Sega1:	incbin	"Palettes\Sega - Stripe.bin"
 Pal_Sega2:	incbin	"Palettes\Sega - All.bin"
 		include "Includes\PalLoad & PalPointers.asm"
 Pal_SegaBG:	incbin	"Palettes\Sega Background.bin"
+Pal_HidCred:	incbin	"Palettes\Hidden Credits.bin"
 Pal_Title:	incbin	"Palettes\Title Screen.bin"
 Pal_LevelSel:	incbin	"Palettes\Level Select.bin"
 Pal_Sonic:	incbin	"Palettes\Sonic.bin"
@@ -283,6 +288,7 @@ Pal_Ending:	incbin	"Palettes\Ending.bin"
 Angle_Data:	incbin	"Misc Data\Angle Table.bin"
 		include "Includes\Demo Pointers.asm"
 		include "Includes\GM_Title.asm"
+		include "Includes\GM_HiddenCredits.asm"
 
 		include "Includes\GM_Level.asm"
 		include "Includes\LZWaterFeatures.asm"
@@ -772,12 +778,11 @@ Art_LivesNums:	incbin	"Graphics\Lives Counter Numbers.bin"	; 8x8 pixel numbers o
 			even
 		endc
 		incfile	KosMap_Title,"Other Kosinski\Title Screen",kos
-Eni_JapNames:	incbin	"Tilemaps\Hidden Japanese Credits.eni"	; Japanese credits (mappings)
-		even
+		incfile	KosMap_JapNames,"Other Kosinski\Hidden Japanese Credits",kos
 		incfile	Kos_TitleFg,"Graphics Kosinski\Title Screen Foreground",kos
 		incfile	Kos_TitleSonic,"Graphics Kosinski\Title Screen Sonic",kos
 		incfile	Kos_TitleTM,"Graphics Kosinski\Title Screen TM",kos
-		incfile	Nem_JapNames,"Graphics - Compressed\Hidden Japanese Credits",nem
+		incfile	Kos_JapNames,"Graphics Kosinski\Hidden Japanese Credits",kos
 
 		include "Objects\Sonic [Mappings].asm"		; Map_Sonic
 		include "Objects\Sonic DPLCs.asm"		; SonicDynPLC
