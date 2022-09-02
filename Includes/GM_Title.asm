@@ -78,12 +78,8 @@ GM_Title:
 		move.l	#TitleSonic,(v_ost_titlesonic).w	; load big Sonic object
 		move.l	#PSBTM,(v_ost_psb).w			; load "PRESS START BUTTON" object
 
-		if Revision=0
-		else
-			tst.b   (v_console_region).w		; is console Japanese?
-			bpl.s   .isjap				; if yes, branch
-		endc
-
+		tst.b   (v_console_region).w			; is console Japanese?
+		bpl.s   .isjap					; if yes, branch
 		move.l	#PSBTM,(v_ost_tm).w			; load "TM" object
 		move.b	#id_frame_psb_tm,(v_ost_tm+ost_frame).w
 	.isjap:
@@ -95,7 +91,6 @@ GM_Title:
 		moveq	#id_PLC_Main,d0				; load lamppost, HUD, lives, ring & points graphics
 		bsr.w	NewPLC					; do it over the next few frames
 		move.w	#0,(v_title_d_count).w			; reset d-pad counter
-		move.w	#0,(v_title_c_count).w			; reset C button counter
 		enable_display
 		bsr.w	PaletteFadeIn				; fade in to title screen from black
 
@@ -110,79 +105,59 @@ Title_MainLoop:
 		bsr.w	DeformLayers				; scroll background
 		jsr	(BuildSprites).l			; create sprite table
 		bsr.w	PCycle_Title				; animate water palette
-		bsr.w	RunPLC					; trigger decompression of items in PLC buffer
 		move.w	(v_ost_player+ost_x_pos).w,d0		; x pos of dummy object (there is no actual object loaded)
 		addq.w	#2,d0
 		move.w	d0,(v_ost_player+ost_x_pos).w		; move dummy 2px to the right
 		cmpi.w	#$1C00,d0
-		blo.s	Title_Cheat				; branch if dummy is still left of $1C00
-
-		move.b	#id_Sega,(v_gamemode).w			; go to Sega screen (takes approx. 1 min for dummy to reach $1C00)
-		rts	
-; ===========================================================================
-
-Title_Cheat:
-		tst.b	(v_console_region).w			; check	if the machine is US/EU or Japanese
-		bpl.s	.japanese				; if Japanese, branch
-
-		lea	(LevSelCode_US).l,a0			; load US/EU code
-		bra.s	.overseas
-
-	.japanese:
-		lea	(LevSelCode_J).l,a0			; load JP code
-
-	.overseas:
-		move.w	(v_title_d_count).w,d0			; get number of times d-pad has been pressed in correct order
-		adda.w	d0,a0					; jump to relevant position in sequence
-		move.b	(v_joypad_press_actual).w,d0		; get button press
-		andi.b	#btnDir,d0				; read only UDLR buttons
-		cmp.b	(a0),d0					; does button press match the cheat code?
-		bne.s	.reset_cheat				; if not, branch
-		addq.w	#1,(v_title_d_count).w			; next button press
-		tst.b	d0					; is d-pad currently pressed?
-		bne.s	.count_c				; if yes, branch
-
-		lea	(f_levelselect_cheat).w,a0		; cheat flag array
-		move.w	(v_title_c_count).w,d1			; d1 = number of times C was pressed
-		lsr.w	#1,d1					; divide by 2
-		andi.w	#3,d1					; read only bits 0/1
-		beq.s	.levelselect_only			; branch if 0
-		tst.b	(v_console_region).w
-		bpl.s	.levelselect_only			; branch if region is Japanese
-		moveq	#1,d1
-		move.b	d1,1(a0,d1.w)				; enable debug mode (C is pressed 2 or more times)
-
-	.levelselect_only:
-		move.b	#1,(a0,d1.w)				; activate cheat: no C = level select; CC+ = slowmo (US/EU); CC = slowmo (JP); CCCC = debug (JP); CCCCCC = hidden credits (JP)
-		play.b	1, bsr.w, sfx_Ring			; play ring sound when code is entered
-		bra.s	.count_c
-; ===========================================================================
-
-.reset_cheat:
-		tst.b	d0					; is d-pad currently pressed?
-		beq.s	.count_c				; if not, branch
-		cmpi.w	#9,(v_title_d_count).w
-		beq.s	.count_c
-		move.w	#0,(v_title_d_count).w			; reset UDLR counter
-
-.count_c:
-		move.b	(v_joypad_press_actual).w,d0
-		andi.b	#btnC,d0				; is C button pressed?
-		beq.s	.c_not_pressed				; if not, branch
-		addq.w	#1,(v_title_c_count).w			; increment C counter
-
-	.c_not_pressed:
+		beq.s	Title_GotoSega
+		bsr.s	Title_Dpad
 		tst.w	(v_countdown).w				; has counter hit 0? (started at $178)
 		beq.w	PlayDemo				; if yes, branch
 		andi.b	#btnStart,(v_joypad_press_actual).w	; check if Start is pressed
-		beq.w	Title_MainLoop				; if not, branch
-
-Title_PressedStart:
+		beq.s	Title_MainLoop				; if not, branch
+		
 		tst.b	(f_levelselect_cheat).w			; check if level select code is on
 		beq.w	PlayLevel				; if not, play level
 		btst	#bitA,(v_joypad_hold_actual).w		; check if A is pressed
 		beq.w	PlayLevel				; if not, play level
+		bra.w	LevSel_Init				; goto level select
+		
+Title_GotoSega:
+		move.b	#id_Sega,(v_gamemode).w			; go to Sega screen (takes approx. 1 min for dummy to reach $1C00)
+		rts
+		
+Title_Dpad:
+		tst.b	(f_levelselect_cheat).w
+		bne.s	.exit					; branch if code has been entered
+		lea	(LevSelCode).l,a0			; get cheat code
+		move.w	(v_title_d_count).w,d0			; get number of times d-pad has been pressed in correct order
+		adda.w	d0,a0					; jump to relevant position in sequence
+		move.b	(v_joypad_press_actual).w,d0		; get button press
+		andi.b	#btnDir,d0				; read only UDLR buttons
+		beq.s	.exit					; branch if not pressed
+		cmp.b	(a0),d0					; does button press match the cheat code?
+		bne.s	.reset_cheat				; if not, branch
+		addq.w	#1,(v_title_d_count).w			; next input
+		tst.b	1(a0)
+		bmi.s	.complete				; branch if next input is $FF
+		
+	.exit:
+		rts
+	
+	.reset_cheat:
+		move.w	#0,(v_title_d_count).w			; reset cheat counter
+		rts
+		
+	.complete:
+		move.b	#1,(f_levelselect_cheat).w		; set level select flag
+		play.b	1, bsr.w, sfx_Ring			; play ring sound
+		rts
+		
+LevSelCode:	dc.b btnUp,btnDn,btnL,btnR,$FF
+		even
+; ===========================================================================
 
+LevSel_Init:
 		moveq	#id_Pal_LevelSel,d0
 		bsr.w	PalLoad_Now				; load level select palette
 		lea	(v_hscroll_buffer).w,a1
@@ -478,18 +453,6 @@ LevSel_Sound:
 		move.w	(v_levelselect_sound).w,d0
 		addi.w	#$80,d0
 		bra.w	PlaySound1
-; ---------------------------------------------------------------------------
-; Level	select codes
-; ---------------------------------------------------------------------------
-LevSelCode_J:	if Revision=0
-		dc.b btnUp,btnDn,btnL,btnR,0,$FF
-		else
-		dc.b btnUp,btnDn,btnDn,btnDn,btnL,btnR,0,$FF
-		endc
-		even
-
-LevSelCode_US:	dc.b btnUp,btnDn,btnL,btnR,0,$FF
-		even
 
 ; ---------------------------------------------------------------------------
 ; Demo mode
@@ -514,8 +477,8 @@ PlayDemo:
 ; ===========================================================================
 
 .chk_start:
-		andi.b	#btnStart,(v_joypad_press_actual).w	; is Start button pressed?
-		bne.w	Title_PressedStart			; if yes, branch
+		;andi.b	#btnStart,(v_joypad_press_actual).w	; is Start button pressed?
+		;bne.w	Title_PressedStart			; if yes, branch
 		tst.w	(v_countdown).w				; has delay timer hit 0?
 		bne.w	.loop_delay				; if not, branch
 
@@ -545,10 +508,7 @@ PlayDemo:
 		move.w	d0,(v_rings).w				; clear rings
 		move.l	d0,(v_time).w				; clear time
 		move.l	d0,(v_score).w				; clear score
-		if Revision=0
-		else
-			move.l	#5000,(v_score_next_life).w	; extra life is awarded at 50000 points
-		endc
+		move.l	#5000,(v_score_next_life).w		; extra life is awarded at 50000 points
 		rts	
 
 		include_demo_list				; Includes\Demo Pointers.asm

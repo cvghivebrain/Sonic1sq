@@ -422,7 +422,6 @@ f_slowmotion_cheat:		equ __rs-3 ; $FFFFFFE1 ; flag set when slow motion & frame 
 f_debug_cheat:			equ __rs-2 ; $FFFFFFE2 ; flag set when debug mode cheat has been entered
 f_credits_cheat:		equ __rs-1 ; $FFFFFFE3 ; flag set when hidden credits & press start cheat has been entered
 v_title_d_count:		rs.w 1 ; $FFFFFFE4 ; number of times the d-pad is pressed on title screen, but only in the order UDLR
-v_title_c_count:		rs.w 1 ; $FFFFFFE6 ; number of times C is pressed on title screen
 v_demo_mode:			rs.w 1 ; $FFFFFFF0 ; demo mode flag - 0 = no; 1 = yes; $8001 = ending
 v_demo_num:			rs.w 1 ; $FFFFFFF2 ; demo level number (not the same as the level number)
 v_credits_num:			rs.w 1 ; $FFFFFFF4 ; credits index number
