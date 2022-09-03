@@ -14,45 +14,33 @@ GM_Special:
 		disable_display
 		bsr.w	ClearScreen
 		enable_ints
-		dma_fill	0,$6FFF,$5000
-
-	.wait_for_dma:
-		move.w	(a5),d1					; read control port ($C00004)
-		btst	#1,d1					; is DMA running?
-		bne.s	.wait_for_dma				; if yes, branch
 		
-		move.w	#$8F02,(a5)				; set VDP increment to 2 bytes
+		locVRAM	$5000,d0
+		move.l	#$6FFF,d1
+		moveq	#0,d2
+		bsr.w	ClearVRAM
+		
 		bsr.w	SS_BGLoad
 		moveq	#id_PLC_SpecialStage,d0
-		bsr.w	QuickPLC				; load special stage gfx
+		bsr.w	QuickPLC
+		moveq	#id_KPLC_Special,d0
+		jsr	KosPLC					; load special stage gfx
 
 		lea	(v_ost_all).w,a1			; RAM address to start clearing
-		moveq	#0,d0
 		move.w	#loops_to_clear_ost,d1			; size of RAM block to clear
-	.clear_ost:
-		move.l	d0,(a1)+
-		dbf	d1,.clear_ost				; clear	the object RAM
+		bsr.w	ClearRAM				; fill OST with 0
 
 		lea	(v_camera_x_pos).w,a1
-		moveq	#0,d0
 		move.w	#loops_to_clear_levelinfo,d1
-	.clear_ram1:
-		move.l	d0,(a1)+
-		dbf	d1,.clear_ram1				; clear	variables $FFFFF700-$FFFFF7FF
+		bsr.w	ClearRAM
 
 		lea	(v_oscillating_table).w,a1
-		moveq	#0,d0
 		move.w	#loops_to_clear_synctables,d1
-	.clear_ram2:
-		move.l	d0,(a1)+
-		dbf	d1,.clear_ram2				; clear	variables $FFFFFE60-$FFFFFEFF
+		bsr.w	ClearRAM
 
 		lea	(v_ss_bubble_x_pos).w,a1
-		moveq	#0,d0
 		move.w	#($200/4)-1,d1
-	.clear_bubblecloud_bg:
-		move.l	d0,(a1)+
-		dbf	d1,.clear_bubblecloud_bg		; clear	bg x position data
+		bsr.w	ClearRAM				; clear	bg x position data
 
 		clr.b	(f_water_pal_full).w
 		clr.w	(f_restart).w
@@ -217,7 +205,7 @@ sizeof_fish:	equ fish_width*fish_height*2
 SS_BGLoad:
 		lea	(v_ss_enidec_buffer).l,a1		; buffer
 		lea	(Eni_SSBg1).l,a0			; load mappings for the birds and fish
-		move.w	#tile_Nem_SSBgFish+tile_pal3,d0		; add this to each tile
+		move.w	#tile_Kos_SSBgFish+tile_pal3,d0		; add this to each tile
 		bsr.w	EniDec					; decompress fish/bird mappings to RAM
 
 		locVRAM	$5000,d3				; d3 = VDP address for $5000 in VRAM
@@ -766,70 +754,70 @@ SS_AniWallsRings:
 
 ; ===========================================================================
 SS_Wall_Vram_Settings:
-		dc.w tile_Nem_SSWalls
-		dc.w tile_Nem_SSWalls+tile_pal4
-		dc.w tile_Nem_SSWalls
-		dc.w tile_Nem_SSWalls
-		dc.w tile_Nem_SSWalls
-		dc.w tile_Nem_SSWalls
-		dc.w tile_Nem_SSWalls
-		dc.w tile_Nem_SSWalls+tile_pal4
-		dc.w tile_Nem_SSWalls
-		dc.w tile_Nem_SSWalls+tile_pal4
-		dc.w tile_Nem_SSWalls
-		dc.w tile_Nem_SSWalls
-		dc.w tile_Nem_SSWalls
-		dc.w tile_Nem_SSWalls
-		dc.w tile_Nem_SSWalls
-		dc.w tile_Nem_SSWalls+tile_pal4
-		dc.w tile_Nem_SSWalls+tile_pal2
-		dc.w tile_Nem_SSWalls
-		dc.w tile_Nem_SSWalls+tile_pal2
-		dc.w tile_Nem_SSWalls+tile_pal2
-		dc.w tile_Nem_SSWalls+tile_pal2
-		dc.w tile_Nem_SSWalls+tile_pal2
-		dc.w tile_Nem_SSWalls+tile_pal2
-		dc.w tile_Nem_SSWalls
-		dc.w tile_Nem_SSWalls+tile_pal2
-		dc.w tile_Nem_SSWalls
-		dc.w tile_Nem_SSWalls+tile_pal2
-		dc.w tile_Nem_SSWalls+tile_pal2
-		dc.w tile_Nem_SSWalls+tile_pal2
-		dc.w tile_Nem_SSWalls+tile_pal2
-		dc.w tile_Nem_SSWalls+tile_pal2
-		dc.w tile_Nem_SSWalls
-		dc.w tile_Nem_SSWalls+tile_pal3
-		dc.w tile_Nem_SSWalls+tile_pal2
-		dc.w tile_Nem_SSWalls+tile_pal3
-		dc.w tile_Nem_SSWalls+tile_pal3
-		dc.w tile_Nem_SSWalls+tile_pal3
-		dc.w tile_Nem_SSWalls+tile_pal3
-		dc.w tile_Nem_SSWalls+tile_pal3
-		dc.w tile_Nem_SSWalls+tile_pal2
-		dc.w tile_Nem_SSWalls+tile_pal3
-		dc.w tile_Nem_SSWalls+tile_pal2
-		dc.w tile_Nem_SSWalls+tile_pal3
-		dc.w tile_Nem_SSWalls+tile_pal3
-		dc.w tile_Nem_SSWalls+tile_pal3
-		dc.w tile_Nem_SSWalls+tile_pal3
-		dc.w tile_Nem_SSWalls+tile_pal3
-		dc.w tile_Nem_SSWalls+tile_pal2
-		dc.w tile_Nem_SSWalls+tile_pal4
-		dc.w tile_Nem_SSWalls+tile_pal3
-		dc.w tile_Nem_SSWalls+tile_pal4
-		dc.w tile_Nem_SSWalls+tile_pal4
-		dc.w tile_Nem_SSWalls+tile_pal4
-		dc.w tile_Nem_SSWalls+tile_pal4
-		dc.w tile_Nem_SSWalls+tile_pal4
-		dc.w tile_Nem_SSWalls+tile_pal3
-		dc.w tile_Nem_SSWalls+tile_pal4
-		dc.w tile_Nem_SSWalls+tile_pal3
-		dc.w tile_Nem_SSWalls+tile_pal4
-		dc.w tile_Nem_SSWalls+tile_pal4
-		dc.w tile_Nem_SSWalls+tile_pal4
-		dc.w tile_Nem_SSWalls+tile_pal4
-		dc.w tile_Nem_SSWalls+tile_pal4
-		dc.w tile_Nem_SSWalls+tile_pal3
+		dc.w tile_Kos_SSWalls
+		dc.w tile_Kos_SSWalls+tile_pal4
+		dc.w tile_Kos_SSWalls
+		dc.w tile_Kos_SSWalls
+		dc.w tile_Kos_SSWalls
+		dc.w tile_Kos_SSWalls
+		dc.w tile_Kos_SSWalls
+		dc.w tile_Kos_SSWalls+tile_pal4
+		dc.w tile_Kos_SSWalls
+		dc.w tile_Kos_SSWalls+tile_pal4
+		dc.w tile_Kos_SSWalls
+		dc.w tile_Kos_SSWalls
+		dc.w tile_Kos_SSWalls
+		dc.w tile_Kos_SSWalls
+		dc.w tile_Kos_SSWalls
+		dc.w tile_Kos_SSWalls+tile_pal4
+		dc.w tile_Kos_SSWalls+tile_pal2
+		dc.w tile_Kos_SSWalls
+		dc.w tile_Kos_SSWalls+tile_pal2
+		dc.w tile_Kos_SSWalls+tile_pal2
+		dc.w tile_Kos_SSWalls+tile_pal2
+		dc.w tile_Kos_SSWalls+tile_pal2
+		dc.w tile_Kos_SSWalls+tile_pal2
+		dc.w tile_Kos_SSWalls
+		dc.w tile_Kos_SSWalls+tile_pal2
+		dc.w tile_Kos_SSWalls
+		dc.w tile_Kos_SSWalls+tile_pal2
+		dc.w tile_Kos_SSWalls+tile_pal2
+		dc.w tile_Kos_SSWalls+tile_pal2
+		dc.w tile_Kos_SSWalls+tile_pal2
+		dc.w tile_Kos_SSWalls+tile_pal2
+		dc.w tile_Kos_SSWalls
+		dc.w tile_Kos_SSWalls+tile_pal3
+		dc.w tile_Kos_SSWalls+tile_pal2
+		dc.w tile_Kos_SSWalls+tile_pal3
+		dc.w tile_Kos_SSWalls+tile_pal3
+		dc.w tile_Kos_SSWalls+tile_pal3
+		dc.w tile_Kos_SSWalls+tile_pal3
+		dc.w tile_Kos_SSWalls+tile_pal3
+		dc.w tile_Kos_SSWalls+tile_pal2
+		dc.w tile_Kos_SSWalls+tile_pal3
+		dc.w tile_Kos_SSWalls+tile_pal2
+		dc.w tile_Kos_SSWalls+tile_pal3
+		dc.w tile_Kos_SSWalls+tile_pal3
+		dc.w tile_Kos_SSWalls+tile_pal3
+		dc.w tile_Kos_SSWalls+tile_pal3
+		dc.w tile_Kos_SSWalls+tile_pal3
+		dc.w tile_Kos_SSWalls+tile_pal2
+		dc.w tile_Kos_SSWalls+tile_pal4
+		dc.w tile_Kos_SSWalls+tile_pal3
+		dc.w tile_Kos_SSWalls+tile_pal4
+		dc.w tile_Kos_SSWalls+tile_pal4
+		dc.w tile_Kos_SSWalls+tile_pal4
+		dc.w tile_Kos_SSWalls+tile_pal4
+		dc.w tile_Kos_SSWalls+tile_pal4
+		dc.w tile_Kos_SSWalls+tile_pal3
+		dc.w tile_Kos_SSWalls+tile_pal4
+		dc.w tile_Kos_SSWalls+tile_pal3
+		dc.w tile_Kos_SSWalls+tile_pal4
+		dc.w tile_Kos_SSWalls+tile_pal4
+		dc.w tile_Kos_SSWalls+tile_pal4
+		dc.w tile_Kos_SSWalls+tile_pal4
+		dc.w tile_Kos_SSWalls+tile_pal4
+		dc.w tile_Kos_SSWalls+tile_pal3
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	find a free slot in sprite update list
@@ -1132,49 +1120,49 @@ ss_sprite:	macro *,map,tile,frame
 		endm
 
 SS_ItemIndex:
-		ss_sprite Map_SSWalls,tile_Nem_SSWalls,0	; 1 - walls
-		ss_sprite Map_SSWalls,tile_Nem_SSWalls,0
-		ss_sprite Map_SSWalls,tile_Nem_SSWalls,0
-		ss_sprite Map_SSWalls,tile_Nem_SSWalls,0
-		ss_sprite Map_SSWalls,tile_Nem_SSWalls,0
-		ss_sprite Map_SSWalls,tile_Nem_SSWalls,0
-		ss_sprite Map_SSWalls,tile_Nem_SSWalls,0
-		ss_sprite Map_SSWalls,tile_Nem_SSWalls,0
-		ss_sprite Map_SSWalls,tile_Nem_SSWalls,0
-		ss_sprite Map_SSWalls,tile_Nem_SSWalls+tile_pal2,0
-		ss_sprite Map_SSWalls,tile_Nem_SSWalls+tile_pal2,0
-		ss_sprite Map_SSWalls,tile_Nem_SSWalls+tile_pal2,0
-		ss_sprite Map_SSWalls,tile_Nem_SSWalls+tile_pal2,0
-		ss_sprite Map_SSWalls,tile_Nem_SSWalls+tile_pal2,0
-		ss_sprite Map_SSWalls,tile_Nem_SSWalls+tile_pal2,0
-		ss_sprite Map_SSWalls,tile_Nem_SSWalls+tile_pal2,0
-		ss_sprite Map_SSWalls,tile_Nem_SSWalls+tile_pal2,0
-		ss_sprite Map_SSWalls,tile_Nem_SSWalls+tile_pal2,0
-		ss_sprite Map_SSWalls,tile_Nem_SSWalls+tile_pal3,0
-		ss_sprite Map_SSWalls,tile_Nem_SSWalls+tile_pal3,0
-		ss_sprite Map_SSWalls,tile_Nem_SSWalls+tile_pal3,0
-		ss_sprite Map_SSWalls,tile_Nem_SSWalls+tile_pal3,0
-		ss_sprite Map_SSWalls,tile_Nem_SSWalls+tile_pal3,0
-		ss_sprite Map_SSWalls,tile_Nem_SSWalls+tile_pal3,0
-		ss_sprite Map_SSWalls,tile_Nem_SSWalls+tile_pal3,0
-		ss_sprite Map_SSWalls,tile_Nem_SSWalls+tile_pal3,0
-		ss_sprite Map_SSWalls,tile_Nem_SSWalls+tile_pal3,0
-		ss_sprite Map_SSWalls,tile_Nem_SSWalls+tile_pal4,0
-		ss_sprite Map_SSWalls,tile_Nem_SSWalls+tile_pal4,0
-		ss_sprite Map_SSWalls,tile_Nem_SSWalls+tile_pal4,0
-		ss_sprite Map_SSWalls,tile_Nem_SSWalls+tile_pal4,0
-		ss_sprite Map_SSWalls,tile_Nem_SSWalls+tile_pal4,0
-		ss_sprite Map_SSWalls,tile_Nem_SSWalls+tile_pal4,0
-		ss_sprite Map_SSWalls,tile_Nem_SSWalls+tile_pal4,0
-		ss_sprite Map_SSWalls,tile_Nem_SSWalls+tile_pal4,0
-		ss_sprite Map_SSWalls,tile_Nem_SSWalls+tile_pal4,0
+		ss_sprite Map_SSWalls,tile_Kos_SSWalls,0	; 1 - walls
+		ss_sprite Map_SSWalls,tile_Kos_SSWalls,0
+		ss_sprite Map_SSWalls,tile_Kos_SSWalls,0
+		ss_sprite Map_SSWalls,tile_Kos_SSWalls,0
+		ss_sprite Map_SSWalls,tile_Kos_SSWalls,0
+		ss_sprite Map_SSWalls,tile_Kos_SSWalls,0
+		ss_sprite Map_SSWalls,tile_Kos_SSWalls,0
+		ss_sprite Map_SSWalls,tile_Kos_SSWalls,0
+		ss_sprite Map_SSWalls,tile_Kos_SSWalls,0
+		ss_sprite Map_SSWalls,tile_Kos_SSWalls+tile_pal2,0
+		ss_sprite Map_SSWalls,tile_Kos_SSWalls+tile_pal2,0
+		ss_sprite Map_SSWalls,tile_Kos_SSWalls+tile_pal2,0
+		ss_sprite Map_SSWalls,tile_Kos_SSWalls+tile_pal2,0
+		ss_sprite Map_SSWalls,tile_Kos_SSWalls+tile_pal2,0
+		ss_sprite Map_SSWalls,tile_Kos_SSWalls+tile_pal2,0
+		ss_sprite Map_SSWalls,tile_Kos_SSWalls+tile_pal2,0
+		ss_sprite Map_SSWalls,tile_Kos_SSWalls+tile_pal2,0
+		ss_sprite Map_SSWalls,tile_Kos_SSWalls+tile_pal2,0
+		ss_sprite Map_SSWalls,tile_Kos_SSWalls+tile_pal3,0
+		ss_sprite Map_SSWalls,tile_Kos_SSWalls+tile_pal3,0
+		ss_sprite Map_SSWalls,tile_Kos_SSWalls+tile_pal3,0
+		ss_sprite Map_SSWalls,tile_Kos_SSWalls+tile_pal3,0
+		ss_sprite Map_SSWalls,tile_Kos_SSWalls+tile_pal3,0
+		ss_sprite Map_SSWalls,tile_Kos_SSWalls+tile_pal3,0
+		ss_sprite Map_SSWalls,tile_Kos_SSWalls+tile_pal3,0
+		ss_sprite Map_SSWalls,tile_Kos_SSWalls+tile_pal3,0
+		ss_sprite Map_SSWalls,tile_Kos_SSWalls+tile_pal3,0
+		ss_sprite Map_SSWalls,tile_Kos_SSWalls+tile_pal4,0
+		ss_sprite Map_SSWalls,tile_Kos_SSWalls+tile_pal4,0
+		ss_sprite Map_SSWalls,tile_Kos_SSWalls+tile_pal4,0
+		ss_sprite Map_SSWalls,tile_Kos_SSWalls+tile_pal4,0
+		ss_sprite Map_SSWalls,tile_Kos_SSWalls+tile_pal4,0
+		ss_sprite Map_SSWalls,tile_Kos_SSWalls+tile_pal4,0
+		ss_sprite Map_SSWalls,tile_Kos_SSWalls+tile_pal4,0
+		ss_sprite Map_SSWalls,tile_Kos_SSWalls+tile_pal4,0
+		ss_sprite Map_SSWalls,tile_Kos_SSWalls+tile_pal4,0
 	SS_ItemIndex_wall_end:
-SS_Item_Bumper:	ss_sprite Map_Bump,tile_Kos_Bumper,0		; $25 - bumper
+SS_Item_Bumper:	ss_sprite Map_Bump,tile_Kos_Bumper_KPLC_Special,0 ; $25 - bumper
 SS_Item_W:	ss_sprite Map_SS_R,tile_Nem_SSWBlock,0		; $26 - W
-SS_Item_GOAL:	ss_sprite Map_SS_R,tile_Nem_SSGOAL,0		; $27 - GOAL
+SS_Item_GOAL:	ss_sprite Map_SS_R,tile_Kos_SSGOAL,0		; $27 - GOAL
 SS_Item_1Up:	ss_sprite Map_SS_R,tile_Nem_SS1UpBlock,0	; $28 - 1UP
-SS_Item_Up:	ss_sprite Map_SS_Up,tile_Nem_SSUpDown,0		; $29 - Up
-SS_Item_Down:	ss_sprite Map_SS_Down,tile_Nem_SSUpDown,0	; $2A - Down
+SS_Item_Up:	ss_sprite Map_SS_Up,tile_Kos_SSUpDown,0		; $29 - Up
+SS_Item_Down:	ss_sprite Map_SS_Down,tile_Kos_SSUpDown,0	; $2A - Down
 SS_Item_R:	ss_sprite Map_SS_R,tile_Nem_SSRBlock+tile_pal2,0 ; $2B - R
 SS_Item_RedWhi:	ss_sprite Map_SS_Glass,tile_Nem_SSRedWhite,0	; $2C - red/white
 SS_Item_Glass1:	ss_sprite Map_SS_Glass,tile_Nem_SSGlass,0	; $2D - breakable glass gem (blue)
@@ -1182,8 +1170,8 @@ SS_Item_Glass2:	ss_sprite Map_SS_Glass,tile_Nem_SSGlass+tile_pal4,0 ; $2E - brea
 SS_Item_Glass3:	ss_sprite Map_SS_Glass,tile_Nem_SSGlass+tile_pal2,0 ; $2F - breakable glass gem (yellow)
 SS_Item_Glass4:	ss_sprite Map_SS_Glass,tile_Nem_SSGlass+tile_pal3,0 ; $30 - breakable glass gem (pink)
 SS_Item_R2:	ss_sprite Map_SS_R,tile_Nem_SSRBlock,0		; $31 - R
-SS_Item_Bump1:	ss_sprite Map_Bump,tile_Kos_Bumper,id_frame_bump_bumped1
-SS_Item_Bump2:	ss_sprite Map_Bump,tile_Kos_Bumper,id_frame_bump_bumped2
+SS_Item_Bump1:	ss_sprite Map_Bump,tile_Kos_Bumper_KPLC_Special,id_frame_bump_bumped1
+SS_Item_Bump2:	ss_sprite Map_Bump,tile_Kos_Bumper_KPLC_Special,id_frame_bump_bumped2
 SS_Item_Zone1:	ss_sprite Map_SS_R,tile_Nem_SSZone1,0		; $34 - Zone 1
 SS_Item_Zone2:	ss_sprite Map_SS_R,tile_Nem_SSZone2,0		; $35 - Zone 2
 SS_Item_Zone3:	ss_sprite Map_SS_R,tile_Nem_SSZone3,0		; $36 - Zone 3

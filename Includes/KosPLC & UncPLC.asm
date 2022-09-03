@@ -87,6 +87,7 @@ KosLoadCues:
 		ptr KPLC_End
 		ptr KPLC_HiddenCredits
 		ptr KPLC_Sega
+		ptr KPLC_Special
 
 KPLC_GHZ:	kplcheader
 		kplc Kos_GHZ_1st
@@ -284,6 +285,16 @@ KPLC_HiddenCredits:	kplcheader
 
 KPLC_Sega:	kplcheader
 		kplc Kos_SegaLogo
+	.end:
+		set_dma_size last_vram
+
+KPLC_Special:	kplcheader
+		kplc Kos_SSBgCloud
+		kplc Kos_SSBgFish
+		kplc Kos_SSWalls
+		kplc Kos_Bumper
+		kplc Kos_SSGOAL
+		kplc Kos_SSUpDown
 	.end:
 		set_dma_size last_vram
 

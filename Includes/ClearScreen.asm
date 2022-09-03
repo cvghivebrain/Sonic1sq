@@ -2,29 +2,23 @@
 ; Subroutine to	clear the screen
 ; Deletes fg/bg nametables and sprite/hscroll buffers
 
-; input:
+; output:
 ;	a5 = vdp_control_port ($C00004)
 
 ;	uses d0, d1, a1
 ; ---------------------------------------------------------------------------
 
 ClearScreen:
-		dma_fill	0,sizeof_vram_fg-1,vram_fg	; clear foreground nametable
+		locVRAM	vram_fg,d0
+		move.l	#sizeof_vram_fg-1,d1
+		moveq	#0,d2
+		bsr.w	ClearVRAM
 
-	.wait_for_dma:
-		move.w	(a5),d1					; get status register (a5 = vdp_control_port)
-		btst	#1,d1					; is DMA in progress?
-		bne.s	.wait_for_dma				; if yes, branch
-
-		move.w	#$8F02,(a5)				; set VDP increment 2 bytes
-		dma_fill	0,sizeof_vram_bg-1,vram_bg	; clear background nametable
-
-	.wait_for_dma2:
-		move.w	(a5),d1
-		btst	#1,d1
-		bne.s	.wait_for_dma2
-
-		move.w	#$8F02,(a5)				; set VDP increment 2 bytes
+		locVRAM	vram_bg,d0
+		move.l	#sizeof_vram_bg-1,d1
+		moveq	#0,d2
+		bsr.w	ClearVRAM
+		
 		clr.l	(v_fg_y_pos_vsram).w
 
 		lea	(v_sprite_buffer).w,a1
@@ -49,5 +43,38 @@ ClearRAM:
 	.loop:
 		move.l	d0,(a1)+
 		dbf	d1,.loop
+		rts
+		
+; ---------------------------------------------------------------------------
+; Subroutine to	clear VRAM
+
+; input:
+;	d0 = VRAM address to start clearing (as VDP instruction)
+;	d1 = bytes to clear
+;	d2 = byte value to fill with (usually 0)
+
+; output:
+;	a5 = vdp_control_port ($C00004)
+
+;	uses d1
+; ---------------------------------------------------------------------------
+
+ClearVRAM:
+		lea	(vdp_control_port).l,a5
+		move.w	#$8F01,(a5)				; set VDP increment to 1 byte
+		lsl.l	#8,d1					; move high byte into high word
+		lsr.w	#8,d1					; move low byte back
+		add.l	#$94009300,d1				; apply VDP registers
+		move.l	d1,(a5)
+		move.w	#$9780,(a5)				; set DMA mode to fill
+		add.w	#$80,d0
+		move.l	d0,(a5)
+		lsl.w	#8,d2					; move fill value to high byte
+		move.w	d2,(vdp_data_port).l
+	.wait_for_dma:
+		move.w	(a5),d1					; get status register
+		btst	#1,d1					; is DMA in progress?
+		bne.s	.wait_for_dma				; if yes, branch
+		move.w	#$8F02,(a5)				; set VDP increment to 2 bytes
 		rts
 		

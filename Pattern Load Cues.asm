@@ -70,12 +70,6 @@ PLC_Boss:	plcheader
 ; Pattern load cues - special stage
 ; ---------------------------------------------------------------------------
 PLC_SpecialStage:	plcheader
-		plcm	Nem_SSBgCloud, 0			; bubble and cloud background
-		plcm	Nem_SSBgFish				; bird and fish	background ($A20)
-		plcm	Nem_SSWalls				; walls ($2840)
-		;plcm	Nem_Bumper,,SS				; bumper ($4760)
-		plcm	Nem_SSGOAL				; GOAL block ($4A20)
-		plcm	Nem_SSUpDown				; UP and DOWN blocks ($4C60)
 		plcm	Nem_SSRBlock, $5E00			; R block
 		plcm	Nem_SS1UpBlock, $6E00			; 1UP block
 		plcm	Nem_SSEmStars, $7E00			; emerald collection stars

@@ -241,20 +241,6 @@ dma:		macro
 		endm
 
 ; ---------------------------------------------------------------------------
-; DMA fill VRAM with a value.
-; input: value, length, destination
-; ---------------------------------------------------------------------------
-
-dma_fill:	macro value,length,loc
-		lea	(vdp_control_port).l,a5
-		move.w	#$8F01,(a5)
-		move.l	#$94000000+(((length)&$FF00)<<8)+$9300+((length)&$FF),(a5)
-		move.w	#$9780,(a5)
-		move.l	#$40000080+(((loc)&$3FFF)<<16)+(((loc)&$C000)>>14),(a5)
-		move.w	#value,(vdp_data_port).l
-		endm
-
-; ---------------------------------------------------------------------------
 ; DMA destination, source and size
 ; ---------------------------------------------------------------------------
 
