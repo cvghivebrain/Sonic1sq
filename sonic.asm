@@ -766,17 +766,9 @@ Art_LivesNums:	incbin	"Graphics\Lives Counter Numbers.bin"	; 8x8 pixel numbers o
 
 		include "Objects\_DebugMode.asm"
 
-		align	$200,$FF
-		if Revision=0
-			incfile	Nem_SegaLogo,"Graphics - Compressed\Sega Logo",nem
-	Eni_SegaLogo:	incbin	"Tilemaps\Sega Logo (REV00).eni" ; large Sega logo (mappings)
-			even
-		else
-			dcb.b	$300,$FF
-			incfile	Nem_SegaLogo,"Graphics - Compressed\Sega Logo (JP1)",nem
-	Eni_SegaLogo:	incbin	"Tilemaps\Sega Logo.eni"	; large Sega logo (mappings)
-			even
-		endc
+		incfile	Kos_SegaLogo,"Graphics Kosinski\Sega Logo",kos
+		incfile	KosMap_SegaLogo,"Other Kosinski\Sega Logo",kos
+		incfile	KosMap_SegaLogoBG,"Other Kosinski\Sega Logo BG",kos
 		incfile	KosMap_Title,"Other Kosinski\Title Screen",kos
 		incfile	KosMap_JapNames,"Other Kosinski\Hidden Japanese Credits",kos
 		incfile	Kos_TitleFg,"Graphics Kosinski\Title Screen Foreground",kos

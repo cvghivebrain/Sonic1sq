@@ -24,26 +24,25 @@ GM_Sega:
 		disable_ints
 		disable_display
 		bsr.w	ClearScreen
-		locVRAM	0
-		lea	(Nem_SegaLogo).l,a0			; load Sega logo patterns
-		bsr.w	NemDec
-		lea	($FF0000).l,a1
-		lea	(Eni_SegaLogo).l,a0			; load Sega logo mappings
-		move.w	#0,d0
-		bsr.w	EniDec
-
-		copyTilemap	$FF0000,vram_bg,8,$A,sega_bg_width,sega_bg_height
-		copyTilemap	$FF0000+(sega_bg_width*sega_bg_height*2),vram_fg,0,0,sega_fg_width,sega_fg_height
-								; copy mappings to fg/bg nametables in VRAM
-
-		if Revision=0
-		else
-			tst.b   (v_console_region).w		; is console Japanese?
-			bmi.s   .loadpal			; if not, branch
-			copyTilemap	$FF0A40,vram_fg,$1D,$A,3,2 ; hide "TM" with a white 3x2 rectangle
-		endc
-
-	.loadpal:
+		moveq	#id_KPLC_Sega,d0
+		jsr	KosPLC
+		
+		lea	($FF0000).l,a1				; RAM buffer
+		lea	(KosMap_SegaLogo).l,a0			; Sega logo mappings
+		locVRAM	vram_fg+(sizeof_vram_row*0)+(0*2),d0	; foreground, x=0, y=0
+		moveq	#sega_fg_width,d1			; width
+		moveq	#sega_fg_height,d2			; height
+		moveq	#0,d3					; tile setting
+		bsr.w	LoadTilemap
+		
+		lea	($FF0000).l,a1				; RAM buffer
+		lea	(KosMap_SegaLogoBG).l,a0		; Sega logo background mappings
+		locVRAM	vram_bg+(sizeof_vram_row*10)+(8*2),d0	; foreground, x=8, y=10
+		moveq	#sega_bg_width,d1			; width
+		moveq	#sega_bg_height,d2			; height
+		moveq	#0,d3					; tile setting
+		bsr.w	LoadTilemap
+		
 		moveq	#id_Pal_SegaBG,d0
 		bsr.w	PalLoad_Now				; load Sega logo palette
 		move.w	#-((countof_stripe-1)*2),(v_palcycle_num).w ; -$A

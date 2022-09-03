@@ -71,7 +71,7 @@ GM_Title:
 		bsr.w	PalLoad_Next
 		play.b	1, bsr.w, mus_TitleScreen		; play title screen music
 		move.b	#0,(f_debug_enable).w			; disable debug mode
-		move.w	#$178,(v_countdown).w			; run title screen for $178 frames
+		move.w	#406,(v_countdown).w			; run title screen for 406 frames
 		lea	(v_ost_psb).w,a1
 		jsr	DeleteChild
 
@@ -108,10 +108,8 @@ Title_MainLoop:
 		move.w	(v_ost_player+ost_x_pos).w,d0		; x pos of dummy object (there is no actual object loaded)
 		addq.w	#2,d0
 		move.w	d0,(v_ost_player+ost_x_pos).w		; move dummy 2px to the right
-		cmpi.w	#$1C00,d0
-		beq.s	Title_GotoSega
 		bsr.s	Title_Dpad
-		tst.w	(v_countdown).w				; has counter hit 0? (started at $178)
+		tst.w	(v_countdown).w				; has counter hit 0? (started at 406)
 		beq.w	PlayDemo				; if yes, branch
 		andi.b	#btnStart,(v_joypad_press_actual).w	; check if Start is pressed
 		beq.s	Title_MainLoop				; if not, branch
@@ -121,10 +119,6 @@ Title_MainLoop:
 		btst	#bitA,(v_joypad_hold_actual).w		; check if A is pressed
 		beq.w	PlayLevel				; if not, play level
 		bra.w	LevSel_Init				; goto level select
-		
-Title_GotoSega:
-		move.b	#id_Sega,(v_gamemode).w			; go to Sega screen (takes approx. 1 min for dummy to reach $1C00)
-		rts
 		
 Title_Dpad:
 		tst.b	(f_levelselect_cheat).w
@@ -459,29 +453,6 @@ LevSel_Sound:
 ; ---------------------------------------------------------------------------
 
 PlayDemo:
-		move.w	#30,(v_countdown).w			; set delay to half a second
-
-.loop_delay:
-		move.b	#id_VBlank_Title,(v_vblank_routine).w
-		bsr.w	WaitForVBlank
-		bsr.w	DeformLayers
-		bsr.w	PaletteCycle
-		bsr.w	RunPLC
-		move.w	(v_ost_player+ost_x_pos).w,d0		; dummy object x pos
-		addq.w	#2,d0					; increment
-		move.w	d0,(v_ost_player+ost_x_pos).w		; update
-		cmpi.w	#$1C00,d0				; has dummy object reached $1C00?
-		blo.s	.chk_start				; if not, branch
-		move.b	#id_Sega,(v_gamemode).w			; goto Sega screen
-		rts	
-; ===========================================================================
-
-.chk_start:
-		;andi.b	#btnStart,(v_joypad_press_actual).w	; is Start button pressed?
-		;bne.w	Title_PressedStart			; if yes, branch
-		tst.w	(v_countdown).w				; has delay timer hit 0?
-		bne.w	.loop_delay				; if not, branch
-
 		play.b	1, bsr.w, cmd_Fade			; fade out music
 		move.w	(v_demo_num).w,d0			; load demo number
 		andi.w	#7,d0
