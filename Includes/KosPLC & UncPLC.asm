@@ -295,6 +295,21 @@ KPLC_Special:	kplcheader
 		kplc Kos_Bumper
 		kplc Kos_SSGOAL
 		kplc Kos_SSUpDown
+		kplc Kos_SSRBlock
+		kplc Kos_SS1UpBlock
+		kplc Kos_SSEmStars
+		kplc Kos_SSRedWhite
+		kplc Kos_SSGhost
+		kplc Kos_SSWBlock
+		kplc Kos_SSGlass
+		kplc Kos_SSEmerald
+		kplc Kos_SSZone1
+		kplc Kos_SSZone2
+		kplc Kos_SSZone3
+		kplc Kos_SSZone4
+		kplc Kos_SSZone5
+		kplc Kos_SSZone6
+		kplc Kos_Ring
 	.end:
 		set_dma_size last_vram
 

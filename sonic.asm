@@ -798,29 +798,28 @@ Art_Sonic:	incbin	"Graphics\Sonic.bin"			; Sonic
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - special stage
 ; ---------------------------------------------------------------------------
-Eni_SSBg1:	incbin	"Tilemaps\SS Background 1.eni"		; special stage background (mappings)
-		even
-Eni_SSBg2:	incbin	"Tilemaps\SS Background 2.eni"		; special stage background (mappings)
-		even
+		incfile	UncMap_FishBirds,"Misc Data\SS Fish Birds",bin,dma_safe
+		incfile	KosMap_SSBubbles,"Other Kosinski\SS Bubbles",kos
+		incfile	KosMap_SSClouds,"Other Kosinski\SS Clouds",kos
 		incfile Kos_SSWalls,"Graphics Kosinski\Special Stage Walls",kos
 		incfile Kos_SSBgFish,"Graphics Kosinski\Special Stage Birds & Fish",kos
 		incfile Kos_SSBgCloud,"Graphics Kosinski\Special Stage Clouds",kos
 		incfile Kos_SSGOAL,"Graphics Kosinski\Special Stage GOAL",kos
-		incfile Nem_SSRBlock,"Graphics - Compressed\Special Stage R",nem
-		incfile Nem_SS1UpBlock,"Graphics - Compressed\Special Stage 1UP",nem
-		incfile Nem_SSEmStars,"Graphics - Compressed\Special Stage Emerald Twinkle",nem
-		incfile Nem_SSRedWhite,"Graphics - Compressed\Special Stage Red-White",nem
-		incfile Nem_SSZone1,"Graphics - Compressed\Special Stage ZONE1",nem
-		incfile Nem_SSZone2,"Graphics - Compressed\Special Stage ZONE2",nem
-		incfile Nem_SSZone3,"Graphics - Compressed\Special Stage ZONE3",nem
-		incfile Nem_SSZone4,"Graphics - Compressed\Special Stage ZONE4",nem
-		incfile Nem_SSZone5,"Graphics - Compressed\Special Stage ZONE5",nem
-		incfile Nem_SSZone6,"Graphics - Compressed\Special Stage ZONE6",nem
+		incfile Kos_SSRBlock,"Graphics Kosinski\Special Stage R",kos
+		incfile Kos_SS1UpBlock,"Graphics Kosinski\Special Stage 1UP",kos
+		incfile Kos_SSEmStars,"Graphics Kosinski\Special Stage Emerald Twinkle",kos
+		incfile Kos_SSRedWhite,"Graphics Kosinski\Special Stage Red-White",kos
+		incfile Kos_SSZone1,"Graphics Kosinski\Special Stage ZONE1",kos
+		incfile Kos_SSZone2,"Graphics Kosinski\Special Stage ZONE2",kos
+		incfile Kos_SSZone3,"Graphics Kosinski\Special Stage ZONE3",kos
+		incfile Kos_SSZone4,"Graphics Kosinski\Special Stage ZONE4",kos
+		incfile Kos_SSZone5,"Graphics Kosinski\Special Stage ZONE5",kos
+		incfile Kos_SSZone6,"Graphics Kosinski\Special Stage ZONE6",kos
 		incfile Kos_SSUpDown,"Graphics Kosinski\Special Stage UP-DOWN",kos
-		incfile Nem_SSEmerald,"Graphics - Compressed\Special Stage Emeralds",nem
-		incfile Nem_SSGhost,"Graphics - Compressed\Special Stage Ghost",nem
-		incfile Nem_SSWBlock,"Graphics - Compressed\Special Stage W",nem
-		incfile Nem_SSGlass,"Graphics - Compressed\Special Stage Glass",nem
+		incfile Kos_SSEmerald,"Graphics Kosinski\Special Stage Emeralds",kos
+		incfile Kos_SSGhost,"Graphics Kosinski\Special Stage Ghost",kos
+		incfile Kos_SSWBlock,"Graphics Kosinski\Special Stage W",kos
+		incfile Kos_SSGlass,"Graphics Kosinski\Special Stage Glass",kos
 		incfile Art_ResultEm,"Graphics\Special Stage Result Emeralds",bin,dma_safe
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - GHZ stuff

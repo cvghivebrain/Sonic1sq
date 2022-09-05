@@ -6,7 +6,6 @@ PatternLoadCues:
 		ptr PLC_Main
 		ptr PLC_Main2
 		ptr PLC_Boss
-		ptr PLC_SpecialStage
 PLC_Animals:
 		ptr PLC_GHZAnimals
 		ptr PLC_LZAnimals
@@ -66,25 +65,6 @@ PLC_Boss:	plcheader
 		plcm	Nem_Prison, $93A0			; prison capsule
 		plcm	Nem_Exhaust, $A540			; exhaust flame
 	PLC_Boss_end:
-; ---------------------------------------------------------------------------
-; Pattern load cues - special stage
-; ---------------------------------------------------------------------------
-PLC_SpecialStage:	plcheader
-		plcm	Nem_SSRBlock, $5E00			; R block
-		plcm	Nem_SS1UpBlock, $6E00			; 1UP block
-		plcm	Nem_SSEmStars, $7E00			; emerald collection stars
-		plcm	Nem_SSRedWhite, $8E00			; red and white	block
-		plcm	Nem_SSGhost, $9E00			; ghost	block
-		plcm	Nem_SSWBlock, $AE00			; W block
-		plcm	Nem_SSGlass, $BE00			; glass	block
-		plcm	Nem_SSEmerald, $EE00			; emeralds
-		plcm	Nem_SSZone1, $F2E0			; ZONE 1 block
-		plcm	Nem_SSZone2				; ZONE 2 block ($F400)
-		plcm	Nem_SSZone3				; ZONE 3 block ($F520)
-	PLC_SpecialStage_end:
-		plcm	Nem_SSZone4, $F2E0			; ZONE 4 block
-		plcm	Nem_SSZone5				; ZONE 5 block ($F400)
-		plcm	Nem_SSZone6				; ZONE 6 block ($F520)
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - GHZ animals
 ; ---------------------------------------------------------------------------

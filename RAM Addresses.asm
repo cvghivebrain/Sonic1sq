@@ -445,10 +445,13 @@ v_ss_layout:			equ $FF0000 ; special stage layout with space added to top and si
 v_ss_layout_start:		equ v_ss_layout+sizeof_ss_padding_top+ss_width_padding_left ; $FF1020
 v_ss_enidec_buffer:		equ $FF0000 ; special stage background mappings are stored here before being moved to VRAM
 v_ss_layout_buffer:		equ $FF4000 ; unprocessed special stage layout - overwritten later ($1000 bytes)
-v_ss_sprite_info:		equ $FF4000 ; sprite info for each item type - mappings pointer (4 bytes); frame id (2 bytes); tile id (2 bytes) (total $278 bytes)
-v_ss_sprite_update_list:	equ $FF4400 ; list of items currently being updated - 8 bytes each ($100 bytes)
-v_ss_sprite_grid_plot:		equ $FFFF8000 ; x/y positions of cells in a 16x16 grid centered around Sonic, updates as it rotates ($400 bytes)
-v_ss_bubble_x_pos:		equ $FFFFAA00 ; x position of background bubbles
-v_ss_cloud_x_pos:		equ $FFFFAB00 ; x position of background clouds - 4 bytes per block, 7 blocks ($1C bytes)
+				rsset $FF4000
+v_ss_sprite_info:		rs.b $278 ; sprite info for each item type - mappings pointer (4 bytes); frame id (2 bytes); tile id (2 bytes) (total $278 bytes)
+v_ss_sprite_update_list:	rs.b $100 ; list of items currently being updated - 8 bytes each ($100 bytes)
+v_ss_sprite_grid_plot:		rs.b $400 ; x/y positions of cells in a 16x16 grid centered around Sonic, updates as it rotates ($400 bytes)
+				rsblock ssbgpos
+v_ss_bubble_x_pos:		rs.b $16 ; x position of background bubbles
+v_ss_cloud_x_pos:		rs.b $1C ; x position of background clouds - 4 bytes per block, 7 blocks ($1C bytes)
+				rsblockend ssbgpos
 
 		popo		; restore options

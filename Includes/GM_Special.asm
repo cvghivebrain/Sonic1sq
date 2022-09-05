@@ -8,6 +8,8 @@ GM_Special:
 		disable_ints
 		lea	(vdp_control_port).l,a6
 		move.w	#$8B03,(a6)				; 1-pixel line scroll mode
+		move.w	#$8200+($A000>>10),(a6)			; set foreground nametable address
+		;move.w	#$8400+($E000>>13),(a6)			; set background nametable address
 		move.w	#$8004,(a6)				; normal colour mode
 		move.w	#$8A00+175,(v_vdp_hint_counter).w
 		move.w	#$9011,(a6)				; 64x64 cell plane size
@@ -15,14 +17,12 @@ GM_Special:
 		bsr.w	ClearScreen
 		enable_ints
 		
-		locVRAM	$5000,d0
-		move.l	#$6FFF,d1
-		moveq	#0,d2
+		locVRAM	$5000,d0				; VRAM address
+		move.l	#$6FFF,d1				; bytes to clear
+		moveq	#0,d2					; value to clear with
 		bsr.w	ClearVRAM
 		
 		bsr.w	SS_BGLoad
-		moveq	#id_PLC_SpecialStage,d0
-		bsr.w	QuickPLC
 		moveq	#id_KPLC_Special,d0
 		jsr	KosPLC					; load special stage gfx
 
@@ -38,8 +38,8 @@ GM_Special:
 		move.w	#loops_to_clear_synctables,d1
 		bsr.w	ClearRAM
 
-		lea	(v_ss_bubble_x_pos).w,a1
-		move.w	#($200/4)-1,d1
+		lea	(v_ss_bubble_x_pos).l,a1
+		move.w	#loops_to_clear_ssbgpos,d1
 		bsr.w	ClearRAM				; clear	bg x position data
 
 		clr.b	(f_water_pal_full).w
@@ -194,84 +194,25 @@ SS_ToSegaScreen:
 ; ---------------------------------------------------------------------------
 ; Special stage	background mappings loading subroutine
 
-;	uses d0, d1, d2, d3, d4, d5, d6, d7, a0, a1, a2
+;	uses d0, d1, d2, d3, d4, d5, a0, a1
 ; ---------------------------------------------------------------------------
 
-; Fish/bird dimensions in cells
-fish_width:	equ 8
-fish_height:	equ 8
-sizeof_fish:	equ fish_width*fish_height*2
-
 SS_BGLoad:
-		lea	(v_ss_enidec_buffer).l,a1		; buffer
-		lea	(Eni_SSBg1).l,a0			; load mappings for the birds and fish
-		move.w	#tile_Kos_SSBgFish+tile_pal3,d0		; add this to each tile
-		bsr.w	EniDec					; decompress fish/bird mappings to RAM
-
-		locVRAM	$5000,d3				; d3 = VDP address for $5000 in VRAM
-		lea	(v_ss_enidec_buffer+sizeof_fish).l,a2
-		moveq	#7-1,d7					; number of canvases for frames of bird/fish and in-between
-
-; Each frame of bird/fish animation is stored as a canvas in VRAM. The game switches between them by changing the bg nametable register.
-.loop_canvas:
-		move.l	d3,d0					; copy VDP command
-		moveq	#4-1,d6					; number of rows visible
-		moveq	#0,d4					; first square is blank (i.e. blank-bird-blank-bird-etc.)
-		cmpi.w	#3,d7
-		bhs.s	.loop_rows				; branch if canvas is bird
-		moveq	#1,d4					; first square is fish (i.e. fish-blank-fish-blank-etc.)
-
-.loop_rows:
-		moveq	#8-1,d5					; number of squares in a row
-
-.loop_birdfish:
-		movea.l	a2,a1					; get address of tilemap as stored in RAM
-		eori.b	#1,d4					; switch between blank square and bird/fish
-		bne.s	.is_birdfish				; branch if set to bird/fish
-		cmpi.w	#6,d7
-		bne.s	.skip_birdfish				; branch if not first frame
-		lea	(v_ss_enidec_buffer).l,a1		; use tilemap for checkerboard pattern
-
-	.is_birdfish:
-		movem.l	d0-d4,-(sp)
-		moveq	#fish_width-1,d1
-		moveq	#fish_height-1,d2
-		bsr.w	TilemapToVRAM				; copy tilemap for 1 bird or fish from RAM to VRAM
-		movem.l	(sp)+,d0-d4
-
-	.skip_birdfish:
-		addi.l	#(fish_width*2)<<16,d0			; skip 8 cells ($10 bytes)
-		dbf	d5,.loop_birdfish			; repeat for all squares in 1 row
-
-		addi.l	#((fish_height-1)*$80)<<16,d0		; skip 7 rows ($380 byes)
-		eori.b	#1,d4					; stagger blank/birdfish pattern
-		dbf	d6,.loop_rows				; repeat for all rows (4 in total)
-
-		addi.l	#$1000<<16,d3				; add $1000 to VRAM address
-		bpl.s	.vdp_ok					; branch if valid VDP command
-		swap	d3
-		addi.l	#$C000,d3				; fix VDP command
-		swap	d3
-
-	.vdp_ok:
-		adda.w	#sizeof_fish,a2				; read from next tilemap
-		dbf	d7,.loop_canvas				; repeat for all canvases
-		
-		lea	(v_ss_enidec_buffer).l,a1
-		lea	(Eni_SSBg2).l,a0			; load mappings for clouds/bubbles
-		move.w	#0+tile_pal3,d0
-		bsr.w	EniDec					; decompress to buffer in RAM
-
-		lea	(v_ss_enidec_buffer).l,a1
+		lea	($FF0000).l,a1
+		lea	(KosMap_SSBubbles).l,a0
 		locVRAM	$C000,d0
-		moveq	#$3F,d1
-		moveq	#$1F,d2
-		bsr.w	TilemapToVRAM				; copy tilemap for bubbles to VRAM
-		lea	(v_ss_enidec_buffer).l,a1
-		locVRAM	$D000,d0
-		moveq	#$3F,d1
-		moveq	#$3F,d2
-		bsr.w	TilemapToVRAM				; copy tilemap for clouds to VRAM
+		moveq	#64,d1
+		moveq	#64,d2
+		move.w	#tile_pal3,d3
+		bsr.w	LoadTilemap				; copy tilemap for bubbles to VRAM
+
+		lea	($FF0000).l,a1
+		lea	(KosMap_SSClouds).l,a0
+		locVRAM	$E000,d0
+		moveq	#64,d1
+		moveq	#32,d2
+		move.w	#tile_pal3,d3
+		bsr.w	LoadTilemap				; copy tilemap for clouds to VRAM
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -284,9 +225,9 @@ SS_BGLoad:
 
 PalCycle_SS:
 		tst.w	(f_pause).w				; is game paused?
-		bne.s	.exit					; if yes, branch
+		bne.w	.exit					; if yes, branch
 		subq.w	#1,(v_palcycle_ss_time).w		; decrement timer
-		bpl.s	.exit					; branch if time remains
+		bpl.w	.exit					; branch if time remains
 		lea	(vdp_control_port).l,a6
 		move.w	(v_palcycle_ss_num).w,d0		; get cycle index counter
 		addq.w	#1,(v_palcycle_ss_num).w		; increment
@@ -303,17 +244,20 @@ PalCycle_SS:
 		moveq	#0,d0
 		move.b	(a0)+,d0				; get bg mode byte
 		move.w	d0,(v_ss_bg_mode).w
-		lea	(SS_BG_Modes).l,a1
-		lea	(a1,d0.w),a1				; jump to mode data
-		move.w	#$8200,d0				; VDP register - fg nametable address
-		move.b	(a1)+,d0				; apply address from mode data
-		move.w	d0,(a6)					; send VDP instruction
-		move.b	(a1),(v_fg_y_pos_vsram).w		; get byte to send to VSRAM
+		
+		lea	(SS_BG_Modes).l,a2
+		move.l	(a2)+,d1				; set VRAM address of fg nametable
+		move.l	(a2)+,d2				; set size
+		mulu.w	#3,d0
+		lea	(a2,d0.w),a2				; jump to mappings source address
+		jsr	AddDMA					; add mappings to DMA queue
+		suba.l	#6,a2					; jump back to same mappings
+		add.l	#$800<<16,d1				; add $800 to VRAM address
+		jsr	AddDMA					; add mappings to DMA queue again
+		
 		move.w	#$8400,d0				; VDP register - bg nametable address
 		move.b	(a0)+,d0				; apply address from list
 		move.w	d0,(a6)					; send VDP instruction
-		move.l	#$40000010,(vdp_control_port).l		; set VDP to VSRAM write mode
-		move.l	(v_fg_y_pos_vsram).w,(vdp_data_port).l	; update VSRAM
 		moveq	#0,d0
 		move.b	(a0)+,d0				; get palette offset
 		bmi.s	PalCycle_SS_2				; branch if $80+
@@ -400,14 +344,16 @@ SS_Timing_Values:
 		dc.b 7, 2, $C000>>13, $24
 		even
 SS_BG_Modes:
-		; fg namespace address in VRAM, VScroll value
-		dc.b $4000>>10, 1				; 0 - grid
-		dc.b $6000>>10, 0				; 2 - fish morph 1
-		dc.b $6000>>10, 1				; 4 - fish morph 2
-		dc.b $8000>>10, 0				; 6 - fish
-		dc.b $8000>>10, 1				; 8 - bird morph 1
-		dc.b $A000>>10, 0				; $A - bird morph 2
-		dc.b $A000>>10, 1				; $C - bird
+		set_dma_dest	$A000				; VRAM address
+		set_dma_size	$800				; size of mappings
+		
+		set_dma_src	UncMap_FishBirds		; 0 - grid
+		set_dma_src	UncMap_FishBirds+$800		; 2 - fish morph 1
+		set_dma_src	UncMap_FishBirds+($800*2)	; 4 - fish morph 2
+		set_dma_src	UncMap_FishBirds+($800*3)	; 6 - fish
+		set_dma_src	UncMap_FishBirds+($800*4)	; 8 - bird morph 1
+		set_dma_src	UncMap_FishBirds+($800*5)	; $A - bird morph 2
+		set_dma_src	UncMap_FishBirds+($800*6)	; $C - bird
 		even
 
 ; ---------------------------------------------------------------------------
@@ -437,7 +383,7 @@ SS_BGAnimate:
 		neg.w	d0
 		swap	d0
 		lea	(SS_Bubble_WobbleData).l,a1
-		lea	(v_ss_bubble_x_pos).w,a3
+		lea	(v_ss_bubble_x_pos).l,a3
 		moveq	#9,d3
 
 SS_BGWobbleLoop:
@@ -453,7 +399,7 @@ SS_BGWobbleLoop:
 		add.w	d2,(a3)+				; add to 2nd word of buffer
 		dbf	d3,SS_BGWobbleLoop
 		
-		lea	(v_ss_bubble_x_pos).w,a3
+		lea	(v_ss_bubble_x_pos).l,a3
 		lea	(SS_Bubble_ScrollBlocks).l,a2
 		bra.s	SS_Scroll_CloudsBubbles
 ; ===========================================================================
@@ -462,7 +408,7 @@ SS_BGBirdCloud:
 		cmpi.w	#$C,d0
 		bne.s	.not_C					; branch if d0 isn't $C
 		subq.w	#1,(v_bg3_x_pos).w
-		lea	(v_ss_cloud_x_pos).w,a3
+		lea	(v_ss_cloud_x_pos).l,a3
 		move.l	#$18000,d2
 		moveq	#6,d1
 
@@ -474,7 +420,7 @@ SS_BGBirdCloud:
 		dbf	d1,.loop
 
 	.not_C:
-		lea	(v_ss_cloud_x_pos).w,a3
+		lea	(v_ss_cloud_x_pos).l,a3
 		lea	(SS_Cloud_ScrollBlocks).l,a2
 
 SS_Scroll_CloudsBubbles:
@@ -543,7 +489,7 @@ SS_ShowLayout:
 
 ; Calculate x/y positions of each cell in a 16x16 grid when rotated
 		move.w	d5,-(sp)				; save sprite count to stack
-		lea	(v_ss_sprite_grid_plot).w,a1		; address to write grid coords
+		lea	(v_ss_sprite_grid_plot).l,a1		; address to write grid coords
 		move.b	(v_ss_angle).w,d0
 		andi.b	#$FC,d0					; round down angle to nearest 4 (disable this line for smoother rotation)
 		jsr	(CalcSine).l				; convert to sine/cosine
@@ -607,7 +553,7 @@ SS_ShowLayout:
 		move.w	(v_camera_x_pos).w,d0			; get camera x pos
 		divu.w	#ss_block_width,d0			; divide by size of wall sprite (24 pixels)
 		adda.w	d0,a0					; jump to correct block in level
-		lea	(v_ss_sprite_grid_plot).w,a4		; transformation grid
+		lea	(v_ss_sprite_grid_plot).l,a4		; transformation grid
 		move.w	#ss_visible_height-1,d7
 
 	.loop_spriterow:
@@ -1158,45 +1104,45 @@ SS_ItemIndex:
 		ss_sprite Map_SSWalls,tile_Kos_SSWalls+tile_pal4,0
 	SS_ItemIndex_wall_end:
 SS_Item_Bumper:	ss_sprite Map_Bump,tile_Kos_Bumper_KPLC_Special,0 ; $25 - bumper
-SS_Item_W:	ss_sprite Map_SS_R,tile_Nem_SSWBlock,0		; $26 - W
+SS_Item_W:	ss_sprite Map_SS_R,tile_Kos_SSWBlock,0		; $26 - W
 SS_Item_GOAL:	ss_sprite Map_SS_R,tile_Kos_SSGOAL,0		; $27 - GOAL
-SS_Item_1Up:	ss_sprite Map_SS_R,tile_Nem_SS1UpBlock,0	; $28 - 1UP
+SS_Item_1Up:	ss_sprite Map_SS_R,tile_Kos_SS1UpBlock,0	; $28 - 1UP
 SS_Item_Up:	ss_sprite Map_SS_Up,tile_Kos_SSUpDown,0		; $29 - Up
 SS_Item_Down:	ss_sprite Map_SS_Down,tile_Kos_SSUpDown,0	; $2A - Down
-SS_Item_R:	ss_sprite Map_SS_R,tile_Nem_SSRBlock+tile_pal2,0 ; $2B - R
-SS_Item_RedWhi:	ss_sprite Map_SS_Glass,tile_Nem_SSRedWhite,0	; $2C - red/white
-SS_Item_Glass1:	ss_sprite Map_SS_Glass,tile_Nem_SSGlass,0	; $2D - breakable glass gem (blue)
-SS_Item_Glass2:	ss_sprite Map_SS_Glass,tile_Nem_SSGlass+tile_pal4,0 ; $2E - breakable glass gem (green)
-SS_Item_Glass3:	ss_sprite Map_SS_Glass,tile_Nem_SSGlass+tile_pal2,0 ; $2F - breakable glass gem (yellow)
-SS_Item_Glass4:	ss_sprite Map_SS_Glass,tile_Nem_SSGlass+tile_pal3,0 ; $30 - breakable glass gem (pink)
-SS_Item_R2:	ss_sprite Map_SS_R,tile_Nem_SSRBlock,0		; $31 - R
+SS_Item_R:	ss_sprite Map_SS_R,tile_Kos_SSRBlock+tile_pal2,0 ; $2B - R
+SS_Item_RedWhi:	ss_sprite Map_SS_Glass,tile_Kos_SSRedWhite,0	; $2C - red/white
+SS_Item_Glass1:	ss_sprite Map_SS_Glass,tile_Kos_SSGlass,0	; $2D - breakable glass gem (blue)
+SS_Item_Glass2:	ss_sprite Map_SS_Glass,tile_Kos_SSGlass+tile_pal4,0 ; $2E - breakable glass gem (green)
+SS_Item_Glass3:	ss_sprite Map_SS_Glass,tile_Kos_SSGlass+tile_pal2,0 ; $2F - breakable glass gem (yellow)
+SS_Item_Glass4:	ss_sprite Map_SS_Glass,tile_Kos_SSGlass+tile_pal3,0 ; $30 - breakable glass gem (pink)
+SS_Item_R2:	ss_sprite Map_SS_R,tile_Kos_SSRBlock,0		; $31 - R
 SS_Item_Bump1:	ss_sprite Map_Bump,tile_Kos_Bumper_KPLC_Special,id_frame_bump_bumped1
 SS_Item_Bump2:	ss_sprite Map_Bump,tile_Kos_Bumper_KPLC_Special,id_frame_bump_bumped2
-SS_Item_Zone1:	ss_sprite Map_SS_R,tile_Nem_SSZone1,0		; $34 - Zone 1
-SS_Item_Zone2:	ss_sprite Map_SS_R,tile_Nem_SSZone2,0		; $35 - Zone 2
-SS_Item_Zone3:	ss_sprite Map_SS_R,tile_Nem_SSZone3,0		; $36 - Zone 3
-SS_Item_Zone4:	ss_sprite Map_SS_R,tile_Nem_SSZone1,0		; $37 - Zone 4
-SS_Item_Zone5:	ss_sprite Map_SS_R,tile_Nem_SSZone2,0		; $38 - Zone 5
-SS_Item_Zone6:	ss_sprite Map_SS_R,tile_Nem_SSZone3,0		; $39 - Zone 6
-SS_Item_Ring:	ss_sprite Map_Ring,tile_Kos_Ring+tile_pal2,0	; $3A - ring
-SS_Item_Em1:	ss_sprite Map_SS_Chaos3,tile_Nem_SSEmerald,0	; $3B - emerald (blue)
-SS_Item_Em2:	ss_sprite Map_SS_Chaos3,tile_Nem_SSEmerald+tile_pal2,0 ; $3C - emerald (yellow)
-SS_Item_Em3:	ss_sprite Map_SS_Chaos3,tile_Nem_SSEmerald+tile_pal3,0 ; $3D - emerald (pink)
-SS_Item_Em4:	ss_sprite Map_SS_Chaos3,tile_Nem_SSEmerald+tile_pal4,0 ; $3E - emerald (green)
-SS_Item_Em5:	ss_sprite Map_SS_Chaos1,tile_Nem_SSEmerald,0	; $3F - emerald (red)
-SS_Item_Em6:	ss_sprite Map_SS_Chaos2,tile_Nem_SSEmerald,0	; $40 - emerald (grey)
-SS_Item_Ghost:	ss_sprite Map_SS_R,tile_Nem_SSGhost,0		; $41 - ghost block
-SS_Item_Spark1:	ss_sprite Map_Ring,tile_Kos_Ring+tile_pal2,id_frame_ring_sparkle1 ; $42 - sparkle
-SS_Item_Spark2:	ss_sprite Map_Ring,tile_Kos_Ring+tile_pal2,id_frame_ring_sparkle2 ; $43 - sparkle
-SS_Item_Spark3:	ss_sprite Map_Ring,tile_Kos_Ring+tile_pal2,id_frame_ring_sparkle3 ; $44 - sparkle
-SS_Item_Spark4:	ss_sprite Map_Ring,tile_Kos_Ring+tile_pal2,id_frame_ring_sparkle4 ; $45 - sparkle
-SS_Item_EmSp1:	ss_sprite Map_SS_Glass,tile_Nem_SSEmStars+tile_pal2,0 ; $46 - emerald sparkle
-SS_Item_EmSp2:	ss_sprite Map_SS_Glass,tile_Nem_SSEmStars+tile_pal2,1 ; $47 - emerald sparkle
-SS_Item_EmSp3:	ss_sprite Map_SS_Glass,tile_Nem_SSEmStars+tile_pal2,2 ; $48 - emerald sparkle
-SS_Item_EmSp4:	ss_sprite Map_SS_Glass,tile_Nem_SSEmStars+tile_pal2,3 ; $49 - emerald sparkle
-SS_Item_Switch:	ss_sprite Map_SS_R,tile_Nem_SSGhost,id_frame_ss_ghost_switch ; $4A - switch that makes ghost blocks solid
-SS_Item_Glass5:	ss_sprite Map_SS_Glass,tile_Nem_SSGlass,0	; $4B
-SS_Item_Glass6:	ss_sprite Map_SS_Glass,tile_Nem_SSGlass+tile_pal4,0 ; $4C
-SS_Item_Glass7:	ss_sprite Map_SS_Glass,tile_Nem_SSGlass+tile_pal2,0 ; $4D
-SS_Item_Glass8:	ss_sprite Map_SS_Glass,tile_Nem_SSGlass+tile_pal3,0 ; $4E
+SS_Item_Zone1:	ss_sprite Map_SS_R,tile_Kos_SSZone1,0		; $34 - Zone 1
+SS_Item_Zone2:	ss_sprite Map_SS_R,tile_Kos_SSZone2,0		; $35 - Zone 2
+SS_Item_Zone3:	ss_sprite Map_SS_R,tile_Kos_SSZone3,0		; $36 - Zone 3
+SS_Item_Zone4:	ss_sprite Map_SS_R,tile_Kos_SSZone4,0		; $37 - Zone 4
+SS_Item_Zone5:	ss_sprite Map_SS_R,tile_Kos_SSZone5,0		; $38 - Zone 5
+SS_Item_Zone6:	ss_sprite Map_SS_R,tile_Kos_SSZone6,0		; $39 - Zone 6
+SS_Item_Ring:	ss_sprite Map_Ring,tile_Kos_Ring_KPLC_Special+tile_pal2,0 ; $3A - ring
+SS_Item_Em1:	ss_sprite Map_SS_Chaos3,tile_Kos_SSEmerald,0	; $3B - emerald (blue)
+SS_Item_Em2:	ss_sprite Map_SS_Chaos3,tile_Kos_SSEmerald+tile_pal2,0 ; $3C - emerald (yellow)
+SS_Item_Em3:	ss_sprite Map_SS_Chaos3,tile_Kos_SSEmerald+tile_pal3,0 ; $3D - emerald (pink)
+SS_Item_Em4:	ss_sprite Map_SS_Chaos3,tile_Kos_SSEmerald+tile_pal4,0 ; $3E - emerald (green)
+SS_Item_Em5:	ss_sprite Map_SS_Chaos1,tile_Kos_SSEmerald,0	; $3F - emerald (red)
+SS_Item_Em6:	ss_sprite Map_SS_Chaos2,tile_Kos_SSEmerald,0	; $40 - emerald (grey)
+SS_Item_Ghost:	ss_sprite Map_SS_R,tile_Kos_SSGhost,0		; $41 - ghost block
+SS_Item_Spark1:	ss_sprite Map_Ring,tile_Kos_Ring_KPLC_Special+tile_pal2,id_frame_ring_sparkle1 ; $42 - sparkle
+SS_Item_Spark2:	ss_sprite Map_Ring,tile_Kos_Ring_KPLC_Special+tile_pal2,id_frame_ring_sparkle2 ; $43 - sparkle
+SS_Item_Spark3:	ss_sprite Map_Ring,tile_Kos_Ring_KPLC_Special+tile_pal2,id_frame_ring_sparkle3 ; $44 - sparkle
+SS_Item_Spark4:	ss_sprite Map_Ring,tile_Kos_Ring_KPLC_Special+tile_pal2,id_frame_ring_sparkle4 ; $45 - sparkle
+SS_Item_EmSp1:	ss_sprite Map_SS_Glass,tile_Kos_SSEmStars+tile_pal2,0 ; $46 - emerald sparkle
+SS_Item_EmSp2:	ss_sprite Map_SS_Glass,tile_Kos_SSEmStars+tile_pal2,1 ; $47 - emerald sparkle
+SS_Item_EmSp3:	ss_sprite Map_SS_Glass,tile_Kos_SSEmStars+tile_pal2,2 ; $48 - emerald sparkle
+SS_Item_EmSp4:	ss_sprite Map_SS_Glass,tile_Kos_SSEmStars+tile_pal2,3 ; $49 - emerald sparkle
+SS_Item_Switch:	ss_sprite Map_SS_R,tile_Kos_SSGhost,id_frame_ss_ghost_switch ; $4A - switch that makes ghost blocks solid
+SS_Item_Glass5:	ss_sprite Map_SS_Glass,tile_Kos_SSGlass,0	; $4B
+SS_Item_Glass6:	ss_sprite Map_SS_Glass,tile_Kos_SSGlass+tile_pal4,0 ; $4C
+SS_Item_Glass7:	ss_sprite Map_SS_Glass,tile_Kos_SSGlass+tile_pal2,0 ; $4D
+SS_Item_Glass8:	ss_sprite Map_SS_Glass,tile_Kos_SSGlass+tile_pal3,0 ; $4E
 	SS_ItemIndex_end:
