@@ -223,13 +223,12 @@ CheckSumError:
 		include	"Includes\ClearScreen.asm"
 		include	"sound\PlaySound + DacDriverLoad.asm"
 		include	"Includes\PauseGame.asm"
-		include	"Includes\TilemapToVRAM.asm"
+		include	"Includes\LoadTilemap.asm"
 
 		include "Includes\Nemesis Decompression.asm"
 		include "Includes\AddPLC, NewPLC, RunPLC, ProcessPLC & QuickPLC.asm"
 		include "Includes\DMA.asm"
 
-		include "Includes\Enigma Decompression.asm"
 		include "Includes\Kosinski Decompression.asm"
 
 ; ---------------------------------------------------------------------------
@@ -1022,24 +1021,12 @@ Col_SBZ:	incbin	"Collision\SBZ.bin"			; SBZ index
 ; ---------------------------------------------------------------------------
 ; Special Stage layouts
 ; ---------------------------------------------------------------------------
-SS_1:		incbin	"Special Stage Layouts\1.eni"
-		even
-SS_2:		incbin	"Special Stage Layouts\2.eni"
-		even
-SS_3:		incbin	"Special Stage Layouts\3.eni"
-		even
-SS_4:		incbin	"Special Stage Layouts\4.eni"
-		even
-		if Revision=0
-	SS_5:		incbin	"Special Stage Layouts\5 (REV00).eni"
-			even
-	SS_6:		incbin	"Special Stage Layouts\6 (REV00).eni"
-		else
-	SS_5:		incbin	"Special Stage Layouts\5.eni"
-			even
-	SS_6:		incbin	"Special Stage Layouts\6.eni"
-		endc
-		even
+		incfile	SS_1,"Other Kosinski\SS1",kos
+		incfile	SS_2,"Other Kosinski\SS2",kos
+		incfile	SS_3,"Other Kosinski\SS3",kos
+		incfile	SS_4,"Other Kosinski\SS4",kos
+		incfile	SS_5,"Other Kosinski\SS5",kos
+		incfile	SS_6,"Other Kosinski\SS6",kos
 ; ---------------------------------------------------------------------------
 ; Animated uncompressed graphics
 ; ---------------------------------------------------------------------------

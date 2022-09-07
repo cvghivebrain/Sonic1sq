@@ -12,20 +12,6 @@ zonewarning:	macro loc,elementsize
 		endm
 
 ; ---------------------------------------------------------------------------
-; Copy a tilemap from 68K (ROM/RAM) to the VRAM without using DMA
-; input: source, destination, width [cells], height [cells]
-; ---------------------------------------------------------------------------
-
-copyTilemap:	macro source,loc,x,y,width,height
-		lea	(source).l,a1
-		vram_loc: = (loc)+(sizeof_vram_row*(y))+((x)*2)
-		locVRAM	vram_loc,d0
-		moveq	#width-1,d1
-		moveq	#height-1,d2
-		bsr.w	TilemapToVRAM
-		endm
-
-; ---------------------------------------------------------------------------
 ; check if object moves out of range
 ; input: location to jump to if out of range, x-axis pos (ost_x_pos(a0) by default)
 ; ---------------------------------------------------------------------------

@@ -441,10 +441,12 @@ ram_final:			equ (ram_used-1)&$FFFF
 
 ; Special Stages
 
-v_ss_layout:			equ $FF0000 ; special stage layout with space added to top and sides
+				rsset $FF0000
+				rsblock sslayout
+v_ss_layout:			rs.b $4000 ; special stage layout with space added to top and sides
+				rsblockend sslayout
 v_ss_layout_start:		equ v_ss_layout+sizeof_ss_padding_top+ss_width_padding_left ; $FF1020
-v_ss_enidec_buffer:		equ $FF0000 ; special stage background mappings are stored here before being moved to VRAM
-v_ss_layout_buffer:		equ $FF4000 ; unprocessed special stage layout - overwritten later ($1000 bytes)
+v_ss_layout_buffer:		rs.b $1000 ; unprocessed special stage layout - overwritten later ($1000 bytes)
 				rsset $FF4000
 v_ss_sprite_info:		rs.b $278 ; sprite info for each item type - mappings pointer (4 bytes); frame id (2 bytes); tile id (2 bytes) (total $278 bytes)
 v_ss_sprite_update_list:	rs.b $100 ; list of items currently being updated - 8 bytes each ($100 bytes)

@@ -1004,20 +1004,18 @@ SS_Load:
 		bne.s	SS_Load					; branch if yes (increment level counter until uncollected emerald is found)
 
 SS_LoadData:
-		lsl.w	#2,d0
+		add.w	d0,d0
+		add.w	d0,d0
 		lea	SpecialStartPosList(pc,d0.w),a1
 		move.w	(a1)+,(v_ost_player+ost_x_pos).w	; set Sonic's start position
 		move.w	(a1)+,(v_ost_player+ost_y_pos).w
 		movea.l	SS_LayoutIndex(pc,d0.w),a0
 		lea	(v_ss_layout_buffer).l,a1		; load level layout ($FF4000)
-		move.w	#0,d0
-		jsr	(EniDec).l
+		jsr	KosDec
 
 		lea	(v_ss_layout).l,a1
-		move.w	#($4000/4)-1,d0
-	.clear_layout:
-		clr.l	(a1)+
-		dbf	d0,.clear_layout			; clear RAM (0-$3FFF)
+		move.w	#loops_to_clear_sslayout,d1
+		bsr.w	ClearRAM				; clear RAM (0-$3FFF)
 
 		lea	(v_ss_layout_start).l,a1		; start of actual data ($FF1020)
 		lea	(v_ss_layout_buffer).l,a0
