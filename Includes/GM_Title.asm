@@ -88,8 +88,6 @@ GM_Title:
 		jsr	(ExecuteObjects).l
 		bsr.w	DeformLayers
 		jsr	(BuildSprites).l
-		moveq	#id_PLC_Main,d0				; load lamppost, HUD, lives, ring & points graphics
-		bsr.w	NewPLC					; do it over the next few frames
 		move.w	#0,(v_title_d_count).w			; reset d-pad counter
 		enable_display
 		bsr.w	PaletteFadeIn				; fade in to title screen from black

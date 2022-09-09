@@ -263,7 +263,10 @@ Pal_SegaBG:	incbin	"Palettes\Sega Background.bin"
 Pal_HidCred:	incbin	"Palettes\Hidden Credits.bin"
 Pal_Title:	incbin	"Palettes\Title Screen.bin"
 Pal_LevelSel:	incbin	"Palettes\Level Select.bin"
+Pal_None:
 Pal_Sonic:	incbin	"Palettes\Sonic.bin"
+Pal_SonicRed:	incbin	"Palettes\Sonic Red.bin"
+Pal_SonicYellow:	incbin	"Palettes\Sonic Yellow.bin"
 Pal_GHZ:	incbin	"Palettes\Green Hill Zone.bin"
 Pal_LZ:		incbin	"Palettes\Labyrinth Zone.bin"
 Pal_LZWater:	incbin	"Palettes\Labyrinth Zone Underwater.bin"
@@ -361,7 +364,7 @@ Demo_EndGHZ2:	incbin	"Demos\Ending - GHZ2.bin"
 		include	"Includes\DeformLayers.asm"
 		include	"Includes\DrawTilesWhenMoving, DrawTilesAtStart & DrawChunks.asm"
 
-		include	"Zones.asm"
+		include	"Zones & Characters.asm"
 		include "Includes\LevelDataLoad, LevelLayoutLoad & LevelHeaders.asm"
 		include "Includes\DynamicLevelEvents.asm"
 
@@ -917,7 +920,7 @@ Art_Sonic:	incbin	"Graphics\Sonic.bin"			; Sonic
 ; ---------------------------------------------------------------------------
 		incfile Art_TitleCard,"Graphics\Title Cards",bin,dma_safe
 		incfile Art_HUDMain,"Graphics\HUD",bin,dma_safe
-		incfile Nem_Lives,"Graphics - Compressed\HUD - Life Counter Icon",nem
+		incfile Art_Lives,"Graphics\HUD - Life Counter Icon",bin,dma_safe
 		incfile Kos_Ring,"Graphics Kosinski\Rings",kos
 		incfile Art_Shield,"Graphics\Shield",bin,dma_safe
 		incfile Art_Stars,"Graphics\Invincibility",bin,dma_safe

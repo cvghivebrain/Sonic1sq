@@ -315,6 +315,10 @@ v_debug_move_speed:		rs.b 1 ; $FFFFFE0B ; debug mode - vertical speed
 v_vblank_counter:		rs.l 1 ; $FFFFFE0C ; vertical interrupt counter, increments every VBlank
 v_vblank_counter_word:		equ __rs-2 ; $FFFFFE0E ; low word for v_vblank_counter
 v_vblank_counter_byte:		equ __rs-1 ; $FFFFFE0F ; low byte for v_vblank_counter
+v_character1:			rs.w 1 ; player 1 character id
+v_character2:			rs.w 1 ; player 2 character id
+v_player1_ptr:			rs.l 1 ; player 1 object pointer
+v_player2_ptr:			rs.l 1 ; player 2 object pointer
 v_zone:				rs.w 1 ; $FFFFFE10 ; current zone number
 v_act:				equ __rs-1 ; $FFFFFE11 ; current act number
 v_lives:			rs.b 1 ; $FFFFFE12 ; number of lives

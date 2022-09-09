@@ -61,8 +61,6 @@ GM_Ending:
 		bset	#redraw_left_bit,(v_fg_redraw_direction).w
 		bsr.w	LevelDataLoad				; load block mappings and palettes
 		enable_ints
-		moveq	#id_Pal_Sonic,d0
-		bsr.w	PalLoad_Next				; load Sonic's palette
 		bsr.w	LoadPerZone
 		bsr.w	LevelParameterLoad			; load level boundaries and start positions
 		bsr.w	DrawTilesAtStart
@@ -73,7 +71,7 @@ GM_Ending:
 		move.b	#1,(f_debug_enable).w			; enable debug mode
 
 	.no_debug:
-		move.l	#SonicPlayer,(v_ost_player).w		; load Sonic object
+		bsr.w	LoadPerCharacter
 		bset	#status_xflip_bit,(v_ost_player+ost_status).w ; make Sonic face left
 		move.b	#1,(f_lock_controls).w			; lock controls
 		move.w	#(btnL<<8),(v_joypad_hold).w		; hold virtual left on d-pad

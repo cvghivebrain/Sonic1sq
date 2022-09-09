@@ -389,6 +389,7 @@ UncLoadCues:
 		ptr UPLC_SSResult
 		ptr UPLC_Warp
 		ptr UPLC_Credits
+		ptr UPLC_SonicIcon
 
 UPLC_HUD:	uplcheader $D940
 		uplc Art_HUDMain,v_tile_hud
@@ -427,4 +428,8 @@ UPLC_Warp:	uplcheader vram_shield
 
 UPLC_Credits:	uplcheader $20
 		uplc Art_CreditText
+	.end:
+
+UPLC_SonicIcon:	uplcheader vram_lifeicon
+		uplc Art_Lives
 	.end:

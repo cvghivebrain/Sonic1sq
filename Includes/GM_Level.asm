@@ -36,34 +36,20 @@ GM_Demo:
 
 	.skip_gfx:
 		lea	(v_ost_all).w,a1			; RAM address to start clearing
-		moveq	#0,d0
 		move.w	#loops_to_clear_ost,d1			; size of RAM block to clear
-	.clear_ost:
-		move.l	d0,(a1)+
-		dbf	d1,.clear_ost				; clear object RAM
-
+		bsr.w	ClearRAM				; fill OST with 0
+		
 		lea	(v_vblank_routine).w,a1
-		moveq	#0,d0
 		move.w	#loops_to_clear_vblankstuff,d1
-	.clear_ram1:
-		move.l	d0,(a1)+
-		dbf	d1,.clear_ram1				; clear variables ($F628-$F67F)
-		; $F680-$F6FF is preserved (PLC buffer and related variables)
+		bsr.w	ClearRAM
 
 		lea	(v_camera_x_pos).w,a1
-		moveq	#0,d0
 		move.w	#loops_to_clear_levelinfo,d1
-	.clear_ram2:
-		move.l	d0,(a1)+
-		dbf	d1,.clear_ram2				; clear variables ($F700-$F7FF)
-		; $F800-$FE5F is preserved (sprite buffer, palettes, stack, some game variables)
+		bsr.w	ClearRAM
 
 		lea	(v_oscillating_table).w,a1
-		moveq	#0,d0
 		move.w	#loops_to_clear_synctables2,d1
-	.clear_ram3:
-		move.l	d0,(a1)+
-		dbf	d1,.clear_ram3				; clear variables ($FE60-$FF7F)
+		bsr.w	ClearRAM
 
 		disable_ints
 		bsr.w	ClearScreen
@@ -127,8 +113,6 @@ Level_TtlCardLoop:
 		jsr	(Hud_Base).l				; load basic HUD gfx
 
 Level_Skip_TtlCard:
-		moveq	#id_Pal_Sonic,d0
-		bsr.w	PalLoad_Next				; load Sonic's palette
 		bsr.w	LevelParameterLoad			; load level boundaries and start positions
 		bsr.w	DeformLayers
 		bset	#redraw_left_bit,(v_fg_redraw_direction).w
@@ -136,7 +120,7 @@ Level_Skip_TtlCard:
 		bsr.w	DrawTilesAtStart
 		jsr	(ConvertCollisionArray).l
 		bsr.w	LZWaterFeatures
-		move.l	#SonicPlayer,(v_ost_player).w		; load Sonic object
+		bsr.w	LoadPerCharacter
 		tst.w	(v_demo_mode).w				; is this an ending demo?
 		bmi.s	.skip_hud				; if yes, branch
 		move.l	#HUD,(v_ost_hud).w			; load HUD object

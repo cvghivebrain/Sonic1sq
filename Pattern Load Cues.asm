@@ -3,7 +3,6 @@
 ; ---------------------------------------------------------------------------
 PatternLoadCues:
 		index *
-		ptr PLC_Main
 		ptr PLC_Main2
 		ptr PLC_Boss
 PLC_Animals:
@@ -44,12 +43,6 @@ plcheader:	macro *
 		dc.w plc_count\@-1
 		endm
 
-; ---------------------------------------------------------------------------
-; Pattern load cues - standard block 1
-; ---------------------------------------------------------------------------
-PLC_Main:	plcheader
-		plcm	Nem_Lives, $FA80			; lives	counter
-	PLC_Main_end:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - standard block 2
 ; ---------------------------------------------------------------------------

@@ -15,10 +15,12 @@ PalLoad_Next:
 		movea.w	(a1)+,a3				; get target RAM address
 		adda.w	#v_pal_dry_next-v_pal_dry,a3		; jump to next palette RAM address
 		move.w	(a1)+,d7				; get length of palette data
+		bmi.s	.exit
 
 	.loop:
 		move.l	(a2)+,(a3)+				; move data to RAM
 		dbf	d7,.loop
+	.exit:
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -37,10 +39,12 @@ PalLoad_Now:
 		movea.l	(a1)+,a2				; get palette data address
 		movea.w	(a1)+,a3				; get target RAM address
 		move.w	(a1)+,d7				; get length of palette
+		bmi.s	.exit
 
 	.loop:
 		move.l	(a2)+,(a3)+				; move data to RAM
 		dbf	d7,.loop
+	.exit:
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -106,7 +110,10 @@ PalPointers:
 		palp	Pal_SegaBG,v_pal_dry_line1,$40		; 0 - Sega logo
 		palp	Pal_Title,v_pal_dry_line1,$40		; 1 - title screen
 		palp	Pal_LevelSel,v_pal_dry_line1,$40	; 2 - level select
+		palp	Pal_None,v_pal_dry_line1,0
 		palp	Pal_Sonic,v_pal_dry_line1,$10		; 3 - Sonic
+		palp	Pal_SonicRed,v_pal_dry_line1+4,4
+		palp	Pal_SonicYellow,v_pal_dry_line1+4,4
 		palp	Pal_HidCred,v_pal_dry_line3,$10		; Hidden Japanese credits
 PalPointers_Levels:
 		palp	Pal_GHZ,v_pal_dry_line2,$30		; 4 - GHZ

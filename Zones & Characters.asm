@@ -420,3 +420,42 @@ Zone_DLE_LZ:	dc.l DLE_LZ12,DLE_LZ12,DLE_LZ3,DLE_SBZ3
 Zone_DLE_SLZ:	dc.l DLE_SLZ12,DLE_SLZ12,DLE_SLZ3
 Zone_DLE_SBZ:	dc.l DLE_SBZ1,DLE_SBZ2,DLE_FZ
 Zone_DLE_End:	dc.l DLE_Ending,DLE_Ending
+
+; ---------------------------------------------------------------------------
+; Subroutine to load character data
+; ---------------------------------------------------------------------------
+
+LoadPerCharacter:
+		moveq	#0,d0
+		move.w	(v_character1).w,d0			; get character number
+		mulu.w	#CharDefs_size-CharDefs,d0		; get offset for character
+		lea	(CharDefs).l,a4
+		adda.l	d0,a4					; jump to relevant character data
+		
+		move.l	(a4),(v_ost_player).w			; load player object
+		move.l	(a4)+,(v_player1_ptr).w			; save pointer to player object
+		
+		move.w	(a4)+,d0
+		bsr.w	PalLoad_Now				; load character palette
+		
+		move.w	(a4)+,d0
+		jsr	UncPLC					; load life icon graphics
+		
+		rts
+
+CharDefs:
+		; Sonic
+		dc.l SonicPlayer				; object pointer
+		dc.w id_Pal_None				; palette patch id (actual palette is loaded by LoadPerZone)
+		dc.w id_UPLC_SonicIcon				; life icon graphics
+	CharDefs_size:
+
+		; Red Sonic
+		dc.l SonicPlayer
+		dc.w id_Pal_SonicRed
+		dc.w id_UPLC_SonicIcon
+
+		; Yellow Sonic
+		dc.l SonicPlayer
+		dc.w id_Pal_SonicYellow
+		dc.w id_UPLC_SonicIcon

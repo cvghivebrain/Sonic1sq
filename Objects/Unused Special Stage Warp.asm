@@ -50,7 +50,8 @@ Van_RmvSonic:	; Routine 2
 Van_LoadSonic:	; Routine 4
 		subq.w	#1,ost_vanish_time(a0)			; decrement timer
 		bne.s	.wait					; if time remains, branch
-		move.l	#SonicPlayer,(v_ost_player).w		; load Sonic object
+		move.l	(v_player1_ptr).w,d0
+		move.l	d0,(v_ost_player).w			; load Sonic object
 		jmp	(DeleteObject).l
 
 	.wait:
