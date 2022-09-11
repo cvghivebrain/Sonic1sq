@@ -46,20 +46,16 @@ LoadPerZone:
 		move.w	(a4)+,d0				; get water flag
 		beq.s	.no_water				; branch if 0
 		move.b	d0,(f_water_enable).w			; set water enable flag
-		movea.l	(a4),a1					; get pointer for water palette id list for Sonic
-		move.b	(a1,d1.w),d0				; get palette id
-		bsr.w	PalLoad_Water				; load palette
-		moveq	#0,d0
-		movea.l	4(a4),a1				; get pointer for water palette id list
-		move.b	(a1,d1.w),d0				; get palette id
-		bsr.w	PalLoad_Water_Next			; load palette
-		movea.l	8(a4),a1				; get pointer for initial water height list
+		movea.l	(a4),a1					; get pointer for water filter id list
+		move.b	(a1,d1.w),(v_waterfilter_id).w		; set water filter id
+		
+		movea.l	4(a4),a1				; get pointer for initial water height list
 		move.w	(a1,d2.w),d0				; get water height
 		move.w	d0,(v_water_height_actual).w		; set water heights
 		move.w	d0,(v_water_height_normal).w
 		move.w	d0,(v_water_height_next).w
 	.no_water:
-		adda.l	#12,a4
+		adda.l	#8,a4
 
 		movea.l	(a4)+,a1				; get pointer for OPL list
 		move.l	(a1,d4.w),(v_opl_data_ptr).w		; get pointer for actual OPL data
@@ -108,8 +104,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Pal_GHZ				; palette id list for level (act specific)
 		dc.l Zone_PCyc_GHZ				; palette cycling routine list (act specific)
 		dc.w 0						; 1 to enable water
-		dc.l Zone_WSPal_LZ				; water palette id list for Sonic (act specific)
-		dc.l Zone_WPal_LZ				; water palette id list (act specific)
+		dc.l Zone_Filter_LZ				; water filter id list (act specific)
 		dc.l Zone_WHeight_LZ				; water height list (act specific)
 		dc.l Zone_OPL_GHZ				; object position list (act specific)
 		dc.l Zone_Music_GHZ				; background music id list (act specific)
@@ -131,8 +126,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Pal_LZ
 		dc.l Zone_PCyc_LZ
 		dc.w 1
-		dc.l Zone_WSPal_LZ
-		dc.l Zone_WPal_LZ
+		dc.l Zone_Filter_LZ
 		dc.l Zone_WHeight_LZ
 		dc.l Zone_OPL_LZ
 		dc.l Zone_Music_LZ
@@ -153,8 +147,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Pal_MZ
 		dc.l Zone_PCyc_MZ
 		dc.w 0
-		dc.l Zone_WSPal_LZ
-		dc.l Zone_WPal_LZ
+		dc.l Zone_Filter_LZ
 		dc.l Zone_WHeight_LZ
 		dc.l Zone_OPL_MZ
 		dc.l Zone_Music_MZ
@@ -175,8 +168,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Pal_SLZ
 		dc.l Zone_PCyc_SLZ
 		dc.w 0
-		dc.l Zone_WSPal_LZ
-		dc.l Zone_WPal_LZ
+		dc.l Zone_Filter_LZ
 		dc.l Zone_WHeight_LZ
 		dc.l Zone_OPL_SLZ
 		dc.l Zone_Music_SLZ
@@ -197,8 +189,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Pal_SYZ
 		dc.l Zone_PCyc_SYZ
 		dc.w 0
-		dc.l Zone_WSPal_LZ
-		dc.l Zone_WPal_LZ
+		dc.l Zone_Filter_LZ
 		dc.l Zone_WHeight_LZ
 		dc.l Zone_OPL_SYZ
 		dc.l Zone_Music_SYZ
@@ -219,8 +210,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Pal_SBZ
 		dc.l Zone_PCyc_SBZ
 		dc.w 0
-		dc.l Zone_WSPal_LZ
-		dc.l Zone_WPal_LZ
+		dc.l Zone_Filter_LZ
 		dc.l Zone_WHeight_LZ
 		dc.l Zone_OPL_SBZ
 		dc.l Zone_Music_SBZ
@@ -241,8 +231,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Pal_End
 		dc.l Zone_PCyc_GHZ
 		dc.w 0
-		dc.l Zone_WSPal_LZ
-		dc.l Zone_WPal_LZ
+		dc.l Zone_Filter_LZ
 		dc.l Zone_WHeight_LZ
 		dc.l Zone_OPL_End
 		dc.l Zone_Music_End
@@ -280,9 +269,8 @@ Zone_Pal_SLZ:	dc.b id_Pal_SLZ,id_Pal_SLZ,id_Pal_SLZ
 Zone_Pal_SBZ:	dc.b id_Pal_SBZ1,id_Pal_SBZ2,id_Pal_SBZ2
 Zone_Pal_End:	dc.b id_Pal_Ending,id_Pal_Ending
 
-Zone_WSPal_LZ:	dc.b id_Pal_LZSonWater,id_Pal_LZSonWater,id_Pal_LZSonWater,id_Pal_SBZ3SonWat
-
-Zone_WPal_LZ:	dc.b id_Pal_LZWater,id_Pal_LZWater,id_Pal_LZWater,id_Pal_SBZ3Water
+Zone_Filter_LZ:
+		dc.b id_Filter_LZ,id_Filter_LZ,id_Filter_LZ,id_Filter_SBZ3
 		even
 
 ; ---------------------------------------------------------------------------

@@ -48,52 +48,6 @@ PalLoad_Now:
 		rts
 
 ; ---------------------------------------------------------------------------
-; Subroutines to load underwater palette immediately
-
-; input:
-;	d0 = index number for palette
-
-;	uses d0, d7, a1, a2, a3
-; ---------------------------------------------------------------------------
-
-PalLoad_Water:
-		lea	(PalPointers).l,a1
-		lsl.w	#3,d0
-		adda.w	d0,a1
-		movea.l	(a1)+,a2				; get palette data address
-		movea.w	(a1)+,a3				; get target RAM address
-		suba.w	#v_pal_dry-v_pal_water,a3		; jump to underwater palette RAM address
-		move.w	(a1)+,d7				; get length of palette data
-
-	.loop:
-		move.l	(a2)+,(a3)+				; move data to RAM
-		dbf	d7,.loop
-		rts
-
-; ---------------------------------------------------------------------------
-; Subroutines to load underwater palette that will be used after fading in
-
-; input:
-;	d0 = index number for palette
-
-;	uses d0, d7, a1, a2, a3
-; ---------------------------------------------------------------------------
-
-PalLoad_Water_Next:
-		lea	(PalPointers).l,a1
-		lsl.w	#3,d0
-		adda.w	d0,a1
-		movea.l	(a1)+,a2				; get palette data address
-		movea.w	(a1)+,a3				; get target RAM address
-		suba.w	#v_pal_dry-v_pal_water_next,a3		; jump to next underwater palette RAM address
-		move.w	(a1)+,d7				; get length of palette data
-
-	.loop:
-		move.l	(a2)+,(a3)+				; move data to RAM
-		dbf	d7,.loop
-		rts
-
-; ---------------------------------------------------------------------------
 ; Palette pointers
 ; ---------------------------------------------------------------------------
 
@@ -123,13 +77,81 @@ PalPointers_Levels:
 		palp	Pal_SYZ,v_pal_dry_line2,$30		; 8 - SYZ
 		palp	Pal_SBZ1,v_pal_dry_line2,$30		; 9 - SBZ1
 		palp	Pal_Special,v_pal_dry_line1,$40		; $A (10) - special stage
-		palp	Pal_LZWater,v_pal_dry_line1,$40		; $B (11) - LZ underwater
 		palp	Pal_SBZ3,v_pal_dry_line2,$30		; $C (12) - SBZ3
-		palp	Pal_SBZ3Water,v_pal_dry_line1,$40	; $D (13) - SBZ3 underwater
 		palp	Pal_SBZ2,v_pal_dry_line2,$30		; $E (14) - SBZ2
-		palp	Pal_LZSonWater,v_pal_dry_line1,$10	; $F (15) - LZ Sonic underwater
-		palp	Pal_SBZ3SonWat,v_pal_dry_line1,$10	; $10 (16) - SBZ3 Sonic underwater
 		palp	Pal_SSResult,v_pal_dry_line1,$40	; $11 (17) - special stage results
 		palp	Pal_Continue,v_pal_dry_line1,$20	; $12 (18) - special stage results continue
 		palp	Pal_Ending,v_pal_dry_line1,$40		; $13 (19) - ending sequence
 		even
+
+; ---------------------------------------------------------------------------
+; Subroutine to generate water palette
+
+;	uses d0, d1, d2, d3, a0, a1, a2
+; ---------------------------------------------------------------------------
+
+WaterFilter:
+		moveq	#0,d0
+		move.b	(v_waterfilter_id).w,d0			; get filter id
+		add.w	d0,d0					; multiply by 2
+		move.w	Filter_Index(pc,d0.w),d0
+		
+		moveq	#0,d3
+		move.w	#countof_color-1,d1
+		lea	(v_pal_dry).w,a0
+		lea	(v_pal_water).w,a1
+		lea	Filter_KeepList(pc),a2
+		bsr.s	WaterFilter_Run				; create water palette for Sonic
+		
+		moveq	#0,d3
+		move.w	#(countof_color*3)-1,d1
+		lea	(v_pal_dry_next+sizeof_pal).w,a0
+		lea	(v_pal_water_next+sizeof_pal).w,a1
+		lea	Filter_KeepList+countof_color(pc),a2
+		bsr.s	WaterFilter_Run				; create water palette for level (after fade-in)
+		rts
+
+WaterFilter_Update:
+		moveq	#0,d0
+		move.b	(v_waterfilter_id).w,d0			; get filter id
+		add.w	d0,d0					; multiply by 2
+		move.w	Filter_Index(pc,d0.w),d0
+		
+		move.w	#(countof_color*countof_pal)-1,d1
+		lea	(v_pal_dry).w,a0
+		lea	(v_pal_water).w,a1
+		lea	Filter_KeepList(pc),a2
+		bsr.s	WaterFilter_Run				; create water palette for all
+		rts
+		
+WaterFilter_Run:
+	.loop:
+		move.w	(a0)+,d2				; get colour
+		tst.b	(a2,d3.w)				; check keeplist
+		bne.s	.keepcolour				; branch if 1
+		jsr	Filter_Index(pc,d0.w)
+	.keepcolour:
+		move.w	d2,(a1)+				; write colour
+		add.w	#1,d3					; increment counter
+		dbf	d1,.loop				; repeat for all colours
+		rts
+		
+Filter_Index:	index *
+		ptr Filter_LZ
+		ptr Filter_SBZ3
+		
+Filter_LZ:
+		and.w	#$CE2,d2				; remove most red & some blue
+		rts
+		
+Filter_SBZ3:
+		and.w	#$E0E,d2				; remove green
+		rts
+		
+Filter_KeepList:
+		dc.b 1,1,0,0,0,0,1,1,1,1,0,0,0,0,0,1		; 0 = filter colour; 1 = keep colour
+		dc.b 1,1,0,0,0,0,1,1,1,1,0,0,0,0,0,0
+		dc.b 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+		dc.b 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+		even
+		

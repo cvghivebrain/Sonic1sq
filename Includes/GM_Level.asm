@@ -121,6 +121,7 @@ Level_Skip_TtlCard:
 		jsr	(ConvertCollisionArray).l
 		bsr.w	LZWaterFeatures
 		bsr.w	LoadPerCharacter
+		bsr.w	WaterFilter
 		tst.w	(v_demo_mode).w				; is this an ending demo?
 		bmi.s	.skip_hud				; if yes, branch
 		move.l	#HUD,(v_ost_hud).w			; load HUD object
