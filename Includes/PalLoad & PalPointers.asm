@@ -85,7 +85,7 @@ PalPointers_Levels:
 		even
 
 ; ---------------------------------------------------------------------------
-; Subroutine to generate water palette
+; Subroutine to generate water palette at the start of a level
 
 ;	uses d0, d1, d2, d3, a0, a1, a2
 ; ---------------------------------------------------------------------------
@@ -110,6 +110,12 @@ WaterFilter:
 		lea	Filter_KeepList+countof_color(pc),a2
 		bsr.s	WaterFilter_Run				; create water palette for level (after fade-in)
 		rts
+
+; ---------------------------------------------------------------------------
+; Subroutine to generate water palette during a level
+
+;	uses d0, d1, d2, d3, a0, a1, a2
+; ---------------------------------------------------------------------------
 
 WaterFilter_Update:
 		moveq	#0,d0
@@ -136,6 +142,13 @@ WaterFilter_Run:
 		dbf	d1,.loop				; repeat for all colours
 		rts
 		
+; ---------------------------------------------------------------------------
+; Functions applied to each colour
+
+; input:
+;	d2 = single colour
+; ---------------------------------------------------------------------------
+
 Filter_Index:	index *
 		ptr Filter_LZ
 		ptr Filter_SBZ3
@@ -148,6 +161,10 @@ Filter_SBZ3:
 		and.w	#$E0E,d2				; remove green
 		rts
 		
+; ---------------------------------------------------------------------------
+; Array listing which colours are filtered and which are kept
+; ---------------------------------------------------------------------------
+
 Filter_KeepList:
 		dc.b 1,1,0,0,0,0,1,1,1,1,0,0,0,0,0,1		; 0 = filter colour; 1 = keep colour
 		dc.b 1,1,0,0,0,0,1,1,1,1,0,0,0,0,0,0

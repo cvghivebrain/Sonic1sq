@@ -191,6 +191,8 @@ linestart:	equ (sizeof_vram_row*linetop)+(lineleft*2)	; address in nametable
 linecolumn:	equ 19						; lines per column (set as linecount for 1 column)
 columnwidth:	equ linesize+2					; spacing between columns
 linesound:	equ (LevSel_Strings_sound-LevSel_Strings)/(linesize+6) ; line number with sound test
+linecharsel:	equ (LevSel_Strings_charsel-LevSel_Strings)/(linesize+6) ; line number with character select
+charselsize:	equ LevSel_CharStrings_end-LevSel_CharStrings	; characters per character name
 
 LevSel_Control:
 		move.w	(v_levelselect_item).w,d0
@@ -244,7 +246,7 @@ LevSel_Hold:
 		
 	.not_up:
 		move.w	d0,(v_levelselect_item).w		; set new selection
-		bra.s	LevSel_Display
+		bra.w	LevSel_Display
 		
 	.exit:
 		rts
@@ -273,6 +275,14 @@ LevSel_Right:
 		move.w	#0,(v_levelselect_sound).w		; reset to 0 if above max
 		bra.s	.exit
 	.not_soundtest:
+		cmp.w	#linecharsel,d0
+		bne.s	.not_charsel				; branch if not on character select
+		add.w	#1,(v_character1).w			; increment character select
+		cmp.w	#3,(v_character1).w
+		bne.s	.exit					; branch if valid
+		move.w	#0,(v_character1).w			; reset to 0 if above max
+		bra.s	.exit
+	.not_charsel:
 		add.w	#linecolumn,d0				; goto next column
 		cmp.w	#linecount,d0
 		blt.s	.exit					; branch if item is valid
@@ -288,6 +298,13 @@ LevSel_Left:
 		move.w	#$4F,(v_levelselect_sound).w		; jump to $4F if below 0
 		bra.s	.exit
 	.not_soundtest:
+		cmp.w	#linecharsel,d0
+		bne.s	.not_charsel				; branch if not on character select
+		sub.w	#1,(v_character1).w			; increment character select
+		bpl.s	.exit					; branch if valid
+		move.w	#2,(v_character1).w			; jump to 2 if below 0
+		bra.s	.exit
+	.not_charsel:
 		sub.w	#linecolumn,d0				; goto previous column
 		bpl.s	.exit					; branch if item is valid
 		add.w	#linecolumn,d0				; undo
@@ -296,6 +313,7 @@ LevSel_Left:
 
 LevSel_Display:
 		lea	(LevSel_Strings).l,a1
+		lea	(LevSel_CharStrings).l,a2
 		lea	(vdp_data_port).l,a6
 		locVRAM	vram_bg+linestart,d3
 		move.l	d3,d4
@@ -339,6 +357,20 @@ LevSel_Line:
 		lsr.w	#2,d1					; restore d1
 		
 	.not_soundtest:
+		cmp.w	#linecharsel,d6				; d6 = current line being drawn
+		bne.s	.not_charsel				; branch if not the character select
+		cmp.w	#charselsize-1,d1
+		bgt.s	.not_charsel				; branch if not the last 8 characters on the line
+		move.w	(v_character1).w,d2			; get character id
+		lsl.w	#3,d2					; multiply by 8
+		sub.w	#charselsize-1,d1
+		neg.w	d1					; invert value d1
+		add.w	d1,d2					; add d1
+		neg.w	d1
+		add.w	#charselsize-1,d1			; restore d1
+		move.b	(a2,d2.w),d2				; get character
+		
+	.not_charsel:
 		add.w	#tile_Kos_Text+tile_pal4+tile_hi-$20,d2	; convert to tile
 		cmp.w	(v_levelselect_item).w,d6		; d6 = current line being drawn
 		bne.s	.unselected				; branch if line is not selected
@@ -530,4 +562,14 @@ LevSel_Strings:	lsline "GREEN HILL ZONE  1",id_LevSel_Level,id_GHZ,0
 		lsline "CONTINUE SCREEN   ",id_LevSel_Gamemode,id_Continue,0
 	LevSel_Strings_sound:
 		lsline "SOUND SELECT   $XX",id_LevSel_Sound,0,0
+	LevSel_Strings_charsel:
+		lsline "CHARACTER XXXXXXXX",id_LevSel_Level,id_GHZ,0
 	LevSel_Strings_end2:
+
+LevSel_CharStrings:
+		dc.b "   SONIC"
+	LevSel_CharStrings_end:
+		dc.b " KETCHUP"
+		dc.b " MUSTARD"
+		even
+		

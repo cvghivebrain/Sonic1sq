@@ -18,6 +18,7 @@ _Sonic 1-squared_ is an enhanced version of the original _Sonic the Hedgehog_ ga
 * UncPLC subroutine load uncompressed graphics at any time. This complements KosPLC by loading graphics during a level. Both this and KosPLC use the DMA queue.
 * Rewritten level select routine to be more customisable. It now uses standard ASCII, and supports multiple columns (which are automatically generated based on the lines-per-column setting).
 * The hidden Japanese credits screen has been given its own gamemode, which is accessible through the level select.
+* Water palettes are generated in-game by the WaterFilter subroutine, instead of being hardcoded.
 
 # Credits
 * [flamewing](https://github.com/flamewing) for [mdcomp](https://github.com/flamewing/mdcomp).
