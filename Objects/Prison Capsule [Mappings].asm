@@ -6,8 +6,6 @@ Map_Pri:	index *
 		ptr frame_prison_switch1
 		ptr frame_prison_broken
 		ptr frame_prison_switch2
-		ptr frame_prison_unused_pod
-		ptr frame_prison_unused_panel
 		ptr frame_prison_blank
 		
 frame_prison_capsule:
@@ -28,28 +26,17 @@ frame_prison_switch1:
 		
 frame_prison_broken:
 		spritemap
-		piece	-$20, 0, 3x1, $42, pal2
-		piece	-$20, 8, 4x1, $45, pal2
-		piece	$10, 0, 2x1, $49, pal2
-		piece	0, 8, 4x1, $4B, pal2
+		piece	-$20, 0, 3x1, 0, pal2
+		piece	-$20, 8, 4x1, 3, pal2
+		piece	$10, 0, 2x1, 7, pal2
+		piece	0, 8, 4x1, 9, pal2
 		piece	-$20, $10, 4x2, $2C, pal2
 		piece	0, $10, 4x2, $34, pal2
 		endsprite
 		
 frame_prison_switch2:
 		spritemap
-		piece	-$C, -8, 3x2, $4F
-		endsprite
-		
-frame_prison_unused_pod:
-		spritemap
-		piece	-$10, -$18, 4x3, $55, pal2
-		piece	-$10, 0, 4x3, $61, pal2
-		endsprite
-		
-frame_prison_unused_panel:
-		spritemap
-		piece	-8, -$10, 2x4, $6D, pal2
+		piece	-$C, -8, 3x2, $42
 		endsprite
 		
 frame_prison_blank:

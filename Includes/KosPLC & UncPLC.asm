@@ -390,6 +390,8 @@ UncLoadCues:
 		ptr UPLC_Warp
 		ptr UPLC_Credits
 		ptr UPLC_SonicIcon
+		ptr UPLC_Prison
+		ptr UPLC_Prison2
 
 UPLC_HUD:	uplcheader $D940
 		uplc Art_HUDMain,v_tile_hud
@@ -432,4 +434,12 @@ UPLC_Credits:	uplcheader $20
 
 UPLC_SonicIcon:	uplcheader vram_lifeicon
 		uplc Art_Lives
+	.end:
+
+UPLC_Prison:	uplcheader $D000
+		uplc Art_Prison
+	.end:
+
+UPLC_Prison2:	uplcheader $D000
+		uplc Art_PrisonBroken
 	.end:

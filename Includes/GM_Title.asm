@@ -571,5 +571,7 @@ LevSel_CharStrings:
 	LevSel_CharStrings_end:
 		dc.b " KETCHUP"
 		dc.b " MUSTARD"
+		dc.b "   TAILS"
+		dc.b "KNUCKLES"
 		even
 		

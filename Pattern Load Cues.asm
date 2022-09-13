@@ -55,7 +55,6 @@ PLC_Main2:	plcheader
 PLC_Boss:	plcheader
 		plcm	Nem_Eggman, $8000			; Eggman main patterns
 		plcm	Nem_Weapons				; Eggman's weapons ($8D80)
-		plcm	Nem_Prison, $93A0			; prison capsule
 		plcm	Nem_Exhaust, $A540			; exhaust flame
 	PLC_Boss_end:
 ; ---------------------------------------------------------------------------

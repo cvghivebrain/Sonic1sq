@@ -20,8 +20,6 @@ Pri_Index:	index *,,2
 		ptr Pri_Main
 		ptr Pri_Body
 		ptr Pri_Switch
-		ptr Pri_Switch2
-		ptr Pri_Panel
 		ptr Pri_Explosion
 		ptr Pri_Animals
 		ptr Pri_EndAct
@@ -29,8 +27,6 @@ Pri_Index:	index *,,2
 		; routine, width, priority, frame
 Pri_Var:	dc.b id_Pri_Body, $20, 4, id_frame_prison_capsule ; 0 - body
 		dc.b id_Pri_Switch, $C, 5, id_frame_prison_switch1 ; 1 - switch
-		dc.b id_Pri_Switch2, $10, 4, id_frame_prison_switch2 ; 2 - unused
-		dc.b id_Pri_Panel, $10, 3, id_frame_prison_unused_panel ; 3 - unused
 
 		rsobj Prison
 ost_prison_y_start:	rs.w 1 ; $30				; original y position (2 bytes)
@@ -40,7 +36,7 @@ ost_prison_time:	rs.w 1 ; $3E
 
 Pri_Main:	; Routine 0
 		move.l	#Map_Pri,ost_mappings(a0)
-		move.w	#tile_Nem_Prison,ost_tile(a0)
+		move.w	#tile_Art_Prison,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.w	ost_y_pos(a0),ost_prison_y_start(a0)
 		moveq	#0,d0
@@ -51,13 +47,13 @@ Pri_Main:	; Routine 0
 		move.b	(a1)+,ost_displaywidth(a0)
 		move.b	(a1)+,ost_priority(a0)
 		move.b	(a1)+,ost_frame(a0)
-		cmpi.w	#8,d0					; is subtype = 2 ?
-		bne.s	.not02					; if not, branch
+		cmpi.w	#0,d0					; is subtype = 0 ?
+		bne.s	.not00					; if not, branch
 
-		move.b	#id_col_16x16,ost_col_type(a0)
-		move.b	#8,ost_col_property(a0)
+		moveq	#id_UPLC_Prison,d0
+		jsr	UncPLC					; load prison gfx
 
-	.not02:
+	.not00:
 		rts	
 ; ===========================================================================
 
@@ -79,7 +75,9 @@ Pri_Body:	; Routine 2
 		bset	#status_air_bit,(v_ost_player+ost_status).w
 
 	.not_on_top:
-		move.b	#id_frame_prison_broken,ost_frame(a0)	; use use borken prison frame (2)
+		move.b	#id_frame_prison_broken,ost_frame(a0)	; use use broken prison frame (2)
+		moveq	#id_UPLC_Prison2,d0
+		jsr	UncPLC					; load new gfx
 		rts	
 ; ===========================================================================
 
@@ -110,8 +108,6 @@ Pri_Switch:	; Routine 4
 		rts	
 ; ===========================================================================
 
-Pri_Switch2:
-Pri_Panel:
 Pri_Explosion:	; Routine 6, 8, $A
 		moveq	#7,d0
 		and.b	(v_vblank_counter_byte).w,d0		; byte that increments every frame
@@ -142,7 +138,7 @@ Pri_Explosion:	; Routine 6, 8, $A
 		move.b	#2,(v_boss_status).w			; set flag for prison open
 		move.b	#id_Pri_Animals,ost_routine(a0)		; goto Pri_Animals next
 		move.b	#id_frame_prison_blank,ost_frame(a0)	; make switch invisible
-		move.w	#150,ost_prison_time(a0)			; set time for additional animals to load to 2.5 secs
+		move.w	#150,ost_prison_time(a0)		; set time for additional animals to load to 2.5 secs
 		addi.w	#$20,ost_y_pos(a0)
 		moveq	#8-1,d6					; number of animals to load
 		move.w	#$9A,d5					; animal jumping queue start

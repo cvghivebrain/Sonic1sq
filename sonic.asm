@@ -785,9 +785,6 @@ Art_Sonic:	incbin	"Graphics\Sonic.bin"			; Sonic
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - various
 ; ---------------------------------------------------------------------------
-		incfile Nem_Smoke,"Graphics - Compressed\Unused - Smoke",nem
-		incfile Nem_SyzSparkle,"Graphics - Compressed\Unused - SYZ Sparkles",nem
-		incfile Nem_UnkFire,"Graphics - Compressed\Unused - Fireball",nem
 		incfile Art_Warp,"Graphics\Unused - Special Stage Warp",bin,dma_safe
 		incfile Nem_Goggle,"Graphics - Compressed\Unused - Goggles",nem
 
@@ -985,7 +982,8 @@ Blk256_SBZ:	incbin	"256x256 Mappings\SBZ.kos"
 		incfile	Art_EndFlowers,"Graphics\Ending Flowers",bin,dma_safe
 		incfile Nem_Eggman,"Graphics - Compressed\Boss - Main",nem
 		incfile Nem_Weapons,"Graphics - Compressed\Boss - Weapons",nem
-		incfile Nem_Prison,"Graphics - Compressed\Prison Capsule",nem
+		incfile Art_Prison,"Graphics\Prison Capsule",bin,dma_safe
+		incfile Art_PrisonBroken,"Graphics\Prison Capsule Broken",bin,dma_safe
 		incfile Nem_Sbz2Eggman,"Graphics - Compressed\Boss - Eggman in SBZ2 & FZ",nem
 		incfile Kos_FzBoss,"Graphics Kosinski\Boss - Final Zone",kos
 		incfile Kos_FzEggman,"Graphics Kosinski\Boss - Eggman after FZ Fight",kos
