@@ -89,6 +89,9 @@ LoadPerZone:
 
 		movea.l	(a4)+,a1				; get pointer for DLE list
 		move.l	(a1,d4.w),(v_dle_ptr).w			; get pointer for DLE routine
+
+		movea.l	(a4)+,a1				; get pointer for next level list
+		move.w	(a1,d2.w),(v_zone_next).w		; set next level
 		rts
 		
 ; ---------------------------------------------------------------------------
@@ -114,6 +117,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l DebugList_GHZ				; debug list
 		dc.l Zone_Card_GHZ				; title card list (act specific)
 		dc.l Zone_DLE_GHZ				; dynamic level event list (act specific)
+		dc.l Zone_Next_GHZ				; next level list (act specific)
 		even
 	ZoneDefs_size:
 
@@ -136,6 +140,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l DebugList_LZ
 		dc.l Zone_Card_LZ
 		dc.l Zone_DLE_LZ
+		dc.l Zone_Next_LZ
 		even
 		
 		; Marble Zone
@@ -157,6 +162,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l DebugList_MZ
 		dc.l Zone_Card_MZ
 		dc.l Zone_DLE_MZ
+		dc.l Zone_Next_MZ
 		even
 		
 		; Star Light Zone
@@ -178,6 +184,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l DebugList_SLZ
 		dc.l Zone_Card_SLZ
 		dc.l Zone_DLE_SLZ
+		dc.l Zone_Next_SLZ
 		even
 		
 		; Spring Yard Zone
@@ -199,6 +206,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l DebugList_SYZ
 		dc.l Zone_Card_SYZ
 		dc.l Zone_DLE_SYZ
+		dc.l Zone_Next_SYZ
 		even
 		
 		; Scrap Brain Zone
@@ -220,6 +228,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l DebugList_SBZ
 		dc.l Zone_Card_SBZ
 		dc.l Zone_DLE_SBZ
+		dc.l Zone_Next_SBZ
 		even
 		
 		; Ending
@@ -241,6 +250,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l DebugList_Ending
 		dc.l Zone_Card_GHZ
 		dc.l Zone_DLE_End
+		dc.l Zone_Next_End
 		even
 
 ; ---------------------------------------------------------------------------
@@ -408,6 +418,18 @@ Zone_DLE_LZ:	dc.l DLE_LZ12,DLE_LZ12,DLE_LZ3,DLE_SBZ3
 Zone_DLE_SLZ:	dc.l DLE_SLZ12,DLE_SLZ12,DLE_SLZ3
 Zone_DLE_SBZ:	dc.l DLE_SBZ1,DLE_SBZ2,DLE_FZ
 Zone_DLE_End:	dc.l DLE_Ending,DLE_Ending
+
+; ---------------------------------------------------------------------------
+; Next level list
+; ---------------------------------------------------------------------------
+
+Zone_Next_GHZ:	dc.w id_GHZ_act2,id_GHZ_act3,id_MZ_act1
+Zone_Next_MZ:	dc.w id_MZ_act2,id_MZ_act3,id_SYZ_act1
+Zone_Next_SYZ:	dc.w id_SYZ_act2,id_SYZ_act3,id_LZ_act1
+Zone_Next_LZ:	dc.w id_LZ_act2,id_LZ_act3,id_SLZ_act1,id_FZ	; SBZ3 -> FZ
+Zone_Next_SLZ:	dc.w id_SLZ_act2,id_SLZ_act3,id_SBZ_act1
+Zone_Next_SBZ:	dc.w id_SBZ_act2,id_SBZ_act3,id_GHZ_act1
+Zone_Next_End:	dc.w id_GHZ_act1,id_GHZ_act1
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to load character data

@@ -323,6 +323,8 @@ v_player2_ptr:			rs.l 1 ; player 2 object pointer
 v_haspassed_character:		rs.w 1 ; mappings frame used for "Sonic has passed"
 v_zone:				rs.w 1 ; $FFFFFE10 ; current zone number
 v_act:				equ __rs-1 ; $FFFFFE11 ; current act number
+v_zone_next:			rs.w 1 ; next zone number
+v_act_next:			equ __rs-1 ; next act number
 v_lives:			rs.b 1 ; $FFFFFE12 ; number of lives
 v_air:				rs.w 1 ; $FFFFFE14 ; air remaining while underwater (2 bytes)
 v_last_ss_levelid:		rs.b 1 ; $FFFFFE16 ; level id of most recent special stage played

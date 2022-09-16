@@ -176,14 +176,7 @@ Has_Bonus:	; Routine 6
 ; ===========================================================================
 
 Has_NextLevel:	; Routine $A
-		move.b	(v_zone).w,d0
-		andi.w	#7,d0
-		lsl.w	#3,d0
-		move.b	(v_act).w,d1
-		andi.w	#3,d1
-		add.w	d1,d1
-		add.w	d1,d0					; combine zone/act numbers into single value
-		move.w	LevelOrder(pc,d0.w),d0			; load level from level order array
+		move.w	(v_zone_next).w,d0
 		move.w	d0,(v_zone).w				; set level number
 		tst.w	d0
 		bne.s	.valid_level				; branch if not 0
@@ -204,51 +197,6 @@ Has_NextLevel:	; Routine $A
 
 .skip_restart:
 		bra.w	DisplaySprite
-
-; ---------------------------------------------------------------------------
-; Level	order array
-
-; Lists which levels which are loaded after the current level
-; ---------------------------------------------------------------------------
-
-LevelOrder:
-		; Green Hill Zone
-		dc.w id_GHZ_act2				; Act 1
-		dc.w id_GHZ_act3				; Act 2
-		dc.w id_MZ_act1					; Act 3
-		dc.w id_GHZ_act1
-
-		; Labyrinth Zone
-		dc.w id_LZ_act2					; Act 1
-		dc.w id_LZ_act3					; Act 2
-		dc.w id_SLZ_act1				; Act 3
-		dc.w id_FZ					; Scrap Brain Zone Act 3
-
-		; Marble Zone
-		dc.w id_MZ_act2					; Act 1
-		dc.w id_MZ_act3					; Act 2
-		dc.w id_SYZ_act1				; Act 3
-		dc.w id_GHZ_act1
-
-		; Star Light Zone
-		dc.w id_SLZ_act2				; Act 1
-		dc.w id_SLZ_act3				; Act 2
-		dc.w id_SBZ_act1				; Act 3
-		dc.w id_GHZ_act1
-
-		; Spring Yard Zone
-		dc.w id_SYZ_act2				; Act 1
-		dc.w id_SYZ_act3				; Act 2
-		dc.w id_LZ_act1					; Act 3
-		dc.w id_GHZ_act1
-
-		; Scrap Brain Zone
-		dc.w id_SBZ_act2				; Act 1
-		dc.w id_SBZ_act3				; Act 2
-		dc.w id_GHZ_act1				; Final Zone
-		dc.w id_GHZ_act1
-		even
-		zonewarning LevelOrder,8
 ; ===========================================================================
 
 Has_MoveBack:	; Routine $E

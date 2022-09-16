@@ -1,21 +1,4 @@
 ; ---------------------------------------------------------------------------
-; Music playlist
-; ---------------------------------------------------------------------------
-MusicList:
-include_MusicList:	macro
-		dc.b mus_GHZ					; GHZ
-		dc.b mus_LZ					; LZ
-		dc.b mus_MZ					; MZ
-		dc.b mus_SLZ					; SLZ
-		dc.b mus_SYZ					; SYZ
-		dc.b mus_SBZ					; SBZ
-		endm
-		include_MusicList
-		zonewarning MusicList,1
-		dc.b mus_FZ					; Ending/FZ
-		even
-
-; ---------------------------------------------------------------------------
 ; Level
 ; ---------------------------------------------------------------------------
 
