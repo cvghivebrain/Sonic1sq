@@ -429,6 +429,8 @@ LoadPerCharacter:
 		move.w	(a4)+,d0
 		jsr	UncPLC					; load life icon graphics
 		
+		move.w	(a4)+,(v_haspassed_character).w		; set mappings frame for "Sonic has passed"
+		
 		rts
 
 CharDefs:
@@ -436,14 +438,17 @@ CharDefs:
 		dc.l SonicPlayer				; object pointer
 		dc.w id_Pal_None				; palette patch id (actual palette is loaded by LoadPerZone)
 		dc.w id_UPLC_SonicIcon				; life icon graphics
+		dc.w id_frame_has_sonichas			; "Sonic has passed" mappings frame
 	CharDefs_size:
 
 		; Red Sonic
 		dc.l SonicPlayer
 		dc.w id_Pal_SonicRed
 		dc.w id_UPLC_SonicIcon
+		dc.w id_frame_has_ketchuphas
 
 		; Yellow Sonic
 		dc.l SonicPlayer
 		dc.w id_Pal_SonicYellow
 		dc.w id_UPLC_SonicIcon
+		dc.w id_frame_has_mustardhas

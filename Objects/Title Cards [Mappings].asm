@@ -28,6 +28,7 @@ frame_card_ghz:
 		piece $3C, -8, 2x2, $26
 		endsprite
 		
+		; x pos start, x pos stop
 		dc.w 0,	$120					; GREEN HILL
 		dc.w -$104, $13C				; ZONE
 		dc.w $414, $154					; ACT x

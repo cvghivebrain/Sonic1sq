@@ -320,6 +320,7 @@ v_character1:			rs.w 1 ; player 1 character id
 v_character2:			rs.w 1 ; player 2 character id
 v_player1_ptr:			rs.l 1 ; player 1 object pointer
 v_player2_ptr:			rs.l 1 ; player 2 object pointer
+v_haspassed_character:		rs.w 1 ; mappings frame used for "Sonic has passed"
 v_zone:				rs.w 1 ; $FFFFFE10 ; current zone number
 v_act:				equ __rs-1 ; $FFFFFE11 ; current act number
 v_lives:			rs.b 1 ; $FFFFFE12 ; number of lives

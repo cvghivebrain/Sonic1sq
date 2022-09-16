@@ -28,7 +28,6 @@ ost_has_x_start:	rs.w 1 ; $32				; start & finish x position (2 bytes)
 ost_has_time:		rs.w 1 ; $3E
 		rsobjend
 
-include_Has_Config:	macro
 		; x pos start, x pos stop, y pos
 		; routine, frame
 Has_Config:	dc.w 4, $124, $BC				; "SONIC HAS"
@@ -51,34 +50,39 @@ Has_Config:	dc.w 4, $124, $BC				; "SONIC HAS"
 
 		dc.w $20C, $14C, $CC				; oval
 		dc.b id_Has_Move, id_frame_has_oval
-		endm
 ; ===========================================================================
 
 Has_Main:	; Routine 0
-		tst.l	(v_plc_buffer).w			; are the pattern load cues empty?
-		beq.s	.plc_free				; if yes, branch
-		rts	
-; ===========================================================================
-
-.plc_free:
 		movea.l	a0,a1					; replace current object with 1st from list
-		lea	(Has_Config).l,a2			; position, routine & frame settings
+		lea	(Has_Config).l,a3			; position, routine & frame settings
 		moveq	#6,d1					; 6 additional items
 
 	.loop:
 		move.l	#HasPassedCard,ost_id(a1)
-		move.w	(a2),ost_x_pos(a1)			; set actual x position
-		move.w	(a2)+,ost_has_x_start(a1)		; set start x position (same as actual)
-		move.w	(a2)+,ost_has_x_stop(a1)		; set stop x position
-		move.w	(a2)+,ost_y_screen(a1)			; set y position
-		move.b	(a2)+,ost_routine(a1)			; goto Has_Move next
-		move.b	(a2)+,d0				; get frame number
+		move.w	(a3),ost_x_pos(a1)			; set actual x position
+		move.w	(a3)+,ost_has_x_start(a1)		; set start x position (same as actual)
+		move.w	(a3)+,ost_has_x_stop(a1)		; set stop x position
+		move.w	(a3)+,ost_y_screen(a1)			; set y position
+		move.b	(a3)+,ost_routine(a1)			; goto Has_Move next
+		move.b	(a3)+,d0				; get frame number
 		cmpi.b	#id_frame_has_act1,d0			; is object the act number?
 		bne.s	.not_act				; if not, branch
 		add.b	(v_act).w,d0				; add act number to frame number
 
 	.not_act:
 		move.b	d0,ost_frame(a1)			; set frame number
+		
+		cmpi.b	#id_frame_has_sonichas,d0		; is object "Sonic has"?
+		bne.s	.not_sonichas				; if not, branch
+		move.w	(v_haspassed_character).w,d0		; change frame number
+		move.w	d0,ost_frame_hi(a1)			; set frame 
+		movea.l	#Map_Has,a2				; goto mappings
+		bsr.w	SkipMappings				; jump to data immediately after mappings
+		move.w	(a2),ost_x_pos(a1)			; set actual x position
+		move.w	(a2)+,ost_has_x_start(a1)		; set start x position (same as actual)
+		move.w	(a2)+,ost_has_x_stop(a1)		; set stop x position
+		
+	.not_sonichas:
 		move.l	#Map_Has,ost_mappings(a1)
 		move.w	(v_tile_titlecard).w,ost_tile(a1)
 		add.w	#tile_hi,ost_tile(a1)
@@ -281,6 +285,4 @@ Has_Boundary:	; Routine $10
 		addq.w	#2,(v_boundary_right).w			; extend right level boundary 2px
 		cmpi.w	#$2100,(v_boundary_right).w
 		beq.w	DeleteObject				; if boundary reaches $2100, delete object
-		rts	
-; ===========================================================================
-		include_Has_Config				; see beginning of this file
+		rts

@@ -3,6 +3,8 @@
 ; ---------------------------------------------------------------------------
 Map_Has:	index *
 		ptr frame_has_sonichas
+		ptr frame_has_ketchuphas
+		ptr frame_has_mustardhas
 		ptr frame_has_passed
 		ptr frame_has_score
 		ptr frame_has_timebonus
@@ -23,6 +25,41 @@ frame_has_sonichas:
 		piece $20, -8, 2x2, 0
 		piece $30, -8, 2x2, $3E
 		endsprite
+		
+		; x pos start, x pos stop
+		dc.w 4, $124
+		
+frame_has_ketchuphas:
+		spritemap					; KETCHUP HAS
+		piece -$70, -8, 2x2, tile_card_K
+		piece -$60, -8, 2x2, tile_card_E
+		piece -$50, -8, 2x2, tile_card_T
+		piece -$40, -8, 2x2, tile_card_C
+		piece -$30, -8, 2x2, tile_card_H
+		piece -$20, -8, 2x2, tile_card_U
+		piece -$10, -8, 2x2, tile_card_P
+		piece $10, -8, 2x2, $1C
+		piece $20, -8, 2x2, 0
+		piece $30, -8, 2x2, $3E
+		endsprite
+		
+		dc.w $1C, $13C
+		
+frame_has_mustardhas:
+		spritemap					; MUSTARD HAS
+		piece -$70, -8, 2x2, tile_card_M
+		piece -$60, -8, 2x2, tile_card_U
+		piece -$50, -8, 2x2, tile_card_S
+		piece -$40, -8, 2x2, tile_card_T
+		piece -$30, -8, 2x2, tile_card_A
+		piece -$20, -8, 2x2, tile_card_R
+		piece -$10, -8, 2x2, tile_card_D
+		piece $10, -8, 2x2, $1C
+		piece $20, -8, 2x2, 0
+		piece $30, -8, 2x2, $3E
+		endsprite
+		
+		dc.w $1C, $13C
 		
 frame_has_passed:
 		spritemap					; PASSED
