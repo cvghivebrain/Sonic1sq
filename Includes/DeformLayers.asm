@@ -36,7 +36,6 @@ Deform_Index:	index *
 		ptr Deform_SLZ
 		ptr Deform_SYZ
 		ptr Deform_SBZ
-		zonewarning Deform_Index,2
 		ptr Deform_GHZ
 
 ; ---------------------------------------------------------------------------

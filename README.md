@@ -23,3 +23,4 @@ _Sonic 1-squared_ is an enhanced version of the original _Sonic the Hedgehog_ ga
 # Credits
 * [flamewing](https://github.com/flamewing) for [mdcomp](https://github.com/flamewing/mdcomp).
 * [vladikcomper](https://github.com/vladikcomper) for the advanced error handler.
+* [Devon](https://github.com/Ralakimus) for the optimised CalcAngle routine.

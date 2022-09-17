@@ -1,13 +1,23 @@
 ; ---------------------------------------------------------------------------
+; Test if macro argument is used
+; ---------------------------------------------------------------------------
+
+ifarg		macros
+		if strlen("\1")>0
+
+ifnotarg	macros
+		if strlen("\1")=0
+
+; ---------------------------------------------------------------------------
 ; Align and pad.
 ; input: length to align to, value to use as padding (default is 0)
 ; ---------------------------------------------------------------------------
 
-align:		macro
-		if narg=1
-		dcb.b (\1-(*%\1))%\1,0
+align:		macro length,value
+		ifarg \value
+		dcb.b (\length-(*%\length))%\length,\value
 		else
-		dcb.b (\1-(*%\1))%\1,\2
+		dcb.b (\length-(*%\length))%\length,0
 		endc
 		endm
 
@@ -15,19 +25,54 @@ align:		macro
 ; Save and restore registers from the stack.
 ; ---------------------------------------------------------------------------
 
-pushr:		macro
-		if strlen("\1")>2
-		movem.l	\1,-(sp)				; save multiple registers
+chkifreg:	macro
+		isreg: = 1					; assume string is register
+		isregm: = 0					; assume single register
+		regtmp: equs \1					; copy input
+		rept strlen(\1)
+		regchr:	substr ,1,"\regtmp"			; get first character
+		regtmp:	substr 2,,"\regtmp"			; remove first character
+		if instr("ad01234567/-","\regchr")
 		else
-		move.l	\1,-(sp)				; save one register
+		isreg: = 0					; string isn't register if it contains characters besides those listed
+		endc
+		if instr("/-","\regchr")
+		isregm: = 1					; string is multi-register
+		endc
+		endr
+		endm
+
+pushr:		macro
+		chkifreg "\1"
+		if (isreg=1)&(isregm=1)
+			ifarg \0				; check if size is specified
+			movem.\0	\1,-(sp)		; save multiple registers (b/w)
+			else
+			movem.l	\1,-(sp)			; save multiple registers
+			endc
+		else
+			ifarg \0				; check if size is specified
+			move.\0	\1,-(sp)			; save one register (b/w)
+			else
+			move.l	\1,-(sp)			; save one whole register
+			endc
 		endc
 		endm
 
 popr:		macro
-		if strlen("\1")>2
-		movem.l	(sp)+,\1				; restore multiple registers
+		chkifreg "\1"
+		if (isreg=1)&(isregm=1)
+			ifarg \0				; check if size is specified
+			movem.\0	(sp)+,\1		; restore multiple registers (b/w)
+			else
+			movem.l	(sp)+,\1			; restore multiple whole registers
+			endc
 		else
-		move.l	(sp)+,\1				; restore one register
+			ifarg \0				; check if size is specified
+			move.\0	(sp)+,\1			; restore one register (b/w)
+			else
+			move.l	(sp)+,\1			; restore one whole register
+			endc
 		endc
 		endm
 
@@ -196,10 +241,10 @@ ptr:		macro
 ; ---------------------------------------------------------------------------
 
 locVRAM:	macro loc,controlport
-		if narg=1
-		move.l	#($40000000+(((loc)&$3FFF)<<16)+(((loc)&$C000)>>14)),(vdp_control_port).l
-		else
+		ifarg \controlport
 		move.l	#($40000000+(((loc)&$3FFF)<<16)+(((loc)&$C000)>>14)),\controlport
+		else
+		move.l	#($40000000+(((loc)&$3FFF)<<16)+(((loc)&$C000)>>14)),(vdp_control_port).l
 		endc
 		endm
 
@@ -209,32 +254,32 @@ locVRAM:	macro loc,controlport
 ;  cram/vsram destination (0 by default)
 ; ---------------------------------------------------------------------------
 
-dma:		macro
+dma:		macro source,length,dest1,dest2
 		dma_type: = $4000
 		dma_type2: = $80
 		
-		if strcmp("\3","cram")
+		if strcmp("\dest1","cram")
 		dma_type: = $C000
-			if strlen("\4")=0
-			dma_dest: = 0
+			ifarg \dest2
+			dma_dest: =\dest2
 			else
-			dma_dest: = \4
+			dma_dest: = 0
 			endc
-		elseif strcmp("\3","vsram")
+		elseif strcmp("\dest1","vsram")
 		dma_type2: = $90
-			if strlen("\4")=0
-			dma_dest: = 0
+			ifarg \dest2
+			dma_dest: =\dest2
 			else
-			dma_dest: = \4
+			dma_dest: = 0
 			endc
 		else
-		dma_dest: = \3
+		dma_dest: = \dest1
 		endc
 		
 		lea	(vdp_control_port).l,a5
-		move.l	#$94000000+(((\2>>1)&$FF00)<<8)+$9300+((\2>>1)&$FF),(a5)
-		move.l	#$96000000+(((\1>>1)&$FF00)<<8)+$9500+((\1>>1)&$FF),(a5)
-		move.w	#$9700+((((\1>>1)&$FF0000)>>16)&$7F),(a5)
+		move.l	#$94000000+(((\length>>1)&$FF00)<<8)+$9300+((\length>>1)&$FF),(a5)
+		move.l	#$96000000+(((\source>>1)&$FF00)<<8)+$9500+((\source>>1)&$FF),(a5)
+		move.w	#$9700+((((\source>>1)&$FF0000)>>16)&$7F),(a5)
 		move.w	#dma_type+(dma_dest&$3FFF),(a5)
 		move.w	#dma_type2+((dma_dest&$C000)>>14),(v_vdp_dma_buffer).w
 		move.w	(v_vdp_dma_buffer).w,(a5)
@@ -292,4 +337,207 @@ enable_display:	macro
 		move.w	(v_vdp_mode_buffer).w,d0		; $81xx
 		ori.b	#$40,d0					; set bit 6
 		move.w	d0,(vdp_control_port).l
+		endm
+
+; ---------------------------------------------------------------------------
+; check if object moves out of range
+; input: location to jump to if out of range, x-axis pos (ost_x_pos(a0) by default)
+; ---------------------------------------------------------------------------
+
+out_of_range:	macro exit,pos
+		if narg=2
+		move.w	pos,d0					; get object position (if specified as not ost_x_pos)
+		else
+		move.w	ost_x_pos(a0),d0			; get object position
+		endc
+		andi.w	#$FF80,d0				; round down to nearest $80
+		move.w	(v_camera_x_pos).w,d1			; get screen position
+		subi.w	#128,d1
+		andi.w	#$FF80,d1
+		sub.w	d1,d0					; d0 = approx distance between object and screen (negative if object is left of screen)
+		cmpi.w	#128+320+192,d0
+		bhi.\0	exit					; branch if d0 is negative or higher than 640
+		endm
+
+; ---------------------------------------------------------------------------
+; Sprite mappings header and footer
+; ---------------------------------------------------------------------------
+
+spritemap:	macro
+		if ~def(current_sprite)
+		current_sprite: = 1
+		endc
+		sprite_start: = *+1
+		dc.w (sprite_\#current_sprite-sprite_start)/6
+		endm
+
+endsprite:	macro
+		sprite_\#current_sprite: equ *
+		current_sprite: = current_sprite+1
+		endm
+
+; ---------------------------------------------------------------------------
+; Sprite mappings piece
+; input: xpos, ypos, size, tile index
+; optional: xflip, yflip, pal2|pal3|pal4, hi (any order)
+; ---------------------------------------------------------------------------
+
+piece:		macro
+		dc.b \2		; ypos
+		sprite_width:	substr	1,1,"\3"
+		sprite_height:	substr	3,3,"\3"
+		dc.b ((sprite_width-1)<<2)+sprite_height-1
+		sprite_xpos: = \1
+		if \4<0						; is tile index negative?
+			sprite_tile: = $10000+(\4)		; convert signed to unsigned
+		else
+			sprite_tile: = \4
+		endc
+		
+		sprite_xflip: = 0
+		sprite_yflip: = 0
+		sprite_hi: = 0
+		sprite_pal: = 0
+		rept narg-4
+			if strcmp("\5","xflip")
+			sprite_xflip: = $800
+			elseif strcmp("\5","yflip")
+			sprite_yflip: = $1000
+			elseif strcmp("\5","hi")
+			sprite_hi: = $8000
+			elseif strcmp("\5","pal2")
+			sprite_pal: = $2000
+			elseif strcmp("\5","pal3")
+			sprite_pal: = $4000
+			elseif strcmp("\5","pal4")
+			sprite_pal: = $6000
+			else
+			endc
+		shift
+		endr
+		
+		dc.w (sprite_tile+sprite_xflip+sprite_yflip+sprite_hi+sprite_pal)&$FFFF
+		dc.w sprite_xpos
+		endm
+
+; ---------------------------------------------------------------------------
+; Object placement
+; input: xpos, ypos, object id, subtype
+; optional: xflip, yflip, rem (any order)
+; ---------------------------------------------------------------------------
+
+objpos:		macro
+		dc.w \1		; xpos
+		obj_ypos: = \2
+		if strcmp("\3","0")
+		obj_id: = 0
+		else
+		obj_id: = \3
+		endc
+		obj_sub\@: equ \4
+		obj_xflip: = 0
+		obj_yflip: = 0
+		obj_rem: = 0
+		rept narg-4
+			if strcmp("\5","xflip")
+			obj_xflip: = $4000
+			elseif strcmp("\5","yflip")
+			obj_yflip: = $8000
+			elseif strcmp("\5","rem")
+			obj_rem: = $80
+			else
+			endc
+		shift
+		endr
+		
+		dc.w obj_ypos+obj_xflip+obj_yflip
+		dc.b obj_rem, obj_sub\@
+		dc.l obj_id
+		endm
+
+endobj:		macros
+		objpos $ffff,0,0,0
+
+; ---------------------------------------------------------------------------
+; Incbins a file and records its (uncompressed) size
+; input: label, file name (without extension), extension
+; optional: dma_safe - keep within a 128kB section
+; ---------------------------------------------------------------------------
+
+incfile:	macro label,name,extension
+		filename: equs \name				; remove quotes from file name
+		sizeof_\label: equ filesize("\filename\.bin")	; save size of associated .bin file
+		if strcmp("\4","dma_safe")			; is DMA safe flag set?
+			if (*&$1FFFF) + sizeof_\label > $20000	; does file occupy two 128kB sections?
+			align $20000				; add padding so that it doesn't
+			endc
+		endc
+	\label:	incbin	"\filename\.\extension"			; incbin actual file
+		even
+		endm
+
+; ---------------------------------------------------------------------------
+; Long conditional jumps
+; ---------------------------------------------------------------------------
+
+jcond:		macro btype,jumpto
+		btype.s	.nojump\@
+		jmp	jumpto
+	.nojump\@:
+		endm
+
+jhi:		macro
+		jcond bls,\1
+		endm
+
+jcc:		macro
+		jcond bcs,\1
+		endm
+
+jhs:		macro
+		jcc	\1
+		endm
+
+jls:		macro
+		jcond bhi,\1
+		endm
+
+jcs:		macro
+		jcond bcc,\1
+		endm
+
+jlo:		macro
+		jcs	\1
+		endm
+
+jeq:		macro
+		jcond bne,\1
+		endm
+
+jne:		macro
+		jcond beq,\1
+		endm
+
+jgt:		macro
+		jcond ble,\1
+		endm
+
+jge:		macro
+		jcond blt,\1
+		endm
+
+jle:		macro
+		jcond bgt,\1
+		endm
+
+jlt:		macro
+		jcond bge,\1
+		endm
+
+jpl:		macro
+		jcond bmi,\1
+		endm
+
+jmi:		macro
+		jcond bpl,\1
 		endm

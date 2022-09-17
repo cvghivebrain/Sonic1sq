@@ -101,7 +101,6 @@ LoopTunnelList:
 		dc.b	$AA,	$B4,	$7F,	$7F		; Star Light
 		dc.b	$7F,	$7F,	$7F,	$7F		; Spring Yard
 		dc.b	$7F,	$7F,	$7F,	$7F		; Scrap Brain
-		zonewarning LoopTunnelList,4
 		dc.b	$7F,	$7F,	$7F,	$7F		; Ending (Green Hill)
 		even
 
@@ -126,7 +125,6 @@ ScrollBlockHeightList:
 		dc.w $800, $100, $100, 0			; SLZ
 		dc.w $800, $100, $100, 0			; SYZ
 		dc.w $800, $100, $100, 0			; SBZ
-		zonewarning ScrollBlockHeightList,8
 		dc.w $70, $100, $100, $100			; Ending (GHZ)
 		
 		endc
@@ -166,7 +164,6 @@ LPL_InitBG_Index:
 		ptr LPL_InitBG_SLZ
 		ptr LPL_InitBG_SYZ
 		ptr LPL_InitBG_SBZ
-		zonewarning LPL_InitBG_Index,2
 		ptr LPL_InitBG_End
 ; ===========================================================================
 

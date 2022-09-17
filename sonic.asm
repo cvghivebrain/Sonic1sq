@@ -10,9 +10,7 @@
 
 		include "Mega Drive.asm"
 		include "Macros - More CPUs.asm"
-		include "Macros - 68k Extended.asm"
-		include "Macros - General.asm"
-		include "Macros - Sonic.asm"
+		include "Macros.asm"
 		include "sound\Sounds.asm"
 		include "sound\Sound Equates.asm"
 		include "Constants.asm"
@@ -283,7 +281,6 @@ Pal_Ending:	incbin	"Palettes\Ending.bin"
 		include "Includes\WaitForVBlank.asm"
 		include "Objects\_RandomNumber.asm"
 		include "Objects\_CalcSine & CalcAngle.asm"
-Angle_Data:	incbin	"Misc Data\Angle Table.bin"
 		include "Includes\Demo Pointers.asm"
 		include "Includes\GM_Title.asm"
 		include "Includes\GM_HiddenCredits.asm"
@@ -1141,7 +1138,6 @@ Level_Index:	index *
 		ptr Level_SBZ4_unused
 		ptr Level_SBZ4_unused
 		ptr Level_SBZ4_unused
-		zonewarning Level_Index,24
 		
 		; Ending
 		ptr Level_End
