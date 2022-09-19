@@ -92,6 +92,9 @@ LoadPerZone:
 
 		movea.l	(a4)+,a1				; get pointer for next level list
 		move.w	(a1,d2.w),(v_zone_next).w		; set next level
+
+		movea.l	(a4)+,a1				; get pointer for bg deformation routine list
+		move.l	(a1,d4.w),(v_deformlayer_ptr).w		; get pointer for bg deformation routine
 		rts
 		
 ; ---------------------------------------------------------------------------
@@ -118,6 +121,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Card_GHZ				; title card list (act specific)
 		dc.l Zone_DLE_GHZ				; dynamic level event list (act specific)
 		dc.l Zone_Next_GHZ				; next level list (act specific)
+		dc.l Zone_Deform_GHZ				; bg deformation routine list (act specific)
 		even
 	ZoneDefs_size:
 
@@ -141,6 +145,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Card_LZ
 		dc.l Zone_DLE_LZ
 		dc.l Zone_Next_LZ
+		dc.l Zone_Deform_LZ
 		even
 		
 		; Marble Zone
@@ -163,6 +168,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Card_MZ
 		dc.l Zone_DLE_MZ
 		dc.l Zone_Next_MZ
+		dc.l Zone_Deform_MZ
 		even
 		
 		; Star Light Zone
@@ -185,6 +191,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Card_SLZ
 		dc.l Zone_DLE_SLZ
 		dc.l Zone_Next_SLZ
+		dc.l Zone_Deform_SLZ
 		even
 		
 		; Spring Yard Zone
@@ -207,6 +214,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Card_SYZ
 		dc.l Zone_DLE_SYZ
 		dc.l Zone_Next_SYZ
+		dc.l Zone_Deform_SYZ
 		even
 		
 		; Scrap Brain Zone
@@ -229,6 +237,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Card_SBZ
 		dc.l Zone_DLE_SBZ
 		dc.l Zone_Next_SBZ
+		dc.l Zone_Deform_SBZ
 		even
 		
 		; Ending
@@ -251,6 +260,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Card_GHZ
 		dc.l Zone_DLE_End
 		dc.l Zone_Next_End
+		dc.l Zone_Deform_End
 		even
 
 ; ---------------------------------------------------------------------------
@@ -430,6 +440,18 @@ Zone_Next_LZ:	dc.w id_LZ_act2,id_LZ_act3,id_SLZ_act1,id_FZ	; SBZ3 -> FZ
 Zone_Next_SLZ:	dc.w id_SLZ_act2,id_SLZ_act3,id_SBZ_act1
 Zone_Next_SBZ:	dc.w id_SBZ_act2,id_SBZ_act3,id_GHZ_act1
 Zone_Next_End:	dc.w id_GHZ_act1,id_GHZ_act1
+
+; ---------------------------------------------------------------------------
+; Background deformation routine pointers
+; ---------------------------------------------------------------------------
+
+Zone_Deform_GHZ:	dc.l Deform_GHZ,Deform_GHZ,Deform_GHZ
+Zone_Deform_MZ:		dc.l Deform_MZ,Deform_MZ,Deform_MZ
+Zone_Deform_SYZ:	dc.l Deform_SYZ,Deform_SYZ,Deform_SYZ
+Zone_Deform_LZ:		dc.l Deform_LZ,Deform_LZ,Deform_LZ,Deform_LZ ; SBZ3
+Zone_Deform_SLZ:	dc.l Deform_SLZ,Deform_SLZ,Deform_SLZ
+Zone_Deform_SBZ:	dc.l Deform_SBZ1,Deform_SBZ2,Deform_SBZ2 ; FZ
+Zone_Deform_End:	dc.l Deform_GHZ,Deform_GHZ
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to load character data

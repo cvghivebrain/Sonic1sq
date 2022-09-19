@@ -134,13 +134,11 @@ CalcAngle_GetAtan2Val:
 ; -------------------------------------------------------------------------
  
 CalcAngle_YZero:
-		cmpi.b  #4,d0                           ; Was the X value negated?
-		beq.s   CalcAngle_YZeroXNeg             ; If so, branch
-		moveq   #0,d0                           ; 0 degrees
-		rts
- 
-CalcAngle_YZeroXNeg:
+		tst.b   d0                              ; Was the X value negated?
+		beq.s   CalcAngle_End                   ; If not, branch (d0 is already 0, so no need to set it again on branch)
 		moveq   #$FFFFFF80,d0                   ; 180 degrees
+ 
+CalcAngle_End:
 		rts
  
 CalcAngle_XZero:

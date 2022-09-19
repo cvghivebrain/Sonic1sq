@@ -195,6 +195,7 @@ v_aniart_ptr:			rs.l 1 ; pointer to animated level art routine
 v_debug_ptr:			rs.l 1 ; pointer to debug list
 v_palcycle_ptr:			rs.l 1 ; pointer to palette cycling routine
 v_dle_ptr:			rs.l 1 ; pointer to dynamic level event routine
+v_deformlayer_ptr:		rs.l 1 ; pointer to bg deformation routine
 v_debug_count:			rs.w 1 ; number of items in debug list
 f_water_enable:			rs.b 1 ; flag set to enable water
 v_waterfilter_id:		rs.b 1 ; water palette filter id
