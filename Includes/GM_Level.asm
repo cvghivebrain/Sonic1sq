@@ -46,27 +46,22 @@ GM_Demo:
 		move.w	#$8720,(a6)				; set background colour (line 3; colour 0)
 		move.w	#$8A00+223,(v_vdp_hint_counter).w	; set palette change position (for water)
 		move.w	(v_vdp_hint_counter).w,(a6)
-		cmpi.b	#id_LZ,(v_zone).w			; is level LZ?
-		bne.s	.skip_water				; if not, branch
+		bsr.w	LoadPerZone
+		tst.b	(f_water_enable).w			; is water enabled?
+		beq.s	.skip_water				; if not, branch
 
 		move.w	#$8014,(a6)				; enable horizontal interrupts
 		clr.b	(v_water_routine).w			; clear water routine counter
 		clr.b	(f_water_pal_full).w			; clear	water state
 		move.b	#1,(v_water_direction).w		; enable water
-
-	.skip_water:
 		move.w	#air_full,(v_air).w
-		enable_ints
-		cmpi.b	#id_LZ,(v_zone).w			; is level LZ?
-		bne.s	.skip_waterpal				; if not, branch
-
 		tst.b	(v_last_lamppost).w			; has a lamppost been used?
 		beq.s	.no_lamp				; if not, branch
 		move.b	(f_water_pal_full_lampcopy).w,(f_water_pal_full).w ; retrieve flag for whole screen being underwater
 
-	.skip_waterpal:
+	.skip_water:
 	.no_lamp:
-		bsr.w	LoadPerZone
+		enable_ints
 		tst.w	(v_demo_mode).w				; is this an ending demo?
 		bmi.s	Level_Skip_TtlCard			; if yes, branch
 		move.l	#TitleCard,(v_ost_titlecard1).w		; load title card object
@@ -119,8 +114,8 @@ Level_Skip_TtlCard:
 	.skip_debug:
 		move.w	#0,(v_joypad_hold).w
 		move.w	#0,(v_joypad_hold_actual).w
-		cmpi.b	#id_LZ,(v_zone).w			; is level LZ?
-		bne.s	.skip_water_surface			; if not, branch
+		tst.b	(f_water_enable).w			; is water enabled?
+		beq.s	.skip_water_surface			; if not, branch
 		move.l	#WaterSurface,(v_ost_watersurface1).w	; load water surface object
 		move.w	#$60,(v_ost_watersurface1+ost_x_pos).w
 		move.l	#WaterSurface,(v_ost_watersurface2).w

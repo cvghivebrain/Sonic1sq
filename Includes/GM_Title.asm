@@ -156,15 +156,13 @@ LevSel_Init:
 		move.w	#loops_to_clear_hscroll,d1
 		bsr.w	ClearRAM				; clear hscroll buffer (in RAM)
 
-		move.l	d0,(v_fg_y_pos_vsram).w
+		move.l	#0,(v_fg_y_pos_vsram).w
 		disable_ints
-		lea	(vdp_data_port).l,a6
-		locVRAM	vram_bg
-		move.w	#(sizeof_vram_bg/4)-1,d1
-
-	.clear_bg:
-		move.l	d0,(a6)
-		dbf	d1,.clear_bg				; clear bg nametable (in VRAM)
+		
+		locVRAM	vram_bg,d0
+		move.l	#sizeof_vram_bg,d1
+		moveq	#0,d2
+		bsr.w	ClearVRAM				; clear bg nametable (in VRAM)
 
 		bsr.w	LevSel_Display
 

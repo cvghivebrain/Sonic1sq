@@ -46,7 +46,7 @@ ObjPos_SLZ1:
 		objpos $0B18,$04D0,FireMaker,type_fire_medium+type_fire_right
 		objpos $0B18,$0550,FireMaker,type_fire_medium+type_fire_right
 		objpos $0B90,$01F0,Staircase,type_stair_below
-		objpos $0B90,$0230,Orbinaut,$02,rem
+		objpos $0B90,$0230,Orbinaut,$03,rem
 		objpos $0B90,$03F0,Staircase,type_stair_above
 		objpos $0B90,$04F0,Staircase,type_stair_above,xflip
 		objpos $0BB8,$0270,Rings,$16,rem
@@ -74,22 +74,22 @@ ObjPos_SLZ1:
 		objpos $0D80,$0360,CirclingPlatform,$03
 		objpos $0DD0,$03D0,Bomb,$00,rem
 		objpos $0DF0,$0250,Fan,type_fan_left_on
-		objpos $0E00,$00A0,Orbinaut,$02,rem
+		objpos $0E00,$00A0,Orbinaut,$03,rem
 		objpos $0E20,$0668,CollapseFloor,$81
 		objpos $0E30,$03D0,Bomb,$00,rem
 		objpos $0E60,$0668,CollapseFloor,$81
 		objpos $0E90,$03D0,Bomb,$00,rem
 		objpos $0E90,$04F0,Staircase,type_stair_below
 		objpos $0EA0,$0668,CollapseFloor,$81
-		objpos $0EC0,$02C8,Orbinaut,$02,rem
+		objpos $0EC0,$02C8,Orbinaut,$03,rem
 		objpos $0EE0,$0668,CollapseFloor,$81
 		objpos $0EF0,$02D1,Monitor,type_monitor_invincible,rem
 		objpos $0EF0,$03D0,Bomb,$00,rem
 		objpos $0F60,$0570,FireMaker,type_fire_medium+type_fire_left
 		objpos $0F78,$0570,Scenery,type_scen_cannon,xflip
-		objpos $0F80,$04C8,Orbinaut,$02,rem
+		objpos $0F80,$04C8,Orbinaut,$03,rem
 		objpos $0FA8,$0670,Rings,$12,rem
-		objpos $1000,$0628,Orbinaut,$02,rem
+		objpos $1000,$0628,Orbinaut,$03,rem
 		objpos $1008,$0150,Scenery,type_scen_cannon
 		objpos $1020,$0150,FireMaker,type_fire_medium+type_fire_right
 		objpos $1068,$0680,Rings,$12,rem
@@ -138,7 +138,7 @@ ObjPos_SLZ1:
 		objpos $1530,$0358,Springs,type_spring_red+type_spring_up
 		objpos $1568,$05A0,Rings,$12,rem
 		objpos $1568,$0670,Rings,$12,rem
-		objpos $1580,$0240,Orbinaut,$02,rem
+		objpos $1580,$0240,Orbinaut,$03,rem
 		objpos $1580,$05A0,CirclingPlatform,$00
 		objpos $1580,$05A0,CirclingPlatform,$01
 		objpos $1580,$05A0,CirclingPlatform,$02
@@ -149,7 +149,7 @@ ObjPos_SLZ1:
 		objpos $1580,$0670,CirclingPlatform,$03
 		objpos $15E0,$0358,Springs,type_spring_yellow+type_spring_up
 		objpos $1620,$0568,CollapseFloor,$81
-		objpos $1630,$0030,Orbinaut,$02,rem
+		objpos $1630,$0030,Orbinaut,$03,rem
 		objpos $1638,$0250,Rings,$16,rem
 		objpos $1660,$0568,CollapseFloor,$81
 		objpos $16A8,$0520,Rings,$12,rem
@@ -169,7 +169,7 @@ ObjPos_SLZ1:
 		objpos $1800,$0640,CirclingPlatform,$05
 		objpos $1800,$0640,CirclingPlatform,$06
 		objpos $1800,$0640,CirclingPlatform,$07
-		objpos $1810,$00A0,Orbinaut,$02,rem
+		objpos $1810,$00A0,Orbinaut,$03,rem
 		objpos $1888,$0470,Springs,type_spring_red+type_spring_right
 		objpos $1970,$0590,Staircase,type_stair_below,xflip
 		objpos $1978,$0470,Springs,type_spring_red+type_spring_right,xflip
@@ -197,7 +197,7 @@ ObjPos_SLZ1:
 		objpos $1BF8,$0450,Springs,type_spring_red+type_spring_right,xflip
 		objpos $1C10,$03D1,Monitor,type_monitor_rings,rem
 		objpos $1C10,$0651,Monitor,type_monitor_rings,rem
-		objpos $1C20,$0140,Orbinaut,$02,xflip,rem
+		objpos $1C20,$0140,Orbinaut,$03,xflip,rem
 		objpos $1C70,$0271,Monitor,type_monitor_rings,rem
 		objpos $1CC8,$0580,Rings,$12,rem
 		objpos $1CD8,$0368,Elevator,type_elev_up_short

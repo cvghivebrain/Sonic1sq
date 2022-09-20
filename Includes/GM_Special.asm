@@ -99,11 +99,7 @@ SS_MainLoop:
 		beq.w	SS_MainLoop				; if yes, branch
 
 		tst.w	(v_demo_mode).w				; is demo mode on?
-		if Revision=0
-			bne.w	SS_ToSegaScreen			; if yes, branch
-		else
-			bne.w	SS_ToLevel
-		endc
+		bne.w	SS_ToLevel
 		move.b	#id_Level,(v_gamemode).w		; set screen mode to $0C (level)
 		cmpi.w	#id_FZ+1,(v_zone).w			; is level number higher than FZ?
 		blo.s	.level_ok				; if not, branch
@@ -153,12 +149,9 @@ SS_FinishLoop:
 		move.w	d0,(v_ring_bonus).w			; set rings bonus
 		play.w	1, jsr, mus_HasPassed			; play end-of-level music
 
-		lea	(v_ost_all).w,a1
-		moveq	#0,d0
-		move.w	#((sizeof_ost*countof_ost)/4)-1,d1
-	.clear_ost:
-		move.l	d0,(a1)+
-		dbf	d1,.clear_ost				; clear object RAM
+		lea	(v_ost_all).w,a1			; RAM address to start clearing
+		move.w	#loops_to_clear_ost,d1			; size of RAM block to clear
+		bsr.w	ClearRAM				; fill OST with 0
 
 		move.l	#SSResult,(v_ost_ssresult1).w		; load results screen object
 

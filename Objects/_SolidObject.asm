@@ -266,6 +266,7 @@ Solid_Squash:
 		btst	#status_air_bit,ost_status(a1)		; is Sonic in the air?
 		bne.s	Solid_TopBtmAir				; if yes, branch
 		move.l	a0,-(sp)				; save address of OST of current object to stack
+		movea.l	a0,a2
 		movea.l	a1,a0					; temporarily make Sonic the current object
 		jsr	(KillSonic).l				; kill Sonic
 		movea.l	(sp)+,a0				; restore address of OST of current object from stack

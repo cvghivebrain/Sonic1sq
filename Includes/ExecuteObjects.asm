@@ -34,7 +34,7 @@ ExecuteObjects:
 
 .display_object:
 		moveq	#0,d0
-		move.b	(a0),d0					; load object number
+		move.l	(a0),d0					; load object number
 		beq.s	.no_object2				; branch if 0
 		tst.b	ost_render(a0)
 		bpl.s	.no_object2				; branch if off-screen

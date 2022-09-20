@@ -5,7 +5,7 @@ ObjPos_SLZ3:
 		objpos $0000,$0000,Pylon,$00
 		objpos $00D0,$0120,Rings,$12,rem
 		objpos $01A0,$0120,Rings,$12,rem
-		objpos $01E0,$0140,Orbinaut,$02,rem
+		objpos $01E0,$0140,Orbinaut,$03,rem
 		objpos $0314,$01E0,Rings,$86,rem
 		objpos $0498,$04E0,Rings,$10,rem
 		objpos $049A,$0507,Rings,$10,rem
@@ -33,7 +33,7 @@ ObjPos_SLZ3:
 		objpos $0728,$0548,Rings,$12,rem
 		objpos $0740,$0300,Seesaw,$00
 		objpos $0760,$04E8,CollapseFloor,$81
-		objpos $0770,$04B0,Orbinaut,$02,rem
+		objpos $0770,$04B0,Orbinaut,$03,rem
 		objpos $0790,$0670,Bomb,$00,xflip,rem
 		objpos $07F0,$0670,Bomb,$00,rem
 		objpos $0810,$0450,Fan,type_fan_right_onoff,xflip
@@ -52,17 +52,17 @@ ObjPos_SLZ3:
 		objpos $0948,$0658,Springs,type_spring_yellow+type_spring_up
 		objpos $0950,$04D1,Monitor,type_monitor_rings,rem
 		objpos $0970,$0658,Springs,type_spring_yellow+type_spring_up
-		objpos $0980,$0440,Orbinaut,$02,rem
+		objpos $0980,$0440,Orbinaut,$03,rem
 		objpos $09A8,$0670,Rings,$12,rem
 		objpos $0A30,$0210,Rings,$42,rem
-		objpos $0A40,$00AC,Orbinaut,$02,rem
+		objpos $0A40,$00AC,Orbinaut,$03,rem
 		objpos $0A40,$0690,Seesaw,$00
 		objpos $0A68,$0130,Rings,$12,rem
 		objpos $0A90,$05D0,Bomb,$00,xflip,rem
-		objpos $0AA0,$00AC,Orbinaut,$02,rem
+		objpos $0AA0,$00AC,Orbinaut,$03,rem
 		objpos $0AF0,$05D0,Bomb,$00,rem
 		objpos $0AF8,$03D0,Springs,type_spring_red+type_spring_right,xflip
-		objpos $0B00,$00AC,Orbinaut,$02,rem
+		objpos $0B00,$00AC,Orbinaut,$03,rem
 		objpos $0B10,$0050,Fan,type_fan_left_on,xflip
 		objpos $0B68,$05E0,Rings,$12,rem
 		objpos $0B80,$05E0,CirclingPlatform,$00
@@ -178,17 +178,17 @@ ObjPos_SLZ3:
 		objpos $1710,$0250,Fan,type_fan_left_on,xflip
 		objpos $1710,$05D1,Monitor,type_monitor_shield,rem
 		objpos $1710,$0650,Fan,type_fan_left_on,xflip
-		objpos $1720,$0320,Orbinaut,$02,rem
+		objpos $1720,$0320,Orbinaut,$03,rem
 		objpos $1730,$05D1,Monitor,type_monitor_rings,rem
 		objpos $1750,$0471,Monitor,type_monitor_rings,rem
 		objpos $1750,$05D1,Monitor,type_monitor_rings,rem
 		objpos $1770,$0471,Monitor,type_monitor_invincible,rem
 		objpos $1770,$05D1,Monitor,type_monitor_rings,rem
-		objpos $1780,$0320,Orbinaut,$02,rem
+		objpos $1780,$0320,Orbinaut,$03,rem
 		objpos $1840,$0240,Seesaw,$00
 		objpos $18A8,$01D0,Rings,$12,rem
 		objpos $18B0,$00D0,Rings,$12,rem
-		objpos $18D8,$03B0,Orbinaut,$02,rem
+		objpos $18D8,$03B0,Orbinaut,$03,rem
 		objpos $1900,$05E0,SwingingPlatform,$07
 		objpos $1910,$03C0,SmashWall,id_frame_smash_middle,rem
 		objpos $1910,$0451,Monitor,type_monitor_invincible,rem
@@ -211,7 +211,7 @@ ObjPos_SLZ3:
 		objpos $1AB0,$05F0,Seesaw,$00
 		objpos $1B10,$02F0,Staircase,type_stair_above,xflip
 		objpos $1B20,$0668,BasicPlatform,type_plat_falls
-		objpos $1B30,$05C0,Orbinaut,$02,xflip,rem
+		objpos $1B30,$05C0,Orbinaut,$03,xflip,rem
 		objpos $1B60,$0370,FireMaker,type_fire_medium+type_fire_left
 		objpos $1B78,$02D0,Springs,type_spring_red+type_spring_right,xflip
 		objpos $1B78,$0370,Scenery,type_scen_cannon,xflip
@@ -224,7 +224,7 @@ ObjPos_SLZ3:
 		objpos $1BD0,$0490,Bomb,$00,yflip,rem
 		objpos $1BF0,$0450,Fan,type_fan_left_on,xflip
 		objpos $1CD0,$0410,Bomb,$00,yflip,rem
-		objpos $1CD0,$05C0,Orbinaut,$02,rem
+		objpos $1CD0,$05C0,Orbinaut,$03,rem
 		objpos $1CE0,$0450,Rings,$14,rem
 		objpos $1CF0,$0410,Bomb,$00,yflip,rem
 		objpos $1CF0,$05D0,Monitor,type_monitor_rings,rem
@@ -237,7 +237,7 @@ ObjPos_SLZ3:
 		objpos $1D60,$0310,Bomb,$00,yflip,rem
 		objpos $1D68,$0130,Rings,$12,rem
 		objpos $1D80,$0310,Bomb,$00,yflip,rem
-		objpos $1D80,$0344,Orbinaut,$02,rem
+		objpos $1D80,$0344,Orbinaut,$03,rem
 		objpos $1DA0,$0310,Bomb,$00,yflip,rem
 		objpos $1DC0,$0310,Bomb,$00,yflip,rem
 		objpos $1DE8,$02D0,Fan,type_fan_left_on,xflip

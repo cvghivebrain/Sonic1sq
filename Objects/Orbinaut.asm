@@ -32,11 +32,12 @@ ost_orb_parent:		rs.l 1 ; $3C				; address of OST of parent object (4 bytes)
 Orb_Main:	; Routine 0
 		move.l	#Map_Orb,ost_mappings(a0)
 		move.w	(v_tile_orbinaut).w,ost_tile(a0)
-		cmpi.b	#id_SLZ,(v_zone).w			; check if level is SLZ
-		bne.s	.not_slz
-		add.w	#tile_pal2,ost_tile(a0)			; SLZ specific code
+		btst.b	#0,ost_subtype(a0)			; check if low bit of subtype is set
+		beq.s	.use_pal1				; if not, branch
+		add.w	#tile_pal2,ost_tile(a0)			; use palette 2
+		bclr.b	#0,ost_subtype(a0)			; clear low bit
 
-	.not_slz:
+	.use_pal1:
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#4,ost_priority(a0)
 		move.b	#id_col_8x8,ost_col_type(a0)
@@ -108,7 +109,8 @@ Orb_ChkSonic:	; Routine 2
 		bcc.s	.animate				; branch if Sonic is > 80px from orbinaut
 		tst.w	(v_debug_active).w			; is debug mode	on?
 		bne.s	.animate				; if yes, branch
-		move.b	#id_ani_orb_angry,ost_anim(a0)		; use "angry" animation
+		move.b	#id_ani_orb_angry,d0			; use "angry" animation
+		bsr.w	NewAnim
 
 .animate:
 		lea	(Ani_Orb).l,a1

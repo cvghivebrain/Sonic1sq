@@ -198,14 +198,14 @@ Lamp_LoadInfo:
 		move.w	(v_bg2_y_pos_lampcopy).w,(v_bg2_y_pos).w
 		move.w	(v_bg3_x_pos_lampcopy).w,(v_bg3_x_pos).w
 		move.w	(v_bg3_y_pos_lampcopy).w,(v_bg3_y_pos).w
-		cmpi.b	#id_LZ,(v_zone).w			; is this Labyrinth Zone?
-		bne.s	.notlabyrinth				; if not, branch
+		tst.b	(f_water_enable).w			; is this a water level?
+		beq.s	.notwater				; if not, branch
 
 		move.w	(v_water_height_normal_lampcopy).w,(v_water_height_normal).w
 		move.b	(v_water_routine_lampcopy).w,(v_water_routine).w
 		move.b	(f_water_pal_full_lampcopy).w,(f_water_pal_full).w
 
-	.notlabyrinth:
+	.notwater:
 		tst.b	(v_last_lamppost).w			; is last lamppost negative? (it never is)
 		bpl.s	.exit					; if not, branch
 		move.w	(v_sonic_x_pos_lampcopy).w,d0
