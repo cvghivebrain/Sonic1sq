@@ -47,6 +47,7 @@ GM_Demo:
 		move.w	#$8A00+223,(v_vdp_hint_counter).w	; set palette change position (for water)
 		move.w	(v_vdp_hint_counter).w,(a6)
 		bsr.w	LoadPerZone
+		move.w	#air_full,(v_air).w
 		tst.b	(f_water_enable).w			; is water enabled?
 		beq.s	.skip_water				; if not, branch
 
@@ -54,7 +55,6 @@ GM_Demo:
 		clr.b	(v_water_routine).w			; clear water routine counter
 		clr.b	(f_water_pal_full).w			; clear	water state
 		move.b	#1,(v_water_direction).w		; enable water
-		move.w	#air_full,(v_air).w
 		tst.b	(v_last_lamppost).w			; has a lamppost been used?
 		beq.s	.no_lamp				; if not, branch
 		move.b	(f_water_pal_full_lampcopy).w,(f_water_pal_full).w ; retrieve flag for whole screen being underwater
@@ -192,10 +192,6 @@ Level_Skip_TtlCard:
 .skip_titlecard:
 		moveq	#id_UPLC_Explode,d0
 		jsr	UncPLC					; load explosion gfx
-		moveq	#0,d0
-		move.b	(v_zone).w,d0
-		addi.w	#id_PLC_GHZAnimals,d0
-		jsr	(AddPLC).l				; load animal gfx (level no. + $15)
 
 .end_prelevel:
 		bclr	#7,(v_gamemode).w			; subtract $80 from gamemode to end pre-level stuff

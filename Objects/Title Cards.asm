@@ -136,10 +136,6 @@ Card_ChangeArt:
 
 		moveq	#id_UPLC_Explode,d0
 		jsr	UncPLC					; load explosion gfx
-		moveq	#0,d0
-		move.b	(v_zone).w,d0
-		addi.w	#id_PLC_GHZAnimals,d0
-		jsr	(AddPLC).l				; load animal gfx
 
 	.delete:
 		bra.w	DeleteObject

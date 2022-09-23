@@ -82,17 +82,17 @@ Anml_EndMap:	dc.l Map_Animal2				; $A
 		dc.l Map_Animal2				; $13
 		dc.l Map_Animal3				; $14
 
-Anml_EndVram:	dc.w tile_Nem_Flicky_End			; $A
-		dc.w tile_Nem_Flicky_End			; $B - unused
-		dc.w tile_Nem_Flicky_End			; $C
-		dc.w tile_Nem_Rabbit_End			; $D
-		dc.w tile_Nem_Rabbit_End			; $E
-		dc.w tile_Nem_BlackBird_End			; $F
-		dc.w tile_Nem_BlackBird_End			; $10
-		dc.w tile_Nem_Seal_End				; $11
-		dc.w tile_Nem_Pig_End				; $12
-		dc.w tile_Nem_Chicken_End			; $13
-		dc.w tile_Nem_Squirrel_End			; $14
+Anml_EndVram:	dc.w tile_Art_Flicky_UPLC_Animals		; $A
+		dc.w tile_Art_Flicky_UPLC_Animals		; $B - unused
+		dc.w tile_Art_Flicky_UPLC_Animals		; $C
+		dc.w tile_Art_Rabbit_UPLC_Animals		; $D
+		dc.w tile_Art_Rabbit_UPLC_Animals		; $E
+		dc.w tile_Art_BlackBird_UPLC_Animals		; $F
+		dc.w tile_Art_BlackBird_UPLC_Animals		; $10
+		dc.w tile_Art_Seal_UPLC_Animals			; $11
+		dc.w tile_Art_Pig_UPLC_Animals			; $12
+		dc.w tile_Art_Chicken_UPLC_Animals		; $13
+		dc.w tile_Art_Squirrel_UPLC_Animals		; $14
 
 		rsobj Animals
 ost_animal_direction:	rs.b 1 ; $29				; animal goes left/right
@@ -146,10 +146,10 @@ Anml_FromEnemy:
 		move.w	(a1)+,ost_animal_x_vel(a0)		; load horizontal speed
 		move.w	(a1)+,ost_animal_y_vel(a0)		; load vertical speed
 		move.l	(a1)+,ost_mappings(a0)			; load mappings
-		move.w	#tile_Nem_Rabbit,ost_tile(a0)		; VRAM setting for 1st animal
+		move.w	(v_tile_animal1).w,ost_tile(a0)		; VRAM setting for 1st animal
 		btst	#0,ost_animal_type(a0)			; was the random bit 0?
 		beq.s	.type_0					; if yes, branch
-		move.w	#tile_Nem_Flicky,ost_tile(a0)		; VRAM setting for 2nd animal
+		move.w	(v_tile_animal2).w,ost_tile(a0)		; VRAM setting for 2nd animal
 
 	.type_0:
 		move.b	#$C,ost_height(a0)

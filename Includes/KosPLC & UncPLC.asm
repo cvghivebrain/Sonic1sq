@@ -392,6 +392,13 @@ UncLoadCues:
 		ptr UPLC_SonicIcon
 		ptr UPLC_Prison
 		ptr UPLC_Prison2
+		ptr UPLC_RabbitFlicky
+		ptr UPLC_BirdSeal
+		ptr UPLC_SquirrelSeal
+		ptr UPLC_PigFlicky
+		ptr UPLC_PigChicken
+		ptr UPLC_RabbitChicken
+		ptr UPLC_Animals
 
 UPLC_HUD:	uplcheader $D940
 		uplc Art_HUDMain,v_tile_hud
@@ -443,3 +450,44 @@ UPLC_Prison:	uplcheader $D000
 UPLC_Prison2:	uplcheader $D000
 		uplc Art_PrisonBroken
 	.end:
+
+UPLC_RabbitFlicky:	uplcheader vram_animals
+		uplc Art_Rabbit,v_tile_animal1
+		uplc Art_Flicky,v_tile_animal2
+	.end:
+	
+UPLC_BirdSeal:	uplcheader vram_animals
+		uplc Art_BlackBird,v_tile_animal1
+		uplc Art_Seal,v_tile_animal2
+	.end:
+	
+UPLC_SquirrelSeal:	uplcheader vram_animals
+		uplc Art_Squirrel,v_tile_animal1
+		uplc Art_Seal,v_tile_animal2
+	.end:
+	
+UPLC_PigFlicky:	uplcheader vram_animals
+		uplc Art_Pig,v_tile_animal1
+		uplc Art_Flicky,v_tile_animal2
+	.end:
+	
+UPLC_PigChicken:	uplcheader vram_animals
+		uplc Art_Pig,v_tile_animal1
+		uplc Art_Chicken,v_tile_animal2
+	.end:
+	
+UPLC_RabbitChicken:	uplcheader vram_animals
+		uplc Art_Rabbit,v_tile_animal1
+		uplc Art_Chicken,v_tile_animal2
+	.end:
+	
+UPLC_Animals:	uplcheader $AA60
+		uplc Art_Rabbit
+		uplc Art_Chicken
+		uplc Art_BlackBird
+		uplc Art_Seal
+		uplc Art_Pig
+		uplc Art_Flicky
+		uplc Art_Squirrel
+	.end:
+	

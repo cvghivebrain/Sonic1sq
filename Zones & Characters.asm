@@ -95,6 +95,11 @@ LoadPerZone:
 
 		movea.l	(a4)+,a1				; get pointer for bg deformation routine list
 		move.l	(a1,d4.w),(v_deformlayer_ptr).w		; get pointer for bg deformation routine
+		
+		move.w	(a4)+,d0				; get id for animal graphics
+		pushr	d1-d2
+		jsr	UncPLC					; load animal graphics
+		popr	d1-d2
 		rts
 		
 ; ---------------------------------------------------------------------------
@@ -122,6 +127,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_DLE_GHZ				; dynamic level event list (act specific)
 		dc.l Zone_Next_GHZ				; next level list (act specific)
 		dc.l Zone_Deform_GHZ				; bg deformation routine list (act specific)
+		dc.w id_UPLC_RabbitFlicky			; UPLC id for animal graphics
 		even
 	ZoneDefs_size:
 
@@ -146,6 +152,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_DLE_LZ
 		dc.l Zone_Next_LZ
 		dc.l Zone_Deform_LZ
+		dc.w id_UPLC_BirdSeal
 		even
 		
 		; Marble Zone
@@ -169,6 +176,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_DLE_MZ
 		dc.l Zone_Next_MZ
 		dc.l Zone_Deform_MZ
+		dc.w id_UPLC_SquirrelSeal
 		even
 		
 		; Star Light Zone
@@ -192,6 +200,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_DLE_SLZ
 		dc.l Zone_Next_SLZ
 		dc.l Zone_Deform_SLZ
+		dc.w id_UPLC_PigFlicky
 		even
 		
 		; Spring Yard Zone
@@ -215,6 +224,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_DLE_SYZ
 		dc.l Zone_Next_SYZ
 		dc.l Zone_Deform_SYZ
+		dc.w id_UPLC_PigChicken
 		even
 		
 		; Scrap Brain Zone
@@ -238,6 +248,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_DLE_SBZ
 		dc.l Zone_Next_SBZ
 		dc.l Zone_Deform_SBZ
+		dc.w id_UPLC_RabbitChicken
 		even
 		
 		; Ending
@@ -261,6 +272,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_DLE_End
 		dc.l Zone_Next_End
 		dc.l Zone_Deform_End
+		dc.w id_UPLC_Animals
 		even
 
 ; ---------------------------------------------------------------------------

@@ -932,13 +932,13 @@ Art_Sonic:	incbin	"Graphics\Sonic.bin"			; Sonic
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - animals
 ; ---------------------------------------------------------------------------
-		incfile	Nem_Rabbit,"Graphics - Compressed\Animal Rabbit",nem
-		incfile	Nem_Chicken,"Graphics - Compressed\Animal Chicken",nem
-		incfile	Nem_BlackBird,"Graphics - Compressed\Animal Blackbird",nem
-		incfile	Nem_Seal,"Graphics - Compressed\Animal Seal",nem
-		incfile	Nem_Pig,"Graphics - Compressed\Animal Pig",nem
-		incfile	Nem_Flicky,"Graphics - Compressed\Animal Flicky",nem
-		incfile	Nem_Squirrel,"Graphics - Compressed\Animal Squirrel",nem
+		incfile	Art_Rabbit,"Graphics\Animal Rabbit",bin,dma_safe
+		incfile	Art_Chicken,"Graphics\Animal Chicken",bin,dma_safe
+		incfile	Art_BlackBird,"Graphics\Animal Blackbird",bin,dma_safe
+		incfile	Art_Seal,"Graphics\Animal Seal",bin,dma_safe
+		incfile	Art_Pig,"Graphics\Animal Pig",bin,dma_safe
+		incfile	Art_Flicky,"Graphics\Animal Flicky",bin,dma_safe
+		incfile	Art_Squirrel,"Graphics\Animal Squirrel",bin,dma_safe
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - primary patterns and block mappings
 ; ---------------------------------------------------------------------------

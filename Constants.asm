@@ -40,10 +40,11 @@ vram_ball:		equ $67C0	; GHZ ball graphics
 vram_bonus:		equ $A200	; hidden bonus graphics
 vram_shield:		equ $A800	; shield graphics (up to $AC80)
 vram_animal1:		equ $B000	; animal graphics
-vram_animal2:		equ $B240	; animal graphics
+vram_animal2:		equ $B240	; 
 vram_credits:		equ $B400	; credits font graphics
 vram_signpost:		equ $D000	; signpost graphics
 vram_giantring:		equ $D340	; giant ring graphics
+vram_animals:		equ $F400	; animal graphics
 vram_lifeicon:		equ $FA80	; life icon graphics
 
 vram_cont_sonic:	equ $A000	; oval & Sonic continue screen graphics
