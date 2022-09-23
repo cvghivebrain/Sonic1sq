@@ -146,20 +146,7 @@ Level_Skip_TtlCard:
 		move.b	#1,(f_hud_time_update).w		; update time counter
 
 		move.w	#0,(v_demo_input_counter).w
-		lea	(DemoDataPtr).l,a1			; address of pointers to demo data
-		moveq	#0,d0
-		move.b	(v_zone).w,d0				; get zone number
-		lsl.w	#2,d0					; multiply by 4
-		movea.l	(a1,d0.w),a1				; jump to demo data for that zone
-		tst.w	(v_demo_mode).w				; is this an ending demo?
-		bpl.s	.skip_endingdemo			; if not, branch
-		lea	(DemoEndDataPtr).l,a1			; use ending demo data instead
-		move.w	(v_credits_num).w,d0
-		subq.w	#1,d0
-		lsl.w	#2,d0
-		movea.l	(a1,d0.w),a1				; jump to demo data
-
-	.skip_endingdemo:
+		movea.l	(v_demo_ptr).w,a1			; get pointer for demo data
 		move.b	1(a1),(v_demo_input_time).w		; load button press duration
 		subq.b	#1,(v_demo_input_time).w		; subtract 1 from duration
 		move.w	#1800,(v_countdown).w			; run demo for 30 seconds max
@@ -208,11 +195,8 @@ Level_MainLoop:
 		bsr.w	MoveSonicInDemo
 		bsr.w	LZWaterFeatures
 		jsr	(ExecuteObjects).l
-		if Revision=0
-		else
-			tst.w	(f_restart).w			; is level restart flag set?
-			bne.w	GM_Level			; if yes, branch
-		endc
+		tst.w	(f_restart).w				; is level restart flag set?
+		bne.w	GM_Level				; if yes, branch
 		tst.w	(v_debug_active).w			; is debug mode being used?
 		bne.s	.skip_death				; if yes, branch
 		cmpi.b	#id_Sonic_Death,(v_ost_player+ost_routine).w ; has Sonic just died?
@@ -232,11 +216,6 @@ Level_MainLoop:
 
 		cmpi.b	#id_Demo,(v_gamemode).w			; is this a demo?
 		beq.s	Level_Demo				; if yes, branch
-		if Revision=0
-			tst.w	(f_restart).w			; is level restart flag set?
-			bne.w	GM_Level			; if yes, branch
-		else
-		endc
 		cmpi.b	#id_Level,(v_gamemode).w
 		beq.w	Level_MainLoop				; if gamemode is still $C (level), branch
 		rts	

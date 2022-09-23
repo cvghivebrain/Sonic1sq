@@ -3,6 +3,11 @@
 ; ---------------------------------------------------------------------------
 
 GM_Credits:
+		tst.w	(v_credits_num).w
+		bne.s	.keep_music				; branch if credits were already running
+		play.b	1, bsr.w, mus_Credits			; play credits music
+		
+	.keep_music:
 		bsr.w	ClearPLC				; clear PLC buffer
 		bsr.w	PaletteFadeOut				; fade out from previous gamemode
 		lea	(vdp_control_port).l,a6
@@ -47,7 +52,7 @@ Cred_WaitLoop:
 		bne.s	Cred_WaitLoop				; if not, branch
 		tst.l	(v_plc_buffer).w			; have level gfx finished decompressing?
 		bne.s	Cred_WaitLoop				; if not, branch
-		cmpi.w	#(sizeof_EndDemoList/2)+1,(v_credits_num).w ; have the credits finished?
+		cmpi.w	#countof_credits+1,(v_credits_num).w	; have the credits finished?
 		beq.w	TryAgainEnd				; if yes, branch
 		rts						; goto demo next
 
@@ -58,13 +63,12 @@ Cred_WaitLoop:
 ; ---------------------------------------------------------------------------
 
 EndDemoSetup:
-		move.w	(v_credits_num).w,d0
-		andi.w	#$F,d0					; get credits id
-		add.w	d0,d0
-		move.w	EndDemoList(pc,d0.w),d0			; get zone/act number from list
-		move.w	d0,(v_zone).w				; set zone/act number
+		move.w	(v_credits_num).w,d0			; get credits id
+		add.w	#countof_demo,d0			; convert to demo id
+		move.w	d0,(v_demo_num).w
+		jsr	LoadPerDemo
 		addq.w	#1,(v_credits_num).w			; increment credits number
-		cmpi.w	#(sizeof_EndDemoList/2)+1,(v_credits_num).w ; have credits finished? (+1 because v_credits_num is already incremented)
+		cmpi.w	#countof_credits+1,(v_credits_num).w	; have credits finished? (+1 because v_credits_num is already incremented)
 		bhs.s	.exit					; if yes, branch
 		move.w	#$8001,(v_demo_mode).w			; set demo+ending mode
 		move.b	#id_Demo,(v_gamemode).w			; set game mode to 8 (demo)
@@ -74,7 +78,7 @@ EndDemoSetup:
 		move.l	d0,(v_time).w				; clear time
 		move.l	d0,(v_score).w				; clear score
 		move.b	d0,(v_last_lamppost).w			; clear lamppost counter
-		cmpi.w	#id_Demo_EndLZ+1,(v_credits_num).w	; is LZ demo running?
+		cmpi.w	#3+1,(v_credits_num).w			; is LZ demo running?
 		bne.s	.exit					; if not, branch
 
 		lea	(EndDemo_LampVar).l,a1			; load lamppost variables
@@ -87,8 +91,6 @@ EndDemoSetup:
 
 .exit:
 		rts
-
-		include_enddemo_list				; Includes\Demo Pointers.asm
 
 ; ---------------------------------------------------------------------------
 ; Lamppost variables in the end sequence demo (Labyrinth Zone)

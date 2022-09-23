@@ -109,7 +109,6 @@ End_MainLoop:
 		beq.s	.continue_ending			; if yes, branch
 
 		move.b	#id_Credits,(v_gamemode).w		; goto credits
-		play.b	1, bsr.w, mus_Credits			; play credits music
 		move.w	#0,(v_credits_num).w			; set credits index number to 0
 		rts	
 ; ===========================================================================

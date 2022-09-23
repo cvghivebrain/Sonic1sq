@@ -55,10 +55,7 @@ GM_Special:
 		move.w	#$40,(v_ss_rotation_speed).w		; set stage rotation speed
 		play.w	0, bsr.w, mus_SpecialStage		; play special stage BG	music
 		move.w	#0,(v_demo_input_counter).w
-		lea	(DemoDataPtr).l,a1
-		moveq	#6,d0					; use demo #6
-		lsl.w	#2,d0
-		movea.l	(a1,d0.w),a1				; jump to SS demo data
+		movea.l	(v_demo_ptr).w,a1			; get pointer for demo data
 		move.b	1(a1),(v_demo_input_time).w		; load 1st button press duration
 		subq.b	#1,(v_demo_input_time).w
 		clr.w	(v_rings).w

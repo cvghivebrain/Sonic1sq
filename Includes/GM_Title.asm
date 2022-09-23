@@ -482,21 +482,17 @@ LevSel_Sound:
 
 PlayDemo:
 		play.b	1, bsr.w, cmd_Fade			; fade out music
-		move.w	(v_demo_num).w,d0			; load demo number
-		andi.w	#7,d0
-		add.w	d0,d0
-		move.w	DemoLevelArray(pc,d0.w),d0		; load level number for	demo
-		move.w	d0,(v_zone).w
+		jsr	LoadPerDemo
 		addq.w	#1,(v_demo_num).w			; add 1 to demo number
-		cmpi.w	#4,(v_demo_num).w			; is demo number less than 4?
+		cmpi.w	#countof_demo,(v_demo_num).w		; is demo number less than 4?
 		blo.s	.demo_0_to_3				; if yes, branch
-		move.w	#0,(v_demo_num).w			; reset demo number to	0
+		move.w	#0,(v_demo_num).w			; reset demo number to 0
 
 	.demo_0_to_3:
 		move.w	#1,(v_demo_mode).w			; turn demo mode on
 		move.b	#id_Demo,(v_gamemode).w			; set screen mode to 08 (demo)
-		cmpi.w	#id_Demo_SS,d0				; is level number 0600 (special	stage)?
-		bne.s	.demo_level				; if not, branch
+		tst.b	(v_zone).w				; is level a special stage?
+		bpl.s	.demo_level				; if not, branch
 		move.b	#id_Special,(v_gamemode).w		; set screen mode to $10 (Special Stage)
 		clr.w	(v_zone).w				; clear	level number
 		clr.b	(v_last_ss_levelid).w			; clear special stage number
@@ -508,9 +504,7 @@ PlayDemo:
 		move.l	d0,(v_time).w				; clear time
 		move.l	d0,(v_score).w				; clear score
 		move.l	#5000,(v_score_next_life).w		; extra life is awarded at 50000 points
-		rts	
-
-		include_demo_list				; Includes\Demo Pointers.asm
+		rts
 
 ; ---------------------------------------------------------------------------
 ; Level	select menu text strings

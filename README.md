@@ -10,6 +10,7 @@ _Sonic 1-squared_ is an enhanced version of the original _Sonic the Hedgehog_ ga
 * ost_frame extended to a word (ost_frame_hi), allowing Sonic to have up to 32,768 distinct frames of animation. Normal objects using AnimateSprite are still limited to 32.
 * LoadPerZone subroutine consolidates all pointers and parameters for zones and acts. This simplifies the process of adding levels. (incomplete)
 * LoadPerCharacter subroutine does the same for the Sonic object, palette and life icon, allowing for extra characters.
+* LoadPerDemo loads the level number, demo data, character and start position for all demos, including those during the credits.
 * DMA queue system for loading uncompressed graphics.
 * Animated level graphics use a script instead of being hard-coded. The exception is Marble Zone's magma, which works somewhat differently to other animations.
 * Palette cycling uses a script.

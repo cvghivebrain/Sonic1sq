@@ -435,6 +435,9 @@ f_credits_cheat:		equ __rs-1 ; $FFFFFFE3 ; flag set when hidden credits & press 
 v_title_d_count:		rs.w 1 ; $FFFFFFE4 ; number of times the d-pad is pressed on title screen, but only in the order UDLR
 v_demo_mode:			rs.w 1 ; $FFFFFFF0 ; demo mode flag - 0 = no; 1 = yes; $8001 = ending
 v_demo_num:			rs.w 1 ; $FFFFFFF2 ; demo level number (not the same as the level number)
+v_demo_ptr:			rs.l 1 ; pointer for demo data
+v_demo_x_start:			rs.l 1 ; Sonic's starting x pos
+v_demo_y_start:			equ __rs-2 ; Sonic's starting y pos
 v_credits_num:			rs.w 1 ; $FFFFFFF4 ; credits index number
 v_console_region:		rs.b 1 ; $FFFFFFF8 ; Mega Drive console type - 0 = JP; $80 = US/EU; +0 = NTSC; +$40 = PAL
 f_debug_enable:			rs.w 1 ; $FFFFFFFA ; flag set when debug mode is enabled (high byte is set to 1, but it's read as a word)

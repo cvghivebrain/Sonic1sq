@@ -281,7 +281,6 @@ Pal_Ending:	incbin	"Palettes\Ending.bin"
 		include "Includes\WaitForVBlank.asm"
 		include "Objects\_RandomNumber.asm"
 		include "Objects\_CalcSine & CalcAngle.asm"
-		include "Includes\Demo Pointers.asm"
 		include "Includes\GM_Title.asm"
 		include "Includes\GM_HiddenCredits.asm"
 
