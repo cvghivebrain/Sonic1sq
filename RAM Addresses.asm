@@ -463,7 +463,9 @@ v_ss_layout_start:		equ v_ss_layout+sizeof_ss_padding_top+ss_width_padding_left 
 v_ss_layout_buffer:		rs.b $1000 ; unprocessed special stage layout - overwritten later ($1000 bytes)
 				rsset $FF4000
 v_ss_sprite_info:		rs.b $278 ; sprite info for each item type - mappings pointer (4 bytes); frame id (2 bytes); tile id (2 bytes) (total $278 bytes)
+				rsblock ssupdate
 v_ss_sprite_update_list:	rs.b $100 ; list of items currently being updated - 8 bytes each ($100 bytes)
+				rsblockend ssupdate
 v_ss_sprite_grid_plot:		rs.b $400 ; x/y positions of cells in a 16x16 grid centered around Sonic, updates as it rotates ($400 bytes)
 				rsblock ssbgpos
 v_ss_bubble_x_pos:		rs.b $16 ; x position of background bubbles

@@ -292,16 +292,20 @@ Pal_Ending:	incbin	"Palettes\Ending.bin"
 		include "Includes\SynchroAnimate.asm"
 
 ; ---------------------------------------------------------------------------
-; Normal demo data
+; Demo data
 ; ---------------------------------------------------------------------------
-Demo_GHZ:	incbin	"Demos\Intro - GHZ.bin"
-		even
-Demo_MZ:	incbin	"Demos\Intro - MZ.bin"
-		even
-Demo_SYZ:	incbin	"Demos\Intro - SYZ.bin"
-		even
-Demo_SS:	incbin	"Demos\Intro - Special Stage.bin"
-		even
+		incfile	Demo_GHZ,"Demos\Intro - GHZ",bin
+		incfile	Demo_MZ,"Demos\Intro - MZ",bin
+		incfile	Demo_SYZ,"Demos\Intro - SYZ",bin
+		incfile	Demo_SS,"Demos\Intro - Special Stage",bin
+		incfile	Demo_EndGHZ1,"Demos\Ending - GHZ1",bin
+		incfile	Demo_EndMZ,"Demos\Ending - MZ",bin
+		incfile	Demo_EndSYZ,"Demos\Ending - SYZ",bin
+		incfile	Demo_EndLZ,"Demos\Ending - LZ",bin
+		incfile	Demo_EndSLZ,"Demos\Ending - SLZ",bin
+		incfile	Demo_EndSBZ1,"Demos\Ending - SBZ1",bin
+		incfile	Demo_EndSBZ2,"Demos\Ending - SBZ2",bin
+		incfile	Demo_EndGHZ2,"Demos\Ending - GHZ2",bin
 
 		include "Includes\GM_Special.asm"
 
@@ -331,26 +335,6 @@ Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 		include "Objects\Ending Eggman Try Again.asm"	; EndEggman
 		include "Objects\Ending Chaos Emeralds Try Again.asm" ; TryChaos
 		include "Objects\Ending Eggman Try Again [Mappings].asm" ; Map_EEgg
-
-; ---------------------------------------------------------------------------
-; Ending demo data
-; ---------------------------------------------------------------------------
-Demo_EndGHZ1:	incbin	"Demos\Ending - GHZ1.bin"
-		even
-Demo_EndMZ:	incbin	"Demos\Ending - MZ.bin"
-		even
-Demo_EndSYZ:	incbin	"Demos\Ending - SYZ.bin"
-		even
-Demo_EndLZ:	incbin	"Demos\Ending - LZ.bin"
-		even
-Demo_EndSLZ:	incbin	"Demos\Ending - SLZ.bin"
-		even
-Demo_EndSBZ1:	incbin	"Demos\Ending - SBZ1.bin"
-		even
-Demo_EndSBZ2:	incbin	"Demos\Ending - SBZ2.bin"
-		even
-Demo_EndGHZ2:	incbin	"Demos\Ending - GHZ2.bin"
-		even
 
 		include	"Includes\LevelParameterLoad.asm"
 		include	"Includes\DeformLayers.asm"
@@ -559,6 +543,7 @@ LGrass_Coll_Sloped:
 
 		include "Objects\_SolidObject.asm"
 		include "Objects\_SkipMappings.asm"
+		include "Objects\_Range.asm"
 
 		include "Objects\MZ Smashable Green Block.asm"	; SmashBlock
 		include "Objects\MZ Smashable Green Block [Mappings].asm" ; Map_Smab

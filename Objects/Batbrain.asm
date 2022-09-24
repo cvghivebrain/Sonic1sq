@@ -49,15 +49,13 @@ Bat_Action_Index:
 ; ===========================================================================
 
 Bat_DropChk:
-		move.w	#$80,d2
-		bsr.w	Bat_ChkDist				; cmp d2 to x dist between Sonic and batbrain
-		bcc.s	.nodrop					; branch if x dist > 128px
-		move.w	(v_ost_player+ost_y_pos).w,d0
-		move.w	d0,ost_bat_sonic_y_pos(a0)
-		sub.w	ost_y_pos(a0),d0
-		bcs.s	.nodrop					; branch if Sonic is above the batbrain
-		cmpi.w	#$80,d0
-		bcc.s	.nodrop					; branch if Sonic is > 128px below the batbrain
+		bsr.w	Range
+		tst.w	d2
+		bmi.s	.nodrop					; branch if Sonic is above
+		cmp.w	#128,d1
+		bcc.s	.nodrop					; branch if > 128px away
+		cmp.w	#128,d3
+		bcc.s	.nodrop					; branch if > 128px below
 		tst.w	(v_debug_active).w
 		bne.s	.nodrop					; branch if debug mode is in use
 
@@ -67,6 +65,10 @@ Bat_DropChk:
 		bne.s	.nodrop					; branch if any are set
 		move.b	#id_ani_bat_drop,ost_anim(a0)
 		addq.b	#2,ost_routine2(a0)			; goto Bat_DropFly next
+		bset	#status_xflip_bit,ost_status(a0)	; face right
+		tst.w	d0
+		bpl.s	.nodrop					; branch if Sonic is right
+		bclr	#status_xflip_bit,ost_status(a0)	; face left
 
 	.nodrop:
 		rts	
@@ -75,14 +77,17 @@ Bat_DropChk:
 Bat_DropFly:
 		bsr.w	SpeedToPos				; update position
 		addi.w	#$18,ost_y_vel(a0)			; make batbrain fall
-		move.w	#$80,d2
-		bsr.w	Bat_ChkDist				; update xflip flag and get direction to fly
-		move.w	ost_bat_sonic_y_pos(a0),d0
-		sub.w	ost_y_pos(a0),d0
-		bcs.s	.chkdel					; branch if Sonic is above the batbrain
-		cmpi.w	#$10,d0
-		bcc.s	.dropmore				; branch if Sonic is > 16px below the batbrain
+		bsr.w	Range
+		tst.w	d2
+		bmi.s	.chkdel					; branch if Sonic is above
+		cmp.w	#16,d2
+		bcc.s	.dropmore				; branch if > 16px below
+		move.w	#$100,d1				; batbrain will fly right
+		btst	#status_xflip_bit,ost_status(a0)
+		bne.s	.noflip					; branch if facing right
+		neg.w	d1					; batbrain will fly left
 
+	.noflip:
 		move.w	d1,ost_x_vel(a0)			; make batbrain fly horizontally
 		move.w	#0,ost_y_vel(a0)			; stop batbrain falling
 		move.b	#id_ani_bat_fly,ost_anim(a0)
@@ -105,14 +110,9 @@ Bat_FlapSound:
 
 	.nosound:
 		bsr.w	SpeedToPos				; update position
-		move.w	(v_ost_player+ost_x_pos).w,d0
-		sub.w	ost_x_pos(a0),d0
-		bcc.s	.sonic_right				; if Sonic is right of batbrain, branch
-		neg.w	d0					; d0 = x dist between Sonic and batbrain
-
-	.sonic_right:
-		cmpi.w	#$80,d0
-		bcs.s	.dontflyup				; branch if Sonic is < 128px from batbrain
+		bsr.w	Range
+		cmp.w	#128,d1
+		blt.s	.dontflyup				; branch if < 128px away
 		move.b	(v_vblank_counter_byte).w,d0		; get byte that increments every frame
 		add.b	d7,d0					; add OST index number (so each batbrain updates on a different frame)
 		andi.b	#7,d0					; read only bits 0-2
@@ -138,37 +138,6 @@ Bat_FlyUp:
 
 	.noceiling:
 		rts
-
-; ---------------------------------------------------------------------------
-; Subroutine to check Sonic's distance from the batbrain and set direction
-
-; input:
-;	d2 = distance to compare
-
-; output:
-;	d0 = distance between Sonic and batbrain (always +ve)
-;	d1 = speed/direction for batbrain to fly horizontally
-; ---------------------------------------------------------------------------
-
-Bat_ChkDist:
-		move.w	#$100,d1
-		bset	#status_xflip_bit,ost_status(a0)
-		move.w	(v_ost_player+ost_x_pos).w,d0
-		sub.w	ost_x_pos(a0),d0
-		bcc.s	.right					; if Sonic is right of batbrain, branch
-		neg.w	d0
-		neg.w	d1
-		bclr	#status_xflip_bit,ost_status(a0)
-
-	.right:
-		cmp.w	d2,d0
-		rts	
-; ===========================================================================
-; unused code
-		bsr.w	SpeedToPos
-		tst.b	ost_render(a0)
-		bpl.w	DeleteObject
-		bra.w	DisplaySprite
 
 ; ---------------------------------------------------------------------------
 ; Animation script

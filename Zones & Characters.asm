@@ -478,9 +478,16 @@ LoadPerCharacter:
 		
 		move.l	(a4),(v_ost_player).w			; load player object
 		move.l	(a4)+,(v_player1_ptr).w			; save pointer to player object
+		cmp.b	#id_Special,(v_gamemode).w
+		bne.s	.not_special				; branch if not on Special Stage
+		move.l	(a4),(v_ost_player).w			; load Special Stage player object
+	.not_special:
+		lea	4(a4),a4
 		
-		move.w	(a4)+,d0
+		move.w	(a4),d0
 		bsr.w	PalLoad_Now				; load character palette
+		move.w	(a4)+,d0
+		bsr.w	PalLoad_Next
 		
 		move.w	(a4)+,d0
 		jsr	UncPLC					; load life icon graphics
@@ -491,7 +498,8 @@ LoadPerCharacter:
 
 CharDefs:
 		; Sonic
-		dc.l SonicPlayer				; object pointer
+		dc.l SonicPlayer				; object pointer for level
+		dc.l SonicSpecial				; object pointer for Special Stage
 		dc.w id_Pal_None				; palette patch id (actual palette is loaded by LoadPerZone)
 		dc.w id_UPLC_SonicIcon				; life icon graphics
 		dc.w id_frame_has_sonichas			; "Sonic has passed" mappings frame
@@ -499,12 +507,14 @@ CharDefs:
 
 		; Red Sonic
 		dc.l SonicPlayer
+		dc.l SonicSpecial
 		dc.w id_Pal_SonicRed
 		dc.w id_UPLC_SonicIcon
 		dc.w id_frame_has_ketchuphas
 
 		; Yellow Sonic
 		dc.l SonicPlayer
+		dc.l SonicSpecial
 		dc.w id_Pal_SonicYellow
 		dc.w id_UPLC_SonicIcon
 		dc.w id_frame_has_mustardhas

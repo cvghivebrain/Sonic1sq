@@ -49,7 +49,7 @@ GM_Special:
 		jsr	(SS_Load).l				; load SS layout data
 		move.l	#0,(v_camera_x_pos).w
 		move.l	#0,(v_camera_y_pos).w
-		move.l	#SonicSpecial,(v_ost_player).w		; load special stage Sonic object
+		jsr	LoadPerCharacter
 		bsr.w	PalCycle_SS
 		clr.w	(v_ss_angle).w				; set stage angle to "upright"
 		move.w	#$40,(v_ss_rotation_speed).w		; set stage rotation speed
@@ -1031,10 +1031,8 @@ SS_LoadData:
 		dbf	d1,.loop_map_ptrs			; copy mappings pointers & VRAM settings to RAM
 
 		lea	(v_ss_sprite_update_list).l,a1
-		move.w	#((sizeof_ss_update*countof_ss_update)/4)-1,d1
-	.loop_update_list:
-		clr.l	(a1)+
-		dbf	d1,.loop_update_list			; clear RAM ($4400-$44FF)
+		move.w	#loops_to_clear_ssupdate,d1
+		bsr.w	ClearRAM				; clear RAM ($4400-$44FF)
 
 		rts
 
