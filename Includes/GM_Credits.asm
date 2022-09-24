@@ -25,7 +25,7 @@ GM_Credits:
 		move.w	#loops_to_clear_ost,d1			; size of RAM block to clear
 		bsr.w	ClearRAM				; fill OST with 0
 
-		lea	(v_pal_dry_next).w,a1
+		lea	(v_pal_dry).w,a1
 		move.w	#loops_to_clear_pal,d1
 		bsr.w	ClearRAM				; clear next palette
 
@@ -133,25 +133,19 @@ TryAgainEnd:
 		bsr.w	ClearScreen
 
 		lea	(v_ost_all).w,a1
-		moveq	#0,d0
-		move.w	#((sizeof_ost*countof_ost)/4)-1,d1
-	.clear_ost:
-		move.l	d0,(a1)+
-		dbf	d1,.clear_ost				; clear object RAM
+		move.w	#loops_to_clear_ost,d1
+		bsr.w	ClearRAM
 
 		moveq	#id_PLC_TryAgain,d0
 		bsr.w	QuickPLC				; load "TRY AGAIN" or "END" patterns
 
-		lea	(v_pal_dry_next).w,a1
-		moveq	#0,d0
-		move.w	#(sizeof_pal_all/4)-1,d1
-	.clear_pal:
-		move.l	d0,(a1)+
-		dbf	d1,.clear_pal				; fill palette with black
+		lea	(v_pal_dry).w,a1
+		move.w	#loops_to_clear_pal,d1
+		bsr.w	ClearRAM
 
 		moveq	#id_Pal_Ending,d0
 		bsr.w	PalLoad_Next				; load ending palette
-		clr.w	(v_pal_dry_next+$40).w			; set bg colour to black
+		clr.w	(v_pal_dry+$40).w			; set bg colour to black
 		move.l	#EndEggman,(v_ost_endeggman).w		; load Eggman object
 		jsr	(ExecuteObjects).l
 		jsr	(BuildSprites).l

@@ -1,29 +1,4 @@
 ; ---------------------------------------------------------------------------
-; Subroutines to load palette that will be used after fading in
-
-; input:
-;	d0 = index number for palette
-
-;	uses d0, d7, a1, a2, a3
-; ---------------------------------------------------------------------------
-
-PalLoad_Next:
-		lea	(PalPointers).l,a1
-		lsl.w	#3,d0
-		adda.w	d0,a1
-		movea.l	(a1)+,a2				; get palette data address
-		movea.w	(a1)+,a3				; get target RAM address
-		adda.w	#v_pal_dry_next-v_pal_dry,a3		; jump to next palette RAM address
-		move.w	(a1)+,d7				; get length of palette data
-		bmi.s	.exit
-
-	.loop:
-		move.l	(a2)+,(a3)+				; move data to RAM
-		dbf	d7,.loop
-	.exit:
-		rts
-
-; ---------------------------------------------------------------------------
 ; Subroutines to load palette immediately
 
 ; input:
@@ -32,6 +7,7 @@ PalLoad_Next:
 ;	uses d0, d7, a1, a2, a3
 ; ---------------------------------------------------------------------------
 
+PalLoad_Next:
 PalLoad_Now:
 		lea	(PalPointers).l,a1
 		lsl.w	#3,d0
@@ -97,40 +73,11 @@ WaterFilter:
 		move.w	Filter_Index(pc,d0.w),d0
 		
 		moveq	#0,d3
-		move.w	#countof_color-1,d1
-		lea	(v_pal_dry).w,a0
-		lea	(v_pal_water).w,a1
-		lea	Filter_KeepList(pc),a2
-		bsr.s	WaterFilter_Run				; create water palette for Sonic
-		
-		moveq	#0,d3
-		move.w	#(countof_color*3)-1,d1
-		lea	(v_pal_dry_next+sizeof_pal).w,a0
-		lea	(v_pal_water_next+sizeof_pal).w,a1
-		lea	Filter_KeepList+countof_color(pc),a2
-		bsr.s	WaterFilter_Run				; create water palette for level (after fade-in)
-		rts
-
-; ---------------------------------------------------------------------------
-; Subroutine to generate water palette during a level
-
-;	uses d0, d1, d2, d3, a0, a1, a2
-; ---------------------------------------------------------------------------
-
-WaterFilter_Update:
-		moveq	#0,d0
-		move.b	(v_waterfilter_id).w,d0			; get filter id
-		add.w	d0,d0					; multiply by 2
-		move.w	Filter_Index(pc,d0.w),d0
-		
 		move.w	#(countof_color*countof_pal)-1,d1
 		lea	(v_pal_dry).w,a0
 		lea	(v_pal_water).w,a1
 		lea	Filter_KeepList(pc),a2
-		bsr.s	WaterFilter_Run				; create water palette for all
-		rts
 		
-WaterFilter_Run:
 	.loop:
 		move.w	(a0)+,d2				; get colour
 		tst.b	(a2,d3.w)				; check keeplist

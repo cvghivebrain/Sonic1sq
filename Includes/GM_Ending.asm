@@ -118,7 +118,6 @@ End_MainLoop:
 		beq.w	End_MainLoop				; if not, branch
 
 		clr.w	(f_restart).w
-		move.w	#palfade_all,(v_palfade_start).w
 		clr.w	(v_palfade_time).w
 
 ; ---------------------------------------------------------------------------
@@ -140,7 +139,7 @@ End_FlashLoop:
 		subq.w	#1,(v_palfade_time).w			; decrement palette timer
 		bpl.s	.wait					; branch if time remains
 		move.w	#2,(v_palfade_time).w			; set timer
-		bsr.w	WhiteOut_ToWhite			; increase brightness of palette (up to max $EEE)
+		bsr.w	Brighten				; increase brightness of palette (up to max $EEE)
 
 	.wait:
 		tst.w	(f_restart).w				; is flash complete? (set by EndSonic object)
@@ -156,7 +155,7 @@ End_FlashLoop:
 		bsr.w	DrawChunks				; redraw level
 		moveq	#id_Pal_Ending,d0
 		bsr.w	PalLoad_Next				; load ending palette
-		bsr.w	PaletteWhiteIn				; fade in from white
+		bsr.w	PaletteFadeIn				; fade in from white
 		bra.w	End_MainLoop				; return to main loop
 
 ; ---------------------------------------------------------------------------

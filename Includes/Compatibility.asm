@@ -48,8 +48,8 @@ v_scrposy_dup:		equ v_fg_y_pos_vsram
 ;v_scrposx_dup:		equ v_fg_x_pos_hscroll
 v_hbla_hreg:		equ v_vdp_hint_counter
 v_hbla_line:		equ v_vdp_hint_line
-v_pfade_start:		equ v_palfade_start
-v_pfade_size:		equ v_palfade_size
+;v_pfade_start:		equ v_palfade_start
+;v_pfade_size:		equ v_palfade_size
 v_vbla_routine:		equ v_vblank_routine
 v_pcyc_num:		equ v_palcycle_num
 v_pcyc_time:		equ v_palcycle_time

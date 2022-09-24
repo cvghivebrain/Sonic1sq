@@ -20,6 +20,7 @@ _Sonic 1-squared_ is an enhanced version of the original _Sonic the Hedgehog_ ga
 * Rewritten level select routine to be more customisable. It now uses standard ASCII, and supports multiple columns (which are automatically generated based on the lines-per-column setting).
 * The hidden Japanese credits screen has been given its own gamemode, which is accessible through the level select.
 * Water palettes are generated in-game by the WaterFilter subroutine, instead of being hardcoded.
+* Palette transitions are controlled by a brightness variable, and no longer require a "next" palette. This simplifies loading new palettes.
 
 # Credits
 * [flamewing](https://github.com/flamewing) for [mdcomp](https://github.com/flamewing/mdcomp).

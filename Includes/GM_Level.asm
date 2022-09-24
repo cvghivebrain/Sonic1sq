@@ -165,8 +165,7 @@ Level_Skip_TtlCard:
 		bsr.w	WaitForVBlank
 		dbf	d1,.delayloop				; wait 4 frames for things to process
 
-		move.w	#(palfade_line2+palfade_3),(v_palfade_start).w ; fade in 2nd, 3rd & 4th palette lines ($202F)
-		bsr.w	PalFadeIn_Alt				; fade in from black
+		bsr.w	PaletteFadeIn				; fade in from black
 		tst.w	(v_demo_mode).w				; is this an ending demo?
 		bmi.s	.skip_titlecard				; if yes, branch
 		addq.b	#2,(v_ost_titlecard1+ost_routine).w	; make title card goto Card_Wait (move back and load explosion/animal gfx)
@@ -242,7 +241,6 @@ Level_Demo:
 
 	.fade_out:
 		move.w	#60,(v_countdown).w			; set timer to 1 second
-		move.w	#palfade_all,(v_palfade_start).w	; fade out all 4 palette lines
 		clr.w	(v_palfade_time).w
 
 	.fade_loop:
@@ -255,7 +253,7 @@ Level_Demo:
 		subq.w	#1,(v_palfade_time).w			; decrement time until next palette update
 		bpl.s	.wait					; branch if positive
 		move.w	#2,(v_palfade_time).w			; set timer to 2 frames
-		bsr.w	FadeOut_ToBlack				; update palette
+		bsr.w	Darken					; decrease brightness
 
 	.wait:
 		tst.w	(v_countdown).w				; has main timer hit 0?

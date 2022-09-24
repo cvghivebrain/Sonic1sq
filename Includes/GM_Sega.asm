@@ -45,6 +45,7 @@ GM_Sega:
 		
 		moveq	#id_Pal_SegaBG,d0
 		bsr.w	PalLoad_Now				; load Sega logo palette
+		move.w	#0,(v_brightness).w
 		move.w	#-((countof_stripe-1)*2),(v_palcycle_num).w ; -$A
 		move.w	#0,(v_palcycle_time).w
 		move.w	#0,(v_palcycle_buffer+$12).w

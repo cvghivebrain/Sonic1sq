@@ -53,9 +53,9 @@ Bat_DropChk:
 		tst.w	d2
 		bmi.s	.nodrop					; branch if Sonic is above
 		cmp.w	#128,d1
-		bcc.s	.nodrop					; branch if > 128px away
+		bge.s	.nodrop					; branch if > 128px away
 		cmp.w	#128,d3
-		bcc.s	.nodrop					; branch if > 128px below
+		bge.s	.nodrop					; branch if > 128px below
 		tst.w	(v_debug_active).w
 		bne.s	.nodrop					; branch if debug mode is in use
 

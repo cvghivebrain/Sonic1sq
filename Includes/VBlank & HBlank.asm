@@ -71,16 +71,7 @@ VBlank_Lag:
 		move.w	#1,(f_hblank_pal_change).w		; set flag to let HBlank know a frame has finished
 		stopZ80
 		waitZ80
-		tst.b	(f_water_pal_full).w			; is water covering the whole screen?
-		bne.s	.allwater				; if yes, branch
-
-		dma	v_pal_dry,sizeof_pal_all,cram		; copy normal palette to CRAM (water palette will be copied by HBlank later)
-		bra.s	.waterbelow
-
-	.allwater:
-		dma	v_pal_water,sizeof_pal_all,cram		; copy water palette to CRAM
-
-	.waterbelow:
+		bsr.w	UpdatePalette
 		move.w	(v_vdp_hint_counter).w,(a5)		; set water palette position by sending VDP register $8Axx to control port (vdp_control_port)
 		startZ80
 		bra.w	VBlank_Music
@@ -130,16 +121,7 @@ VBlank_Level:
 		stopZ80
 		waitZ80
 		bsr.w	ReadJoypads
-		tst.b	(f_water_pal_full).w			; is water covering the whole screen?
-		bne.s	.allwater				; if yes, branch
-
-		dma	v_pal_dry,sizeof_pal_all,cram		; copy normal palette to CRAM (water palette will be copied by HBlank later)
-		bra.s	.waterbelow
-
-	.allwater:
-		dma	v_pal_water,sizeof_pal_all,cram		; copy water palette to CRAM
-
-	.waterbelow:
+		bsr.w	UpdatePalette
 		move.w	(v_vdp_hint_counter).w,(a5)		; set water palette position by sending VDP register $8Axx to control port (vdp_control_port)
 
 		dma	v_hscroll_buffer,sizeof_vram_hscroll,vram_hscroll
@@ -180,12 +162,12 @@ VBlank_Special:
 		stopZ80
 		waitZ80
 		bsr.w	ReadJoypads
-		dma	v_pal_dry,sizeof_pal_all,cram		; copy palette to CRAM
+		bsr.w	PalCycle_SS				; update cycling palette
+		bsr.w	UpdatePalette
 		dma	v_sprite_buffer,sizeof_vram_sprites,vram_sprites
 		dma	v_hscroll_buffer,sizeof_vram_hscroll,vram_hscroll
 		bsr.w	ProcessDMA
 		startZ80
-		bsr.w	PalCycle_SS				; update cycling palette
 		tst.w	(v_countdown).w
 		beq.w	.end
 		subq.w	#1,(v_countdown).w			; decrement timer
@@ -201,7 +183,7 @@ VBlank_Ending:
 		stopZ80
 		waitZ80
 		bsr.w	ReadJoypads
-		dma	v_pal_dry,sizeof_pal_all,cram		; copy palette to CRAM
+		bsr.w	UpdatePalette
 		move.w	(v_vdp_hint_counter).w,(a5)		; set water palette position by sending VDP register $8Axx to control port (vdp_control_port)
 		dma	v_hscroll_buffer,sizeof_vram_hscroll,vram_hscroll
 		dma	v_sprite_buffer,sizeof_vram_sprites,vram_sprites
@@ -223,7 +205,7 @@ VBlank_0E:
 		rts	
 ; ===========================================================================
 
-; $12 - PaletteWhiteIn, PaletteWhiteOut, PaletteFadeIn, PaletteFadeOut
+; $12 - PaletteFadeIn, PaletteWhiteOut, PaletteFadeOut
 VBlank_Fade:
 		bsr.w	ReadPad_Palette_Sprites_HScroll		; read joypad, DMA palettes, sprites and hscroll
 		move.w	(v_vdp_hint_counter).w,(a5)		; set water palette position by sending VDP register $8Axx to control port (vdp_control_port)
@@ -235,7 +217,7 @@ VBlank_Continue:
 		stopZ80
 		waitZ80
 		bsr.w	ReadJoypads
-		dma	v_pal_dry,sizeof_pal_all,cram		; copy palette to CRAM
+		bsr.w	UpdatePalette
 		dma	v_sprite_buffer,sizeof_vram_sprites,vram_sprites
 		dma	v_hscroll_buffer,sizeof_vram_hscroll,vram_hscroll
 		bsr.w	ProcessDMA
@@ -255,19 +237,160 @@ ReadPad_Palette_Sprites_HScroll:
 		stopZ80
 		waitZ80
 		bsr.w	ReadJoypads
-		tst.b	(f_water_pal_full).w			; is water covering the whole screen?
-		bne.s	.allwater				; if yes, branch
-		dma	v_pal_dry,sizeof_pal_all,cram		; copy normal palette to CRAM (water palette will be copied by HBlank later)
-		bra.s	.waterbelow
-
-	.allwater:
-		dma	v_pal_water,sizeof_pal_all,cram		; copy water palette to CRAM
-
-	.waterbelow:
+		bsr.s	UpdatePalette
 		dma	v_sprite_buffer,sizeof_vram_sprites,vram_sprites
 		dma	v_hscroll_buffer,sizeof_vram_hscroll,vram_hscroll
 		startZ80
 		rts
+
+; ---------------------------------------------------------------------------
+; Subroutine to copy palette to CRAM
+; ---------------------------------------------------------------------------
+
+UpdatePalette:
+		tst.b	(f_brightness_update).w
+		beq.s	.no_update				; branch if update flag isn't set
+		bsr.w	ApplyBrightness				; create final palette
+		
+	.no_update:
+		tst.w	(v_brightness).w
+		bne.s	.use_brightness				; branch if brightness isn't default (0)
+		tst.b	(f_water_pal_full).w
+		bne.s	.allwater				; branch if water is covering the whole screen
+		dma	v_pal_dry,sizeof_pal_all,cram		; copy normal palette to CRAM (water palette will be copied by HBlank later)
+		rts
+
+	.allwater:
+		dma	v_pal_water,sizeof_pal_all,cram		; copy water palette to CRAM
+		rts
+		
+	.use_brightness:
+		tst.b	(f_water_pal_full).w
+		bne.s	.allwater2				; branch if water is covering the whole screen
+		dma	v_pal_dry_final,sizeof_pal_all,cram	; copy normal palette to CRAM (water palette will be copied by HBlank later)
+		rts
+
+	.allwater2:
+		dma	v_pal_water_final,sizeof_pal_all,cram	; copy water palette to CRAM
+		rts
+
+; ---------------------------------------------------------------------------
+; Subroutine to create palette with brightness applied
+; ---------------------------------------------------------------------------
+
+ApplyBrightness:
+		clr.b	(f_brightness_update).w			; clear update flag
+		move.w	#(countof_color*countof_pal)-1,d0	; number of colours to copy
+		tst.b	(f_water_enable).w
+		beq.s	.no_water				; branch if not in water level
+		move.w	#(countof_color*countof_pal*2)-1,d0	; also do underwater palette
+		
+	.no_water:
+		lea	(v_pal_dry).w,a0
+		lea	(v_pal_dry_final).w,a1
+		lea	BrightLevels_Red(pc),a2
+		lea	BrightLevels_Green(pc),a3
+		lea	BrightLevels_Blue(pc),a4
+		move.w	(v_brightness).w,d1
+		bpl.s	.loop					; branch if brightness is > 0
+		lea	DarkLevels_Red(pc),a2
+		lea	DarkLevels_Green(pc),a3
+		lea	DarkLevels_Blue(pc),a4
+		neg.w	d1
+		
+	.loop:
+		move.w	(a0)+,d2
+		move.w	d2,d3
+		lsl.w	#3,d3
+		and.w	#$F0,d3					; read red value
+		add.w	d1,d3
+		move.b	(a2,d3.w),d3				; get new red value
+		
+		move.w	d2,d4
+		lsr.w	#1,d4
+		and.w	#$F0,d4					; read green value
+		add.w	d1,d4
+		move.b	(a3,d4.w),d4				; get new green value
+		
+		move.w	d2,d5
+		lsr.w	#5,d5
+		and.w	#$F0,d5					; read blue value
+		add.w	d1,d5
+		move.b	(a4,d5.w),d5				; get new blue value
+		
+		lsl.b	#4,d4
+		or.b	d4,d3					; make low byte of colour (green/red)
+		
+		move.b	d5,(a1)+				; write blue
+		move.b	d3,(a1)+				; write green/red
+		dbf	d0,.loop				; repeat for all colours
+		rts
+		
+BrightLevels_Red:
+		hex	0002020404060608080a0a0c0c0e0e0e
+		hex	020404060608080a0a0c0c0e0e0e0e0e
+		hex	04060608080a0a0c0c0e0e0e0e0e0e0e
+		hex	0608080a0a0c0c0e0e0e0e0e0e0e0e0e
+		hex	080a0a0c0c0e0e0e0e0e0e0e0e0e0e0e
+		hex	0a0c0c0e0e0e0e0e0e0e0e0e0e0e0e0e
+		hex	0c0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e
+		hex	0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e
+		even
+		
+DarkLevels_Red:
+		hex	00000000000000000000000000000000
+		hex	02000000000000000000000000000000
+		hex	04020200000000000000000000000000
+		hex	06040402020000000000000000000000
+		hex	08060604040202000000000000000000
+		hex	0a080806060404020200000000000000
+		hex	0c0a0a08080606040402020000000000
+		hex	0e0c0c0a0a0808060604040202000000
+		even
+		
+BrightLevels_Green:
+		hex	000002020404060608080a0a0c0c0e0e
+		hex	02020404060608080a0a0c0c0e0e0e0e
+		hex	0404060608080a0a0c0c0e0e0e0e0e0e
+		hex	060608080a0a0c0c0e0e0e0e0e0e0e0e
+		hex	08080a0a0c0c0e0e0e0e0e0e0e0e0e0e
+		hex	0a0a0c0c0e0e0e0e0e0e0e0e0e0e0e0e
+		hex	0c0c0e0e0e0e0e0e0e0e0e0e0e0e0e0e
+		hex	0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e
+		even
+		
+DarkLevels_Green:
+		hex	00000000000000000000000000000000
+		hex	02020000000000000000000000000000
+		hex	04040202000000000000000000000000
+		hex	06060404020200000000000000000000
+		hex	08080606040402020000000000000000
+		hex	0a0a0808060604040202000000000000
+		hex	0c0c0a0a080806060404020200000000
+		hex	0e0e0c0c0a0a08080606040402020000
+		even
+		
+BrightLevels_Blue:
+		hex	00000002020404060608080a0a0c0c0e
+		hex	0202020404060608080a0a0c0c0e0e0e
+		hex	040404060608080a0a0c0c0e0e0e0e0e
+		hex	06060608080a0a0c0c0e0e0e0e0e0e0e
+		hex	0808080a0a0c0c0e0e0e0e0e0e0e0e0e
+		hex	0a0a0a0c0c0e0e0e0e0e0e0e0e0e0e0e
+		hex	0c0c0c0e0e0e0e0e0e0e0e0e0e0e0e0e
+		hex	0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e
+		even
+		
+DarkLevels_Blue:
+		hex	00000000000000000000000000000000
+		hex	02020200000000000000000000000000
+		hex	04040402020000000000000000000000
+		hex	06060604040202000000000000000000
+		hex	08080806060404020200000000000000
+		hex	0a0a0a08080606040402020000000000
+		hex	0c0c0c0a0a0808060604040202000000
+		hex	0e0e0e0c0c0a0a080806060404020200
+		even
 
 ; ---------------------------------------------------------------------------
 ; Horizontal interrupt
@@ -281,6 +404,11 @@ HBlank:
 		movem.l	a0-a1,-(sp)				; save a0-a1 to stack
 		lea	(vdp_data_port).l,a1
 		lea	(v_pal_water).w,a0			; get palette from RAM
+		tst.b	(v_brightness).w
+		beq.s	.default_brightness			; branch if brightness is default (0)
+		lea	(v_pal_water_final).w,a0
+		
+	.default_brightness:
 		move.l	#$C0000000,4(a1)			; set VDP to CRAM write
 		rept sizeof_pal_all/4
 		move.l	(a0)+,(a1)				; copy palette to CRAM

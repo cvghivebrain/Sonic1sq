@@ -23,9 +23,9 @@ GM_Title:
 		move.w	#loops_to_clear_ost,d1			; size of RAM block to clear
 		bsr.w	ClearRAM				; fill OST with 0
 
-		lea	(v_pal_dry_next).w,a1
+		lea	(v_pal_dry).w,a1
 		move.w	#loops_to_clear_pal,d1
-		bsr.w	ClearRAM				; clear next palette
+		bsr.w	ClearRAM
 
 		moveq	#id_Pal_Sonic,d0			; load Sonic's palette
 		bsr.w	PalLoad_Next				; palette will be shown after fading in

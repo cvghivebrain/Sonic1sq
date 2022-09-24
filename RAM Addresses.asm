@@ -99,8 +99,6 @@ v_fg_y_pos_vsram:		rs.l 1 ; $FFFFF616 ; foreground y position, sent to VSRAM dur
 v_bg_y_pos_vsram:		equ __rs-2 ; $FFFFF618 ; background y position, sent to VSRAM during VBlank
 v_vdp_hint_counter:		rs.w 1 ; $FFFFF624 ; VDP register $8A buffer - horizontal interrupt counter ($8Axx)
 v_vdp_hint_line:		equ __rs-1 ; screen line where water starts and palette is changed by HBlank
-v_palfade_start:		rs.w 1 ; $FFFFF626 ; palette fading - start position in bytes
-v_palfade_size:			equ __rs-1 ; $FFFFF627 ; palette fading - number of colours
 
 				rsblock vblankstuff ; $F628-$F67F cleared by GM_Level, GM_Ending
 v_vblank_routine:		rs.b 1 ; $FFFFF62A ; VBlank routine counter
@@ -285,20 +283,20 @@ v_scroll_block_4_height:	equ __rs-2 ; $FFFFF7F6 ; scroll block height - $100 for
 				rsblock sprites
 v_sprite_buffer:		rs.b sizeof_vram_sprites ; $FFFFF800 ; sprite table ($280 bytes)
 				rsblockend sprites
-v_pal_water_next:		rs.w countof_color*4 ; $FFFFFA00 ; target underwater palette, used for transitions
+				rsblock pal
+v_pal_dry:			rs.w countof_color*4 ; $FFFFFB00 ; main palette
+				rsblockend pal
+v_pal_dry_line1:		equ v_pal_dry
+v_pal_dry_line2:		equ v_pal_dry+sizeof_pal ; $FFFFFB20 ; 2nd palette line
+v_pal_dry_line3:		equ v_pal_dry+(sizeof_pal*2) ; $FFFFFB40 ; 3rd palette line
+v_pal_dry_line4:		equ v_pal_dry+(sizeof_pal*3) ; $FFFFFB60 ; 4th palette line
 v_pal_water:			rs.w countof_color*4 ; $FFFFFA80 ; main underwater palette
 v_pal_water_line1:		equ v_pal_water
 v_pal_water_line2:		equ v_pal_water+sizeof_pal ; $FFFFFAA0 ; 2nd palette line
 v_pal_water_line3:		equ v_pal_water+(sizeof_pal*2) ; $FFFFFAC0 ; 3rd palette line
 v_pal_water_line4:		equ v_pal_water+(sizeof_pal*3) ; $FFFFFAE0 ; 4th palette line
-v_pal_dry:			rs.w countof_color*4 ; $FFFFFB00 ; main palette
-v_pal_dry_line1:		equ v_pal_dry
-v_pal_dry_line2:		equ v_pal_dry+sizeof_pal ; $FFFFFB20 ; 2nd palette line
-v_pal_dry_line3:		equ v_pal_dry+(sizeof_pal*2) ; $FFFFFB40 ; 3rd palette line
-v_pal_dry_line4:		equ v_pal_dry+(sizeof_pal*3) ; $FFFFFB60 ; 4th palette line
-				rsblock pal
-v_pal_dry_next:			rs.w countof_color*4 ; $FFFFFB80 ; target palette, used for transitions
-				rsblockend pal
+v_pal_dry_final:		rs.w countof_color*countof_pal ; main palette after brightness change
+v_pal_water_final:		rs.w countof_color*countof_pal ; underwater palette after brightness change
 				rsalign 2
 v_respawn_list:			rs.b $100 ; $FFFFFC00 ; object state list (2 bytes for counter; 1 byte each for up to $FE objects)
 
@@ -438,6 +436,8 @@ v_demo_num:			rs.w 1 ; $FFFFFFF2 ; demo level number (not the same as the level 
 v_demo_ptr:			rs.l 1 ; pointer for demo data
 v_demo_x_start:			rs.l 1 ; Sonic's starting x pos
 v_demo_y_start:			equ __rs-2 ; Sonic's starting y pos
+v_brightness:			rs.w 1 ; 0 = normal; -15 = black; 15 = white
+f_brightness_update:		rs.b 1 ; flag set to update brightness
 v_credits_num:			rs.w 1 ; $FFFFFFF4 ; credits index number
 v_console_region:		rs.b 1 ; $FFFFFFF8 ; Mega Drive console type - 0 = JP; $80 = US/EU; +0 = NTSC; +$40 = PAL
 f_debug_enable:			rs.w 1 ; $FFFFFFFA ; flag set when debug mode is enabled (high byte is set to 1, but it's read as a word)

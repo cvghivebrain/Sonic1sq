@@ -70,7 +70,7 @@ GM_Special:
 
 	SS_NoDebug:
 		enable_display
-		bsr.w	PaletteWhiteIn
+		bsr.w	PaletteFadeIn
 
 ; ---------------------------------------------------------------------------
 ; Main Special Stage loop
@@ -104,7 +104,6 @@ SS_MainLoop:
 
 	.level_ok:
 		move.w	#60,(v_countdown).w			; set delay time to 1 second
-		move.w	#palfade_all,(v_palfade_start).w	; $3F
 		clr.w	(v_palfade_time).w
 
 SS_FinishLoop:
@@ -119,7 +118,7 @@ SS_FinishLoop:
 		subq.w	#1,(v_palfade_time).w
 		bpl.s	.leave_palette				; branch if palette timer is 0 or higher
 		move.w	#2,(v_palfade_time).w			; set palette update delay to 2 frames
-		bsr.w	WhiteOut_ToWhite			; fade to white in increments
+		bsr.w	Brighten				; fade to white in increments
 
 	.leave_palette:
 		tst.w	(v_countdown).w				; has timer hit 0?
@@ -151,6 +150,7 @@ SS_FinishLoop:
 		bsr.w	ClearRAM				; fill OST with 0
 
 		move.l	#SSResult,(v_ost_ssresult1).w		; load results screen object
+		bsr.w	PaletteFadeIn
 
 SS_NormalExit:
 		bsr.w	PauseGame

@@ -28,9 +28,9 @@ GM_HiddenCredits:
 		move.w	#0,d3					; tile setting
 		bsr.w	LoadTilemap
 		
-		lea	(v_pal_dry_next).w,a1
+		lea	(v_pal_dry).w,a1
 		move.w	#loops_to_clear_pal,d1
-		bsr.w	ClearRAM				; clear next palette
+		bsr.w	ClearRAM				; clear palette
 
 		moveq	#id_Pal_HidCred,d0
 		bsr.w	PalLoad_Next				; palette will be shown after fading in
