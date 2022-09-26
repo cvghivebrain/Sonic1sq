@@ -42,14 +42,12 @@ GM_Ending:
 		move.w	#id_EndZ_bad,(v_zone).w			; set level number to 0601 (no flowers)
 
 	.all_emeralds:
-		moveq	#id_PLC_Ending,d0
-		bsr.w	QuickPLC				; load ending sequence graphics in 1 frame
 		jsr	(Hud_Base).l				; load uncompressed portion of HUD graphics
+		bsr.w	LoadPerZone
 		bsr.w	DeformLayers
 		bset	#redraw_left_bit,(v_fg_redraw_direction).w
 		bsr.w	LevelDataLoad				; load block mappings and palettes
 		enable_ints
-		bsr.w	LoadPerZone
 		bsr.w	LevelParameterLoad			; load level boundaries and start positions
 		bsr.w	DrawTilesAtStart
 		move.b	(v_bgm).w,d0
@@ -86,6 +84,7 @@ GM_Ending:
 		move.b	#id_VBlank_Ending,(v_vblank_routine).w
 		bsr.w	WaitForVBlank
 		enable_display
+		bsr.w	DeformLayers
 		bsr.w	PaletteFadeIn				; fade in from black
 
 ; ---------------------------------------------------------------------------

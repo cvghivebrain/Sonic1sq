@@ -974,7 +974,7 @@ Blk256_SBZ:	incbin	"256x256 Mappings\SBZ.kos"
 		incfile Nem_TryAgain,"Graphics - Compressed\Ending - Try Again",nem
 		incfile Kos_EndFlower,"Graphics Kosinski\Ending - Flowers",kos
 		incfile Art_CreditText,"Graphics\Ending - Credits",bin,dma_safe
-		incfile Nem_EndStH,"Graphics - Compressed\Ending - StH Logo",nem
+		incfile Kos_EndStH,"Graphics Kosinski\Ending - StH Logo",kos
 ; ---------------------------------------------------------------------------
 ; Collision data
 ; ---------------------------------------------------------------------------

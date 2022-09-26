@@ -5,7 +5,6 @@ PatternLoadCues:
 		index *
 		ptr PLC_Main2
 		ptr PLC_Boss
-		ptr PLC_Ending
 		ptr PLC_TryAgain
 		ptr PLC_EggmanSBZ2
 		ptr PLC_FZBoss
@@ -50,12 +49,6 @@ PLC_Boss:	plcheader
 		plcm	Nem_Weapons				; Eggman's weapons ($8D80)
 		plcm	Nem_Exhaust, $A540			; exhaust flame
 	PLC_Boss_end:
-; ---------------------------------------------------------------------------
-; Pattern load cues - ending sequence
-; ---------------------------------------------------------------------------
-PLC_Ending:	plcheader
-		plcm	Nem_EndStH,$B8A0
-	PLC_Ending_end:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - "TRY AGAIN" and "END" screens
 ; ---------------------------------------------------------------------------

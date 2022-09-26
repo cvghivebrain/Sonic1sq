@@ -25,10 +25,10 @@ PalLoad:
 ; Palette pointers
 ; ---------------------------------------------------------------------------
 
-palp:		macro paladdress,ramaddress,colours
+palp:		macro paladdress,ramaddress
 		id_\paladdress:	equ (*-PalPointers)/8
 		dc.l paladdress
-		dc.w ramaddress, (sizeof_\paladdress/2)-1
+		dc.w ramaddress, (sizeof_\paladdress/4)-1
 		endm
 
 PalPointers:

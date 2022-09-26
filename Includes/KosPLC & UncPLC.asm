@@ -266,6 +266,7 @@ KPLC_End:	kplcheader
 		kplc Kos_EndFlower
 		kplc Kos_EndEm,v_tile_emeralds
 		kplc Kos_EndSonic
+		kplc Kos_EndStH
 	.end:
 		set_dma_size last_vram
 
@@ -481,7 +482,7 @@ UPLC_RabbitChicken:	uplcheader vram_animals
 		uplc Art_Chicken,v_tile_animal2
 	.end:
 	
-UPLC_Animals:	uplcheader $AA60
+UPLC_Animals:	uplcheader $AC00
 		uplc Art_Rabbit
 		uplc Art_Chicken
 		uplc Art_BlackBird
