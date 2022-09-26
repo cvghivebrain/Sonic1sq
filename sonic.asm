@@ -169,6 +169,7 @@ GameInit:
 MainGameLoop:
 		moveq	#0,d0
 		move.b	(v_gamemode).w,d0			; load gamemode
+		and.b	#$7F,d0					; ignore high bit
 		add.b	d0,d0
 		add.b	d0,d0					; multiply by 4
 		movea.l	GameModeArray(pc,d0.w),a1		; get pointer
@@ -257,26 +258,25 @@ Pal_SBZCyc10:	incbin	"Palettes\Cycle - SBZ 10.bin"
 Pal_Sega1:	incbin	"Palettes\Sega - Stripe.bin"
 Pal_Sega2:	incbin	"Palettes\Sega - All.bin"
 		include "Includes\PalLoad & PalPointers.asm"
-Pal_SegaBG:	incbin	"Palettes\Sega Background.bin"
-Pal_HidCred:	incbin	"Palettes\Hidden Credits.bin"
-Pal_Title:	incbin	"Palettes\Title Screen.bin"
-Pal_LevelSel:	incbin	"Palettes\Level Select.bin"
-Pal_None:
-Pal_Sonic:	incbin	"Palettes\Sonic.bin"
-Pal_SonicRed:	incbin	"Palettes\Sonic Red.bin"
-Pal_SonicYellow:	incbin	"Palettes\Sonic Yellow.bin"
-Pal_GHZ:	incbin	"Palettes\Green Hill Zone.bin"
-Pal_LZ:		incbin	"Palettes\Labyrinth Zone.bin"
-Pal_MZ:		incbin	"Palettes\Marble Zone.bin"
-Pal_SLZ:	incbin	"Palettes\Star Light Zone.bin"
-Pal_SYZ:	incbin	"Palettes\Spring Yard Zone.bin"
-Pal_SBZ1:	incbin	"Palettes\SBZ Act 1.bin"
-Pal_SBZ2:	incbin	"Palettes\SBZ Act 2.bin"
-Pal_Special:	incbin	"Palettes\Special Stage.bin"
-Pal_SBZ3:	incbin	"Palettes\SBZ Act 3.bin"
-Pal_SSResult:	incbin	"Palettes\Special Stage Results.bin"
-Pal_Continue:	incbin	"Palettes\Special Stage Continue Bonus.bin"
-Pal_Ending:	incbin	"Palettes\Ending.bin"
+		incfile	Pal_SegaBG,"Palettes\Sega Background",bin
+		incfile	Pal_HidCred,"Palettes\Hidden Credits",bin
+		incfile	Pal_Title,"Palettes\Title Screen",bin
+		incfile	Pal_LevelSel,"Palettes\Level Select",bin
+		incfile	Pal_Sonic,"Palettes\Sonic",bin
+		incfile	Pal_SonicRed,"Palettes\Sonic Red",bin
+		incfile	Pal_SonicYellow,"Palettes\Sonic Yellow",bin
+		incfile	Pal_GHZ,"Palettes\Green Hill Zone",bin
+		incfile	Pal_LZ,"Palettes\Labyrinth Zone",bin
+		incfile	Pal_MZ,"Palettes\Marble Zone",bin
+		incfile	Pal_SLZ,"Palettes\Star Light Zone",bin
+		incfile	Pal_SYZ,"Palettes\Spring Yard Zone",bin
+		incfile	Pal_SBZ1,"Palettes\SBZ Act 1",bin
+		incfile	Pal_SBZ2,"Palettes\SBZ Act 2",bin
+		incfile	Pal_Special,"Palettes\Special Stage",bin
+		incfile	Pal_SBZ3,"Palettes\SBZ Act 3",bin
+		incfile	Pal_SSResult,"Palettes\Special Stage Results",bin
+		incfile	Pal_Continue,"Palettes\Special Stage Continue Bonus",bin
+		incfile	Pal_Ending,"Palettes\Ending",bin
 
 		include "Includes\WaitForVBlank.asm"
 		include "Objects\_RandomNumber.asm"

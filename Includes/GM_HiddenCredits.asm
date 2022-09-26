@@ -33,7 +33,7 @@ GM_HiddenCredits:
 		bsr.w	ClearRAM				; clear palette
 
 		moveq	#id_Pal_HidCred,d0
-		bsr.w	PalLoad_Next				; palette will be shown after fading in
+		bsr.w	PalLoad				; palette will be shown after fading in
 		bsr.w	PaletteFadeIn
 		
 Hidden_MainLoop:

@@ -30,7 +30,7 @@ GM_Credits:
 		bsr.w	ClearRAM				; clear next palette
 
 		moveq	#id_Pal_Sonic,d0
-		bsr.w	PalLoad_Next				; load Sonic's palette
+		bsr.w	PalLoad				; load Sonic's palette
 		move.l	#CreditsText,(v_ost_credits).w		; load credits object
 		jsr	(ExecuteObjects).l
 		jsr	(BuildSprites).l
@@ -144,7 +144,7 @@ TryAgainEnd:
 		bsr.w	ClearRAM
 
 		moveq	#id_Pal_Ending,d0
-		bsr.w	PalLoad_Next				; load ending palette
+		bsr.w	PalLoad				; load ending palette
 		clr.w	(v_pal_dry+$40).w			; set bg colour to black
 		move.l	#EndEggman,(v_ost_endeggman).w		; load Eggman object
 		jsr	(ExecuteObjects).l

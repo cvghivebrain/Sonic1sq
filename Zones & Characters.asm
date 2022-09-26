@@ -33,11 +33,11 @@ LoadPerZone:
 		moveq	#0,d0
 		movea.l	(a4)+,a1				; get pointer for palette id list for Sonic & title cards
 		move.b	(a1,d1.w),d0				; get palette id
-		bsr.w	PalLoad_Now				; load palette
+		bsr.w	PalLoad					; load palette
 		moveq	#0,d0
 		movea.l	(a4)+,a1				; get pointer for palette id list for level
 		move.b	(a1,d1.w),d0				; get palette id
-		bsr.w	PalLoad_Next				; load palette
+		bsr.w	PalLoad					; load palette
 
 		movea.l	(a4)+,a1				; get pointer for palette cycling routine list
 		move.l	(a1,d4.w),(v_palcycle_ptr).w		; get pointer for palette cycling routine
@@ -484,11 +484,11 @@ LoadPerCharacter:
 	.not_special:
 		lea	4(a4),a4
 		
-		move.w	(a4),d0
-		bsr.w	PalLoad_Now				; load character palette
 		move.w	(a4)+,d0
-		bsr.w	PalLoad_Next
+		bmi.s	.skip_pal
+		bsr.w	PalLoad					; load character palette
 		
+	.skip_pal:
 		move.w	(a4)+,d0
 		jsr	UncPLC					; load life icon graphics
 		
@@ -500,7 +500,7 @@ CharDefs:
 		; Sonic
 		dc.l SonicPlayer				; object pointer for level
 		dc.l SonicSpecial				; object pointer for Special Stage
-		dc.w id_Pal_None				; palette patch id (actual palette is loaded by LoadPerZone)
+		dc.w -1						; palette patch id (actual palette is loaded by LoadPerZone; use -1 to skip)
 		dc.w id_UPLC_SonicIcon				; life icon graphics
 		dc.w id_frame_has_sonichas			; "Sonic has passed" mappings frame
 	CharDefs_size:

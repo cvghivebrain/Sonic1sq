@@ -4,7 +4,6 @@
 
 GM_Level:
 GM_Demo:
-		bset	#7,(v_gamemode).w			; add $80 to gamemode (for pre level sequence)
 		tst.w	(v_demo_mode).w				; is this an ending demo?
 		bmi.s	.keep_music				; if yes, branch
 		play.b	1, bsr.w, cmd_Fade			; fade out music
@@ -12,6 +11,7 @@ GM_Demo:
 	.keep_music:
 		bsr.w	ClearPLC				; clear PLC buffer
 		bsr.w	PaletteFadeOut				; fade out from previous gamemode
+		bset	#7,(v_gamemode).w			; add $80 to gamemode (for title card sequence)
 		tst.w	(v_demo_mode).w				; is this an ending demo?
 		bmi.s	.skip_gfx				; if yes, branch
 		moveq	#id_PLC_Main2,d0
@@ -65,6 +65,7 @@ GM_Demo:
 		tst.w	(v_demo_mode).w				; is this an ending demo?
 		bmi.s	Level_Skip_TtlCard			; if yes, branch
 		move.l	#TitleCard,(v_ost_titlecard1).w		; load title card object
+		move.b	#1,(f_brightness_update).w		; show Sonic/title card palette
 		move.b	(v_bgm).w,d0
 		bsr.w	PlaySound0				; play music
 

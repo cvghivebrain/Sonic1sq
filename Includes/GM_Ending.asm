@@ -154,7 +154,7 @@ End_FlashLoop:
 		move.w	#draw_fg,d2
 		bsr.w	DrawChunks				; redraw level
 		moveq	#id_Pal_Ending,d0
-		bsr.w	PalLoad_Next				; load ending palette
+		bsr.w	PalLoad				; load ending palette
 		bsr.w	PaletteFadeIn				; fade in from white
 		bra.w	End_MainLoop				; return to main loop
 

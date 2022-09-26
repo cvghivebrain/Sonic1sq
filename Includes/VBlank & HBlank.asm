@@ -6,7 +6,6 @@ VBlank:
 		movem.l	d0-a6,-(sp)				; save all registers to stack
 		tst.b	(v_vblank_routine).w			; is routine number 0?
 		beq.s	VBlank_Lag				; if yes, branch
-		move.w	(vdp_control_port).l,d0
 		move.l	#$40000010+(0<<16),(vdp_control_port).l	; set write destination to VSRAM address 0
 		move.l	(v_fg_y_pos_vsram).w,(vdp_data_port).l	; send screen y-axis pos. to VSRAM
 		btst	#6,(v_console_region).w			; is Mega Drive PAL?
@@ -280,6 +279,8 @@ UpdatePalette:
 
 ApplyBrightness:
 		clr.b	(f_brightness_update).w			; clear update flag
+		tst.b	(v_gamemode).w
+		bmi.w	ApplyBrightness_KeepSonic		; branch if title card is shown
 		move.w	#(countof_color*countof_pal)-1,d0	; number of colours to copy
 		tst.b	(f_water_enable).w
 		beq.s	.no_water				; branch if not in water level
@@ -288,6 +289,8 @@ ApplyBrightness:
 	.no_water:
 		lea	(v_pal_dry).w,a0
 		lea	(v_pal_dry_final).w,a1
+		
+ApplyBrightness_Run:
 		lea	BrightLevels_Red(pc),a2
 		lea	BrightLevels_Green(pc),a3
 		lea	BrightLevels_Blue(pc),a4
@@ -391,6 +394,23 @@ DarkLevels_Blue:
 		hex	0c0c0c0a0a0808060604040202000000
 		hex	0e0e0e0c0c0a0a080806060404020200
 		even
+
+ApplyBrightness_KeepSonic:
+		lea	(v_pal_dry).w,a0
+		lea	(v_pal_dry_final).w,a1
+		move.w	#(countof_color/2)-1,d0			; do first palette line only
+		
+	.loop:
+		move.l	(a0)+,(a1)+				; copy palette without changing brightness
+		dbf	d0,.loop
+		
+		move.w	#(countof_color*3)-1,d0			; remaining 3 palettes
+		tst.b	(f_water_enable).w
+		beq.s	.no_water				; branch if not in water level
+		move.w	#(countof_color*7)-1,d0			; also do underwater palette
+		
+	.no_water:
+		bra.w	ApplyBrightness_Run
 
 ; ---------------------------------------------------------------------------
 ; Horizontal interrupt

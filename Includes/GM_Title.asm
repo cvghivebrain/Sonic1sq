@@ -28,7 +28,7 @@ GM_Title:
 		bsr.w	ClearRAM
 
 		moveq	#id_Pal_Sonic,d0			; load Sonic's palette
-		bsr.w	PalLoad_Next				; palette will be shown after fading in
+		bsr.w	PalLoad				; palette will be shown after fading in
 		move.l	#CreditsText,(v_ost_credits).w		; load "SONIC TEAM PRESENTS" object
 		jsr	(ExecuteObjects).l
 		jsr	(BuildSprites).l
@@ -68,7 +68,7 @@ GM_Title:
 		bsr.w	LoadTilemap
 
 		moveq	#id_Pal_Title,d0			; load title screen palette
-		bsr.w	PalLoad_Next
+		bsr.w	PalLoad
 		play.b	1, bsr.w, mus_TitleScreen		; play title screen music
 		move.b	#0,(f_debug_enable).w			; disable debug mode
 		move.w	#406,(v_countdown).w			; run title screen for 406 frames
@@ -151,7 +151,7 @@ LevSelCode:	dc.b btnUp,btnDn,btnL,btnR,$FF
 
 LevSel_Init:
 		moveq	#id_Pal_LevelSel,d0
-		bsr.w	PalLoad_Now				; load level select palette
+		bsr.w	PalLoad				; load level select palette
 		lea	(v_hscroll_buffer).w,a1
 		move.w	#loops_to_clear_hscroll,d1
 		bsr.w	ClearRAM				; clear hscroll buffer (in RAM)
