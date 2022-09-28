@@ -80,16 +80,11 @@ Lamp_Blue:	; Routine 2
 ; ===========================================================================
 
 .chkhit:
-		move.w	(v_ost_player+ost_x_pos).w,d0
-		sub.w	ost_x_pos(a0),d0
-		addq.w	#8,d0
-		cmpi.w	#$10,d0
+		bsr.w	Range
+		cmp.w	#8,d1
 		bcc.w	.donothing
-		move.w	(v_ost_player+ost_y_pos).w,d0
-		sub.w	ost_y_pos(a0),d0
-		addi.w	#$40,d0
-		cmpi.w	#$68,d0
-		bcc.s	.donothing
+		cmp.w	#$28,d3
+		bcc.w	.donothing
 
 		play.w	1, jsr, sfx_Lamppost			; play lamppost sound
 		addq.b	#2,ost_routine(a0)			; goto Lamp_Finish next

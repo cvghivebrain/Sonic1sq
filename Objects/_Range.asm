@@ -47,7 +47,7 @@ Range:
 ;	uses d4
 ; ---------------------------------------------------------------------------
 
-Range2:
+RangePlus:
 		lea	(v_ost_player).w,a1			; get OST of Sonic
 		moveq	#0,d4
 		

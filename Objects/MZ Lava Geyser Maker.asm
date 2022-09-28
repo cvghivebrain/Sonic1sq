@@ -43,13 +43,11 @@ GMake_Wait:	; Routine 2
 		bpl.s	.cancel					; if time remains, branch
 
 		move.w	ost_gmake_wait_total(a0),ost_gmake_wait_time(a0) ; reset timer
-		move.w	(v_ost_player+ost_y_pos).w,d0
-		move.w	ost_y_pos(a0),d1
-		cmp.w	d1,d0
-		bcc.s	.cancel					; branch if Sonic is to the right
-		subi.w	#$170,d1
-		cmp.w	d1,d0
-		bcs.s	.cancel					; branch if Sonic is more than 368px to the left
+		bsr.w	Range
+		tst.w	d0
+		bpl.s	.cancel					; branch if Sonic is to the right
+		cmp.w	#386,d1
+		bcc.s	.cancel					; branch if Sonic is > 368px away
 		addq.b	#2,ost_routine(a0)			; if Sonic is within range, goto GMake_ChkType next
 
 	.cancel:

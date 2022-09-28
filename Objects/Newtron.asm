@@ -51,15 +51,14 @@ Newt_Action_Index:
 
 Newt_ChkDist:
 		bset	#status_xflip_bit,ost_status(a0)
-		move.w	(v_ost_player+ost_x_pos).w,d0
-		sub.w	ost_x_pos(a0),d0
-		bcc.s	.sonicisright				; branch if Sonic is to the right
-		neg.w	d0					; make d0 +ve
+		bsr.w	Range
+		tst.w	d0
+		bpl.s	.sonicisright				; branch if Sonic is to the right
 		bclr	#status_xflip_bit,ost_status(a0)
 
 	.sonicisright:
-		cmpi.w	#$80,d0					; is Sonic within $80 pixels of	the newtron?
-		bcc.s	.outofrange				; if not, branch
+		cmpi.w	#128,d1
+		bcc.s	.outofrange				; branch if Sonic is > 128px away
 		addq.b	#id_Newt_Type0,ost_routine2(a0)		; goto Newt_Type0 next
 		move.b	#id_ani_newt_drop,ost_anim(a0)
 		tst.b	ost_subtype(a0)				; check	object type

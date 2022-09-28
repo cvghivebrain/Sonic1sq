@@ -25,19 +25,12 @@ ADoor_Main:	; Routine 0
 		move.b	#4,ost_priority(a0)
 
 ADoor_OpenShut:	; Routine 2
-		move.w	#$40,d1					; set range for door detection
-		move.w	(v_ost_player+ost_x_pos).w,d0
-		add.w	d1,d0					; d0 = 64px right of Sonic
-		cmp.w	ost_x_pos(a0),d0			; is Sonic > 64px left of door?
-		bcs.s	ADoor_Close				; if yes, branch
-		sub.w	d1,d0
-		sub.w	d1,d0					; d0 = 64px left of Sonic
-		cmp.w	ost_x_pos(a0),d0			; is Sonic > 64px right of door?
-		bcc.s	ADoor_Close				; if yes, branch
+		bsr.w	Range
+		cmp.w	#64,d1
+		bcc.s	ADoor_Close				; branch if Sonic is > 64px away
 
-		add.w	d1,d0					; d0 = Sonic's x position
-		cmp.w	ost_x_pos(a0),d0			; is Sonic left of the door?
-		bcc.s	ADoor_SonicLeft				; if yes, branch
+		tst.w	d0
+		bpl.s	ADoor_SonicRight			; branch if Sonic is to the right
 		btst	#status_xflip_bit,ost_status(a0)
 		bne.s	ADoor_Animate
 		bra.s	ADoor_Open
@@ -49,7 +42,7 @@ ADoor_Close:
 		
 ; ===========================================================================
 
-ADoor_SonicLeft:
+ADoor_SonicRight:
 		btst	#status_xflip_bit,ost_status(a0)
 		beq.s	ADoor_Animate
 

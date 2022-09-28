@@ -23,20 +23,11 @@ ost_bonus_wait_time:	rs.w 1 ; $30				; length of time to display bonus sprites (
 ; ===========================================================================
 
 Bonus_Main:	; Routine 0
-		moveq	#$10,d2					; radius
-		move.w	d2,d3
-		add.w	d3,d3
-		lea	(v_ost_player).w,a1
-		move.w	ost_x_pos(a1),d0
-		sub.w	ost_x_pos(a0),d0			; d0 = Sonic's distance from item (-ve if Sonic is left, +ve if right)
-		add.w	d2,d0					; add radius
-		cmp.w	d3,d0					; is Sonic within item's width?
-		bcc.s	.chkdel					; if not, branch
-		move.w	ost_y_pos(a1),d1
-		sub.w	ost_y_pos(a0),d1
-		add.w	d2,d1
-		cmp.w	d3,d1					; is Sonic within item's height?
-		bcc.s	.chkdel					; if not, branch
+		bsr.w	Range
+		cmp.w	#16,d1
+		bcc.s	.chkdel					; branch if Sonic is > 16px away
+		cmp.w	#16,d3
+		bcc.s	.chkdel
 
 		tst.w	(v_debug_active).w			; is debug in use?
 		bne.s	.chkdel					; if yes, branch

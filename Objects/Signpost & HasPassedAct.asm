@@ -44,10 +44,10 @@ Sign_Main:	; Routine 0
 		jsr	UncPLC					; load hidden bonus gfx
 
 Sign_Touch:	; Routine 2
-		move.w	(v_ost_player+ost_x_pos).w,d0
-		sub.w	ost_x_pos(a0),d0
-		bcs.s	.exit					; branch if Sonic is left of the signpost
-		cmpi.w	#$20,d0					; is Sonic within 32px of right?
+		bsr.w	Range
+		tst.w	d0
+		bmi.s	.exit					; branch if Sonic is left of the signpost
+		cmpi.w	#32,d1					; is Sonic within 32px of right?
 		bcc.s	.exit					; if not, branch
 
 		play.w	0, jsr, sfx_Signpost			; play signpost sound

@@ -94,17 +94,12 @@ Buzz_Move:
 
 Buzz_ChkDist:
 		subq.w	#1,ost_buzz_wait_time(a0)		; subtract 1 from time delay
-		bmi.s	.chgdirection
+		bmi.s	.chgdirection				; branch if time passes 0
 		bsr.w	SpeedToPos
 		tst.b	ost_buzz_mode(a0)
 		bne.s	.keepgoing
-		move.w	(v_ost_player+ost_x_pos).w,d0
-		sub.w	ost_x_pos(a0),d0
-		bpl.s	.isleft
-		neg.w	d0
-
-	.isleft:
-		cmpi.w	#$60,d0					; is Buzz Bomber within	$60 pixels of Sonic?
+		bsr.w	Range
+		cmpi.w	#$60,d1					; is Buzz Bomber within	$60 pixels of Sonic?
 		bcc.s	.keepgoing				; if not, branch
 		tst.b	ost_render(a0)
 		bpl.s	.keepgoing

@@ -123,54 +123,38 @@ Burro_Jump:
 		move.b	#id_ani_burro_walk2,ost_anim(a0)
 		move.w	#255,ost_burro_turn_time(a0)		; time until turn (4.2ish seconds)
 		subq.b	#2,ost_routine2(a0)			; goto Burro_Move next
-		bsr.w	Burro_ChkDist				; check & update xflip flag
+		bset	#status_xflip_bit,ost_status(a0)
+		bsr.w	Range
+		tst.w	d0
+		bpl.s	.exit					; branch if Sonic is to the right
+		bclr	#status_xflip_bit,ost_status(a0)
 
 	.exit:
 		rts	
 ; ===========================================================================
 
 Burro_ChkSonic:
-		move.w	#$60,d2
-		bsr.w	Burro_ChkDist				; is Sonic < $60px from burrobot?
-		bcc.s	.exit					; if not, branch
-		move.w	(v_ost_player+ost_y_pos).w,d0
-		sub.w	ost_y_pos(a0),d0
-		bcc.s	.exit					; branch is Sonic is right of burrobot
-		cmpi.w	#-$80,d0
-		bcs.s	.exit					; branch if Sonic is more than $80px away
-		tst.w	(v_debug_active).w			; is debug mode	on?
-		bne.s	.exit					; if yes, branch
+		bsr.w	Range
+		cmp.w	#$60,d1
+		bcc.s	.exit					; branch if Sonic is > $60px away
+		tst.w	d2
+		bpl.s	.exit					; branch if Sonic is below
+		cmp.w	#$80,d3
+		bcc.s	.exit					; branch if Sonic is > $80px above
+		tst.w	(v_debug_active).w
+		bne.s	.exit					; branch if debug mode is on
+		
 		subq.b	#2,ost_routine2(a0)			; goto Burro_Jump next
-		move.w	d1,ost_x_vel(a0)
 		move.w	#-$400,ost_y_vel(a0)			; burrobot jumps
+		bset	#status_xflip_bit,ost_status(a0)
+		move.w	#$80,ost_x_vel(a0)
+		tst.w	d0
+		bpl.s	.exit					; branch if Sonic is to the right
+		bclr	#status_xflip_bit,ost_status(a0)
+		move.w	#-$80,ost_x_vel(a0)
 
 	.exit:
 		rts	
-
-; ---------------------------------------------------------------------------
-; Subroutine to check Sonic's distance from the burrobot
-
-; input:
-;	d2 = distance to compare
-
-; output:
-;	d0 = distance between Sonic and burrobot (abs negative value)
-;	d1 = speed/direction for burrobot to move
-; ---------------------------------------------------------------------------
-
-Burro_ChkDist:
-		move.w	#$80,d1
-		bset	#status_xflip_bit,ost_status(a0)
-		move.w	(v_ost_player+ost_x_pos).w,d0
-		sub.w	ost_x_pos(a0),d0
-		bcc.s	.right					; if Sonic is right of burrobot, branch
-		neg.w	d0
-		neg.w	d1
-		bclr	#status_xflip_bit,ost_status(a0)
-
-	.right:
-		cmp.w	d2,d0
-		rts
 
 ; ---------------------------------------------------------------------------
 ; Animation script

@@ -56,22 +56,11 @@ LWall_Main:	; Routine 0
 		move.b	#id_frame_lavawall_back,ost_frame(a1)	; use back of lava wall frame
 
 LWall_Action:	; Routine 4
-		move.w	(v_ost_player+ost_x_pos).w,d0
-		sub.w	ost_x_pos(a0),d0
-		bcc.s	.rangechk
-		neg.w	d0
-
-	.rangechk:
-		cmpi.w	#$C0,d0					; is Sonic within 192px on x axis?
-		bcc.s	.movewall				; if not, branch
-		move.w	(v_ost_player+ost_y_pos).w,d0
-		sub.w	ost_y_pos(a0),d0
-		bcc.s	.rangechk2
-		neg.w	d0
-
-	.rangechk2:
-		cmpi.w	#$60,d0					; is Sonic within 96px on y axis?
-		bcc.s	.movewall				; if not, branch
+		bsr.w	Range
+		cmpi.w	#192,d1
+		bcc.s	.movewall				; branch if Sonic is > 192px away
+		cmpi.w	#96,d3
+		bcc.s	.movewall				; branch if Sonic is > 96px away on y axis
 		move.b	#1,ost_lwall_flag(a0)			; set object to move
 		bra.s	LWall_Solid
 ; ===========================================================================
@@ -109,10 +98,9 @@ LWall_Solid:	; Routine 2
 		tst.b	ost_lwall_flag(a0)			; is wall already moving?
 		bne.s	.moving					; if yes, branch
 		out_of_range.s	.chkgone
-		bra.w	DisplaySprite
 
 	.moving:
-		rts	
+		bra.w	DisplaySprite
 ; ===========================================================================
 
 .chkgone:

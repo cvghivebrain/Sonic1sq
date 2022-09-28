@@ -65,13 +65,8 @@ Brick_Still:
 
 ; Type 2
 Brick_Falls:
-		move.w	(v_ost_player+ost_x_pos).w,d0
-		sub.w	ost_x_pos(a0),d0
-		bcc.s	.sonic_is_right				; branch if Sonic is to the right
-		neg.w	d0					; make d0 +ve
-
-	.sonic_is_right:
-		cmpi.w	#$90,d0					; is Sonic within 144px of the block?
+		bsr.w	Range
+		cmpi.w	#144,d1					; is Sonic within 144px of the block?
 		bcc.s	Brick_Wobbles				; if not, resume wobbling
 		move.b	#id_Brick_FallNow,ost_subtype(a0)	; if yes, make the block fall
 
@@ -104,11 +99,7 @@ Brick_FallNow:
 		move.b	#id_Brick_FallLava,ost_subtype(a0)	; final subtype - slow wobble on lava
 		move.w	(a1),d0					; get 16x16 tile id the block is sitting on
 		andi.w	#$3FF,d0
-		if Revision=0
-			cmpi.w	#$2E8,d0			; wrong 16x16 tile check in REV00
-		else
-			cmpi.w	#$16A,d0			; is the 16x16 tile it's landed on lava?
-		endc
+		cmpi.w	#$16A,d0				; is the 16x16 tile it's landed on lava?
 		bcc.s	.exit					; if yes, branch
 		move.b	#0,ost_subtype(a0)			; don't wobble
 

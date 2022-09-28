@@ -144,10 +144,10 @@ CStom_Block:	; Routine 2
 		beq.s	.display				; if not, branch
 		cmpi.b	#$10,ost_cstomp_chain_length(a0)	; is chain longer than $10?
 		bcc.s	.display				; if yes, branch
-		movea.l	a0,a2
+		pushr	a0
 		lea	(v_ost_player).w,a0
 		jsr	(KillSonic).l				; Sonic gets crushed against ceiling
-		movea.l	a2,a0
+		popr	a0
 
 	.display:
 		bra.w	CStom_ChkDel
@@ -298,13 +298,8 @@ CStom_Type01_SetPos:
 
 ; Type 3 - drops when Sonic is nearby
 CStom_Type03:
-		move.w	(v_ost_player+ost_x_pos).w,d0
-		sub.w	ost_x_pos(a0),d0
-		bcc.s	.sonic_is_right				; branch if Sonic is to the right
-		neg.w	d0					; d0 = distance between Sonic & stomper
-
-	.sonic_is_right:
-		cmpi.w	#$90,d0					; is Sonic within 144px?
+		bsr.w	Range
+		cmpi.w	#144,d1					; is Sonic within 144px?
 		bcc.s	.over_144				; if not, branch
 		addq.b	#1,ost_subtype(a0)			; allow stomper to drop by changing subtype
 

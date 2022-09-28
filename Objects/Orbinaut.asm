@@ -91,22 +91,11 @@ Orb_Main:	; Routine 0
 ; ===========================================================================
 
 Orb_ChkSonic:	; Routine 2
-		move.w	(v_ost_player+ost_x_pos).w,d0
-		sub.w	ost_x_pos(a0),d0
-		bcc.s	.sonic_right				; branch if Sonic is right of the orbinaut
-		neg.w	d0					; d0 = x dist between Sonic and orbinaut
-
-	.sonic_right:
-		cmpi.w	#160,d0
+		bsr.w	Range
+		cmpi.w	#160,d1
 		bcc.s	.animate				; branch if Sonic is > 160px from orbinaut
-		move.w	(v_ost_player+ost_y_pos).w,d0
-		sub.w	ost_y_pos(a0),d0
-		bcc.s	.sonic_below				; branch if Sonic is below the orbinaut
-		neg.w	d0					; d0 = y dist between Sonic and orbinaut
-
-	.sonic_below:
-		cmpi.w	#80,d0
-		bcc.s	.animate				; branch if Sonic is > 80px from orbinaut
+		cmpi.w	#80,d3
+		bcc.s	.animate				; branch if Sonic is > 80px above/below orbinaut
 		tst.w	(v_debug_active).w			; is debug mode	on?
 		bne.s	.animate				; if yes, branch
 		move.b	#id_ani_orb_angry,d0			; use "angry" animation

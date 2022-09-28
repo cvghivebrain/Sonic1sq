@@ -103,21 +103,10 @@ Bom_Action_Explode:
 ; ---------------------------------------------------------------------------
 
 Bom_ChkDist:
-		move.w	(v_ost_player+ost_x_pos).w,d0
-		sub.w	ost_x_pos(a0),d0
-		bcc.s	.isleft
-		neg.w	d0
-
-	.isleft:
-		cmpi.w	#$60,d0					; is Sonic within $60 pixels?
+		bsr.w	Range
+		cmpi.w	#$60,d1					; is Sonic within $60 pixels?
 		bcc.s	.outofrange				; if not, branch
-		move.w	(v_ost_player+ost_y_pos).w,d0
-		sub.w	ost_y_pos(a0),d0
-		bcc.s	.isabove
-		neg.w	d0
-
-	.isabove:
-		cmpi.w	#$60,d0
+		cmpi.w	#$60,d3
 		bcc.s	.outofrange
 		tst.w	(v_debug_active).w
 		bne.s	.outofrange
