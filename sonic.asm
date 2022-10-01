@@ -542,6 +542,7 @@ LGrass_Coll_Sloped:
 		include "Objects\Yadrin [Mappings].asm"		; Map_Yad
 
 		include "Objects\_SolidObject.asm"
+		include "Objects\_SolidNew.asm"
 		include "Objects\_SkipMappings.asm"
 		include "Objects\_Range.asm"
 

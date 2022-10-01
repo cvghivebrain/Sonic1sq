@@ -23,12 +23,10 @@ Rock_Main:	; Routine 0
 		move.b	#render_rel,ost_render(a0)
 		move.b	#$13,ost_displaywidth(a0)
 		move.b	#4,ost_priority(a0)
+		move.b	#16,ost_height(a0)
+		move.b	#21,ost_width(a0)
 
 Rock_Solid:	; Routine 2
-		move.w	#$1B,d1					; width
-		move.w	#$10,d2					; height
-		move.w	#$10,d3					; height
-		move.w	ost_x_pos(a0),d4
-		bsr.w	SolidObject
+		bsr.w	SolidNew
 		out_of_range	DeleteObject
 		bra.w	DisplaySprite

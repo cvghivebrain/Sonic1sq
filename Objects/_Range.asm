@@ -43,8 +43,8 @@ Range:
 ;	d1 = x distance between hitbox edges (-ve if overlapping)
 ;	d2 = y distance (-ve if Sonic is above)
 ;	d3 = y distance between hitbox edges (-ve if overlapping)
+;	d4 = object height
 ;	a1 = address of OST of Sonic
-;	uses d4
 ; ---------------------------------------------------------------------------
 
 RangePlus:
