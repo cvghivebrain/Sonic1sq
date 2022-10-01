@@ -51,7 +51,9 @@ BBall_Move:	; Routine 2
 		add.w	d0,d0
 		move.w	BBall_Types(pc,d0.w),d1
 		jsr	BBall_Types(pc,d1.w)
-		out_of_range	DeleteObject,ost_bball_x_start(a0)
+		move.w	ost_bball_x_start(a0),d0
+		bsr.w	OffScreen
+		bne.w	DeleteObject
 		bra.w	DisplaySprite
 ; ===========================================================================
 BBall_Types:	index *

@@ -11,7 +11,9 @@ SpinConvey:
 		move.b	ost_routine(a0),d0
 		move.w	SpinC_Index(pc,d0.w),d1
 		jsr	SpinC_Index(pc,d1.w)
-		out_of_range.s	SpinC_ChkDel,ost_spinc_x_pos_centre(a0)
+		move.w	ost_spinc_x_pos_centre(a0),d0
+		bsr.w	OffScreen
+		bne.s	SpinC_ChkDel
 
 SpinC_Display:
 		jmp	(DisplaySprite).l

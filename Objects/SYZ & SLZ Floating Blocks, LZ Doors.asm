@@ -135,21 +135,18 @@ FBlock_Action:	; Routine 2
 		bsr.w	SolidObject				; detect collision
 
 	.chkdel:
-		if Revision=0
-			out_of_range	DeleteObject,ost_fblock_x_start(a0)
-			bra.w	DisplaySprite
-		else
-			out_of_range.s	.chkdel2,ost_fblock_x_start(a0)
-		.display:
-			bra.w	DisplaySprite
-		.chkdel2:
-			cmpi.b	#type_fblock_syzrect2x2+type_fblock_farrightbutton,ost_subtype(a0)
-			bne.s	.delete
-			tst.b	ost_fblock_move_flag(a0)
-			bne.s	.display
-		.delete:
-			jmp	(DeleteObject).l
-		endc
+		move.w	ost_fblock_x_start(a0),d0
+		bsr.w	OffScreen
+		bne.s	.chkdel2
+	.display:
+		bra.w	DisplaySprite
+	.chkdel2:
+		cmpi.b	#type_fblock_syzrect2x2+type_fblock_farrightbutton,ost_subtype(a0)
+		bne.s	.delete
+		tst.b	ost_fblock_move_flag(a0)
+		bne.s	.display
+	.delete:
+		jmp	(DeleteObject).l
 ; ===========================================================================
 FBlock_Types:	index *
 		ptr FBlock_Still				; 0

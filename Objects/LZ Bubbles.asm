@@ -220,7 +220,9 @@ Bub_BblMaker:	; Routine $A
 		jsr	(AnimateSprite).l
 
 .chkdel:
-		out_of_range	DeleteObject
+		move.w	ost_x_pos(a0),d0
+		bsr.w	OffScreen
+		bne.w	DeleteObject
 		move.w	(v_water_height_actual).w,d0
 		cmp.w	ost_y_pos(a0),d0
 		bcs.w	DisplaySprite				; display if below water

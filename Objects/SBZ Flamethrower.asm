@@ -68,7 +68,9 @@ Flame_Action:	; Routine 2
 		move.b	#id_col_12x24+id_col_hurt,ost_col_type(a0) ; make object harmful
 
 	.harmless:
-		out_of_range	DeleteObject
+		move.w	ost_x_pos(a0),d0
+		bsr.w	OffScreen
+		bne.w	DeleteObject
 		bra.w	DisplaySprite
 
 ; ---------------------------------------------------------------------------

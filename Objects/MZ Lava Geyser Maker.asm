@@ -11,7 +11,9 @@ GeyserMaker:
 		move.b	ost_routine(a0),d0
 		move.w	GMake_Index(pc,d0.w),d1
 		jsr	GMake_Index(pc,d1.w)
-		out_of_range	DeleteObject
+		move.w	ost_x_pos(a0),d0
+		bsr.w	OffScreen
+		bne.w	DeleteObject
 		rts
 ; ===========================================================================
 GMake_Index:	index *,,2

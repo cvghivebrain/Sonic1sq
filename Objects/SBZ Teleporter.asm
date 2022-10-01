@@ -10,7 +10,9 @@ Teleport:
 		move.b	ost_routine(a0),d0
 		move.w	Tele_Index(pc,d0.w),d1
 		jsr	Tele_Index(pc,d1.w)
-		out_of_range.s	.delete
+		move.w	ost_x_pos(a0),d0
+		bsr.w	OffScreen
+		bne.s	.delete
 		rts	
 
 	.delete:

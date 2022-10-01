@@ -83,7 +83,9 @@ But_Flash:
 		bchg	#1,ost_frame(a0)			; use frame 2/3
 
 But_Display:
-		out_of_range.s	But_Delete
+		move.w	ost_x_pos(a0),d0
+		bsr.w	OffScreen
+		bne.s	But_Delete
 		bra.w	DisplaySprite
 ; ===========================================================================
 

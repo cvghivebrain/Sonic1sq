@@ -28,5 +28,7 @@ Rock_Main:	; Routine 0
 
 Rock_Solid:	; Routine 2
 		bsr.w	SolidNew
-		out_of_range	DeleteObject
+		move.w	ost_x_pos(a0),d0
+		bsr.w	OffScreen
+		bne.w	DeleteObject
 		bra.w	DisplaySprite

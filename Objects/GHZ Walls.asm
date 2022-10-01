@@ -38,7 +38,9 @@ Edge_Solid:	; Routine 2
 		bsr.w	Edge_SolidWall
 
 Edge_Display:	; Routine 4
-		out_of_range	DeleteObject
+		move.w	ost_x_pos(a0),d0
+		bsr.w	OffScreen
+		bne.w	DeleteObject
 		bra.w	DisplaySprite
 
 ; ---------------------------------------------------------------------------

@@ -11,7 +11,9 @@ Elevator:
 		move.b	ost_routine(a0),d0
 		move.w	Elev_Index(pc,d0.w),d1
 		jsr	Elev_Index(pc,d1.w)
-		out_of_range	DeleteObject,ost_elev_x_start(a0)
+		move.w	ost_elev_x_start(a0),d0
+		bsr.w	OffScreen
+		bne.w	DeleteObject
 		bra.w	DisplaySprite
 ; ===========================================================================
 Elev_Index:	index *,,2
@@ -276,5 +278,7 @@ Elev_MakeMulti:	; Routine 6
 
 	.chkdel:
 		addq.l	#4,sp
-		out_of_range	DeleteObject
+		move.w	ost_x_pos(a0),d0
+		bsr.w	OffScreen
+		bne.w	DeleteObject
 		rts	

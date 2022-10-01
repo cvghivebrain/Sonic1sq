@@ -34,5 +34,7 @@ Light_Animate:	; Routine 2
 		move.b	#id_frame_light_0,ost_frame(a0)		; reset to frame 0
 
 	.chkdel:
-		out_of_range	DeleteObject
+		move.w	ost_x_pos(a0),d0
+		bsr.w	OffScreen
+		bne.w	DeleteObject
 		bra.w	DisplaySprite

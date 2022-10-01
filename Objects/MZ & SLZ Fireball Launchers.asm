@@ -53,5 +53,7 @@ FireM_MakeFire:	; Routine 2
 		move.b	ost_subtype(a0),ost_subtype(a1)		; subtype = speed/direction
 
 	.wait:
-		out_of_range	DeleteObject
+		move.w	ost_x_pos(a0),d0
+		bsr.w	OffScreen
+		bne.w	DeleteObject
 		rts

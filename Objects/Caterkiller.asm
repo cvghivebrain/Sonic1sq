@@ -69,11 +69,7 @@ Cat_Main:	; Routine 0
 
 Cat_Loop:
 		jsr	(FindNextFreeObj).l
-		if Revision=0
-			bne.s	.fail
-		else
-			bne.w	Cat_Despawn
-		endc
+		bne.w	Cat_Despawn
 		move.l	#Caterkiller,ost_id(a1)			; load body segment object
 		move.b	d6,ost_routine(a1)			; goto Cat_BodySeg1 or Cat_BodySeg2 next
 		addq.b	#2,d6					; alternate between the two
@@ -123,7 +119,9 @@ Cat_Head:	; Routine 2
 		move.b	d0,ost_frame(a0)			; set frame
 
 	.display:
-		out_of_range	Cat_Despawn
+		move.w	ost_x_pos(a0),d0
+		bsr.w	OffScreen
+		bne.s	Cat_Despawn
 		jmp	(DisplaySprite).l
 
 Cat_Despawn:

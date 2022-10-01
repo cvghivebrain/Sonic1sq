@@ -90,7 +90,9 @@ MBlock_StandOn:	; Routine 4
 		jsr	(MoveWithPlatform2).l
 
 MBlock_ChkDel:
-		out_of_range	DeleteObject,ost_mblock_x_start(a0)
+		move.w	ost_mblock_x_start(a0),d0
+		bsr.w	OffScreen
+		bne.w	DeleteObject
 		bra.w	DisplaySprite
 ; ===========================================================================
 
@@ -206,7 +208,9 @@ MBlock_RightDrop_Button:
 
 	.not_pressed:
 		addq.l	#4,sp
-		out_of_range	DeleteObject,ost_mblock_x_start(a0)
+		move.w	ost_mblock_x_start(a0),d0
+		bsr.w	OffScreen
+		bne.w	DeleteObject
 		rts	
 ; ===========================================================================
 

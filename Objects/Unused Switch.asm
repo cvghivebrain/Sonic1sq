@@ -41,7 +41,9 @@ Swi_Action:	; Routine 2
 		move.w	d0,(v_button_state).w			; set button 0 as "pressed"
 
 	.display:
-		out_of_range.s	Swi_Delete
+		move.w	ost_x_pos(a0),d0
+		bsr.w	OffScreen
+		bne.s	Swi_Delete
 		bra.w	DisplaySprite
 ; ===========================================================================
 

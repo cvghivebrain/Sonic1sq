@@ -100,5 +100,7 @@ Fan_Delay:	; Routine 2
 		move.b	d0,ost_frame(a0)			; update frame
 
 .chkdel:
-		out_of_range	DeleteObject
+		move.w	ost_x_pos(a0),d0
+		bsr.w	OffScreen
+		bne.w	DeleteObject
 		bra.w	DisplaySprite

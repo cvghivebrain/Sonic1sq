@@ -69,7 +69,9 @@ Bump_Hit:	; Routine 2
 	.display:
 		lea	(Ani_Bump).l,a1
 		bsr.w	AnimateSprite
-		out_of_range.s	.resetcount
+		move.w	ost_x_pos(a0),d0
+		bsr.w	OffScreen
+		bne.s	.resetcount
 		bra.w	DisplaySprite
 ; ===========================================================================
 

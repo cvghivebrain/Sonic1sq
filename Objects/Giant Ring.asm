@@ -44,7 +44,9 @@ GRing_Animate:	; Routine 2
 		bsr.w	AnimateSprite
 		set_dma_dest vram_giantring,d1			; set VRAM address to write gfx
 		jsr	DPLCSprite				; write gfx if frame has changed
-		out_of_range	DeleteObject
+		move.w	ost_x_pos(a0),d0
+		bsr.w	OffScreen
+		bne.w	DeleteObject
 		bra.w	DisplaySprite
 ; ===========================================================================
 

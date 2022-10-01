@@ -206,7 +206,9 @@ Swing_MoveAll:
 ; ===========================================================================
 
 Swing_ChkDel:
-		out_of_range.s	Swing_DelAll,ost_swing_x_start(a0)
+		move.w	ost_swing_x_start(a0),d0
+		bsr.w	OffScreen
+		bne.s	Swing_DelAll
 		bra.w	DisplaySprite
 ; ===========================================================================
 

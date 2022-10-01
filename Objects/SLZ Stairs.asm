@@ -11,7 +11,9 @@ Staircase:
 		move.b	ost_routine(a0),d0
 		move.w	Stair_Index(pc,d0.w),d1
 		jsr	Stair_Index(pc,d1.w)
-		out_of_range	DeleteObject,ost_stair_x_start(a0)
+		move.w	ost_stair_x_start(a0),d0
+		bsr.w	OffScreen
+		bne.w	DeleteObject
 		bra.w	DisplaySprite
 ; ===========================================================================
 Stair_Index:	index *,,2

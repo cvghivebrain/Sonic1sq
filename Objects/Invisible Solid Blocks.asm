@@ -49,7 +49,9 @@ Invis_Solid:	; Routine 2
 		bsr.w	SolidObject_NoRenderChk
 
 .chkdel:
-		out_of_range.s	.delete
+		move.w	ost_x_pos(a0),d0
+		bsr.w	OffScreen
+		bne.s	.delete
 		tst.w	(v_debug_active).w			; are you using	debug mode?
 		beq.s	.nodisplay				; if not, branch
 		jmp	(DisplaySprite).l			; if yes, display the object

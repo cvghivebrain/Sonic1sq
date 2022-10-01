@@ -42,7 +42,9 @@ Saw_Action:	; Routine 2
 		add.w	d0,d0
 		move.w	Saw_Type_Index(pc,d0.w),d1
 		jsr	Saw_Type_Index(pc,d1.w)
-		out_of_range.s	.delete,ost_saw_x_start(a0)
+		move.w	ost_saw_x_start(a0),d0
+		bsr.w	OffScreen
+		bne.s	.delete
 		jmp	(DisplaySprite).l
 
 	.delete:

@@ -97,7 +97,9 @@ LWall_Solid:	; Routine 2
 	.rangechk:
 		tst.b	ost_lwall_flag(a0)			; is wall already moving?
 		bne.s	.moving					; if yes, branch
-		out_of_range.s	.chkgone
+		move.w	ost_x_pos(a0),d0
+		bsr.w	OffScreen
+		bne.s	.chkgone
 
 	.moving:
 		bra.w	DisplaySprite

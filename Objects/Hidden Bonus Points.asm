@@ -50,7 +50,9 @@ Bonus_Main:	; Routine 0
 		jsr	(AddPoints).l				; add points and update HUD
 
 	.chkdel:
-		out_of_range.s	.delete
+		move.w	ost_x_pos(a0),d0
+		bsr.w	OffScreen
+		bne.s	.delete
 		rts	
 
 	.delete:
@@ -67,7 +69,9 @@ Bonus_Points_3:	dc.w 1						; subtype 3 - 10 points (should be 100)
 Bonus_Display:	; Routine 2
 		subq.w	#1,ost_bonus_wait_time(a0)		; decrement display time
 		bmi.s	.delete					; if time is zero, branch
-		out_of_range.s	.delete
+		move.w	ost_x_pos(a0),d0
+		bsr.w	OffScreen
+		bne.s	.delete
 		jmp	(DisplaySprite).l
 
 	.delete:	

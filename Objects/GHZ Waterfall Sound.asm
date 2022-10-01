@@ -27,5 +27,7 @@ WSnd_PlaySnd:	; Routine 2
 		play.w	1, jsr, sfx_Waterfall			; play waterfall sound (every 64 frames)
 
 	.skip_sfx:
-		out_of_range	DeleteObject
+		move.w	ost_x_pos(a0),d0
+		bsr.w	OffScreen
+		bne.w	DeleteObject
 		rts	

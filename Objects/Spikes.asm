@@ -119,7 +119,9 @@ Spike_Hurt:
 		movea.l	(sp)+,a0				; restore OST address for spikes from stack
 
 Spike_Display:
-		out_of_range	DeleteObject,ost_spike_x_start(a0)
+		move.w	ost_spike_x_start(a0),d0
+		bsr.w	OffScreen
+		bne.w	DeleteObject
 		bra.w	DisplaySprite
 ; ===========================================================================
 

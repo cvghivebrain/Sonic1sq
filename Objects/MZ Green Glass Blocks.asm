@@ -11,7 +11,9 @@ GlassBlock:
 		move.b	ost_routine(a0),d0
 		move.w	Glass_Index(pc,d0.w),d1
 		jsr	Glass_Index(pc,d1.w)
-		out_of_range	Glass_Delete
+		move.w	ost_x_pos(a0),d0
+		bsr.w	OffScreen
+		bne.s	Glass_Delete
 		bra.w	DisplaySprite
 ; ===========================================================================
 

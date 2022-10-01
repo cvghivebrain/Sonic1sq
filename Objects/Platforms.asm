@@ -314,7 +314,9 @@ Plat_Type_Update_Angle:
 ; ===========================================================================
 
 Plat_ChkDel:
-		out_of_range.s	Plat_Delete,ost_plat_x_start(a0)
+		move.w	ost_plat_x_start(a0),d0
+		bsr.w	OffScreen
+		bne.s	Plat_Delete
 		bra.w	DisplaySprite
 ; ===========================================================================
 

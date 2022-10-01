@@ -64,7 +64,9 @@ Gird_Action:	; Routine 2
 		bsr.w	SolidObject
 
 	.chkdel:
-		out_of_range.s	.delete,ost_girder_x_start(a0)
+		move.w	ost_girder_x_start(a0),d0
+		bsr.w	OffScreen
+		bne.s	.delete
 		jmp	(DisplaySprite).l
 
 	.delete:

@@ -82,7 +82,9 @@ LBlk_Action:	; Routine 2
 		bsr.w	LBlk_Sink
 
 	.chkdel:
-		out_of_range	DeleteObject,ost_lblock_x_start(a0)
+		move.w	ost_lblock_x_start(a0),d0
+		bsr.w	OffScreen
+		bne.w	DeleteObject
 		bra.w	DisplaySprite
 ; ===========================================================================
 LBlk_Type_Index:

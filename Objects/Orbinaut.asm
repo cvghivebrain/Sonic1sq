@@ -111,7 +111,9 @@ Orb_MoveHead:	; Routine 4
 		bsr.w	SpeedToPos				; update position
 
 Orb_ChkDel:
-		out_of_range	.chkgone
+		move.w	ost_x_pos(a0),d0
+		bsr.w	OffScreen
+		bne.s	.chkgone
 		bra.w	DisplaySprite
 
 	.chkgone:

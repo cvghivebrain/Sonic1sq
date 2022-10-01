@@ -28,11 +28,12 @@ Flash_Main:	; Routine 0
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#0,ost_priority(a0)
 		move.b	#$20,ost_displaywidth(a0)
-		move.b	#-1,ost_frame(a0)			; start at -1 because 1 is added to get the first frame
 
 Flash_ChkDel:	; Routine 2
 		bsr.s	Flash_Collect
-		out_of_range	DeleteObject
+		move.w	ost_x_pos(a0),d0
+		bsr.w	OffScreen
+		bne.w	DeleteObject
 		bra.w	DisplaySprite
 
 ; ---------------------------------------------------------------------------

@@ -258,7 +258,9 @@ LGrass_ChkDel:
 		bpl.s	LGrass_DelFlames			; if yes, branch
 
 	.not_burning:
-		out_of_range	DeleteObject,ost_grass_x_start(a0)
+		move.w	ost_grass_x_start(a0),d0
+		bsr.w	OffScreen
+		bne.w	DeleteObject
 		bra.w	DisplaySprite
 ; ===========================================================================
 

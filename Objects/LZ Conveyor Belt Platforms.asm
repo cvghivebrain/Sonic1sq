@@ -13,7 +13,9 @@ LabyrinthConvey:
 		move.b	ost_routine(a0),d0
 		move.w	LCon_Index(pc,d0.w),d1
 		jsr	LCon_Index(pc,d1.w)
-		out_of_range.s	LCon_ChkDel,ost_lcon_x_pos_centre(a0)
+		move.w	ost_lcon_x_pos_centre(a0),d0
+		bsr.w	OffScreen
+		bne.s	LCon_ChkDel
 
 LCon_Display:
 		bra.w	DisplaySprite

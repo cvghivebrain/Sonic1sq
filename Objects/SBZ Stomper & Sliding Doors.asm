@@ -135,7 +135,9 @@ Sto_Action:	; Routine 2
 		bsr.w	SolidObject
 
 	.chkdel:
-		out_of_range.s	.chkgone,ost_stomp_x_start(a0)
+		move.w	ost_stomp_x_start(a0),d0
+		bsr.w	OffScreen
+		bne.s	.chkgone
 		jmp	(DisplaySprite).l
 
 	.chkgone:

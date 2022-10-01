@@ -10,7 +10,9 @@ Prison:
 		move.b	ost_routine(a0),d0
 		move.w	Pri_Index(pc,d0.w),d1
 		jsr	Pri_Index(pc,d1.w)
-		out_of_range.s	.delete
+		move.w	ost_x_pos(a0),d0
+		jsr	OffScreen
+		bne.s	.delete
 		jmp	(DisplaySprite).l
 
 	.delete:

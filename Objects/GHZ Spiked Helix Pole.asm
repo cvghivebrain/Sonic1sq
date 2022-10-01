@@ -105,7 +105,9 @@ Hel_RotateSpikes:
 ; ===========================================================================
 
 Hel_ChkDel:
-		out_of_range.s	Hel_DelAll
+		move.w	ost_x_pos(a0),d0
+		bsr.w	OffScreen
+		bne.s	Hel_DelAll
 		bra.w	DisplaySprite
 ; ===========================================================================
 

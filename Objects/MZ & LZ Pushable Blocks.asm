@@ -91,12 +91,16 @@ PushB_Action:	; Routine 2
 		bset	#7,ost_subtype(a0)			; set flag to disable gravity for block
 
 	PushB_Display:
-		out_of_range.s	PushB_ChkDel
+		move.w	ost_x_pos(a0),d0
+		bsr.w	OffScreen
+		bne.s	PushB_ChkDel
 		bra.w	DisplaySprite
 ; ===========================================================================
 
 PushB_ChkDel:
-		out_of_range.s	PushB_ChkDel2,ost_pblock_x_start(a0)
+		move.w	ost_pblock_x_start(a0),d0
+		bsr.w	OffScreen
+		bne.s	PushB_ChkDel2
 		move.w	ost_pblock_x_start(a0),ost_x_pos(a0)
 		move.w	ost_pblock_y_start(a0),ost_y_pos(a0)
 		move.b	#id_PushB_ChkVisible,ost_routine(a0)

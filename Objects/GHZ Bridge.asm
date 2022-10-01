@@ -291,7 +291,9 @@ Bri_Data_Align:
 ; ===========================================================================
 
 Bri_ChkDel:
-		out_of_range.s	.deletebridge
+		move.w	ost_x_pos(a0),d0
+		bsr.w	OffScreen
+		bne.s	.deletebridge
 		bra.w	DisplaySprite
 
 .deletebridge:

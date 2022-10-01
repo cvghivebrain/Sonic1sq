@@ -104,7 +104,9 @@ Geyser_Action:	; Routine 2
 		bsr.w	AnimateSprite
 
 Geyser_ChkDel:
-		out_of_range	DeleteObject
+		move.w	ost_x_pos(a0),d0
+		bsr.w	OffScreen
+		bne.w	DeleteObject
 		bra.w	DisplaySprite
 ; ===========================================================================
 Geyser_Types:	index *
