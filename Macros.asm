@@ -406,15 +406,15 @@ piece:		macro
 ; optional: xflip, yflip, rem (any order)
 ; ---------------------------------------------------------------------------
 
-objpos:		macro
-		dc.w \1		; xpos
-		obj_ypos: = \2
-		if strcmp("\3","0")
-		obj_id: = 0
+objpos:		macro xpos,ypos,id,subtype
+		dc.w \xpos
+		obj_ypos: = \ypos
+		obj_id: = \id
+		ifarg \subtype
+		obj_sub\@: equ \subtype
 		else
-		obj_id: = \3
+		obj_sub\@: equ 0
 		endc
-		obj_sub\@: equ \4
 		obj_xflip: = 0
 		obj_yflip: = 0
 		obj_rem: = 0

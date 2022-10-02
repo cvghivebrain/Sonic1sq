@@ -2,8 +2,10 @@
 ; Subroutine to make an object solid
 
 ; output:
+;	d0 = x position of Sonic on object, starting at 0 on left edge
+;	d1 = collision type (0 = none; 1 = top; 2 = bottom; 4 = left; 8 = right)
 ;	a1 = address of OST of Sonic
-;	uses d0, d1, d2, d3, d4, d5
+;	uses d0, d1, d2, d3, d4, d5, d6
 ; ---------------------------------------------------------------------------
 
 SolidNew:
@@ -15,10 +17,16 @@ SolidNew:
 		tst.w	d3
 		bpl.s	.exit
 		move.w	ost_y_pos(a1),d5
+		moveq	#0,d6
+		move.b	ost_height(a1),d6
+		sub.w	d6,d5					; d5 = y pos of Sonic's top edge
 		move.w	d4,d2					; d2 = object height
 		add.w	ost_y_pos(a0),d4			; d4 = y pos of obj bottom edge
 		cmp.w	d4,d5
 		bhi.s	Sol_Below				; branch if Sonic is below bottom edge
+		add.w	d6,d5
+		add.w	d6,d5					; d5 = y pos of Sonic's bottom edge
+		sub.w	#4,d5					; extra 4px leeway
 		sub.w	d2,d4
 		sub.w	d2,d4					; d4 = y pos of obj top edge
 		cmp.w	d4,d5
@@ -26,10 +34,12 @@ SolidNew:
 		bra.s	Sol_Side
 		
 	.exit:
+		moveq	#0,d1					; set collision flag to none
 		rts
 		
 Sol_Below:
 		sub.w	d3,ost_y_pos(a1)			; snap to hitbox
+		moveq	#2,d1					; set collision flag to bottom
 		rts
 		
 Sol_Above:
@@ -52,6 +62,7 @@ Sol_Above:
 		exg	a0,a1					; temporarily make Sonic the current object
 		jsr	Sonic_ResetOnFloor			; reset Sonic as if on floor
 		exg	a0,a1
+		moveq	#1,d1					; set collision flag to top
 		
 	.exit:
 		rts
@@ -62,12 +73,14 @@ Sol_Side:
 		
 	.right:
 		sub.w	d1,ost_x_pos(a1)			; snap to hitbox
+		moveq	#8,d1					; set collision flag to right
 		tst.w	ost_x_vel(a1)
 		bpl.s	.away					; branch if Sonic is moving away
 		bra.s	.push
 		
 	.left:
 		add.w	d1,ost_x_pos(a1)			; snap to hitbox
+		moveq	#4,d1					; set collision flag to left
 		tst.w	ost_x_vel(a1)
 		bmi.s	.away					; branch if Sonic is moving away
 		
@@ -89,10 +102,16 @@ Sol_Stand:
 		cmp.w	#0,d1
 		bgt.s	.leave					; branch if Sonic is outside left/right edges
 		
+		moveq	#0,d4
+		move.b	ost_width(a0),d4
+		add.w	d4,d0					; d0 = x pos of Sonic on object, starting at 0 on left edge
+		
 		add.w	d3,ost_y_pos(a1)			; align Sonic with top of object
-		move.w	ost_x_vel(a0),d0
-		asr.w	#8,d0					; get distance in pixels moved
-		add.w	d0,ost_x_pos(a1)			; update Sonic's x position
+		move.w	ost_x_vel(a0),d2
+		asr.w	#8,d2					; get distance in pixels moved
+		add.w	d2,ost_x_pos(a1)			; update Sonic's x position
+		
+		moveq	#1,d1					; set collision flag to top
 		rts
 
 	.leave:
@@ -101,3 +120,38 @@ Sol_Stand:
 		clr.b	ost_solid(a0)
 		rts
 		
+; ---------------------------------------------------------------------------
+; Subroutine to make an object solid, sides only
+
+; output:
+;	d0 = x position of Sonic on object, starting at 0 on left edge
+;	d1 = collision type (0 = none; 4 = left; 8 = right)
+;	a1 = address of OST of Sonic
+;	uses d0, d1, d2, d3, d4, d5, d6
+; ---------------------------------------------------------------------------
+
+SolidNew_SidesOnly:
+		bsr.w	RangePlus				; get distances between Sonic (a1) and object (a0)
+		cmp.w	#0,d1
+		bgt.s	.exit					; branch if outside hitbox
+		tst.w	d3
+		bpl.s	.exit
+		move.w	ost_y_pos(a1),d5
+		moveq	#0,d6
+		move.b	ost_height(a1),d6
+		sub.w	d6,d5					; d5 = y pos of Sonic's top edge
+		move.w	d4,d2					; d2 = object height
+		add.w	ost_y_pos(a0),d4			; d4 = y pos of obj bottom edge
+		cmp.w	d4,d5
+		bhi.s	.exit					; branch if Sonic is below bottom edge
+		add.w	d6,d5
+		add.w	d6,d5					; d5 = y pos of Sonic's bottom edge
+		sub.w	d2,d4
+		sub.w	d2,d4					; d4 = y pos of obj top edge
+		cmp.w	d4,d5
+		bcs.s	.exit					; branch if Sonic is above top edge
+		bra.w	Sol_Side
+		
+	.exit:
+		moveq	#0,d1					; set collision flag to none
+		rts

@@ -45,7 +45,7 @@ ObjPos_MZ1:
 		objpos $0A60,$037C,ChainStomp,type_cstomp_controlled
 		objpos $0A78,$03D0,PushBlock,type_pblock_single,rem
 		objpos $0A80,$054C,Lamppost,$01,rem
-		objpos $0AD0,$03F8,Button,$80+$10
+		objpos $0AD0,$03F8,Button,0+type_button_block+type_button_pal3
 		objpos $0B00,$02F8,LavaTag,$02
 		objpos $0B10,$036C,Batbrain,$00,rem
 		objpos $0B20,$02E8,LargeGrass,type_grass_sloped+type_grass_sinks

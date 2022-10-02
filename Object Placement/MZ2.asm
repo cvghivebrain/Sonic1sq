@@ -45,7 +45,7 @@ ObjPos_MZ2:
 		objpos $0590,$0350,MarbleBrick,type_brick_still
 		objpos $0590,$042C,Batbrain,$00,rem
 		objpos $05A0,$05D4,Spikes,type_spike_3up+type_spike_updown
-		objpos $060F,$0358,Button,$01+$10
+		objpos $060F,$0358,Button,1+type_button_pal3
 		objpos $0618,$0590,Rings,$12,rem
 		objpos $0630,$05D0,MarbleBrick,type_brick_still
 		objpos $0634,$0354,Rings,$11,rem
@@ -120,7 +120,7 @@ ObjPos_MZ2:
 		objpos $0E58,$0550,Springs,type_spring_red+type_spring_right,xflip
 		objpos $0E60,$0160,BuzzBomber,$00,rem
 		objpos $0E80,$019C,Caterkiller,$00,rem
-		objpos $0EB0,$04D8,Button,$00+$10
+		objpos $0EB0,$04D8,Button,0+type_button_pal3
 		objpos $0EC0,$0178,BuzzBomber,$00,rem
 		objpos $0ED0,$04F0,MarbleBrick,type_brick_still
 		objpos $0ED0,$0510,MarbleBrick,type_brick_still
