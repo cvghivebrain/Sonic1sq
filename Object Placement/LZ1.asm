@@ -145,18 +145,18 @@ ObjPos_LZ1:
 		objpos $1410,$0330,Rings,$14,rem
 		objpos $1420,$0390,Burrobot,$00,xflip,rem
 		objpos $1430,$0230,Invisibarrier,$31
-		objpos $1430,$0290,LabyrinthBlock,type_lblock_cork
+		objpos $1430,$0290,Cork
 		objpos $1430,$05F8,Springs,type_spring_red+type_spring_up
 		objpos $1454,$0294,Rings,$11,rem
 		objpos $1494,$0284,Rings,$11,rem
 		objpos $14A0,$02A0,Burrobot,$00,rem
 		objpos $14B8,$0310,Rings,$12,rem
 		objpos $14D0,$02F0,Invisibarrier,$31
-		objpos $14D0,$0430,LabyrinthBlock,type_lblock_cork
+		objpos $14D0,$0430,Cork
 		objpos $14D4,$0274,Rings,$11,rem
 		objpos $1520,$0210,Burrobot,$00,rem
 		objpos $1530,$0230,Invisibarrier,$31
-		objpos $1530,$0290,LabyrinthBlock,type_lblock_cork
+		objpos $1530,$0290,Cork
 		objpos $1550,$0210,Burrobot,$00,rem
 		objpos $1574,$025C,Rings,$11,rem
 		objpos $1590,$01B8,Button,$08
@@ -169,7 +169,7 @@ ObjPos_LZ1:
 		objpos $1610,$01A8,Rings,$10,rem
 		objpos $1610,$02B0,Burrobot,$00,rem
 		objpos $1630,$0230,Invisibarrier,$31
-		objpos $1630,$0290,LabyrinthBlock,type_lblock_cork
+		objpos $1630,$0290,Cork
 		objpos $1650,$01F0,Burrobot,$00,rem
 		objpos $1670,$01E0,Burrobot,$00,rem
 		objpos $1690,$01A8,Button,$09

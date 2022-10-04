@@ -46,8 +46,9 @@ Sol_Above:
 		tst.w	ost_y_vel(a1)
 		bmi.s	.exit					; branch if Sonic is moving up
 		add.w	d3,ost_y_pos(a1)			; snap to hitbox
+		subq.w	#1,ost_y_pos(a1)			; move Sonic up 1px
 		move.w	#0,ost_y_vel(a1)			; stop Sonic falling
-		;move.w	#0,ost_inertia(a1)
+		move.w	ost_x_vel(a1),ost_inertia(a1)
 		move.b	#0,ost_angle(a1)			; clear Sonic's angle
 		move.b	#2,ost_solid(a0)			; set flag that Sonic is standing on the object
 		bset	#status_platform_bit,ost_status(a0)	; set object's platform flag
@@ -107,10 +108,13 @@ Sol_Stand:
 		add.w	d4,d0					; d0 = x pos of Sonic on object, starting at 0 on left edge
 		
 		add.w	d3,ost_y_pos(a1)			; align Sonic with top of object
-		move.w	ost_x_vel(a0),d2
-		asr.w	#8,d2					; get distance in pixels moved
+		tst.w	ost_x_prev(a0)
+		beq.s	.skip_x					; branch if previous x pos is unused
+		move.w	ost_x_pos(a0),d2
+		sub.w	ost_x_prev(a0),d2			; subtract previous x pos for distance in pixels moved (+ve if moved right)
 		add.w	d2,ost_x_pos(a1)			; update Sonic's x position
 		
+	.skip_x:
 		moveq	#1,d1					; set collision flag to top
 		rts
 

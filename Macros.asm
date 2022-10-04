@@ -418,6 +418,7 @@ objpos:		macro xpos,ypos,id,subtype
 		obj_xflip: = 0
 		obj_yflip: = 0
 		obj_rem: = 0
+		ifarg \5
 		rept narg-4
 			if strcmp("\5","xflip")
 			obj_xflip: = $4000
@@ -429,6 +430,7 @@ objpos:		macro xpos,ypos,id,subtype
 			endc
 		shift
 		endr
+		endc
 		
 		dc.w obj_ypos+obj_xflip+obj_yflip
 		dc.b obj_rem, obj_sub\@

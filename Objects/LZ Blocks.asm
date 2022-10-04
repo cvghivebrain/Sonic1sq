@@ -21,8 +21,6 @@ LBlk_Var:	; width, height, tile setting
 		dc.b $20, $C
 		dc.w tile_Kos_LzPlatform+tile_pal3		; $1x
 		dc.b $10, $10
-		dc.w tile_Kos_Cork+tile_pal3			; $2x
-		dc.b $10, $10
 		dc.w tile_Kos_LzBlock+tile_pal3			; $3x
 
 		rsobj LabyrinthBlock
@@ -55,8 +53,6 @@ LBlk_Main:	; Routine 0
 		move.b	ost_subtype(a0),d0			; get block type
 		andi.b	#$F,d0					; read only the low nybble
 		beq.s	LBlk_Action				; branch if 0
-		cmpi.b	#id_LBlk_Type_Floats,d0
-		beq.s	LBlk_Action				; branch if 7 (floats on water)
 		move.b	#1,ost_lblock_flag(a0)			; for types 1/3, set "untouched" flag
 
 LBlk_Action:	; Routine 2
@@ -96,7 +92,6 @@ LBlk_Type_Index:
 		ptr LBlk_Type_Rises_Now				; 4
 		ptr LBlk_Type_Sinks_Side			; 5 (unused)
 		ptr LBlk_Type_Sinks_Now				; 6
-		ptr LBlk_Type_Floats				; 7
 ; ===========================================================================
 
 ; Type 0 - doesn't move
@@ -164,44 +159,6 @@ LBlk_Type_Sinks_Side:
 		clr.b	ost_lblock_flag(a0)			; flag block as touched
 
 	.notouch05:
-		rts	
-; ===========================================================================
-
-; Type 7 - floats on top of water
-LBlk_Type_Floats:
-		move.w	(v_water_height_actual).w,d0
-		sub.w	ost_y_pos(a0),d0			; is block level with water?
-		beq.s	.stop07					; if yes, branch
-		bcc.s	.fall07					; branch if block is above water
-		cmpi.w	#-2,d0					; is block within 2 pixels of water surface?
-		bge.s	.near_surface				; if yes, branch
-		moveq	#-2,d0					; set maximum rate for block rising
-
-	.near_surface:
-		add.w	d0,ost_y_pos(a0)			; make the block rise
-		bsr.w	FindCeilingObj
-		tst.w	d1					; has block hit the ceiling?
-		bpl.w	.noceiling07				; if not, branch
-		sub.w	d1,ost_y_pos(a0)			; stop block
-
-	.noceiling07:
-		rts	
-; ===========================================================================
-
-.fall07:
-		cmpi.w	#2,d0					; is block within 2 pixels of water surface?
-		ble.s	.near_surface2				; if yes, branch
-		moveq	#2,d0					; set maximum rate for block sinking
-
-	.near_surface2:
-		add.w	d0,ost_y_pos(a0)			; make the block sink
-		bsr.w	FindFloorObj
-		tst.w	d1					; has block hit the floor?
-		bpl.w	.stop07					; if not, branch
-		addq.w	#1,d1
-		add.w	d1,ost_y_pos(a0)			; stop block
-
-	.stop07:
 		rts
 
 ; ---------------------------------------------------------------------------

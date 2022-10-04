@@ -230,22 +230,18 @@ ObjPos_LZ3:
 		objpos $18E0,$0690,Spikes,type_spike_3upwide+type_spike_still,yflip
 		objpos $18F0,$0410,Spikes,type_spike_6upwide+type_spike_still,yflip
 		objpos $1910,$03F0,Invisibarrier,$31
-		objpos $1910,$04F0,LabyrinthBlock,type_lblock_cork
+		objpos $1910,$04F0,Cork
 		objpos $1970,$0340,Invisibarrier,$31
-		objpos $1970,$04F0,LabyrinthBlock,type_lblock_cork
+		objpos $1970,$04F0,Cork
 		objpos $1990,$0510,Burrobot,$00,rem
 		objpos $19A0,$0350,Spikes,type_spike_3upwide+type_spike_still,yflip
 		objpos $19F0,$0370,Invisibarrier,$11
-		objpos $19F0,$04F0,LabyrinthBlock,type_lblock_cork
+		objpos $19F0,$04F0,Cork
 		objpos $1A40,$0210,Burrobot,$00,rem
 		objpos $1AD0,$0250,Burrobot,$00,rem
 		objpos $1B20,$0210,Burrobot,$00,rem
 		objpos $1B60,$0010,Burrobot,$00,rem
 		objpos $1BC0,$0810,FloatingBlock,type_fblock_lzhoriz+type_fblock_button+8,rem
-		if Revision=0
-		objpos $1BC0,$0030,LabyrinthBlock,type_lblock_solid
-		objpos $1BE0,$0030,LabyrinthBlock,type_lblock_solid
-		endc
 		objpos $1C00,$0010,Burrobot,$00,rem
 		objpos $1C10,$05F1,Monitor,type_monitor_shield,rem
 		

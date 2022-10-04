@@ -214,6 +214,7 @@ ost_y_sub:		equ __rs-2	; $E ; y-axis subpixel position (2 bytes)
 ost_x_vel:		rs.l 1		; $10 ; x-axis velocity (2 bytes)
 ost_y_vel:		equ __rs-2	; $12 ; y-axis velocity (2 bytes)
 ost_inertia:		rs.w 1		; $14 ; potential speed (2 bytes)
+ost_x_prev:		equ ost_inertia	; previous x position (2 bytes)
 ost_angle:		rs.w 1		; $26 ; angle of floor or rotation - 0 = flat; $40 = vertical left; $80 = ceiling; $C0 = vertical right
 ost_frame_hi:		rs.w 1		; $1A ; current frame displayed
 ost_frame:		equ __rs-1
@@ -244,6 +245,7 @@ ost_anim:		rs.b 1		; $1C ; current animation
 ost_anim_time:		rs.b 1		; $1E ; time to next frame (1 byte) / general timer (2 bytes)
 ost_col_type:		rs.b 1		; $20 ; collision response type - 0 = none; 1-$3F = enemy; $41-$7F = items; $81-BF = hurts; $C1-$FF = custom
 ost_col_property:	rs.b 1		; $21 ; collision extra property
+ost_sink:		equ ost_col_property ; amount platform has sunk when stood on - 0 is none, $1E is max
 ost_status:		rs.b 1		; $22 ; orientation or mode
 	status_xflip:		equ 1	; xflip
 	status_yflip:		equ 2	; yflip (objects only)
