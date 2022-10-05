@@ -614,6 +614,8 @@ See_DataFlat:	incbin	"Collision\SLZ Seesaw Heightmap (Flat).bin" ; used by Seesa
 		include "Objects\LZ Cork.asm"			; Cork
 		include "Objects\LZ Cork [Mappings].asm"	; Map_Cork
 		include "Objects\_Sink.asm"
+		include "Objects\LZ Rising Platform.asm"	; LabyrinthPlatform
+		include "Objects\LZ Rising Platform [Mappings].asm" ; Map_LPlat
 
 		include "Objects\LZ Gargoyle Head.asm"		; Gargoyle
 		include "Objects\LZ Gargoyle Head [Mappings].asm" ; Map_Gar

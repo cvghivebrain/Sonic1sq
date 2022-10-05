@@ -243,8 +243,7 @@ DebugList_LZ:
 		dbug	Map_Spike,	Spikes,		type_spike_3up+type_spike_still,	0,	tile_Kos_Spikes_KPLC_LZ
 		dbug	Map_MBlockLZ,	MovingBlock,	type_mblock_1+type_mblock_rightdrop,	0,	tile_Kos_LzHalfBlock+tile_pal3
 		dbug	Map_LBlock,	LabyrinthBlock, type_lblock_sink,	id_frame_lblock_sinkblock,	tile_Kos_LzDoorH+tile_pal3
-		dbug	Map_LBlock,	LabyrinthBlock, type_lblock_rise,	id_frame_lblock_riseplatform,	tile_Kos_LzPlatform+tile_pal3
-		dbug	Map_LBlock,	LabyrinthBlock, 5,	id_frame_lblock_sinkblock,	tile_Kos_LzDoorH+tile_pal3
+		dbug	Map_LPlat,	LabyrinthPlatform, 0,	0,	tile_Kos_LzPlatform+tile_pal3
 		dbug	Map_Gar,	Gargoyle,	0,	0,	tile_Kos_Gargoyle+tile_pal3
 		dbug	Map_Cork,	Cork, 		0,	0,	tile_Kos_Cork+tile_pal3
 		dbug	Map_LBlock,	LabyrinthBlock, type_lblock_solid,	id_frame_lblock_block,	tile_Kos_LzBlock+tile_pal3

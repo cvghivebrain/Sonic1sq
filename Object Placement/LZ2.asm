@@ -25,7 +25,7 @@ ObjPos_LZ2:
 		objpos $02D0,$0110,Burrobot,$00,rem
 		objpos $02F0,$04C0,SpikeBall,$C4
 		objpos $0340,$0390,Spikes,type_spike_3upwide+type_spike_still,yflip
-		objpos $0340,$0408,LabyrinthBlock,type_lblock_rise
+		objpos $0340,$0408,LabyrinthPlatform
 		objpos $0358,$0110,Waterfall,type_wfall_vertwide
 		objpos $0358,$0120,Waterfall,type_wfall_splash
 		objpos $0368,$0130,Waterfall,type_wfall_diagonal,xflip

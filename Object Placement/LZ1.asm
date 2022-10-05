@@ -38,11 +38,11 @@ ObjPos_LZ1:
 		objpos $0A10,$02F8,Button,$02
 		objpos $0A20,$0230,Spikes,type_spike_3upwide+type_spike_still,yflip
 		objpos $0A20,$0298,Jaws,$06,xflip,rem
-		objpos $0A20,$030C,LabyrinthBlock,type_lblock_rise
+		objpos $0A20,$030C,LabyrinthPlatform
 		objpos $0A50,$0318,Bubble,$80
 		objpos $0A5C,$0250,Rings,$44,rem
 		objpos $0AA0,$0270,Spikes,type_spike_3upwide+type_spike_still,yflip
-		objpos $0AA0,$0348,LabyrinthBlock,type_lblock_rise
+		objpos $0AA0,$0348,LabyrinthPlatform
 		objpos $0AA8,$0238,Bubble,$80
 		objpos $0AC0,$0338,Bubble,$81
 		objpos $0AE0,$0210,Jaws,$06,rem
@@ -52,13 +52,13 @@ ObjPos_LZ1:
 		objpos $0B50,$01F0,Spikes,type_spike_6upwide+type_spike_still
 		objpos $0BE4,$01F0,Spikes,type_spike_6upwide+type_spike_still
 		objpos $0C20,$0330,Spikes,type_spike_3upwide+type_spike_still,yflip
-		objpos $0C20,$0450,LabyrinthBlock,type_lblock_rise
+		objpos $0C20,$0450,LabyrinthPlatform
 		objpos $0C20,$04F8,Bubble,$81
 		objpos $0C40,$0458,Bubble,$80
 		objpos $0C4C,$0310,Spikes,type_spike_3up+type_spike_still,yflip
 		objpos $0C60,$00B0,Spikes,type_spike_3upwide+type_spike_still
 		objpos $0C7C,$0310,Spikes,type_spike_3up+type_spike_still,yflip
-		objpos $0C80,$044C,LabyrinthBlock,type_lblock_rise
+		objpos $0C80,$044C,LabyrinthPlatform
 		objpos $0CA0,$0370,Spikes,type_spike_3upwide+type_spike_still,yflip
 		objpos $0CAC,$0310,Spikes,type_spike_3up+type_spike_still,yflip
 		objpos $0CC0,$04B8,SpikeBall,$D4
@@ -70,10 +70,7 @@ ObjPos_LZ1:
 		objpos $0DD0,$0488,Jaws,$0A,rem
 		objpos $0DE0,$04F8,Bubble,$81
 		objpos $0E60,$0440,SpikeBall,$B5
-		if Revision=0
-		else
 		objpos $0E90,$0054,Rings,$10,rem
-		endc
 		objpos $0EC8,$03F0,Rings,$12,rem
 		objpos $0F38,$056C,Lamppost,$01,rem
 		objpos $0F50,$0380,SpikeBall,$B5
