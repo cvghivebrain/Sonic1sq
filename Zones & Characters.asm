@@ -494,6 +494,15 @@ LoadPerCharacter:
 		
 		move.w	(a4)+,(v_haspassed_character).w		; set mappings frame for "Sonic has passed"
 		
+		moveq	#0,d0
+		move.b	(a4)+,(v_player1_width).w		; set width
+		move.b	(a4),d0
+		move.b	(a4)+,(v_player1_height).w		; set height
+		move.b	(a4)+,(v_player1_width_roll).w		; set width (rolling/jumping)
+		sub.b	(a4),d0
+		move.w	d0,(v_player1_height_diff).w		; set height difference
+		move.b	(a4)+,(v_player1_height_roll).w		; set height (rolling/jumping)
+		
 		rts
 
 CharDefs:
@@ -503,6 +512,8 @@ CharDefs:
 		dc.w -1						; palette patch id (actual palette is loaded by LoadPerZone; use -1 to skip)
 		dc.w id_UPLC_SonicIcon				; life icon graphics
 		dc.w id_frame_has_sonichas			; "Sonic has passed" mappings frame
+		dc.b 18/2, 38/2					; width, height (standing/running etc.)
+		dc.b 14/2, 28/2					; width, height (rolling/jumping)
 	CharDefs_size:
 
 		; Red Sonic
@@ -511,6 +522,8 @@ CharDefs:
 		dc.w id_Pal_SonicRed
 		dc.w id_UPLC_SonicIcon
 		dc.w id_frame_has_ketchuphas
+		dc.b 18/2, 38/2
+		dc.b 14/2, 28/2
 
 		; Yellow Sonic
 		dc.l SonicPlayer
@@ -518,6 +531,8 @@ CharDefs:
 		dc.w id_Pal_SonicYellow
 		dc.w id_UPLC_SonicIcon
 		dc.w id_frame_has_mustardhas
+		dc.b 18/2, 38/2
+		dc.b 14/2, 28/2
 		
 ; ---------------------------------------------------------------------------
 ; Subroutine to load demo data
