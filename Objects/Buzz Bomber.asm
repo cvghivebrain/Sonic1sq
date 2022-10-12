@@ -135,18 +135,18 @@ Ani_Buzz:	index *
 		ptr ani_buzz_fly2
 		ptr ani_buzz_fire
 		
-ani_buzz_fly1:	dc.b 1
-		dc.b id_frame_buzz_fly1
-		dc.b id_frame_buzz_fly2
-		dc.b afEnd
+ani_buzz_fly1:	dc.w 1
+		dc.w id_frame_buzz_fly1
+		dc.w id_frame_buzz_fly2
+		dc.w afEnd
 
-ani_buzz_fly2:	dc.b 1
-		dc.b id_frame_buzz_fly3
-		dc.b id_frame_buzz_fly4
-		dc.b afEnd
+ani_buzz_fly2:	dc.w 1
+		dc.w id_frame_buzz_fly3
+		dc.w id_frame_buzz_fly4
+		dc.w afEnd
 
-ani_buzz_fire:	dc.b 1
-		dc.b id_frame_buzz_fire1
-		dc.b id_frame_buzz_fire2
-		dc.b afEnd
+ani_buzz_fire:	dc.w 1
+		dc.w id_frame_buzz_fire1
+		dc.w id_frame_buzz_fire2
+		dc.w afEnd
 		even

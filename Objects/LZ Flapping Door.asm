@@ -72,16 +72,16 @@ Ani_Flap:	index *
 		ptr ani_flap_closing
 		
 ani_flap_opening:
-		dc.b 3
-		dc.b id_frame_flap_closed
-		dc.b id_frame_flap_halfway
-		dc.b id_frame_flap_open
-		dc.b afBack, 1
+		dc.w 3
+		dc.w id_frame_flap_closed
+		dc.w id_frame_flap_halfway
+		dc.w id_frame_flap_open
+		dc.w afBack, 1
 
 ani_flap_closing:
-		dc.b 3
-		dc.b id_frame_flap_open
-		dc.b id_frame_flap_halfway
-		dc.b id_frame_flap_closed
-		dc.b afBack, 1
+		dc.w 3
+		dc.w id_frame_flap_open
+		dc.w id_frame_flap_halfway
+		dc.w id_frame_flap_closed
+		dc.w afBack, 1
 		even

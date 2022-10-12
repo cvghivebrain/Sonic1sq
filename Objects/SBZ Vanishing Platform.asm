@@ -123,19 +123,19 @@ Ani_Van:	index *
 		ptr ani_vanish_appear
 		
 ani_vanish_vanish:
-		dc.b 7
-		dc.b id_frame_vanish_whole
-		dc.b id_frame_vanish_half
-		dc.b id_frame_vanish_quarter
-		dc.b id_frame_vanish_gone
-		dc.b afBack, 1
+		dc.w 7
+		dc.w id_frame_vanish_whole
+		dc.w id_frame_vanish_half
+		dc.w id_frame_vanish_quarter
+		dc.w id_frame_vanish_gone
+		dc.w afBack, 1
 		even
 
 ani_vanish_appear:
-		dc.b 7
-		dc.b id_frame_vanish_gone
-		dc.b id_frame_vanish_quarter
-		dc.b id_frame_vanish_half
-		dc.b id_frame_vanish_whole
-		dc.b afBack, 1
+		dc.w 7
+		dc.w id_frame_vanish_gone
+		dc.w id_frame_vanish_quarter
+		dc.w id_frame_vanish_half
+		dc.w id_frame_vanish_whole
+		dc.w afBack, 1
 		even

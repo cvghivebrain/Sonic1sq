@@ -84,53 +84,53 @@ Ani_Flame:	index *
 		ptr ani_flame_valve_off
 		
 ani_flame_pipe_on:
-		dc.b 3
-		dc.b id_frame_flame_pipe1
-		dc.b id_frame_flame_pipe2
-		dc.b id_frame_flame_pipe3
-		dc.b id_frame_flame_pipe4
-		dc.b id_frame_flame_pipe5
-		dc.b id_frame_flame_pipe6
-		dc.b id_frame_flame_pipe7
-		dc.b id_frame_flame_pipe8
-		dc.b id_frame_flame_pipe9
-		dc.b id_frame_flame_pipe10
-		dc.b id_frame_flame_pipe11
-		dc.b afBack, 2
+		dc.w 3
+		dc.w id_frame_flame_pipe1
+		dc.w id_frame_flame_pipe2
+		dc.w id_frame_flame_pipe3
+		dc.w id_frame_flame_pipe4
+		dc.w id_frame_flame_pipe5
+		dc.w id_frame_flame_pipe6
+		dc.w id_frame_flame_pipe7
+		dc.w id_frame_flame_pipe8
+		dc.w id_frame_flame_pipe9
+		dc.w id_frame_flame_pipe10
+		dc.w id_frame_flame_pipe11
+		dc.w afBack, 2
 
 ani_flame_pipe_off:
-		dc.b 0
-		dc.b id_frame_flame_pipe10
-		dc.b id_frame_flame_pipe8
-		dc.b id_frame_flame_pipe6
-		dc.b id_frame_flame_pipe4
-		dc.b id_frame_flame_pipe2
-		dc.b id_frame_flame_pipe1
-		dc.b afBack, 1
+		dc.w 0
+		dc.w id_frame_flame_pipe10
+		dc.w id_frame_flame_pipe8
+		dc.w id_frame_flame_pipe6
+		dc.w id_frame_flame_pipe4
+		dc.w id_frame_flame_pipe2
+		dc.w id_frame_flame_pipe1
+		dc.w afBack, 1
 		even
 
 ani_flame_valve_on:
-		dc.b 3
-		dc.b id_frame_flame_valve1
-		dc.b id_frame_flame_valve2
-		dc.b id_frame_flame_valve3
-		dc.b id_frame_flame_valve4
-		dc.b id_frame_flame_valve5
-		dc.b id_frame_flame_valve6
-		dc.b id_frame_flame_valve7
-		dc.b id_frame_flame_valve8
-		dc.b id_frame_flame_valve9
-		dc.b id_frame_flame_valve10
-		dc.b id_frame_flame_valve11
-		dc.b afBack, 2
+		dc.w 3
+		dc.w id_frame_flame_valve1
+		dc.w id_frame_flame_valve2
+		dc.w id_frame_flame_valve3
+		dc.w id_frame_flame_valve4
+		dc.w id_frame_flame_valve5
+		dc.w id_frame_flame_valve6
+		dc.w id_frame_flame_valve7
+		dc.w id_frame_flame_valve8
+		dc.w id_frame_flame_valve9
+		dc.w id_frame_flame_valve10
+		dc.w id_frame_flame_valve11
+		dc.w afBack, 2
 
 ani_flame_valve_off:
-		dc.b 0
-		dc.b id_frame_flame_valve10
-		dc.b id_frame_flame_valve8
-		dc.b id_frame_flame_valve7
-		dc.b id_frame_flame_valve5
-		dc.b id_frame_flame_valve3
-		dc.b id_frame_flame_valve1
-		dc.b afBack, 1
+		dc.w 0
+		dc.w id_frame_flame_valve10
+		dc.w id_frame_flame_valve8
+		dc.w id_frame_flame_valve7
+		dc.w id_frame_flame_valve5
+		dc.w id_frame_flame_valve3
+		dc.w id_frame_flame_valve1
+		dc.w afBack, 1
 		even

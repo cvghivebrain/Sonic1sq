@@ -74,28 +74,28 @@ Ani_ADoor:	index *
 		ptr ani_autodoor_open
 		
 ani_autodoor_close:
-		dc.b 0
-		dc.b id_frame_autodoor_open
-		dc.b id_frame_autodoor_07
-		dc.b id_frame_autodoor_06
-		dc.b id_frame_autodoor_05
-		dc.b id_frame_autodoor_04
-		dc.b id_frame_autodoor_03
-		dc.b id_frame_autodoor_02
-		dc.b id_frame_autodoor_01
-		dc.b id_frame_autodoor_closed
-		dc.b afBack, 1
+		dc.w 0
+		dc.w id_frame_autodoor_open
+		dc.w id_frame_autodoor_07
+		dc.w id_frame_autodoor_06
+		dc.w id_frame_autodoor_05
+		dc.w id_frame_autodoor_04
+		dc.w id_frame_autodoor_03
+		dc.w id_frame_autodoor_02
+		dc.w id_frame_autodoor_01
+		dc.w id_frame_autodoor_closed
+		dc.w afBack, 1
 
 ani_autodoor_open:
-		dc.b 0
-		dc.b id_frame_autodoor_closed
-		dc.b id_frame_autodoor_01
-		dc.b id_frame_autodoor_02
-		dc.b id_frame_autodoor_03
-		dc.b id_frame_autodoor_04
-		dc.b id_frame_autodoor_05
-		dc.b id_frame_autodoor_06
-		dc.b id_frame_autodoor_07
-		dc.b id_frame_autodoor_open
-		dc.b afBack, 1
+		dc.w 0
+		dc.w id_frame_autodoor_closed
+		dc.w id_frame_autodoor_01
+		dc.w id_frame_autodoor_02
+		dc.w id_frame_autodoor_03
+		dc.w id_frame_autodoor_04
+		dc.w id_frame_autodoor_05
+		dc.w id_frame_autodoor_06
+		dc.w id_frame_autodoor_07
+		dc.w id_frame_autodoor_open
+		dc.w afBack, 1
 		even

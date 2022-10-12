@@ -282,47 +282,47 @@ Ani_Bub:	index *
 		ptr ani_bubble_bubmaker
 		
 ani_bubble_small:						; small bubble forming
-		dc.b $E
-		dc.b id_frame_bubble_0
-		dc.b id_frame_bubble_1
-		dc.b id_frame_bubble_2
-		dc.b afRoutine
+		dc.w $E
+		dc.w id_frame_bubble_0
+		dc.w id_frame_bubble_1
+		dc.w id_frame_bubble_2
+		dc.w afRoutine
 		even
 
 ani_bubble_medium:						; medium bubble forming
-		dc.b $E
-		dc.b id_frame_bubble_1
-		dc.b id_frame_bubble_2
-		dc.b id_frame_bubble_3
-		dc.b id_frame_bubble_4
-		dc.b afRoutine
+		dc.w $E
+		dc.w id_frame_bubble_1
+		dc.w id_frame_bubble_2
+		dc.w id_frame_bubble_3
+		dc.w id_frame_bubble_4
+		dc.w afRoutine
 
 ani_bubble_large:						; full size bubble forming
-		dc.b $E
-		dc.b id_frame_bubble_2
-		dc.b id_frame_bubble_3
-		dc.b id_frame_bubble_4
-		dc.b id_frame_bubble_5
-		dc.b id_frame_bubble_full
-		dc.b afRoutine
+		dc.w $E
+		dc.w id_frame_bubble_2
+		dc.w id_frame_bubble_3
+		dc.w id_frame_bubble_4
+		dc.w id_frame_bubble_5
+		dc.w id_frame_bubble_full
+		dc.w afRoutine
 		even
 
 ani_bubble_incroutine:						; increment routine counter (no animation)
-		dc.b 4
-		dc.b afRoutine
+		dc.w 4
+		dc.w afRoutine
 
 ani_bubble_burst:						; large bubble bursts
-		dc.b 4
-		dc.b id_frame_bubble_full
-		dc.b id_frame_bubble_burst1
-		dc.b id_frame_bubble_burst2
-		dc.b afRoutine
+		dc.w 4
+		dc.w id_frame_bubble_full
+		dc.w id_frame_bubble_burst1
+		dc.w id_frame_bubble_burst2
+		dc.w afRoutine
 		even
 
 ani_bubble_bubmaker:						; bubble maker on the floor
-		dc.b $F
-		dc.b id_frame_bubble_bubmaker1
-		dc.b id_frame_bubble_bubmaker2
-		dc.b id_frame_bubble_bubmaker3
-		dc.b afEnd
+		dc.w $F
+		dc.w id_frame_bubble_bubmaker1
+		dc.w id_frame_bubble_bubmaker2
+		dc.w id_frame_bubble_bubmaker3
+		dc.w afEnd
 		even

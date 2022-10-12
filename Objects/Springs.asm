@@ -213,30 +213,30 @@ Ani_Spring:	index *
 		ptr ani_spring_left
 		
 ani_spring_up:
-		dc.b 0
-		dc.b id_frame_spring_upflat
-		dc.b id_frame_spring_up
-		dc.b id_frame_spring_up
-		dc.b id_frame_spring_upext
-		dc.b id_frame_spring_upext
-		dc.b id_frame_spring_upext
-		dc.b id_frame_spring_upext
-		dc.b id_frame_spring_upext
-		dc.b id_frame_spring_upext
-		dc.b id_frame_spring_up
-		dc.b afRoutine
+		dc.w 0
+		dc.w id_frame_spring_upflat
+		dc.w id_frame_spring_up
+		dc.w id_frame_spring_up
+		dc.w id_frame_spring_upext
+		dc.w id_frame_spring_upext
+		dc.w id_frame_spring_upext
+		dc.w id_frame_spring_upext
+		dc.w id_frame_spring_upext
+		dc.w id_frame_spring_upext
+		dc.w id_frame_spring_up
+		dc.w afRoutine
 
 ani_spring_left:
-		dc.b 0
-		dc.b id_frame_spring_leftflat
-		dc.b id_frame_spring_left
-		dc.b id_frame_spring_left
-		dc.b id_frame_spring_leftext
-		dc.b id_frame_spring_leftext
-		dc.b id_frame_spring_leftext
-		dc.b id_frame_spring_leftext
-		dc.b id_frame_spring_leftext
-		dc.b id_frame_spring_leftext
-		dc.b id_frame_spring_left
-		dc.b afRoutine
+		dc.w 0
+		dc.w id_frame_spring_leftflat
+		dc.w id_frame_spring_left
+		dc.w id_frame_spring_left
+		dc.w id_frame_spring_leftext
+		dc.w id_frame_spring_leftext
+		dc.w id_frame_spring_leftext
+		dc.w id_frame_spring_leftext
+		dc.w id_frame_spring_leftext
+		dc.w id_frame_spring_leftext
+		dc.w id_frame_spring_left
+		dc.w afRoutine
 		even

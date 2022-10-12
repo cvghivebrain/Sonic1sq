@@ -618,8 +618,8 @@ BFZ_EmptyShip:	; Routine $A
 Ani_FZEgg:	index *
 		ptr ani_fzeggman_0
 		
-ani_fzeggman_0:	dc.b 3
-		dc.b id_frame_fzeggman_damage1
-		dc.b id_frame_fzeggman_damage2
-		dc.b afEnd
+ani_fzeggman_0:	dc.w 3
+		dc.w id_frame_fzeggman_damage1
+		dc.w id_frame_fzeggman_damage2
+		dc.w afEnd
 		even

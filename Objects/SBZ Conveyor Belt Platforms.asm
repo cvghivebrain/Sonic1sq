@@ -230,30 +230,30 @@ Ani_SpinConvey:	index *
 		ptr ani_spinc_still
 		
 ani_spinc_spin:
-		dc.b 0
-		dc.b id_frame_spin_flat
-		dc.b id_frame_spin_1
-		dc.b id_frame_spin_2
-		dc.b id_frame_spin_3
-		dc.b id_frame_spin_4
-		dc.b id_frame_spin_3+afyflip
-		dc.b id_frame_spin_2+afyflip
-		dc.b id_frame_spin_1+afyflip
-		dc.b id_frame_spin_flat+afyflip
-		dc.b id_frame_spin_1+afxflip+afyflip
-		dc.b id_frame_spin_2+afxflip+afyflip
-		dc.b id_frame_spin_3+afxflip+afyflip
-		dc.b id_frame_spin_4+afxflip+afyflip
-		dc.b id_frame_spin_3+afxflip
-		dc.b id_frame_spin_2+afxflip
-		dc.b id_frame_spin_1+afxflip
-		dc.b id_frame_spin_flat
-		dc.b afEnd
+		dc.w 0
+		dc.w id_frame_spin_flat
+		dc.w id_frame_spin_1
+		dc.w id_frame_spin_2
+		dc.w id_frame_spin_3
+		dc.w id_frame_spin_4
+		dc.w id_frame_spin_3+afyflip
+		dc.w id_frame_spin_2+afyflip
+		dc.w id_frame_spin_1+afyflip
+		dc.w id_frame_spin_flat+afyflip
+		dc.w id_frame_spin_1+afxflip+afyflip
+		dc.w id_frame_spin_2+afxflip+afyflip
+		dc.w id_frame_spin_3+afxflip+afyflip
+		dc.w id_frame_spin_4+afxflip+afyflip
+		dc.w id_frame_spin_3+afxflip
+		dc.w id_frame_spin_2+afxflip
+		dc.w id_frame_spin_1+afxflip
+		dc.w id_frame_spin_flat
+		dc.w afEnd
 		even
 ani_spinc_still:
-		dc.b $F
-		dc.b id_frame_spin_flat
-		dc.b afEnd
+		dc.w $F
+		dc.w id_frame_spin_flat
+		dc.w afEnd
 		even
 
 SpinC_Corner_Data:

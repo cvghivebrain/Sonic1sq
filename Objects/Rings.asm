@@ -151,10 +151,10 @@ Ani_Ring:	index *
 		ptr ani_ring_sparkle
 		
 ani_ring_sparkle:
-		dc.b 5
-		dc.b id_frame_ring_sparkle1
-		dc.b id_frame_ring_sparkle2
-		dc.b id_frame_ring_sparkle3
-		dc.b id_frame_ring_sparkle4
-		dc.b afRoutine
+		dc.w 5
+		dc.w id_frame_ring_sparkle1
+		dc.w id_frame_ring_sparkle2
+		dc.w id_frame_ring_sparkle3
+		dc.w id_frame_ring_sparkle4
+		dc.w afRoutine
 		even

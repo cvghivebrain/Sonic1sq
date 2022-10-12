@@ -110,15 +110,15 @@ Ani_Missile:	index *
 		ptr ani_buzz_missile
 		
 ani_buzz_flare:
-		dc.b 7
-		dc.b id_frame_buzz_flare1
-		dc.b id_frame_buzz_flare2
-		dc.b afRoutine
+		dc.w 7
+		dc.w id_frame_buzz_flare1
+		dc.w id_frame_buzz_flare2
+		dc.w afRoutine
 		even
 
 ani_buzz_missile:
-		dc.b 1
-		dc.b id_frame_buzz_ball1
-		dc.b id_frame_buzz_ball2
-		dc.b afEnd
+		dc.w 1
+		dc.w id_frame_buzz_ball1
+		dc.w id_frame_buzz_ball2
+		dc.w afEnd
 		even

@@ -80,9 +80,9 @@ Ani_WFall:	index *
 		ptr ani_wfall_splash
 		
 ani_wfall_splash:
-		dc.b 5
-		dc.b id_frame_wfall_splash1
-		dc.b id_frame_wfall_splash2
-		dc.b id_frame_wfall_splash3
-		dc.b afEnd
+		dc.w 5
+		dc.w id_frame_wfall_splash1
+		dc.w id_frame_wfall_splash2
+		dc.w id_frame_wfall_splash3
+		dc.w afEnd
 		even

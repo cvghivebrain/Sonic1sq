@@ -139,20 +139,20 @@ Ani_Yad:	index *
 		ptr ani_yadrin_walk
 
 ani_yadrin_stand:
-		dc.b 7
-		dc.b id_frame_yadrin_walk0
-		dc.b afEnd
+		dc.w 7
+		dc.w id_frame_yadrin_walk0
+		dc.w afEnd
 		even
 
 ani_yadrin_walk:
-		dc.b 7
-		dc.b id_frame_yadrin_walk0
-		dc.b id_frame_yadrin_walk3
-		dc.b id_frame_yadrin_walk1
-		dc.b id_frame_yadrin_walk4
-		dc.b id_frame_yadrin_walk0
-		dc.b id_frame_yadrin_walk3
-		dc.b id_frame_yadrin_walk2
-		dc.b id_frame_yadrin_walk5
-		dc.b afEnd
+		dc.w 7
+		dc.w id_frame_yadrin_walk0
+		dc.w id_frame_yadrin_walk3
+		dc.w id_frame_yadrin_walk1
+		dc.w id_frame_yadrin_walk4
+		dc.w id_frame_yadrin_walk0
+		dc.w id_frame_yadrin_walk3
+		dc.w id_frame_yadrin_walk2
+		dc.w id_frame_yadrin_walk5
+		dc.w afEnd
 		even

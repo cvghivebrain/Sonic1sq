@@ -182,51 +182,51 @@ Ani_SEgg:	index *
 		ptr ani_eggman_jump
 		
 ani_eggman_stand:
-		dc.b $7E
-		dc.b id_frame_eggman_stand
-		dc.b afEnd
+		dc.w $7E
+		dc.w id_frame_eggman_stand
+		dc.w afEnd
 		even
 
 ani_eggman_laugh:
-		dc.b 6
-		dc.b id_frame_eggman_laugh1
-		dc.b id_frame_eggman_laugh2
-		dc.b afEnd
+		dc.w 6
+		dc.w id_frame_eggman_laugh1
+		dc.w id_frame_eggman_laugh2
+		dc.w afEnd
 
 ani_eggman_jump1:
-		dc.b $E
-		dc.b id_frame_eggman_jump1
-		dc.b id_frame_eggman_jump2
-		dc.b id_frame_eggman_jump2
-		dc.b id_frame_eggman_stand
-		dc.b id_frame_eggman_stand
-		dc.b id_frame_eggman_stand
-		dc.b afEnd
+		dc.w $E
+		dc.w id_frame_eggman_jump1
+		dc.w id_frame_eggman_jump2
+		dc.w id_frame_eggman_jump2
+		dc.w id_frame_eggman_stand
+		dc.w id_frame_eggman_stand
+		dc.w id_frame_eggman_stand
+		dc.w afEnd
 
 ani_eggman_intube:
-		dc.b 0
-		dc.b id_frame_eggman_surprise
-		dc.b id_frame_eggman_intube
-		dc.b afEnd
+		dc.w 0
+		dc.w id_frame_eggman_surprise
+		dc.w id_frame_eggman_intube
+		dc.w afEnd
 
 ani_eggman_running:
-		dc.b 6
-		dc.b id_frame_eggman_running1
-		dc.b id_frame_eggman_jump2
-		dc.b id_frame_eggman_running2
-		dc.b id_frame_eggman_jump2
-		dc.b afEnd
+		dc.w 6
+		dc.w id_frame_eggman_running1
+		dc.w id_frame_eggman_jump2
+		dc.w id_frame_eggman_running2
+		dc.w id_frame_eggman_jump2
+		dc.w afEnd
 
 ani_eggman_jump2:
-		dc.b $F
-		dc.b id_frame_eggman_jump2
-		dc.b id_frame_eggman_jump1
-		dc.b id_frame_eggman_jump1
-		dc.b afEnd
+		dc.w $F
+		dc.w id_frame_eggman_jump2
+		dc.w id_frame_eggman_jump1
+		dc.w id_frame_eggman_jump1
+		dc.w afEnd
 		even
 
 ani_eggman_jump:
-		dc.b $7E
-		dc.b id_frame_eggman_jump
-		dc.b afEnd
+		dc.w $7E
+		dc.w id_frame_eggman_jump
+		dc.w afEnd
 		even

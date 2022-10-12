@@ -64,24 +64,24 @@ Van_LoadSonic:	; Routine 4
 Ani_Vanish:	index *
 		ptr ani_vanish_0
 		
-ani_vanish_0:	dc.b 5
-		dc.b id_frame_vanish_flash1
-		dc.b id_frame_vanish_flash2
-		dc.b id_frame_vanish_flash1
-		dc.b id_frame_vanish_flash2
-		dc.b id_frame_vanish_flash1
-		dc.b id_frame_vanish_blank
-		dc.b id_frame_vanish_flash2
-		dc.b id_frame_vanish_blank
-		dc.b id_frame_vanish_flash3
-		dc.b id_frame_vanish_blank
-		dc.b id_frame_vanish_sparkle1
-		dc.b id_frame_vanish_blank
-		dc.b id_frame_vanish_sparkle2
-		dc.b id_frame_vanish_blank
-		dc.b id_frame_vanish_sparkle3
-		dc.b id_frame_vanish_blank
-		dc.b id_frame_vanish_sparkle4
-		dc.b id_frame_vanish_blank
-		dc.b afRoutine
+ani_vanish_0:	dc.w 5
+		dc.w id_frame_vanish_flash1
+		dc.w id_frame_vanish_flash2
+		dc.w id_frame_vanish_flash1
+		dc.w id_frame_vanish_flash2
+		dc.w id_frame_vanish_flash1
+		dc.w id_frame_vanish_blank
+		dc.w id_frame_vanish_flash2
+		dc.w id_frame_vanish_blank
+		dc.w id_frame_vanish_flash3
+		dc.w id_frame_vanish_blank
+		dc.w id_frame_vanish_sparkle1
+		dc.w id_frame_vanish_blank
+		dc.w id_frame_vanish_sparkle2
+		dc.w id_frame_vanish_blank
+		dc.w id_frame_vanish_sparkle3
+		dc.w id_frame_vanish_blank
+		dc.w id_frame_vanish_sparkle4
+		dc.w id_frame_vanish_blank
+		dc.w afRoutine
 		even

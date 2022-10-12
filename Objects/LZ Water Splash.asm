@@ -43,9 +43,9 @@ Spla_Delete:	; Routine 4
 Ani_Splash:	index *
 		ptr ani_splash_0
 		
-ani_splash_0:	dc.b 4
-		dc.b id_frame_splash_0
-		dc.b id_frame_splash_1
-		dc.b id_frame_splash_2
-		dc.b afRoutine
+ani_splash_0:	dc.w 4
+		dc.w id_frame_splash_0
+		dc.w id_frame_splash_1
+		dc.w id_frame_splash_2
+		dc.w afRoutine
 		even

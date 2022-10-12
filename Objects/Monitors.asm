@@ -266,130 +266,130 @@ Ani_Monitor:	index *
 		ptr ani_monitor_breaking			; 9
 		
 ani_monitor_static:
-		dc.b 1
-		dc.b id_frame_monitor_static0
-		dc.b id_frame_monitor_static1
-		dc.b id_frame_monitor_static2
-		dc.b afEnd
+		dc.w 1
+		dc.w id_frame_monitor_static0
+		dc.w id_frame_monitor_static1
+		dc.w id_frame_monitor_static2
+		dc.w afEnd
 		even
 
 ani_monitor_eggman:
-		dc.b 1
-		dc.b id_frame_monitor_static0
-		dc.b id_frame_monitor_eggman
-		dc.b id_frame_monitor_eggman
-		dc.b id_frame_monitor_static1
-		dc.b id_frame_monitor_eggman
-		dc.b id_frame_monitor_eggman
-		dc.b id_frame_monitor_static2
-		dc.b id_frame_monitor_eggman
-		dc.b id_frame_monitor_eggman
-		dc.b afEnd
+		dc.w 1
+		dc.w id_frame_monitor_static0
+		dc.w id_frame_monitor_eggman
+		dc.w id_frame_monitor_eggman
+		dc.w id_frame_monitor_static1
+		dc.w id_frame_monitor_eggman
+		dc.w id_frame_monitor_eggman
+		dc.w id_frame_monitor_static2
+		dc.w id_frame_monitor_eggman
+		dc.w id_frame_monitor_eggman
+		dc.w afEnd
 		even
 
 ani_monitor_sonic:
-		dc.b 1
-		dc.b id_frame_monitor_static0
-		dc.b id_frame_monitor_sonic
-		dc.b id_frame_monitor_sonic
-		dc.b id_frame_monitor_static1
-		dc.b id_frame_monitor_sonic
-		dc.b id_frame_monitor_sonic
-		dc.b id_frame_monitor_static2
-		dc.b id_frame_monitor_sonic
-		dc.b id_frame_monitor_sonic
-		dc.b afEnd
+		dc.w 1
+		dc.w id_frame_monitor_static0
+		dc.w id_frame_monitor_sonic
+		dc.w id_frame_monitor_sonic
+		dc.w id_frame_monitor_static1
+		dc.w id_frame_monitor_sonic
+		dc.w id_frame_monitor_sonic
+		dc.w id_frame_monitor_static2
+		dc.w id_frame_monitor_sonic
+		dc.w id_frame_monitor_sonic
+		dc.w afEnd
 		even
 
 ani_monitor_shoes:
-		dc.b 1
-		dc.b id_frame_monitor_static0
-		dc.b id_frame_monitor_shoes
-		dc.b id_frame_monitor_shoes
-		dc.b id_frame_monitor_static1
-		dc.b id_frame_monitor_shoes
-		dc.b id_frame_monitor_shoes
-		dc.b id_frame_monitor_static2
-		dc.b id_frame_monitor_shoes
-		dc.b id_frame_monitor_shoes
-		dc.b afEnd
+		dc.w 1
+		dc.w id_frame_monitor_static0
+		dc.w id_frame_monitor_shoes
+		dc.w id_frame_monitor_shoes
+		dc.w id_frame_monitor_static1
+		dc.w id_frame_monitor_shoes
+		dc.w id_frame_monitor_shoes
+		dc.w id_frame_monitor_static2
+		dc.w id_frame_monitor_shoes
+		dc.w id_frame_monitor_shoes
+		dc.w afEnd
 		even
 
 ani_monitor_shield:
-		dc.b 1
-		dc.b id_frame_monitor_static0
-		dc.b id_frame_monitor_shield
-		dc.b id_frame_monitor_shield
-		dc.b id_frame_monitor_static1
-		dc.b id_frame_monitor_shield
-		dc.b id_frame_monitor_shield
-		dc.b id_frame_monitor_static2
-		dc.b id_frame_monitor_shield
-		dc.b id_frame_monitor_shield
-		dc.b afEnd
+		dc.w 1
+		dc.w id_frame_monitor_static0
+		dc.w id_frame_monitor_shield
+		dc.w id_frame_monitor_shield
+		dc.w id_frame_monitor_static1
+		dc.w id_frame_monitor_shield
+		dc.w id_frame_monitor_shield
+		dc.w id_frame_monitor_static2
+		dc.w id_frame_monitor_shield
+		dc.w id_frame_monitor_shield
+		dc.w afEnd
 		even
 
 ani_monitor_invincible:
-		dc.b 1
-		dc.b id_frame_monitor_static0
-		dc.b id_frame_monitor_invincible
-		dc.b id_frame_monitor_invincible
-		dc.b id_frame_monitor_static1
-		dc.b id_frame_monitor_invincible
-		dc.b id_frame_monitor_invincible
-		dc.b id_frame_monitor_static2
-		dc.b id_frame_monitor_invincible
-		dc.b id_frame_monitor_invincible
-		dc.b afEnd
+		dc.w 1
+		dc.w id_frame_monitor_static0
+		dc.w id_frame_monitor_invincible
+		dc.w id_frame_monitor_invincible
+		dc.w id_frame_monitor_static1
+		dc.w id_frame_monitor_invincible
+		dc.w id_frame_monitor_invincible
+		dc.w id_frame_monitor_static2
+		dc.w id_frame_monitor_invincible
+		dc.w id_frame_monitor_invincible
+		dc.w afEnd
 		even
 
 ani_monitor_rings:
-		dc.b 1
-		dc.b id_frame_monitor_static0
-		dc.b id_frame_monitor_rings
-		dc.b id_frame_monitor_rings
-		dc.b id_frame_monitor_static1
-		dc.b id_frame_monitor_rings
-		dc.b id_frame_monitor_rings
-		dc.b id_frame_monitor_static2
-		dc.b id_frame_monitor_rings
-		dc.b id_frame_monitor_rings
-		dc.b afEnd
+		dc.w 1
+		dc.w id_frame_monitor_static0
+		dc.w id_frame_monitor_rings
+		dc.w id_frame_monitor_rings
+		dc.w id_frame_monitor_static1
+		dc.w id_frame_monitor_rings
+		dc.w id_frame_monitor_rings
+		dc.w id_frame_monitor_static2
+		dc.w id_frame_monitor_rings
+		dc.w id_frame_monitor_rings
+		dc.w afEnd
 		even
 
 ani_monitor_s:
-		dc.b 1
-		dc.b id_frame_monitor_static0
-		dc.b id_frame_monitor_s
-		dc.b id_frame_monitor_s
-		dc.b id_frame_monitor_static1
-		dc.b id_frame_monitor_s
-		dc.b id_frame_monitor_s
-		dc.b id_frame_monitor_static2
-		dc.b id_frame_monitor_s
-		dc.b id_frame_monitor_s
-		dc.b afEnd
+		dc.w 1
+		dc.w id_frame_monitor_static0
+		dc.w id_frame_monitor_s
+		dc.w id_frame_monitor_s
+		dc.w id_frame_monitor_static1
+		dc.w id_frame_monitor_s
+		dc.w id_frame_monitor_s
+		dc.w id_frame_monitor_static2
+		dc.w id_frame_monitor_s
+		dc.w id_frame_monitor_s
+		dc.w afEnd
 		even
 
 ani_monitor_goggles:
-		dc.b 1
-		dc.b id_frame_monitor_static0
-		dc.b id_frame_monitor_goggles
-		dc.b id_frame_monitor_goggles
-		dc.b id_frame_monitor_static1
-		dc.b id_frame_monitor_goggles
-		dc.b id_frame_monitor_goggles
-		dc.b id_frame_monitor_static2
-		dc.b id_frame_monitor_goggles
-		dc.b id_frame_monitor_goggles
-		dc.b afEnd
+		dc.w 1
+		dc.w id_frame_monitor_static0
+		dc.w id_frame_monitor_goggles
+		dc.w id_frame_monitor_goggles
+		dc.w id_frame_monitor_static1
+		dc.w id_frame_monitor_goggles
+		dc.w id_frame_monitor_goggles
+		dc.w id_frame_monitor_static2
+		dc.w id_frame_monitor_goggles
+		dc.w id_frame_monitor_goggles
+		dc.w afEnd
 		even
 
 ani_monitor_breaking:
-		dc.b 2
-		dc.b id_frame_monitor_static0
-		dc.b id_frame_monitor_static1
-		dc.b id_frame_monitor_static2
-		dc.b id_frame_monitor_broken
-		dc.b afBack, 1
+		dc.w 2
+		dc.w id_frame_monitor_static0
+		dc.w id_frame_monitor_static1
+		dc.w id_frame_monitor_static2
+		dc.w id_frame_monitor_broken
+		dc.w afBack, 1
 		even

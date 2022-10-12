@@ -30,31 +30,32 @@ Anim_Run:
 		andi.b	#$7F,d0
 		add.w	d0,d0
 		adda.w	(a1,d0.w),a1				; jump to appropriate animation	script
-		move.b	(a1),ost_anim_time(a0)			; load frame duration
+		move.w	(a1),d0
+		move.b	d0,ost_anim_time(a0)			; load frame duration
 		moveq	#0,d1
 		move.b	ost_anim_frame(a0),d1			; load current frame number
-		move.b	1(a1,d1.w),d0				; read sprite number from script
+		move.w	2(a1,d1.w),d0				; read sprite number from script
 		bmi.s	Anim_Flag				; branch if an animation flag is found
 
 Anim_Next:
-		move.b	d0,d1					; copy full frame info to d1
-		andi.b	#$1F,d0					; sprite number only
-		move.b	d0,ost_frame(a0)			; load sprite number
+		move.w	d0,d1					; copy full frame info to d1
+		andi.w	#$1FFF,d0				; sprite number only
+		move.w	d0,ost_frame_hi(a0)			; load sprite number
 		move.b	ost_status(a0),d0
-		rol.b	#3,d1
+		rol.w	#3,d1
 		eor.b	d0,d1
 		andi.b	#status_xflip+status_yflip,d1		; get x/yflip bits in d1
 		andi.b	#$FF-render_xflip-render_yflip,ost_render(a0)
 		or.b	d1,ost_render(a0)			; apply x/yflip bits from status
-		addq.b	#1,ost_anim_frame(a0)			; next frame number
+		addq.b	#2,ost_anim_frame(a0)			; next frame number
 
 Anim_Wait:
 		rts	
 ; ===========================================================================
 
 Anim_Flag:
-		neg.b	d0
-		subq.b	#2,d0					; flags start at 2
+		neg.w	d0
+		subq.w	#2,d0					; flags start at 2
 		move.w	Anim_Flag_Index(pc,d0.w),d0
 		jmp	Anim_Flag_Index(pc,d0.w)
 ; ===========================================================================
@@ -70,20 +71,22 @@ Anim_Flag_Index:
 
 Anim_Flag_Restart:
 		move.b	#0,ost_anim_frame(a0)			; restart the animation
-		move.b	1(a1),d0				; read sprite number
+		move.w	2(a1),d0				; read sprite number
 		bra.s	Anim_Next
 ; ===========================================================================
 
 Anim_Flag_Back:
-		move.b	2(a1,d1.w),d0				; read the next	byte in	the script
+		move.w	4(a1,d1.w),d0				; read the next	word in	the script
+		add.w	d0,d0
 		sub.b	d0,ost_anim_frame(a0)			; jump back d0 bytes in the script
 		sub.b	d0,d1
-		move.b	1(a1,d1.w),d0				; read sprite number
+		move.w	2(a1,d1.w),d0				; read sprite number
 		bra.s	Anim_Next
 ; ===========================================================================
 
 Anim_Flag_Change:
-		move.b	2(a1,d1.w),ost_anim(a0)			; read next byte, run that animation
+		move.w	4(a1,d1.w),d0
+		move.b	d0,ost_anim(a0)				; read next byte, run that animation
 		rts
 
 Anim_Flag_Routine:
@@ -141,7 +144,7 @@ NewAnim:
 ; ---------------------------------------------------------------------------
 
 DPLCSprite:
-		move.b	(a1),d0
+		move.w	(a1),d0
 		cmp.b	ost_anim_time(a0),d0			; has animation just updated?
 		bne.s	.exit					; branch if not
 		

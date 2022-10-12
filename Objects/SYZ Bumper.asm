@@ -94,15 +94,15 @@ Ani_Bump:	index *
 		ptr ani_bump_bumped
 		
 ani_bump_normal:
-		dc.b $F
-		dc.b id_frame_bump_normal
-		dc.b afEnd
+		dc.w $F
+		dc.w id_frame_bump_normal
+		dc.w afEnd
 		even
 ani_bump_bumped:
-		dc.b 3
-		dc.b id_frame_bump_bumped1
-		dc.b id_frame_bump_bumped2
-		dc.b id_frame_bump_bumped1
-		dc.b id_frame_bump_bumped2
-		dc.b afChange, id_ani_bump_normal
+		dc.w 3
+		dc.w id_frame_bump_bumped1
+		dc.w id_frame_bump_bumped2
+		dc.w id_frame_bump_bumped1
+		dc.w id_frame_bump_bumped2
+		dc.w afChange, id_ani_bump_normal
 		even

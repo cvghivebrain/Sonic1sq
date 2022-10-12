@@ -131,30 +131,30 @@ Ani_Moto:	index *
 		ptr ani_moto_walk
 		ptr ani_moto_smoke
 
-ani_moto_stand:	dc.b $F
-		dc.b id_frame_moto_2
-		dc.b afEnd
+ani_moto_stand:	dc.w $F
+		dc.w id_frame_moto_2
+		dc.w afEnd
 		even
 
-ani_moto_walk:	dc.b 7
-		dc.b id_frame_moto_0
-		dc.b id_frame_moto_1
-		dc.b id_frame_moto_0
-		dc.b id_frame_moto_2
-		dc.b afEnd
+ani_moto_walk:	dc.w 7
+		dc.w id_frame_moto_0
+		dc.w id_frame_moto_1
+		dc.w id_frame_moto_0
+		dc.w id_frame_moto_2
+		dc.w afEnd
 		even
 
-ani_moto_smoke:	dc.b 1
-		dc.b id_frame_moto_smoke1
-		dc.b id_frame_moto_blank
-		dc.b id_frame_moto_smoke1
-		dc.b id_frame_moto_blank
-		dc.b id_frame_moto_smoke2
-		dc.b id_frame_moto_blank
-		dc.b id_frame_moto_smoke2
-		dc.b id_frame_moto_blank
-		dc.b id_frame_moto_smoke2
-		dc.b id_frame_moto_blank
-		dc.b id_frame_moto_smoke3
-		dc.b afRoutine
+ani_moto_smoke:	dc.w 1
+		dc.w id_frame_moto_smoke1
+		dc.w id_frame_moto_blank
+		dc.w id_frame_moto_smoke1
+		dc.w id_frame_moto_blank
+		dc.w id_frame_moto_smoke2
+		dc.w id_frame_moto_blank
+		dc.w id_frame_moto_smoke2
+		dc.w id_frame_moto_blank
+		dc.w id_frame_moto_smoke2
+		dc.w id_frame_moto_blank
+		dc.w id_frame_moto_smoke3
+		dc.w afRoutine
 		even

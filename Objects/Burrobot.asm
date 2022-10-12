@@ -167,25 +167,25 @@ Ani_Burro:	index *
 		ptr ani_burro_fall
 		
 ani_burro_walk1:
-		dc.b 3
-		dc.b id_frame_burro_walk1
-		dc.b id_frame_burro_walk3
-		dc.b afEnd
+		dc.w 3
+		dc.w id_frame_burro_walk1
+		dc.w id_frame_burro_walk3
+		dc.w afEnd
 
 ani_burro_walk2:
-		dc.b 3
-		dc.b id_frame_burro_walk1
-		dc.b id_frame_burro_walk2
-		dc.b afEnd
+		dc.w 3
+		dc.w id_frame_burro_walk1
+		dc.w id_frame_burro_walk2
+		dc.w afEnd
 
 ani_burro_digging:
-		dc.b 3
-		dc.b id_frame_burro_dig1
-		dc.b id_frame_burro_dig2
-		dc.b afEnd
+		dc.w 3
+		dc.w id_frame_burro_dig1
+		dc.w id_frame_burro_dig2
+		dc.w afEnd
 
 ani_burro_fall:
-		dc.b 3
-		dc.b id_frame_burro_fall
-		dc.b afEnd
+		dc.w 3
+		dc.w id_frame_burro_fall
+		dc.w afEnd
 		even

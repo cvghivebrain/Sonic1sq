@@ -360,154 +360,154 @@ Ani_Drown:	index *
 		ptr ani_drown_mediumbubble			; $E
 		
 ani_drown_zeroappear:
-		dc.b 5
-		dc.b id_frame_bubble_0
-		dc.b id_frame_bubble_1
-		dc.b id_frame_bubble_2
-		dc.b id_frame_bubble_3
-		dc.b id_frame_bubble_4
-		dc.b id_frame_bubble_zero_small
-		dc.b id_frame_bubble_zero
-		dc.b afRoutine
+		dc.w 5
+		dc.w id_frame_bubble_0
+		dc.w id_frame_bubble_1
+		dc.w id_frame_bubble_2
+		dc.w id_frame_bubble_3
+		dc.w id_frame_bubble_4
+		dc.w id_frame_bubble_zero_small
+		dc.w id_frame_bubble_zero
+		dc.w afRoutine
 		even
 
 ani_drown_oneappear:
-		dc.b 5
-		dc.b id_frame_bubble_0
-		dc.b id_frame_bubble_1
-		dc.b id_frame_bubble_2
-		dc.b id_frame_bubble_3
-		dc.b id_frame_bubble_4
-		dc.b id_frame_bubble_one_small
-		dc.b id_frame_bubble_one
-		dc.b afRoutine
+		dc.w 5
+		dc.w id_frame_bubble_0
+		dc.w id_frame_bubble_1
+		dc.w id_frame_bubble_2
+		dc.w id_frame_bubble_3
+		dc.w id_frame_bubble_4
+		dc.w id_frame_bubble_one_small
+		dc.w id_frame_bubble_one
+		dc.w afRoutine
 		even
 
 ani_drown_twoappear:
-		dc.b 5
-		dc.b id_frame_bubble_0
-		dc.b id_frame_bubble_1
-		dc.b id_frame_bubble_2
-		dc.b id_frame_bubble_3
-		dc.b id_frame_bubble_4
-		dc.b id_frame_bubble_one_small
-		dc.b id_frame_bubble_two
-		dc.b afRoutine
+		dc.w 5
+		dc.w id_frame_bubble_0
+		dc.w id_frame_bubble_1
+		dc.w id_frame_bubble_2
+		dc.w id_frame_bubble_3
+		dc.w id_frame_bubble_4
+		dc.w id_frame_bubble_one_small
+		dc.w id_frame_bubble_two
+		dc.w afRoutine
 		even
 
 ani_drown_threeappear:
-		dc.b 5
-		dc.b id_frame_bubble_0
-		dc.b id_frame_bubble_1
-		dc.b id_frame_bubble_2
-		dc.b id_frame_bubble_3
-		dc.b id_frame_bubble_4
-		dc.b id_frame_bubble_three_small
-		dc.b id_frame_bubble_three
-		dc.b afRoutine
+		dc.w 5
+		dc.w id_frame_bubble_0
+		dc.w id_frame_bubble_1
+		dc.w id_frame_bubble_2
+		dc.w id_frame_bubble_3
+		dc.w id_frame_bubble_4
+		dc.w id_frame_bubble_three_small
+		dc.w id_frame_bubble_three
+		dc.w afRoutine
 		even
 
 ani_drown_fourappear:
-		dc.b 5
-		dc.b id_frame_bubble_0
-		dc.b id_frame_bubble_1
-		dc.b id_frame_bubble_2
-		dc.b id_frame_bubble_3
-		dc.b id_frame_bubble_4
-		dc.b id_frame_bubble_zero_small
-		dc.b id_frame_bubble_four
-		dc.b afRoutine
+		dc.w 5
+		dc.w id_frame_bubble_0
+		dc.w id_frame_bubble_1
+		dc.w id_frame_bubble_2
+		dc.w id_frame_bubble_3
+		dc.w id_frame_bubble_4
+		dc.w id_frame_bubble_zero_small
+		dc.w id_frame_bubble_four
+		dc.w afRoutine
 		even
 
 ani_drown_fiveappear:
-		dc.b 5
-		dc.b id_frame_bubble_0
-		dc.b id_frame_bubble_1
-		dc.b id_frame_bubble_2
-		dc.b id_frame_bubble_3
-		dc.b id_frame_bubble_4
-		dc.b id_frame_bubble_five_small
-		dc.b id_frame_bubble_five
-		dc.b afRoutine
+		dc.w 5
+		dc.w id_frame_bubble_0
+		dc.w id_frame_bubble_1
+		dc.w id_frame_bubble_2
+		dc.w id_frame_bubble_3
+		dc.w id_frame_bubble_4
+		dc.w id_frame_bubble_five_small
+		dc.w id_frame_bubble_five
+		dc.w afRoutine
 		even
 
 ani_drown_smallbubble:
-		dc.b $E
-		dc.b id_frame_bubble_0
-		dc.b id_frame_bubble_1
-		dc.b id_frame_bubble_2
-		dc.b afRoutine
+		dc.w $E
+		dc.w id_frame_bubble_0
+		dc.w id_frame_bubble_1
+		dc.w id_frame_bubble_2
+		dc.w afRoutine
 		even
 
 ani_drown_zeroflash:
-		dc.b 7
-		dc.b id_frame_bubble_blank
-		dc.b id_frame_bubble_zero
-		dc.b id_frame_bubble_blank
-		dc.b id_frame_bubble_zero
-		dc.b id_frame_bubble_blank
-		dc.b id_frame_bubble_zero
-		dc.b afRoutine
+		dc.w 7
+		dc.w id_frame_bubble_blank
+		dc.w id_frame_bubble_zero
+		dc.w id_frame_bubble_blank
+		dc.w id_frame_bubble_zero
+		dc.w id_frame_bubble_blank
+		dc.w id_frame_bubble_zero
+		dc.w afRoutine
 
 ani_drown_oneflash:
-		dc.b 7
-		dc.b id_frame_bubble_blank
-		dc.b id_frame_bubble_one
-		dc.b id_frame_bubble_blank
-		dc.b id_frame_bubble_one
-		dc.b id_frame_bubble_blank
-		dc.b id_frame_bubble_one
-		dc.b afRoutine
+		dc.w 7
+		dc.w id_frame_bubble_blank
+		dc.w id_frame_bubble_one
+		dc.w id_frame_bubble_blank
+		dc.w id_frame_bubble_one
+		dc.w id_frame_bubble_blank
+		dc.w id_frame_bubble_one
+		dc.w afRoutine
 
 ani_drown_twoflash:
-		dc.b 7
-		dc.b id_frame_bubble_blank
-		dc.b id_frame_bubble_two
-		dc.b id_frame_bubble_blank
-		dc.b id_frame_bubble_two
-		dc.b id_frame_bubble_blank
-		dc.b id_frame_bubble_two
-		dc.b afRoutine
+		dc.w 7
+		dc.w id_frame_bubble_blank
+		dc.w id_frame_bubble_two
+		dc.w id_frame_bubble_blank
+		dc.w id_frame_bubble_two
+		dc.w id_frame_bubble_blank
+		dc.w id_frame_bubble_two
+		dc.w afRoutine
 
 ani_drown_threeflash:
-		dc.b 7
-		dc.b id_frame_bubble_blank
-		dc.b id_frame_bubble_three
-		dc.b id_frame_bubble_blank
-		dc.b id_frame_bubble_three
-		dc.b id_frame_bubble_blank
-		dc.b id_frame_bubble_three
-		dc.b afRoutine
+		dc.w 7
+		dc.w id_frame_bubble_blank
+		dc.w id_frame_bubble_three
+		dc.w id_frame_bubble_blank
+		dc.w id_frame_bubble_three
+		dc.w id_frame_bubble_blank
+		dc.w id_frame_bubble_three
+		dc.w afRoutine
 
 ani_drown_fourflash:
-		dc.b 7
-		dc.b id_frame_bubble_blank
-		dc.b id_frame_bubble_four
-		dc.b id_frame_bubble_blank
-		dc.b id_frame_bubble_four
-		dc.b id_frame_bubble_blank
-		dc.b id_frame_bubble_four
-		dc.b afRoutine
+		dc.w 7
+		dc.w id_frame_bubble_blank
+		dc.w id_frame_bubble_four
+		dc.w id_frame_bubble_blank
+		dc.w id_frame_bubble_four
+		dc.w id_frame_bubble_blank
+		dc.w id_frame_bubble_four
+		dc.w afRoutine
 
 ani_drown_fiveflash:
-		dc.b 7
-		dc.b id_frame_bubble_blank
-		dc.b id_frame_bubble_five
-		dc.b id_frame_bubble_blank
-		dc.b id_frame_bubble_five
-		dc.b id_frame_bubble_blank
-		dc.b id_frame_bubble_five
-		dc.b afRoutine
+		dc.w 7
+		dc.w id_frame_bubble_blank
+		dc.w id_frame_bubble_five
+		dc.w id_frame_bubble_blank
+		dc.w id_frame_bubble_five
+		dc.w id_frame_bubble_blank
+		dc.w id_frame_bubble_five
+		dc.w afRoutine
 
 ani_drown_blank:
-		dc.b $E
-		dc.b afRoutine
+		dc.w $E
+		dc.w afRoutine
 
 ani_drown_mediumbubble:
-		dc.b $E
-		dc.b id_frame_bubble_1
-		dc.b id_frame_bubble_2
-		dc.b id_frame_bubble_3
-		dc.b id_frame_bubble_4
-		dc.b afRoutine
+		dc.w $E
+		dc.w id_frame_bubble_1
+		dc.w id_frame_bubble_2
+		dc.w id_frame_bubble_3
+		dc.w id_frame_bubble_4
+		dc.w afRoutine
 		even

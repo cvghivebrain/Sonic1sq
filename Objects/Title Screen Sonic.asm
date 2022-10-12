@@ -69,14 +69,14 @@ TSon_Animate:	; Routine 6
 Ani_TSon:	index *
 		ptr ani_tson_0
 		
-ani_tson_0:	dc.b 7
-		dc.b id_frame_tson_0
-		dc.b id_frame_tson_1
-		dc.b id_frame_tson_2
-		dc.b id_frame_tson_3
-		dc.b id_frame_tson_4
-		dc.b id_frame_tson_5
-		dc.b id_frame_tson_wag1
-		dc.b id_frame_tson_wag2
-		dc.b afBack, 2
+ani_tson_0:	dc.w 7
+		dc.w id_frame_tson_0
+		dc.w id_frame_tson_1
+		dc.w id_frame_tson_2
+		dc.w id_frame_tson_3
+		dc.w id_frame_tson_4
+		dc.w id_frame_tson_5
+		dc.w id_frame_tson_wag1
+		dc.w id_frame_tson_wag2
+		dc.w afBack, 2
 		even

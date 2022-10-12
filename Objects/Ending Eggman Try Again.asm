@@ -86,32 +86,32 @@ Ani_EEgg:	index *
 		ptr ani_eegg_end
 		
 ani_eegg_juggle1:
-		dc.b 5
-		dc.b id_frame_eegg_juggle1
-		dc.b afRoutine, 1
+		dc.w 5
+		dc.w id_frame_eegg_juggle1
+		dc.w afRoutine, 1
 
 ani_eegg_juggle2:
-		dc.b 5
-		dc.b id_frame_eegg_juggle3
-		dc.b afRoutine, 3
+		dc.w 5
+		dc.w id_frame_eegg_juggle3
+		dc.w afRoutine, 3
 
 ani_eegg_end:
-		dc.b 7
-		dc.b id_frame_eegg_end1
-		dc.b id_frame_eegg_end2
-		dc.b id_frame_eegg_end3
-		dc.b id_frame_eegg_end2
-		dc.b id_frame_eegg_end1
-		dc.b id_frame_eegg_end2
-		dc.b id_frame_eegg_end3
-		dc.b id_frame_eegg_end2
-		dc.b id_frame_eegg_end1
-		dc.b id_frame_eegg_end2
-		dc.b id_frame_eegg_end3
-		dc.b id_frame_eegg_end2
-		dc.b id_frame_eegg_end4
-		dc.b id_frame_eegg_end2
-		dc.b id_frame_eegg_end3
-		dc.b id_frame_eegg_end2
-		dc.b afEnd
+		dc.w 7
+		dc.w id_frame_eegg_end1
+		dc.w id_frame_eegg_end2
+		dc.w id_frame_eegg_end3
+		dc.w id_frame_eegg_end2
+		dc.w id_frame_eegg_end1
+		dc.w id_frame_eegg_end2
+		dc.w id_frame_eegg_end3
+		dc.w id_frame_eegg_end2
+		dc.w id_frame_eegg_end1
+		dc.w id_frame_eegg_end2
+		dc.w id_frame_eegg_end3
+		dc.w id_frame_eegg_end2
+		dc.w id_frame_eegg_end4
+		dc.w id_frame_eegg_end2
+		dc.w id_frame_eegg_end3
+		dc.w id_frame_eegg_end2
+		dc.w afEnd
 		even

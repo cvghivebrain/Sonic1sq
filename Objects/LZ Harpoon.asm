@@ -70,26 +70,26 @@ Ani_Harp:	index *
 		ptr ani_harp_v_retracting
 		
 ani_harp_h_extending:
-		dc.b 3
-		dc.b id_frame_harp_h_middle
-		dc.b id_frame_harp_h_extended
-		dc.b afRoutine
+		dc.w 3
+		dc.w id_frame_harp_h_middle
+		dc.w id_frame_harp_h_extended
+		dc.w afRoutine
 
 ani_harp_h_retracting:
-		dc.b 3
-		dc.b id_frame_harp_h_middle
-		dc.b id_frame_harp_h_retracted
-		dc.b afRoutine
+		dc.w 3
+		dc.w id_frame_harp_h_middle
+		dc.w id_frame_harp_h_retracted
+		dc.w afRoutine
 
 ani_harp_v_extending:
-		dc.b 3
-		dc.b id_frame_harp_v_middle
-		dc.b id_frame_harp_v_extended
-		dc.b afRoutine
+		dc.w 3
+		dc.w id_frame_harp_v_middle
+		dc.w id_frame_harp_v_extended
+		dc.w afRoutine
 
 ani_harp_v_retracting:
-		dc.b 3
-		dc.b id_frame_harp_v_middle
-		dc.b id_frame_harp_v_retracted
-		dc.b afRoutine
+		dc.w 3
+		dc.w id_frame_harp_v_middle
+		dc.w id_frame_harp_v_retracted
+		dc.w afRoutine
 		even

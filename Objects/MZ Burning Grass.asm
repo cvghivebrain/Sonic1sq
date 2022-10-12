@@ -96,10 +96,10 @@ GFire_Animate:
 Ani_GFire:	index *
 		ptr ani_gfire_0
 		
-ani_gfire_0:	dc.b 5
-		dc.b id_frame_fire_vertical1
-		dc.b id_frame_fire_vertical1+afxflip
-		dc.b id_frame_fire_vertical2
-		dc.b id_frame_fire_vertical2+afxflip
-		dc.b afEnd
+ani_gfire_0:	dc.w 5
+		dc.w id_frame_fire_vertical1
+		dc.w id_frame_fire_vertical1+afxflip
+		dc.w id_frame_fire_vertical2
+		dc.w id_frame_fire_vertical2+afxflip
+		dc.w afEnd
 		even

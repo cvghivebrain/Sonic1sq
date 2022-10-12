@@ -180,19 +180,19 @@ Ani_Roll:	index *
 		ptr ani_roll_roll
 		
 ani_roll_unfold:
-		dc.b $F
-		dc.b id_frame_roll_roll1
-		dc.b id_frame_roll_fold
-		dc.b id_frame_roll_stand
-		dc.b afBack, 1
-ani_roll_fold:	dc.b $F
-		dc.b id_frame_roll_fold
-		dc.b id_frame_roll_roll1
-		dc.b afChange, id_ani_roll_roll
+		dc.w $F
+		dc.w id_frame_roll_roll1
+		dc.w id_frame_roll_fold
+		dc.w id_frame_roll_stand
+		dc.w afBack, 1
+ani_roll_fold:	dc.w $F
+		dc.w id_frame_roll_fold
+		dc.w id_frame_roll_roll1
+		dc.w afChange, id_ani_roll_roll
 		even
-ani_roll_roll:	dc.b 3
-		dc.b id_frame_roll_roll2
-		dc.b id_frame_roll_roll3
-		dc.b id_frame_roll_roll1
-		dc.b afEnd
+ani_roll_roll:	dc.w 3
+		dc.w id_frame_roll_roll2
+		dc.w id_frame_roll_roll3
+		dc.w id_frame_roll_roll1
+		dc.w afEnd
 		even

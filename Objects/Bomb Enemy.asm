@@ -207,34 +207,34 @@ Ani_Bomb:	index *
 		ptr ani_bomb_shrapnel
 		
 ani_bomb_stand:
-		dc.b $13
-		dc.b id_frame_bomb_stand2
-		dc.b id_frame_bomb_stand1
-		dc.b afEnd
+		dc.w $13
+		dc.w id_frame_bomb_stand2
+		dc.w id_frame_bomb_stand1
+		dc.w afEnd
 
 ani_bomb_walk:
-		dc.b $13
-		dc.b id_frame_bomb_walk4
-		dc.b id_frame_bomb_walk3
-		dc.b id_frame_bomb_walk2
-		dc.b id_frame_bomb_walk1
-		dc.b afEnd
+		dc.w $13
+		dc.w id_frame_bomb_walk4
+		dc.w id_frame_bomb_walk3
+		dc.w id_frame_bomb_walk2
+		dc.w id_frame_bomb_walk1
+		dc.w afEnd
 
 ani_bomb_active:
-		dc.b $13
-		dc.b id_frame_bomb_activate2
-		dc.b id_frame_bomb_activate1
-		dc.b afEnd
+		dc.w $13
+		dc.w id_frame_bomb_activate2
+		dc.w id_frame_bomb_activate1
+		dc.w afEnd
 
 ani_bomb_fuse:
-		dc.b 3
-		dc.b id_frame_bomb_fuse1
-		dc.b id_frame_bomb_fuse2
-		dc.b afEnd
+		dc.w 3
+		dc.w id_frame_bomb_fuse1
+		dc.w id_frame_bomb_fuse2
+		dc.w afEnd
 
 ani_bomb_shrapnel:
-		dc.b 3
-		dc.b id_frame_bomb_shrapnel1
-		dc.b id_frame_bomb_shrapnel2
-		dc.b afEnd
+		dc.w 3
+		dc.w id_frame_bomb_shrapnel1
+		dc.w id_frame_bomb_shrapnel2
+		dc.w afEnd
 		even

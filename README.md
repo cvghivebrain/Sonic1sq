@@ -7,7 +7,7 @@ _Sonic 1-squared_ is an enhanced version of the original _Sonic the Hedgehog_ ga
 * Modified the way animation works to save 2 bytes in RAM per object. The high bit of ost_anim now serves as an update flag instead of ost_anim_restart.
 * Object scratch RAM is assigned automatically with __rsobj__ macro. If you attempt to use more RAM than is available ($40 bytes), assembly will fail.
 * ost_id is now a longword pointer instead of a single byte (as is the case in _Sonic 3 & Knuckles_). This allows for unlimited object types, and slightly improves performance.
-* ost_frame extended to a word (ost_frame_hi), allowing Sonic to have up to 32,768 distinct frames of animation. Normal objects using AnimateSprite are still limited to 32.
+* ost_frame extended to a word (ost_frame_hi), allowing objects to have up to 8,192 distinct frames of animation.
 * LoadPerZone subroutine consolidates all pointers and parameters for zones and acts. This simplifies the process of adding levels. (incomplete)
 * LoadPerCharacter subroutine does the same for the Sonic object, palette and life icon, allowing for extra characters.
 * LoadPerDemo loads the level number, demo data, character and start position for all demos, including those during the credits.

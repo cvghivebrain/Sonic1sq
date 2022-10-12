@@ -191,48 +191,48 @@ Ani_Geyser:	index *
 		ptr ani_geyser_bubble4
 		
 ani_geyser_bubble1:
-		dc.b 2
-		dc.b id_frame_geyser_bubble1
-		dc.b id_frame_geyser_bubble2
-		dc.b id_frame_geyser_bubble1
-		dc.b id_frame_geyser_bubble2
-		dc.b id_frame_geyser_bubble5
-		dc.b id_frame_geyser_bubble6
-		dc.b id_frame_geyser_bubble5
-		dc.b id_frame_geyser_bubble6
-		dc.b afRoutine
+		dc.w 2
+		dc.w id_frame_geyser_bubble1
+		dc.w id_frame_geyser_bubble2
+		dc.w id_frame_geyser_bubble1
+		dc.w id_frame_geyser_bubble2
+		dc.w id_frame_geyser_bubble5
+		dc.w id_frame_geyser_bubble6
+		dc.w id_frame_geyser_bubble5
+		dc.w id_frame_geyser_bubble6
+		dc.w afRoutine
 
 ani_geyser_bubble2:
-		dc.b 2
-		dc.b id_frame_geyser_bubble3
-		dc.b id_frame_geyser_bubble4
-		dc.b afEnd
+		dc.w 2
+		dc.w id_frame_geyser_bubble3
+		dc.w id_frame_geyser_bubble4
+		dc.w afEnd
 
 ani_geyser_end:
-		dc.b 2
-		dc.b id_frame_geyser_end1
-		dc.b id_frame_geyser_end2
-		dc.b afEnd
+		dc.w 2
+		dc.w id_frame_geyser_end1
+		dc.w id_frame_geyser_end2
+		dc.w afEnd
 
 ani_geyser_bubble3:
-		dc.b 2
-		dc.b id_frame_geyser_bubble3
-		dc.b id_frame_geyser_bubble4
-		dc.b id_frame_geyser_bubble1
-		dc.b id_frame_geyser_bubble2
-		dc.b id_frame_geyser_bubble1
-		dc.b id_frame_geyser_bubble2
-		dc.b afRoutine
+		dc.w 2
+		dc.w id_frame_geyser_bubble3
+		dc.w id_frame_geyser_bubble4
+		dc.w id_frame_geyser_bubble1
+		dc.w id_frame_geyser_bubble2
+		dc.w id_frame_geyser_bubble1
+		dc.w id_frame_geyser_bubble2
+		dc.w afRoutine
 
 ani_geyser_blank:
-		dc.b $F
-		dc.b id_frame_geyser_blank
-		dc.b afEnd
+		dc.w $F
+		dc.w id_frame_geyser_blank
+		dc.w afEnd
 		even
 
 ani_geyser_bubble4:
-		dc.b 2
-		dc.b id_frame_geyser_bubble7
-		dc.b id_frame_geyser_bubble8
-		dc.b afEnd
+		dc.w 2
+		dc.w id_frame_geyser_bubble7
+		dc.w id_frame_geyser_bubble8
+		dc.w afEnd
 		even

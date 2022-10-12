@@ -318,8 +318,8 @@ afChange:	equ -id_Anim_Flag_Change			; run specified animation
 afRoutine:	equ -id_Anim_Flag_Routine			; increment routine counter
 afReset:	equ -id_Anim_Flag_Restart2			; reset animation and 2nd object routine counter
 af2ndRoutine:	equ -id_Anim_Flag_Routine2			; increment 2nd routine counter
-afxflip:	equ $20
-afyflip:	equ $40
+afxflip:	equ $2000
+afyflip:	equ $4000
 
 ; 16x16 row/column redraw flags (v_fg_redraw_direction)
 redraw_top:		equ 1

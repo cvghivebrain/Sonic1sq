@@ -190,29 +190,29 @@ Ani_Fire:	index *
 		ptr ani_fire_horicollide
 		
 ani_fire_vertical:
-		dc.b 5
-		dc.b id_frame_fire_vertical1
-		dc.b id_frame_fire_vertical1+afxflip
-		dc.b id_frame_fire_vertical2
-		dc.b id_frame_fire_vertical2+afxflip
-		dc.b afEnd
+		dc.w 5
+		dc.w id_frame_fire_vertical1
+		dc.w id_frame_fire_vertical1+afxflip
+		dc.w id_frame_fire_vertical2
+		dc.w id_frame_fire_vertical2+afxflip
+		dc.w afEnd
 
 ani_fire_vertcollide:
-		dc.b 5
-		dc.b id_frame_fire_vertcollide
-		dc.b afRoutine
+		dc.w 5
+		dc.w id_frame_fire_vertcollide
+		dc.w afRoutine
 		even
 
 ani_fire_horizontal:
-		dc.b 5
-		dc.b id_frame_fire_horizontal1
-		dc.b id_frame_fire_horizontal1+afyflip
-		dc.b id_frame_fire_horizontal2
-		dc.b id_frame_fire_horizontal2+afyflip
-		dc.b afEnd
+		dc.w 5
+		dc.w id_frame_fire_horizontal1
+		dc.w id_frame_fire_horizontal1+afyflip
+		dc.w id_frame_fire_horizontal2
+		dc.w id_frame_fire_horizontal2+afyflip
+		dc.w afEnd
 
 ani_fire_horicollide:
-		dc.b 5
-		dc.b id_frame_fire_horicollide
-		dc.b afRoutine
+		dc.w 5
+		dc.w id_frame_fire_horicollide
+		dc.w afRoutine
 		even

@@ -147,58 +147,58 @@ Ani_Spin:	index *
 		ptr ani_spin_2
 		
 ani_spin_trapopen:
-		dc.b 3
-		dc.b id_frame_trap_closed
-		dc.b id_frame_trap_half
-		dc.b id_frame_trap_open
-		dc.b afBack, 1
+		dc.w 3
+		dc.w id_frame_trap_closed
+		dc.w id_frame_trap_half
+		dc.w id_frame_trap_open
+		dc.w afBack, 1
 
 ani_spin_trapclose:
-		dc.b 3
-		dc.b id_frame_trap_open
-		dc.b id_frame_trap_half
-		dc.b id_frame_trap_closed
-		dc.b afBack, 1
+		dc.w 3
+		dc.w id_frame_trap_open
+		dc.w id_frame_trap_half
+		dc.w id_frame_trap_closed
+		dc.w afBack, 1
 
 ani_spin_1:
-		dc.b 1
-		dc.b id_frame_spin_flat
-		dc.b id_frame_spin_1
-		dc.b id_frame_spin_2
-		dc.b id_frame_spin_3
-		dc.b id_frame_spin_4
-		dc.b id_frame_spin_3+afyflip
-		dc.b id_frame_spin_2+afyflip
-		dc.b id_frame_spin_1+afyflip
-		dc.b id_frame_spin_flat+afyflip
-		dc.b id_frame_spin_1+afxflip+afyflip
-		dc.b id_frame_spin_2+afxflip+afyflip
-		dc.b id_frame_spin_3+afxflip+afyflip
-		dc.b id_frame_spin_4+afxflip+afyflip
-		dc.b id_frame_spin_3+afxflip
-		dc.b id_frame_spin_2+afxflip
-		dc.b id_frame_spin_1+afxflip
-		dc.b id_frame_spin_flat
-		dc.b afBack, 1
+		dc.w 1
+		dc.w id_frame_spin_flat
+		dc.w id_frame_spin_1
+		dc.w id_frame_spin_2
+		dc.w id_frame_spin_3
+		dc.w id_frame_spin_4
+		dc.w id_frame_spin_3+afyflip
+		dc.w id_frame_spin_2+afyflip
+		dc.w id_frame_spin_1+afyflip
+		dc.w id_frame_spin_flat+afyflip
+		dc.w id_frame_spin_1+afxflip+afyflip
+		dc.w id_frame_spin_2+afxflip+afyflip
+		dc.w id_frame_spin_3+afxflip+afyflip
+		dc.w id_frame_spin_4+afxflip+afyflip
+		dc.w id_frame_spin_3+afxflip
+		dc.w id_frame_spin_2+afxflip
+		dc.w id_frame_spin_1+afxflip
+		dc.w id_frame_spin_flat
+		dc.w afBack, 1
 
 ani_spin_2:
-		dc.b 1
-		dc.b id_frame_spin_flat
-		dc.b id_frame_spin_1
-		dc.b id_frame_spin_2
-		dc.b id_frame_spin_3
-		dc.b id_frame_spin_4
-		dc.b id_frame_spin_3+afyflip
-		dc.b id_frame_spin_2+afyflip
-		dc.b id_frame_spin_1+afyflip
-		dc.b id_frame_spin_flat+afyflip
-		dc.b id_frame_spin_1+afxflip+afyflip
-		dc.b id_frame_spin_2+afxflip+afyflip
-		dc.b id_frame_spin_3+afxflip+afyflip
-		dc.b id_frame_spin_4+afxflip+afyflip
-		dc.b id_frame_spin_3+afxflip
-		dc.b id_frame_spin_2+afxflip
-		dc.b id_frame_spin_1+afxflip
-		dc.b id_frame_spin_flat
-		dc.b afBack, 1
+		dc.w 1
+		dc.w id_frame_spin_flat
+		dc.w id_frame_spin_1
+		dc.w id_frame_spin_2
+		dc.w id_frame_spin_3
+		dc.w id_frame_spin_4
+		dc.w id_frame_spin_3+afyflip
+		dc.w id_frame_spin_2+afyflip
+		dc.w id_frame_spin_1+afyflip
+		dc.w id_frame_spin_flat+afyflip
+		dc.w id_frame_spin_1+afxflip+afyflip
+		dc.w id_frame_spin_2+afxflip+afyflip
+		dc.w id_frame_spin_3+afxflip+afyflip
+		dc.w id_frame_spin_4+afxflip+afyflip
+		dc.w id_frame_spin_3+afxflip
+		dc.w id_frame_spin_2+afxflip
+		dc.w id_frame_spin_1+afxflip
+		dc.w id_frame_spin_flat
+		dc.w afBack, 1
 		even

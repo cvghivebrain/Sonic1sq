@@ -194,13 +194,13 @@ Ani_Orb:	index *
 		ptr ani_orb_normal
 		ptr ani_orb_angry
 		
-ani_orb_normal:	dc.b $F
-		dc.b id_frame_orb_normal
-		dc.b afEnd
+ani_orb_normal:	dc.w $F
+		dc.w id_frame_orb_normal
+		dc.w afEnd
 		even
 
-ani_orb_angry:	dc.b $F
-		dc.b id_frame_orb_medium
-		dc.b id_frame_orb_angry
-		dc.b afBack, 1
+ani_orb_angry:	dc.w $F
+		dc.w id_frame_orb_medium
+		dc.w id_frame_orb_angry
+		dc.w afBack, 1
 		even

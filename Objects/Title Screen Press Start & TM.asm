@@ -50,8 +50,8 @@ PSB_Animate:	; Routine 2
 Ani_PSB:	index *
 		ptr ani_psb_flash
 		
-ani_psb_flash:	dc.b $1F
-		dc.b id_frame_psb_blank
-		dc.b id_frame_psb_psb
-		dc.b afEnd
+ani_psb_flash:	dc.w $1F
+		dc.w id_frame_psb_blank
+		dc.w id_frame_psb_psb
+		dc.w afEnd
 		even

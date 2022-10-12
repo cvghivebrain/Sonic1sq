@@ -133,10 +133,10 @@ LWall_Delete:	; Routine 8
 Ani_LWall:	index *
 		ptr ani_lavawall_0
 		
-ani_lavawall_0:	dc.b 9
-		dc.b id_frame_lavawall_0
-		dc.b id_frame_lavawall_1
-		dc.b id_frame_lavawall_2
-		dc.b id_frame_lavawall_3
-		dc.b afEnd
+ani_lavawall_0:	dc.w 9
+		dc.w id_frame_lavawall_0
+		dc.w id_frame_lavawall_1
+		dc.w id_frame_lavawall_2
+		dc.w id_frame_lavawall_3
+		dc.w afEnd
 		even

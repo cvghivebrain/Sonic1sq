@@ -194,10 +194,10 @@ Ani_Ball:	index *
 		ptr ani_ball_boss
 		
 ani_ball_boss:
-		dc.b 0
-		dc.b id_frame_ball_shiny
-		dc.b id_frame_ball_check1
-		dc.b afEnd
+		dc.w 0
+		dc.w id_frame_ball_shiny
+		dc.w id_frame_ball_check1
+		dc.w afEnd
 		even
 
 ; ---------------------------------------------------------------------------

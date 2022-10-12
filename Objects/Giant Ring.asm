@@ -81,10 +81,10 @@ Ani_BigRing:	index *
 		ptr ani_bigring_0
 		
 ani_bigring_0:
-		dc.b 7
-		dc.b id_frame_bigring_front
-		dc.b id_frame_bigring_45_1
-		dc.b id_frame_bigring_side
-		dc.b id_frame_bigring_45_2
-		dc.b afEnd
+		dc.w 7
+		dc.w id_frame_bigring_front
+		dc.w id_frame_bigring_45_1
+		dc.w id_frame_bigring_side
+		dc.w id_frame_bigring_45_2
+		dc.w afEnd
 		even

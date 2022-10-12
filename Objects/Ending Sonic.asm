@@ -136,39 +136,39 @@ Ani_ESon:	index *
 		ptr ani_esonic_leap
 
 ani_esonic_hold:
-		dc.b 3
-		dc.b id_frame_esonic_hold2
-		dc.b id_frame_esonic_hold1
-		dc.b id_frame_esonic_hold2
-		dc.b id_frame_esonic_hold1
-		dc.b id_frame_esonic_hold2
-		dc.b id_frame_esonic_hold1
-		dc.b id_frame_esonic_hold2
-		dc.b id_frame_esonic_hold1
-		dc.b id_frame_esonic_hold2
-		dc.b id_frame_esonic_hold1
-		dc.b id_frame_esonic_hold2
-		dc.b id_frame_esonic_up
-		dc.b af2ndRoutine
+		dc.w 3
+		dc.w id_frame_esonic_hold2
+		dc.w id_frame_esonic_hold1
+		dc.w id_frame_esonic_hold2
+		dc.w id_frame_esonic_hold1
+		dc.w id_frame_esonic_hold2
+		dc.w id_frame_esonic_hold1
+		dc.w id_frame_esonic_hold2
+		dc.w id_frame_esonic_hold1
+		dc.w id_frame_esonic_hold2
+		dc.w id_frame_esonic_hold1
+		dc.w id_frame_esonic_hold2
+		dc.w id_frame_esonic_up
+		dc.w af2ndRoutine
 
 ani_esonic_confused:
-		dc.b 5
-		dc.b id_frame_esonic_confused1
-		dc.b id_frame_esonic_confused2
-		dc.b id_frame_esonic_confused1
-		dc.b id_frame_esonic_confused2
-		dc.b id_frame_esonic_confused1
-		dc.b id_frame_esonic_confused2
-		dc.b id_frame_esonic_confused1
-		dc.b af2ndRoutine
+		dc.w 5
+		dc.w id_frame_esonic_confused1
+		dc.w id_frame_esonic_confused2
+		dc.w id_frame_esonic_confused1
+		dc.w id_frame_esonic_confused2
+		dc.w id_frame_esonic_confused1
+		dc.w id_frame_esonic_confused2
+		dc.w id_frame_esonic_confused1
+		dc.w af2ndRoutine
 		even
 
 ani_esonic_leap:
-		dc.b 3
-		dc.b id_frame_esonic_leap1
-		dc.b id_frame_esonic_leap1
-		dc.b id_frame_esonic_leap1
-		dc.b id_frame_esonic_leap2
-		dc.b id_frame_esonic_leap3
-		dc.b afBack, 1
+		dc.w 3
+		dc.w id_frame_esonic_leap1
+		dc.w id_frame_esonic_leap1
+		dc.w id_frame_esonic_leap1
+		dc.w id_frame_esonic_leap2
+		dc.w id_frame_esonic_leap3
+		dc.w afBack, 1
 		even

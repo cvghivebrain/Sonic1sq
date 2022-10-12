@@ -209,29 +209,29 @@ Ani_Sign:	index *
 		ptr ani_sign_sonic
 		
 ani_sign_eggman:
-		dc.b $F
-		dc.b id_frame_sign_eggman
-		dc.b afEnd
+		dc.w $F
+		dc.w id_frame_sign_eggman
+		dc.w afEnd
 		even
 
 ani_sign_spin1:
-		dc.b 1
-		dc.b id_frame_sign_eggman
-		dc.b id_frame_sign_spin1
-		dc.b id_frame_sign_spin2
-		dc.b id_frame_sign_spin3
-		dc.b afEnd
+		dc.w 1
+		dc.w id_frame_sign_eggman
+		dc.w id_frame_sign_spin1
+		dc.w id_frame_sign_spin2
+		dc.w id_frame_sign_spin3
+		dc.w afEnd
 
 ani_sign_spin2:
-		dc.b 1
-		dc.b id_frame_sign_sonic
-		dc.b id_frame_sign_spin1
-		dc.b id_frame_sign_spin2
-		dc.b id_frame_sign_spin3
-		dc.b afEnd
+		dc.w 1
+		dc.w id_frame_sign_sonic
+		dc.w id_frame_sign_spin1
+		dc.w id_frame_sign_spin2
+		dc.w id_frame_sign_spin3
+		dc.w afEnd
 
 ani_sign_sonic:
-		dc.b $F
-		dc.b id_frame_sign_sonic
-		dc.b afEnd
+		dc.w $F
+		dc.w id_frame_sign_sonic
+		dc.w afEnd
 		even

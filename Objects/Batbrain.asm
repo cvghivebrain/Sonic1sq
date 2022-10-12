@@ -148,20 +148,20 @@ Ani_Bat:	index *
 		ptr ani_bat_drop
 		ptr ani_bat_fly
 		
-ani_bat_hang:	dc.b $F
-		dc.b id_frame_bat_hanging
-		dc.b afEnd
+ani_bat_hang:	dc.w $F
+		dc.w id_frame_bat_hanging
+		dc.w afEnd
 		even
 
-ani_bat_drop:	dc.b $F
-		dc.b id_frame_bat_fly1
-		dc.b afEnd
+ani_bat_drop:	dc.w $F
+		dc.w id_frame_bat_fly1
+		dc.w afEnd
 		even
 
-ani_bat_fly:	dc.b 3
-		dc.b id_frame_bat_fly1
-		dc.b id_frame_bat_fly2
-		dc.b id_frame_bat_fly3
-		dc.b id_frame_bat_fly2
-		dc.b afEnd
+ani_bat_fly:	dc.w 3
+		dc.w id_frame_bat_fly1
+		dc.w id_frame_bat_fly2
+		dc.w id_frame_bat_fly3
+		dc.w id_frame_bat_fly2
+		dc.w afEnd
 		even

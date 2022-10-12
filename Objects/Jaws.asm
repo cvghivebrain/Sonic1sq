@@ -64,10 +64,10 @@ Jaws_Turn:	; Routine 2
 Ani_Jaws:	index *
 		ptr ani_jaws_swim
 		
-ani_jaws_swim:	dc.b 7
-		dc.b id_frame_jaws_open1
-		dc.b id_frame_jaws_shut1
-		dc.b id_frame_jaws_open2
-		dc.b id_frame_jaws_shut2
-		dc.b afEnd
+ani_jaws_swim:	dc.w 7
+		dc.w id_frame_jaws_open1
+		dc.w id_frame_jaws_shut1
+		dc.w id_frame_jaws_open2
+		dc.w id_frame_jaws_shut2
+		dc.w afEnd
 		even

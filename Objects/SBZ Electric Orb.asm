@@ -62,25 +62,25 @@ Ani_Elec:	index *
 		ptr ani_electro_zap
 		
 ani_electro_normal:
-		dc.b 7
-		dc.b id_frame_electro_normal
-		dc.b afEnd
+		dc.w 7
+		dc.w id_frame_electro_normal
+		dc.w afEnd
 		even
 
 ani_electro_zap:
-		dc.b 0
-		dc.b id_frame_electro_zap1
-		dc.b id_frame_electro_zap1
-		dc.b id_frame_electro_zap1
-		dc.b id_frame_electro_zap2
-		dc.b id_frame_electro_zap3
-		dc.b id_frame_electro_zap3
-		dc.b id_frame_electro_zap4
-		dc.b id_frame_electro_zap4
-		dc.b id_frame_electro_zap4
-		dc.b id_frame_electro_zap5
-		dc.b id_frame_electro_zap5
-		dc.b id_frame_electro_zap5
-		dc.b id_frame_electro_normal
-		dc.b afChange, id_ani_electro_normal
+		dc.w 0
+		dc.w id_frame_electro_zap1
+		dc.w id_frame_electro_zap1
+		dc.w id_frame_electro_zap1
+		dc.w id_frame_electro_zap2
+		dc.w id_frame_electro_zap3
+		dc.w id_frame_electro_zap3
+		dc.w id_frame_electro_zap4
+		dc.w id_frame_electro_zap4
+		dc.w id_frame_electro_zap4
+		dc.w id_frame_electro_zap5
+		dc.w id_frame_electro_zap5
+		dc.w id_frame_electro_zap5
+		dc.w id_frame_electro_normal
+		dc.w afChange, id_ani_electro_normal
 		even

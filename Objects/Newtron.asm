@@ -186,32 +186,32 @@ Ani_Newt:	index *
 		ptr ani_newt_fly2
 		ptr ani_newt_firing
 		
-ani_newt_blank:		dc.b $F
-			dc.b id_frame_newt_blank
-			dc.b afEnd
+ani_newt_blank:		dc.w $F
+			dc.w id_frame_newt_blank
+			dc.w afEnd
 			even
-ani_newt_drop:		dc.b $13
-			dc.b id_frame_newt_trans
-			dc.b id_frame_newt_norm
-			dc.b id_frame_newt_drop1
-			dc.b id_frame_newt_drop2
-			dc.b id_frame_newt_drop3
-			dc.b afBack, 1
-ani_newt_fly1:		dc.b 2
-			dc.b id_frame_newt_fly1a
-			dc.b id_frame_newt_fly1b
-			dc.b afEnd
-ani_newt_fly2:		dc.b 2
-			dc.b id_frame_newt_fly2a
-			dc.b id_frame_newt_fly2b
-			dc.b afEnd
-ani_newt_firing:	dc.b $13
-			dc.b id_frame_newt_trans
-			dc.b id_frame_newt_norm
-			dc.b id_frame_newt_norm
-			dc.b id_frame_newt_firing
-			dc.b id_frame_newt_norm
-			dc.b id_frame_newt_norm
-			dc.b id_frame_newt_trans
-			dc.b afRoutine
+ani_newt_drop:		dc.w $13
+			dc.w id_frame_newt_trans
+			dc.w id_frame_newt_norm
+			dc.w id_frame_newt_drop1
+			dc.w id_frame_newt_drop2
+			dc.w id_frame_newt_drop3
+			dc.w afBack, 1
+ani_newt_fly1:		dc.w 2
+			dc.w id_frame_newt_fly1a
+			dc.w id_frame_newt_fly1b
+			dc.w afEnd
+ani_newt_fly2:		dc.w 2
+			dc.w id_frame_newt_fly2a
+			dc.w id_frame_newt_fly2b
+			dc.w afEnd
+ani_newt_firing:	dc.w $13
+			dc.w id_frame_newt_trans
+			dc.w id_frame_newt_norm
+			dc.w id_frame_newt_norm
+			dc.w id_frame_newt_firing
+			dc.w id_frame_newt_norm
+			dc.w id_frame_newt_norm
+			dc.w id_frame_newt_trans
+			dc.w afRoutine
 			even

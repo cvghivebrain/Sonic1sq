@@ -220,8 +220,8 @@ Ani_Pri:	index *
 		ptr ani_prison_switchflash
 		
 ani_prison_switchflash:
-		dc.b 2
-		dc.b id_frame_prison_switch1
-		dc.b id_frame_prison_switch2
-		dc.b afEnd
+		dc.w 2
+		dc.w id_frame_prison_switch1
+		dc.w id_frame_prison_switch2
+		dc.w afEnd
 		even

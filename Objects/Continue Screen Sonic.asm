@@ -83,15 +83,15 @@ CSon_Run:	; Routine 6
 Ani_CSon:	index *
 		ptr ani_csonic_0
 
-ani_csonic_0:	dc.b 4
-		dc.b id_frame_cont_sonic1
-		dc.b id_frame_cont_sonic1
-		dc.b id_frame_cont_sonic1
-		dc.b id_frame_cont_sonic1
-		dc.b id_frame_cont_sonic2
-		dc.b id_frame_cont_sonic2
-		dc.b id_frame_cont_sonic2
-		dc.b id_frame_cont_sonic3
-		dc.b id_frame_cont_sonic3
-		dc.b afEnd
+ani_csonic_0:	dc.w 4
+		dc.w id_frame_cont_sonic1
+		dc.w id_frame_cont_sonic1
+		dc.w id_frame_cont_sonic1
+		dc.w id_frame_cont_sonic1
+		dc.w id_frame_cont_sonic2
+		dc.w id_frame_cont_sonic2
+		dc.w id_frame_cont_sonic2
+		dc.w id_frame_cont_sonic3
+		dc.w id_frame_cont_sonic3
+		dc.w afEnd
 		even

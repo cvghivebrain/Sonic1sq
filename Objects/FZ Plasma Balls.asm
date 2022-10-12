@@ -222,27 +222,27 @@ Ani_PLaunch:	index *
 		ptr ani_plaunch_whitesparking
 		
 ani_plaunch_red:
-		dc.b $7E
-		dc.b id_frame_plaunch_red
-		dc.b afEnd
+		dc.w $7E
+		dc.w id_frame_plaunch_red
+		dc.w afEnd
 		even
 
 ani_plaunch_redsparking:
-		dc.b 1
-		dc.b id_frame_plaunch_red
-		dc.b id_frame_plaunch_sparking1
-		dc.b id_frame_plaunch_red
-		dc.b id_frame_plaunch_sparking2
-		dc.b afEnd
+		dc.w 1
+		dc.w id_frame_plaunch_red
+		dc.w id_frame_plaunch_sparking1
+		dc.w id_frame_plaunch_red
+		dc.w id_frame_plaunch_sparking2
+		dc.w afEnd
 		even
 
 ani_plaunch_whitesparking:
-		dc.b 1
-		dc.b id_frame_plaunch_white
-		dc.b id_frame_plaunch_sparking1
-		dc.b id_frame_plaunch_white
-		dc.b id_frame_plaunch_sparking2
-		dc.b afEnd
+		dc.w 1
+		dc.w id_frame_plaunch_white
+		dc.w id_frame_plaunch_sparking1
+		dc.w id_frame_plaunch_white
+		dc.w id_frame_plaunch_sparking2
+		dc.w afEnd
 		even
 
 Ani_Plasma:	index *
@@ -250,50 +250,50 @@ Ani_Plasma:	index *
 		ptr ani_plasma_short
 		
 ani_plasma_full:
-		dc.b 1
-		dc.b id_frame_plasma_fuzzy1
-		dc.b id_frame_plasma_blank
-		dc.b id_frame_plasma_fuzzy5
-		dc.b id_frame_plasma_blank
-		dc.b id_frame_plasma_fuzzy2
-		dc.b id_frame_plasma_blank
-		dc.b id_frame_plasma_fuzzy6
-		dc.b id_frame_plasma_blank
-		dc.b id_frame_plasma_fuzzy3
-		dc.b id_frame_plasma_blank
-		dc.b id_frame_plasma_fuzzy4
-		dc.b id_frame_plasma_blank
-		dc.b id_frame_plasma_fuzzy1
-		dc.b id_frame_plasma_blank
-		dc.b id_frame_plasma_fuzzy5
-		dc.b id_frame_plasma_blank
-		dc.b id_frame_plasma_fuzzy2
-		dc.b id_frame_plasma_blank
-		dc.b id_frame_plasma_fuzzy6
-		dc.b id_frame_plasma_blank
-		dc.b id_frame_plasma_fuzzy3
-		dc.b id_frame_plasma_blank
-		dc.b id_frame_plasma_fuzzy4
-		dc.b id_frame_plasma_blank
-		dc.b id_frame_plasma_white1
-		dc.b id_frame_plasma_blank
-		dc.b id_frame_plasma_white2
-		dc.b id_frame_plasma_blank
-		dc.b id_frame_plasma_white3
-		dc.b id_frame_plasma_blank
-		dc.b id_frame_plasma_white4
-		dc.b afEnd
+		dc.w 1
+		dc.w id_frame_plasma_fuzzy1
+		dc.w id_frame_plasma_blank
+		dc.w id_frame_plasma_fuzzy5
+		dc.w id_frame_plasma_blank
+		dc.w id_frame_plasma_fuzzy2
+		dc.w id_frame_plasma_blank
+		dc.w id_frame_plasma_fuzzy6
+		dc.w id_frame_plasma_blank
+		dc.w id_frame_plasma_fuzzy3
+		dc.w id_frame_plasma_blank
+		dc.w id_frame_plasma_fuzzy4
+		dc.w id_frame_plasma_blank
+		dc.w id_frame_plasma_fuzzy1
+		dc.w id_frame_plasma_blank
+		dc.w id_frame_plasma_fuzzy5
+		dc.w id_frame_plasma_blank
+		dc.w id_frame_plasma_fuzzy2
+		dc.w id_frame_plasma_blank
+		dc.w id_frame_plasma_fuzzy6
+		dc.w id_frame_plasma_blank
+		dc.w id_frame_plasma_fuzzy3
+		dc.w id_frame_plasma_blank
+		dc.w id_frame_plasma_fuzzy4
+		dc.w id_frame_plasma_blank
+		dc.w id_frame_plasma_white1
+		dc.w id_frame_plasma_blank
+		dc.w id_frame_plasma_white2
+		dc.w id_frame_plasma_blank
+		dc.w id_frame_plasma_white3
+		dc.w id_frame_plasma_blank
+		dc.w id_frame_plasma_white4
+		dc.w afEnd
 		even
 
 ani_plasma_short:
-		dc.b 0
-		dc.b id_frame_plasma_fuzzy3
-		dc.b id_frame_plasma_white4
-		dc.b id_frame_plasma_fuzzy2
-		dc.b id_frame_plasma_white4
-		dc.b id_frame_plasma_fuzzy4
-		dc.b id_frame_plasma_white4
-		dc.b id_frame_plasma_fuzzy2
-		dc.b id_frame_plasma_white4
-		dc.b afEnd
+		dc.w 0
+		dc.w id_frame_plasma_fuzzy3
+		dc.w id_frame_plasma_white4
+		dc.w id_frame_plasma_fuzzy2
+		dc.w id_frame_plasma_white4
+		dc.w id_frame_plasma_fuzzy4
+		dc.w id_frame_plasma_white4
+		dc.w id_frame_plasma_fuzzy2
+		dc.w id_frame_plasma_white4
+		dc.w afEnd
 		even

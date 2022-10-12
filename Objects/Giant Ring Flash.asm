@@ -80,14 +80,14 @@ Ani_Flash:	index *
 		ptr ani_flash_0
 		
 ani_flash_0:
-		dc.b 1
-		dc.b id_frame_flash_0
-		dc.b id_frame_flash_1
-		dc.b id_frame_flash_2
-		dc.b id_frame_flash_full
-		dc.b id_frame_flash_4
-		dc.b id_frame_flash_5
-		dc.b id_frame_flash_6
-		dc.b id_frame_flash_final
-		dc.b af2ndRoutine
+		dc.w 1
+		dc.w id_frame_flash_0
+		dc.w id_frame_flash_1
+		dc.w id_frame_flash_2
+		dc.w id_frame_flash_full
+		dc.w id_frame_flash_4
+		dc.w id_frame_flash_5
+		dc.w id_frame_flash_6
+		dc.w id_frame_flash_final
+		dc.w af2ndRoutine
 		even
