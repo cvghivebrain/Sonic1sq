@@ -2,12 +2,13 @@
 ; Subroutine to jump to data immediately after sprite mappings
 
 ; input:
-;	d0 = frame number
+;	d0.w = frame number
 ;	a2 = address of mappings (e.g. Map_Sonic)
 
 ; output:
 ;	a2 = address of data after mappings
-;	uses d0, d2
+
+;	uses d0.w, d2.w
 ; ---------------------------------------------------------------------------
 
 SkipMappings:

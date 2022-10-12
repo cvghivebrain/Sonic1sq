@@ -6,12 +6,17 @@
 
 ; output:
 ;	a1 = animation script (e.g. ani_crab_stand)
-;	uses d0, d1
+
+;	uses d0.l, d1.l
+
+; usage:
+;		lea	(Ani_Hog).l,a1
+;		bsr.w	AnimateSprite
 ; ---------------------------------------------------------------------------
 
 AnimateSprite:
 		moveq	#0,d0
-		move.b	ost_anim(a0),d0				; move animation number	to d0
+		move.b	ost_anim(a0),d0				; get animation number
 		btst	#7,d0					; is animation set to restart?
 		bne.s	Anim_Run				; if not, branch
 
@@ -29,7 +34,7 @@ Anim_Run:
 		moveq	#0,d1
 		move.b	ost_anim_frame(a0),d1			; load current frame number
 		move.b	1(a1,d1.w),d0				; read sprite number from script
-		bmi.s	Anim_End_FF				; if animation is complete, branch
+		bmi.s	Anim_Flag				; branch if an animation flag is found
 
 Anim_Next:
 		move.b	d0,d1					; copy full frame info to d1
@@ -47,17 +52,29 @@ Anim_Wait:
 		rts	
 ; ===========================================================================
 
-Anim_End_FF:
-		addq.b	#1,d0					; is the end flag = $FF	?
-		bne.s	Anim_End_FE				; if not, branch
+Anim_Flag:
+		neg.b	d0
+		subq.b	#2,d0					; flags start at 2
+		move.w	Anim_Flag_Index(pc,d0.w),d0
+		jmp	Anim_Flag_Index(pc,d0.w)
+; ===========================================================================
+Anim_Flag_Index:
+		index *,2,2
+		ptr Anim_Flag_Restart
+		ptr Anim_Flag_Back
+		ptr Anim_Flag_Change
+		ptr Anim_Flag_Routine
+		ptr Anim_Flag_Restart2
+		ptr Anim_Flag_Routine2		
+; ===========================================================================
+
+Anim_Flag_Restart:
 		move.b	#0,ost_anim_frame(a0)			; restart the animation
 		move.b	1(a1),d0				; read sprite number
 		bra.s	Anim_Next
 ; ===========================================================================
 
-Anim_End_FE:
-		addq.b	#1,d0					; is the end flag = $FE	?
-		bne.s	Anim_End_FD				; if not, branch
+Anim_Flag_Back:
 		move.b	2(a1,d1.w),d0				; read the next	byte in	the script
 		sub.b	d0,ost_anim_frame(a0)			; jump back d0 bytes in the script
 		sub.b	d0,d1
@@ -65,38 +82,35 @@ Anim_End_FE:
 		bra.s	Anim_Next
 ; ===========================================================================
 
-Anim_End_FD:
-		addq.b	#1,d0					; is the end flag = $FD	?
-		bne.s	Anim_End_FC				; if not, branch
+Anim_Flag_Change:
 		move.b	2(a1,d1.w),ost_anim(a0)			; read next byte, run that animation
+		rts
 
-Anim_End_FC:
-		addq.b	#1,d0					; is the end flag = $FC	?
-		bne.s	Anim_End_FB				; if not, branch
+Anim_Flag_Routine:
 		addq.b	#2,ost_routine(a0)			; jump to next routine
+		rts
 
-Anim_End_FB:	; unused
-		addq.b	#1,d0					; is the end flag = $FB	?
-		bne.s	Anim_End_FA				; if not, branch
+Anim_Flag_Restart2:						; unused
 		move.b	#0,ost_anim_frame(a0)			; reset animation
 		clr.b	ost_routine2(a0)			; reset 2nd routine counter
+		rts
 
-Anim_End_FA:	; only used by EndSonic
-		addq.b	#1,d0					; is the end flag = $FA	?
-		bne.s	Anim_End				; if not, branch
+Anim_Flag_Routine2:						; only used by EndSonic
 		addq.b	#2,ost_routine2(a0)			; jump to next routine
-
-Anim_End:
 		rts
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	update the animation id of an object if it changes
 ;
 ; input:
-;	d0 = new animation id
+;	d0.b = new animation id
 
 ; output:
-;	d1 = previous animation id
+;	d1.b = previous animation id
+
+; usage:
+;		move.b	#id_ani_roll_roll,d0
+;		bsr.w	NewAnim
 ; ---------------------------------------------------------------------------
 
 NewAnim:
@@ -113,11 +127,17 @@ NewAnim:
 ; Subroutine to	run DPLC when an object's animation updates
 ;
 ; input:
-;	d1 = destination address (as DMA instruction)
+;	d1.l = destination address (as DMA instruction)
 ;	a1 = animation script (e.g. ani_crab_stand)
 
 ; output:
-;	uses d0, d1, d2, a1, a2
+;	uses d0.w, d1.l, d2.w, a1, a2
+
+; usage:
+;		lea	(Ani_BigRing).l,a1
+;		bsr.w	AnimateSprite				; update animation
+;		set_dma_dest vram_giantring,d1			; set VRAM address to write gfx
+;		jsr	DPLCSprite
 ; ---------------------------------------------------------------------------
 
 DPLCSprite:
@@ -127,7 +147,7 @@ DPLCSprite:
 		
 		move.w	ost_frame_hi(a0),d0			; get frame number
 		movea.l	ost_mappings(a0),a2			; get mappings pointer
-		bsr.w	SkipMappings				; jump to data after mappings
+		bsr.w	SkipMappings				; jump to data after mappings (where DPLCs are stored)
 		tst.w	d0
 		beq.s	.exit					; branch if mappings contained 0 pieces (i.e. blank)
 		jsr	AddDMA2					; add to DMA queue

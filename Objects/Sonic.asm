@@ -1536,7 +1536,7 @@ Sonic_Animate:
 ; ===========================================================================
 
 .end_FF:
-		addq.w	#1,d0					; is the end flag = $FFFF ?
+		addq.w	#2,d0					; is the end flag = $FFFF ?
 		bne.s	.end_FE					; if not, branch
 		move.b	#0,ost_anim_frame(a0)			; restart the animation
 		move.w	2(a1),d0				; read sprite number
@@ -1544,7 +1544,7 @@ Sonic_Animate:
 ; ===========================================================================
 
 .end_FE:
-		addq.w	#1,d0					; is the end flag = $FFFE ?
+		addq.w	#2,d0					; is the end flag = $FFFE ?
 		bne.s	.end_FD					; if not, branch
 		move.w	4(a1,d1.w),d0				; read the next	word in	the script
 		sub.b	d0,ost_anim_frame(a0)			; jump back d0 bytes in the script
@@ -1554,7 +1554,7 @@ Sonic_Animate:
 ; ===========================================================================
 
 .end_FD:
-		addq.w	#1,d0					; is the end flag = $FD	?
+		addq.w	#2,d0					; is the end flag = $FD	?
 		bne.s	.end					; if not, branch
 		move.w	4(a1,d1.w),d0
 		move.b	d0,ost_anim(a0)				; read next byte, run that animation

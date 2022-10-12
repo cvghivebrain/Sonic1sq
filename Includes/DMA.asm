@@ -3,7 +3,8 @@
 
 ; output:
 ;	a1 = address of free DMA slot
-;	uses d0
+
+;	uses d0.w
 ; ---------------------------------------------------------------------------
 
 FindFreeDMA:
@@ -23,11 +24,11 @@ FindFreeDMA:
 ; Subroutine to add an item to the DMA queue
 
 ; input:
-;	d1 = destination address (as DMA instruction)
-;	d2 = length (as DMA instruction)
-;	(a2) = source address (as DMA instruction)
+;	d1.l = destination address (as DMA instruction)
+;	d2.l = length (as DMA instruction)
+;	(a2).l = source address (as DMA instruction)
 
-;	uses d0, a1
+;	uses d0.w, a1
 ; ---------------------------------------------------------------------------
 
 AddDMA:
@@ -42,10 +43,10 @@ AddDMA:
 ; As above, but with length stored after source in (a2)
 
 ; input:
-;	d1 = destination address (as DMA instruction)
-;	(a2) = source address and length (as DMA instructions)
+;	d1.l = destination address (as DMA instruction)
+;	(a2).l = source address and length (as DMA instructions)
 
-;	uses d0, a1
+;	uses d0.w, a1
 ; ---------------------------------------------------------------------------
 
 AddDMA2:
@@ -59,7 +60,10 @@ AddDMA2:
 ; ---------------------------------------------------------------------------
 ; Subroutine to run all items stored in the DMA queue
 
-;	uses d0, d1, a1, a5
+; output:
+;	a5 = vdp_control_port
+
+;	uses d0.w, d1.l, a1
 ; ---------------------------------------------------------------------------
 
 ProcessDMA:
