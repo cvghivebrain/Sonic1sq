@@ -1500,176 +1500,18 @@ Sonic_LoopPlane:
 
 Sonic_Animate:
 		lea	(Ani_Sonic).l,a1
+		movea.l	a1,a2
 		moveq	#0,d0
+		moveq	#status_xflip,d2
 		move.b	ost_anim(a0),d0
 		cmp.b	ost_sonic_anim_next(a0),d0		; is animation set to restart?
-		beq.s	.do					; if not, branch
+		beq.w	Anim_Run				; if not, branch
+		
 		move.b	d0,ost_sonic_anim_next(a0)		; set to "no restart"
 		move.b	#0,ost_anim_frame(a0)			; reset animation
 		move.b	#0,ost_anim_time(a0)			; reset frame duration
-
-	.do:
-		add.w	d0,d0
-		adda.w	(a1,d0.w),a1				; jump to appropriate animation	script
-		move.w	(a1),d0					; get frame duration (or special $FFFx flag)
-		bmi.s	.walkrunroll				; if animation is walk/run/roll/jump, branch
-		move.b	ost_status(a0),d1
-		andi.b	#status_xflip,d1			; read xflip from status
-		andi.b	#$FF-render_xflip-render_yflip,ost_render(a0)
-		or.b	d1,ost_render(a0)			; apply xflip from status
-		subq.b	#1,ost_anim_time(a0)			; decrement frame duration
-		bpl.s	.delay					; if time remains, branch
-		move.b	d0,ost_anim_time(a0)			; load frame duration
-
-.loadframe:
-		moveq	#0,d1
-		move.b	ost_anim_frame(a0),d1			; load current frame number
-		move.w	2(a1,d1.w),d0				; read sprite number from script
-		bmi.s	.end_FF					; if animation is complete, branch
-
-	.next:
-		move.w	d0,ost_frame_hi(a0)			; load sprite number
-		addq.b	#2,ost_anim_frame(a0)			; next frame number
-
-	.delay:
-		rts	
-; ===========================================================================
-
-.end_FF:
-		addq.w	#2,d0					; is the end flag = $FFFF ?
-		bne.s	.end_FE					; if not, branch
-		move.b	#0,ost_anim_frame(a0)			; restart the animation
-		move.w	2(a1),d0				; read sprite number
-		bra.s	.next
-; ===========================================================================
-
-.end_FE:
-		addq.w	#2,d0					; is the end flag = $FFFE ?
-		bne.s	.end_FD					; if not, branch
-		move.w	4(a1,d1.w),d0				; read the next	word in	the script
-		sub.b	d0,ost_anim_frame(a0)			; jump back d0 bytes in the script
-		sub.b	d0,d1
-		move.w	2(a1,d1.w),d0				; read sprite number
-		bra.s	.next
-; ===========================================================================
-
-.end_FD:
-		addq.w	#2,d0					; is the end flag = $FD	?
-		bne.s	.end					; if not, branch
-		move.w	4(a1,d1.w),d0
-		move.b	d0,ost_anim(a0)				; read next byte, run that animation
-
-	.end:
-		rts	
-; ===========================================================================
-
-.walkrunroll:
-		subq.b	#1,ost_anim_time(a0)			; decrement frame duration
-		bpl.s	.delay					; if time remains, branch
-		addq.w	#1,d0					; is animation walking/running?
-		bne.w	.rolljump				; if not, branch
-
-		moveq	#0,d1
-		move.b	ost_angle(a0),d0			; get Sonic's angle
-		move.b	ost_status(a0),d2
-		andi.b	#status_xflip,d2			; is Sonic xflipped?
-		bne.s	.flip					; if yes, branch
-		not.b	d0					; reverse angle
-
-	.flip:
-		addi.b	#$10,d0					; add $10 to angle
-		bpl.s	.noinvert				; if angle+$10 is $0-$7F, branch
-		moveq	#status_xflip+status_yflip,d1
-
-	.noinvert:
-		andi.b	#$FF-render_xflip-render_yflip,ost_render(a0)
-		eor.b	d1,d2					; include x/yflip bits, allow for cancelling of double xflipped sprites
-		or.b	d2,ost_render(a0)			; apply x/yflip
-		btst	#status_pushing_bit,ost_status(a0)	; is Sonic pushing something?
-		bne.w	.push					; if yes, branch
-
-		lsr.b	#4,d0					; divide angle by $10
-		andi.b	#6,d0					; angle	must be	0, 2, 4	or 6
-		move.w	ost_inertia(a0),d2			; get Sonic's speed
-		bpl.s	.speed_pos
-		neg.w	d2					; absolute speed
-
-	.speed_pos:
-		lea	(Run).l,a1				; use running animation
-		cmpi.w	#sonic_max_speed,d2			; is Sonic at running speed?
-		bcc.s	.running				; if yes, branch
-
-		lea	(Walk).l,a1				; use walking animation
-		move.b	d0,d1
-		lsr.b	#1,d1
-		add.b	d1,d0					; multiply d0 by 1.5 (d0 = 0, 3, 6 or 9)
-
-	.running:
-		add.b	d0,d0					; d0 = 0, 4, 8 or 12 if running; 0, 6, 12 or 18 if walking
-		moveq	#0,d3
-		move.b	d0,d3
-		neg.w	d2
-		addi.w	#$800,d2				; d2 = $800 minus Sonic's speed
-		bpl.s	.belowmax				; branch if speed is below $800
-		moveq	#0,d2					; max animation speed
-
-	.belowmax:
-		lsr.w	#8,d2
-		move.b	d2,ost_anim_time(a0)			; set frame duration
-		bsr.w	.loadframe				; run animation
-		add.w	d3,ost_frame_hi(a0)			; modify frame number for rotated animations
-		rts	
-; ===========================================================================
-
-.rolljump:
-		addq.b	#1,d0					; is animation rolling/jumping?
-		bne.s	.push					; if not, branch
-		move.w	ost_inertia(a0),d2			; get Sonic's speed
-		bpl.s	.speed_pos2
-		neg.w	d2					; absolute speed
-
-	.speed_pos2:
-		lea	(Roll2).l,a1				; use fast animation
-		cmpi.w	#sonic_max_speed,d2			; is Sonic moving fast?
-		bcc.s	.rollfast				; if yes, branch
-		lea	(Roll).l,a1				; use slower animation
-
-	.rollfast:
-		neg.w	d2
-		addi.w	#$400,d2				; d2 = $400 minus Sonic's speed
-		bpl.s	.belowmax2				; branch if speed is below $400
-		moveq	#0,d2					; max animation speed
-
-	.belowmax2:
-		lsr.w	#8,d2
-		move.b	d2,ost_anim_time(a0)			; set frame duration
-		move.b	ost_status(a0),d1
-		andi.b	#status_xflip,d1			; read xflip from status
-		andi.b	#$FF-render_xflip-render_yflip,ost_render(a0)
-		or.b	d1,ost_render(a0)			; apply xflip from status
-		bra.w	.loadframe				; run animation
-; ===========================================================================
-
-.push:
-		move.w	ost_inertia(a0),d2			; get Sonic's speed
-		bmi.s	.negspeed
-		neg.w	d2
-
-	.negspeed:
-		addi.w	#$800,d2				; d2 = $800 minus Sonic's speed
-		bpl.s	.belowmax3				; branch if speed is below $800
-		moveq	#0,d2					; max animation speed
-
-	.belowmax3:
-		lsr.w	#6,d2
-		move.b	d2,ost_anim_time(a0)			; set frame duration
-		lea	(Pushing).l,a1
-		move.b	ost_status(a0),d1
-		andi.b	#status_xflip,d1			; read xflip from status
-		andi.b	#$FF-render_xflip-render_yflip,ost_render(a0)
-		or.b	d1,ost_render(a0)			; apply xflip from status
-		bra.w	.loadframe				; run animation
-
+		bra.w	Anim_Run
+		
 ; ---------------------------------------------------------------------------
 ; Subroutine to load Sonic's graphics to RAM
 ; ---------------------------------------------------------------------------

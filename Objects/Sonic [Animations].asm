@@ -4,7 +4,13 @@
 
 Ani_Sonic:	index *
 		ptr Walk
+		ptr Walk2
+		ptr Walk3
+		ptr Walk4
 		ptr Run
+		ptr Run2
+		ptr Run3
+		ptr Run4
 		ptr Roll
 		ptr Roll2
 		ptr Pushing
@@ -35,7 +41,7 @@ Ani_Sonic:	index *
 		ptr Float3
 		ptr Float4
 
-Walk:		dc.w $FFFF
+Walk:		dc.w id_Anim_Flag_WalkRun
 		dc.w id_frame_walk13
 		dc.w id_frame_walk14
 		dc.w id_frame_walk15
@@ -45,7 +51,37 @@ Walk:		dc.w $FFFF
 		dc.w afEnd
 		even
 
-Run:		dc.w $FFFF
+Walk2:		dc.w id_Anim_Flag_WalkRun
+		dc.w id_frame_walk23
+		dc.w id_frame_walk24
+		dc.w id_frame_walk25
+		dc.w id_frame_walk26
+		dc.w id_frame_walk21
+		dc.w id_frame_walk22
+		dc.w afEnd
+		even
+
+Walk3:		dc.w id_Anim_Flag_WalkRun
+		dc.w id_frame_walk33
+		dc.w id_frame_walk34
+		dc.w id_frame_walk35
+		dc.w id_frame_walk36
+		dc.w id_frame_walk31
+		dc.w id_frame_walk32
+		dc.w afEnd
+		even
+
+Walk4:		dc.w id_Anim_Flag_WalkRun
+		dc.w id_frame_walk43
+		dc.w id_frame_walk44
+		dc.w id_frame_walk45
+		dc.w id_frame_walk46
+		dc.w id_frame_walk41
+		dc.w id_frame_walk42
+		dc.w afEnd
+		even
+
+Run:		dc.w id_Anim_Flag_WalkRun
 		dc.w id_frame_run11
 		dc.w id_frame_run12
 		dc.w id_frame_run13
@@ -55,7 +91,37 @@ Run:		dc.w $FFFF
 		dc.w afEnd
 		even
 
-Roll:		dc.w $FFFE
+Run2:		dc.w id_Anim_Flag_WalkRun
+		dc.w id_frame_run21
+		dc.w id_frame_run22
+		dc.w id_frame_run23
+		dc.w id_frame_run24
+		dc.w afEnd
+		dc.w afEnd
+		dc.w afEnd
+		even
+
+Run3:		dc.w id_Anim_Flag_WalkRun
+		dc.w id_frame_run31
+		dc.w id_frame_run32
+		dc.w id_frame_run33
+		dc.w id_frame_run34
+		dc.w afEnd
+		dc.w afEnd
+		dc.w afEnd
+		even
+
+Run4:		dc.w id_Anim_Flag_WalkRun
+		dc.w id_frame_run41
+		dc.w id_frame_run42
+		dc.w id_frame_run43
+		dc.w id_frame_run44
+		dc.w afEnd
+		dc.w afEnd
+		dc.w afEnd
+		even
+
+Roll:		dc.w id_Anim_Flag_Roll
 		dc.w id_frame_Roll1
 		dc.w id_frame_Roll2
 		dc.w id_frame_Roll3
@@ -65,7 +131,7 @@ Roll:		dc.w $FFFE
 		dc.w afEnd
 		even
 
-Roll2:		dc.w $FFFE
+Roll2:		dc.w id_Anim_Flag_Roll
 		dc.w id_frame_Roll1
 		dc.w id_frame_Roll2
 		dc.w id_frame_Roll5
@@ -75,7 +141,7 @@ Roll2:		dc.w $FFFE
 		dc.w afEnd
 		even
 
-Pushing:	dc.w $FFFD
+Pushing:	dc.w id_Anim_Flag_Push
 		dc.w id_frame_push1
 		dc.w id_frame_push2
 		dc.w id_frame_push3
@@ -104,7 +170,7 @@ Wait:		dc.w $17
 		dc.w id_frame_wait1
 		dc.w id_frame_wait2
 		dc.w id_frame_wait3
-		dc.w afBack, 2*2
+		dc.w afBack, 2
 		even
 
 Balance:	dc.w $1F
@@ -179,13 +245,13 @@ Leap1:		dc.w $F
 		dc.w id_frame_leap1
 		dc.w id_frame_leap1
 		dc.w id_frame_leap1
-		dc.w afBack, 1*2
+		dc.w afBack, 1
 		even
 
 Leap2:		dc.w $F
 		dc.w id_frame_leap1
 		dc.w id_frame_leap2
-		dc.w afBack, 1*2
+		dc.w afBack, 1
 		even
 
 Surf:		dc.w $3F
@@ -223,7 +289,7 @@ Shrink:		dc.w 3
 		dc.w id_frame_shrink4
 		dc.w id_frame_shrink5
 		dc.w id_frame_blank
-		dc.w afBack, 1*2
+		dc.w afBack, 1
 		even
 
 Hurt:		dc.w 3

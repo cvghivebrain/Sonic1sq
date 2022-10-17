@@ -312,12 +312,12 @@ hitcount_slz:		equ hitcount_all
 hitcount_fz:		equ hitcount_all
 
 ; Animation flags
-afEnd:		equ -id_Anim_Flag_Restart			; return to beginning of animation
-afBack:		equ -id_Anim_Flag_Back				; go back (specified number) bytes
-afChange:	equ -id_Anim_Flag_Change			; run specified animation
-afRoutine:	equ -id_Anim_Flag_Routine			; increment routine counter
-afReset:	equ -id_Anim_Flag_Restart2			; reset animation and 2nd object routine counter
-af2ndRoutine:	equ -id_Anim_Flag_Routine2			; increment 2nd routine counter
+afEnd:		equ id_Anim_Flag_Restart			; return to beginning of animation
+afBack:		equ id_Anim_Flag_Back				; go back (specified number) bytes
+afChange:	equ id_Anim_Flag_Change				; run specified animation
+afRoutine:	equ id_Anim_Flag_Routine			; increment routine counter
+afReset:	equ id_Anim_Flag_Restart2			; reset animation and 2nd object routine counter
+af2ndRoutine:	equ id_Anim_Flag_Routine2			; increment 2nd routine counter
 afxflip:	equ $2000
 afyflip:	equ $4000
 

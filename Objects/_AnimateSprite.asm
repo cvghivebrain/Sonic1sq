@@ -3,11 +3,12 @@
 ;
 ; input:
 ;	a1 = animation script index (e.g. Ani_Crab)
+;	d2 = x/yflip flags to read from status (Anim_Run only)
 
 ; output:
 ;	a1 = animation script (e.g. ani_crab_stand)
 
-;	uses d0.l, d1.l
+;	uses d0.l, d1.l, d2.l, a2
 
 ; usage:
 ;		lea	(Ani_Hog).l,a1
@@ -16,6 +17,7 @@
 
 AnimateSprite:
 		moveq	#0,d0
+		moveq	#status_xflip+status_yflip,d2		; use x/yflip from status and flags
 		move.b	ost_anim(a0),d0				; get animation number
 		btst	#7,d0					; is animation set to restart?
 		bne.s	Anim_Run				; if not, branch
@@ -31,6 +33,7 @@ Anim_Run:
 		add.w	d0,d0
 		adda.w	(a1,d0.w),a1				; jump to appropriate animation	script
 		move.w	(a1),d0
+		bmi.s	Anim_Flag				; branch if there's a flag instead of time
 		move.b	d0,ost_anim_time(a0)			; load frame duration
 		moveq	#0,d1
 		move.b	ost_anim_frame(a0),d1			; load current frame number
@@ -44,7 +47,7 @@ Anim_Next:
 		move.b	ost_status(a0),d0
 		rol.w	#3,d1
 		eor.b	d0,d1
-		andi.b	#status_xflip+status_yflip,d1		; get x/yflip bits in d1
+		and.b	d2,d1					; get x/yflip bits in d1
 		andi.b	#$FF-render_xflip-render_yflip,ost_render(a0)
 		or.b	d1,ost_render(a0)			; apply x/yflip bits from status
 		addq.b	#2,ost_anim_frame(a0)			; next frame number
@@ -60,13 +63,16 @@ Anim_Flag:
 		jmp	Anim_Flag_Index(pc,d0.w)
 ; ===========================================================================
 Anim_Flag_Index:
-		index *,2,2
+		index *,-2,-2
 		ptr Anim_Flag_Restart
 		ptr Anim_Flag_Back
 		ptr Anim_Flag_Change
 		ptr Anim_Flag_Routine
 		ptr Anim_Flag_Restart2
-		ptr Anim_Flag_Routine2		
+		ptr Anim_Flag_Routine2
+		ptr Anim_Flag_WalkRun
+		ptr Anim_Flag_Roll
+		ptr Anim_Flag_Push
 ; ===========================================================================
 
 Anim_Flag_Restart:
@@ -101,6 +107,149 @@ Anim_Flag_Restart2:						; unused
 Anim_Flag_Routine2:						; only used by EndSonic
 		addq.b	#2,ost_routine2(a0)			; jump to next routine
 		rts
+
+Anim_Flag_WalkRun:
+		btst	#status_pushing_bit,ost_status(a0)
+		bne.w	Anim_Flag_Push				; branch if Sonic is pushing
+		
+		exg	a1,a2					; a1 = Ani_Sonic
+		moveq	#0,d0
+		move.b	ost_angle(a0),d0			; get Sonic's angle
+		move.b	ost_status(a0),d2
+		andi.b	#status_xflip,d2
+		beq.s	.flip					; branch if Sonic is xflipped
+		not.b	d0					; reverse angle
+	.flip:
+		lsr.b	#2,d0					; divide angle by 4
+		lea	(Anim_Orientation).l,a2
+		move.b	(a2,d0.w),d1				; get x/yflip flags based on angle
+		eor.b	d1,d2					; combine with xflip from status
+		andi.b	#$FF-render_xflip-render_yflip,ost_render(a0)
+		or.b	d2,ost_render(a0)			; apply x/yflip bits to render flags
+		lea	(Anim_WalkList).l,a2
+		move.w	ost_inertia(a0),d1			; get Sonic's speed
+		bpl.s	.speed_ok
+		neg.w	d1					; absolute speed
+	.speed_ok:
+		cmpi.w	#sonic_max_speed,d1
+		bcs.s	.walking				; branch if Sonic is below max speed
+		lea	(Anim_RunList).l,a2			; use running animation
+	.walking:
+		neg.w	d1
+		addi.w	#$800,d1				; d1 = $800 minus Sonic's speed
+		bpl.s	.belowmax				; branch if speed is below $800
+		moveq	#0,d1					; max animation speed
+	.belowmax:
+		lsr.w	#8,d1
+		move.b	d1,ost_anim_time(a0)			; set frame duration
+		
+		move.b	(a2,d0.w),d0				; get animation for specified angle
+
+Anim_Sonic_Update:
+		add.w	d0,d0
+		adda.w	(a1,d0.w),a1				; jump to appropriate animation	script
+		moveq	#0,d1
+		move.b	ost_anim_frame(a0),d1			; load current frame number
+		move.w	2(a1,d1.w),d0				; read sprite number from script
+		bmi.w	Anim_Flag				; branch if an animation flag is found
+		move.w	d0,ost_frame_hi(a0)			; load sprite number
+		addq.b	#2,ost_anim_frame(a0)			; next frame number
+		rts
+		
+Anim_Flag_Roll:
+		exg	a1,a2					; a1 = Ani_Sonic
+		move.w	ost_inertia(a0),d1			; get Sonic's speed
+		bpl.s	.speed_ok
+		neg.w	d1					; absolute speed
+	.speed_ok:
+		moveq	#id_Roll2,d0				; use fast animation
+		cmpi.w	#sonic_max_speed,d1			; is Sonic moving fast?
+		bcc.s	.rollfast				; if yes, branch
+		moveq	#id_Roll,d0				; use slower animation
+	.rollfast:
+		neg.w	d1
+		addi.w	#$400,d1				; d1 = $400 minus Sonic's speed
+		bpl.s	.belowmax				; branch if speed is below $400
+		moveq	#0,d1					; max animation speed
+	.belowmax:
+		lsr.w	#8,d1
+		bra.s	Anim_Sonic_Update2
+		
+Anim_Flag_Push:
+		moveq	#id_Pushing,d0
+		exg	a1,a2					; a1 = Ani_Sonic
+		move.w	ost_inertia(a0),d1			; get Sonic's speed
+		bmi.s	.speed_ok
+		neg.w	d1
+	.speed_ok:
+		addi.w	#$800,d1				; d2 = $800 minus Sonic's speed
+		bpl.s	.belowmax				; branch if speed is below $800
+		moveq	#0,d1					; max animation speed
+	.belowmax:
+		lsr.w	#6,d1
+		
+Anim_Sonic_Update2:
+		move.b	d1,ost_anim_time(a0)			; set frame duration
+		move.b	ost_status(a0),d1
+		andi.b	#status_xflip,d1			; read xflip from status
+		andi.b	#$FF-render_xflip-render_yflip,ost_render(a0)
+		or.b	d1,ost_render(a0)			; apply xflip from status
+		bra.w	Anim_Sonic_Update
+		
+Anim_WalkList:	dc.b id_Walk,id_Walk,id_Walk,id_Walk		; angles 0-$F
+		dc.b id_Walk4,id_Walk4,id_Walk4,id_Walk4	; angles $10-$1F
+		dc.b id_Walk4,id_Walk4,id_Walk4,id_Walk4	; angles $20-$2F
+		dc.b id_Walk3,id_Walk3,id_Walk3,id_Walk3	; angles $30-$3F
+		dc.b id_Walk3,id_Walk3,id_Walk3,id_Walk3	; angles $40-$4F
+		dc.b id_Walk2,id_Walk2,id_Walk2,id_Walk2	; angles $50-$5F
+		dc.b id_Walk2,id_Walk2,id_Walk2,id_Walk2	; angles $60-$6F
+		dc.b id_Walk,id_Walk,id_Walk,id_Walk		; angles $70-$7F
+		dc.b id_Walk,id_Walk,id_Walk,id_Walk		; angles $80-$8F
+		dc.b id_Walk4,id_Walk4,id_Walk4,id_Walk4	; angles $90-$9F
+		dc.b id_Walk4,id_Walk4,id_Walk4,id_Walk4	; angles $A0-$AF
+		dc.b id_Walk3,id_Walk3,id_Walk3,id_Walk3	; angles $B0-$BF
+		dc.b id_Walk3,id_Walk3,id_Walk3,id_Walk3	; angles $C0-$CF
+		dc.b id_Walk2,id_Walk2,id_Walk2,id_Walk2	; angles $D0-$DF
+		dc.b id_Walk2,id_Walk2,id_Walk2,id_Walk2	; angles $E0-$EF
+		dc.b id_Walk,id_Walk,id_Walk,id_Walk		; angles $F0-$FF
+		even
+		
+Anim_RunList:	dc.b id_Run,id_Run,id_Run,id_Run		; angles 0-$F
+		dc.b id_Run4,id_Run4,id_Run4,id_Run4		; angles $10-$1F
+		dc.b id_Run4,id_Run4,id_Run4,id_Run4		; angles $20-$2F
+		dc.b id_Run3,id_Run3,id_Run3,id_Run3		; angles $30-$3F
+		dc.b id_Run3,id_Run3,id_Run3,id_Run3		; angles $40-$4F
+		dc.b id_Run2,id_Run2,id_Run2,id_Run2		; angles $50-$5F
+		dc.b id_Run2,id_Run2,id_Run2,id_Run2		; angles $60-$6F
+		dc.b id_Run,id_Run,id_Run,id_Run		; angles $70-$7F
+		dc.b id_Run,id_Run,id_Run,id_Run		; angles $80-$8F
+		dc.b id_Run4,id_Run4,id_Run4,id_Run4		; angles $90-$9F
+		dc.b id_Run4,id_Run4,id_Run4,id_Run4		; angles $A0-$AF
+		dc.b id_Run3,id_Run3,id_Run3,id_Run3		; angles $B0-$BF
+		dc.b id_Run3,id_Run3,id_Run3,id_Run3		; angles $C0-$CF
+		dc.b id_Run2,id_Run2,id_Run2,id_Run2		; angles $D0-$DF
+		dc.b id_Run2,id_Run2,id_Run2,id_Run2		; angles $E0-$EF
+		dc.b id_Run,id_Run,id_Run,id_Run		; angles $F0-$FF
+		even
+		
+Anim_Orientation:
+		dc.b 0,0,0,0					; angles 0-$F
+		dc.b render_xflip+render_yflip,render_xflip+render_yflip,render_xflip+render_yflip,render_xflip+render_yflip ; angles $10-$1F
+		dc.b render_xflip+render_yflip,render_xflip+render_yflip,render_xflip+render_yflip,render_xflip+render_yflip ; angles $20-$2F
+		dc.b render_xflip+render_yflip,render_xflip+render_yflip,render_xflip+render_yflip,render_xflip+render_yflip ; angles $30-$3F
+		dc.b render_xflip+render_yflip,render_xflip+render_yflip,render_xflip+render_yflip,render_xflip+render_yflip ; angles $40-$4F
+		dc.b render_xflip+render_yflip,render_xflip+render_yflip,render_xflip+render_yflip,render_xflip+render_yflip ; angles $50-$5F
+		dc.b render_xflip+render_yflip,render_xflip+render_yflip,render_xflip+render_yflip,render_xflip+render_yflip ; angles $60-$6F
+		dc.b render_xflip+render_yflip,render_xflip+render_yflip,render_xflip+render_yflip,render_xflip+render_yflip ; angles $70-$7F
+		dc.b render_xflip+render_yflip,render_xflip+render_yflip,render_xflip+render_yflip,render_xflip+render_yflip ; angles $80-$8F
+		dc.b 0,0,0,0					; angles $90-$9F
+		dc.b 0,0,0,0					; angles $A0-$AF
+		dc.b 0,0,0,0					; angles $B0-$BF
+		dc.b 0,0,0,0					; angles $C0-$CF
+		dc.b 0,0,0,0					; angles $D0-$DF
+		dc.b 0,0,0,0					; angles $E0-$EF
+		dc.b 0,0,0,0					; angles $F0-$FF
+		even
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	update the animation id of an object if it changes
