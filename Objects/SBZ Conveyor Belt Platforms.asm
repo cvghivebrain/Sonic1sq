@@ -248,12 +248,12 @@ ani_spinc_spin:
 		dc.w id_frame_spin_2+afxflip
 		dc.w id_frame_spin_1+afxflip
 		dc.w id_frame_spin_flat
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 ani_spinc_still:
 		dc.w $F
 		dc.w id_frame_spin_flat
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 SpinC_Corner_Data:

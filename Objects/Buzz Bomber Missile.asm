@@ -113,12 +113,12 @@ ani_buzz_flare:
 		dc.w 7
 		dc.w id_frame_buzz_flare1
 		dc.w id_frame_buzz_flare2
-		dc.w afRoutine
+		dc.w id_Anim_Flag_Routine
 		even
 
 ani_buzz_missile:
 		dc.w 1
 		dc.w id_frame_buzz_ball1
 		dc.w id_frame_buzz_ball2
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even

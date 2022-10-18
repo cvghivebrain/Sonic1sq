@@ -89,5 +89,5 @@ ani_flash_0:
 		dc.w id_frame_flash_5
 		dc.w id_frame_flash_6
 		dc.w id_frame_flash_final
-		dc.w af2ndRoutine
+		dc.w id_Anim_Flag_Routine2
 		even

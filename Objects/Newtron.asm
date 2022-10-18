@@ -188,7 +188,7 @@ Ani_Newt:	index *
 		
 ani_newt_blank:		dc.w $F
 			dc.w id_frame_newt_blank
-			dc.w afEnd
+			dc.w id_Anim_Flag_Restart
 			even
 ani_newt_drop:		dc.w $13
 			dc.w id_frame_newt_trans
@@ -196,15 +196,15 @@ ani_newt_drop:		dc.w $13
 			dc.w id_frame_newt_drop1
 			dc.w id_frame_newt_drop2
 			dc.w id_frame_newt_drop3
-			dc.w afBack, 1
+			dc.w id_Anim_Flag_Back, 1
 ani_newt_fly1:		dc.w 2
 			dc.w id_frame_newt_fly1a
 			dc.w id_frame_newt_fly1b
-			dc.w afEnd
+			dc.w id_Anim_Flag_Restart
 ani_newt_fly2:		dc.w 2
 			dc.w id_frame_newt_fly2a
 			dc.w id_frame_newt_fly2b
-			dc.w afEnd
+			dc.w id_Anim_Flag_Restart
 ani_newt_firing:	dc.w $13
 			dc.w id_frame_newt_trans
 			dc.w id_frame_newt_norm
@@ -213,5 +213,5 @@ ani_newt_firing:	dc.w $13
 			dc.w id_frame_newt_norm
 			dc.w id_frame_newt_norm
 			dc.w id_frame_newt_trans
-			dc.w afRoutine
+			dc.w id_Anim_Flag_Routine
 			even

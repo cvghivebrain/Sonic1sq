@@ -156,5 +156,5 @@ ani_ring_sparkle:
 		dc.w id_frame_ring_sparkle2
 		dc.w id_frame_ring_sparkle3
 		dc.w id_frame_ring_sparkle4
-		dc.w afRoutine
+		dc.w id_Anim_Flag_Routine
 		even

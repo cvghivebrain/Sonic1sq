@@ -138,5 +138,5 @@ ani_lavawall_0:	dc.w 9
 		dc.w id_frame_lavawall_1
 		dc.w id_frame_lavawall_2
 		dc.w id_frame_lavawall_3
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even

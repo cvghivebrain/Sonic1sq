@@ -286,7 +286,7 @@ ani_bubble_small:						; small bubble forming
 		dc.w id_frame_bubble_0
 		dc.w id_frame_bubble_1
 		dc.w id_frame_bubble_2
-		dc.w afRoutine
+		dc.w id_Anim_Flag_Routine
 		even
 
 ani_bubble_medium:						; medium bubble forming
@@ -295,7 +295,7 @@ ani_bubble_medium:						; medium bubble forming
 		dc.w id_frame_bubble_2
 		dc.w id_frame_bubble_3
 		dc.w id_frame_bubble_4
-		dc.w afRoutine
+		dc.w id_Anim_Flag_Routine
 
 ani_bubble_large:						; full size bubble forming
 		dc.w $E
@@ -304,19 +304,19 @@ ani_bubble_large:						; full size bubble forming
 		dc.w id_frame_bubble_4
 		dc.w id_frame_bubble_5
 		dc.w id_frame_bubble_full
-		dc.w afRoutine
+		dc.w id_Anim_Flag_Routine
 		even
 
 ani_bubble_incroutine:						; increment routine counter (no animation)
 		dc.w 4
-		dc.w afRoutine
+		dc.w id_Anim_Flag_Routine
 
 ani_bubble_burst:						; large bubble bursts
 		dc.w 4
 		dc.w id_frame_bubble_full
 		dc.w id_frame_bubble_burst1
 		dc.w id_frame_bubble_burst2
-		dc.w afRoutine
+		dc.w id_Anim_Flag_Routine
 		even
 
 ani_bubble_bubmaker:						; bubble maker on the floor
@@ -324,5 +324,5 @@ ani_bubble_bubmaker:						; bubble maker on the floor
 		dc.w id_frame_bubble_bubmaker1
 		dc.w id_frame_bubble_bubmaker2
 		dc.w id_frame_bubble_bubmaker3
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even

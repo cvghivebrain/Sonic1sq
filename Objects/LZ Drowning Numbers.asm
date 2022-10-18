@@ -368,7 +368,7 @@ ani_drown_zeroappear:
 		dc.w id_frame_bubble_4
 		dc.w id_frame_bubble_zero_small
 		dc.w id_frame_bubble_zero
-		dc.w afRoutine
+		dc.w id_Anim_Flag_Routine
 		even
 
 ani_drown_oneappear:
@@ -380,7 +380,7 @@ ani_drown_oneappear:
 		dc.w id_frame_bubble_4
 		dc.w id_frame_bubble_one_small
 		dc.w id_frame_bubble_one
-		dc.w afRoutine
+		dc.w id_Anim_Flag_Routine
 		even
 
 ani_drown_twoappear:
@@ -392,7 +392,7 @@ ani_drown_twoappear:
 		dc.w id_frame_bubble_4
 		dc.w id_frame_bubble_one_small
 		dc.w id_frame_bubble_two
-		dc.w afRoutine
+		dc.w id_Anim_Flag_Routine
 		even
 
 ani_drown_threeappear:
@@ -404,7 +404,7 @@ ani_drown_threeappear:
 		dc.w id_frame_bubble_4
 		dc.w id_frame_bubble_three_small
 		dc.w id_frame_bubble_three
-		dc.w afRoutine
+		dc.w id_Anim_Flag_Routine
 		even
 
 ani_drown_fourappear:
@@ -416,7 +416,7 @@ ani_drown_fourappear:
 		dc.w id_frame_bubble_4
 		dc.w id_frame_bubble_zero_small
 		dc.w id_frame_bubble_four
-		dc.w afRoutine
+		dc.w id_Anim_Flag_Routine
 		even
 
 ani_drown_fiveappear:
@@ -428,7 +428,7 @@ ani_drown_fiveappear:
 		dc.w id_frame_bubble_4
 		dc.w id_frame_bubble_five_small
 		dc.w id_frame_bubble_five
-		dc.w afRoutine
+		dc.w id_Anim_Flag_Routine
 		even
 
 ani_drown_smallbubble:
@@ -436,7 +436,7 @@ ani_drown_smallbubble:
 		dc.w id_frame_bubble_0
 		dc.w id_frame_bubble_1
 		dc.w id_frame_bubble_2
-		dc.w afRoutine
+		dc.w id_Anim_Flag_Routine
 		even
 
 ani_drown_zeroflash:
@@ -447,7 +447,7 @@ ani_drown_zeroflash:
 		dc.w id_frame_bubble_zero
 		dc.w id_frame_bubble_blank
 		dc.w id_frame_bubble_zero
-		dc.w afRoutine
+		dc.w id_Anim_Flag_Routine
 
 ani_drown_oneflash:
 		dc.w 7
@@ -457,7 +457,7 @@ ani_drown_oneflash:
 		dc.w id_frame_bubble_one
 		dc.w id_frame_bubble_blank
 		dc.w id_frame_bubble_one
-		dc.w afRoutine
+		dc.w id_Anim_Flag_Routine
 
 ani_drown_twoflash:
 		dc.w 7
@@ -467,7 +467,7 @@ ani_drown_twoflash:
 		dc.w id_frame_bubble_two
 		dc.w id_frame_bubble_blank
 		dc.w id_frame_bubble_two
-		dc.w afRoutine
+		dc.w id_Anim_Flag_Routine
 
 ani_drown_threeflash:
 		dc.w 7
@@ -477,7 +477,7 @@ ani_drown_threeflash:
 		dc.w id_frame_bubble_three
 		dc.w id_frame_bubble_blank
 		dc.w id_frame_bubble_three
-		dc.w afRoutine
+		dc.w id_Anim_Flag_Routine
 
 ani_drown_fourflash:
 		dc.w 7
@@ -487,7 +487,7 @@ ani_drown_fourflash:
 		dc.w id_frame_bubble_four
 		dc.w id_frame_bubble_blank
 		dc.w id_frame_bubble_four
-		dc.w afRoutine
+		dc.w id_Anim_Flag_Routine
 
 ani_drown_fiveflash:
 		dc.w 7
@@ -497,11 +497,11 @@ ani_drown_fiveflash:
 		dc.w id_frame_bubble_five
 		dc.w id_frame_bubble_blank
 		dc.w id_frame_bubble_five
-		dc.w afRoutine
+		dc.w id_Anim_Flag_Routine
 
 ani_drown_blank:
 		dc.w $E
-		dc.w afRoutine
+		dc.w id_Anim_Flag_Routine
 
 ani_drown_mediumbubble:
 		dc.w $E
@@ -509,5 +509,5 @@ ani_drown_mediumbubble:
 		dc.w id_frame_bubble_2
 		dc.w id_frame_bubble_3
 		dc.w id_frame_bubble_4
-		dc.w afRoutine
+		dc.w id_Anim_Flag_Routine
 		even

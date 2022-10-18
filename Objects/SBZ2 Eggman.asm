@@ -184,14 +184,14 @@ Ani_SEgg:	index *
 ani_eggman_stand:
 		dc.w $7E
 		dc.w id_frame_eggman_stand
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_eggman_laugh:
 		dc.w 6
 		dc.w id_frame_eggman_laugh1
 		dc.w id_frame_eggman_laugh2
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 
 ani_eggman_jump1:
 		dc.w $E
@@ -201,13 +201,13 @@ ani_eggman_jump1:
 		dc.w id_frame_eggman_stand
 		dc.w id_frame_eggman_stand
 		dc.w id_frame_eggman_stand
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 
 ani_eggman_intube:
 		dc.w 0
 		dc.w id_frame_eggman_surprise
 		dc.w id_frame_eggman_intube
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 
 ani_eggman_running:
 		dc.w 6
@@ -215,18 +215,18 @@ ani_eggman_running:
 		dc.w id_frame_eggman_jump2
 		dc.w id_frame_eggman_running2
 		dc.w id_frame_eggman_jump2
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 
 ani_eggman_jump2:
 		dc.w $F
 		dc.w id_frame_eggman_jump2
 		dc.w id_frame_eggman_jump1
 		dc.w id_frame_eggman_jump1
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_eggman_jump:
 		dc.w $7E
 		dc.w id_frame_eggman_jump
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even

@@ -197,7 +197,7 @@ ani_ball_boss:
 		dc.w 0
 		dc.w id_frame_ball_shiny
 		dc.w id_frame_ball_check1
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ; ---------------------------------------------------------------------------

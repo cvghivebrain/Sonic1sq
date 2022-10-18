@@ -86,5 +86,5 @@ ani_bigring_0:
 		dc.w id_frame_bigring_45_1
 		dc.w id_frame_bigring_side
 		dc.w id_frame_bigring_45_2
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even

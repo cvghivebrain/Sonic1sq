@@ -96,7 +96,7 @@ Ani_Bump:	index *
 ani_bump_normal:
 		dc.w $F
 		dc.w id_frame_bump_normal
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 ani_bump_bumped:
 		dc.w 3
@@ -104,5 +104,5 @@ ani_bump_bumped:
 		dc.w id_frame_bump_bumped2
 		dc.w id_frame_bump_bumped1
 		dc.w id_frame_bump_bumped2
-		dc.w afChange, id_ani_bump_normal
+		dc.w id_Anim_Flag_Change, id_ani_bump_normal
 		even

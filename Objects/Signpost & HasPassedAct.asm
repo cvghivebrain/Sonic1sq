@@ -211,7 +211,7 @@ Ani_Sign:	index *
 ani_sign_eggman:
 		dc.w $F
 		dc.w id_frame_sign_eggman
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_sign_spin1:
@@ -220,7 +220,7 @@ ani_sign_spin1:
 		dc.w id_frame_sign_spin1
 		dc.w id_frame_sign_spin2
 		dc.w id_frame_sign_spin3
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 
 ani_sign_spin2:
 		dc.w 1
@@ -228,10 +228,10 @@ ani_sign_spin2:
 		dc.w id_frame_sign_spin1
 		dc.w id_frame_sign_spin2
 		dc.w id_frame_sign_spin3
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 
 ani_sign_sonic:
 		dc.w $F
 		dc.w id_frame_sign_sonic
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even

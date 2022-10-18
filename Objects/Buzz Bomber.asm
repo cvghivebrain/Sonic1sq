@@ -138,15 +138,15 @@ Ani_Buzz:	index *
 ani_buzz_fly1:	dc.w 1
 		dc.w id_frame_buzz_fly1
 		dc.w id_frame_buzz_fly2
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 
 ani_buzz_fly2:	dc.w 1
 		dc.w id_frame_buzz_fly3
 		dc.w id_frame_buzz_fly4
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 
 ani_buzz_fire:	dc.w 1
 		dc.w id_frame_buzz_fire1
 		dc.w id_frame_buzz_fire2
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even

@@ -111,5 +111,5 @@ ani_hog_0:	dc.w 9
 		dc.w id_frame_hog_standing
 		dc.w id_frame_hog_standing
 		dc.w id_frame_hog_open
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even

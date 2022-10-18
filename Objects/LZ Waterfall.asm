@@ -84,5 +84,5 @@ ani_wfall_splash:
 		dc.w id_frame_wfall_splash1
 		dc.w id_frame_wfall_splash2
 		dc.w id_frame_wfall_splash3
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even

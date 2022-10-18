@@ -128,7 +128,7 @@ ani_vanish_vanish:
 		dc.w id_frame_vanish_half
 		dc.w id_frame_vanish_quarter
 		dc.w id_frame_vanish_gone
-		dc.w afBack, 1
+		dc.w id_Anim_Flag_Back, 1
 		even
 
 ani_vanish_appear:
@@ -137,5 +137,5 @@ ani_vanish_appear:
 		dc.w id_frame_vanish_quarter
 		dc.w id_frame_vanish_half
 		dc.w id_frame_vanish_whole
-		dc.w afBack, 1
+		dc.w id_Anim_Flag_Back, 1
 		even

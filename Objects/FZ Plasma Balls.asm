@@ -224,7 +224,7 @@ Ani_PLaunch:	index *
 ani_plaunch_red:
 		dc.w $7E
 		dc.w id_frame_plaunch_red
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_plaunch_redsparking:
@@ -233,7 +233,7 @@ ani_plaunch_redsparking:
 		dc.w id_frame_plaunch_sparking1
 		dc.w id_frame_plaunch_red
 		dc.w id_frame_plaunch_sparking2
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_plaunch_whitesparking:
@@ -242,7 +242,7 @@ ani_plaunch_whitesparking:
 		dc.w id_frame_plaunch_sparking1
 		dc.w id_frame_plaunch_white
 		dc.w id_frame_plaunch_sparking2
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 Ani_Plasma:	index *
@@ -282,7 +282,7 @@ ani_plasma_full:
 		dc.w id_frame_plasma_white3
 		dc.w id_frame_plasma_blank
 		dc.w id_frame_plasma_white4
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_plasma_short:
@@ -295,5 +295,5 @@ ani_plasma_short:
 		dc.w id_frame_plasma_white4
 		dc.w id_frame_plasma_fuzzy2
 		dc.w id_frame_plasma_white4
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even

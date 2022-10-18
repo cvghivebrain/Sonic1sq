@@ -93,5 +93,5 @@ ani_csonic_0:	dc.w 4
 		dc.w id_frame_cont_sonic2
 		dc.w id_frame_cont_sonic3
 		dc.w id_frame_cont_sonic3
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even

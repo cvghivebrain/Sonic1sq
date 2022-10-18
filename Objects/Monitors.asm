@@ -270,7 +270,7 @@ ani_monitor_static:
 		dc.w id_frame_monitor_static0
 		dc.w id_frame_monitor_static1
 		dc.w id_frame_monitor_static2
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_monitor_eggman:
@@ -284,7 +284,7 @@ ani_monitor_eggman:
 		dc.w id_frame_monitor_static2
 		dc.w id_frame_monitor_eggman
 		dc.w id_frame_monitor_eggman
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_monitor_sonic:
@@ -298,7 +298,7 @@ ani_monitor_sonic:
 		dc.w id_frame_monitor_static2
 		dc.w id_frame_monitor_sonic
 		dc.w id_frame_monitor_sonic
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_monitor_shoes:
@@ -312,7 +312,7 @@ ani_monitor_shoes:
 		dc.w id_frame_monitor_static2
 		dc.w id_frame_monitor_shoes
 		dc.w id_frame_monitor_shoes
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_monitor_shield:
@@ -326,7 +326,7 @@ ani_monitor_shield:
 		dc.w id_frame_monitor_static2
 		dc.w id_frame_monitor_shield
 		dc.w id_frame_monitor_shield
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_monitor_invincible:
@@ -340,7 +340,7 @@ ani_monitor_invincible:
 		dc.w id_frame_monitor_static2
 		dc.w id_frame_monitor_invincible
 		dc.w id_frame_monitor_invincible
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_monitor_rings:
@@ -354,7 +354,7 @@ ani_monitor_rings:
 		dc.w id_frame_monitor_static2
 		dc.w id_frame_monitor_rings
 		dc.w id_frame_monitor_rings
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_monitor_s:
@@ -368,7 +368,7 @@ ani_monitor_s:
 		dc.w id_frame_monitor_static2
 		dc.w id_frame_monitor_s
 		dc.w id_frame_monitor_s
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_monitor_goggles:
@@ -382,7 +382,7 @@ ani_monitor_goggles:
 		dc.w id_frame_monitor_static2
 		dc.w id_frame_monitor_goggles
 		dc.w id_frame_monitor_goggles
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_monitor_breaking:
@@ -391,5 +391,5 @@ ani_monitor_breaking:
 		dc.w id_frame_monitor_static1
 		dc.w id_frame_monitor_static2
 		dc.w id_frame_monitor_broken
-		dc.w afBack, 1
+		dc.w id_Anim_Flag_Back, 1
 		even

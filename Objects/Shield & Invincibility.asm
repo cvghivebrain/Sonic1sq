@@ -129,14 +129,14 @@ ani_shield_0:	dc.w 1
 		dc.w id_frame_shield_blank
 		dc.w id_frame_shield_3
 		dc.w id_frame_shield_blank
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 
 ani_stars1:	dc.w 5
 		dc.w id_frame_stars1
 		dc.w id_frame_stars2
 		dc.w id_frame_stars3
 		dc.w id_frame_stars4
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 
 ani_stars2:	dc.w 0
 		dc.w id_frame_stars1
@@ -163,7 +163,7 @@ ani_stars2:	dc.w 0
 		dc.w id_frame_stars4
 		dc.w id_frame_stars4
 		dc.w id_frame_shield_blank
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 
 ani_stars3:	dc.w 0
 		dc.w id_frame_stars1
@@ -190,7 +190,7 @@ ani_stars3:	dc.w 0
 		dc.w id_frame_stars4
 		dc.w id_frame_shield_blank
 		dc.w id_frame_shield_blank
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 
 ani_stars4:	dc.w 0
 		dc.w id_frame_stars1
@@ -217,5 +217,5 @@ ani_stars4:	dc.w 0
 		dc.w id_frame_stars4
 		dc.w id_frame_shield_blank
 		dc.w id_frame_shield_blank
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even

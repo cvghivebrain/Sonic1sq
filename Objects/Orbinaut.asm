@@ -196,11 +196,11 @@ Ani_Orb:	index *
 		
 ani_orb_normal:	dc.w $F
 		dc.w id_frame_orb_normal
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_orb_angry:	dc.w $F
 		dc.w id_frame_orb_medium
 		dc.w id_frame_orb_angry
-		dc.w afBack, 1
+		dc.w id_Anim_Flag_Back, 1
 		even

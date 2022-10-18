@@ -53,5 +53,5 @@ Ani_PSB:	index *
 ani_psb_flash:	dc.w $1F
 		dc.w id_frame_psb_blank
 		dc.w id_frame_psb_psb
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even

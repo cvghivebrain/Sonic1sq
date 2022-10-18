@@ -200,19 +200,19 @@ ani_geyser_bubble1:
 		dc.w id_frame_geyser_bubble6
 		dc.w id_frame_geyser_bubble5
 		dc.w id_frame_geyser_bubble6
-		dc.w afRoutine
+		dc.w id_Anim_Flag_Routine
 
 ani_geyser_bubble2:
 		dc.w 2
 		dc.w id_frame_geyser_bubble3
 		dc.w id_frame_geyser_bubble4
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 
 ani_geyser_end:
 		dc.w 2
 		dc.w id_frame_geyser_end1
 		dc.w id_frame_geyser_end2
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 
 ani_geyser_bubble3:
 		dc.w 2
@@ -222,17 +222,17 @@ ani_geyser_bubble3:
 		dc.w id_frame_geyser_bubble2
 		dc.w id_frame_geyser_bubble1
 		dc.w id_frame_geyser_bubble2
-		dc.w afRoutine
+		dc.w id_Anim_Flag_Routine
 
 ani_geyser_blank:
 		dc.w $F
 		dc.w id_frame_geyser_blank
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_geyser_bubble4:
 		dc.w 2
 		dc.w id_frame_geyser_bubble7
 		dc.w id_frame_geyser_bubble8
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even

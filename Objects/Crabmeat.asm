@@ -230,19 +230,19 @@ Ani_Crab:	index *
 ani_crab_stand:
 		dc.w $F
 		dc.w id_frame_crab_stand
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_crab_standslope:
 		dc.w $F
 		dc.w id_frame_crab_slope1
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_crab_standsloperev:
 		dc.w $F
 		dc.w id_frame_crab_slope1+afxflip
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_crab_walk:
@@ -250,7 +250,7 @@ ani_crab_walk:
 		dc.w id_frame_crab_walk
 		dc.w id_frame_crab_walk+afxflip
 		dc.w id_frame_crab_stand
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_crab_walkslope:
@@ -258,7 +258,7 @@ ani_crab_walkslope:
 		dc.w id_frame_crab_walk+afxflip
 		dc.w id_frame_crab_slope2
 		dc.w id_frame_crab_slope1
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_crab_walksloperev:
@@ -266,18 +266,18 @@ ani_crab_walksloperev:
 		dc.w id_frame_crab_walk
 		dc.w id_frame_crab_slope2+afxflip
 		dc.w id_frame_crab_slope1+afxflip
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_crab_firing:
 		dc.w $F
 		dc.w id_frame_crab_firing
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_crab_ball:
 		dc.w 1
 		dc.w id_frame_crab_ball1
 		dc.w id_frame_crab_ball2
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even

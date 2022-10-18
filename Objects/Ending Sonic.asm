@@ -149,7 +149,7 @@ ani_esonic_hold:
 		dc.w id_frame_esonic_hold1
 		dc.w id_frame_esonic_hold2
 		dc.w id_frame_esonic_up
-		dc.w af2ndRoutine
+		dc.w id_Anim_Flag_Routine2
 
 ani_esonic_confused:
 		dc.w 5
@@ -160,7 +160,7 @@ ani_esonic_confused:
 		dc.w id_frame_esonic_confused1
 		dc.w id_frame_esonic_confused2
 		dc.w id_frame_esonic_confused1
-		dc.w af2ndRoutine
+		dc.w id_Anim_Flag_Routine2
 		even
 
 ani_esonic_leap:
@@ -170,5 +170,5 @@ ani_esonic_leap:
 		dc.w id_frame_esonic_leap1
 		dc.w id_frame_esonic_leap2
 		dc.w id_frame_esonic_leap3
-		dc.w afBack, 1
+		dc.w id_Anim_Flag_Back, 1
 		even

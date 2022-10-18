@@ -96,7 +96,7 @@ ani_flame_pipe_on:
 		dc.w id_frame_flame_pipe9
 		dc.w id_frame_flame_pipe10
 		dc.w id_frame_flame_pipe11
-		dc.w afBack, 2
+		dc.w id_Anim_Flag_Back, 2
 
 ani_flame_pipe_off:
 		dc.w 0
@@ -106,7 +106,7 @@ ani_flame_pipe_off:
 		dc.w id_frame_flame_pipe4
 		dc.w id_frame_flame_pipe2
 		dc.w id_frame_flame_pipe1
-		dc.w afBack, 1
+		dc.w id_Anim_Flag_Back, 1
 		even
 
 ani_flame_valve_on:
@@ -122,7 +122,7 @@ ani_flame_valve_on:
 		dc.w id_frame_flame_valve9
 		dc.w id_frame_flame_valve10
 		dc.w id_frame_flame_valve11
-		dc.w afBack, 2
+		dc.w id_Anim_Flag_Back, 2
 
 ani_flame_valve_off:
 		dc.w 0
@@ -132,5 +132,5 @@ ani_flame_valve_off:
 		dc.w id_frame_flame_valve5
 		dc.w id_frame_flame_valve3
 		dc.w id_frame_flame_valve1
-		dc.w afBack, 1
+		dc.w id_Anim_Flag_Back, 1
 		even

@@ -70,16 +70,16 @@ ani_chopper_slow:
 		dc.w 7
 		dc.w id_frame_chopper_shut
 		dc.w id_frame_chopper_open
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 
 ani_chopper_fast:
 		dc.w 3
 		dc.w id_frame_chopper_shut
 		dc.w id_frame_chopper_open
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 
 ani_chopper_still:
 		dc.w 7
 		dc.w id_frame_chopper_shut
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even

@@ -78,5 +78,5 @@ ani_tson_0:	dc.w 7
 		dc.w id_frame_tson_5
 		dc.w id_frame_tson_wag1
 		dc.w id_frame_tson_wag2
-		dc.w afBack, 2
+		dc.w id_Anim_Flag_Back, 2
 		even

@@ -210,7 +210,7 @@ ani_bomb_stand:
 		dc.w $13
 		dc.w id_frame_bomb_stand2
 		dc.w id_frame_bomb_stand1
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 
 ani_bomb_walk:
 		dc.w $13
@@ -218,23 +218,23 @@ ani_bomb_walk:
 		dc.w id_frame_bomb_walk3
 		dc.w id_frame_bomb_walk2
 		dc.w id_frame_bomb_walk1
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 
 ani_bomb_active:
 		dc.w $13
 		dc.w id_frame_bomb_activate2
 		dc.w id_frame_bomb_activate1
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 
 ani_bomb_fuse:
 		dc.w 3
 		dc.w id_frame_bomb_fuse1
 		dc.w id_frame_bomb_fuse2
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 
 ani_bomb_shrapnel:
 		dc.w 3
 		dc.w id_frame_bomb_shrapnel1
 		dc.w id_frame_bomb_shrapnel2
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even

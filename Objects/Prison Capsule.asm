@@ -223,5 +223,5 @@ ani_prison_switchflash:
 		dc.w 2
 		dc.w id_frame_prison_switch1
 		dc.w id_frame_prison_switch2
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even

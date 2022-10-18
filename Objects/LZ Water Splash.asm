@@ -47,5 +47,5 @@ ani_splash_0:	dc.w 4
 		dc.w id_frame_splash_0
 		dc.w id_frame_splash_1
 		dc.w id_frame_splash_2
-		dc.w afRoutine
+		dc.w id_Anim_Flag_Routine
 		even

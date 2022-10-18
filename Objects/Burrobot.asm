@@ -170,22 +170,22 @@ ani_burro_walk1:
 		dc.w 3
 		dc.w id_frame_burro_walk1
 		dc.w id_frame_burro_walk3
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 
 ani_burro_walk2:
 		dc.w 3
 		dc.w id_frame_burro_walk1
 		dc.w id_frame_burro_walk2
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 
 ani_burro_digging:
 		dc.w 3
 		dc.w id_frame_burro_dig1
 		dc.w id_frame_burro_dig2
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 
 ani_burro_fall:
 		dc.w 3
 		dc.w id_frame_burro_fall
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even

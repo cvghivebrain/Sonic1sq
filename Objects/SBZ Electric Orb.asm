@@ -64,7 +64,7 @@ Ani_Elec:	index *
 ani_electro_normal:
 		dc.w 7
 		dc.w id_frame_electro_normal
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_electro_zap:
@@ -82,5 +82,5 @@ ani_electro_zap:
 		dc.w id_frame_electro_zap5
 		dc.w id_frame_electro_zap5
 		dc.w id_frame_electro_normal
-		dc.w afChange, id_ani_electro_normal
+		dc.w id_Anim_Flag_Change, id_ani_electro_normal
 		even

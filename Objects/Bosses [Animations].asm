@@ -19,75 +19,75 @@ Ani_Bosses:	index *
 ani_boss_ship:
 		dc.w $F
 		dc.w id_frame_boss_ship
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_boss_face1:
 		dc.w 5
 		dc.w id_frame_boss_face1
 		dc.w id_frame_boss_face2
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_boss_face2:
 		dc.w 3
 		dc.w id_frame_boss_face1
 		dc.w id_frame_boss_face2
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_boss_face3:
 		dc.w 1
 		dc.w id_frame_boss_face1
 		dc.w id_frame_boss_face2
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_boss_laugh:
 		dc.w 4
 		dc.w id_frame_boss_laugh1
 		dc.w id_frame_boss_laugh2
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_boss_hit:
 		dc.w $1F
 		dc.w id_frame_boss_hit
 		dc.w id_frame_boss_face1
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_boss_panic:
 		dc.w 3
 		dc.w id_frame_boss_panic
 		dc.w id_frame_boss_face1
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_boss_blank:
 		dc.w $F
 		dc.w id_frame_boss_blank
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_boss_flame1:
 		dc.w 3
 		dc.w id_frame_boss_flame1
 		dc.w id_frame_boss_flame2
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_boss_flame2:
 		dc.w 1
 		dc.w id_frame_boss_flame1
 		dc.w id_frame_boss_flame2
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_boss_defeat:
 		dc.w $F
 		dc.w id_frame_boss_defeat
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_boss_bigflame:
@@ -100,5 +100,5 @@ ani_boss_bigflame:
 		dc.w id_frame_boss_bigflame2
 		dc.w id_frame_boss_flame2
 		dc.w id_frame_boss_flame1
-		dc.w afBack, 2
+		dc.w id_Anim_Flag_Back, 2
 		even

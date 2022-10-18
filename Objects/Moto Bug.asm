@@ -133,7 +133,7 @@ Ani_Moto:	index *
 
 ani_moto_stand:	dc.w $F
 		dc.w id_frame_moto_2
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_moto_walk:	dc.w 7
@@ -141,7 +141,7 @@ ani_moto_walk:	dc.w 7
 		dc.w id_frame_moto_1
 		dc.w id_frame_moto_0
 		dc.w id_frame_moto_2
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_moto_smoke:	dc.w 1
@@ -156,5 +156,5 @@ ani_moto_smoke:	dc.w 1
 		dc.w id_frame_moto_smoke2
 		dc.w id_frame_moto_blank
 		dc.w id_frame_moto_smoke3
-		dc.w afRoutine
+		dc.w id_Anim_Flag_Routine
 		even

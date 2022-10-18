@@ -150,12 +150,12 @@ Ani_Bat:	index *
 		
 ani_bat_hang:	dc.w $F
 		dc.w id_frame_bat_hanging
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_bat_drop:	dc.w $F
 		dc.w id_frame_bat_fly1
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_bat_fly:	dc.w 3
@@ -163,5 +163,5 @@ ani_bat_fly:	dc.w 3
 		dc.w id_frame_bat_fly2
 		dc.w id_frame_bat_fly3
 		dc.w id_frame_bat_fly2
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even

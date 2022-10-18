@@ -73,23 +73,23 @@ ani_harp_h_extending:
 		dc.w 3
 		dc.w id_frame_harp_h_middle
 		dc.w id_frame_harp_h_extended
-		dc.w afRoutine
+		dc.w id_Anim_Flag_Routine
 
 ani_harp_h_retracting:
 		dc.w 3
 		dc.w id_frame_harp_h_middle
 		dc.w id_frame_harp_h_retracted
-		dc.w afRoutine
+		dc.w id_Anim_Flag_Routine
 
 ani_harp_v_extending:
 		dc.w 3
 		dc.w id_frame_harp_v_middle
 		dc.w id_frame_harp_v_extended
-		dc.w afRoutine
+		dc.w id_Anim_Flag_Routine
 
 ani_harp_v_retracting:
 		dc.w 3
 		dc.w id_frame_harp_v_middle
 		dc.w id_frame_harp_v_retracted
-		dc.w afRoutine
+		dc.w id_Anim_Flag_Routine
 		even

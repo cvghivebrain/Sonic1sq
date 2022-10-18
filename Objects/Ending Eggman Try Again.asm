@@ -88,12 +88,12 @@ Ani_EEgg:	index *
 ani_eegg_juggle1:
 		dc.w 5
 		dc.w id_frame_eegg_juggle1
-		dc.w afRoutine, 1
+		dc.w id_Anim_Flag_Routine, 1
 
 ani_eegg_juggle2:
 		dc.w 5
 		dc.w id_frame_eegg_juggle3
-		dc.w afRoutine, 3
+		dc.w id_Anim_Flag_Routine, 3
 
 ani_eegg_end:
 		dc.w 7
@@ -113,5 +113,5 @@ ani_eegg_end:
 		dc.w id_frame_eegg_end2
 		dc.w id_frame_eegg_end3
 		dc.w id_frame_eegg_end2
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even

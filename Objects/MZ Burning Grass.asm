@@ -101,5 +101,5 @@ ani_gfire_0:	dc.w 5
 		dc.w id_frame_fire_vertical1+afxflip
 		dc.w id_frame_fire_vertical2
 		dc.w id_frame_fire_vertical2+afxflip
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even

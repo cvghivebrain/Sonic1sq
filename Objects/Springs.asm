@@ -224,7 +224,7 @@ ani_spring_up:
 		dc.w id_frame_spring_upext
 		dc.w id_frame_spring_upext
 		dc.w id_frame_spring_up
-		dc.w afRoutine
+		dc.w id_Anim_Flag_Routine
 
 ani_spring_left:
 		dc.w 0
@@ -238,5 +238,5 @@ ani_spring_left:
 		dc.w id_frame_spring_leftext
 		dc.w id_frame_spring_leftext
 		dc.w id_frame_spring_left
-		dc.w afRoutine
+		dc.w id_Anim_Flag_Routine
 		even

@@ -184,15 +184,15 @@ ani_roll_unfold:
 		dc.w id_frame_roll_roll1
 		dc.w id_frame_roll_fold
 		dc.w id_frame_roll_stand
-		dc.w afBack, 1
+		dc.w id_Anim_Flag_Back, 1
 ani_roll_fold:	dc.w $F
 		dc.w id_frame_roll_fold
 		dc.w id_frame_roll_roll1
-		dc.w afChange, id_ani_roll_roll
+		dc.w id_Anim_Flag_Change, id_ani_roll_roll
 		even
 ani_roll_roll:	dc.w 3
 		dc.w id_frame_roll_roll2
 		dc.w id_frame_roll_roll3
 		dc.w id_frame_roll_roll1
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even

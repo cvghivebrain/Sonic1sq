@@ -621,5 +621,5 @@ Ani_FZEgg:	index *
 ani_fzeggman_0:	dc.w 3
 		dc.w id_frame_fzeggman_damage1
 		dc.w id_frame_fzeggman_damage2
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even

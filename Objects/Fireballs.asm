@@ -195,12 +195,12 @@ ani_fire_vertical:
 		dc.w id_frame_fire_vertical1+afxflip
 		dc.w id_frame_fire_vertical2
 		dc.w id_frame_fire_vertical2+afxflip
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 
 ani_fire_vertcollide:
 		dc.w 5
 		dc.w id_frame_fire_vertcollide
-		dc.w afRoutine
+		dc.w id_Anim_Flag_Routine
 		even
 
 ani_fire_horizontal:
@@ -209,10 +209,10 @@ ani_fire_horizontal:
 		dc.w id_frame_fire_horizontal1+afyflip
 		dc.w id_frame_fire_horizontal2
 		dc.w id_frame_fire_horizontal2+afyflip
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 
 ani_fire_horicollide:
 		dc.w 5
 		dc.w id_frame_fire_horicollide
-		dc.w afRoutine
+		dc.w id_Anim_Flag_Routine
 		even

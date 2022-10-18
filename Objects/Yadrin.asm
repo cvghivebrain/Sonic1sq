@@ -141,7 +141,7 @@ Ani_Yad:	index *
 ani_yadrin_stand:
 		dc.w 7
 		dc.w id_frame_yadrin_walk0
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even
 
 ani_yadrin_walk:
@@ -154,5 +154,5 @@ ani_yadrin_walk:
 		dc.w id_frame_yadrin_walk3
 		dc.w id_frame_yadrin_walk2
 		dc.w id_frame_yadrin_walk5
-		dc.w afEnd
+		dc.w id_Anim_Flag_Restart
 		even

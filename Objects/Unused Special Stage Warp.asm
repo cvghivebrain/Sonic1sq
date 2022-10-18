@@ -83,5 +83,5 @@ ani_vanish_0:	dc.w 5
 		dc.w id_frame_vanish_blank
 		dc.w id_frame_vanish_sparkle4
 		dc.w id_frame_vanish_blank
-		dc.w afRoutine
+		dc.w id_Anim_Flag_Routine
 		even

@@ -73,12 +73,21 @@ Anim_Flag_Index:
 		ptr Anim_Flag_WalkRun
 		ptr Anim_Flag_Roll
 		ptr Anim_Flag_Push
+		ptr Anim_Flag_Restart_Sonic
 ; ===========================================================================
 
 Anim_Flag_Restart:
 		move.b	#0,ost_anim_frame(a0)			; restart the animation
 		move.w	2(a1),d0				; read sprite number
 		bra.s	Anim_Next
+; ===========================================================================
+
+Anim_Flag_Restart_Sonic:
+		move.b	#0,ost_anim_frame(a0)			; restart the animation
+		move.w	2(a1),d0				; read sprite number
+		move.w	d0,ost_frame_hi(a0)			; load sprite number
+		addq.b	#2,ost_anim_frame(a0)			; next frame number
+		rts
 ; ===========================================================================
 
 Anim_Flag_Back:
@@ -117,15 +126,11 @@ Anim_Flag_WalkRun:
 		move.b	ost_angle(a0),d0			; get Sonic's angle
 		move.b	ost_status(a0),d2
 		andi.b	#status_xflip,d2
-		beq.s	.flip					; branch if Sonic is xflipped
+		beq.s	.noxflip				; branch if Sonic isn't xflipped
 		not.b	d0					; reverse angle
-	.flip:
+	.noxflip:
 		lsr.b	#2,d0					; divide angle by 4
-		lea	(Anim_Orientation).l,a2
-		move.b	(a2,d0.w),d1				; get x/yflip flags based on angle
-		eor.b	d1,d2					; combine with xflip from status
-		andi.b	#$FF-render_xflip-render_yflip,ost_render(a0)
-		or.b	d2,ost_render(a0)			; apply x/yflip bits to render flags
+		
 		lea	(Anim_WalkList).l,a2
 		move.w	ost_inertia(a0),d1			; get Sonic's speed
 		bpl.s	.speed_ok
@@ -143,7 +148,14 @@ Anim_Flag_WalkRun:
 		lsr.w	#8,d1
 		move.b	d1,ost_anim_time(a0)			; set frame duration
 		
+		andi.b	#$FF-render_xflip-render_yflip,ost_render(a0) ; clear x/yflip flags
 		move.b	(a2,d0.w),d0				; get animation for specified angle
+		bpl.s	.noinvert				; branch if invert flag is not set
+		bset	#render_xflip_bit,ost_render(a0)
+		bset	#render_yflip_bit,ost_render(a0)	; x/yflip sprite
+		and.b	#$7F,d0					; remove invert flag
+	.noinvert:
+		eor.b	d2,ost_render(a0)			; apply xflip from status
 
 Anim_Sonic_Update:
 		add.w	d0,d0
@@ -197,14 +209,14 @@ Anim_Sonic_Update2:
 		bra.w	Anim_Sonic_Update
 		
 Anim_WalkList:	dc.b id_Walk,id_Walk,id_Walk,id_Walk		; angles 0-$F
-		dc.b id_Walk4,id_Walk4,id_Walk4,id_Walk4	; angles $10-$1F
-		dc.b id_Walk4,id_Walk4,id_Walk4,id_Walk4	; angles $20-$2F
-		dc.b id_Walk3,id_Walk3,id_Walk3,id_Walk3	; angles $30-$3F
-		dc.b id_Walk3,id_Walk3,id_Walk3,id_Walk3	; angles $40-$4F
-		dc.b id_Walk2,id_Walk2,id_Walk2,id_Walk2	; angles $50-$5F
-		dc.b id_Walk2,id_Walk2,id_Walk2,id_Walk2	; angles $60-$6F
-		dc.b id_Walk,id_Walk,id_Walk,id_Walk		; angles $70-$7F
-		dc.b id_Walk,id_Walk,id_Walk,id_Walk		; angles $80-$8F
+		dc.b id_Walk4+$80,id_Walk4+$80,id_Walk4+$80,id_Walk4+$80 ; angles $10-$1F
+		dc.b id_Walk4+$80,id_Walk4+$80,id_Walk4+$80,id_Walk4+$80 ; angles $20-$2F
+		dc.b id_Walk3+$80,id_Walk3+$80,id_Walk3+$80,id_Walk3+$80 ; angles $30-$3F
+		dc.b id_Walk3+$80,id_Walk3+$80,id_Walk3+$80,id_Walk3+$80 ; angles $40-$4F
+		dc.b id_Walk2+$80,id_Walk2+$80,id_Walk2+$80,id_Walk2+$80 ; angles $50-$5F
+		dc.b id_Walk2+$80,id_Walk2+$80,id_Walk2+$80,id_Walk2+$80 ; angles $60-$6F
+		dc.b id_Walk+$80,id_Walk+$80,id_Walk+$80,id_Walk+$80 ; angles $70-$7F
+		dc.b id_Walk+$80,id_Walk+$80,id_Walk+$80,id_Walk+$80 ; angles $80-$8F
 		dc.b id_Walk4,id_Walk4,id_Walk4,id_Walk4	; angles $90-$9F
 		dc.b id_Walk4,id_Walk4,id_Walk4,id_Walk4	; angles $A0-$AF
 		dc.b id_Walk3,id_Walk3,id_Walk3,id_Walk3	; angles $B0-$BF
@@ -215,14 +227,14 @@ Anim_WalkList:	dc.b id_Walk,id_Walk,id_Walk,id_Walk		; angles 0-$F
 		even
 		
 Anim_RunList:	dc.b id_Run,id_Run,id_Run,id_Run		; angles 0-$F
-		dc.b id_Run4,id_Run4,id_Run4,id_Run4		; angles $10-$1F
-		dc.b id_Run4,id_Run4,id_Run4,id_Run4		; angles $20-$2F
-		dc.b id_Run3,id_Run3,id_Run3,id_Run3		; angles $30-$3F
-		dc.b id_Run3,id_Run3,id_Run3,id_Run3		; angles $40-$4F
-		dc.b id_Run2,id_Run2,id_Run2,id_Run2		; angles $50-$5F
-		dc.b id_Run2,id_Run2,id_Run2,id_Run2		; angles $60-$6F
-		dc.b id_Run,id_Run,id_Run,id_Run		; angles $70-$7F
-		dc.b id_Run,id_Run,id_Run,id_Run		; angles $80-$8F
+		dc.b id_Run4+$80,id_Run4+$80,id_Run4+$80,id_Run4+$80 ; angles $10-$1F
+		dc.b id_Run4+$80,id_Run4+$80,id_Run4+$80,id_Run4+$80 ; angles $20-$2F
+		dc.b id_Run3+$80,id_Run3+$80,id_Run3+$80,id_Run3+$80 ; angles $30-$3F
+		dc.b id_Run3+$80,id_Run3+$80,id_Run3+$80,id_Run3+$80 ; angles $40-$4F
+		dc.b id_Run2+$80,id_Run2+$80,id_Run2+$80,id_Run2+$80 ; angles $50-$5F
+		dc.b id_Run2+$80,id_Run2+$80,id_Run2+$80,id_Run2+$80 ; angles $60-$6F
+		dc.b id_Run+$80,id_Run+$80,id_Run+$80,id_Run+$80 ; angles $70-$7F
+		dc.b id_Run+$80,id_Run+$80,id_Run+$80,id_Run+$80 ; angles $80-$8F
 		dc.b id_Run4,id_Run4,id_Run4,id_Run4		; angles $90-$9F
 		dc.b id_Run4,id_Run4,id_Run4,id_Run4		; angles $A0-$AF
 		dc.b id_Run3,id_Run3,id_Run3,id_Run3		; angles $B0-$BF
@@ -230,25 +242,6 @@ Anim_RunList:	dc.b id_Run,id_Run,id_Run,id_Run		; angles 0-$F
 		dc.b id_Run2,id_Run2,id_Run2,id_Run2		; angles $D0-$DF
 		dc.b id_Run2,id_Run2,id_Run2,id_Run2		; angles $E0-$EF
 		dc.b id_Run,id_Run,id_Run,id_Run		; angles $F0-$FF
-		even
-		
-Anim_Orientation:
-		dc.b 0,0,0,0					; angles 0-$F
-		dc.b render_xflip+render_yflip,render_xflip+render_yflip,render_xflip+render_yflip,render_xflip+render_yflip ; angles $10-$1F
-		dc.b render_xflip+render_yflip,render_xflip+render_yflip,render_xflip+render_yflip,render_xflip+render_yflip ; angles $20-$2F
-		dc.b render_xflip+render_yflip,render_xflip+render_yflip,render_xflip+render_yflip,render_xflip+render_yflip ; angles $30-$3F
-		dc.b render_xflip+render_yflip,render_xflip+render_yflip,render_xflip+render_yflip,render_xflip+render_yflip ; angles $40-$4F
-		dc.b render_xflip+render_yflip,render_xflip+render_yflip,render_xflip+render_yflip,render_xflip+render_yflip ; angles $50-$5F
-		dc.b render_xflip+render_yflip,render_xflip+render_yflip,render_xflip+render_yflip,render_xflip+render_yflip ; angles $60-$6F
-		dc.b render_xflip+render_yflip,render_xflip+render_yflip,render_xflip+render_yflip,render_xflip+render_yflip ; angles $70-$7F
-		dc.b render_xflip+render_yflip,render_xflip+render_yflip,render_xflip+render_yflip,render_xflip+render_yflip ; angles $80-$8F
-		dc.b 0,0,0,0					; angles $90-$9F
-		dc.b 0,0,0,0					; angles $A0-$AF
-		dc.b 0,0,0,0					; angles $B0-$BF
-		dc.b 0,0,0,0					; angles $C0-$CF
-		dc.b 0,0,0,0					; angles $D0-$DF
-		dc.b 0,0,0,0					; angles $E0-$EF
-		dc.b 0,0,0,0					; angles $F0-$FF
 		even
 
 ; ---------------------------------------------------------------------------
