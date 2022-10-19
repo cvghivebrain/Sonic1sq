@@ -186,8 +186,8 @@ Bri_UpdateY:
 		move.w	d3,d2					; copy to d2
 		add.w	d0,d3
 		moveq	#0,d5
-		lea	(Bri_Data_Y_Max).l,a5			; log y bend distance array
-		move.b	(a5,d3.w),d5				; get byte according to bridge length & log being stood on
+		lea	(Bri_Data_Y_Max).l,a3			; log y bend distance array
+		move.b	(a3,d3.w),d5				; get byte according to bridge length & log being stood on
 		andi.w	#$F,d3					; d3 = log Sonic is standing on
 		lsl.w	#4,d3					; multiply by $10
 		lea	(a4,d3.w),a3

@@ -111,8 +111,7 @@ BBlock_Frag:	; Routine 4
 ; ---------------------------------------------------------------------------
 
 BBlock_Break:
-		lea	BBlock_FragSpeed(pc),a4
-		lea	BBlock_FragPos(pc),a5
+		lea	BBlock_FragData(pc),a4
 		moveq	#id_frame_bblock_topleft,d4		; first fragment is top left
 		moveq	#3,d1
 		moveq	#$38,d2
@@ -141,9 +140,9 @@ BBlock_Break:
 
 		move.w	(a4)+,ost_x_vel(a1)
 		move.w	(a4)+,ost_y_vel(a1)
-		move.w	(a5)+,d3
+		move.w	(a4)+,d3
 		add.w	d3,ost_x_pos(a1)
-		move.w	(a5)+,d3
+		move.w	(a4)+,d3
 		add.w	d3,ost_y_pos(a1)
 		move.b	d4,ost_frame(a1)			; set frame (raw mappings are not used like in other broken blocks)
 		addq.w	#1,d4					; use next frame
@@ -154,13 +153,8 @@ BBlock_Break:
 ; End of function BBlock_Break
 
 ; ===========================================================================
-BBlock_FragSpeed:
-		dc.w -$180, -$200
-		dc.w $180, -$200
-		dc.w -$100, -$100
-		dc.w $100, -$100
-
-BBlock_FragPos:	dc.w -8, -8
-		dc.w $10, 0
-		dc.w 0,	$10
-		dc.w $10, $10
+BBlock_FragData:
+		dc.w -$180, -$200, -8, -8			; x/y speed, x/y pos
+		dc.w $180, -$200, $10, 0
+		dc.w -$100, -$100, 0, $10
+		dc.w $100, -$100, $10, $10

@@ -7,11 +7,8 @@
 LZWaterFeatures:
 		tst.b	(f_water_enable).w			; check if water is enabled
 		beq.s	.notlabyrinth				; if not, branch
-		if Revision=0
-		else
-			tst.b   (f_disable_scrolling).w
-			bne.s	.set_height
-		endc
+		tst.b   (f_disable_scrolling).w
+		bne.s	.set_height
 		cmpi.b	#id_Sonic_Death,(v_ost_player+ost_routine).w ; has Sonic just died?
 		bcc.s	.set_height				; if yes, skip other effects
 

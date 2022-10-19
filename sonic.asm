@@ -24,13 +24,6 @@ EnableSRAM:	equ 0						; change to 1 to enable SRAM
 BackupSRAM:	equ 1
 AddressSRAM:	equ 3						; 0 = odd+even; 2 = even only; 3 = odd only
 
-; Change to 0 to build the original version of the game, dubbed REV00
-; Change to 1 to build the later version, dubbed REV01, which includes various bugfixes and enhancements
-; Change to 2 to build the version from Sonic Mega Collection, dubbed REVXB, which fixes the infamous "spike bug"
-	if ~def(Revision)					; bit-perfect check will automatically set this variable
-Revision:	equ 1
-	endc
-
 ZoneCount:	equ 6						; discrete zones are: GHZ, MZ, SYZ, LZ, SLZ, and SBZ
 
 ; ===========================================================================
@@ -62,30 +55,20 @@ Vectors:	dc.l v_stack_pointer&$FFFFFF			; Initial stack pointer value
 		dc.l ErrorTrap					; IRQ level 7
 		dcb.l 16,ErrorTrap				; TRAP #00..#15 exceptions
 		dcb.l 8,ErrorTrap				; Unused (reserved)
-		if Revision<>2
-			dcb.l 8,ErrorTrap			; Unused (reserved)
-		else
+		dcb.l 8,ErrorTrap			; Unused (reserved)
 	Spike_Bugfix:
 								; Relocated code from Spike_Hurt. REVXB was a nasty hex-edit.
-			move.l	ost_y_pos(a0),d3
-			move.w	ost_y_vel(a0),d0
-			ext.l	d0
-			asl.l	#8,d0
-			jmp	(Spike_Resume).l
+		;	move.l	ost_y_pos(a0),d3
+		;	move.w	ost_y_vel(a0),d0
+		;	ext.l	d0
+		;	asl.l	#8,d0
+		;	jmp	(Spike_Resume).l
 
-			dc.w ErrorTrap
-			dcb.l 3,ErrorTrap
-		endc
 		dc.b "SEGA MEGA DRIVE "				; Hardware system ID (Console name)
 		dc.b "(C)SEGA \date"				; Copyright holder and release date (generally year)
 		dc.b "SONIC 1-SQUARED                                 " ; Domestic name
 		dc.b "SONIC 1-SQUARED                                 " ; International name
-
-	if Revision=0
-		dc.b "GM 00001009-00"				; Serial/version number (Rev 0)
-	else
-		dc.b "GM 00004049-01"				; Serial/version number (Rev non-0)
-	endc
+		dc.b "GM 00004049-SQ"				; Serial/version number
 
 Checksum: 	dc.w $0
 		dc.b "J               "				; I/O support
@@ -1080,11 +1063,7 @@ Level_SLZ_unused:	dc.b 0,	0, 0, 0
 
 Level_SYZ1:	incbin	"Level Layouts\syz1.bin"
 		even
-Level_SYZ_bg:	if Revision=0
-			incbin	"Level Layouts\syzbg.bin"
-		else
-			incbin	"Level Layouts\syzbg (JP1).bin"
-		endc
+Level_SYZ_bg:	incbin	"Level Layouts\syzbg (JP1).bin"
 		even
 Level_SYZ1_unused:	dc.b 0,	0, 0, 0
 Level_SYZ2:	incbin	"Level Layouts\syz2.bin"

@@ -172,12 +172,9 @@ SS_ToSegaScreen:
 		move.b	#id_Sega,(v_gamemode).w			; goto Sega screen
 		rts
 
-		if Revision=0
-		else
-	SS_ToLevel:	cmpi.b	#id_Level,(v_gamemode).w
-			beq.s	SS_ToSegaScreen
-			rts
-		endc
+SS_ToLevel:	cmpi.b	#id_Level,(v_gamemode).w
+		beq.s	SS_ToSegaScreen
+		rts
 
 ; ---------------------------------------------------------------------------
 ; Special stage	background mappings loading subroutine

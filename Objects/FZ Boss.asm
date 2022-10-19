@@ -79,11 +79,7 @@ BFZ_Main:	; Routine 0
 		move.b	(a3)+,ost_routine(a1)			; goto BFZ_Main/BFZ_Eggman/BFZ_Panel/BFZ_Legs/BFZ_Cockpit/BFZ_EmptyShip/BFZ_Flame next
 		move.b	(a3)+,ost_anim(a1)
 		move.b	(a3)+,ost_priority(a1)
-		if Revision=0
-			move.b	(a3)+,ost_width(a1)
-		else
-			move.b	(a3)+,ost_displaywidth(a1)
-		endc
+		move.b	(a3)+,ost_displaywidth(a1)
 		move.b	(a3)+,ost_height(a1)
 		move.b	#render_rel,ost_render(a1)
 		bset	#render_onscreen_bit,ost_render(a0)
@@ -246,11 +242,8 @@ BFZ_Eggman_Crush:
 ; ===========================================================================
 
 .beaten:
-		if Revision=0
-		else
-			moveq	#100,d0
-			bsr.w	AddPoints			; give Sonic 1000 points
-		endc
+		moveq	#100,d0
+		bsr.w	AddPoints				; give Sonic 1000 points
 		move.b	#id_BFZ_Eggman_Fall,ost_fz_mode(a0)	; goto BFZ_Eggman_Fall next
 		move.w	#$25C0,ost_x_pos(a0)			; move Eggman outside arena to the right
 		move.w	#$53C,ost_y_pos(a0)
@@ -300,11 +293,7 @@ BFZ_Eggman_Plasma:
 ; ===========================================================================
 
 BFZ_Eggman_Fall:
-		if Revision=0
-			move.b	#$30,ost_width(a0)
-		else
-			move.b	#$30,ost_displaywidth(a0)
-		endc
+		move.b	#$30,ost_displaywidth(a0)
 		bset	#status_xflip_bit,ost_status(a0)	; Eggman faces right
 		jsr	(SpeedToPos).l				; update position
 		move.b	#id_frame_eggman_jump,ost_frame(a0)	; use jumping frame
@@ -313,11 +302,7 @@ BFZ_Eggman_Fall:
 		bcs.s	.wait					; if not, branch
 		move.w	#$59C,ost_y_pos(a0)			; align to bottom of tube
 		addq.b	#2,ost_fz_mode(a0)			; goto BFZ_Eggman_Run next
-		if Revision=0
-			move.b	#$20,ost_width(a0)
-		else
-			move.b	#$20,ost_displaywidth(a0)
-		endc
+		move.b	#$20,ost_displaywidth(a0)
 		move.w	#$100,ost_x_vel(a0)			; move right
 		move.w	#-$100,ost_y_vel(a0)			; bounce up
 		addq.b	#2,(v_dle_routine).w			; scroll camera right

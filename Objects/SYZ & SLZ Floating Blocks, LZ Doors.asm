@@ -62,22 +62,19 @@ FBlock_Main:	; Routine 0
 		move.b	(a2),d0					; get height from size list
 		add.w	d0,d0
 		move.w	d0,ost_fblock_move_dist(a0)		; set full height
-		if Revision=0
-		else
-			cmpi.b	#type_fblock_syzrect2x2+type_fblock_farrightbutton,ost_subtype(a0) ; is the subtype $37? (used once in SYZ3)
-			bne.s	.dontdelete			; if not, branch
-			cmpi.w	#$1BB8,ost_x_pos(a0)		; is object in its start position?
-			bne.s	.notatpos			; if not, branch
-			tst.b	(f_fblock_finish).w		; has similar object reached its destination?
-			beq.s	.dontdelete			; if not, branch
-			jmp	(DeleteObject).l
+		cmpi.b	#type_fblock_syzrect2x2+type_fblock_farrightbutton,ost_subtype(a0) ; is the subtype $37? (used once in SYZ3)
+		bne.s	.dontdelete				; if not, branch
+		cmpi.w	#$1BB8,ost_x_pos(a0)			; is object in its start position?
+		bne.s	.notatpos				; if not, branch
+		tst.b	(f_fblock_finish).w			; has similar object reached its destination?
+		beq.s	.dontdelete				; if not, branch
+		jmp	(DeleteObject).l
 	.notatpos:
-			clr.b	ost_subtype(a0)			; stop object moving
-			tst.b	(f_fblock_finish).w
-			bne.s	.dontdelete
-			jmp	(DeleteObject).l
+		clr.b	ost_subtype(a0)				; stop object moving
+		tst.b	(f_fblock_finish).w
+		bne.s	.dontdelete
+		jmp	(DeleteObject).l
 	.dontdelete:
-		endc
 		moveq	#0,d0
 		cmpi.b	#id_LZ,(v_zone).w			; check if level is LZ
 		beq.s	.not_syzslz				; if yes, branch
@@ -340,11 +337,8 @@ FBlock_FarRightButton:
 		addq.w	#1,ost_fblock_move_dist(a0)		; increment movement counter
 		cmpi.w	#$380,ost_fblock_move_dist(a0)		; has object moved $380 pixels?
 		bne.s	.end					; if not, branch
-		if Revision=0
-		else
-			move.b	#1,(f_fblock_finish).w
-			clr.b	ost_fblock_move_flag(a0)
-		endc
+		move.b	#1,(f_fblock_finish).w
+		clr.b	ost_fblock_move_flag(a0)
 		clr.b	ost_subtype(a0)				; stop object moving
 
 	.end:

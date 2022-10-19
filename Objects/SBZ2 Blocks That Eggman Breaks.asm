@@ -124,8 +124,7 @@ FFloor_Frag:	; Routine $A
 ; ===========================================================================
 
 FFloor_BlockBreak:
-		lea	FFloor_FragSpeed(pc),a4			; y speed data
-		lea	FFloor_FragPos(pc),a5			; x/y position data
+		lea	FFloor_FragData(pc),a4			; y speed & x/y position data
 		moveq	#id_frame_ffloor_topleft,d4		; frame id of first fragment (1)
 		moveq	#4-1,d1					; number of fragments
 		moveq	#$38,d2
@@ -153,9 +152,9 @@ FFloor_BlockBreak:
 		dbf	d3,.copy_ost				; copy contents of parent block OST to fragment OST
 
 		move.w	(a4)+,ost_y_vel(a1)			; get initial y speed from FFloor_FragSpeed
-		move.w	(a5)+,d3
+		move.w	(a4)+,d3
 		add.w	d3,ost_x_pos(a1)			; get position from FFloor_FragPos
-		move.w	(a5)+,d3
+		move.w	(a4)+,d3
 		add.w	d3,ost_y_pos(a1)
 		move.b	d4,ost_frame(a1)			; set frame
 		addq.w	#1,d4					; next frame
@@ -165,13 +164,8 @@ FFloor_BlockBreak:
 		play.w	1, jsr, sfx_Smash			; play smashing sound
 		jmp	(DisplaySprite).l
 ; ===========================================================================
-FFloor_FragSpeed:
-		dc.w $80
-		dc.w 0
-		dc.w $120
-		dc.w $C0
-
-FFloor_FragPos:	dc.w -8, -8
-		dc.w $10, 0
-		dc.w 0,	$10
-		dc.w $10, $10		
+FFloor_FragData:
+		dc.w $80, -8, -8				; y speed, x pos, y pos
+		dc.w 0, $10, 0
+		dc.w $120, 0, $10
+		dc.w $C0, $10, $10

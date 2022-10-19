@@ -159,11 +159,7 @@ ObjPos_GHZ3:
 		objpos $1308,$04B0,EdgeWalls,type_edge_shadow
 		objpos $1330,$02B0,CollapseLedge,type_ledge_right,xflip,rem
 		objpos $1378,$0478,Spikes,type_spike_3up+type_spike_still
-		if Revision=0
-		objpos $1404,$036F,Springs,type_spring_red+type_spring_right,xflip
-		else
 		objpos $1404,$036E,Springs,type_spring_red+type_spring_right,xflip
-		endc
 		objpos $1408,$0470,EdgeWalls,type_edge_shadow
 		objpos $1420,$036F,PurpleRock,$00
 		objpos $1428,$0420,Crabmeat,$00,rem

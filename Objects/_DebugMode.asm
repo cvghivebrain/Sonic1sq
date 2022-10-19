@@ -360,22 +360,7 @@ DebugList_Ending:
 
 ;			mappings	object		subtype	frame	VRAM setting
 		dbug	Map_Ring,	Rings,		0,	0,	tile_Kos_Ring+tile_pal2
-	if Revision=0
-		dbug	Map_Bump,	Bumper,		0,	0,	$380
-		dbug	Map_Animal2,	Animals,	$A,	0,	$5A0
-		dbug	Map_Animal2,	Animals,	$B,	0,	$5A0
-		dbug	Map_Animal2,	Animals,	$C,	0,	$5A0
-		dbug	Map_Animal1,	Animals,	$D,	0,	tile_Nem_Rabbit_End
-		dbug	Map_Animal1,	Animals,	$E,	0,	tile_Nem_Rabbit_End
-		dbug	Map_Animal1,	Animals,	$F,	0,	tile_Nem_BlackBird_End
-		dbug	Map_Animal1,	Animals,	$10,	0,	tile_Nem_BlackBird_End
-		dbug	Map_Animal2,	Animals,	$11,	0,	tile_Nem_Seal_End
-		dbug	Map_Animal3,	Animals,	$12,	0,	tile_Nem_Pig_End
-		dbug	Map_Animal2,	Animals,	$13,	0,	tile_Nem_Chicken_End
-		dbug	Map_Animal3,	Animals,	$14,	0,	tile_Nem_Squirrel_End
-	else
 		dbug	Map_Ring,	Rings,		0,	id_frame_ring_blank,	tile_Kos_Ring+tile_pal2
-	endc
 	DebugList_Ending_end:
 
 		even

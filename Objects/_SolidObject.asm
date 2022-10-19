@@ -163,11 +163,7 @@ Solid_Collision:
 		tst.b	(v_lock_multi).w			; are controls locked?
 		bmi.w	Solid_NoCollision			; if yes, branch
 		cmpi.b	#id_Sonic_Death,(v_ost_player+ost_routine).w ; is Sonic dying?
-		if Revision=0
-			bcc.w	Solid_NoCollision		; if yes, branch
-		else
-			bcc.w	Solid_Debug
-		endc
+		bcc.w	Solid_Debug
 		tst.w	(v_debug_active).w			; is debug mode being used?
 		bne.w	Solid_Debug				; if yes, branch
 		move.w	d0,d5					; d0/d5 = x pos of Sonic on object

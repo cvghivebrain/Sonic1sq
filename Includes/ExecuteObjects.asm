@@ -2,16 +2,19 @@
 ; Object code execution subroutine
 
 ; output:
-;	d7 = OST index of last object (not changed by any object)
+;	d7.l = OST index of last object (not changed by any object)
 ;	a0 = address of OST of last object
-;	uses d0, a1 (objects may use other registers)
+;	a5 = address of OST of Sonic (not changed by any object)
+
+;	uses d0.l, a1 (objects use registers d1-d6, a2-a4)
 ; ---------------------------------------------------------------------------
 
 ExecuteObjects:
 		lea	(v_ost_all).w,a0			; set address for object RAM
+		lea	(v_ost_player).w,a5			; set address for player object
 		moveq	#countof_ost-1,d7			; $80 objects -1
 		moveq	#0,d0
-		cmpi.b	#id_Sonic_Death,(v_ost_player+ost_routine).w ; is Sonic dead?
+		cmpi.b	#id_Sonic_Death,ost_routine(a5)		; is Sonic dead?
 		bhs.s	.dead					; if yes, branch
 
 .run_object:
