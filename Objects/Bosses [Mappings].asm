@@ -11,11 +11,7 @@ Map_Bosses:	index *
 		ptr frame_boss_hit
 		ptr frame_boss_panic
 		ptr frame_boss_defeat
-		ptr frame_boss_flame1
-		ptr frame_boss_flame2
 		ptr frame_boss_blank
-		ptr frame_boss_bigflame1
-		ptr frame_boss_bigflame2
 		
 frame_boss_ship:
 		spritemap
@@ -75,33 +71,53 @@ frame_boss_defeat:
 		piece	4, -$14, 2x2, $60
 		endsprite
 		
-frame_boss_flame1:
-		spritemap
-		piece	$22, 4, 2x2, $2D
-		endsprite
-		
-frame_boss_flame2:
-		spritemap
-		piece	$22, 4, 2x2, $31
-		endsprite
-		
 frame_boss_blank:
 		spritemap
 		endsprite
+		even
 		
-frame_boss_bigflame1:
+; ---------------------------------------------------------------------------
+; Sprite mappings - Exhaust flame
+; ---------------------------------------------------------------------------
+
+Map_Exhaust:	index *
+		ptr frame_exhaust_flame1
+		ptr frame_exhaust_flame2
+		ptr frame_exhaust_bigflame1
+		ptr frame_exhaust_bigflame2
+		
+frame_exhaust_flame1:
 		spritemap
-		piece	$22, 0, 3x1, $12A
-		piece	$22, 8, 3x1, $12A, yflip
+		piece	$22, 4, 2x2, 0
 		endsprite
 		
-frame_boss_bigflame2:
+		dplcinit Art_Exhaust				; address of exhaust gfx
+		dplc 17,4					; offset, size (in tiles)
+		
+frame_exhaust_flame2:
 		spritemap
-		piece	$22, -8, 3x4, $12D
-		piece	$3A, 0, 1x2, $139
+		piece	$22, 4, 2x2, 0
+		endsprite
+		
+		dplc 21,4
+		
+frame_exhaust_bigflame1:
+		spritemap
+		piece	$22, 0, 3x1, 0
+		piece	$22, 8, 3x1, 0, yflip
+		endsprite
+		
+		dplc 0,3
+		
+frame_exhaust_bigflame2:
+		spritemap
+		piece	$22, -8, 3x4, 0
+		piece	$3A, 0, 1x2, 12
 		endsprite
 		even
-
+		
+		dplc 3,14
+		
 ; ---------------------------------------------------------------------------
 ; Sprite mappings - extra boss items & weapons
 ; ---------------------------------------------------------------------------

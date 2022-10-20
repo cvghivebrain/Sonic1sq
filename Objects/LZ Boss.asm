@@ -16,11 +16,9 @@ BLZ_Index:	index *,,2
 		ptr BLZ_Main
 		ptr BLZ_ShipMain
 		ptr BLZ_FaceMain
-		ptr BLZ_FlameMain
 
 BLZ_ObjData:	dc.b id_BLZ_ShipMain,	id_ani_boss_ship	; routine number, animation
 		dc.b id_BLZ_FaceMain,	id_ani_boss_face1
-		dc.b id_BLZ_FlameMain, id_ani_boss_blank
 ; ===========================================================================
 
 BLZ_Main:	; Routine 0
@@ -33,7 +31,7 @@ BLZ_Main:	; Routine 0
 		move.b	#4,ost_priority(a0)
 		lea	BLZ_ObjData(pc),a2			; get data for routine number & animation
 		movea.l	a0,a1					; replace current object with 1st in list
-		moveq	#2,d1					; 2 additional objects
+		moveq	#1,d1					; 2 additional objects
 		bra.s	.load_boss
 ; ===========================================================================
 
@@ -56,6 +54,12 @@ BLZ_Main:	; Routine 0
 		move.b	#$20,ost_displaywidth(a1)
 		move.l	a0,ost_boss_parent(a1)			; save address of OST of parent
 		dbf	d1,.loop				; repeat sequence 2 more times
+		
+		jsr	(FindNextFreeObj).l			; find free OST slot
+		bne.s	BLZ_ShipMain				; branch if not found
+		move.l	#Exhaust,ost_id(a1)
+		move.b	#$40,ost_subtype(a1)			; set speed at which ship escapes (div by $10)
+		move.l	a0,ost_exhaust_parent(a1)		; save address of OST of parent
 
 BLZ_ShipMain:	; Routine 2
 		lea	(v_ost_player).w,a1
@@ -364,37 +368,6 @@ BLZ_FaceMain:	; Routine 4
 		bpl.s	.delete					; if not, branch
 
 	.display:
-		bra.s	BLZ_Display
-; ===========================================================================
-
-.delete:
-		jmp	(DeleteObject).l
-; ===========================================================================
-
-BLZ_FlameMain:; Routine 6
-		movea.l	ost_boss_parent(a0),a1			; get address of OST of parent object
-		move.b	(a1),d0
-		cmp.b	(a0),d0
-		bne.s	.delete					; branch if parent has been deleted
-		cmpi.b	#id_BLZ_Escape2,ost_routine2(a1)	; is boss escaping?
-		bne.s	.display				; if not, branch
-		move.b	#id_ani_boss_bigflame,d0		; use big flame animation
-		jsr	NewAnim
-		tst.b	ost_render(a0)				; is object on-screen?
-		bpl.s	.delete					; if not, branch
-		bra.s	.display
-; ===========================================================================
-		tst.w	ost_x_vel(a1)
-		beq.s	.not_moving
-		move.b	#id_ani_boss_flame1,d0
-		jsr	NewAnim
-
-.display:
-		bra.s	BLZ_Display
-
-.not_moving:
-		move.b	#id_ani_boss_blank,d0
-		jsr	NewAnim
 		bra.s	BLZ_Display
 ; ===========================================================================
 

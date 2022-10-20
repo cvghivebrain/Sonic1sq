@@ -15,13 +15,12 @@ BMZ_Index:	index *,,2
 		ptr BMZ_Main
 		ptr BMZ_ShipMain
 		ptr BMZ_FaceMain
-		ptr BMZ_FlameMain
 		ptr BMZ_TubeMain
 
 BMZ_ObjData:	dc.b id_BMZ_ShipMain, id_ani_boss_ship, 4	; routine number, animation, priority
 		dc.b id_BMZ_FaceMain, id_ani_boss_face1, 4
-		dc.b id_BMZ_FlameMain, id_ani_boss_blank, 4
 		dc.b id_BMZ_TubeMain, id_ani_boss_ship, 3
+		even
 
 ost_boss_fireball_time:	equ ost_boss_parent ; $34		; time between fireballs coming out of lava - parent only
 ; ===========================================================================
@@ -33,7 +32,7 @@ BMZ_Main:	; Routine 0
 		move.b	#hitcount_mz,ost_col_property(a0)	; set number of hits to 8
 		lea	BMZ_ObjData(pc),a2			; get routine number, animation & priority
 		movea.l	a0,a1					; replace current object with 1st in list
-		moveq	#3,d1					; 3 additional objects
+		moveq	#2,d1					; 3 additional objects
 		bra.s	.load_boss
 ; ===========================================================================
 
@@ -56,6 +55,12 @@ BMZ_Main:	; Routine 0
 		move.b	#$20,ost_displaywidth(a1)
 		move.l	a0,ost_boss_parent(a1)			; save address of OST of parent
 		dbf	d1,.loop				; repeat sequence 3 more times
+		
+		jsr	(FindNextFreeObj).l			; find free OST slot
+		bne.s	BMZ_ShipMain				; branch if not found
+		move.l	#Exhaust,ost_id(a1)
+		move.b	#$50,ost_subtype(a1)			; set speed at which ship escapes (div by $10)
+		move.l	a0,ost_exhaust_parent(a1)		; save address of OST of parent
 
 BMZ_ShipMain:	; Routine 2
 		moveq	#0,d0
@@ -387,36 +392,6 @@ BMZ_FaceMain:	; Routine 4
 		bpl.s	.delete					; if not, branch
 
 	.display:
-		bra.s	BMZ_Display
-; ===========================================================================
-
-.delete:
-		jmp	(DeleteObject).l
-; ===========================================================================
-
-BMZ_FlameMain:	; Routine 6
-		movea.l	ost_boss_parent(a0),a1			; get address of OST of parent object
-		cmpi.b	#id_BMZ_Escape,ost_routine2(a1)		; is ship on BMZ_Escape?
-		blt.s	.chk_moving				; if not, branch
-		move.b	#id_ani_boss_bigflame,d0		; use big flame animation
-		jsr	NewAnim
-		tst.b	ost_render(a0)				; is object on-screen?
-		bpl.s	.delete					; if not, branch
-		bra.s	.display
-; ===========================================================================
-
-.chk_moving:
-		tst.w	ost_x_vel(a1)
-		beq.s	.not_moving				; branch if ship isn't moving
-		move.b	#id_ani_boss_flame1,d0
-		jsr	NewAnim
-
-.display:
-		bra.s	BMZ_Display
-
-.not_moving:
-		move.b	#id_ani_boss_blank,d0
-		jsr	NewAnim
 		bra.s	BMZ_Display
 ; ===========================================================================
 

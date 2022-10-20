@@ -23,7 +23,6 @@ BFZ_Index:	index *,,2
 		ptr BFZ_Legs
 		ptr BFZ_Cockpit
 		ptr BFZ_EmptyShip
-		ptr BFZ_Flame
 
 BFZ_ObjData:	; x pos, y pos,	VRAM setting, mappings pointer
 		dc.w $100, $100, tile_Nem_Sbz2Eggman_FZ
@@ -36,8 +35,6 @@ BFZ_ObjData:	; x pos, y pos,	VRAM setting, mappings pointer
 		dc.l Map_SEgg
 		dc.w $26E0, $596, tile_Nem_Eggman
 		dc.l Map_Bosses
-		dc.w $26E0, $596, tile_Nem_Eggman
-		dc.l Map_Bosses
 
 BFZ_ObjData2:	; routine num, animation, sprite priority, width, height
 		dc.b id_BFZ_Eggman, id_ani_eggman_stand, 4, $20, $19
@@ -45,7 +42,7 @@ BFZ_ObjData2:	; routine num, animation, sprite priority, width, height
 		dc.b id_BFZ_Legs, 0, 3, 0, 0
 		dc.b id_BFZ_Cockpit, 0, 3, 0, 0
 		dc.b id_BFZ_EmptyShip, 0, 3, $20, $20
-		dc.b id_BFZ_Flame, 0, 3, 0, 0
+		even
 
 		rsobj BossFinal
 ost_fz_cylinder_flag:	rs.w 1 ; $30				; -1 when cylinders activate; id of cylinder Eggman is in when crushing (2 bytes)
@@ -62,7 +59,7 @@ BFZ_Main:	; Routine 0
 		lea	BFZ_ObjData(pc),a2
 		lea	BFZ_ObjData2(pc),a3
 		movea.l	a0,a1					; replace current object with 1st in list
-		moveq	#5,d1					; 5 additional objects
+		moveq	#4,d1					; 5 additional objects
 		bra.s	.load_boss
 ; ===========================================================================
 
@@ -419,6 +416,12 @@ BFZ_Eggman_Ship:
 		move.w	#-$18,ost_y_vel(a0)			; move up slowly
 		move.b	#id_col_24x24,ost_col_type(a0)		; enable collision
 		addq.b	#2,ost_fz_mode(a0)			; goto BFZ_Eggman_Escape next
+		
+		jsr	(FindNextFreeObj).l			; find free OST slot
+		bne.s	.keep_rising				; branch if not found
+		move.l	#Exhaust,ost_id(a1)
+		move.b	#$18,ost_subtype(a1)			; set speed at which ship escapes (div by $10)
+		move.l	a0,ost_exhaust_parent(a1)		; save address of OST of parent
 
 	.keep_rising:
 		bra.w	BFZ_Eggman_AnimScroll			; animate & scroll screen
@@ -474,26 +477,6 @@ BFZ_Eggman_Escape:
 .animate:
 		bra.w	BFZ_Eggman_AnimScroll			; animate & scroll screen
 ; ===========================================================================
-
-BFZ_Flame:	; Routine $C
-		movea.l	ost_fz_parent(a0),a1			; get address of OST of parent object
-		move.l	(a1),d0
-		cmp.l	(a0),d0					; has parent been deleted?
-		bne.w	BFZ_Delete				; if yes, branch
-		move.b	#id_ani_boss_blank,ost_anim(a0)		; invisible
-		cmpi.b	#id_BFZ_Eggman_Ship,ost_fz_mode(a1)	; is Eggman in his ship?
-		bge.s	.chk_moving				; if yes, branch
-		bra.s	BFZ_Update_SkipPos
-; ===========================================================================
-
-.chk_moving:
-		tst.w	ost_x_vel(a1)				; is ship moving?
-		beq.s	.not_moving				; if not, branch
-		move.b	#id_ani_boss_bigflame,ost_anim(a0)	; use large flame animation
-
-	.not_moving:
-		lea	Ani_Bosses(pc),a1
-		jsr	(AnimateSprite).l
 
 BFZ_Update:
 		movea.l	ost_fz_parent(a0),a1			; get address of OST of parent object

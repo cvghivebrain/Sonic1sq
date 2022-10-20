@@ -11,10 +11,7 @@ Ani_Bosses:	index *
 		ptr ani_boss_hit				; 5
 		ptr ani_boss_panic				; 6
 		ptr ani_boss_blank				; 7
-		ptr ani_boss_flame1				; 8
-		ptr ani_boss_flame2				; 9
 		ptr ani_boss_defeat				; $A
-		ptr ani_boss_bigflame				; $B
 		
 ani_boss_ship:
 		dc.w $F
@@ -70,35 +67,8 @@ ani_boss_blank:
 		dc.w id_Anim_Flag_Restart
 		even
 
-ani_boss_flame1:
-		dc.w 3
-		dc.w id_frame_boss_flame1
-		dc.w id_frame_boss_flame2
-		dc.w id_Anim_Flag_Restart
-		even
-
-ani_boss_flame2:
-		dc.w 1
-		dc.w id_frame_boss_flame1
-		dc.w id_frame_boss_flame2
-		dc.w id_Anim_Flag_Restart
-		even
-
 ani_boss_defeat:
 		dc.w $F
 		dc.w id_frame_boss_defeat
 		dc.w id_Anim_Flag_Restart
-		even
-
-ani_boss_bigflame:
-		dc.w 2
-		dc.w id_frame_boss_flame2
-		dc.w id_frame_boss_flame1
-		dc.w id_frame_boss_bigflame1
-		dc.w id_frame_boss_bigflame2
-		dc.w id_frame_boss_bigflame1
-		dc.w id_frame_boss_bigflame2
-		dc.w id_frame_boss_flame2
-		dc.w id_frame_boss_flame1
-		dc.w id_Anim_Flag_Back, 2
 		even

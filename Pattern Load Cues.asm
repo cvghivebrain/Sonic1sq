@@ -47,7 +47,6 @@ PLC_Main2:	plcheader
 PLC_Boss:	plcheader
 		plcm	Nem_Eggman, $8000			; Eggman main patterns
 		plcm	Nem_Weapons				; Eggman's weapons ($8D80)
-		plcm	Nem_Exhaust, $A540			; exhaust flame
 	PLC_Boss_end:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - "TRY AGAIN" and "END" screens
@@ -69,6 +68,5 @@ PLC_EggmanSBZ2:	plcheader
 PLC_FZBoss:	plcheader
 		plcm	Nem_Eggman, $8000			; Eggman main patterns
 		plcm	Nem_Sbz2Eggman, $8E00, FZ		; Eggman without ship
-		plcm	Nem_Exhaust, $A540			; exhaust flame
 	PLC_FZBoss_end:
 		even

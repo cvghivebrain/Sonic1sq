@@ -16,13 +16,12 @@ BSYZ_Index:	index *,,2
 		ptr BSYZ_Main
 		ptr BSYZ_ShipMain
 		ptr BSYZ_FaceMain
-		ptr BSYZ_FlameMain
 		ptr BSYZ_SpikeMain
 
 BSYZ_ObjData:	dc.b id_BSYZ_ShipMain,	id_ani_boss_ship, 5	; routine number, animation, priority
 		dc.b id_BSYZ_FaceMain,	id_ani_boss_face1, 5
-		dc.b id_BSYZ_FlameMain, id_ani_boss_blank, 5
 		dc.b id_BSYZ_SpikeMain, 0, 5
+		even
 
 ost_boss_block_num:	equ ost_boss_parent ; $34		; number of block Eggman is above (0-9) - parent only
 ost_boss_block:		equ ost_boss_parent+2 ; $36		; address of OST of block Eggman is above - parent only (2 bytes)
@@ -37,7 +36,7 @@ BSYZ_Main:	; Routine 0
 		move.b	#hitcount_syz,ost_col_property(a0)	; set number of hits to 8
 		lea	BSYZ_ObjData(pc),a2			; get routine number, animation & priority
 		movea.l	a0,a1					; replace current object with 1st in list
-		moveq	#3,d1					; 3 additional objects
+		moveq	#2,d1					; 3 additional objects
 		bra.s	.load_boss
 ; ===========================================================================
 
@@ -60,6 +59,12 @@ BSYZ_Main:	; Routine 0
 		move.b	#$20,ost_displaywidth(a1)
 		move.l	a0,ost_boss_parent(a1)			; save address of OST of parent
 		dbf	d1,.loop				; repeat sequence 3 more times
+		
+		jsr	(FindNextFreeObj).l			; find free OST slot
+		bne.s	BSYZ_ShipMain				; branch if not found
+		move.l	#Exhaust,ost_id(a1)
+		move.b	#$40,ost_subtype(a1)			; set speed at which ship escapes (div by $10)
+		move.l	a0,ost_exhaust_parent(a1)		; save address of OST of parent
 
 BSYZ_ShipMain:	; Routine 2
 		moveq	#0,d0
@@ -535,36 +540,6 @@ BSYZ_Face_ChkHit:
 
 	.sonic_ok:
 		rts	
-; ===========================================================================
-
-BSYZ_FlameMain:; Routine 6
-		movea.l	ost_boss_parent(a0),a1			; get address of OST of parent object
-		cmpi.b	#id_BSYZ_Escape,ost_routine2(a1)	; is ship on BSYZ_Escape?
-		bne.s	.chk_moving				; if not, branch
-		move.b	#id_ani_boss_bigflame,d0		; use big flame animation
-		jsr	NewAnim
-		tst.b	ost_render(a0)				; is object on-screen?
-		bpl.s	.delete					; if not, branch
-		bra.s	.update
-; ===========================================================================
-
-.chk_moving:
-		tst.w	ost_x_vel(a1)
-		beq.s	.not_moving				; branch if ship isn't moving
-		move.b	#id_ani_boss_flame1,d0
-		jsr	NewAnim
-
-.update:
-		bra.s	BSYZ_Display
-
-.not_moving:
-		move.b	#id_ani_boss_blank,d0
-		jsr	NewAnim
-		bra.s	BSYZ_Display
-; ===========================================================================
-
-.delete:
-		jmp	(DeleteObject).l
 ; ===========================================================================
 
 BSYZ_Display:

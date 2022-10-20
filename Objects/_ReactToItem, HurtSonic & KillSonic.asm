@@ -219,7 +219,7 @@ React_Enemy:
 		move.w	#id_frame_points_10k*2,ost_enemy_combo(a1) ; use 10k frame for points object
 
 	.lessthan16:
-		bsr.w	AddPoints				; update score
+		jsr	AddPoints				; update score
 		move.l	#ExplosionItem,ost_id(a1)		; change object to explosion
 		move.b	#id_ExItem_Animal,ost_routine(a1)	; explosion also spawns an animal
 		tst.w	ost_y_vel(a0)

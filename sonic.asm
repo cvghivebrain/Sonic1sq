@@ -576,6 +576,7 @@ See_DataFlat:	incbin	"Collision\SLZ Seesaw Heightmap (Flat).bin" ; used by Seesa
 
 		include "Objects\GHZ Boss, BossExplode & BossMove.asm" ; BossGreenHill
 		include "Objects\Bosses [Animations].asm"	; Ani_Bosses
+		include "Objects\Boss Exhaust.asm"		; Exhaust
 
 		include "Objects\LZ Boss.asm"			; BossLabyrinth
 		include "Objects\MZ Boss.asm"			; BossMarble
@@ -835,7 +836,7 @@ Blk256_SBZ:	incbin	"256x256 Mappings\SBZ.kos"
 		incfile Nem_Sbz2Eggman,"Graphics - Compressed\Boss - Eggman in SBZ2 & FZ",nem
 		incfile Kos_FzBoss,"Graphics Kosinski\Boss - Final Zone",kos
 		incfile Kos_FzEggman,"Graphics Kosinski\Boss - Eggman after FZ Fight",kos
-		incfile Nem_Exhaust,"Graphics - Compressed\Boss - Exhaust Flame",nem
+		incfile Art_Exhaust,"Graphics\Boss - Exhaust Flame",bin,dma_safe
 		incfile Kos_EndEm,"Graphics Kosinski\Ending - Emeralds",kos
 		incfile Kos_EndSonic,"Graphics Kosinski\Ending - Sonic",kos
 		incfile Nem_TryAgain,"Graphics - Compressed\Ending - Try Again",nem

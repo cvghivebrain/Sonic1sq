@@ -20,13 +20,12 @@ BSLZ_Index:	index *,,2
 		ptr BSLZ_Main
 		ptr BSLZ_ShipMain
 		ptr BSLZ_FaceMain
-		ptr BSLZ_FlameMain
 		ptr BSLZ_TubeMain
 
 BSLZ_ObjData:	dc.b id_BSLZ_ShipMain,	id_ani_boss_ship, 4	; routine number, animation, priority
 		dc.b id_BSLZ_FaceMain,	id_ani_boss_face1, 4
-		dc.b id_BSLZ_FlameMain, id_ani_boss_blank, 4
 		dc.b id_BSLZ_TubeMain,	0, 3
+		even
 
 ost_boss_seesaw:	equ ost_boss_parent ; $2A		; addresses of OSTs of seesaws (2 bytes * 3)
 ; ===========================================================================
@@ -40,7 +39,7 @@ BSLZ_Main:
 		move.b	#hitcount_slz,ost_col_property(a0)	; set number of hits to 8
 		lea	BSLZ_ObjData(pc),a2			; get data for routine number, animation & priority
 		movea.l	a0,a1					; replace current object with 1st in list
-		moveq	#3,d1					; 3 additional objects
+		moveq	#2,d1					; 3 additional objects
 		bra.s	.load_boss
 ; ===========================================================================
 
@@ -63,6 +62,12 @@ BSLZ_Main:
 		move.b	#$20,ost_displaywidth(a1)
 		move.l	a0,ost_boss_parent(a1)			; save address of OST of parent
 		dbf	d1,.loop				; repeat sequence 3 more times
+		
+		jsr	(FindNextFreeObj).l			; find free OST slot
+		bne.s	.fail					; branch if not found
+		move.l	#Exhaust,ost_id(a1)
+		move.b	#$40,ost_subtype(a1)			; set speed at which ship escapes (div by $10)
+		move.l	a0,ost_exhaust_parent(a1)		; save address of OST of parent
 
 	.fail:
 		lea	(v_ost_all+sizeof_ost).w,a1		; start at first OST slot after Sonic
@@ -374,29 +379,6 @@ BSLZ_FaceMain:	; Routine 4
 		bpl.w	BSLZ_Delete				; if not, branch
 
 	.display:
-		bra.s	BSLZ_FaceFlame_Display
-; ===========================================================================
-
-BSLZ_FlameMain:; Routine 6
-		movea.l	ost_boss_parent(a0),a1			; get address of OST of parent object
-		cmpi.b	#id_BSLZ_Escape,ost_routine2(a1)	; is ship on BSLZ_Escape?
-		bne.s	.chk_flame				; if not, branch
-		tst.b	ost_render(a0)				; is object on-screen?
-		bpl.w	BSLZ_Delete				; if not, branch
-		move.b	#id_ani_boss_bigflame,d0		; use big flame animation
-		jsr	NewAnim
-		bra.s	BSLZ_FaceFlame_Display
-; ===========================================================================
-
-.chk_flame:
-		cmpi.b	#id_BSLZ_Recover,ost_routine2(a1)
-		bgt.s	BSLZ_FaceFlame_Display			; branch if on BSLZ_Escape
-		cmpi.b	#id_BSLZ_MakeBall,ost_routine2(a1)
-		blt.s	BSLZ_FaceFlame_Default			; branch if on BSLZ_ShipStart/BSLZ_ShipMove
-		move.b	#id_ani_boss_blank,d0
-		jsr	NewAnim
-
-BSLZ_FaceFlame_Display:
 		lea	(Ani_Bosses).l,a1
 		jsr	(AnimateSprite).l
 
@@ -410,11 +392,6 @@ BSLZ_Tube_Display:
 		andi.b	#$FF-render_xflip-render_yflip,ost_render(a0) ; ignore x/yflip bits
 		or.b	d0,ost_render(a0)			; combine x/yflip bits from status instead
 		jmp	(DisplaySprite).l
-
-BSLZ_FaceFlame_Default:
-		move.b	#id_ani_boss_flame1,d0
-		jsr	NewAnim
-		bra.s	BSLZ_FaceFlame_Display
 ; ===========================================================================
 
 BSLZ_TubeMain:	; Routine 8
