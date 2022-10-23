@@ -19,11 +19,9 @@ BossStarLight:
 BSLZ_Index:	index *,,2
 		ptr BSLZ_Main
 		ptr BSLZ_ShipMain
-		ptr BSLZ_FaceMain
 		ptr BSLZ_TubeMain
 
 BSLZ_ObjData:	dc.b id_BSLZ_ShipMain,	id_ani_boss_ship, 4	; routine number, animation, priority
-		dc.b id_BSLZ_FaceMain,	id_ani_boss_face1, 4
 		dc.b id_BSLZ_TubeMain,	0, 3
 		even
 
@@ -39,13 +37,13 @@ BSLZ_Main:
 		move.b	#hitcount_slz,ost_col_property(a0)	; set number of hits to 8
 		lea	BSLZ_ObjData(pc),a2			; get data for routine number, animation & priority
 		movea.l	a0,a1					; replace current object with 1st in list
-		moveq	#2,d1					; 3 additional objects
+		moveq	#1,d1					; 3 additional objects
 		bra.s	.load_boss
 ; ===========================================================================
 
 .loop:
 		jsr	(FindNextFreeObj).l			; find free OST slot
-		bne.s	.fail					; branch if not found
+		bne.w	.fail					; branch if not found
 		move.l	#BossStarLight,ost_id(a1)
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
@@ -66,8 +64,15 @@ BSLZ_Main:
 		jsr	(FindNextFreeObj).l			; find free OST slot
 		bne.s	.fail					; branch if not found
 		move.l	#Exhaust,ost_id(a1)
-		move.b	#$40,ost_subtype(a1)			; set speed at which ship escapes (div by $10)
+		move.w	#$400,ost_exhaust_escape(a1)		; set speed at which ship escapes
 		move.l	a0,ost_exhaust_parent(a1)		; save address of OST of parent
+		
+		jsr	(FindNextFreeObj).l			; find free OST slot
+		bne.s	.fail					; branch if not found
+		move.l	#BossFace,ost_id(a1)
+		move.w	#$400,ost_face_escape(a1)		; set speed at which ship escapes
+		move.b	#id_BSLZ_Explode,ost_face_defeat(a1)	; boss defeat routine number
+		move.l	a0,ost_face_parent(a1)			; save address of OST of parent
 
 	.fail:
 		lea	(v_ost_all+sizeof_ost).w,a1		; start at first OST slot after Sonic
@@ -344,43 +349,6 @@ BSLZ_Escape:
 		bsr.w	BossMove				; update parent position
 		bra.w	BSLZ_Update				; update position
 ; ===========================================================================
-
-BSLZ_FaceMain:	; Routine 4
-		moveq	#0,d2
-		moveq	#id_ani_boss_face1,d1
-		movea.l	ost_boss_parent(a0),a1			; get address of OST of parent object
-		move.b	ost_routine2(a1),d2
-		cmpi.b	#id_BSLZ_Explode,d2
-		bmi.s	.chk_hit
-		moveq	#id_ani_boss_defeat,d1
-		bra.s	.update
-; ===========================================================================
-
-.chk_hit:
-		tst.b	ost_col_type(a1)			; is boss collision on?
-		bne.s	.chk_sonic_hurt				; if yes, branch
-		moveq	#id_ani_boss_hit,d1			; use hit animation
-		bra.s	.update
-; ===========================================================================
-
-.chk_sonic_hurt:
-		cmpi.b	#id_Sonic_Hurt,(v_ost_player+ost_routine).w ; is Sonic hurt or dead?
-		bcs.s	.update					; if not, branch
-		moveq	#id_ani_boss_laugh,d1
-
-.update:
-		move.b	d1,d0					; set animation
-		jsr	NewAnim
-		cmpi.b	#id_BSLZ_Escape,d2			; is ship on BSLZ_Escape?
-		bne.s	.display				; if not, branch
-		move.b	#id_ani_boss_panic,d0			; use sweating animation
-		jsr	NewAnim
-		tst.b	ost_render(a0)				; is object on-screen?
-		bpl.w	BSLZ_Delete				; if not, branch
-
-	.display:
-		lea	(Ani_Bosses).l,a1
-		jsr	(AnimateSprite).l
 
 BSLZ_Tube_Display:
 		movea.l	ost_boss_parent(a0),a1			; get address of OST of parent object

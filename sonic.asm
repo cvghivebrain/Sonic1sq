@@ -577,6 +577,7 @@ See_DataFlat:	incbin	"Collision\SLZ Seesaw Heightmap (Flat).bin" ; used by Seesa
 		include "Objects\GHZ Boss, BossExplode & BossMove.asm" ; BossGreenHill
 		include "Objects\Bosses [Animations].asm"	; Ani_Bosses
 		include "Objects\Boss Exhaust.asm"		; Exhaust
+		include "Objects\Boss Face.asm"			; BossFace
 
 		include "Objects\LZ Boss.asm"			; BossLabyrinth
 		include "Objects\MZ Boss.asm"			; BossMarble

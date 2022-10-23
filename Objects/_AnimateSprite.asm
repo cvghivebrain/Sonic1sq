@@ -3,7 +3,7 @@
 ;
 ; input:
 ;	a1 = animation script index (e.g. Ani_Crab)
-;	d2 = x/yflip flags to read from status (Anim_Run only)
+;	d2.l = x/yflip flags to read from status (Anim_Run only)
 
 ; output:
 ;	a1 = animation script (e.g. ani_crab_stand)

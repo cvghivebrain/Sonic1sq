@@ -15,10 +15,6 @@ BossLabyrinth:
 BLZ_Index:	index *,,2
 		ptr BLZ_Main
 		ptr BLZ_ShipMain
-		ptr BLZ_FaceMain
-
-BLZ_ObjData:	dc.b id_BLZ_ShipMain,	id_ani_boss_ship	; routine number, animation
-		dc.b id_BLZ_FaceMain,	id_ani_boss_face1
 ; ===========================================================================
 
 BLZ_Main:	; Routine 0
@@ -29,37 +25,26 @@ BLZ_Main:	; Routine 0
 		move.b	#id_col_24x24,ost_col_type(a0)
 		move.b	#hitcount_lz,ost_col_property(a0)	; set number of hits to 8
 		move.b	#4,ost_priority(a0)
-		lea	BLZ_ObjData(pc),a2			; get data for routine number & animation
-		movea.l	a0,a1					; replace current object with 1st in list
-		moveq	#1,d1					; 2 additional objects
-		bra.s	.load_boss
-; ===========================================================================
-
-.loop:
-		jsr	(FindNextFreeObj).l			; find free OST slot
-		bne.s	BLZ_ShipMain				; branch if not found
-		move.l	#BossLabyrinth,ost_id(a1)
-		move.w	ost_x_pos(a0),ost_x_pos(a1)
-		move.w	ost_y_pos(a0),ost_y_pos(a1)
-
-.load_boss:
 		bclr	#status_xflip_bit,ost_status(a0)
-		clr.b	ost_routine2(a1)
-		move.b	(a2)+,ost_routine(a1)			; goto BLZ_ShipMain/BLZ_FaceMain/BLZ_FlameMain next
-		move.b	(a2)+,ost_anim(a1)
-		move.b	ost_priority(a0),ost_priority(a1)
-		move.l	#Map_Bosses,ost_mappings(a1)
-		move.w	#tile_Nem_Eggman,ost_tile(a1)
-		move.b	#render_rel,ost_render(a1)
-		move.b	#$20,ost_displaywidth(a1)
-		move.l	a0,ost_boss_parent(a1)			; save address of OST of parent
-		dbf	d1,.loop				; repeat sequence 2 more times
+		clr.b	ost_routine2(a0)
+		move.b	#id_BLZ_ShipMain,ost_routine(a0)	; goto BLZ_ShipMain
+		move.b	#id_ani_boss_ship,ost_anim(a0)
+		move.l	#Map_Bosses,ost_mappings(a0)
+		move.w	#tile_Nem_Eggman,ost_tile(a0)
+		move.b	#render_rel,ost_render(a0)
+		move.b	#$20,ost_displaywidth(a0)
 		
 		jsr	(FindNextFreeObj).l			; find free OST slot
 		bne.s	BLZ_ShipMain				; branch if not found
 		move.l	#Exhaust,ost_id(a1)
-		move.b	#$40,ost_subtype(a1)			; set speed at which ship escapes (div by $10)
+		move.w	#$400,ost_exhaust_escape(a1)		; set speed at which ship escapes
 		move.l	a0,ost_exhaust_parent(a1)		; save address of OST of parent
+		
+		jsr	(FindNextFreeObj).l			; find free OST slot
+		bne.s	BLZ_ShipMain				; branch if not found
+		move.l	#BossFace,ost_id(a1)
+		move.w	#$400,ost_face_escape(a1)		; set speed at which ship escapes
+		move.l	a0,ost_face_parent(a1)			; save address of OST of parent
 
 BLZ_ShipMain:	; Routine 2
 		lea	(v_ost_player).w,a1
@@ -135,7 +120,7 @@ BLZ_Update_SkipPos:
 .beaten:
 		moveq	#100,d0
 		bsr.w	AddPoints				; give Sonic 1000 points
-		move.b	#-1,ost_boss_mode(a0)			; set beaten flag
+		move.b	#1,ost_boss_mode(a0)			; set beaten flag
 		rts	
 ; ===========================================================================
 
@@ -329,61 +314,3 @@ BLZ_Escape2:
 .delete:
 		addq.l	#4,sp
 		jmp	(DeleteObject).l
-; ===========================================================================
-
-BLZ_FaceMain:	; Routine 4
-		movea.l	ost_boss_parent(a0),a1			; get address of OST of parent object
-		move.b	(a1),d0
-		cmp.b	(a0),d0
-		bne.s	.delete					; branch if parent has been deleted
-		moveq	#0,d2
-		move.b	ost_routine2(a1),d2
-		moveq	#id_ani_boss_face1,d1
-		tst.b	ost_boss_mode(a0)			; has boss been beaten?
-		beq.s	.chk_hit				; if not, branch
-		moveq	#id_ani_boss_defeat,d1
-		bra.s	.update
-; ===========================================================================
-
-.chk_hit:
-		tst.b	ost_col_type(a1)			; is boss collision on?
-		bne.s	.chk_sonic_hurt				; if yes, branch
-		moveq	#id_ani_boss_hit,d1			; use hit animation
-		bra.s	.update
-; ===========================================================================
-
-.chk_sonic_hurt:
-		cmpi.b	#id_Sonic_Hurt,(v_ost_player+ost_routine).w ; is Sonic hurt or dead?
-		bcs.s	.update					; if not, branch
-		moveq	#id_ani_boss_laugh,d1
-
-.update:
-		move.b	d1,d0					; set animation
-		jsr	NewAnim
-		cmpi.b	#id_BLZ_Escape2,d2			; is boss escaping?
-		bne.s	.display				; if not, branch
-		move.b	#id_ani_boss_panic,d0			; use sweating animation
-		jsr	NewAnim
-		tst.b	ost_render(a0)				; is object on-screen?
-		bpl.s	.delete					; if not, branch
-
-	.display:
-		bra.s	BLZ_Display
-; ===========================================================================
-
-.delete:
-		jmp	(DeleteObject).l
-; ===========================================================================
-
-BLZ_Display:
-		lea	(Ani_Bosses).l,a1
-		jsr	(AnimateSprite).l
-		movea.l	ost_boss_parent(a0),a1			; get address of OST of parent object
-		move.w	ost_x_pos(a1),ost_x_pos(a0)
-		move.w	ost_y_pos(a1),ost_y_pos(a0)
-		move.b	ost_status(a1),ost_status(a0)
-		moveq	#status_xflip+status_yflip,d0
-		and.b	ost_status(a0),d0
-		andi.b	#$FF-render_xflip-render_yflip,ost_render(a0) ; ignore x/yflip bits
-		or.b	d0,ost_render(a0)			; combine x/yflip bits from status instead
-		jmp	(DisplaySprite).l

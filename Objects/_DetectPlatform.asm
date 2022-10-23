@@ -2,14 +2,15 @@
 ; Subroutine to detect collision with a platform, and update relevant flags
 ;
 ; input:
-;	d0 = y position (Plat_NoXCheck_AltY only)
-;	d1 = platform width
+;	d0.w = y position (Plat_NoXCheck_AltY only)
+;	d1.w = platform width
 
 ; output:
-;	d2 = Sonic's y position
+;	d2.w = Sonic's y position
 ;	a1 = OST of Sonic
 ;	a2 = OST of platform that Sonic is already on
-;	uses d0, d1
+
+;	uses d0.l, d1.w
 ; ---------------------------------------------------------------------------
 
 DetectPlatform:

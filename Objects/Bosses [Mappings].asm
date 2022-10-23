@@ -1,17 +1,9 @@
 ; ---------------------------------------------------------------------------
-; Sprite mappings - Bosses (ship, Eggman and flame)
+; Sprite mappings - Bosses
 ; ---------------------------------------------------------------------------
 
 Map_Bosses:	index *
 		ptr frame_boss_ship
-		ptr frame_boss_face1
-		ptr frame_boss_face2
-		ptr frame_boss_laugh1
-		ptr frame_boss_laugh2
-		ptr frame_boss_hit
-		ptr frame_boss_panic
-		ptr frame_boss_defeat
-		ptr frame_boss_blank
 		
 frame_boss_ship:
 		spritemap
@@ -23,56 +15,65 @@ frame_boss_ship:
 		piece	$C, $14, 1x1, $2C, pal2
 		endsprite
 		
-frame_boss_face1:
+; ---------------------------------------------------------------------------
+; Sprite mappings - Boss face
+; ---------------------------------------------------------------------------
+
+Map_Face:	index *
+		ptr frame_face_face1
+		ptr frame_face_face2
+		ptr frame_face_laugh1
+		ptr frame_face_laugh2
+		ptr frame_face_hit
+		ptr frame_face_panic
+		ptr frame_face_defeat
+		
+frame_face_face1:
 		spritemap
 		piece	-$C, -$1C, 2x1, 0
 		piece	-$14, -$14, 4x2, 2
 		endsprite
 		
-frame_boss_face2:
+frame_face_face2:
 		spritemap
 		piece	-$C, -$1C, 2x1, 0
 		piece	-$14, -$14, 4x2, $35
 		endsprite
 		
-frame_boss_laugh1:
+frame_face_laugh1:
 		spritemap
 		piece	-$C, -$1C, 3x1, $3D
 		piece	-$14, -$14, 3x2, $40
 		piece	4, -$14, 2x2, $46
 		endsprite
 		
-frame_boss_laugh2:
+frame_face_laugh2:
 		spritemap
 		piece	-$C, -$1C, 3x1, $4A
 		piece	-$14, -$14, 3x2, $4D
 		piece	4, -$14, 2x2, $53
 		endsprite
 		
-frame_boss_hit:
+frame_face_hit:
 		spritemap
 		piece	-$C, -$1C, 3x1, $57
 		piece	-$14, -$14, 3x2, $5A
 		piece	4, -$14, 2x2, $60
 		endsprite
 		
-frame_boss_panic:
+frame_face_panic:
 		spritemap
 		piece	4, -$1C, 2x1, $64
 		piece	-$C, -$1C, 2x1, 0
 		piece	-$14, -$14, 4x2, $35
 		endsprite
 		
-frame_boss_defeat:
+frame_face_defeat:
 		spritemap
 		piece	-$C, -$1C, 3x2, $66
 		piece	-$C, -$1C, 3x1, $57
 		piece	-$14, -$14, 3x2, $5A
 		piece	4, -$14, 2x2, $60
-		endsprite
-		
-frame_boss_blank:
-		spritemap
 		endsprite
 		even
 		

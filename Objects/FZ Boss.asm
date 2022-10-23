@@ -420,7 +420,7 @@ BFZ_Eggman_Ship:
 		jsr	(FindNextFreeObj).l			; find free OST slot
 		bne.s	.keep_rising				; branch if not found
 		move.l	#Exhaust,ost_id(a1)
-		move.b	#$18,ost_subtype(a1)			; set speed at which ship escapes (div by $10)
+		move.w	#$180,ost_exhaust_escape(a1)		; set speed at which ship escapes
 		move.l	a0,ost_exhaust_parent(a1)		; save address of OST of parent
 
 	.keep_rising:
@@ -505,13 +505,13 @@ BFZ_Cockpit:	; Routine 8
 ; ===========================================================================
 
 .chk_hit:
-		move.b	#id_ani_boss_face1,ost_anim(a0)
+		move.b	#id_ani_face_face1,ost_anim(a0)
 		tst.b	ost_col_property(a1)			; has ship been hit?
 		ble.s	.explode				; if yes, branch
-		move.b	#id_ani_boss_panic,ost_anim(a0)		; use sweating animation
-		move.l	#Map_Bosses,ost_mappings(a0)		; use standard boss mappings
+		move.b	#id_ani_face_panic,ost_anim(a0)		; use sweating animation
+		move.l	#Map_Face,ost_mappings(a0)		; use standard boss mappings
 		move.w	#tile_Nem_Eggman,ost_tile(a0)
-		lea	Ani_Bosses(pc),a1
+		lea	Ani_Face(pc),a1
 		jsr	(AnimateSprite).l
 		bra.w	BFZ_Update
 ; ===========================================================================

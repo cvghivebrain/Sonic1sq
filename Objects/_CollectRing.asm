@@ -1,7 +1,7 @@
 ; ---------------------------------------------------------------------------
 ; Subroutine to	update ring counters and lives when a ring is collected
 
-;	uses d0
+;	uses d0.w
 ; ---------------------------------------------------------------------------
 
 CollectRing:

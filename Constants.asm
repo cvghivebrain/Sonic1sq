@@ -301,6 +301,7 @@ ost_boss_parent_y_pos:	rs.l 1					; parent y position (4 bytes)
 ost_boss_wait_time:	rs.w 1					; time to wait between each action (2 bytes)
 ost_boss_flash_num:	rs.b 1					; number of times to make boss flash when hit
 ost_boss_wobble:	rs.b 1					; wobble state as Eggman moves back & forth (1 byte incremented every frame & interpreted by CalcSine)
+ost_boss_attack:	rs.b 1					; flag set when boss is attacking & laughing
 		rsobjend
 
 ; Boss constants

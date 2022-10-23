@@ -56,10 +56,6 @@ Exhaust_Main:	; Routine 0
 		move.b	#$20,ost_displaywidth(a0)
 		move.b	#3,ost_priority(a0)
 		move.b	#id_ani_exhaust_flame1,ost_anim(a0)
-		moveq	#0,d0
-		move.b	ost_subtype(a0),d0			; get escape speed from subtype
-		lsl.w	#4,d0					; multiply by $10
-		move.w	d0,ost_exhaust_escape(a0)
 		
 Exhaust_Chk:	; Routine 2
 		move.w	ost_exhaust_escape(a0),d0

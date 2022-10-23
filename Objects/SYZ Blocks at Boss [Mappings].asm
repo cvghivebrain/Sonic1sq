@@ -13,7 +13,6 @@ frame_bblock_wholeblock:
 		piece	-$10, -$10, 4x2, $71
 		piece	-$10, 0, 4x2, $79
 		endsprite
-		dc.b 0
 		
 frame_bblock_topleft:
 		spritemap

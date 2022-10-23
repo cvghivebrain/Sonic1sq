@@ -15,11 +15,9 @@ BossSpringYard:
 BSYZ_Index:	index *,,2
 		ptr BSYZ_Main
 		ptr BSYZ_ShipMain
-		ptr BSYZ_FaceMain
 		ptr BSYZ_SpikeMain
 
 BSYZ_ObjData:	dc.b id_BSYZ_ShipMain,	id_ani_boss_ship, 5	; routine number, animation, priority
-		dc.b id_BSYZ_FaceMain,	id_ani_boss_face1, 5
 		dc.b id_BSYZ_SpikeMain, 0, 5
 		even
 
@@ -36,13 +34,13 @@ BSYZ_Main:	; Routine 0
 		move.b	#hitcount_syz,ost_col_property(a0)	; set number of hits to 8
 		lea	BSYZ_ObjData(pc),a2			; get routine number, animation & priority
 		movea.l	a0,a1					; replace current object with 1st in list
-		moveq	#2,d1					; 3 additional objects
+		moveq	#1,d1					; 3 additional objects
 		bra.s	.load_boss
 ; ===========================================================================
 
 .loop:
 		jsr	(FindNextFreeObj).l
-		bne.s	BSYZ_ShipMain
+		bne.w	BSYZ_ShipMain
 		move.l	#BossSpringYard,ost_id(a1)
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
@@ -63,8 +61,15 @@ BSYZ_Main:	; Routine 0
 		jsr	(FindNextFreeObj).l			; find free OST slot
 		bne.s	BSYZ_ShipMain				; branch if not found
 		move.l	#Exhaust,ost_id(a1)
-		move.b	#$40,ost_subtype(a1)			; set speed at which ship escapes (div by $10)
+		move.w	#$400,ost_exhaust_escape(a1)		; set speed at which ship escapes
 		move.l	a0,ost_exhaust_parent(a1)		; save address of OST of parent
+		
+		jsr	(FindNextFreeObj).l			; find free OST slot
+		bne.s	BSYZ_ShipMain				; branch if not found
+		move.l	#BossFace,ost_id(a1)
+		move.w	#$400,ost_face_escape(a1)		; set speed at which ship escapes
+		move.b	#id_BSYZ_Explode,ost_face_defeat(a1)	; boss defeat routine number
+		move.l	a0,ost_face_parent(a1)			; save address of OST of parent
 
 BSYZ_ShipMain:	; Routine 2
 		moveq	#0,d0
@@ -466,88 +471,6 @@ BSYZ_Escape:
 		addq.l	#4,sp
 		jmp	(DeleteObject).l
 ; ===========================================================================
-
-BSYZ_FaceMain:	; Routine 4
-		moveq	#id_ani_boss_face1,d1
-		movea.l	ost_boss_parent(a0),a1			; get address of OST of parent object
-		moveq	#0,d0
-		move.b	ost_routine2(a1),d0
-		move.w	BSYZ_Face_Index(pc,d0.w),d0
-		jsr	BSYZ_Face_Index(pc,d0.w)		; set d1 as animation number
-		move.b	d1,d0					; set animation
-		jsr	NewAnim
-		move.l	ost_id(a0),d0
-		cmp.l	ost_id(a1),d0				; has ship been destroyed? (objects no longer match id)
-		bne.s	.delete					; if yes, branch
-		bra.w	BSYZ_Display
-; ===========================================================================
-
-.delete:
-		jmp	(DeleteObject).l
-; ===========================================================================
-BSYZ_Face_Index:
-		index *
-		ptr BSYZ_Face_ChkHit
-		ptr BSYZ_Face_ChkHit
-		ptr BSYZ_Face_Attack
-		ptr BSYZ_Face_Defeat
-		ptr BSYZ_Face_Defeat
-		ptr BSYZ_Face_Escape
-; ===========================================================================
-
-BSYZ_Face_Defeat:
-		moveq	#id_ani_boss_defeat,d1			; use defeated animation
-		rts	
-; ===========================================================================
-
-BSYZ_Face_Escape:
-		moveq	#id_ani_boss_panic,d1			; use sweating animation
-		rts	
-; ===========================================================================
-
-BSYZ_Face_Attack:
-		moveq	#0,d0
-		move.b	ost_subtype(a1),d0
-		move.w	BSYZ_Face_Attack_Index(pc,d0.w),d0
-		jmp	BSYZ_Face_Attack_Index(pc,d0.w)
-; ===========================================================================
-BSYZ_Face_Attack_Index:
-		index *
-		ptr BSYZ_Face_Attack_Other			; ship is descending
-		ptr BSYZ_Face_Attack_Lift			; ship is lifting block/ascending
-		ptr BSYZ_Face_Attack_Other			; ship stops at top
-		ptr BSYZ_Face_Attack_Other			; ship breaks block
-; ===========================================================================
-
-BSYZ_Face_Attack_Other:
-		bra.s	BSYZ_Face_ChkHit			; use normal or hit animation
-; ===========================================================================
-
-BSYZ_Face_Attack_Lift:
-		moveq	#id_ani_boss_panic,d1			; use sweating animation
-
-BSYZ_Face_ChkHit:
-		tst.b	ost_col_type(a1)			; was Eggman recently hit and is flashing?
-		bne.s	.not_hit				; if not, branch
-		moveq	#id_ani_boss_hit,d1			; use hit animation
-		rts	
-; ===========================================================================
-
-.not_hit:
-		cmpi.b	#id_Sonic_Hurt,(v_ost_player+ost_routine).w ; is Sonic hurt or dead?
-		bcs.s	.sonic_ok				; if not, branch
-		moveq	#id_ani_boss_laugh,d1			; use laughing animation
-
-	.sonic_ok:
-		rts	
-; ===========================================================================
-
-BSYZ_Display:
-		lea	(Ani_Bosses).l,a1
-		jsr	(AnimateSprite).l
-		movea.l	ost_boss_parent(a0),a1			; get address of OST of parent object
-		move.w	ost_x_pos(a1),ost_x_pos(a0)
-		move.w	ost_y_pos(a1),ost_y_pos(a0)
 
 BSYZ_Display_SkipAnim:
 		move.b	ost_status(a1),ost_status(a0)

@@ -1,7 +1,7 @@
 ; ---------------------------------------------------------------------------
 ; Routine to check if object is still on-screen: display if yes, delete if not
 
-;	uses d0, d1, a2
+;	uses d0.l, d1.l, a2
 ; ---------------------------------------------------------------------------
 
 DespawnObject:
@@ -24,11 +24,12 @@ DespawnObject:
 ; Subroutine to check if object is off screen
 
 ; input:
-;	d0 = object x position
+;	d0.w = object x position
 
 ; output:
-;	d0 = 0 if on screen; 1 if off screen
-;	uses d1
+;	d0.l = 0 if on screen; 1 if off screen
+
+;	uses d1.w
 ; ---------------------------------------------------------------------------
 
 OffScreen:
