@@ -15,8 +15,8 @@ BossFace:
 		jsr	Face_Index(pc,d1.w)
 		lea	(Ani_Face).l,a1
 		jsr	AnimateSprite
-		;set_dma_dest vram_exhaust,d1			; set VRAM address to write gfx
-		;jsr	DPLCSprite				; write gfx if frame has changed
+		set_dma_dest vram_face,d1			; set VRAM address to write gfx
+		jsr	DPLCSprite				; write gfx if frame has changed
 		tst.l	ost_id(a3)
 		beq.s	.delete					; branch if parent has been deleted
 		
@@ -28,9 +28,6 @@ BossFace:
 		andi.b	#$FF-render_xflip-render_yflip,ost_render(a0) ; ignore x/yflip bits
 		or.b	d0,ost_render(a0)			; combine x/yflip bits from status instead
 		jmp	DisplaySprite
-		
-	.exit:
-		rts
 		
 	.delete:
 		jmp	DeleteObject
@@ -55,7 +52,7 @@ ost_face_defeat:	rs.b 1					; routine number that boss is defeated on
 Face_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Exhaust_Chk next
 		move.l	#Map_Face,ost_mappings(a0)
-		move.w	#tile_Nem_Eggman,ost_tile(a0)
+		move.w	#vram_face/sizeof_cell,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#$20,ost_displaywidth(a0)
 		move.b	#3,ost_priority(a0)

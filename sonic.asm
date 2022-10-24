@@ -838,6 +838,7 @@ Blk256_SBZ:	incbin	"256x256 Mappings\SBZ.kos"
 		incfile Kos_FzBoss,"Graphics Kosinski\Boss - Final Zone",kos
 		incfile Kos_FzEggman,"Graphics Kosinski\Boss - Eggman after FZ Fight",kos
 		incfile Art_Exhaust,"Graphics\Boss - Exhaust Flame",bin,dma_safe
+		incfile Art_Face,"Graphics\Boss - Face",bin,dma_safe
 		incfile Kos_EndEm,"Graphics Kosinski\Ending - Emeralds",kos
 		incfile Kos_EndSonic,"Graphics Kosinski\Ending - Sonic",kos
 		incfile Nem_TryAgain,"Graphics - Compressed\Ending - Try Again",nem

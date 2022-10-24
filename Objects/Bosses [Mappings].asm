@@ -34,48 +34,63 @@ frame_face_face1:
 		piece	-$14, -$14, 4x2, 2
 		endsprite
 		
+		dplcinit Art_Face				; address of exhaust gfx
+		dplc 0,10					; offset, size (in tiles)
+		
 frame_face_face2:
 		spritemap
 		piece	-$C, -$1C, 2x1, 0
-		piece	-$14, -$14, 4x2, $35
+		piece	-$14, -$14, 4x2, 2
 		endsprite
+		
+		dplc 10,10
 		
 frame_face_laugh1:
 		spritemap
-		piece	-$C, -$1C, 3x1, $3D
-		piece	-$14, -$14, 3x2, $40
-		piece	4, -$14, 2x2, $46
+		piece	-$C, -$1C, 3x1, 0
+		piece	-$14, -$14, 3x2, 3
+		piece	4, -$14, 2x2, 9
 		endsprite
+		
+		dplc 22,13
 		
 frame_face_laugh2:
 		spritemap
-		piece	-$C, -$1C, 3x1, $4A
-		piece	-$14, -$14, 3x2, $4D
-		piece	4, -$14, 2x2, $53
+		piece	-$C, -$1C, 3x1, 0
+		piece	-$14, -$14, 3x2, 3
+		piece	4, -$14, 2x2, 9
 		endsprite
+		
+		dplc 35,13
 		
 frame_face_hit:
 		spritemap
-		piece	-$C, -$1C, 3x1, $57
-		piece	-$14, -$14, 3x2, $5A
-		piece	4, -$14, 2x2, $60
+		piece	-$C, -$1C, 3x1, 0
+		piece	-$14, -$14, 3x2, 3
+		piece	4, -$14, 2x2, 9
 		endsprite
+		
+		dplc 48,13
 		
 frame_face_panic:
 		spritemap
-		piece	4, -$1C, 2x1, $64
+		piece	4, -$1C, 2x1, 10
 		piece	-$C, -$1C, 2x1, 0
-		piece	-$14, -$14, 4x2, $35
+		piece	-$14, -$14, 4x2, 2
 		endsprite
+		
+		dplc 10,12
 		
 frame_face_defeat:
 		spritemap
-		piece	-$C, -$1C, 3x2, $66
-		piece	-$C, -$1C, 3x1, $57
-		piece	-$14, -$14, 3x2, $5A
-		piece	4, -$14, 2x2, $60
+		piece	-$C, -$1C, 3x2, 13
+		piece	-$C, -$1C, 3x1, 0
+		piece	-$14, -$14, 3x2, 3
+		piece	4, -$14, 2x2, 9
 		endsprite
 		even
+		
+		dplc 48,19
 		
 ; ---------------------------------------------------------------------------
 ; Sprite mappings - Exhaust flame

@@ -40,8 +40,8 @@ vram_ball:		equ $67C0	; GHZ ball graphics
 vram_bonus:		equ $A200	; hidden bonus graphics
 vram_shield:		equ $A800	; shield graphics (up to $AC80)
 vram_exhaust:		equ $AC80	; boss exhaust flame graphics
-vram_animal1:		equ $B000	; animal graphics
-vram_animal2:		equ $B240	; 
+vram_face:		equ $AE40	; boss face graphics
+vram_weapon:		equ $B0A0	; boss weapon graphics
 vram_credits:		equ $B400	; credits font graphics
 vram_signpost:		equ $D000	; signpost graphics
 vram_giantring:		equ $D340	; giant ring graphics
