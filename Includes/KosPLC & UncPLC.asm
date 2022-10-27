@@ -400,6 +400,7 @@ UncLoadCues:
 		ptr UPLC_PigChicken
 		ptr UPLC_RabbitChicken
 		ptr UPLC_Animals
+		ptr UPLC_Boss
 		ptr UPLC_MZPipe
 		ptr UPLC_SLZPipe
 		ptr UPLC_GHZAnchor
@@ -494,6 +495,10 @@ UPLC_Animals:	uplcheader $AC00
 		uplc Art_Pig
 		uplc Art_Flicky
 		uplc Art_Squirrel
+	.end:
+	
+UPLC_Boss:	uplcheader vram_boss
+		uplc Art_Eggman
 	.end:
 	
 UPLC_MZPipe:	uplcheader vram_weapon

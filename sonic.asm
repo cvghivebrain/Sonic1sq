@@ -831,7 +831,7 @@ Blk256_SBZ:	incbin	"256x256 Mappings\SBZ.kos"
 ; Compressed graphics - bosses and ending sequence
 ; ---------------------------------------------------------------------------
 		incfile	Art_EndFlowers,"Graphics\Ending Flowers",bin,dma_safe
-		incfile Nem_Eggman,"Graphics - Compressed\Boss - Main",nem
+		incfile Art_Eggman,"Graphics\Boss - Ship",bin,dma_safe
 		incfile Art_MZPipe,"Graphics\MZ Boss Pipe",bin,dma_safe
 		incfile Art_SLZPipe,"Graphics\SLZ Boss Pipe",bin,dma_safe
 		incfile Art_GHZAnchor,"Graphics\GHZ Boss Anchor",bin,dma_safe

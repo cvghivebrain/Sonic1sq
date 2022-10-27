@@ -145,8 +145,7 @@ DLE_GHZ3_Boss:
 		play.w	0, bsr.w, mus_Boss			; play boss music
 		move.b	#1,(f_boss_boundary).w			; lock screen
 		addq.b	#2,(v_dle_routine).w			; goto DLE_GHZ3_End next
-		moveq	#id_PLC_Boss,d0
-		bra.w	AddPLC					; load boss gfx
+		rts
 ; ===========================================================================
 
 .exit:
@@ -190,8 +189,7 @@ DLE_LZ3:
 		play.w	0, bsr.w, mus_Boss			; play boss music
 		move.b	#1,(f_boss_boundary).w			; lock screen
 		addq.b	#2,(v_dle_routine).w			; don't load boss again
-		moveq	#id_PLC_Boss,d0
-		bra.w	AddPLC					; load boss gfx
+		rts
 ; ===========================================================================
 
 .skip_boss2:
@@ -374,8 +372,7 @@ DLE_MZ3_Boss:
 		play.w	0, bsr.w, mus_Boss			; play boss music
 		move.b	#1,(f_boss_boundary).w			; lock screen
 		addq.b	#2,(v_dle_routine).w			; goto DLE_MZ3_End next
-		moveq	#id_PLC_Boss,d0
-		bra.w	AddPLC					; load boss gfx
+		rts
 ; ===========================================================================
 
 .exit:
@@ -429,8 +426,7 @@ DLE_SLZ3_Boss:
 		play.w	0, bsr.w, mus_Boss			; play boss music
 		move.b	#1,(f_boss_boundary).w			; lock screen
 		addq.b	#2,(v_dle_routine).w			; goto DLE_SLZ3_End next
-		moveq	#id_PLC_Boss,d0
-		bra.w	AddPLC					; load boss gfx
+		rts
 ; ===========================================================================
 
 .exit:
@@ -503,8 +499,7 @@ DLE_SYZ3_Boss:
 	.fail:
 		play.w	0, bsr.w, mus_Boss			; play boss music
 		move.b	#1,(f_boss_boundary).w			; lock screen
-		moveq	#id_PLC_Boss,d0
-		bra.w	AddPLC					; load boss gfx
+		rts
 ; ===========================================================================
 
 .exit:

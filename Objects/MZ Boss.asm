@@ -29,9 +29,12 @@ BMZ_Main:	; Routine 0
 		move.b	#id_ani_boss_ship,ost_anim(a0)
 		move.b	#4,ost_priority(a0)
 		move.l	#Map_Bosses,ost_mappings(a0)
-		move.w	#tile_Nem_Eggman,ost_tile(a0)
+		move.w	#tile_Art_Eggman,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#$20,ost_displaywidth(a0)
+		
+		moveq	#id_UPLC_Boss,d0
+		jsr	UncPLC
 		
 		jsr	(FindNextFreeObj).l			; find free OST slot
 		bne.s	BMZ_ShipMain				; branch if not found

@@ -7,12 +7,12 @@ Map_Bosses:	index *
 		
 frame_boss_ship:
 		spritemap
-		piece	-$1C, -$14, 1x2, $A
-		piece	$C, -$14, 2x2, $C
-		piece	-$1C, -4, 4x3, $10, pal2
-		piece	4, -4, 4x3, $1C, pal2
-		piece	-$14, $14, 4x1, $28, pal2
-		piece	$C, $14, 1x1, $2C, pal2
+		piece	-$1C, -$14, 1x2, 0
+		piece	$C, -$14, 2x2, 2
+		piece	-$1C, -4, 4x3, 6, pal2
+		piece	4, -4, 4x3, 18, pal2
+		piece	-$14, $14, 4x1, 30, pal2
+		piece	$C, $14, 1x1, 34, pal2
 		endsprite
 		
 ; ---------------------------------------------------------------------------

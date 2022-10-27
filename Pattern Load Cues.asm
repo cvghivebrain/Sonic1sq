@@ -4,7 +4,6 @@
 PatternLoadCues:
 		index *
 		ptr PLC_Main2
-		ptr PLC_Boss
 		ptr PLC_TryAgain
 		ptr PLC_EggmanSBZ2
 		ptr PLC_FZBoss
@@ -42,12 +41,6 @@ PLC_Main2:	plcheader
 		plcm	Nem_Monitors, $D000			; monitors
 	PLC_Main2_end:
 ; ---------------------------------------------------------------------------
-; Pattern load cues - act 3 boss
-; ---------------------------------------------------------------------------
-PLC_Boss:	plcheader
-		plcm	Nem_Eggman, $8000			; Eggman main patterns
-	PLC_Boss_end:
-; ---------------------------------------------------------------------------
 ; Pattern load cues - "TRY AGAIN" and "END" screens
 ; ---------------------------------------------------------------------------
 PLC_TryAgain:	plcheader
@@ -65,7 +58,6 @@ PLC_EggmanSBZ2:	plcheader
 ; Pattern load cues - final boss
 ; ---------------------------------------------------------------------------
 PLC_FZBoss:	plcheader
-		plcm	Nem_Eggman, $8000			; Eggman main patterns
 		plcm	Nem_Sbz2Eggman, $8E00, FZ		; Eggman without ship
 	PLC_FZBoss_end:
 		even

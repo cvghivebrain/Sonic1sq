@@ -33,7 +33,7 @@ BFZ_ObjData:	; x pos, y pos,	VRAM setting, mappings pointer
 		dc.l Map_FZLegs
 		dc.w $26E0, $596, tile_Nem_Sbz2Eggman_FZ
 		dc.l Map_SEgg
-		dc.w $26E0, $596, tile_Nem_Eggman
+		dc.w $26E0, $596, tile_Art_Eggman
 		dc.l Map_Bosses
 
 BFZ_ObjData2:	; routine num, animation, sprite priority, width, height
@@ -56,6 +56,9 @@ ost_fz_cylinder_child:	rs.w 4 ; $38				; address of OST of cylinder object - par
 ; ===========================================================================
 
 BFZ_Main:	; Routine 0
+		moveq	#id_UPLC_Boss,d0
+		jsr	UncPLC
+		
 		lea	BFZ_ObjData(pc),a2
 		lea	BFZ_ObjData2(pc),a3
 		movea.l	a0,a1					; replace current object with 1st in list
@@ -406,7 +409,7 @@ BFZ_Eggman_Scroll:
 
 BFZ_Eggman_Ship:
 		move.l	#Map_Bosses,ost_mappings(a0)		; use standard boss mappings
-		move.w	#tile_Nem_Eggman,ost_tile(a0)
+		move.w	#tile_Art_Eggman,ost_tile(a0)
 		move.b	#id_ani_boss_ship,ost_anim(a0)
 		bset	#status_xflip_bit,ost_status(a0)	; ship faces right
 		jsr	(SpeedToPos).l				; update position
@@ -510,7 +513,7 @@ BFZ_Cockpit:	; Routine 8
 		ble.s	.explode				; if yes, branch
 		move.b	#id_ani_face_panic,ost_anim(a0)		; use sweating animation
 		move.l	#Map_Face,ost_mappings(a0)		; use standard boss mappings
-		move.w	#tile_Nem_Eggman,ost_tile(a0)
+		move.w	#tile_Art_Eggman,ost_tile(a0)
 		lea	Ani_Face(pc),a1
 		jsr	(AnimateSprite).l
 		bra.w	BFZ_Update

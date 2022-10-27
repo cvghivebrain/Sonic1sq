@@ -38,6 +38,7 @@ draw_bg:		equ $4000+(vram_bg-draw_base)	; VRAM write command + bg nametable addr
 
 vram_ball:		equ $67C0	; GHZ ball graphics
 vram_bonus:		equ $A200	; hidden bonus graphics
+vram_boss:		equ $A200	; boss ship graphics
 vram_shield:		equ $A800	; shield graphics (up to $AC80)
 vram_exhaust:		equ $AC80	; boss exhaust flame graphics
 vram_face:		equ $AE40	; boss face graphics
