@@ -43,7 +43,7 @@ Face_Index:	index *,,2
 		ptr Face_Lift
 
 		rsobj BossFace
-ost_face_parent:	rs.l 1					; address off OST of parent
+ost_face_parent:	rs.l 1					; address of OST of parent
 ost_face_escape:	rs.w 1					; escape speed of ship
 ost_face_defeat:	rs.b 1					; routine number that boss is defeated on
 		rsobjend

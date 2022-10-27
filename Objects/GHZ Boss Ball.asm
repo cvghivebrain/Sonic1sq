@@ -36,7 +36,9 @@ GBall_Main:	; Routine 0
 		move.w	#$4080,ost_angle(a0)
 		move.w	#-$200,ost_ball_speed(a0)
 		move.l	#Map_BossItems,ost_mappings(a0)
-		move.w	#tile_Nem_Weapons,ost_tile(a0)
+		move.w	#vram_weapon/sizeof_cell,ost_tile(a0)
+		moveq	#id_UPLC_GHZAnchor,d0
+		jsr	UncPLC
 		lea	ost_subtype(a0),a2
 		move.b	#0,(a2)+
 		moveq	#5,d1					; load 5 additional objects

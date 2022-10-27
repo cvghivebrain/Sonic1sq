@@ -43,7 +43,7 @@ Exhaust_Index:	index *,,2
 		ptr Exhaust_Big
 
 		rsobj Exhaust
-ost_exhaust_parent:	rs.l 1					; address off OST of parent
+ost_exhaust_parent:	rs.l 1					; address of OST of parent
 ost_exhaust_escape:	rs.w 1					; escape speed of ship
 		rsobjend
 ; ===========================================================================

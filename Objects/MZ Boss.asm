@@ -14,11 +14,6 @@ BossMarble:
 BMZ_Index:	index *,,2
 		ptr BMZ_Main
 		ptr BMZ_ShipMain
-		ptr BMZ_TubeMain
-
-BMZ_ObjData:	dc.b id_BMZ_ShipMain, id_ani_boss_ship, 4	; routine number, animation, priority
-		dc.b id_BMZ_TubeMain, id_ani_boss_ship, 3
-		even
 
 ost_boss_fireball_time:	equ ost_boss_parent ; $34		; time between fireballs coming out of lava - parent only
 ; ===========================================================================
@@ -28,31 +23,15 @@ BMZ_Main:	; Routine 0
 		move.w	ost_y_pos(a0),ost_boss_parent_y_pos(a0)
 		move.b	#id_col_24x24,ost_col_type(a0)
 		move.b	#hitcount_mz,ost_col_property(a0)	; set number of hits to 8
-		lea	BMZ_ObjData(pc),a2			; get routine number, animation & priority
-		movea.l	a0,a1					; replace current object with 1st in list
-		moveq	#1,d1					; 3 additional objects
-		bra.s	.load_boss
-; ===========================================================================
-
-.loop:
-		jsr	(FindNextFreeObj).l			; find free OST slot
-		bne.w	BMZ_ShipMain				; branch if not found
-		move.l	#BossMarble,ost_id(a1)
-		move.w	ost_x_pos(a0),ost_x_pos(a1)
-		move.w	ost_y_pos(a0),ost_y_pos(a1)
-
-.load_boss:
 		bclr	#status_xflip_bit,ost_status(a0)
-		clr.b	ost_routine2(a1)
-		move.b	(a2)+,ost_routine(a1)			; goto BMZ_ShipMain/BMZ_TubeMain next
-		move.b	(a2)+,ost_anim(a1)
-		move.b	(a2)+,ost_priority(a1)
-		move.l	#Map_Bosses,ost_mappings(a1)
-		move.w	#tile_Nem_Eggman,ost_tile(a1)
-		move.b	#render_rel,ost_render(a1)
-		move.b	#$20,ost_displaywidth(a1)
-		move.l	a0,ost_boss_parent(a1)			; save address of OST of parent
-		dbf	d1,.loop				; repeat sequence 3 more times
+		clr.b	ost_routine2(a0)
+		move.b	#id_BMZ_ShipMain,ost_routine(a0)	; goto BMZ_ShipMain
+		move.b	#id_ani_boss_ship,ost_anim(a0)
+		move.b	#4,ost_priority(a0)
+		move.l	#Map_Bosses,ost_mappings(a0)
+		move.w	#tile_Nem_Eggman,ost_tile(a0)
+		move.b	#render_rel,ost_render(a0)
+		move.b	#$20,ost_displaywidth(a0)
 		
 		jsr	(FindNextFreeObj).l			; find free OST slot
 		bne.s	BMZ_ShipMain				; branch if not found
@@ -66,6 +45,12 @@ BMZ_Main:	; Routine 0
 		move.w	#$500,ost_face_escape(a1)		; set speed at which ship escapes
 		move.b	#id_BMZ_Explode,ost_face_defeat(a1)	; boss defeat routine number
 		move.l	a0,ost_face_parent(a1)			; save address of OST of parent
+		
+		jsr	(FindNextFreeObj).l			; find free OST slot
+		bne.s	BMZ_ShipMain				; branch if not found
+		move.l	#BossWeapon,ost_id(a1)
+		move.b	#0,ost_subtype(a1)
+		move.l	a0,ost_weapon_parent(a1)		; save address of OST of parent
 
 BMZ_ShipMain:	; Routine 2
 		moveq	#0,d0
@@ -350,34 +335,4 @@ BMZ_Escape:
 
 .delete:
 		addq.l	#4,sp
-		jmp	(DeleteObject).l
-; ===========================================================================
-
-BMZ_Display_SkipAnim:
-		movea.l	ost_boss_parent(a0),a1			; get address of OST of parent object
-		move.w	ost_x_pos(a1),ost_x_pos(a0)
-		move.w	ost_y_pos(a1),ost_y_pos(a0)
-		move.b	ost_status(a1),ost_status(a0)
-		moveq	#status_xflip+status_yflip,d0
-		and.b	ost_status(a0),d0
-		andi.b	#$FF-render_xflip-render_yflip,ost_render(a0) ; ignore x/yflip bits
-		or.b	d0,ost_render(a0)			; combine x/yflip bits from status instead
-		jmp	(DisplaySprite).l
-; ===========================================================================
-
-BMZ_TubeMain:	; Routine 8
-		movea.l	ost_boss_parent(a0),a1			; get address of OST of parent object
-		cmpi.b	#id_BMZ_Escape,ost_routine2(a1)		; is ship on BMZ_Escape?
-		bne.s	.display				; if not, branch
-		tst.b	ost_render(a0)				; is object on-screen?
-		bpl.s	.delete					; if not, branch
-
-	.display:
-		move.l	#Map_BossItems,ost_mappings(a0)
-		move.w	#tile_Nem_Weapons+tile_pal2,ost_tile(a0)
-		move.b	#id_frame_boss_pipe,ost_frame(a0)
-		bra.s	BMZ_Display_SkipAnim
-; ===========================================================================
-
-.delete:
 		jmp	(DeleteObject).l

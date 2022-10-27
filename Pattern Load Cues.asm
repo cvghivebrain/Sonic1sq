@@ -46,7 +46,6 @@ PLC_Main2:	plcheader
 ; ---------------------------------------------------------------------------
 PLC_Boss:	plcheader
 		plcm	Nem_Eggman, $8000			; Eggman main patterns
-		plcm	Nem_Weapons				; Eggman's weapons ($8D80)
 	PLC_Boss_end:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - "TRY AGAIN" and "END" screens

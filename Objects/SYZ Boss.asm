@@ -15,11 +15,6 @@ BossSpringYard:
 BSYZ_Index:	index *,,2
 		ptr BSYZ_Main
 		ptr BSYZ_ShipMain
-		ptr BSYZ_SpikeMain
-
-BSYZ_ObjData:	dc.b id_BSYZ_ShipMain,	id_ani_boss_ship, 5	; routine number, animation, priority
-		dc.b id_BSYZ_SpikeMain, 0, 5
-		even
 
 ost_boss_block_num:	equ ost_boss_parent ; $34		; number of block Eggman is above (0-9) - parent only
 ost_boss_block:		equ ost_boss_parent+2 ; $36		; address of OST of block Eggman is above - parent only (2 bytes)
@@ -32,31 +27,15 @@ BSYZ_Main:	; Routine 0
 		move.w	ost_y_pos(a0),ost_boss_parent_y_pos(a0)
 		move.b	#id_col_24x24,ost_col_type(a0)
 		move.b	#hitcount_syz,ost_col_property(a0)	; set number of hits to 8
-		lea	BSYZ_ObjData(pc),a2			; get routine number, animation & priority
-		movea.l	a0,a1					; replace current object with 1st in list
-		moveq	#1,d1					; 3 additional objects
-		bra.s	.load_boss
-; ===========================================================================
-
-.loop:
-		jsr	(FindNextFreeObj).l
-		bne.w	BSYZ_ShipMain
-		move.l	#BossSpringYard,ost_id(a1)
-		move.w	ost_x_pos(a0),ost_x_pos(a1)
-		move.w	ost_y_pos(a0),ost_y_pos(a1)
-
-.load_boss:
 		bclr	#status_xflip_bit,ost_status(a0)
-		clr.b	ost_routine2(a1)
-		move.b	(a2)+,ost_routine(a1)			; goto BSYZ_ShipMain/BSYZ_FaceMain/BSYZ_FlameMain/BSYZ_SpikeMain next
-		move.b	(a2)+,ost_anim(a1)
-		move.b	(a2)+,ost_priority(a1)
-		move.l	#Map_Bosses,ost_mappings(a1)
-		move.w	#tile_Nem_Eggman,ost_tile(a1)
-		move.b	#render_rel,ost_render(a1)
-		move.b	#$20,ost_displaywidth(a1)
-		move.l	a0,ost_boss_parent(a1)			; save address of OST of parent
-		dbf	d1,.loop				; repeat sequence 3 more times
+		clr.b	ost_routine2(a0)
+		move.b	#id_BSYZ_ShipMain,ost_routine(a0)	; goto BSYZ_ShipMain next
+		move.b	#id_ani_boss_ship,ost_anim(a0)
+		move.b	#5,ost_priority(a0)
+		move.l	#Map_Bosses,ost_mappings(a0)
+		move.w	#tile_Nem_Eggman,ost_tile(a0)
+		move.b	#render_rel,ost_render(a0)
+		move.b	#$20,ost_displaywidth(a0)
 		
 		jsr	(FindNextFreeObj).l			; find free OST slot
 		bne.s	BSYZ_ShipMain				; branch if not found
@@ -70,6 +49,12 @@ BSYZ_Main:	; Routine 0
 		move.w	#$400,ost_face_escape(a1)		; set speed at which ship escapes
 		move.b	#id_BSYZ_Explode,ost_face_defeat(a1)	; boss defeat routine number
 		move.l	a0,ost_face_parent(a1)			; save address of OST of parent
+		
+		jsr	(FindNextFreeObj).l			; find free OST slot
+		bne.s	BSYZ_ShipMain				; branch if not found
+		move.l	#BossWeapon,ost_id(a1)
+		move.b	#2,ost_subtype(a1)
+		move.l	a0,ost_weapon_parent(a1)		; save address of OST of parent
 
 BSYZ_ShipMain:	; Routine 2
 		moveq	#0,d0
@@ -469,70 +454,4 @@ BSYZ_Escape:
 
 .delete:
 		addq.l	#4,sp
-		jmp	(DeleteObject).l
-; ===========================================================================
-
-BSYZ_Display_SkipAnim:
-		move.b	ost_status(a1),ost_status(a0)
-		moveq	#status_xflip+status_yflip,d0
-		and.b	ost_status(a0),d0
-		andi.b	#$FF-render_xflip-render_yflip,ost_render(a0) ; ignore x/yflip bits
-		or.b	d0,ost_render(a0)			; combine x/yflip bits from status instead
-		jmp	(DisplaySprite).l
-; ===========================================================================
-
-BSYZ_SpikeMain:; Routine 8
-		move.l	#Map_BossItems,ost_mappings(a0)
-		move.w	#tile_Nem_Weapons+tile_pal2,ost_tile(a0)
-		move.b	#id_frame_boss_spike,ost_frame(a0)
-		movea.l	ost_boss_parent(a0),a1			; get address of OST of parent object
-		cmpi.b	#id_BSYZ_Escape,ost_routine2(a1)	; is ship on BSYZ_Escape?
-		bne.s	.not_escaping				; if not, branch
-		tst.b	ost_render(a0)				; is object on-screen?
-		bpl.s	.delete					; if not, branch
-
-	.not_escaping:
-		move.w	ost_x_pos(a1),ost_x_pos(a0)
-		move.w	ost_y_pos(a1),ost_y_pos(a0)
-		move.w	ost_boss_wait_time(a0),d0
-		cmpi.b	#id_BSYZ_Attack,ost_routine2(a1)	; is ship descending or lifting a block?
-		bne.s	.not_attacking				; if not, branch
-		cmpi.b	#id_BSYZ_BreakBlock,ost_subtype(a1)	; is block being broken right now?
-		beq.s	.breaking_block				; if yes, branch
-		tst.b	ost_subtype(a1)				; is ship descending?
-		bne.s	.set_spike				; if not branch
-		cmpi.w	#$94,d0
-		bge.s	.set_spike
-		addq.w	#7,d0
-		bra.s	.set_spike
-; ===========================================================================
-
-.breaking_block:
-		tst.w	ost_boss_wait_time(a1)
-		bpl.s	.set_spike
-
-.not_attacking:
-		tst.w	d0
-		ble.s	.set_spike
-		subq.w	#5,d0
-
-.set_spike:
-		move.w	d0,ost_boss_wait_time(a0)		; set timer
-		asr.w	#2,d0
-		add.w	d0,ost_y_pos(a0)			; extend or retract spike
-		move.b	#8,ost_displaywidth(a0)
-		move.b	#$C,ost_height(a0)
-		clr.b	ost_col_type(a0)
-		movea.l	ost_boss_parent(a0),a1			; get address of OST of parent object
-		tst.b	ost_col_type(a1)			; has ship been hit recently?
-		beq.s	.display				; if yes, branch
-		tst.b	ost_boss_mode(a1)			; is block being lifted?
-		bne.s	.display				; if yes, branch
-		move.b	#id_col_4x16+id_col_hurt,ost_col_type(a0) ; make spike harmful
-
-	.display:
-		bra.w	BSYZ_Display_SkipAnim
-; ===========================================================================
-
-.delete:
 		jmp	(DeleteObject).l

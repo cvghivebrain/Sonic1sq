@@ -400,6 +400,10 @@ UncLoadCues:
 		ptr UPLC_PigChicken
 		ptr UPLC_RabbitChicken
 		ptr UPLC_Animals
+		ptr UPLC_MZPipe
+		ptr UPLC_SLZPipe
+		ptr UPLC_GHZAnchor
+		ptr UPLC_SYZSpike
 
 UPLC_HUD:	uplcheader $D940
 		uplc Art_HUDMain,v_tile_hud
@@ -490,5 +494,21 @@ UPLC_Animals:	uplcheader $AC00
 		uplc Art_Pig
 		uplc Art_Flicky
 		uplc Art_Squirrel
+	.end:
+	
+UPLC_MZPipe:	uplcheader vram_weapon
+		uplc Art_MZPipe
+	.end:
+	
+UPLC_SLZPipe:	uplcheader vram_weapon
+		uplc Art_SLZPipe
+	.end:
+	
+UPLC_GHZAnchor:	uplcheader vram_weapon
+		uplc Art_GHZAnchor
+	.end:
+	
+UPLC_SYZSpike:	uplcheader vram_weapon
+		uplc Art_SYZSpike
 	.end:
 	
