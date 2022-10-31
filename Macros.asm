@@ -297,8 +297,13 @@ set_dma_dest:	macro
 		endc
 		endm
 
-set_dma_size:	macros
+set_dma_size:	macro
+		if narg=1
 		dc.l $93009400+((((\1)>>1)&$FF)<<16)+((((\1)>>1)&$FF00)>>8)
+		else
+		move.l	#$93009400+((((\1)>>1)&$FF)<<16)+((((\1)>>1)&$FF00)>>8),\2
+		endc
+		endm
 
 set_dma_src:	macro
 		dc.w $9500+(((\1)>>1)&$FF)
@@ -316,7 +321,7 @@ dplcinit:	macro
 
 dplc:		macro src,size
 		set_dma_src dplc_base+((\src)*sizeof_cell)	; src = tile number within source data
-		set_dma_size (size)*sizeof_cell			; size = number of tiles to load
+		set_dma_size (\size)*sizeof_cell		; size = number of tiles to load
 		endm
 
 ; ---------------------------------------------------------------------------

@@ -22,7 +22,7 @@ Invis_Index:	index *,,2
 Invis_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Invis_Solid next
 		move.l	#Map_Invis,ost_mappings(a0)
-		move.w	#tile_Nem_Monitors+tile_hi,ost_tile(a0)
+		move.w	#tile_Art_Monitors+tile_hi,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.b	ost_subtype(a0),d0			; get object type
 		move.b	d0,d1

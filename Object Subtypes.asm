@@ -21,12 +21,12 @@ type_spike_updown:	equ id_Spike_UpDown			; x1 - moves up and down 32px
 type_spike_leftright:	equ id_Spike_LeftRight			; x2 - moves side-to-side 32px
 
 ; Monitor
-type_monitor_eggman:	equ id_ani_monitor_eggman	; 1 - Eggman, does nothing
-type_monitor_1up:	equ id_ani_monitor_sonic	; 2 - Extra life
-type_monitor_shoes:	equ id_ani_monitor_shoes	; 3 - speed shoes
-type_monitor_shield:	equ id_ani_monitor_shield	; 4 - shield
-type_monitor_invincible: equ id_ani_monitor_invincible	; 5 - invincibility
-type_monitor_rings:	equ id_ani_monitor_rings	; 6 - 10 rings
+type_monitor_eggman:	equ id_Pow_Eggman			; Eggman, does nothing
+type_monitor_1up:	equ id_Pow_Sonic			; Extra life
+type_monitor_shoes:	equ id_Pow_Shoes			; speed shoes
+type_monitor_shield:	equ id_Pow_Shield			; shield
+type_monitor_invincible: equ id_Pow_Invincible			; invincibility
+type_monitor_rings:	equ id_Pow_Rings			; 10 rings
 
 ; Button
 type_button_pal3:	equ $10					; use palette line 3

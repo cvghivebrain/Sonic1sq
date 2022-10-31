@@ -44,6 +44,7 @@ vram_exhaust:		equ $AC80	; boss exhaust flame graphics
 vram_face:		equ $AE40	; boss face graphics
 vram_weapon:		equ $B0A0	; boss weapon graphics
 vram_credits:		equ $B400	; credits font graphics
+vram_monitors:		equ $D000	; monitor graphics
 vram_signpost:		equ $D000	; signpost graphics
 vram_giantring:		equ $D340	; giant ring graphics
 vram_animals:		equ $F400	; animal graphics

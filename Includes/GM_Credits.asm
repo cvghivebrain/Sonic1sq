@@ -35,8 +35,8 @@ GM_Credits:
 		jsr	(ExecuteObjects).l
 		jsr	(BuildSprites).l
 		bsr.w	EndDemoSetup				; setup for next mini-demo
-		moveq	#id_PLC_Main2,d0
-		bsr.w	AddPLC					; load graphics for monitors/shield/stars over next few frames
+		moveq	#id_UPLC_Monitors,d0
+		jsr	UncPLC					; load graphics for monitors
 		move.w	#120,(v_countdown).w			; display a credit for 2 seconds
 		bsr.w	PaletteFadeIn				; fade credits text in from black
 

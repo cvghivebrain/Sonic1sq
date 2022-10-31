@@ -3,7 +3,6 @@
 ; ---------------------------------------------------------------------------
 PatternLoadCues:
 		index *
-		ptr PLC_Main2
 		ptr PLC_TryAgain
 		ptr PLC_EggmanSBZ2
 		ptr PLC_FZBoss
@@ -33,13 +32,6 @@ plcheader:	macro *
 		plc_count\@: equ (\*_end-*-2)/sizeof_plc
 		dc.w plc_count\@-1
 		endm
-
-; ---------------------------------------------------------------------------
-; Pattern load cues - standard block 2
-; ---------------------------------------------------------------------------
-PLC_Main2:	plcheader
-		plcm	Nem_Monitors, $D000			; monitors
-	PLC_Main2_end:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - "TRY AGAIN" and "END" screens
 ; ---------------------------------------------------------------------------

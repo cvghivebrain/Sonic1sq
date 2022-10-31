@@ -405,6 +405,7 @@ UncLoadCues:
 		ptr UPLC_SLZPipe
 		ptr UPLC_GHZAnchor
 		ptr UPLC_SYZSpike
+		ptr UPLC_Monitors
 
 UPLC_HUD:	uplcheader $D940
 		uplc Art_HUDMain,v_tile_hud
@@ -515,5 +516,9 @@ UPLC_GHZAnchor:	uplcheader vram_weapon
 	
 UPLC_SYZSpike:	uplcheader vram_weapon
 		uplc Art_SYZSpike
+	.end:
+	
+UPLC_Monitors:	uplcheader vram_monitors
+		uplc Art_Monitors
 	.end:
 	

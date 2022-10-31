@@ -14,8 +14,8 @@ GM_Demo:
 		bset	#7,(v_gamemode).w			; add $80 to gamemode (for title card sequence)
 		tst.w	(v_demo_mode).w				; is this an ending demo?
 		bmi.s	.skip_gfx				; if yes, branch
-		moveq	#id_PLC_Main2,d0
-		bsr.w	AddPLC					; load graphics for monitors/shield/stars over next few frames
+		moveq	#id_UPLC_Monitors,d0
+		jsr	UncPLC					; load graphics for monitors
 
 	.skip_gfx:
 		lea	(v_ost_all).w,a1			; RAM address to start clearing

@@ -22,6 +22,10 @@ Mon_Index:	index *,,2
 		ptr Mon_BreakOpen
 		ptr Mon_Animate
 		ptr Mon_Display
+
+		rsobj Monitor
+ost_monitor_slot:	rs.b 1					; slot used by monitor (0-7; -1 if none)
+		rsobjend
 ; ===========================================================================
 
 Mon_Main:	; Routine 0
@@ -29,7 +33,7 @@ Mon_Main:	; Routine 0
 		move.b	#$E,ost_height(a0)
 		move.b	#$E,ost_width(a0)
 		move.l	#Map_Monitor,ost_mappings(a0)
-		move.w	#tile_Nem_Monitors,ost_tile(a0)
+		move.w	#tile_Art_Monitors,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#3,ost_priority(a0)
 		move.b	#$F,ost_displaywidth(a0)
@@ -41,12 +45,19 @@ Mon_Main:	; Routine 0
 		beq.s	.notbroken				; if not, branch
 		move.b	#id_Mon_Display,ost_routine(a0)		; goto Mon_Display next
 		move.b	#id_frame_monitor_broken,ost_frame(a0)	; use broken monitor frame
+		move.b	#-1,ost_monitor_slot(a0)
 		rts	
 ; ===========================================================================
 
 	.notbroken:
 		move.b	#id_col_16x16+id_col_item,ost_col_type(a0)
-		move.b	ost_subtype(a0),ost_anim(a0)		; use animation based on subtype
+		cmp.b	#type_monitor_1up,ost_subtype(a0)
+		bne.s	.not_1up
+		move.b	#id_ani_monitor_sonic,ost_anim(a0)
+		bra.s	Mon_Solid
+		
+	.not_1up:
+		bsr.w	Mon_FindSlot
 
 Mon_Solid:	; Routine 2
 		move.b	ost_routine2(a0),d0			; is monitor being stood on or falling?
@@ -145,8 +156,16 @@ Mon_Animate:	; Routine 6
 Mon_Display:	; Routine 8
 		move.w	ost_x_pos(a0),d0
 		bsr.w	OffScreen
-		bne.w	DeleteObject
+		bne.s	Mon_ClearSlot
 		bra.w	DisplaySprite
+		
+Mon_ClearSlot:
+		move.b	ost_monitor_slot(a0),d0
+		bmi.s	.no_slot				; branch if slot isn't used
+		bclr.b	d0,(v_monitor_slots).w
+		
+	.no_slot:
+		bra.w	DeleteObject
 ; ===========================================================================
 
 Mon_BreakOpen:	; Routine 4
@@ -157,7 +176,13 @@ Mon_BreakOpen:	; Routine 4
 		move.l	#PowerUp,ost_id(a1)			; load monitor contents object
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
-		move.b	ost_anim(a0),ost_subtype(a1)		; inherit animation id
+		move.b	ost_subtype(a0),ost_subtype(a1)		; inherit subtype
+		move.b	ost_monitor_slot(a0),ost_pow_slot(a1)
+		move.b	#id_frame_monitor_static1,ost_frame(a1)	; use static icon by default
+		tst.b	ost_monitor_slot(a0)
+		bmi.s	Mon_Explode				; branch if monitor isn't using a slot
+		move.b	ost_monitor_slot(a0),ost_frame(a1)
+		add.b	#id_frame_monitor_7,ost_frame(a1)	; icon is based on monitor slot number
 
 Mon_Explode:
 		bsr.w	FindFreeObj				; find free OST slot
@@ -173,6 +198,7 @@ Mon_Explode:
 		move.b	ost_respawn(a0),d0
 		bset	#0,2(a2,d0.w)
 		move.b	#id_ani_monitor_breaking,ost_anim(a0)	; set monitor type to broken
+		move.b	#-1,ost_monitor_slot(a0)		; cancel slot use (monitor contents now use that slot)
 		bra.w	DisplaySprite
 
 ; ---------------------------------------------------------------------------
@@ -250,40 +276,81 @@ Mon_Solid_Detect:
 		rts
 		
 ; ---------------------------------------------------------------------------
+; Subroutine to	find a free monitor slot, set animation and load graphics
+
+;	uses d0.l, d1.l, d2.l, a1, a2
+; ---------------------------------------------------------------------------
+
+Mon_FindSlot:
+		lea	(v_monitor_slots).w,a1
+		moveq	#8-1,d1					; number of slots to check
+		
+	.loop:
+		btst	d1,(a1)
+		beq.s	.found_slot				; branch if free slot found
+		dbf	d1,.loop				; repeat for all slots
+		
+		move.b	#-1,ost_monitor_slot(a0)		; no free slots
+		move.b	#id_ani_monitor_static,ost_anim(a0)	; use static animation
+		rts
+		
+	.found_slot:
+		bset	d1,(a1)					; set slot as used
+		move.b	d1,ost_monitor_slot(a0)
+		move.b	d1,ost_anim(a0)
+		add.b	#id_ani_monitor_7,ost_anim(a0)		; use animation based on slot number
+		
+		set_dma_size	sizeof_cell*4,d2		; number of tiles to load
+		lea	Mon_GfxSlots(pc),a1
+		lsl.w	#2,d1
+		move.l	(a1,d1.w),d1				; get VRAM address from list below
+		moveq	#0,d0
+		move.b	ost_subtype(a0),d0
+		mulu.w	#6,d0
+		lea	Mon_GfxSource(pc,d0.w),a2		; get ROM address for gfx
+		jmp	AddDMA					; add gfx to DMA queue
+
+Mon_GfxSlots:
+		set_dma_dest	vram_monitors+$780
+		set_dma_dest	vram_monitors+$700
+		set_dma_dest	vram_monitors+$680
+		set_dma_dest	vram_monitors+$600
+		set_dma_dest	vram_monitors+$580
+		set_dma_dest	vram_monitors+$500
+		set_dma_dest	vram_monitors+$480
+		set_dma_dest	vram_monitors+$400
+
+Mon_GfxSource:
+		set_dma_src	Art_EggmanIcon			; Eggman
+		set_dma_src	Art_EggmanIcon			; Sonic (unused)
+		set_dma_src	Art_ShoeIcon			; Speed shoes
+		set_dma_src	Art_ShieldIcon			; Shield
+		set_dma_src	Art_InvIcon			; Invincibility
+		set_dma_src	Art_RingIcon			; Rings
+		set_dma_src	Art_SIcon			; S
+		set_dma_src	Art_GogglesIcon			; Goggles
+; ---------------------------------------------------------------------------
 ; Animation script
 ; ---------------------------------------------------------------------------
 
 Ani_Monitor:	index *
-		ptr ani_monitor_static				; 0
-		ptr ani_monitor_eggman				; 1
-		ptr ani_monitor_sonic				; 2
-		ptr ani_monitor_shoes				; 3
-		ptr ani_monitor_shield				; 4
-		ptr ani_monitor_invincible			; 5
-		ptr ani_monitor_rings				; 6
-		ptr ani_monitor_s				; 7
-		ptr ani_monitor_goggles				; 8
-		ptr ani_monitor_breaking			; 9
+		ptr ani_monitor_static
+		ptr ani_monitor_sonic
+		ptr ani_monitor_7
+		ptr ani_monitor_6
+		ptr ani_monitor_5
+		ptr ani_monitor_4
+		ptr ani_monitor_3
+		ptr ani_monitor_2
+		ptr ani_monitor_1
+		ptr ani_monitor_0
+		ptr ani_monitor_breaking
 		
 ani_monitor_static:
 		dc.w 1
 		dc.w id_frame_monitor_static0
 		dc.w id_frame_monitor_static1
 		dc.w id_frame_monitor_static2
-		dc.w id_Anim_Flag_Restart
-		even
-
-ani_monitor_eggman:
-		dc.w 1
-		dc.w id_frame_monitor_static0
-		dc.w id_frame_monitor_eggman
-		dc.w id_frame_monitor_eggman
-		dc.w id_frame_monitor_static1
-		dc.w id_frame_monitor_eggman
-		dc.w id_frame_monitor_eggman
-		dc.w id_frame_monitor_static2
-		dc.w id_frame_monitor_eggman
-		dc.w id_frame_monitor_eggman
 		dc.w id_Anim_Flag_Restart
 		even
 
@@ -301,87 +368,115 @@ ani_monitor_sonic:
 		dc.w id_Anim_Flag_Restart
 		even
 
-ani_monitor_shoes:
+ani_monitor_0:
 		dc.w 1
 		dc.w id_frame_monitor_static0
-		dc.w id_frame_monitor_shoes
-		dc.w id_frame_monitor_shoes
+		dc.w id_frame_monitor_0
+		dc.w id_frame_monitor_0
 		dc.w id_frame_monitor_static1
-		dc.w id_frame_monitor_shoes
-		dc.w id_frame_monitor_shoes
+		dc.w id_frame_monitor_0
+		dc.w id_frame_monitor_0
 		dc.w id_frame_monitor_static2
-		dc.w id_frame_monitor_shoes
-		dc.w id_frame_monitor_shoes
+		dc.w id_frame_monitor_0
+		dc.w id_frame_monitor_0
 		dc.w id_Anim_Flag_Restart
 		even
 
-ani_monitor_shield:
+ani_monitor_1:
 		dc.w 1
 		dc.w id_frame_monitor_static0
-		dc.w id_frame_monitor_shield
-		dc.w id_frame_monitor_shield
+		dc.w id_frame_monitor_1
+		dc.w id_frame_monitor_1
 		dc.w id_frame_monitor_static1
-		dc.w id_frame_monitor_shield
-		dc.w id_frame_monitor_shield
+		dc.w id_frame_monitor_1
+		dc.w id_frame_monitor_1
 		dc.w id_frame_monitor_static2
-		dc.w id_frame_monitor_shield
-		dc.w id_frame_monitor_shield
+		dc.w id_frame_monitor_1
+		dc.w id_frame_monitor_1
 		dc.w id_Anim_Flag_Restart
 		even
 
-ani_monitor_invincible:
+ani_monitor_2:
 		dc.w 1
 		dc.w id_frame_monitor_static0
-		dc.w id_frame_monitor_invincible
-		dc.w id_frame_monitor_invincible
+		dc.w id_frame_monitor_2
+		dc.w id_frame_monitor_2
 		dc.w id_frame_monitor_static1
-		dc.w id_frame_monitor_invincible
-		dc.w id_frame_monitor_invincible
+		dc.w id_frame_monitor_2
+		dc.w id_frame_monitor_2
 		dc.w id_frame_monitor_static2
-		dc.w id_frame_monitor_invincible
-		dc.w id_frame_monitor_invincible
+		dc.w id_frame_monitor_2
+		dc.w id_frame_monitor_2
 		dc.w id_Anim_Flag_Restart
 		even
 
-ani_monitor_rings:
+ani_monitor_3:
 		dc.w 1
 		dc.w id_frame_monitor_static0
-		dc.w id_frame_monitor_rings
-		dc.w id_frame_monitor_rings
+		dc.w id_frame_monitor_3
+		dc.w id_frame_monitor_3
 		dc.w id_frame_monitor_static1
-		dc.w id_frame_monitor_rings
-		dc.w id_frame_monitor_rings
+		dc.w id_frame_monitor_3
+		dc.w id_frame_monitor_3
 		dc.w id_frame_monitor_static2
-		dc.w id_frame_monitor_rings
-		dc.w id_frame_monitor_rings
+		dc.w id_frame_monitor_3
+		dc.w id_frame_monitor_3
 		dc.w id_Anim_Flag_Restart
 		even
 
-ani_monitor_s:
+ani_monitor_4:
 		dc.w 1
 		dc.w id_frame_monitor_static0
-		dc.w id_frame_monitor_s
-		dc.w id_frame_monitor_s
+		dc.w id_frame_monitor_4
+		dc.w id_frame_monitor_4
 		dc.w id_frame_monitor_static1
-		dc.w id_frame_monitor_s
-		dc.w id_frame_monitor_s
+		dc.w id_frame_monitor_4
+		dc.w id_frame_monitor_4
 		dc.w id_frame_monitor_static2
-		dc.w id_frame_monitor_s
-		dc.w id_frame_monitor_s
+		dc.w id_frame_monitor_4
+		dc.w id_frame_monitor_4
 		dc.w id_Anim_Flag_Restart
 		even
 
-ani_monitor_goggles:
+ani_monitor_5:
 		dc.w 1
 		dc.w id_frame_monitor_static0
-		dc.w id_frame_monitor_goggles
-		dc.w id_frame_monitor_goggles
+		dc.w id_frame_monitor_5
+		dc.w id_frame_monitor_5
 		dc.w id_frame_monitor_static1
-		dc.w id_frame_monitor_goggles
-		dc.w id_frame_monitor_goggles
+		dc.w id_frame_monitor_5
+		dc.w id_frame_monitor_5
 		dc.w id_frame_monitor_static2
-		dc.w id_frame_monitor_goggles
-		dc.w id_frame_monitor_goggles
+		dc.w id_frame_monitor_5
+		dc.w id_frame_monitor_5
+		dc.w id_Anim_Flag_Restart
+		even
+
+ani_monitor_6:
+		dc.w 1
+		dc.w id_frame_monitor_static0
+		dc.w id_frame_monitor_6
+		dc.w id_frame_monitor_6
+		dc.w id_frame_monitor_static1
+		dc.w id_frame_monitor_6
+		dc.w id_frame_monitor_6
+		dc.w id_frame_monitor_static2
+		dc.w id_frame_monitor_6
+		dc.w id_frame_monitor_6
+		dc.w id_Anim_Flag_Restart
+		even
+
+ani_monitor_7:
+		dc.w 1
+		dc.w id_frame_monitor_static0
+		dc.w id_frame_monitor_7
+		dc.w id_frame_monitor_7
+		dc.w id_frame_monitor_static1
+		dc.w id_frame_monitor_7
+		dc.w id_frame_monitor_7
+		dc.w id_frame_monitor_static2
+		dc.w id_frame_monitor_7
+		dc.w id_frame_monitor_7
 		dc.w id_Anim_Flag_Restart
 		even
 

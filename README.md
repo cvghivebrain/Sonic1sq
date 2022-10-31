@@ -21,6 +21,7 @@ _Sonic 1-squared_ is an enhanced version of the original _Sonic the Hedgehog_ ga
 * The hidden Japanese credits screen has been given its own gamemode, which is accessible through the level select.
 * Water palettes are generated in-game by the WaterFilter subroutine, instead of being hardcoded.
 * Palette transitions are controlled by a brightness variable, and no longer require a "next" palette. This simplifies loading new palettes.
+* Monitor icons load only as needed, allowing for up to 256 unique monitor types (with a maximum of 8 loaded at any one time).
 
 # Credits
 * [flamewing](https://github.com/flamewing) for [mdcomp](https://github.com/flamewing/mdcomp).

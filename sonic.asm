@@ -768,7 +768,14 @@ Art_Sonic:	incbin	"Graphics\Sonic.bin"			; Sonic
 		incfile Kos_Ring,"Graphics Kosinski\Rings",kos
 		incfile Art_Shield,"Graphics\Shield",bin,dma_safe
 		incfile Art_Stars,"Graphics\Invincibility",bin,dma_safe
-		incfile Nem_Monitors,"Graphics - Compressed\Monitors",nem
+		incfile Art_Monitors,"Graphics\Monitors",bin,dma_safe
+		incfile Art_RingIcon,"Graphics\Monitor Contents - Ring",bin,dma_safe
+		incfile Art_EggmanIcon,"Graphics\Monitor Contents - Eggman",bin,dma_safe
+		incfile Art_ShieldIcon,"Graphics\Monitor Contents - Shield",bin,dma_safe
+		incfile Art_InvIcon,"Graphics\Monitor Contents - Invincible",bin,dma_safe
+		incfile Art_SIcon,"Graphics\Monitor Contents - S",bin,dma_safe
+		incfile Art_GogglesIcon,"Graphics\Monitor Contents - Goggles",bin,dma_safe
+		incfile Art_ShoeIcon,"Graphics\Monitor Contents - Shoes",bin,dma_safe
 		incfile Art_Explode,"Graphics\Explosion",bin,dma_safe
 		incfile Kos_Points,"Graphics Kosinski\Points",kos
 		incfile Art_GameOver,"Graphics\Game Over",bin,dma_safe
