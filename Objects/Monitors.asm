@@ -37,6 +37,7 @@ Mon_Main:	; Routine 0
 		move.b	#render_rel,ost_render(a0)
 		move.b	#3,ost_priority(a0)
 		move.b	#$F,ost_displaywidth(a0)
+		move.b	#-1,ost_monitor_slot(a0)		; assume there are no free slots
 		lea	(v_respawn_list).w,a2
 		moveq	#0,d0
 		move.b	ost_respawn(a0),d0
@@ -45,16 +46,15 @@ Mon_Main:	; Routine 0
 		beq.s	.notbroken				; if not, branch
 		move.b	#id_Mon_Display,ost_routine(a0)		; goto Mon_Display next
 		move.b	#id_frame_monitor_broken,ost_frame(a0)	; use broken monitor frame
-		move.b	#-1,ost_monitor_slot(a0)
 		rts	
 ; ===========================================================================
 
 	.notbroken:
 		move.b	#id_col_16x16+id_col_item,ost_col_type(a0)
 		cmp.b	#type_monitor_1up,ost_subtype(a0)
-		bne.s	.not_1up
-		move.b	#id_ani_monitor_sonic,ost_anim(a0)
-		bra.s	Mon_Solid
+		bne.s	.not_1up				; branch if monitor isn't a 1-up
+		move.b	#id_ani_monitor_sonic,ost_anim(a0)	; use 1-up animation
+		bra.s	Mon_Solid				; skip slot check
 		
 	.not_1up:
 		bsr.w	Mon_FindSlot
@@ -179,6 +179,11 @@ Mon_BreakOpen:	; Routine 4
 		move.b	ost_subtype(a0),ost_subtype(a1)		; inherit subtype
 		move.b	ost_monitor_slot(a0),ost_pow_slot(a1)
 		move.b	#id_frame_monitor_static1,ost_frame(a1)	; use static icon by default
+		cmp.b	#type_monitor_1up,ost_subtype(a0)
+		bne.s	.not_1up				; branch if not 1-up
+		move.b	#id_frame_monitor_sonic,ost_frame(a1)	; use 1-up icon instead
+		
+	.not_1up:
 		tst.b	ost_monitor_slot(a0)
 		bmi.s	Mon_Explode				; branch if monitor isn't using a slot
 		move.b	ost_monitor_slot(a0),ost_frame(a1)
@@ -290,7 +295,6 @@ Mon_FindSlot:
 		beq.s	.found_slot				; branch if free slot found
 		dbf	d1,.loop				; repeat for all slots
 		
-		move.b	#-1,ost_monitor_slot(a0)		; no free slots
 		move.b	#id_ani_monitor_static,ost_anim(a0)	; use static animation
 		rts
 		
@@ -329,6 +333,8 @@ Mon_GfxSource:
 		set_dma_src	Art_RingIcon			; Rings
 		set_dma_src	Art_SIcon			; S
 		set_dma_src	Art_GogglesIcon			; Goggles
+		
+countof_monitor_types:	equ (*-Mon_GfxSource)/6
 ; ---------------------------------------------------------------------------
 ; Animation script
 ; ---------------------------------------------------------------------------

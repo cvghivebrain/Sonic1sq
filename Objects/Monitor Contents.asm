@@ -67,6 +67,10 @@ Pow_Index2:	index *
 		ptr Pow_Rings
 		ptr Pow_S
 		ptr Pow_Goggles
+
+		if (*-Pow_Index2)/2 <> countof_monitor_types
+		inform 3,"Mismatch between monitor count in Monitor and PowerUp objects."
+		endc
 ; ===========================================================================
 
 Pow_Eggman:
