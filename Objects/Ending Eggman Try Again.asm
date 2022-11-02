@@ -2,7 +2,7 @@
 ; Object 8B - Eggman on "TRY AGAIN" and "END" screens
 
 ; spawned by:
-;	GM_Ending
+;	GM_TryAgain
 ; ---------------------------------------------------------------------------
 
 EndEggman:
@@ -28,7 +28,7 @@ EEgg_Main:	; Routine 0
 		move.w	#$120,ost_x_pos(a0)
 		move.w	#$F4,ost_y_screen(a0)
 		move.l	#Map_EEgg,ost_mappings(a0)
-		move.w	#tile_Nem_TryAgain,ost_tile(a0)
+		move.w	#tile_Kos_TryAgain+1,ost_tile(a0)
 		move.b	#render_abs,ost_render(a0)
 		move.b	#2,ost_priority(a0)
 		move.b	#id_ani_eegg_end,ost_anim(a0)		; use "END" animation
@@ -70,7 +70,8 @@ EEgg_Juggle:	; Routine 4
 EEgg_Wait:	; Routine 6
 		subq.w	#1,ost_eeggman_wait_time(a0)		; decrement timer
 		bpl.s	.nochg					; branch if time remains
-		bchg	#0,ost_anim(a0)
+		bchg	#0,ost_anim(a0)				; switch animation
+		bclr	#7,ost_anim(a0)				; restart animation
 		move.b	#id_EEgg_Animate,ost_routine(a0)	; goto EEgg_Animate next
 
 	.nochg:
@@ -88,12 +89,12 @@ Ani_EEgg:	index *
 ani_eegg_juggle1:
 		dc.w 5
 		dc.w id_frame_eegg_juggle1
-		dc.w id_Anim_Flag_Routine, 1
+		dc.w id_Anim_Flag_Routine
 
 ani_eegg_juggle2:
 		dc.w 5
 		dc.w id_frame_eegg_juggle3
-		dc.w id_Anim_Flag_Routine, 3
+		dc.w id_Anim_Flag_Routine
 
 ani_eegg_end:
 		dc.w 7

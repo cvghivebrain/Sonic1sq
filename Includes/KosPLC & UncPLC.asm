@@ -88,6 +88,7 @@ KosLoadCues:
 		ptr KPLC_HiddenCredits
 		ptr KPLC_Sega
 		ptr KPLC_Special
+		ptr KPLC_TryAgain
 
 KPLC_GHZ:	kplcheader
 		kplc Kos_GHZ_1st
@@ -314,6 +315,12 @@ KPLC_Special:	kplcheader
 	.end:
 		set_dma_size last_vram
 
+KPLC_TryAgain:	kplcheader
+		kplc Kos_TryAgain
+		kplc Kos_EndEm,v_tile_emeralds
+	.end:
+		set_dma_size last_vram
+
 ; ---------------------------------------------------------------------------
 ; Subroutine to	load uncompressed graphics
 
@@ -390,6 +397,7 @@ UncLoadCues:
 		ptr UPLC_SSResult
 		ptr UPLC_Warp
 		ptr UPLC_Credits
+		ptr UPLC_TryAgain
 		ptr UPLC_SonicIcon
 		ptr UPLC_Prison
 		ptr UPLC_Prison2
@@ -443,7 +451,11 @@ UPLC_Warp:	uplcheader vram_shield
 	.end:
 
 UPLC_Credits:	uplcheader $20
-		uplc Art_CreditText
+		uplc Art_CreditText,v_tile_credits
+	.end:
+
+UPLC_TryAgain:	uplcheader $2000
+		uplc Art_CreditText,v_tile_credits
 	.end:
 
 UPLC_SonicIcon:	uplcheader vram_lifeicon

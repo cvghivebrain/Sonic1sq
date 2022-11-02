@@ -3,7 +3,6 @@
 ; ---------------------------------------------------------------------------
 PatternLoadCues:
 		index *
-		ptr PLC_TryAgain
 		ptr PLC_EggmanSBZ2
 		ptr PLC_FZBoss
 
@@ -32,14 +31,6 @@ plcheader:	macro *
 		plc_count\@: equ (\*_end-*-2)/sizeof_plc
 		dc.w plc_count\@-1
 		endm
-; ---------------------------------------------------------------------------
-; Pattern load cues - "TRY AGAIN" and "END" screens
-; ---------------------------------------------------------------------------
-PLC_TryAgain:	plcheader
-		;plcm	Nem_EndEm, $78A0, TryAgain		; emeralds
-		plcm	Nem_TryAgain,$7C20
-		;plcm	Nem_CreditText, vram_credits		; credits alphabet ($B400)
-	PLC_TryAgain_end:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - Eggman on SBZ 2
 ; ---------------------------------------------------------------------------

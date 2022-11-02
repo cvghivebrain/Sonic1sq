@@ -453,11 +453,13 @@ LevSel_Ending:
 LevSel_Gamemode:
 		move.w	(a1)+,d0
 		move.b	d0,(v_gamemode).w			; set gamemode
+		move.w	(a1)+,d0
+		move.w	d0,(v_emeralds+2).w			; set emeralds
 		rts
 		
 LevSel_Credits:
 		move.w	(a1)+,d0
-		move.b	d0,(v_credits_num).w			; set credits number
+		move.w	d0,(v_credits_num).w			; set credits number
 		move.b	#id_Credits,(v_gamemode).w		; set gamemode to credits
 		rts
 		
@@ -549,8 +551,8 @@ LevSel_Strings:	lsline "GREEN HILL ZONE  1",id_LevSel_Level,id_GHZ,0
 		lsline "BAD ENDING        ",id_LevSel_Ending,id_EndZ,1
 		lsline "CREDITS           ",id_LevSel_Credits,0,0
 		lsline "HIDDEN CREDITS    ",id_LevSel_Gamemode,id_HiddenCredits,0
-		lsline "END SCREEN        ",id_LevSel_Credits,0,0
-		lsline "TRY AGAIN SCREEN  ",id_LevSel_Credits,0,0
+		lsline "END SCREEN        ",id_LevSel_Gamemode,id_TryAgain,emerald_all
+		lsline "TRY AGAIN SCREEN  ",id_LevSel_Gamemode,id_TryAgain,0
 		lsline "CONTINUE SCREEN   ",id_LevSel_Gamemode,id_Continue,0
 	LevSel_Strings_sound:
 		lsline "SOUND SELECT   $XX",id_LevSel_Sound,0,0

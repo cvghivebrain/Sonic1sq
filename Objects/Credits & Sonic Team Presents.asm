@@ -18,13 +18,18 @@ Cred_Index:	index *,,2
 
 Cred_Main:	; Routine 0
 		moveq	#id_UPLC_Credits,d0
+		cmpi.b	#id_TryAgain,(v_gamemode).w
+		bne.s	.not_tryagain				; branch if not on Try Again screen
+		moveq	#id_UPLC_TryAgain,d0
+		
+	.not_tryagain:
 		jsr	UncPLC
 		jsr	ProcessDMA
 		addq.b	#2,ost_routine(a0)			; goto Cred_Display next
 		move.w	#$120,ost_x_pos(a0)
 		move.w	#$F0,ost_y_screen(a0)
 		move.l	#Map_Cred,ost_mappings(a0)
-		move.w	#tile_Art_CreditText,ost_tile(a0)
+		move.w	(v_tile_credits).w,ost_tile(a0)
 		move.w	(v_credits_num).w,d0			; load credits index number
 		move.b	d0,ost_frame(a0)			; display appropriate sprite
 		move.b	#render_abs,ost_render(a0)

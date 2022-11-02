@@ -232,6 +232,7 @@ v_tile_points			rs.w 1
 v_tile_rings			rs.w 1
 v_tile_animal1			rs.w 1
 v_tile_animal2			rs.w 1
+v_tile_credits			rs.w 1
 v_palcycle_ss_num:		rs.w 1 ; $FFFFF79A ; palette cycling in Special Stage - current index number
 v_palcycle_ss_time:		rs.w 1 ; $FFFFF79C ; palette cycling in Special Stage - time until next change
 v_palcycle_ss_unused:		rs.w 1 ; $FFFFF79E ; palette cycling in Special Stage - unused offset value, always 0
@@ -445,6 +446,7 @@ v_demo_y_start:			equ __rs-2 ; Sonic's starting y pos
 v_brightness:			rs.w 1 ; 0 = normal; -15 = black; 15 = white
 f_brightness_update:		rs.b 1 ; flag set to update brightness
 v_credits_num:			rs.w 1 ; $FFFFFFF4 ; credits index number
+f_credits_started:		rs.b 1 ; flag set when credits have started
 v_console_region:		rs.b 1 ; $FFFFFFF8 ; Mega Drive console type - 0 = JP; $80 = US/EU; +0 = NTSC; +$40 = PAL
 f_debug_enable:			rs.w 1 ; $FFFFFFFA ; flag set when debug mode is enabled (high byte is set to 1, but it's read as a word)
 v_checksum_pass:		rs.l 1 ; $FFFFFFFC ; set to the text string "init" when checksum is passed

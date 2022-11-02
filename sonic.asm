@@ -172,6 +172,7 @@ GameModeArray:	index.l 0
 		ptr GM_Ending					; End of game sequence
 		ptr GM_Credits					; Credits
 		ptr GM_HiddenCredits				; Hidden Japanese credits screen
+		ptr GM_TryAgain					; Try Again/End screen
 
 id_Sega:	equ id_GM_Sega
 id_Title:	equ id_GM_Title
@@ -182,6 +183,7 @@ id_Continue:	equ id_GM_Continue
 id_Ending:	equ id_GM_Ending
 id_Credits:	equ id_GM_Credits
 id_HiddenCredits: equ id_GM_HiddenCredits
+id_TryAgain:	equ id_GM_TryAgain
 ; ===========================================================================
 
 CheckSumError:
@@ -852,7 +854,7 @@ Blk256_SBZ:	incbin	"256x256 Mappings\SBZ.kos"
 		incfile Art_Face,"Graphics\Boss - Face",bin,dma_safe
 		incfile Kos_EndEm,"Graphics Kosinski\Ending - Emeralds",kos
 		incfile Kos_EndSonic,"Graphics Kosinski\Ending - Sonic",kos
-		incfile Nem_TryAgain,"Graphics - Compressed\Ending - Try Again",nem
+		incfile Kos_TryAgain,"Graphics Kosinski\Ending - Try Again",kos
 		incfile Kos_EndFlower,"Graphics Kosinski\Ending - Flowers",kos
 		incfile Art_CreditText,"Graphics\Ending - Credits",bin,dma_safe
 		incfile Kos_EndStH,"Graphics Kosinski\Ending - StH Logo",kos

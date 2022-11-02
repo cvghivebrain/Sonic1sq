@@ -3,9 +3,10 @@
 ; ---------------------------------------------------------------------------
 
 GM_Credits:
-		tst.w	(v_credits_num).w
+		tst.b	(f_credits_started).w
 		bne.s	.keep_music				; branch if credits were already running
 		play.b	1, bsr.w, mus_Credits			; play credits music
+		move.b	#1,(f_credits_started).w
 		
 	.keep_music:
 		bsr.w	ClearPLC				; clear PLC buffer
@@ -30,7 +31,7 @@ GM_Credits:
 		bsr.w	ClearRAM				; clear next palette
 
 		moveq	#id_Pal_Sonic,d0
-		bsr.w	PalLoad				; load Sonic's palette
+		bsr.w	PalLoad					; load Sonic's palette
 		move.l	#CreditsText,(v_ost_credits).w		; load credits object
 		jsr	(ExecuteObjects).l
 		jsr	(BuildSprites).l
@@ -47,15 +48,16 @@ GM_Credits:
 Cred_WaitLoop:
 		move.b	#id_VBlank_Title,(v_vblank_routine).w
 		bsr.w	WaitForVBlank
-		bsr.w	RunPLC
 		tst.w	(v_countdown).w				; have 2 seconds elapsed?
 		bne.s	Cred_WaitLoop				; if not, branch
-		tst.l	(v_plc_buffer).w			; have level gfx finished decompressing?
-		bne.s	Cred_WaitLoop				; if not, branch
 		cmpi.w	#countof_credits+1,(v_credits_num).w	; have the credits finished?
-		beq.w	TryAgainEnd				; if yes, branch
+		beq.s	Cred_TryAgain				; if yes, branch
 		rts						; goto demo next
 
+Cred_TryAgain:
+		move.b	#id_TryAgain,(v_gamemode).w
+		rts
+		
 ; ---------------------------------------------------------------------------
 ; Subroutine to setup an ending sequence demo
 
@@ -118,7 +120,7 @@ EndDemo_LampVar:
 ; "TRY AGAIN" and "END"	screens
 ; ---------------------------------------------------------------------------
 
-TryAgainEnd:
+GM_TryAgain:
 		bsr.w	ClearPLC
 		bsr.w	PaletteFadeOut				; fade out from previous gamemode (demo)
 		lea	(vdp_control_port).l,a6
@@ -136,15 +138,15 @@ TryAgainEnd:
 		move.w	#loops_to_clear_ost,d1
 		bsr.w	ClearRAM
 
-		moveq	#id_PLC_TryAgain,d0
-		bsr.w	QuickPLC				; load "TRY AGAIN" or "END" patterns
+		moveq	#id_KPLC_TryAgain,d0
+		jsr	KosPLC					; load "TRY AGAIN"/"END" gfx
 
 		lea	(v_pal_dry).w,a1
 		move.w	#loops_to_clear_pal,d1
 		bsr.w	ClearRAM
 
 		moveq	#id_Pal_Ending,d0
-		bsr.w	PalLoad				; load ending palette
+		bsr.w	PalLoad					; load ending palette
 		clr.w	(v_pal_dry+$40).w			; set bg colour to black
 		move.l	#EndEggman,(v_ost_endeggman).w		; load Eggman object
 		jsr	(ExecuteObjects).l
@@ -166,7 +168,7 @@ TryAg_MainLoop:
 		bne.s	.exit					; if yes, branch
 		tst.w	(v_countdown).w				; has 30 seconds elapsed?
 		beq.s	.exit					; if yes, branch
-		cmpi.b	#id_Credits,(v_gamemode).w
+		cmpi.b	#id_TryAgain,(v_gamemode).w
 		beq.s	TryAg_MainLoop
 
 	.exit:
