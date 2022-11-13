@@ -83,9 +83,11 @@ LoadPerZone:
 		add.l	#2,(v_debug_ptr).w			; skip to first item in list
 		
 		movea.l	(a4)+,a1				; get pointer for title card list
-		lea	(a1,d4.w),a1
+		lea	(a1,d5.w),a1
 		move.w	(a1)+,(v_titlecard_zone).w		; set zone name
 		move.w	(a1)+,(v_titlecard_act).w		; set act number
+		move.w	(a1)+,(v_titlecard_uplc).w		; set UPLC id
+		adda.l	#2,a1
 
 		movea.l	(a4)+,a1				; get pointer for DLE list
 		move.l	(a1,d4.w),(v_dle_ptr).w			; get pointer for DLE routine
@@ -409,25 +411,25 @@ Zone_SPos_End:	dc.w $0620, $016B
 ; Title card ids
 ; ---------------------------------------------------------------------------
 
-Zone_Card_GHZ:	dc.w id_frame_card_ghz,id_frame_card_act1
-		dc.w id_frame_card_ghz,id_frame_card_act2
-		dc.w id_frame_card_ghz,id_frame_card_act3
-Zone_Card_MZ:	dc.w id_frame_card_mz,id_frame_card_act1
-		dc.w id_frame_card_mz,id_frame_card_act2
-		dc.w id_frame_card_mz,id_frame_card_act3
-Zone_Card_SYZ:	dc.w id_frame_card_syz,id_frame_card_act1
-		dc.w id_frame_card_syz,id_frame_card_act2
-		dc.w id_frame_card_syz,id_frame_card_act3
-Zone_Card_LZ:	dc.w id_frame_card_lz,id_frame_card_act1
-		dc.w id_frame_card_lz,id_frame_card_act2
-		dc.w id_frame_card_lz,id_frame_card_act3
-		dc.w id_frame_card_sbz,id_frame_card_act3	; SBZ3
-Zone_Card_SLZ:	dc.w id_frame_card_slz,id_frame_card_act1
-		dc.w id_frame_card_slz,id_frame_card_act2
-		dc.w id_frame_card_slz,id_frame_card_act3
-Zone_Card_SBZ:	dc.w id_frame_card_sbz,id_frame_card_act1
-		dc.w id_frame_card_sbz,id_frame_card_act2
-		dc.w id_frame_card_fz,id_frame_card_act1	; FZ
+Zone_Card_GHZ:	dc.w id_frame_card_ghz,id_frame_card_act1,id_UPLC_TitleCard,0
+		dc.w id_frame_card_ghz,id_frame_card_act2,id_UPLC_TitleCard,0
+		dc.w id_frame_card_ghz,id_frame_card_act3,id_UPLC_TitleCard,0
+Zone_Card_MZ:	dc.w id_frame_card_mz,id_frame_card_act1,id_UPLC_TitleCard,0
+		dc.w id_frame_card_mz,id_frame_card_act2,id_UPLC_TitleCard,0
+		dc.w id_frame_card_mz,id_frame_card_act3,id_UPLC_TitleCard,0
+Zone_Card_SYZ:	dc.w id_frame_card_syz,id_frame_card_act1,id_UPLC_TitleCard,0
+		dc.w id_frame_card_syz,id_frame_card_act2,id_UPLC_TitleCard,0
+		dc.w id_frame_card_syz,id_frame_card_act3,id_UPLC_TitleCard,0
+Zone_Card_LZ:	dc.w id_frame_card_lz,id_frame_card_act1,id_UPLC_TitleCard,0
+		dc.w id_frame_card_lz,id_frame_card_act2,id_UPLC_TitleCard,0
+		dc.w id_frame_card_lz,id_frame_card_act3,id_UPLC_TitleCard,0
+		dc.w id_frame_card_sbz,id_frame_card_act3,id_UPLC_TitleCard,0 ; SBZ3
+Zone_Card_SLZ:	dc.w id_frame_card_slz,id_frame_card_act1,id_UPLC_TitleCard,0
+		dc.w id_frame_card_slz,id_frame_card_act2,id_UPLC_TitleCard,0
+		dc.w id_frame_card_slz,id_frame_card_act3,id_UPLC_TitleCard,0
+Zone_Card_SBZ:	dc.w id_frame_card_sbz,id_frame_card_act1,id_UPLC_TitleCard,0
+		dc.w id_frame_card_sbz,id_frame_card_act2,id_UPLC_TitleCard,0
+		dc.w id_frame_card_fz,id_frame_card_act1,id_UPLC_TitleCard,0 ; FZ
 
 ; ---------------------------------------------------------------------------
 ; Dynamic level event list pointers

@@ -15,18 +15,14 @@ GM_Continue:
 		move.w	#loops_to_clear_ost,d1			; size of RAM block to clear
 		bsr.w	ClearRAM				; fill OST with 0
 
-		moveq	#id_UPLC_TitleCard,d0
+		moveq	#id_UPLC_Continue,d0
 		jsr	UncPLC					; load title card patterns
-		locVRAM	vram_cont_sonic				; $A000
-		lea	(Nem_ContSonic).l,a0			; load oval & Sonic patterns
-		bsr.w	NemDec
-		;locVRAM	vram_cont_minisonic			; $AA20
-		;lea	(Nem_MiniSonic).l,a0			; load mini Sonic patterns
-		;bsr.w	NemDec
+		jsr	ProcessDMA
+		
 		moveq	#10,d1
 		jsr	(ContScrCounter).l			; run countdown	(start from 10)
 		moveq	#id_Pal_Continue,d0
-		bsr.w	PalLoad				; load continue	screen palette
+		bsr.w	PalLoad					; load continue	screen palette
 		play.b	0, bsr.w, mus_Continue			; play continue	music
 		move.w	#659,(v_countdown).w			; set timer to 11 seconds
 		clr.l	(v_camera_x_pos).w

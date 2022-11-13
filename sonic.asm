@@ -639,7 +639,7 @@ Art_Sonic:	incbin	"Graphics\Sonic.bin"			; Sonic
 ; Compressed graphics - various
 ; ---------------------------------------------------------------------------
 		incfile Art_Warp,"Graphics\Unused - Special Stage Warp",bin,dma_safe
-		incfile Nem_Goggle,"Graphics - Compressed\Unused - Goggles",nem
+		incfile Art_Goggles,"Graphics\Unused - Goggles",bin,dma_safe
 
 		include "Objects\Special Stage Walls [Mappings].asm" ; Map_SSWalls
 
@@ -790,7 +790,7 @@ Art_Sonic:	incbin	"Graphics\Sonic.bin"			; Sonic
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - continue screen
 ; ---------------------------------------------------------------------------
-		incfile	Nem_ContSonic,"Graphics - Compressed\Continue Screen Sonic",nem
+		incfile	Art_ContSonic,"Graphics\Continue Screen Sonic",bin,dma_safe
 		incfile	Art_MiniSonic,"Graphics\Continue Screen Stuff",bin,dma_safe
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - animals

@@ -21,7 +21,8 @@ CSI_Index:	index *,,2
 CSI_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto CSI_Display next
 		move.l	#Map_ContScr,ost_mappings(a0)
-		move.w	#(vram_cont_sonic/sizeof_cell)+tile_hi,ost_tile(a0)
+		move.w	(v_tile_titlecard).w,ost_tile(a0)
+		add.w	#tile_hi,ost_tile(a0)
 		move.b	#render_abs,ost_render(a0)
 		move.b	#$3C,ost_displaywidth(a0)
 		move.w	#$120,ost_x_pos(a0)
@@ -70,7 +71,7 @@ CSI_MiniSonicLoop:
 		move.b	#id_frame_cont_mini1_6,ost_frame(a1)
 		move.b	#id_CSI_ChkDel,ost_routine(a1)
 		move.l	#Map_ContScr,ost_mappings(a1)
-		move.w	#(vram_cont_minisonic/sizeof_cell)+tile_hi,ost_tile(a1)
+		move.w	#tile_Art_MiniSonic_UPLC_Continue+tile_hi,ost_tile(a1)
 		move.b	#render_abs,ost_render(a1)
 		lea	sizeof_ost(a1),a1
 		dbf	d1,CSI_MiniSonicLoop			; repeat for number of continues

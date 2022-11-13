@@ -200,6 +200,7 @@ v_waterfilter_id:		rs.b 1 ; water palette filter id
 v_bgm:				rs.b 1 ; music track id for current zone
 v_titlecard_zone:		rs.w 1 ; frame id of title card (zone name)
 v_titlecard_act:		rs.w 1 ; frame id of title card (act number)
+v_titlecard_uplc:		rs.w 1 ; UPLC id of title card
 v_tile_hud:			rs.w 1
 v_tile_swing:			rs.w 1
 v_tile_wall:			rs.w 1

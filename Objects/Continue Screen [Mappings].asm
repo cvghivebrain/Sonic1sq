@@ -13,16 +13,16 @@ Map_ContScr:	index *
 		
 frame_cont_text:
 		spritemap					; "CONTINUE", stars and countdown
-		piece	-60, -8, 2x2, $88
-		piece	-$2C, -8, 2x2, $B2
-		piece	-$1C, -8, 2x2, $AE
-		piece	-$C, -8, 2x2, $C2
-		piece	4, -8, 1x2, $A0
-		piece	$C, -8, 2x2, $AE
-		piece	$1C, -8, 2x2, $C6
-		piece	$2C, -8, 2x2, $90
-		piece	-$18, $38, 2x2, $21, pal2
-		piece	8, 56, 2x2, $21, pal2
+		piece	-60, -8, 2x2, 8
+		piece	-$2C, -8, 2x2, $32
+		piece	-$1C, -8, 2x2, $2E
+		piece	-$C, -8, 2x2, $42
+		piece	4, -8, 1x2, $20
+		piece	$C, -8, 2x2, $2E
+		piece	$1C, -8, 2x2, $46
+		piece	$2C, -8, 2x2, $10
+		piece	-$18, $38, 2x2, $BF, pal2
+		piece	8, 56, 2x2, $BF, pal2
 		piece	-8, $36, 2x2, $1FC
 		endsprite
 		
@@ -49,8 +49,8 @@ frame_cont_sonic3:
 		
 frame_cont_oval:
 		spritemap					; circle on the floor
-		piece	-$18, $60, 3x2, 0, pal2
-		piece	0, $60, 3x2, 0, pal2, xflip
+		piece	-$18, $60, 3x2, $9E, pal2
+		piece	0, $60, 3x2, $9E, pal2, xflip
 		endsprite
 		
 frame_cont_mini1:

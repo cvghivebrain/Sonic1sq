@@ -37,7 +37,7 @@ CSon_ChkLand:	; Routine 2
 		addq.b	#2,ost_routine(a0)			; goto CSon_Animate next
 		clr.w	ost_y_vel(a0)				; stop Sonic falling
 		move.l	#Map_ContScr,ost_mappings(a0)
-		move.w	#(vram_cont_sonic/sizeof_cell)+tile_hi,ost_tile(a0)
+		move.w	#tile_Art_ContSonic+tile_hi,ost_tile(a0)
 		move.b	#id_Walk,ost_anim(a0)
 		bra.s	CSon_Animate
 
@@ -56,7 +56,7 @@ CSon_Animate:	; Routine 4
 	.start_pressed:
 		addq.b	#2,ost_routine(a0)			; goto CSon_Run next
 		move.l	#Map_Sonic,ost_mappings(a0)
-		move.w	#$780,ost_tile(a0)
+		move.w	#tile_sonic,ost_tile(a0)
 		move.b	#id_Float4,ost_anim(a0)			; use "getting up" animation
 		clr.w	ost_inertia(a0)
 		subq.w	#8,ost_y_pos(a0)

@@ -35,7 +35,7 @@ Card_ItemData:	; y position, routine number, frame number
 ; ===========================================================================
 
 Card_Main:	; Routine 0
-		moveq	#id_UPLC_TitleCard,d0
+		move.w	(v_titlecard_uplc).w,d0
 		jsr	UncPLC					; load title card patterns
 		movea.l	a0,a1					; replace current object with 1st item in list
 		moveq	#0,d0

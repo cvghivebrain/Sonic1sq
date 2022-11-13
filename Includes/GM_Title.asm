@@ -455,6 +455,7 @@ LevSel_Gamemode:
 		move.b	d0,(v_gamemode).w			; set gamemode
 		move.w	(a1)+,d0
 		move.w	d0,(v_emeralds+2).w			; set emeralds
+		move.b	#3,(v_continues).w			; give Sonic 3 continues
 		rts
 		
 LevSel_Credits:

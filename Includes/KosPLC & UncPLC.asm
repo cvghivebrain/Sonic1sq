@@ -2,9 +2,9 @@
 ; Subroutine to	decompress Kosinski graphics
 
 ; input:
-;	d0 = KPLC index id
+;	d0.w = KPLC index id
 
-; uses d0, a0, a1, a2
+;	uses d0, a0, a1, a2
 ; ---------------------------------------------------------------------------
 
 KosPLC:
@@ -325,9 +325,9 @@ KPLC_TryAgain:	kplcheader
 ; Subroutine to	load uncompressed graphics
 
 ; input:
-;	d0 = UPLC index id
+;	d0.w = UPLC index id
 
-; uses d0, d1, d2, a1, a2, a3
+;	uses d0, d1, d2, a1, a2, a3
 ; ---------------------------------------------------------------------------
 
 UncPLC:
@@ -414,6 +414,7 @@ UncLoadCues:
 		ptr UPLC_GHZAnchor
 		ptr UPLC_SYZSpike
 		ptr UPLC_Monitors
+		ptr UPLC_Continue
 
 UPLC_HUD:	uplcheader $D940
 		uplc Art_HUDMain,v_tile_hud
@@ -532,5 +533,11 @@ UPLC_SYZSpike:	uplcheader vram_weapon
 	
 UPLC_Monitors:	uplcheader vram_monitors
 		uplc Art_Monitors
+	.end:
+
+UPLC_Continue:	uplcheader $A000
+		uplc Art_TitleCard,v_tile_titlecard
+		uplc Art_MiniSonic
+		uplc Art_ContSonic
 	.end:
 	

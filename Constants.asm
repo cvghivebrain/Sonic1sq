@@ -50,9 +50,6 @@ vram_giantring:		equ $D340	; giant ring graphics
 vram_animals:		equ $F400	; animal graphics
 vram_lifeicon:		equ $FA80	; life icon graphics
 
-vram_cont_sonic:	equ $A000	; oval & Sonic continue screen graphics
-vram_cont_minisonic:	equ $AA20	; mini Sonic continue screen graphics
-
 sizeof_cell:		equ $20			; single 8x8 tile
 sizeof_vram_fg:		equ sizeof_vram_row*32	; fg nametable, assuming 64x32 ($1000 bytes)
 sizeof_vram_bg:		equ sizeof_vram_row*32	; bg nametable, assuming 64x32 ($1000 bytes)
