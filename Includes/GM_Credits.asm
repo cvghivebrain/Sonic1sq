@@ -32,7 +32,8 @@ GM_Credits:
 
 		moveq	#id_Pal_Sonic,d0
 		bsr.w	PalLoad					; load Sonic's palette
-		move.l	#CreditsText,(v_ost_credits).w		; load credits object
+		jsr	FindFreeInert
+		move.l	#CreditsText,ost_id(a1)			; load credits object
 		jsr	(ExecuteObjects).l
 		jsr	(BuildSprites).l
 		bsr.w	EndDemoSetup				; setup for next mini-demo

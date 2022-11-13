@@ -28,8 +28,9 @@ GM_Title:
 		bsr.w	ClearRAM
 
 		moveq	#id_Pal_Sonic,d0			; load Sonic's palette
-		bsr.w	PalLoad				; palette will be shown after fading in
-		move.l	#CreditsText,(v_ost_credits).w		; load "SONIC TEAM PRESENTS" object
+		bsr.w	PalLoad					; palette will be shown after fading in
+		jsr	FindFreeInert
+		move.l	#CreditsText,ost_id(a1)			; load "SONIC TEAM PRESENTS" object
 		jsr	(ExecuteObjects).l
 		jsr	(BuildSprites).l
 		bsr.w	PaletteFadeIn				; fade in to "SONIC TEAM PRESENTS" screen from black
@@ -72,19 +73,26 @@ GM_Title:
 		play.b	1, bsr.w, mus_TitleScreen		; play title screen music
 		move.b	#0,(f_debug_enable).w			; disable debug mode
 		move.w	#406,(v_countdown).w			; run title screen for 406 frames
-		lea	(v_ost_psb).w,a1
-		jsr	DeleteChild
 
-		move.l	#TitleSonic,(v_ost_titlesonic).w	; load big Sonic object
-		move.l	#PSBTM,(v_ost_psb).w			; load "PRESS START BUTTON" object
+		jsr	FindFreeInert
+		bne.s	.no_slots
+		move.l	#TitleSonic,ost_id(a1)			; load big Sonic object
 
-		tst.b   (v_console_region).w			; is console Japanese?
-		bpl.s   .isjap					; if yes, branch
-		move.l	#PSBTM,(v_ost_tm).w			; load "TM" object
-		move.b	#id_frame_psb_tm,(v_ost_tm+ost_frame).w
-	.isjap:
-		move.l	#PSBTM,(v_ost_titlemask).w		; load object which hides part of Sonic
-		move.b	#id_frame_psb_mask,(v_ost_titlemask+ost_frame).w
+		jsr	FindFreeInert
+		bne.s	.no_slots
+		move.l	#PSBTM,ost_id(a1)			; load "PRESS START BUTTON" object
+
+		jsr	FindFreeInert
+		bne.s	.no_slots
+		move.l	#PSBTM,ost_id(a1)			; load "TM" object
+		move.b	#id_frame_psb_tm,ost_frame(a1)
+
+		jsr	FindFreeInert
+		bne.s	.no_slots
+		move.l	#PSBTM,ost_id(a1)			; load object which hides part of Sonic
+		move.b	#id_frame_psb_mask,ost_frame(a1)
+		
+	.no_slots:
 		jsr	(ExecuteObjects).l
 		bsr.w	DeformLayers
 		jsr	(BuildSprites).l

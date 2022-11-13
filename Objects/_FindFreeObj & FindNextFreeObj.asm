@@ -3,13 +3,15 @@
 
 ; output:
 ;	a1 = address of free OST slot
-;	uses d0
+
+;	uses d0.w
 ; ---------------------------------------------------------------------------
 
 FindFreeObj:
 		lea	(v_ost_level_obj).w,a1			; start address for OSTs
 		move.w	#countof_ost_ert-1,d0
 
+FindFreeObj2:
 	.loop:
 		tst.l	ost_id(a1)				; is OST slot empty?
 		beq.s	.found					; if yes, branch
@@ -20,6 +22,20 @@ FindFreeObj:
 		rts
 
 ; ---------------------------------------------------------------------------
+; Subroutine to find a free OST, including inert object slots
+
+; output:
+;	a1 = address of free OST slot
+
+;	uses d0.w
+; ---------------------------------------------------------------------------
+
+FindFreeInert:
+		lea	(v_ost_all+sizeof_ost).w,a1		; start at OST after Sonic
+		move.w	#countof_ost-2,d0
+		bra.s	FindFreeObj2
+		
+; ---------------------------------------------------------------------------
 ; Subroutine to find a free OST AFTER the current one
 
 ; input:
@@ -27,7 +43,8 @@ FindFreeObj:
 
 ; output:
 ;	a1 = address of free OST slot
-;	uses d0
+
+;	uses d0.w
 ; ---------------------------------------------------------------------------
 
 FindNextFreeObj:

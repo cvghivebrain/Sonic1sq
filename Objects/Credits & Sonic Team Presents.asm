@@ -42,4 +42,14 @@ Cred_Main:	; Routine 0
 ; ===========================================================================
 
 Cred_Display:	; Routine 2
+		cmpi.b	#id_Title,(v_gamemode).w
+		bne.s	.not_title
+		tst.w	(v_countdown).w
+		bne.s	.delete					; branch if title screen is visible
+		
+	.not_title:
 		jmp	DisplaySprite
+
+	.delete:
+		jmp	DeleteObject
+		
