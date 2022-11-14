@@ -21,13 +21,12 @@ GBall_Index:	index *,,2
 
 		rsobj BossBall
 ist_ball_child_list:	rs.b 6
-ost_ball_boss_dist:	rs.w 1 ; $32				; distance of base from boss (2 bytes)
-ost_ball_parent:	rs.l 1 ; $34				; address of OST of parent object (4 bytes)
-ost_ball_base_y_pos:	rs.w 1 ; $38				; y position of base (2 bytes)
-ost_ball_base_x_pos:	rs.w 1 ; $3A				; x position of base (2 bytes)
-ost_ball_radius:	rs.b 1 ; $3C				; distance of ball/link from base
-ost_ball_side:		rs.b 1 ; $3D				; which side the ball is on - 0 = right; 1 = left
-ost_ball_speed:		rs.w 1 ; $3E				; rate of change of angle (2 bytes)
+ost_ball_boss_dist:	rs.w 1					; distance of base from boss (2 bytes)
+ost_ball_base_y_pos:	rs.w 1					; y position of base (2 bytes)
+ost_ball_base_x_pos:	rs.w 1					; x position of base (2 bytes)
+ost_ball_radius:	rs.b 1					; distance of ball/link from base
+ost_ball_side:		rs.b 1					; which side the ball is on - 0 = right; 1 = left
+ost_ball_speed:		rs.w 1					; rate of change of angle (2 bytes)
 		rsobjend
 ; ===========================================================================
 
@@ -67,7 +66,7 @@ GBall_Main:	; Routine 0
 		move.b	#render_rel,ost_render(a1)
 		move.b	#8,ost_displaywidth(a1)
 		move.b	#6,ost_priority(a1)
-		move.l	ost_ball_parent(a0),ost_ball_parent(a1)
+		move.w	ost_parent(a0),ost_parent(a1)
 		dbf	d1,.loop				; repeat sequence 5 more times
 
 	.fail:
@@ -109,7 +108,7 @@ GBall_Base:	; Routine 2
 
 		cmp.b	ost_ball_radius(a1),d0			; has final object (ball) reached target?
 		bne.s	.not_finished				; if not, branch
-		movea.l	ost_ball_parent(a0),a1
+		jsr	GetParent
 		cmpi.b	#id_BGHZ_ChgDir,ost_routine2(a1)	; is boss in back-and-forth phase?
 		bne.s	.not_finished				; if not, branch
 		addq.b	#2,ost_routine(a0)			; goto GBall_Base2 next
@@ -136,7 +135,7 @@ GBall_Base2:	; Routine 4
 ; ---------------------------------------------------------------------------
 
 GBall_UpdateBase:
-		movea.l	ost_ball_parent(a0),a1			; get address of OST of parent
+		jsr	GetParent				; get address of OST of parent
 		addi.b	#$20,ost_anim_frame(a0)			; increment frame counter
 		bcc.s	.no_chg					; branch if byte doesn't wrap from $C0 to 0
 		bchg	#0,ost_frame(a0)			; change frame every 8th frame
@@ -159,7 +158,7 @@ GBall_UpdateBase:
 ; ===========================================================================
 
 GBall_Link:	; Routine 6
-		movea.l	ost_ball_parent(a0),a1			; get address of OST of parent (ship)
+		jsr	GetParent				; get address of OST of parent (ship)
 		tst.b	ost_status(a1)				; has boss been beaten?
 		bpl.s	.not_beaten				; if not, branch
 		move.l	#ExplosionBomb,ost_id(a0)		; replace chain with explosion object
@@ -175,7 +174,7 @@ GBall_Ball:	; Routine 8
 		set_dma_dest vram_ball,d1			; set VRAM address to write gfx
 		bsr.w	DPLCSprite				; write gfx if frame has changed
 		
-		movea.l	ost_ball_parent(a0),a1			; get address of OST of parent (ship)
+		jsr	GetParent				; get address of OST of parent (ship)
 		tst.b	ost_status(a1)				; has boss been beaten?
 		bpl.s	.display				; if not, branch
 		move.b	#0,ost_col_type(a0)			; make ball harmless

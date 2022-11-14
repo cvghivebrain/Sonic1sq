@@ -25,10 +25,10 @@ Swing_Index:	index *,,2
 		ptr Swing_Action
 
 		rsobj SwingingPlatform
-ost_swing_child_list:	rs.b 15 ; $29
-ost_swing_y_start:	rs.w 1 ; $38				; original y-axis position (2 bytes)
-ost_swing_x_start:	rs.w 1 ; $3A				; original x-axis position (2 bytes)
-ost_swing_radius:	rs.b 1 ; $3C				; distance of chainlink from anchor
+ost_swing_child_list:	rs.b 15
+ost_swing_y_start:	rs.w 1					; original y-axis position (2 bytes)
+ost_swing_x_start:	rs.w 1					; original x-axis position (2 bytes)
+ost_swing_radius:	equ ost_col_property			; distance of chainlink from anchor
 		rsobjend
 ; ===========================================================================
 

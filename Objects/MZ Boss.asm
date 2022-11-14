@@ -15,7 +15,7 @@ BMZ_Index:	index *,,2
 		ptr BMZ_Main
 		ptr BMZ_ShipMain
 
-ost_boss_fireball_time:	equ ost_boss_parent ; $34		; time between fireballs coming out of lava - parent only
+ost_boss_fireball_time:	equ ost_boss_mode			; time between fireballs coming out of lava - parent only
 ; ===========================================================================
 
 BMZ_Main:	; Routine 0

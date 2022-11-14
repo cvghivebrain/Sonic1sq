@@ -16,8 +16,8 @@ BSYZ_Index:	index *,,2
 		ptr BSYZ_Main
 		ptr BSYZ_ShipMain
 
-ost_boss_block_num:	equ ost_boss_parent ; $34		; number of block Eggman is above (0-9) - parent only
-ost_boss_block:		equ ost_boss_parent+2 ; $36		; address of OST of block Eggman is above - parent only (2 bytes)
+ost_boss_block_num:	equ ost_boss_mode			; number of block Eggman is above (0-9) - parent only
+ost_boss_block:		equ ost_parent				; address of OST of block Eggman is above - parent only (2 bytes)
 ; ===========================================================================
 
 BSYZ_Main:	; Routine 0

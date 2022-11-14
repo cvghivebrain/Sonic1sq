@@ -436,6 +436,7 @@ LGrass_Coll_Sloped:
 
 		include "Includes\ObjPosLoad.asm"
 		include "Objects\_FindFreeObj & FindNextFreeObj.asm"
+		include "Objects\_SaveParent & GetParent.asm"
 
 		include "Objects\Springs.asm"			; Springs
 

@@ -19,8 +19,6 @@ BossStarLight:
 BSLZ_Index:	index *,,2
 		ptr BSLZ_Main
 		ptr BSLZ_ShipMain
-
-ost_boss_seesaw:	equ ost_boss_parent ; $2A		; addresses of OSTs of seesaws (2 bytes * 3)
 ; ===========================================================================
 
 BSLZ_Main:
@@ -64,7 +62,7 @@ BSLZ_Main:
 
 	.fail:
 		lea	(v_ost_all+sizeof_ost).w,a1		; start at first OST slot after Sonic
-		lea	ost_boss_seesaw(a0),a2			; where to save seesaw OST addresses
+		lea	(v_slzboss_seesaws).w,a2		; where to save seesaw OST addresses
 		move.l	#Seesaw,d0
 		moveq	#$3E,d1					; check first $40 OSTs (there are $80 total)
 
@@ -184,7 +182,7 @@ BSLZ_ShipMove:
 		move.w	ost_x_pos(a0),d0
 		moveq	#-1,d1
 		moveq	#3-1,d2					; number of seesaws
-		lea	ost_boss_seesaw(a0),a2			; get OST addresses for the 3 seesaws
+		lea	(v_slzboss_seesaws).w,a2		; get OST addresses for the 3 seesaws
 		moveq	#$28,d4					; dist from centre to right side of seesaw
 		tst.w	ost_x_vel(a0)
 		bpl.s	.moving_right				; branch if ship is moving right
@@ -225,7 +223,7 @@ BSLZ_MakeBall:
 		subq.w	#2,d0
 		neg.w	d0					; switch between 0 and 2
 		add.w	d0,d0
-		lea	ost_boss_seesaw(a0),a1
+		lea	(v_slzboss_seesaws).w,a1
 		move.w	(a1,d0.w),d0
 		movea.l	d0,a2					; get address of OST of seesaw
 		lea	(v_ost_all+sizeof_ost).w,a1		; first OST slot excluding Sonic

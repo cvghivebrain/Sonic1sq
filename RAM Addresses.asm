@@ -274,6 +274,7 @@ v_scroll_block_1_height:	rs.w 4 ; $FFFFF7F0 ; scroll block height - $70 for GHZ;
 v_scroll_block_2_height:	equ __rs-6 ; $FFFFF7F2 ; scroll block height - always $100, unused
 v_scroll_block_3_height:	equ __rs-4 ; $FFFFF7F4 ; scroll block height - always $100, unused
 v_scroll_block_4_height:	equ __rs-2 ; $FFFFF7F6 ; scroll block height - $100 for GHZ; 0 for all others, unused
+v_slzboss_seesaws:		rs.w 3 ; OST addresses of 3 seesaws at SLZ boss
 				rsblockend levelinfo
 
 				rsblock sprites

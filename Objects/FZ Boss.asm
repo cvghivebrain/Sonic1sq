@@ -47,7 +47,6 @@ BFZ_ObjData2:	; routine num, animation, sprite priority, width, height
 		rsobj BossFinal
 ost_fz_cylinder_flag:	rs.w 1 ; $30				; -1 when cylinders activate; id of cylinder Eggman is in when crushing (2 bytes)
 ost_fz_phase_state:	rs.w 1 ; $32				; 1 = crushing; 0 = plasma; -1 = crushing/plasma complete (2 bytes)
-ost_fz_parent:		rs.l 1 ; $34				; address of OST of parent object - children only (4 bytes)
 ost_fz_mode:		rs.b 1 ; $34				; action being performed, increments of 2 - parent only
 ost_fz_flash_num:	rs.b 1 ; $35				; number of times to make boss flash when hit - parent only
 ost_fz_plasma_child:	rs.w 1 ; $36				; address of OST of plasma object - parent only (2 bytes)
@@ -83,7 +82,7 @@ BFZ_Main:	; Routine 0
 		move.b	(a3)+,ost_height(a1)
 		move.b	#render_rel,ost_render(a1)
 		bset	#render_onscreen_bit,ost_render(a0)
-		move.l	a0,ost_fz_parent(a1)			; save address of OST of parent
+		jsr	SaveParent				; save address of OST of parent
 		dbf	d1,.loop				; repeat 5 more times
 
 	.fail:
@@ -482,12 +481,12 @@ BFZ_Eggman_Escape:
 ; ===========================================================================
 
 BFZ_Update:
-		movea.l	ost_fz_parent(a0),a1			; get address of OST of parent object
+		jsr	GetParent				; get address of OST of parent object
 		move.w	ost_x_pos(a1),ost_x_pos(a0)		; match position with parent
 		move.w	ost_y_pos(a1),ost_y_pos(a0)
 
 BFZ_Update_SkipPos:
-		movea.l	ost_fz_parent(a0),a1			; get address of OST of parent object
+		jsr	GetParent				; get address of OST of parent object
 		move.b	ost_status(a1),ost_status(a0)
 		moveq	#status_xflip+status_yflip,d0
 		and.b	ost_status(a0),d0
@@ -497,7 +496,7 @@ BFZ_Update_SkipPos:
 ; ===========================================================================
 
 BFZ_Cockpit:	; Routine 8
-		movea.l	ost_fz_parent(a0),a1			; get address of OST of parent object
+		jsr	GetParent				; get address of OST of parent object
 		move.l	(a1),d0
 		cmp.l	(a0),d0					; has parent been deleted?
 		bne.w	BFZ_Delete				; if yes, branch
@@ -534,7 +533,7 @@ BFZ_Cockpit:	; Routine 8
 
 BFZ_Legs:	; Routine 6
 		bset	#status_xflip_bit,ost_status(a0)
-		movea.l	ost_fz_parent(a0),a1			; get address of OST of parent object
+		jsr	GetParent				; get address of OST of parent object
 		cmpi.l	#Map_Bosses,ost_mappings(a1)		; is Eggman in his ship?
 		beq.s	.animate				; if yes, branch
 		bra.w	BFZ_Update_SkipPos
@@ -573,7 +572,7 @@ BFZ_Panel:	; Routine 4
 BFZ_EmptyShip:	; Routine $A
 		move.b	#id_frame_boss_ship,ost_frame(a0)
 		bset	#status_xflip_bit,ost_status(a0)	; face right
-		movea.l	ost_fz_parent(a0),a1			; get address of OST of parent object
+		jsr	GetParent				; get address of OST of parent object
 		cmpi.b	#id_BFZ_Eggman_Ship,ost_fz_mode(a1)	; is Eggman in his ship? (pre-escaping)
 		bne.s	.update					; if not, branch
 		cmpi.l	#Map_Bosses,ost_mappings(a1)		; is Eggman in his ship at all?
