@@ -35,7 +35,7 @@ ObjPos_MZ3:
 		objpos $0220,$03A8,CollapseFloor,$01
 		objpos $0240,$0420,LavaTag,$01
 		objpos $0240,$04E8,CollapseFloor,$01
-		objpos $0240,$06D0,Caterkiller,$00,xflip,rem
+		objpos $0240,$06D0,Splats,$00,xflip,rem
 		objpos $0260,$03A8,CollapseFloor,$01
 		objpos $0280,$04E8,CollapseFloor,$01
 		objpos $0290,$031C,ChainStomp,type_cstomp_small+type_cstomp_3
@@ -44,12 +44,12 @@ ObjPos_MZ3:
 		objpos $02D0,$04F0,MarbleBrick,type_brick_still
 		objpos $02F0,$0150,BuzzBomber,$00,rem
 		objpos $02F0,$0690,PushBlock,type_pblock_single,rem
-		objpos $0310,$054C,Caterkiller,$00,rem
+		objpos $0310,$054C,Splats,$00,rem
 		objpos $0320,$048C,Batbrain,$00,rem
 		objpos $0338,$06A8,Rings,$13,rem
 		objpos $0380,$06E8,LavaTag,$02
 		objpos $03B0,$06A0,MarbleBrick,type_brick_still
-		objpos $03E0,$01A8,Caterkiller,$00,rem
+		objpos $03E0,$01A8,Splats,$00,rem
 		objpos $03F0,$06A8,Rings,$14,rem
 		objpos $0420,$04A8,CollapseFloor,$01
 		objpos $0430,$0150,BuzzBomber,$00,rem
@@ -69,7 +69,7 @@ ObjPos_MZ3:
 		objpos $0530,$01B8,Rings,$10,rem
 		objpos $0530,$0410,MarbleBrick,type_brick_falls
 		objpos $0530,$0610,MarbleBrick,type_brick_still
-		objpos $0540,$02C8,Caterkiller,$00,rem
+		objpos $0540,$02C8,Splats,$00,rem
 		objpos $0554,$01CE,Rings,$10,rem
 		objpos $0570,$01EC,Rings,$10,rem
 		objpos $0570,$041C,ChainStomp,type_cstomp_small+type_cstomp_3
@@ -92,7 +92,7 @@ ObjPos_MZ3:
 		objpos $0698,$06C0,Spikes,type_spike_3left+type_spike_still
 		objpos $06A0,$02CC,LargeGrass,type_grass_narrow+type_grass_1
 		objpos $06B0,$03B4,Rings,$10,rem
-		objpos $06C0,$05A8,Caterkiller,$00,rem
+		objpos $06C0,$05A8,Splats,$00,rem
 		objpos $06D0,$0320,FireMaker,type_fire_slow+type_fire_down
 		objpos $06D4,$0394,Rings,$11,rem
 		objpos $0710,$0360,MarbleBrick,type_brick_still
@@ -113,7 +113,7 @@ ObjPos_MZ3:
 		objpos $08A0,$05D4,Spikes,type_spike_3up+type_spike_updown
 		objpos $08D0,$0620,FireMaker,type_fire_medium+type_fire_down
 		objpos $0930,$053C,ChainStomp,type_cstomp_medium+type_cstomp_1
-		objpos $0940,$07C0,Caterkiller,$00,xflip,rem
+		objpos $0940,$07C0,Splats,$00,xflip,rem
 		objpos $09B8,$07D0,Springs,type_spring_red+type_spring_right,xflip
 		objpos $09D0,$053C,ChainStomp,type_cstomp_medium+type_cstomp_1
 		objpos $0AC0,$07E8,LavaTag,$01
@@ -128,7 +128,7 @@ ObjPos_MZ3:
 		objpos $0D10,$06F1,Monitor,type_monitor_shield,rem
 		objpos $0DA0,$06EC,Lamppost,$01,rem
 		objpos $0DEC,$0710,Spikes,type_spike_1left+type_spike_leftright,xflip
-		objpos $0E00,$0748,Caterkiller,$10,rem
+		objpos $0E00,$0748,Splats,$10,rem
 		objpos $0E28,$03B0,FireMaker,type_fire_slow+type_fire_right
 		objpos $0E30,$0431,Monitor,type_monitor_rings
 		objpos $0E48,$0450,Spikes,type_spike_1left+type_spike_leftright,xflip
@@ -200,7 +200,7 @@ ObjPos_MZ3:
 		objpos $1330,$0790,MarbleBrick,type_brick_still
 		objpos $1354,$0340,Spikes,type_spike_3left+type_spike_leftright
 		objpos $1380,$07E8,LavaTag,$02
-		objpos $13A0,$04EC,Caterkiller,$00,xflip,rem
+		objpos $13A0,$04EC,Splats,$00,xflip,rem
 		objpos $13E8,$02A8,Rings,$12,rem
 		objpos $1418,$07C0,Spikes,type_spike_3left+type_spike_still
 		objpos $1438,$063C,Batbrain,$00,rem

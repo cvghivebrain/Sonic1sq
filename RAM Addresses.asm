@@ -208,6 +208,7 @@ v_tile_vspring			rs.w 1
 v_tile_fireball			rs.w 1
 v_tile_batbrain			rs.w 1
 v_tile_caterkiller		rs.w 1
+v_tile_splats			rs.w 1
 v_tile_button			rs.w 1
 v_tile_bumper			rs.w 1
 v_tile_spikechain		rs.w 1

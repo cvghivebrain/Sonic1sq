@@ -124,13 +124,14 @@ KPLC_MZ:	kplcheader
 		kplc Kos_Buzz,v_tile_buzzbomber
 		kplc Kos_Batbrain,v_tile_batbrain
 		kplc Kos_Cater,v_tile_caterkiller
+		kplc Kos_Splats,v_tile_splats
 		kplc Kos_MzButton,v_tile_button
 		kplc Kos_Lamp,v_tile_lamppost
 		kplc Kos_Points,v_tile_points
 		kplc Kos_Ring,v_tile_rings
 		kplc Kos_Spikes,v_tile_spikes
 		kplc Kos_HSpring,v_tile_hspring
-		kplc Kos_VSpring,v_tile_vspring			; $9820 used
+		kplc Kos_VSpring,v_tile_vspring			; $9BC0 used
 	.end:
 		set_dma_size last_vram
 

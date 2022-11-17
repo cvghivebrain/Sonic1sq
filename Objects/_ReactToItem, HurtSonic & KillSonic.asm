@@ -55,7 +55,7 @@ id_col_custom:	equ $C0						; enemies with spikes (yadrin, caterkiller), SYZ bum
 
 React_Sizes:	;   width, height
 col_20x20:	colid  $14, $14					; $01 - GHZ ball
-col_12x20:	colid   $C, $14					; $02
+col_12x20:	colid   $C, $14					; $02 - Splats
 col_20x12:	colid  $14,  $C					; $03
 col_4x16:	colid	4,  $10					; $04 - GHZ spike pole, SYZ boss spike
 col_12x18:	colid   $C, $12					; $05 - Ball Hog, Burrobot

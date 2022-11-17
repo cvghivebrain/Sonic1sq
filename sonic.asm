@@ -571,6 +571,8 @@ See_DataFlat:	incbin	"Collision\SLZ Seesaw Heightmap (Flat).bin" ; used by Seesa
 
 		include "Objects\Caterkiller.asm"		; Caterkiller
 
+		include "Objects\Splats.asm"			; Splats
+
 		include "Objects\Lamppost.asm"			; Lamppost
 
 		include "Objects\Hidden Bonus Points.asm"	; HiddenBonus
@@ -761,7 +763,7 @@ Art_Sonic:	incbin	"Graphics\Sonic.bin"			; Sonic
 		incfile Kos_Bomb,"Graphics Kosinski\Bomb Enemy",kos
 		incfile Kos_Orbinaut,"Graphics Kosinski\Orbinaut",kos
 		incfile Kos_Cater,"Graphics Kosinski\Caterkiller",kos
-		incfile Nem_Splats,"Graphics - Compressed\Unused - Splats Enemy",nem
+		incfile Kos_Splats,"Graphics Kosinski\Splats",kos
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - various
 ; ---------------------------------------------------------------------------
@@ -1216,6 +1218,7 @@ Level_End_unused:	dc.b 0,	0, 0, 0
 		include "Objects\Bomb Enemy [Mappings].asm"	; Map_Bomb
 		include "Objects\Orbinaut [Mappings].asm"	; Map_Orb
 		include "Objects\Caterkiller [Mappings].asm"	; Map_Cat
+		include "Objects\Splats [Mappings].asm"		; Map_Splats
 		include "Objects\Bosses [Mappings].asm"		; Map_Bosses, Map_BossItems
 		include "Objects\Explosions [Mappings].asm"	; Map_ExplodeItem & Map_ExplodeBomb
 		include "Objects\HUD Score, Time & Rings [Mappings].asm" ; Map_HUD
