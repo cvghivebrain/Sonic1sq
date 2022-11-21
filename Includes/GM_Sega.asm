@@ -12,7 +12,6 @@ countof_sega:	equ $C/2					; colours in Sega logo
 
 GM_Sega:
 		play.b	1, bsr.w, cmd_Stop			; stop music
-		bsr.w	ClearPLC
 		bsr.w	PaletteFadeOut				; fade out from previous gamemode
 		lea	(vdp_control_port).l,a6
 		move.w	#$8004,(a6)				; use normal colour mode

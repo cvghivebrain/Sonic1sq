@@ -27,6 +27,9 @@ ost_eggman_wait_time:	rs.w 1 ; $3C				; time delay between events (2 bytes)
 ; ===========================================================================
 
 SEgg_Main:	; Routine 0
+		moveq	#id_UPLC_EggmanFZ,d0
+		jsr	UncPLC
+		
 		lea	SEgg_ObjData(pc),a2
 		move.w	#$2160,ost_x_pos(a0)
 		move.w	#$5A4,ost_y_pos(a0)
@@ -38,7 +41,7 @@ SEgg_Main:	; Routine 0
 		move.b	(a2)+,ost_anim(a0)
 		move.b	(a2)+,ost_priority(a0)
 		move.l	#Map_SEgg,ost_mappings(a0)
-		move.w	#tile_Nem_Sbz2Eggman,ost_tile(a0)
+		move.w	#tile_Art_Sbz2Eggman,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		bset	#render_onscreen_bit,ost_render(a0)
 		move.b	#$20,ost_displaywidth(a0)

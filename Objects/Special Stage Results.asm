@@ -50,12 +50,6 @@ SSR_Config:	dc.w $20, $120,	$C4
 ; ===========================================================================
 
 SSR_Main:	; Routine 0
-		tst.l	(v_plc_buffer).w			; are the pattern load cues empty?
-		beq.s	.plc_free				; if yes, branch
-		rts	
-; ===========================================================================
-
-.plc_free:
 		movea.l	a0,a1					; replace current object with 1st from list
 		lea	(SSR_Config).l,a2			; position, routine & frame settings
 		moveq	#3,d1					; 3 additional items

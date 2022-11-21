@@ -25,13 +25,13 @@ BFZ_Index:	index *,,2
 		ptr BFZ_EmptyShip
 
 BFZ_ObjData:	; x pos, y pos,	VRAM setting, mappings pointer
-		dc.w $100, $100, tile_Nem_Sbz2Eggman_FZ
+		dc.w $100, $100, tile_Art_Sbz2Eggman_UPLC_EggmanFZ
 		dc.l Map_SEgg
 		dc.w $25B0, $590, tile_Kos_FzBoss
 		dc.l Map_EggCyl
 		dc.w $26E0, $596, tile_Kos_FzEggman
 		dc.l Map_FZLegs
-		dc.w $26E0, $596, tile_Nem_Sbz2Eggman_FZ
+		dc.w $26E0, $596, tile_Art_Sbz2Eggman_UPLC_EggmanFZ
 		dc.l Map_SEgg
 		dc.w $26E0, $596, tile_Art_Eggman
 		dc.l Map_Bosses
@@ -56,6 +56,8 @@ ost_fz_cylinder_child:	rs.w 4 ; $38				; address of OST of cylinder object - par
 
 BFZ_Main:	; Routine 0
 		moveq	#id_UPLC_Boss,d0
+		jsr	UncPLC
+		moveq	#id_UPLC_EggmanFZ,d0
 		jsr	UncPLC
 		
 		lea	BFZ_ObjData(pc),a2
@@ -132,8 +134,6 @@ BFZ_Eggman_Index:
 ; ===========================================================================
 
 BFZ_Eggman_Wait:
-		tst.l	(v_plc_buffer).w			; is pattern load cue buffer empty?
-		bne.s	.wait					; if not, branch
 		cmpi.w	#$2450,(v_camera_x_pos).w		; has camera reached boss arena?
 		bcs.s	.wait					; if not, branch
 		addq.b	#2,ost_fz_mode(a0)			; goto BFZ_Eggman_Crush next

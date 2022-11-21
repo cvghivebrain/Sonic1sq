@@ -12,7 +12,7 @@ GameOverCard:
 		jmp	Over_Index(pc,d1.w)
 ; ===========================================================================
 Over_Index:	index *,,2
-		ptr Over_ChkPLC
+		ptr Over_Main
 		ptr Over_Move
 		ptr Over_Wait
 
@@ -21,13 +21,7 @@ ost_over_time:	rs.w 1 ; $3E
 		rsobjend
 ; ===========================================================================
 
-Over_ChkPLC:	; Routine 0
-		tst.l	(v_plc_buffer).w			; are the pattern load cues empty?
-		beq.s	Over_Main				; if yes, branch
-		rts	
-; ===========================================================================
-
-Over_Main:
+Over_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Over_Move next
 		move.w	#$50,ost_x_pos(a0)			; set x position
 		btst	#0,ost_frame(a0)			; is the object "OVER"?

@@ -9,7 +9,6 @@ GM_Credits:
 		move.b	#1,(f_credits_started).w
 		
 	.keep_music:
-		bsr.w	ClearPLC				; clear PLC buffer
 		bsr.w	PaletteFadeOut				; fade out from previous gamemode
 		lea	(vdp_control_port).l,a6
 		move.w	#$8004,(a6)				; normal colour mode
@@ -122,7 +121,6 @@ EndDemo_LampVar:
 ; ---------------------------------------------------------------------------
 
 GM_TryAgain:
-		bsr.w	ClearPLC
 		bsr.w	PaletteFadeOut				; fade out from previous gamemode (demo)
 		lea	(vdp_control_port).l,a6
 		move.w	#$8004,(a6)				; normal colour mode

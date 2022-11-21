@@ -9,7 +9,6 @@ GM_Demo:
 		play.b	1, bsr.w, cmd_Fade			; fade out music
 
 	.keep_music:
-		bsr.w	ClearPLC				; clear PLC buffer
 		bsr.w	PaletteFadeOut				; fade out from previous gamemode
 		bset	#7,(v_gamemode).w			; add $80 to gamemode (for title card sequence)
 		tst.w	(v_demo_mode).w				; is this an ending demo?
@@ -74,7 +73,6 @@ Level_TtlCardLoop:
 		bsr.w	WaitForVBlank
 		jsr	(ExecuteObjects).l
 		jsr	(BuildSprites).l
-		bsr.w	RunPLC
 		move.w	(v_ost_titlecard1+ost_x_pos).w,d0
 		cmp.w	(v_ost_titlecard1+ost_card_x_stop).w,d0	; has title card sequence finished?
 		bne.s	Level_TtlCardLoop			; if not, branch
@@ -87,8 +85,6 @@ Level_TtlCardLoop:
 		move.w	(v_ost_titlecard4+ost_x_pos).w,d0
 		cmp.w	(v_ost_titlecard4+ost_card_x_stop).w,d0
 		bne.s	Level_TtlCardLoop
-		tst.l	(v_plc_buffer).w			; are there any items in the pattern load cue?
-		bne.s	Level_TtlCardLoop			; if yes, branch
 		jsr	(Hud_Base).l				; load basic HUD gfx
 
 Level_Skip_TtlCard:
@@ -209,7 +205,6 @@ Level_MainLoop:
 		jsr	(BuildSprites).l			; create sprite table
 		jsr	(ObjPosLoad).l				; load objects for level
 		bsr.w	PaletteCycle
-		bsr.w	RunPLC					; load graphics listed in PLC buffer
 		bsr.w	OscillateNumDo				; update oscillatory values for objects
 		bsr.w	SynchroAnimate				; update values for synchronised object animations
 		bsr.w	SignpostArtLoad				; check for level end, and load signpost graphics if needed

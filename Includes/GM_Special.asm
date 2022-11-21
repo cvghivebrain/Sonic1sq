@@ -158,11 +158,8 @@ SS_NormalExit:
 		bsr.w	WaitForVBlank
 		jsr	(ExecuteObjects).l
 		jsr	(BuildSprites).l
-		bsr.w	RunPLC
 		tst.w	(f_restart).w
 		beq.s	SS_NormalExit
-		tst.l	(v_plc_buffer).w
-		bne.s	SS_NormalExit
 		play.w	1, bsr.w, sfx_EnterSS			; play special stage exit sound
 		bsr.w	PaletteWhiteOut
 		rts	

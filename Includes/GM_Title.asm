@@ -4,7 +4,6 @@
 
 GM_Title:
 		play.b	1, bsr.w, cmd_Stop			; stop music
-		bsr.w	ClearPLC
 		bsr.w	PaletteFadeOut				; fade from previous gamemode to black
 		disable_ints
 		bsr.w	DacDriverLoad

@@ -565,8 +565,6 @@ DLE_SBZ2_Blocks:
 		bne.s	.exit					; branch if not found
 		move.l	#FalseFloor,ost_id(a1)			; load collapsing block object
 		addq.b	#2,(v_dle_routine).w			; goto DLE_SBZ2_Eggman next
-		moveq	#id_PLC_EggmanSBZ2,d0
-		bra.w	AddPLC					; load SBZ2 Eggman gfx
 ; ===========================================================================
 
 .exit:
@@ -619,8 +617,6 @@ DLE_FZ_Main:
 		bcs.s	.set_boundary				; branch if camera is left of $2148
 
 		addq.b	#2,(v_dle_routine).w			; goto DLE_FZ_Boss next
-		moveq	#id_PLC_FZBoss,d0
-		bsr.w	AddPLC					; load FZ boss gfx
 
 	.set_boundary:
 		bra.s	DLE_SBZ2_SetBoundary

@@ -209,8 +209,6 @@ CheckSumError:
 		include	"Includes\PauseGame.asm"
 		include	"Includes\LoadTilemap.asm"
 
-		include "Includes\Nemesis Decompression.asm"
-		include "Includes\AddPLC, NewPLC, RunPLC, ProcessPLC & QuickPLC.asm"
 		include "Includes\DMA.asm"
 
 		include "Includes\Kosinski Decompression.asm"
@@ -850,7 +848,7 @@ Blk256_SBZ:	incbin	"256x256 Mappings\SBZ.kos"
 		incfile Art_SYZSpike,"Graphics\SYZ Boss Spike",bin,dma_safe
 		incfile Art_Prison,"Graphics\Prison Capsule",bin,dma_safe
 		incfile Art_PrisonBroken,"Graphics\Prison Capsule Broken",bin,dma_safe
-		incfile Nem_Sbz2Eggman,"Graphics - Compressed\Boss - Eggman in SBZ2 & FZ",nem
+		incfile Art_Sbz2Eggman,"Graphics\Boss - Eggman in SBZ2 & FZ",bin,dma_safe
 		incfile Kos_FzBoss,"Graphics Kosinski\Boss - Final Zone",kos
 		incfile Kos_FzEggman,"Graphics Kosinski\Boss - Eggman after FZ Fight",kos
 		incfile Art_Exhaust,"Graphics\Boss - Exhaust Flame",bin,dma_safe
@@ -1109,7 +1107,6 @@ Level_End_unused:	dc.b 0,	0, 0, 0
 
 		incfile	Art_BigRing,"Graphics\Giant Ring",bin,dma_safe
 
-		include "Pattern Load Cues.asm"
 		include "Includes\KosPLC & UncPLC.asm"
 		include "Objects\GHZ Giant Ball [Mappings].asm"	; Map_GBall
 		include "Objects\GHZ Bridge [Mappings].asm"	; Map_Bri

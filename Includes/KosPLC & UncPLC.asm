@@ -416,6 +416,8 @@ UncLoadCues:
 		ptr UPLC_SYZSpike
 		ptr UPLC_Monitors
 		ptr UPLC_Continue
+		ptr UPLC_EggmanSBZ
+		ptr UPLC_EggmanFZ
 
 UPLC_HUD:	uplcheader $D940
 		uplc Art_HUDMain,v_tile_hud
@@ -540,5 +542,13 @@ UPLC_Continue:	uplcheader $A000
 		uplc Art_TitleCard,v_tile_titlecard
 		uplc Art_MiniSonic
 		uplc Art_ContSonic
+	.end:
+	
+UPLC_EggmanSBZ:	uplcheader $8000
+		uplc Art_Sbz2Eggman
+	.end:
+	
+UPLC_EggmanFZ:	uplcheader $8E00
+		uplc Art_Sbz2Eggman
 	.end:
 	

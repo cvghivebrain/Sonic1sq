@@ -17,7 +17,6 @@ v_256x256_tiles:		equ   $FF0000 ; 256x256 tile mappings ($A400 bytes)
 				rsset $FFFF0000+sizeof_256x256_all
 v_level_layout:			rs.b sizeof_level ; $FFFFA400 ; level and background layouts ($400 bytes)
 v_bgscroll_buffer:		rs.b $200 ; $FFFFA800 ; background scroll buffer
-v_nem_gfx_buffer:		rs.b $200 ; $FFFFAA00 ; Nemesis graphics decompression buffer
 v_sprite_queue:			rs.b sizeof_priority*8 ; $FFFFAC00 ; sprite display queue, first section is highest priority ($400 bytes; 8 sections of $80 bytes)
 v_sonic_gfx_buffer:		rs.b sizeof_vram_sonic ; $FFFFC800 ; buffered Sonic graphics ($17 cells) ($2E0 bytes)
 v_sonic_pos_tracker:		rs.l $40 ; $FFFFCB00 ; earlier position tracking list for Sonic, used by invincibility stars ($100 bytes)
@@ -113,19 +112,7 @@ f_hblank_run_snd:		rs.b 1 ; $FFFFF64F ; flag set when sound driver should be run
 v_palcycle_buffer:		rs.w $20 ; $FFFFF650 ; palette data buffer (used for palette cycling)
 				rsblockend vblankstuff
 
-				rsblock plc
-v_plc_buffer:			rs.b sizeof_plc*countof_plc ; $FFFFF680 ; pattern load cues buffer (maximum $10 PLCs) ($60 bytes)
-v_plc_buffer_dest:		equ v_plc_buffer+4 ; VRAM destination for 1st item in PLC buffer (2 bytes)
-v_nem_mode_ptr:			rs.l 1 ; $FFFFF6E0 ; pointer for nemesis decompression code ($1502 or $150C)
-v_nem_repeat:			rs.l 1 ; $FFFFF6E4 ; Nemesis register buffer - d0: repeat counter
-v_nem_pixel:			rs.l 1 ; $FFFFF6E8 ; Nemesis register buffer - d1: pixel value
-v_nem_d2:			rs.l 1 ; $FFFFF6EC ; Nemesis register buffer - d2
-v_nem_header:			rs.l 1 ; $FFFFF6F0 ; Nemesis register buffer - d5: 3rd & 4th bytes of Nemesis archive header
-v_nem_shift:			rs.l 1 ; $FFFFF6F4 ; Nemesis register buffer - d6: shift value
-v_nem_tile_count:		rs.w 1 ; $FFFFF6F8 ; number of 8x8 tiles in a Nemesis archive
-v_nem_tile_count_frame:		rs.w 1 ; $FFFFF6FA ; number of 8x8 tiles to process in 1 frame
 v_dma_queue:			rs.w (sizeof_dma/2)*countof_dma ; ROM/RAM to VRAM DMA transfer queue ($140 bytes)
-				rsblockend plc
 
 				rsblock levelinfo ; $F700-$F7FF cleared by GM_Level, GM_Special, GM_Ending
 v_camera_x_pos:			rs.l 1 ; $FFFFF700 ; foreground camera x position

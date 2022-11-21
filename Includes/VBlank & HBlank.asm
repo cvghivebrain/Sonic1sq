@@ -94,7 +94,6 @@ VBlank_Sega_SkipLoad:
 VBlank_Title:
 		bsr.w	ReadPad_Palette_Sprites_HScroll		; read joypad, DMA palettes, sprites and hscroll
 		bsr.w	DrawTilesWhenMoving_BGOnly		; update background
-		bsr.w	ProcessPLC				; decompress up to 9 cells of Nemesis gfx if needed
 		bsr.w	ProcessDMA
 		tst.w	(v_countdown).w
 		beq.w	.end
@@ -146,7 +145,6 @@ DrawTiles_LevelGfx_HUD_PLC:
 		bsr.w	DrawTilesWhenMoving			; display new tiles if camera has moved
 		jsr	(AnimateLevelGfx).l			; update animated level graphics
 		jsr	(HUD_Update).l				; update HUD graphics
-		bsr.w	ProcessPLC2				; decompress up to 3 cells of Nemesis gfx
 		tst.w	(v_countdown).w
 		beq.w	.end
 		subq.w	#1,(v_countdown).w			; decrement timer
@@ -195,7 +193,6 @@ VBlank_Ending:
 		bsr.w	DrawTilesWhenMoving			; display new tiles if camera has moved
 		jsr	(AnimateLevelGfx).l			; update animated level graphics
 		jsr	(HUD_Update).l				; update HUD graphics
-		bsr.w	ProcessPLC				; decompress up to 9 cells of Nemesis gfx
 		rts	
 ; ===========================================================================
 
@@ -208,7 +205,6 @@ VBlank_0E:
 VBlank_Fade:
 		bsr.w	ReadPad_Palette_Sprites_HScroll		; read joypad, DMA palettes, sprites and hscroll
 		move.w	(v_vdp_hint_counter).w,(a5)		; set water palette position by sending VDP register $8Axx to control port (vdp_control_port)
-		bra.w	ProcessPLC				; decompress up to 9 cells of Nemesis gfx
 ; ===========================================================================
 
 ; $16 - GM_Special> SS_FinLoop; GM_Continue> Cont_MainLoop
