@@ -15,12 +15,6 @@ EndEggman:
 EEgg_Index:	index *,,2
 		ptr EEgg_Main
 		ptr EEgg_Animate
-		ptr EEgg_Juggle
-		ptr EEgg_Wait
-
-		rsobj EndEggman
-ost_eeggman_wait_time:	rs.w 1 ; $30				; time between juggle motions (2 bytes)
-		rsobjend
 ; ===========================================================================
 
 EEgg_Main:	; Routine 0
@@ -35,47 +29,17 @@ EEgg_Main:	; Routine 0
 		cmpi.l	#emerald_all,(v_emeralds).w		; do you have all 6 emeralds?
 		beq.s	EEgg_Animate				; if yes, branch
 
-		move.l	#CreditsText,(v_ost_tryagain).w		; load credits object
+		jsr	FindFreeInert
+		move.l	#CreditsText,ost_id(a1)			; load credits object
 		move.w	#id_frame_cred_tryagain,(v_credits_num).w ; use "TRY AGAIN" text
-		move.l	#TryChaos,(v_ost_tryag_emeralds).w	; load emeralds object on "TRY AGAIN" screen
+		jsr	FindFreeInert
+		move.l	#TryChaos,ost_id(a1)			; load emeralds object on "TRY AGAIN" screen
+		jsr	SaveParent
 		move.b	#id_ani_eegg_juggle1,ost_anim(a0)	; use "TRY AGAIN" animation
 
 EEgg_Animate:	; Routine 2
 		lea	(Ani_EEgg).l,a1
-		jmp	(AnimateSprite).l			; goto EEgg_Juggle after animation finishes
-; ===========================================================================
-
-EEgg_Juggle:	; Routine 4
-		addq.b	#2,ost_routine(a0)			; goto EEgg_Wait next
-		moveq	#2,d0
-		btst	#0,ost_anim(a0)
-		beq.s	.noflip
-		neg.w	d0
-
-	.noflip:
-		lea	(v_ost_tryag_emeralds).w,a1		; get RAM address for emeralds
-		moveq	#6-1,d1
-
-.emeraldloop:
-		move.b	d0,ost_ectry_speed(a1)			; set emerald speed to 2 or -2
-		move.w	d0,d2
-		asl.w	#3,d2					; d2 = speed * 8
-		add.b	d2,ost_angle(a1)			; update angle
-		lea	sizeof_ost(a1),a1			; next emerald
-		dbf	d1,.emeraldloop				; repeat for all emeralds
-
-		addq.b	#1,ost_frame(a0)
-		move.w	#112,ost_eeggman_wait_time(a0)		; set time delay between juggles
-
-EEgg_Wait:	; Routine 6
-		subq.w	#1,ost_eeggman_wait_time(a0)		; decrement timer
-		bpl.s	.nochg					; branch if time remains
-		bchg	#0,ost_anim(a0)				; switch animation
-		bclr	#7,ost_anim(a0)				; restart animation
-		move.b	#id_EEgg_Animate,ost_routine(a0)	; goto EEgg_Animate next
-
-	.nochg:
-		rts	
+		jmp	(AnimateSprite).l
 
 ; ---------------------------------------------------------------------------
 ; Animation script
@@ -83,18 +47,19 @@ EEgg_Wait:	; Routine 6
 
 Ani_EEgg:	index *
 		ptr ani_eegg_juggle1
-		ptr ani_eegg_juggle2
 		ptr ani_eegg_end
 		
 ani_eegg_juggle1:
 		dc.w 5
 		dc.w id_frame_eegg_juggle1
-		dc.w id_Anim_Flag_Routine
-
-ani_eegg_juggle2:
-		dc.w 5
+		rept 22
+		dc.w id_frame_eegg_juggle2
+		endr
 		dc.w id_frame_eegg_juggle3
-		dc.w id_Anim_Flag_Routine
+		rept 22
+		dc.w id_frame_eegg_juggle4
+		endr
+		dc.w id_Anim_Flag_Restart
 
 ani_eegg_end:
 		dc.w 7

@@ -15,6 +15,9 @@ TryChaos:
 TCha_Index:	index *,,2
 		ptr TCha_Main
 		ptr TCha_Move
+		ptr TCha_Wait
+		ptr TCha_Arc
+		ptr TCha_Stop
 
 		rsobj TryChaos
 ost_ectry_time_master:	rs.b 1 ; $37
@@ -30,11 +33,15 @@ TCha_Main:	; Routine 0
 		moveq	#0,d2
 		moveq	#0,d3
 		moveq	#emerald_count-1,d1
-		move.l	(v_emeralds).w,d0			; get emerald bitfield
+		move.l	(v_emeralds).w,d4			; get emerald bitfield
+		bra.s	.skipfindost
 
 .makeemerald:
+		jsr	FindFreeInert
+		
+	.skipfindost:
 		move.l	#0,ost_id(a1)				; set object to none by default
-		btst	d2,d0					; check if emerald was collected
+		btst	d2,d4					; check if emerald was collected
 		bne.s	.sonic_has_emerald			; branch if yes
 
 		move.l	#TryChaos,ost_id(a1)			; load emerald object
@@ -53,36 +60,59 @@ TCha_Main:	; Routine 0
 		addq.b	#id_frame_echaos_blue,ost_frame(a1)	; set frame based on emerald id
 		move.b	d3,ost_anim_time(a1)
 		move.b	d3,ost_ectry_time_master(a1)
+		move.w	ost_parent(a0),ost_parent(a1)
 
 	.sonic_has_emerald:
 		addq.b	#1,d2					; next emerald
 		addi.w	#10,d3
-		lea	sizeof_ost(a1),a1			; next OST slot
 		dbf	d1,.makeemerald				; repeat for remaining emeralds
 
 TCha_Move:	; Routine 2
-		tst.w	ost_ectry_speed(a0)			; should be 0, 2 or -2 (changed by Eggman object)
-		beq.s	.no_move				; branch if 0
-		tst.b	ost_anim_time(a0)
-		beq.s	.update_angle				; branch if timer is 0
-		subq.b	#1,ost_anim_time(a0)			; decrement timer
-		bne.s	.chk_angle				; branch if not 0
+		jsr	GetParent				; a1 = OST of Eggman
+		cmpi.b	#id_frame_eegg_juggle2,ost_frame(a1)
+		bne.s	.not_right				; branch if Eggman isn't throwing right
+		move.b	#$90,ost_angle(a0)			; match angle to Eggman's hand
+		bsr.w	TCha_Update
+		move.b	#2,ost_ectry_speed(a0)			; set direction of rotation
+		move.b	#id_TCha_Wait,ost_routine(a0)		; goto TCha_Wait next
+		rts
+		
+	.not_right:
+		cmpi.b	#id_frame_eegg_juggle4,ost_frame(a1)
+		bne.s	.not_left				; branch if Eggman isn't throwing left
+		move.b	#$F0,ost_angle(a0)			; match angle to Eggman's hand
+		bsr.w	TCha_Update
+		move.b	#-2,ost_ectry_speed(a0)			; set direction of rotation
+		move.b	#id_TCha_Wait,ost_routine(a0)		; goto TCha_Wait next
+		
+	.not_left:
+		rts
 
-	.update_angle:
+TCha_Wait:	; Routine 4
+		subq.b	#1,ost_anim_time(a0)			; decrement timer
+		bpl.s	.wait					; branch if time remains
+		move.b	ost_ectry_time_master(a0),ost_anim_time(a0) ; reset timer
+		move.b	#id_TCha_Arc,ost_routine(a0)		; goto TCha_Arc next
+	.wait:
+		rts
+		
+TCha_Arc:	; Routine 6
 		move.w	ost_ectry_speed(a0),d0			; 2 or -2
 		add.w	d0,ost_angle(a0)			; update angle
-
-	.chk_angle:
+		bsr.s	TCha_Update				; update position
+		move.b	ost_angle(a0),d0
+		beq.s	.stopmoving
+		cmp.b	#$80,d0
+		bne.s	.keepmoving				; branch if emerald has been caught
+		
+	.stopmoving:
+		move.b	#id_TCha_Stop,ost_routine(a0)		; goto TCha_Stop next
+		
+	.keepmoving:
+		rts
+		
+TCha_Update:
 		move.b	ost_angle(a0),d0			; get angle
-		beq.s	.angle_0				; branch if 0
-		cmpi.b	#$80,d0
-		bne.s	.angle_not_80				; branch if not $80
-
-	.angle_0:
-		clr.w	ost_ectry_speed(a0)
-		move.b	ost_ectry_time_master(a0),ost_anim_time(a0)
-
-	.angle_not_80:
 		jsr	(CalcSine).l				; convert angle (d0) to sine (d0) and cosine (d1)
 		moveq	#0,d4
 		move.b	ost_ectry_radius(a0),d4
@@ -93,7 +123,18 @@ TCha_Move:	; Routine 2
 		add.w	ost_ectry_x_start(a0),d1
 		add.w	ost_ectry_y_start(a0),d0
 		move.w	d1,ost_x_pos(a0)
-		move.w	d0,ost_y_screen(a0)
-
-	.no_move:
-		rts	
+		move.w	d0,ost_y_screen(a0)			; update position
+		rts
+		
+TCha_Stop:	; Routine 8
+		jsr	GetParent				; a1 = OST of Eggman
+		cmpi.b	#id_frame_eegg_juggle1,ost_frame(a1)
+		beq.s	.goto_move				; branch if Eggman is preparing to throw
+		cmpi.b	#id_frame_eegg_juggle3,ost_frame(a1)
+		bne.s	.exit
+		
+	.goto_move:
+		move.b	#id_TCha_Move,ost_routine(a0)		; goto TCha_Move next
+		
+	.exit:
+		rts

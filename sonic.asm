@@ -309,6 +309,7 @@ Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 		include "Objects\Ending StH Text.asm"		; EndSTH
 
 		include "Includes\GM_Credits.asm"
+		include "Includes\GM_TryAgain.asm"
 
 		include "Objects\Ending Eggman Try Again.asm"	; EndEggman
 		include "Objects\Ending Chaos Emeralds Try Again.asm" ; TryChaos

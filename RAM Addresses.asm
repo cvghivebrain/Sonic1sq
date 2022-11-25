@@ -28,10 +28,6 @@ v_hscroll_buffer_padding:	rs.b sizeof_vram_hscroll_padded-sizeof_vram_hscroll ; 
 				rsblock ost ; $D000-$EFFF cleared by GM_Title, GM_Level, GM_Special, GM_Continue, GM_Credits, GM_Ending
 v_ost_all:			rs.b sizeof_ost*countof_ost ; $FFFFD000 ; object variable space ($40 bytes per object; $80 objects) ($2000 bytes)
 	v_ost_player:		equ v_ost_all ; object variable space for Sonic ($40 bytes)
-	; Try again
-	v_ost_endeggman:	equ v_ost_all+(sizeof_ost*2) ; ending/"Try Again" Eggman
-	v_ost_tryagain:		equ v_ost_all+(sizeof_ost*3) ; "Try Again" text
-	v_ost_tryag_emeralds:	equ v_ost_all+(sizeof_ost*$20) ; "Try Again" chaos emeralds
 	; Continue
 	v_ost_cont_text:	equ v_ost_all+(sizeof_ost*1) ; continue screen text
 	v_ost_cont_oval:	equ v_ost_all+(sizeof_ost*2) ; continue screen oval
