@@ -172,8 +172,12 @@ Sonic_Water:
 		bne.s	.exit					; branch if already set
 
 		bsr.w	ResumeMusic
-		move.l	#DrownCount,(v_ost_bubble).w		; load bubbles object from Sonic's mouth
-		move.b	#$81,(v_ost_bubble+ost_subtype).w
+		;bsr.w	FindFreeInert
+		;bne.s	.fail
+		;move.l	#DrownCount,ost_id(a1)			; load bubbles object from Sonic's mouth
+		;move.b	#$81,ost_subtype(a1)
+		
+	.fail:
 		move.w	#sonic_max_speed_water,(v_sonic_max_speed).w ; change Sonic's top speed
 		move.w	#sonic_acceleration_water,(v_sonic_acceleration).w ; change Sonic's acceleration
 		move.w	#sonic_deceleration_water,(v_sonic_deceleration).w ; change Sonic's deceleration
@@ -181,7 +185,11 @@ Sonic_Water:
 		asr	ost_y_vel(a0)
 		asr	ost_y_vel(a0)				; slow Sonic
 		beq.s	.exit					; branch if Sonic stops moving
-		move.l	#Splash,(v_ost_splash).w		; load splash object
+		bsr.w	FindFreeInert
+		bne.s	.fail2
+		move.l	#Splash,ost_id(a1)			; load splash object
+		
+	.fail2:
 		play.w	1, jmp, sfx_Splash			; play splash sound
 ; ===========================================================================
 
@@ -195,7 +203,11 @@ Sonic_Water:
 		move.w	#sonic_deceleration,(v_sonic_deceleration).w ; restore Sonic's deceleration
 		asl	ost_y_vel(a0)
 		beq.w	.exit
-		move.l	#Splash,(v_ost_splash).w		; load splash object
+		bsr.w	FindFreeInert
+		bne.s	.fail3
+		move.l	#Splash,ost_id(a1)			; load splash object
+		
+	.fail3:
 		cmpi.w	#-sonic_max_speed_surface,ost_y_vel(a0)
 		bgt.s	.belowmaxspeed
 		move.w	#-sonic_max_speed_surface,ost_y_vel(a0)	; set maximum speed on leaving water
@@ -1375,9 +1387,15 @@ GameOver:
 		subq.b	#1,(v_lives).w				; subtract 1 from number of lives
 		bne.s	.lives_remain				; branch if some lives are remaining
 		move.w	#0,ost_sonic_restart_time(a0)
-		move.l	#GameOverCard,(v_ost_gameover1).w	; load GAME object
-		move.l	#GameOverCard,(v_ost_gameover2).w	; load OVER object
-		move.b	#id_frame_gameover_over,(v_ost_gameover2+ost_frame).w ; set OVER object to correct frame
+		bsr.w	FindFreeInert
+		bne.s	.fail
+		move.l	#GameOverCard,ost_id(a1)		; load GAME object
+		bsr.w	FindFreeInert
+		bne.s	.fail
+		move.l	#GameOverCard,ost_id(a1)		; load OVER object
+		move.b	#id_frame_gameover_over,ost_frame(a1)	; set OVER object to correct frame
+		
+	.fail:
 		clr.b	(f_time_over).w
 
 .music_gfx:
@@ -1389,10 +1407,14 @@ GameOver:
 		tst.b	(f_time_over).w				; is TIME OVER tag set?
 		beq.s	.exit					; if not, branch
 		move.w	#0,ost_sonic_restart_time(a0)
-		move.l	#GameOverCard,(v_ost_gameover1).w	; load TIME object
-		move.l	#GameOverCard,(v_ost_gameover2).w	; load OVER object
-		move.b	#id_frame_gameover_time,(v_ost_gameover1+ost_frame).w
-		move.b	#id_frame_gameover_over2,(v_ost_gameover2+ost_frame).w
+		bsr.w	FindFreeInert
+		bne.s	.music_gfx
+		move.l	#GameOverCard,ost_id(a1)		; load TIME object
+		move.b	#id_frame_gameover_time,ost_frame(a1)
+		bsr.w	FindFreeInert
+		bne.s	.music_gfx
+		move.l	#GameOverCard,ost_id(a1)		; load OVER object
+		move.b	#id_frame_gameover_over2,ost_frame(a1)
 		bra.s	.music_gfx
 ; ===========================================================================
 

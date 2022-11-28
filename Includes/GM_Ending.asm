@@ -62,7 +62,8 @@ GM_Ending:
 		move.b	#1,(f_lock_controls).w			; lock controls
 		move.w	#(btnL<<8),(v_joypad_hold).w		; hold virtual left on d-pad
 		move.w	#-$800,(v_ost_player+ost_inertia).w	; set Sonic's speed
-		move.l	#HUD,(v_ost_hud).w			; load HUD object
+		jsr	FindFreeInert
+		move.l	#HUD,ost_id(a1)				; load HUD object
 		jsr	(ObjPosLoad).l				; load objects for level
 		jsr	(ExecuteObjects).l			; run all objects
 		jsr	(BuildSprites).l			; create sprite table

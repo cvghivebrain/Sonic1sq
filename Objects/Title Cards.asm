@@ -14,7 +14,7 @@ TitleCard:
 Card_Index:	index *,,2
 		ptr Card_Main
 		ptr Card_Move
-		ptr Card_Wait
+		ptr Card_Move2
 		ptr Card_Wait
 
 		rsobj TitleCard
@@ -44,9 +44,13 @@ Card_Main:	; Routine 0
 		bsr.w	SkipMappings				; jump to data immediately after mappings
 		lea	(Card_ItemData).l,a3			; y pos/routine/frame for each item
 		moveq	#4-1,d1					; there are 4 items (minus 1 for 1st loop)
+		bra.s	.skip_newobj
 
 .loop:
+		jsr	FindFreeInert
 		move.l	#TitleCard,ost_id(a1)
+		
+	.skip_newobj:
 		move.w	(a2),ost_x_pos(a1)			; set initial x position
 		move.w	(a2)+,ost_card_x_start(a1)
 		move.w	(a2)+,ost_card_x_stop(a1)		; set target x position
@@ -72,7 +76,7 @@ Card_Main:	; Routine 0
 		move.b	#render_abs,ost_render(a1)
 		move.b	#0,ost_priority(a1)
 		move.w	#60,ost_card_time(a1)			; set time delay to 1 second
-		lea	sizeof_ost(a1),a1			; next object
+		addq.b	#1,(v_titlecard_state).w
 		dbf	d1,.loop				; repeat sequence 3 times
 
 Card_Move:	; Routine 2
@@ -85,8 +89,18 @@ Card_Move:	; Routine 2
 
 	.is_left:
 		add.w	d1,ost_x_pos(a0)			; update position
+		bra.s	Card_Move2
 
 	.at_target:
+		move.b	#id_Card_Move2,ost_routine(a0)
+		add.b	#$10,(v_titlecard_state).w
+		
+Card_Move2:	; Routine 4
+		tst.w	(v_brightness).w
+		bne.s	.wait_for_fadein			; branch if still fading in from black
+		add.b	#2,ost_routine(a0)			; goto Card_Wait next
+		
+	.wait_for_fadein:
 		move.w	ost_x_pos(a0),d0
 		bmi.s	.no_display				; branch if item is outside left of screen
 		cmpi.w	#$200,d0				; is item right of $200 on x-axis?
@@ -98,8 +112,7 @@ Card_Move:	; Routine 2
 		rts	
 ; ===========================================================================
 
-Card_Wait:	; Routine 4/6
-		; title cards are instructed to jump here by GM_Level
+Card_Wait:	; Routine 6
 		tst.w	ost_card_time(a0)			; has timer hit 0?
 		beq.s	Card_MoveBack				; if yes, branch
 		subq.w	#1,ost_card_time(a0)			; decrement timer
@@ -108,12 +121,12 @@ Card_Wait:	; Routine 4/6
 
 Card_MoveBack:
 		tst.b	ost_render(a0)				; is item on-screen?
-		bpl.s	Card_ChangeArt				; if not, branch
+		bpl.s	.delete					; if not, branch
 
 		moveq	#$20,d1					; set to move 32px right
 		move.w	ost_card_x_start(a0),d0
 		cmp.w	ost_x_pos(a0),d0			; has item reached the finish position?
-		beq.s	Card_ChangeArt				; if yes, branch
+		beq.s	.delete					; if yes, branch
 		bge.s	.is_left				; branch if item is left of target
 		neg.w	d1					; move left instead
 
@@ -130,12 +143,12 @@ Card_MoveBack:
 		rts	
 ; ===========================================================================
 
-Card_ChangeArt:
-		cmpi.b	#id_Card_Wait,ost_routine(a0)		; is this the main object? (routine 4)
-		bne.s	.delete					; if not, branch
-
+.delete:
+		sub.b	#$11,(v_titlecard_state).w
+		tst.b	(v_titlecard_state).w
+		bne.s	.skip_gfx				; branch if not the last title card object
 		moveq	#id_UPLC_Explode,d0
 		jsr	UncPLC					; load explosion gfx
-
-	.delete:
+		
+	.skip_gfx:
 		bra.w	DeleteObject

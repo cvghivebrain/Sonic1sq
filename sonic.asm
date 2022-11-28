@@ -24,8 +24,6 @@ EnableSRAM:	equ 0						; change to 1 to enable SRAM
 BackupSRAM:	equ 1
 AddressSRAM:	equ 3						; 0 = odd+even; 2 = even only; 3 = odd only
 
-ZoneCount:	equ 6						; discrete zones are: GHZ, MZ, SYZ, LZ, SLZ, and SBZ
-
 ; ===========================================================================
 
 ROM_Start:
@@ -105,31 +103,14 @@ ErrorTrap:
 GameProgram:
 		tst.w	(vdp_control_port).l
 		btst	#6,(port_e_control).l
-		beq.s	CheckSumCheck
+		beq.s	FirstRun
 		cmpi.l	#'init',(v_checksum_pass).w		; has checksum routine already run?
 		beq.w	GameInit				; if yes, branch
 
-CheckSumCheck:
-		movea.l	#EndOfHeader,a0				; start	checking bytes after the header	($200)
-		movea.l	#ROM_End_Ptr,a1				; stop at end of ROM
-		move.l	(a1),d0
-		moveq	#0,d1
-
-	.loop:
-		add.w	(a0)+,d1
-		cmp.l	a0,d0
-		bhs.s	.loop
-		movea.l	#Checksum,a1				; read the checksum
-		cmp.w	(a1),d1					; compare checksum in header to ROM
-		bne.w	CheckSumError				; if they don't match, branch
-
-	CheckSumOk:
-		lea	(v_keep_after_reset).w,a6		; $FFFFFE00
-		moveq	#0,d7
-		move.w	#(($FFFFFFFF-v_keep_after_reset+1)/4)-1,d6
-	.clearRAM:
-		move.l	d7,(a6)+
-		dbf	d6,.clearRAM				; clear RAM ($FE00-$FFFF)
+FirstRun:
+		lea	(v_keep_after_reset).w,a1		; $FFFFFE00
+		move.w	#(($FFFFFFFF-v_keep_after_reset+1)/4)-1,d1
+		jsr	ClearRAM				; clear RAM ($FE00-$FFFF)
 
 		move.b	(console_version).l,d0
 		andi.b	#$C0,d0
@@ -137,12 +118,12 @@ CheckSumCheck:
 		move.l	#'init',(v_checksum_pass).w		; set flag so checksum won't run again
 
 GameInit:
-		lea	($FF0000).l,a6
-		moveq	#0,d7
-		move.w	#((v_keep_after_reset&$FFFF)/4)-1,d6
-	.clearRAM:
-		move.l	d7,(a6)+
-		dbf	d6,.clearRAM				; clear RAM ($0000-$FDFF)
+		lea	($FF0000).l,a1
+		move.w	#((v_keep_after_reset&$FFFF)/4)-1,d1
+		moveq	#0,d0
+	.loop:
+		move.l	d0,(a1)+
+		dbf	d1,.loop				; clear RAM up to v_keep_after_reset
 
 		bsr.w	VDPSetupGame				; clear CRAM and set VDP registers
 		bsr.w	DacDriverLoad

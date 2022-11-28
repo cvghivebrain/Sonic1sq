@@ -28,12 +28,15 @@ GM_Continue:
 		clr.l	(v_camera_x_pos).w
 		move.l	#$1000000,(v_camera_y_pos).w
 		move.l	#ContSonic,(v_ost_player).w		; load Sonic object
-		move.l	#ContScrItem,(v_ost_cont_text).w	; load continue screen objects
-		move.l	#ContScrItem,(v_ost_cont_oval).w
-		move.b	#3,(v_ost_cont_oval+ost_priority).w
-		move.b	#id_frame_cont_oval,(v_ost_cont_oval+ost_frame).w ; set frame for oval object
-		move.l	#ContScrItem,(v_ost_cont_minisonic).w	; load mini Sonic
-		move.b	#id_CSI_MakeMiniSonic,(v_ost_cont_minisonic+ost_routine).w ; set routine for mini Sonic
+		jsr	FindFreeInert
+		move.l	#ContScrItem,ost_id(a1)			; load continue screen objects
+		jsr	FindFreeInert
+		move.l	#ContScrItem,ost_id(a1)
+		move.b	#3,ost_priority(a1)
+		move.b	#id_frame_cont_oval,ost_frame(a1)	; set frame for oval object
+		jsr	FindFreeInert
+		move.l	#ContScrItem,ost_id(a1)			; load mini Sonic
+		move.b	#id_CSI_MakeMiniSonic,ost_routine(a1)	; set routine for mini Sonic
 		jsr	(ExecuteObjects).l
 		jsr	(BuildSprites).l
 		enable_display

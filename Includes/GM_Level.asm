@@ -63,7 +63,8 @@ GM_Demo:
 		enable_ints
 		tst.w	(v_demo_mode).w				; is this an ending demo?
 		bmi.s	Level_Skip_TtlCard			; if yes, branch
-		move.l	#TitleCard,(v_ost_titlecard1).w		; load title card object
+		jsr	FindFreeInert
+		move.l	#TitleCard,ost_id(a1)			; load title card object
 		move.b	#1,(f_brightness_update).w		; show Sonic/title card palette
 		move.b	(v_bgm).w,d0
 		bsr.w	PlaySound0				; play music
@@ -73,18 +74,8 @@ Level_TtlCardLoop:
 		bsr.w	WaitForVBlank
 		jsr	(ExecuteObjects).l
 		jsr	(BuildSprites).l
-		move.w	(v_ost_titlecard1+ost_x_pos).w,d0
-		cmp.w	(v_ost_titlecard1+ost_card_x_stop).w,d0	; has title card sequence finished?
-		bne.s	Level_TtlCardLoop			; if not, branch
-		move.w	(v_ost_titlecard2+ost_x_pos).w,d0
-		cmp.w	(v_ost_titlecard2+ost_card_x_stop).w,d0
-		bne.s	Level_TtlCardLoop
-		move.w	(v_ost_titlecard3+ost_x_pos).w,d0
-		cmp.w	(v_ost_titlecard3+ost_card_x_stop).w,d0
-		bne.s	Level_TtlCardLoop
-		move.w	(v_ost_titlecard4+ost_x_pos).w,d0
-		cmp.w	(v_ost_titlecard4+ost_card_x_stop).w,d0
-		bne.s	Level_TtlCardLoop
+		cmp.b	#$44,(v_titlecard_state).w
+		bne.s	Level_TtlCardLoop			; branch if title card is still moving
 		jsr	(Hud_Base).l				; load basic HUD gfx
 
 Level_Skip_TtlCard:
@@ -99,7 +90,9 @@ Level_Skip_TtlCard:
 		bsr.w	WaterFilter
 		tst.w	(v_demo_mode).w				; is this an ending demo?
 		bmi.s	.skip_hud				; if yes, branch
-		move.l	#HUD,(v_ost_hud).w			; load HUD object
+		jsr	FindFreeInert
+		bne.s	.skip_hud
+		move.l	#HUD,ost_id(a1)				; load HUD object
 
 	.skip_hud:
 		tst.b	(f_debug_cheat).w			; has debug cheat been entered?
@@ -113,10 +106,14 @@ Level_Skip_TtlCard:
 		move.w	#0,(v_joypad_hold_actual).w
 		tst.b	(f_water_enable).w			; is water enabled?
 		beq.s	.skip_water_surface			; if not, branch
-		move.l	#WaterSurface,(v_ost_watersurface1).w	; load water surface object
-		move.w	#$60,(v_ost_watersurface1+ost_x_pos).w
-		move.l	#WaterSurface,(v_ost_watersurface2).w
-		move.w	#$120,(v_ost_watersurface2+ost_x_pos).w
+		jsr	FindFreeInert
+		bne.s	.skip_water_surface
+		move.l	#WaterSurface,ost_id(a1)		; load water surface object
+		move.w	#$60,ost_x_pos(a1)
+		jsr	FindFreeInert
+		bne.s	.skip_water_surface
+		move.l	#WaterSurface,ost_id(a1)
+		move.w	#$120,ost_x_pos(a1)
 
 	.skip_water_surface:
 		jsr	(ObjPosLoad).l
@@ -165,10 +162,6 @@ Level_Skip_TtlCard:
 		bsr.w	PaletteFadeIn				; fade in from black
 		tst.w	(v_demo_mode).w				; is this an ending demo?
 		bmi.s	.skip_titlecard				; if yes, branch
-		addq.b	#2,(v_ost_titlecard1+ost_routine).w	; make title card goto Card_Wait (move back and load explosion/animal gfx)
-		addq.b	#4,(v_ost_titlecard2+ost_routine).w
-		addq.b	#4,(v_ost_titlecard3+ost_routine).w
-		addq.b	#4,(v_ost_titlecard4+ost_routine).w
 		bra.s	.end_prelevel
 ; ===========================================================================
 

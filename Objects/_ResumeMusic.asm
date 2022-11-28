@@ -23,5 +23,4 @@ ResumeMusic:
 
 	.over12:
 		move.w	#air_full,(v_air).w			; reset air to 30 seconds
-		clr.b	(v_ost_bubble+ost_drown_disp_time).w
 		rts

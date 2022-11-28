@@ -28,25 +28,7 @@ v_hscroll_buffer_padding:	rs.b sizeof_vram_hscroll_padded-sizeof_vram_hscroll ; 
 				rsblock ost ; $D000-$EFFF cleared by GM_Title, GM_Level, GM_Special, GM_Continue, GM_Credits, GM_Ending
 v_ost_all:			rs.b sizeof_ost*countof_ost ; $FFFFD000 ; object variable space ($40 bytes per object; $80 objects) ($2000 bytes)
 	v_ost_player:		equ v_ost_all ; object variable space for Sonic ($40 bytes)
-	; Continue
-	v_ost_cont_text:	equ v_ost_all+(sizeof_ost*1) ; continue screen text
-	v_ost_cont_oval:	equ v_ost_all+(sizeof_ost*2) ; continue screen oval
-	v_ost_cont_minisonic:	equ v_ost_all+(sizeof_ost*3) ; continue screen mini Sonics
 	; Level - no interaction with Sonic
-	v_ost_hud:		equ v_ost_all+(sizeof_ost*1) ; HUD
-	v_ost_titlecard1:	equ v_ost_all+(sizeof_ost*2) ; title card - zone name
-	v_ost_titlecard2:	equ v_ost_all+(sizeof_ost*3) ; title card - "zone"
-	v_ost_titlecard3:	equ v_ost_all+(sizeof_ost*4) ; title card - "act" 1/2/3
-	v_ost_titlecard4:	equ v_ost_all+(sizeof_ost*5) ; title card - oval
-	v_ost_gameover1:	equ v_ost_all+(sizeof_ost*2) ; game over card - "game"/"time"
-	v_ost_gameover2:	equ v_ost_all+(sizeof_ost*3) ; game over card - "over"
-	v_ost_shield:		equ v_ost_all+(sizeof_ost*6) ; shield
-	v_ost_stars1:		equ v_ost_all+(sizeof_ost*8) ; invincibility stars
-	v_ost_stars2:		equ v_ost_all+(sizeof_ost*9) ; invincibility stars
-	v_ost_stars3:		equ v_ost_all+(sizeof_ost*$A) ; invincibility stars
-	v_ost_stars4:		equ v_ost_all+(sizeof_ost*$B) ; invincibility stars
-	v_ost_splash:		equ v_ost_all+(sizeof_ost*$C) ; splash
-	v_ost_bubble:		equ v_ost_all+(sizeof_ost*$D) ; bubble from Sonic's mouth
 	v_ost_end_emeralds:	equ v_ost_all+(sizeof_ost*$10) ; ending chaos emeralds
 	v_ost_haspassed1:	equ v_ost_all+(sizeof_ost*$17) ; has passed act - "Sonic has"
 	v_ost_haspassed2:	equ v_ost_all+(sizeof_ost*$18) ; has passed act - "passed"
@@ -55,8 +37,6 @@ v_ost_all:			rs.b sizeof_ost*countof_ost ; $FFFFD000 ; object variable space ($4
 	v_ost_haspassed5:	equ v_ost_all+(sizeof_ost*$1B) ; has passed act - time bonus
 	v_ost_haspassed6:	equ v_ost_all+(sizeof_ost*$1C) ; has passed act - ring bonus
 	v_ost_haspassed7:	equ v_ost_all+(sizeof_ost*$1D) ; has passed act - oval
-	v_ost_watersurface1:	equ v_ost_all+(sizeof_ost*$1E) ; LZ water surface
-	v_ost_watersurface2:	equ v_ost_all+(sizeof_ost*$1F) ; LZ water surface
 	; Special stage results
 	v_ost_ssresult1:	equ v_ost_all+(sizeof_ost*$17) ; special stage results screen
 	v_ost_ssresult2:	equ v_ost_all+(sizeof_ost*$18) ; special stage results screen
@@ -177,6 +157,7 @@ v_bgm:				rs.b 1 ; music track id for current zone
 v_titlecard_zone:		rs.w 1 ; frame id of title card (zone name)
 v_titlecard_act:		rs.w 1 ; frame id of title card (act number)
 v_titlecard_uplc:		rs.w 1 ; UPLC id of title card
+v_titlecard_state:		rs.b 1 ; state of title card objects (+1 when loaded; +$10 when stopped on screen)
 v_tile_hud:			rs.w 1
 v_tile_swing:			rs.w 1
 v_tile_wall:			rs.w 1

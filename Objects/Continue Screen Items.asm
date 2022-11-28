@@ -58,9 +58,13 @@ CSI_MakeMiniSonic:
 	.fewer_than_16:
 		move.b	d1,d2
 		andi.b	#1,d2
+		bra.s	.skip_newobj
 
-CSI_MiniSonicLoop:
+.loop:
+		jsr	FindFreeInert
 		move.l	#ContScrItem,ost_id(a1)			; load mini-Sonic object
+		
+	.skip_newobj:
 		move.w	(a2)+,ost_x_pos(a1)			; use above data for x-axis position
 		tst.b	d2					; do you have an even number of continues?
 		beq.s	.is_even				; if yes, branch
@@ -73,10 +77,8 @@ CSI_MiniSonicLoop:
 		move.l	#Map_ContScr,ost_mappings(a1)
 		move.w	#tile_Art_MiniSonic_UPLC_Continue+tile_hi,ost_tile(a1)
 		move.b	#render_abs,ost_render(a1)
-		lea	sizeof_ost(a1),a1
-		dbf	d1,CSI_MiniSonicLoop			; repeat for number of continues
+		dbf	d1,.loop				; repeat for number of continues
 
-		lea	-sizeof_ost(a1),a1
 		move.b	d3,ost_subtype(a1)
 
 CSI_ChkDel:	; Routine 6
