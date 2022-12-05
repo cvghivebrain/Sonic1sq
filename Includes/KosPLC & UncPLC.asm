@@ -268,7 +268,6 @@ KPLC_End:	kplcheader
 		kplc Kos_EndFlower
 		kplc Kos_EndEm,v_tile_emeralds
 		kplc Kos_EndSonic
-		kplc Kos_EndStH
 	.end:
 		set_dma_size last_vram
 
@@ -418,6 +417,7 @@ UncLoadCues:
 		ptr UPLC_Continue
 		ptr UPLC_EggmanSBZ
 		ptr UPLC_EggmanFZ
+		ptr UPLC_EndStH
 
 UPLC_HUD:	uplcheader $D940
 		uplc Art_HUDMain,v_tile_hud
@@ -550,5 +550,9 @@ UPLC_EggmanSBZ:	uplcheader $8000
 	
 UPLC_EggmanFZ:	uplcheader $8E00
 		uplc Art_Sbz2Eggman
+	.end:
+	
+UPLC_EndStH:	uplcheader $A480
+		uplc Art_EndStH
 	.end:
 	

@@ -53,12 +53,17 @@ Has_Config:	dc.w 4, $124, $BC				; "SONIC HAS"
 ; ===========================================================================
 
 Has_Main:	; Routine 0
+		move.b	#1,(v_haspassed_state).w
 		movea.l	a0,a1					; replace current object with 1st from list
 		lea	(Has_Config).l,a3			; position, routine & frame settings
 		moveq	#6,d1					; 6 additional items
+		bra.s	.skip_findost
 
 	.loop:
+		bsr.w	FindFreeInert
 		move.l	#HasPassedCard,ost_id(a1)
+		
+	.skip_findost:
 		move.w	(a3),ost_x_pos(a1)			; set actual x position
 		move.w	(a3)+,ost_has_x_start(a1)		; set start x position (same as actual)
 		move.w	(a3)+,ost_has_x_stop(a1)		; set stop x position
@@ -87,7 +92,6 @@ Has_Main:	; Routine 0
 		move.w	(v_tile_titlecard).w,ost_tile(a1)
 		add.w	#tile_hi,ost_tile(a1)
 		move.b	#render_abs,ost_render(a1)
-		lea	sizeof_ost(a1),a1			; next OST slot in RAM
 		dbf	d1,.loop				; repeat 6 times
 
 Has_Move:	; Routine 2
@@ -119,7 +123,7 @@ Has_Move:	; Routine 2
 ; ===========================================================================
 
 .at_target:
-		cmpi.b	#id_Has_MoveBack,(v_ost_haspassed6+ost_routine).w ; is ring bonus object on routine Has_MoveBack?
+		cmpi.b	#2,(v_haspassed_state).w		; is ring bonus object on routine Has_MoveBack?
 		beq.s	.sbz2_ending				; if yes, branch
 		cmpi.b	#id_frame_has_ringbonus,ost_frame(a0)	; is object the ring bonus?
 		bne.s	.chk_visible				; if not, branch
@@ -159,6 +163,7 @@ Has_Bonus:	; Routine 6
 		cmpi.w	#id_SBZ_act2,(v_zone).w			; is current level SBZ2?
 		bne.s	.not_sbz2				; if not, branch
 		addq.b	#4,ost_routine(a0)			; goto Has_Wait next, and then Has_MoveBack
+		move.b	#2,(v_haspassed_state).w
 
 	.not_sbz2:
 		move.w	#180,ost_has_time(a0)			; set time delay to 3 seconds

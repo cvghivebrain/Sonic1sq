@@ -840,7 +840,7 @@ Blk256_SBZ:	incbin	"256x256 Mappings\SBZ.kos"
 		incfile Kos_TryAgain,"Graphics Kosinski\Ending - Try Again",kos
 		incfile Kos_EndFlower,"Graphics Kosinski\Ending - Flowers",kos
 		incfile Art_CreditText,"Graphics\Ending - Credits",bin,dma_safe
-		incfile Kos_EndStH,"Graphics Kosinski\Ending - StH Logo",kos
+		incfile Art_EndStH,"Graphics\Ending - StH Logo",bin,dma_safe
 ; ---------------------------------------------------------------------------
 ; Collision data
 ; ---------------------------------------------------------------------------

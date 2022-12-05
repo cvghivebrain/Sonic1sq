@@ -38,9 +38,13 @@ ECha_CreateEms:
 		moveq	#0,d3
 		moveq	#id_frame_echaos_blue,d2
 		moveq	#emerald_count-1,d1
+		bra.s	.skip_findost
 
-	ECha_LoadLoop:
+	.loop:
+		jsr	FindFreeInert
 		move.l	#EndChaos,ost_id(a1)			; load chaos emerald object
+		
+	.skip_findost:
 		addq.b	#2,ost_routine(a1)			; goto ECha_Move next
 		move.l	#Map_ECha,ost_mappings(a1)
 		move.w	(v_tile_emeralds).w,ost_tile(a1)
@@ -48,13 +52,13 @@ ECha_CreateEms:
 		move.b	#1,ost_priority(a1)
 		move.w	ost_x_pos(a0),ost_echaos_x_start(a1)
 		move.w	ost_y_pos(a0),ost_echaos_y_start(a1)
+		move.w	ost_parent(a0),ost_parent(a1)
 		move.b	d2,ost_anim(a1)
 		move.b	d2,ost_frame(a1)
 		addq.b	#1,d2
 		move.b	d3,ost_angle(a1)
 		addi.b	#$100/emerald_count,d3			; angle between each emerald
-		lea	sizeof_ost(a1),a1
-		dbf	d1,ECha_LoadLoop			; repeat 5 more times
+		dbf	d1,.loop				; repeat 5 more times
 
 ECha_Move:	; Routine 2
 		move.w	ost_echaos_angle(a0),d0
@@ -74,7 +78,7 @@ ECha_Move:	; Routine 2
 
 	ECha_Expand:
 		cmpi.w	#$2000,ost_echaos_radius(a0)
-		beq.s	ECha_Rotate
+		beq.s	ECha_Stop
 		addi.w	#$20,ost_echaos_radius(a0)		; expand circle of emeralds
 
 	ECha_Rotate:
@@ -89,3 +93,14 @@ ECha_Move:	; Routine 2
 
 ECha_End:
 		rts	
+
+ECha_Stop:
+		jsr	GetParent				; get OST of Sonic object
+		move.b	#1,ost_esonic_flag(a1)
+		cmpi.b	#id_ani_esonic_confused,ost_anim(a1)
+		bne.s	.wait					; branch until Sonic looks confused
+		jmp	DeleteObject
+		
+	.wait:
+		rts
+		

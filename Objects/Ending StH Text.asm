@@ -23,11 +23,13 @@ ost_esth_wait_time:	rs.w 1 ; $30				; time until exit (2 bytes)
 ; ===========================================================================
 
 ESth_Main:	; Routine 0
+		moveq	#id_UPLC_EndStH,d0
+		jsr	UncPLC
 		addq.b	#2,ost_routine(a0)			; goto ESth_Move next
 		move.w	#-$20,ost_x_pos(a0)			; object starts outside the level boundary
 		move.w	#$D8,ost_y_screen(a0)
 		move.l	#Map_ESTH,ost_mappings(a0)
-		move.w	#tile_Kos_EndStH,ost_tile(a0)
+		move.w	#tile_Art_EndStH,ost_tile(a0)
 		move.b	#render_abs,ost_render(a0)
 		move.b	#0,ost_priority(a0)
 

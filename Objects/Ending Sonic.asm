@@ -25,7 +25,8 @@ ESon_Index:	index *,,2
 		ptr ESon_Animate
 
 		rsobj EndSonic
-ost_esonic_wait_time:	rs.w 1 ; $30				; time to wait between events (2 bytes)
+ost_esonic_wait_time:	rs.w 1					; time to wait between events (2 bytes)
+ost_esonic_flag:	rs.b 1					; flag set when chaos emeralds stop spinning
 		rsobjend
 ; ===========================================================================
 
@@ -55,15 +56,18 @@ ESon_MakeEmeralds:
 		move.b	#id_ani_esonic_hold,ost_anim(a0)
 		move.b	#0,ost_anim_frame(a0)			; reset animation
 		move.b	#0,ost_anim_time(a0)
-		move.l	#EndChaos,(v_ost_end_emeralds).w	; load chaos emeralds objects
+		jsr	FindFreeInert
+		bne.s	.wait
+		move.l	#EndChaos,ost_id(a1)			; load chaos emeralds objects
+		jsr	SaveParent
 
 	.wait:
 		rts	
 ; ===========================================================================
 
 ESon_LookUp:	; Routine 6
-		cmpi.w	#$2000,((v_ost_end_emeralds&$FFFFFF)+ost_echaos_radius).l ; has emerald circle expanded fully?
-		bne.s	.wait					; if not, branch
+		tst.b	ost_esonic_flag(a0)			; has emerald circle expanded fully?
+		beq.s	.wait					; if not, branch
 		move.w	#1,(f_restart).w			; set level to restart (causes flash)
 		move.w	#90,ost_esonic_wait_time(a0)		; set delay to 1.5 seconds
 		addq.b	#2,ost_routine2(a0)			; goto ESon_ClrEmeralds next
@@ -76,12 +80,6 @@ ESon_ClrEmeralds:
 		; Routine 8
 		subq.w	#1,ost_esonic_wait_time(a0)		; decrement timer
 		bne.s	.wait
-		lea	(v_ost_end_emeralds).w,a1		; address of OST of emeralds
-		move.w	#((sizeof_ost*6)/4)-1,d1		; amount of space to clear (excessive; $10 could be 6)
-
-	.loop:
-		clr.l	(a1)+
-		dbf	d1,.loop				; clear the object RAM
 
 		move.w	#1,(f_restart).w
 		addq.b	#2,ost_routine2(a0)			; goto ESon_Animate next
@@ -98,7 +96,9 @@ ESon_MakeLogo:	; Routine $C
 		addq.b	#2,ost_routine2(a0)			; goto ESon_Animate next
 		move.w	#180,ost_esonic_wait_time(a0)		; set delay to 3 seconds
 		move.b	#id_ani_esonic_leap,ost_anim(a0)
-		move.l	#EndSTH,(v_ost_end_emeralds).w		; load "SONIC THE HEDGEHOG" object
+		jsr	FindFreeInert
+		bne.s	.wait
+		move.l	#EndSTH,ost_id(a1)			; load "SONIC THE HEDGEHOG" object
 
 	.wait:
 		rts	
@@ -120,7 +120,9 @@ ESon_Leap:	; Routine $10
 		move.b	#2,ost_priority(a0)
 		move.w	#id_frame_esonic_leap1,ost_frame_hi(a0)
 		move.b	#id_ani_esonic_leap,ost_anim(a0)	; use "leaping" animation
-		move.l	#EndSTH,(v_ost_end_emeralds).w		; load "SONIC THE HEDGEHOG" object
+		jsr	FindFreeInert
+		bne.s	.wait
+		move.l	#EndSTH,ost_id(a1)			; load "SONIC THE HEDGEHOG" object
 		bra.s	ESon_Animate
 
 	.wait:
