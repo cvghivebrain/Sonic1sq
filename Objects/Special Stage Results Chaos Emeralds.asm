@@ -30,8 +30,12 @@ SSRC_Main:	; Routine 0
 		moveq	#0,d2
 		moveq	#emerald_count-1,d1
 		move.l	(v_emeralds).w,d0			; get emerald bitfield
+		bra.s	.skip_findost
 
 	.loop:
+		bsr.w	FindFreeInert
+		
+	.skip_findost:
 		move.l	#0,ost_id(a1)				; set object to none by default
 		btst	d2,d0					; check if emerald was collected
 		beq.s	.emerald_not_got			; branch if not
@@ -48,7 +52,6 @@ SSRC_Main:	; Routine 0
 
 	.emerald_not_got:
 		addq.b	#1,d2					; next emerald value
-		lea	sizeof_ost(a1),a1			; next object
 		dbf	d1,.loop				; repeat for rest of emeralds
 
 SSRC_Flash:	; Routine 2

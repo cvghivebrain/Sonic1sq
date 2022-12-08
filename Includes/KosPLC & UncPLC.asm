@@ -67,6 +67,9 @@ kplc:		macro gfx,tileram
 		tile_\gfx\_\last_label: equ last_vram/sizeof_cell
 		endc
 		last_vram: = last_vram+sizeof_\gfx		; update last_vram for next item
+		if last_vram > v_kosplc_buffer_end&$FFFF
+		inform	3,"KosLoadCue \last_label uses $%h bytes of RAM out of $%h maximum.",last_vram,v_kosplc_buffer_end&$FFFF
+		endc
 		endm
 
 ; ---------------------------------------------------------------------------

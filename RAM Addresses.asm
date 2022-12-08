@@ -17,6 +17,7 @@ v_256x256_tiles:		equ   $FF0000 ; 256x256 tile mappings ($A400 bytes)
 				rsset $FFFF0000+sizeof_256x256_all
 v_level_layout:			rs.b sizeof_level ; $FFFFA400 ; level and background layouts ($400 bytes)
 v_bgscroll_buffer:		rs.b $200 ; $FFFFA800 ; background scroll buffer
+v_kosplc_buffer_end:		equ __rs ; KosPLC shouldn't overwrite the sprite queue or it'll cause problems
 v_sprite_queue:			rs.b sizeof_priority*8 ; $FFFFAC00 ; sprite display queue, first section is highest priority ($400 bytes; 8 sections of $80 bytes)
 v_sonic_gfx_buffer:		rs.b sizeof_vram_sonic ; $FFFFC800 ; buffered Sonic graphics ($17 cells) ($2E0 bytes)
 v_sonic_pos_tracker:		rs.l $40 ; $FFFFCB00 ; earlier position tracking list for Sonic, used by invincibility stars ($100 bytes)
@@ -28,14 +29,6 @@ v_hscroll_buffer_padding:	rs.b sizeof_vram_hscroll_padded-sizeof_vram_hscroll ; 
 				rsblock ost ; $D000-$EFFF cleared by GM_Title, GM_Level, GM_Special, GM_Continue, GM_Credits, GM_Ending
 v_ost_all:			rs.b sizeof_ost*countof_ost ; $FFFFD000 ; object variable space ($40 bytes per object; $80 objects) ($2000 bytes)
 	v_ost_player:		equ v_ost_all ; object variable space for Sonic ($40 bytes)
-	; Special stage results
-	v_ost_ssresult1:	equ v_ost_all+(sizeof_ost*$17) ; special stage results screen
-	v_ost_ssresult2:	equ v_ost_all+(sizeof_ost*$18) ; special stage results screen
-	v_ost_ssresult3:	equ v_ost_all+(sizeof_ost*$19) ; special stage results screen
-	v_ost_ssresult4:	equ v_ost_all+(sizeof_ost*$1A) ; special stage results screen
-	v_ost_ssresult5:	equ v_ost_all+(sizeof_ost*$1B) ; special stage results screen
-	v_ost_ssres_emeralds:	equ v_ost_all+(sizeof_ost*$20) ; special stage results screen chaos emeralds
-	; Level - can interact with Sonic
 	v_ost_level_obj:	equ v_ost_all+(sizeof_ost*countof_ost_inert) ; level object variable space ($1800 bytes)
 v_ost_end:			equ v_ost_all+(sizeof_ost*countof_ost) ; $FFFFF000
 				rsblockend ost

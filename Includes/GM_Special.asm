@@ -149,7 +149,8 @@ SS_FinishLoop:
 		move.w	#loops_to_clear_ost,d1			; size of RAM block to clear
 		bsr.w	ClearRAM				; fill OST with 0
 
-		move.l	#SSResult,(v_ost_ssresult1).w		; load results screen object
+		jsr	FindFreeInert
+		move.l	#SSResult,ost_id(a1)			; load results screen object
 		bsr.w	PaletteFadeIn
 
 SS_NormalExit:

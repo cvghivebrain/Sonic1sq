@@ -29,7 +29,6 @@ ost_ssr_x_stop:		rs.w 1 ; $30				; on screen x position (2 bytes)
 ost_ssr_time:		rs.w 1 ; $3E
 		rsobjend
 
-include_SSR_Config:	macro
 		; x pos start, x pos stop, y pos
 		; routine number, frame number
 SSR_Config:	dc.w $20, $120,	$C4
@@ -46,19 +45,22 @@ SSR_Config:	dc.w $20, $120,	$C4
 
 		dc.w $3A0, $120, $138
 		dc.b id_SSR_Move, id_frame_ssr_continue
-		endm
 ; ===========================================================================
 
 SSR_Main:	; Routine 0
 		movea.l	a0,a1					; replace current object with 1st from list
 		lea	(SSR_Config).l,a2			; position, routine & frame settings
 		moveq	#3,d1					; 3 additional items
-		;cmpi.w	#50,(v_rings).w				; do you have 50 or more rings?
-		;bcs.s	.loop					; if no, branch
+		cmpi.w	#5,(v_rings).w				; do you have 50 or more rings?
+		bcs.s	.loop					; if no, branch
 		addq.w	#1,d1					; if yes, add 1	item (continue)
+		bra.s	.skip_findost
 
 	.loop:
+		bsr.w	FindFreeInert
 		move.l	#SSResult,ost_id(a1)
+		
+	.skip_findost:
 		move.w	(a2)+,ost_x_pos(a1)			; set actual x position
 		move.w	(a2)+,ost_ssr_x_stop(a1)		; set stop x position
 		move.w	(a2)+,ost_y_screen(a1)			; set y position
@@ -68,7 +70,6 @@ SSR_Main:	; Routine 0
 		move.w	(v_tile_titlecard).w,ost_tile(a1)
 		add.w	#tile_hi,ost_tile(a1)
 		move.b	#render_abs,ost_render(a1)
-		lea	sizeof_ost(a1),a1			; next OST slot in RAM
 		dbf	d1,.loop				; repeat 3 or 4 times
 
 		moveq	#7,d0
@@ -113,7 +114,8 @@ SSR_Move:	; Routine 2
 
 		addq.b	#2,ost_routine(a0)			; goto SSR_Wait next, and then SSR_RingBonus
 		move.w	#180,ost_ssr_time(a0)			; set time delay to 3 seconds
-		move.l	#SSRChaos,(v_ost_ssres_emeralds).w	; load chaos emerald object
+		bsr.w	FindFreeInert
+		move.l	#SSRChaos,ost_id(a1)			; load chaos emerald object
 
 SSR_Wait:	; Routine 4, 8, $C, $10
 		subq.w	#1,ost_ssr_time(a0)			; decrement timer
@@ -143,7 +145,7 @@ SSR_RingBonus:	; Routine 6
 		play.w	1, jsr, sfx_Register			; play "ker-ching" sound
 		addq.b	#2,ost_routine(a0)			; goto SSR_Wait next, and then SSR_Exit
 		move.w	#180,ost_ssr_time(a0)			; set time delay to 3 seconds
-		cmpi.w	#50,(v_rings).w				; do you have at least 50 rings?
+		cmpi.w	#5,(v_rings).w				; do you have at least 50 rings?
 		bcs.s	.exit					; if not, branch
 		move.w	#60,ost_ssr_time(a0)			; set time delay to 1 second
 		addq.b	#4,ost_routine(a0)			; goto SSR_Continue next
@@ -158,8 +160,16 @@ SSR_Exit:	; Routine $A, $12
 ; ===========================================================================
 
 SSR_Continue:	; Routine $E
-		move.b	#id_frame_ssr_contsonic1,(v_ost_ssresult5+ost_frame).w ; make Sonic sprite appear
-		move.b	#id_SSR_ContAni,(v_ost_ssresult5+ost_routine).w ; "CONTINUE" object goto SSR_ContAni next
+		bsr.w	FindFreeInert
+		move.l	#SSResult,ost_id(a1)
+		move.w	#$120,ost_x_pos(a1)
+		move.w	#$138,ost_y_screen(a1)
+		move.l	#Map_SSR,ost_mappings(a1)
+		move.w	(v_tile_titlecard).w,ost_tile(a1)
+		add.w	#tile_hi,ost_tile(a1)
+		move.b	#render_abs,ost_render(a1)
+		move.b	#id_frame_ssr_contsonic1,ost_frame(a1)	; make Sonic sprite appear
+		move.b	#id_SSR_ContAni,ost_routine(a1)		; "CONTINUE" object goto SSR_ContAni next
 		play.w	1, jsr, sfx_Continue			; play continues jingle
 		addq.b	#2,ost_routine(a0)			; goto SSR_Wait next, and then SSR_Exit
 		move.w	#360,ost_ssr_time(a0)			; set time delay to 6 seconds
@@ -174,5 +184,3 @@ SSR_ContAni:	; Routine $14
 
 	.wait:
 		bra.w	DisplaySprite
-; ===========================================================================
-		include_SSR_Config
