@@ -2,10 +2,11 @@
 ; Subroutine to make an object solid
 
 ; output:
-;	d0 = x position of Sonic on object, starting at 0 on left edge
-;	d1 = collision type (0 = none; 1 = top; 2 = bottom; 4 = left; 8 = right)
+;	d0.w = x position of Sonic on object, starting at 0 on left edge
+;	d1.l = collision type (0 = none; 1 = top; 2 = bottom; 4 = left; 8 = right)
 ;	a1 = address of OST of Sonic
-;	uses d0, d1, d2, d3, d4, d5, d6
+
+;	uses d2.w, d3.w, d4.l, d5.w, d6.l
 ; ---------------------------------------------------------------------------
 
 SolidNew:
@@ -128,10 +129,11 @@ Sol_Stand:
 ; Subroutine to make an object solid, sides only
 
 ; output:
-;	d0 = x position of Sonic on object, starting at 0 on left edge
-;	d1 = collision type (0 = none; 4 = left; 8 = right)
+;	d0.w = x position of Sonic on object, starting at 0 on left edge
+;	d1.l = collision type (0 = none; 4 = left; 8 = right)
 ;	a1 = address of OST of Sonic
-;	uses d0, d1, d2, d3, d4, d5, d6
+
+;	uses d2.w, d3.w, d4.l, d5.w, d6.l
 ; ---------------------------------------------------------------------------
 
 SolidNew_SidesOnly:

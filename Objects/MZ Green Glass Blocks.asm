@@ -12,7 +12,7 @@ GlassBlock:
 		move.w	Glass_Index(pc,d0.w),d1
 		jsr	Glass_Index(pc,d1.w)
 		move.w	ost_x_pos(a0),d0
-		bsr.w	OffScreen
+		bsr.w	CheckActive
 		bne.s	Glass_Delete
 		bra.w	DisplaySprite
 ; ===========================================================================

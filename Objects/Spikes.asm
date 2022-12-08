@@ -120,7 +120,7 @@ Spike_Hurt:
 
 Spike_Display:
 		move.w	ost_spike_x_start(a0),d0
-		bsr.w	OffScreen
+		bsr.w	CheckActive
 		bne.w	DeleteObject
 		bra.w	DisplaySprite
 ; ===========================================================================

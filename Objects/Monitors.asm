@@ -155,7 +155,7 @@ Mon_Animate:	; Routine 6
 
 Mon_Display:	; Routine 8
 		move.w	ost_x_pos(a0),d0
-		bsr.w	OffScreen
+		bsr.w	CheckActive
 		bne.s	Mon_ClearSlot
 		bra.w	DisplaySprite
 		

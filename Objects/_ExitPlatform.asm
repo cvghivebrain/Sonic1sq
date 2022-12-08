@@ -9,6 +9,11 @@
 ;	a1 = OST of Sonic
 
 ;	uses d0.w, d2.w
+
+; usage:
+;		moveq	#0,d1
+;		move.b	ost_displaywidth(a0),d1
+;		bsr.w	ExitPlatform
 ; ---------------------------------------------------------------------------
 
 ExitPlatform:

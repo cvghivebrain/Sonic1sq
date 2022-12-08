@@ -39,6 +39,6 @@ Edge_Solid:	; Routine 2
 
 Edge_Display:	; Routine 4
 		move.w	ost_x_pos(a0),d0
-		bsr.w	OffScreen
+		bsr.w	CheckActive
 		bne.w	DeleteObject
 		bra.w	DisplaySprite

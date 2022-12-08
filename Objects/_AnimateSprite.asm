@@ -208,40 +208,47 @@ Anim_Sonic_Update2:
 		or.b	d1,ost_render(a0)			; apply xflip from status
 		bra.w	Anim_Sonic_Update
 		
-Anim_WalkList:	dc.b id_Walk,id_Walk,id_Walk,id_Walk		; angles 0-$F
-		dc.b id_Walk4+$80,id_Walk4+$80,id_Walk4+$80,id_Walk4+$80 ; angles $10-$1F
-		dc.b id_Walk4+$80,id_Walk4+$80,id_Walk4+$80,id_Walk4+$80 ; angles $20-$2F
-		dc.b id_Walk3+$80,id_Walk3+$80,id_Walk3+$80,id_Walk3+$80 ; angles $30-$3F
-		dc.b id_Walk3+$80,id_Walk3+$80,id_Walk3+$80,id_Walk3+$80 ; angles $40-$4F
-		dc.b id_Walk2+$80,id_Walk2+$80,id_Walk2+$80,id_Walk2+$80 ; angles $50-$5F
-		dc.b id_Walk2+$80,id_Walk2+$80,id_Walk2+$80,id_Walk2+$80 ; angles $60-$6F
-		dc.b id_Walk+$80,id_Walk+$80,id_Walk+$80,id_Walk+$80 ; angles $70-$7F
-		dc.b id_Walk+$80,id_Walk+$80,id_Walk+$80,id_Walk+$80 ; angles $80-$8F
-		dc.b id_Walk4,id_Walk4,id_Walk4,id_Walk4	; angles $90-$9F
-		dc.b id_Walk4,id_Walk4,id_Walk4,id_Walk4	; angles $A0-$AF
-		dc.b id_Walk3,id_Walk3,id_Walk3,id_Walk3	; angles $B0-$BF
-		dc.b id_Walk3,id_Walk3,id_Walk3,id_Walk3	; angles $C0-$CF
-		dc.b id_Walk2,id_Walk2,id_Walk2,id_Walk2	; angles $D0-$DF
-		dc.b id_Walk2,id_Walk2,id_Walk2,id_Walk2	; angles $E0-$EF
-		dc.b id_Walk,id_Walk,id_Walk,id_Walk		; angles $F0-$FF
+; ---------------------------------------------------------------------------
+; List of animations to be used at every possible angle. Angles are always
+; multiples of 4 (the lower 2 bits are used as flags).
+
+; +$80 = xflip+yflip sprites for ceiling angles
+; ---------------------------------------------------------------------------
+
+Anim_WalkList:	dc.b id_Walk,id_Walk,id_Walk,id_Walk		; angles 0-$C
+		dc.b id_Walk4+$80,id_Walk4+$80,id_Walk4+$80,id_Walk4+$80 ; angles $10-$1C
+		dc.b id_Walk4+$80,id_Walk4+$80,id_Walk4+$80,id_Walk4+$80 ; angles $20-$2C
+		dc.b id_Walk3+$80,id_Walk3+$80,id_Walk3+$80,id_Walk3+$80 ; angles $30-$3C
+		dc.b id_Walk3+$80,id_Walk3+$80,id_Walk3+$80,id_Walk3+$80 ; angles $40-$4C
+		dc.b id_Walk2+$80,id_Walk2+$80,id_Walk2+$80,id_Walk2+$80 ; angles $50-$5C
+		dc.b id_Walk2+$80,id_Walk2+$80,id_Walk2+$80,id_Walk2+$80 ; angles $60-$6C
+		dc.b id_Walk+$80,id_Walk+$80,id_Walk+$80,id_Walk+$80 ; angles $70-$7C
+		dc.b id_Walk+$80,id_Walk+$80,id_Walk+$80,id_Walk+$80 ; angles $80-$8C
+		dc.b id_Walk4,id_Walk4,id_Walk4,id_Walk4	; angles $90-$9C
+		dc.b id_Walk4,id_Walk4,id_Walk4,id_Walk4	; angles $A0-$AC
+		dc.b id_Walk3,id_Walk3,id_Walk3,id_Walk3	; angles $B0-$BC
+		dc.b id_Walk3,id_Walk3,id_Walk3,id_Walk3	; angles $C0-$CC
+		dc.b id_Walk2,id_Walk2,id_Walk2,id_Walk2	; angles $D0-$DC
+		dc.b id_Walk2,id_Walk2,id_Walk2,id_Walk2	; angles $E0-$EC
+		dc.b id_Walk,id_Walk,id_Walk,id_Walk		; angles $F0-$FC
 		even
 		
-Anim_RunList:	dc.b id_Run,id_Run,id_Run,id_Run		; angles 0-$F
-		dc.b id_Run4+$80,id_Run4+$80,id_Run4+$80,id_Run4+$80 ; angles $10-$1F
-		dc.b id_Run4+$80,id_Run4+$80,id_Run4+$80,id_Run4+$80 ; angles $20-$2F
-		dc.b id_Run3+$80,id_Run3+$80,id_Run3+$80,id_Run3+$80 ; angles $30-$3F
-		dc.b id_Run3+$80,id_Run3+$80,id_Run3+$80,id_Run3+$80 ; angles $40-$4F
-		dc.b id_Run2+$80,id_Run2+$80,id_Run2+$80,id_Run2+$80 ; angles $50-$5F
-		dc.b id_Run2+$80,id_Run2+$80,id_Run2+$80,id_Run2+$80 ; angles $60-$6F
-		dc.b id_Run+$80,id_Run+$80,id_Run+$80,id_Run+$80 ; angles $70-$7F
-		dc.b id_Run+$80,id_Run+$80,id_Run+$80,id_Run+$80 ; angles $80-$8F
-		dc.b id_Run4,id_Run4,id_Run4,id_Run4		; angles $90-$9F
-		dc.b id_Run4,id_Run4,id_Run4,id_Run4		; angles $A0-$AF
-		dc.b id_Run3,id_Run3,id_Run3,id_Run3		; angles $B0-$BF
-		dc.b id_Run3,id_Run3,id_Run3,id_Run3		; angles $C0-$CF
-		dc.b id_Run2,id_Run2,id_Run2,id_Run2		; angles $D0-$DF
-		dc.b id_Run2,id_Run2,id_Run2,id_Run2		; angles $E0-$EF
-		dc.b id_Run,id_Run,id_Run,id_Run		; angles $F0-$FF
+Anim_RunList:	dc.b id_Run,id_Run,id_Run,id_Run		; angles 0-$C
+		dc.b id_Run4+$80,id_Run4+$80,id_Run4+$80,id_Run4+$80 ; angles $10-$1C
+		dc.b id_Run4+$80,id_Run4+$80,id_Run4+$80,id_Run4+$80 ; angles $20-$2C
+		dc.b id_Run3+$80,id_Run3+$80,id_Run3+$80,id_Run3+$80 ; angles $30-$3C
+		dc.b id_Run3+$80,id_Run3+$80,id_Run3+$80,id_Run3+$80 ; angles $40-$4C
+		dc.b id_Run2+$80,id_Run2+$80,id_Run2+$80,id_Run2+$80 ; angles $50-$5C
+		dc.b id_Run2+$80,id_Run2+$80,id_Run2+$80,id_Run2+$80 ; angles $60-$6C
+		dc.b id_Run+$80,id_Run+$80,id_Run+$80,id_Run+$80 ; angles $70-$7C
+		dc.b id_Run+$80,id_Run+$80,id_Run+$80,id_Run+$80 ; angles $80-$8C
+		dc.b id_Run4,id_Run4,id_Run4,id_Run4		; angles $90-$9C
+		dc.b id_Run4,id_Run4,id_Run4,id_Run4		; angles $A0-$AC
+		dc.b id_Run3,id_Run3,id_Run3,id_Run3		; angles $B0-$BC
+		dc.b id_Run3,id_Run3,id_Run3,id_Run3		; angles $C0-$CC
+		dc.b id_Run2,id_Run2,id_Run2,id_Run2		; angles $D0-$DC
+		dc.b id_Run2,id_Run2,id_Run2,id_Run2		; angles $E0-$EC
+		dc.b id_Run,id_Run,id_Run,id_Run		; angles $F0-$FC
 		even
 
 ; ---------------------------------------------------------------------------

@@ -61,7 +61,7 @@ LBlk_Update:
 LBlk_Stop:	; Routine 6
 		bsr.w	SolidNew
 		move.w	ost_x_pos(a0),d0
-		bsr.w	OffScreen
+		bsr.w	CheckActive
 		bne.w	DeleteObject
 		bra.w	DisplaySprite
 ; ===========================================================================

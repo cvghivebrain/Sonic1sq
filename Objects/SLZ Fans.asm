@@ -101,6 +101,6 @@ Fan_Delay:	; Routine 2
 
 .chkdel:
 		move.w	ost_x_pos(a0),d0
-		bsr.w	OffScreen
+		bsr.w	CheckActive
 		bne.w	DeleteObject
 		bra.w	DisplaySprite

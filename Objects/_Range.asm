@@ -5,10 +5,10 @@
 ;	a0 = address of OST of object
 ;
 ; output:
-;	d0 = x distance (-ve if Sonic is to the left)
-;	d1 = x distance (always +ve)
-;	d2 = y distance (-ve if Sonic is above)
-;	d3 = y distance (always +ve)
+;	d0.w = x distance (-ve if Sonic is to the left)
+;	d1.w = x distance (always +ve)
+;	d2.w = y distance (-ve if Sonic is above)
+;	d3.w = y distance (always +ve)
 ;	a1 = address of OST of Sonic
 ; ---------------------------------------------------------------------------
 
@@ -39,12 +39,14 @@ Range:
 ;	a0 = address of OST of object
 ;
 ; output:
-;	d0 = x distance (-ve if Sonic is to the left)
-;	d1 = x distance between hitbox edges (-ve if overlapping)
-;	d2 = y distance (-ve if Sonic is above)
-;	d3 = y distance between hitbox edges (-ve if overlapping)
-;	d4 = object height
+;	d0.w = x distance (-ve if Sonic is to the left)
+;	d1.w = x distance between hitbox edges (-ve if overlapping)
+;	d2.w = y distance (-ve if Sonic is above)
+;	d3.w = y distance between hitbox edges (-ve if overlapping)
+;	d4.b = object height
 ;	a1 = address of OST of Sonic
+
+;	uses d4.l
 ; ---------------------------------------------------------------------------
 
 RangePlus:
@@ -57,7 +59,8 @@ RangePlus:
 		bpl.s	.x_not_neg
 		neg.w	d1
 	.x_not_neg:
-		move.b	ost_width(a1),d4
+		;move.b	ost_width(a1),d4
+		move.b	#9,d4
 		sub.w	d4,d1
 		move.b	ost_width(a0),d4
 		sub.w	d4,d1					; d1 = x dist between hitbox edges (-ve if overlapping)

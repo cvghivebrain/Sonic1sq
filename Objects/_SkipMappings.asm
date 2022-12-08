@@ -9,6 +9,11 @@
 ;	a2 = address of data after mappings
 
 ;	uses d0.w, d2.w
+
+; usage:
+;		move.w	ost_frame_hi(a0),d0			; get frame number
+;		movea.l	ost_mappings(a0),a2			; get mappings pointer
+;		bsr.w	SkipMappings				; jump to data after mappings
 ; ---------------------------------------------------------------------------
 
 SkipMappings:

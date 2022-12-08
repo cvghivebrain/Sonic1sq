@@ -11,7 +11,7 @@ Prison:
 		move.w	Pri_Index(pc,d0.w),d1
 		jsr	Pri_Index(pc,d1.w)
 		move.w	ost_x_pos(a0),d0
-		jsr	OffScreen
+		jsr	CheckActive
 		bne.s	.delete
 		jmp	(DisplaySprite).l
 

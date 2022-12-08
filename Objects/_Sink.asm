@@ -2,9 +2,13 @@
 ; Subroutine to sink object slightly when stood on
 
 ; input:
-;	d0 = y position without sink applied
+;	d0.w = y position without sink applied
 
-;	uses d0, d1, a1
+;	uses d0.w, d1.l, a1
+
+; usage:
+;		move.w	ost_cork_y_pos(a0),d0
+;		bsr.w	Sink
 ; ---------------------------------------------------------------------------
 
 Sink:

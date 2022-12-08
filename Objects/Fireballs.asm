@@ -81,7 +81,7 @@ FBall_Action:	; Routine 2
 
 FBall_ChkDel:
 		move.w	ost_x_pos(a0),d0
-		bsr.w	OffScreen
+		bsr.w	CheckActive
 		bne.w	DeleteObject
 		bra.w	DisplaySprite
 ; ===========================================================================

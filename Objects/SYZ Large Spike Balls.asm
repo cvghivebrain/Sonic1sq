@@ -52,7 +52,7 @@ BBall_Move:	; Routine 2
 		move.w	BBall_Types(pc,d0.w),d1
 		jsr	BBall_Types(pc,d1.w)
 		move.w	ost_bball_x_start(a0),d0
-		bsr.w	OffScreen
+		bsr.w	CheckActive
 		bne.w	DeleteObject
 		bra.w	DisplaySprite
 ; ===========================================================================

@@ -115,7 +115,7 @@ SStom_Spikes:	; Routine 4
 SStom_Display:	; Routine 6
 SStom_ChkDel:
 		move.w	ost_mash_y_start(a0),d0
-		bsr.w	OffScreen
+		bsr.w	CheckActive
 		bne.w	DeleteObject
 		bra.w	DisplaySprite
 

@@ -259,7 +259,7 @@ LGrass_ChkDel:
 
 	.not_burning:
 		move.w	ost_grass_x_start(a0),d0
-		bsr.w	OffScreen
+		bsr.w	CheckActive
 		bne.w	DeleteObject
 		bra.w	DisplaySprite
 ; ===========================================================================

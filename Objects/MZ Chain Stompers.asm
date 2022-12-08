@@ -172,7 +172,7 @@ CStom_Spikes:	; Routine 4
 CStom_Ceiling:	; Routine 6
 CStom_ChkDel:
 		move.w	ost_x_pos(a0),d0
-		bsr.w	OffScreen
+		bsr.w	CheckActive
 		bne.w	DeleteObject
 		bra.w	DisplaySprite
 ; ===========================================================================

@@ -167,7 +167,7 @@ Disc_MoveSpot:
 
 Disc_ChkDel:
 		move.w	ost_disc_x_start(a0),d0
-		bsr.w	OffScreen
+		bsr.w	CheckActive
 		bne.s	.delete
 		jmp	(DisplaySprite).l
 

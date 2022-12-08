@@ -98,7 +98,7 @@ LWall_Solid:	; Routine 2
 		tst.b	ost_lwall_flag(a0)			; is wall already moving?
 		bne.s	.moving					; if yes, branch
 		move.w	ost_x_pos(a0),d0
-		bsr.w	OffScreen
+		bsr.w	CheckActive
 		bne.s	.chkgone
 
 	.moving:

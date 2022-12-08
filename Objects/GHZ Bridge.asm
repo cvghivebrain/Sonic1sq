@@ -292,7 +292,7 @@ Bri_Data_Align:
 
 Bri_ChkDel:
 		move.w	ost_x_pos(a0),d0
-		bsr.w	OffScreen
+		bsr.w	CheckActive
 		bne.s	.deletebridge
 		bra.w	DisplaySprite
 

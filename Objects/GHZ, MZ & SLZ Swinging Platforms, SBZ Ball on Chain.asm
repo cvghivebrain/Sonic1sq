@@ -207,7 +207,7 @@ Swing_MoveAll:
 
 Swing_ChkDel:
 		move.w	ost_swing_x_start(a0),d0
-		bsr.w	OffScreen
+		bsr.w	CheckActive
 		bne.s	Swing_DelAll
 		bra.w	DisplaySprite
 ; ===========================================================================

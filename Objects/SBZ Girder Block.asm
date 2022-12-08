@@ -65,7 +65,7 @@ Gird_Action:	; Routine 2
 
 	.chkdel:
 		move.w	ost_girder_x_start(a0),d0
-		bsr.w	OffScreen
+		bsr.w	CheckActive
 		bne.s	.delete
 		jmp	(DisplaySprite).l
 

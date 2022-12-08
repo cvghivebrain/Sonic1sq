@@ -92,14 +92,14 @@ PushB_Action:	; Routine 2
 
 	PushB_Display:
 		move.w	ost_x_pos(a0),d0
-		bsr.w	OffScreen
+		bsr.w	CheckActive
 		bne.s	PushB_ChkDel
 		bra.w	DisplaySprite
 ; ===========================================================================
 
 PushB_ChkDel:
 		move.w	ost_pblock_x_start(a0),d0
-		bsr.w	OffScreen
+		bsr.w	CheckActive
 		bne.s	PushB_ChkDel2
 		move.w	ost_pblock_x_start(a0),ost_x_pos(a0)
 		move.w	ost_pblock_y_start(a0),ost_y_pos(a0)

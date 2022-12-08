@@ -4,15 +4,16 @@
 ; Runs FindFloor without the need for inputs, taking inputs from local OST variables
 
 ; input:
-;	d3 = x position of object (FindFloorObj2 only)
+;	d3.w = x position of object (FindFloorObj2 only)
 
 ; output:
-;	d1 = distance to the floor
-;	d3 = floor angle
+;	d1.w = distance to the floor
+;	d3.b = floor angle
 ;	a1 = address within 256x256 mappings where object is standing
-;	(a1) = 16x16 tile number, x/yflip, solidness
-;	(a4) = floor angle
-;	uses d0, d2, d4, d5, d6
+;	(a1).w = 16x16 tile number, x/yflip, solidness
+;	(a4).b = floor angle
+
+;	uses d0.w, d2.w, d4.w, d5.l, d6.w
 ; ---------------------------------------------------------------------------
 
 FindFloorObj:
@@ -45,14 +46,16 @@ FindFloorObj2:
 ; Runs FindWall without the need for inputs, taking inputs from local OST variables
 
 ; input:
-;	d3 = x radius of object, right side
+;	d3.w = x radius of object, right side
 
 ; output:
-;	d1 = distance to the wall
+;	d1.w = distance to the wall
+;	d3.b = wall angle
 ;	a1 = address within 256x256 mappings where object is standing
-;	(a1) = 16x16 tile number, x/yflip, solidness
-;	(a4) = floor angle
-;	uses d0, d3, d4, d5, d6
+;	(a1).w = 16x16 tile number, x/yflip, solidness
+;	(a4).b = wall angle
+
+;	uses d0.w, d3.w, d4.w, d5.l, d6.w
 ; ---------------------------------------------------------------------------
 
 FindWallRightObj:
@@ -78,12 +81,13 @@ FindWallRightObj:
 ; Runs FindFloor without the need for inputs, taking inputs from local OST variables
 
 ; output:
-;	d1 = distance to the ceiling
-;	d3 = ceiling angle
+;	d1.w = distance to the ceiling
+;	d3.b = ceiling angle
 ;	a1 = address within 256x256 mappings where object is standing
-;	(a1) = 16x16 tile number, x/yflip, solidness
-;	(a4) = floor angle
-;	uses d0, d2, d4, d5, d6
+;	(a1).w = 16x16 tile number, x/yflip, solidness
+;	(a4).b = ceiling angle
+
+;	uses d0.w, d2.w, d4.w, d5.l, d6.w
 ; ---------------------------------------------------------------------------
 
 FindCeilingObj:
@@ -113,14 +117,16 @@ FindCeilingObj:
 ; Runs FindWall without the need for inputs, taking inputs from local OST variables
 
 ; input:
-;	d3 = x radius of object, left side (negative)
+;	d3.w = x radius of object, left side (negative)
 
 ; output:
-;	d1 = distance to the wall
+;	d1.w = distance to the wall
+;	d3.b = wall angle
 ;	a1 = address within 256x256 mappings where object is standing
-;	(a1) = 16x16 tile number, x/yflip, solidness
-;	(a4) = floor angle
-;	uses d0, d3, d4, d5, d6
+;	(a1).w = 16x16 tile number, x/yflip, solidness
+;	(a4).b = wall angle
+
+;	uses d0.w, d3.w, d4.w, d5.l, d6.w
 ; ---------------------------------------------------------------------------
 
 FindWallLeftObj:

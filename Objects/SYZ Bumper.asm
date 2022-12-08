@@ -70,7 +70,7 @@ Bump_Hit:	; Routine 2
 		lea	(Ani_Bump).l,a1
 		bsr.w	AnimateSprite
 		move.w	ost_x_pos(a0),d0
-		bsr.w	OffScreen
+		bsr.w	CheckActive
 		bne.s	.resetcount
 		bra.w	DisplaySprite
 ; ===========================================================================

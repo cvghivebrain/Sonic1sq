@@ -7,10 +7,15 @@
 
 ; output:
 ;	d2.w = Sonic's y position
-;	a1 = OST of Sonic
-;	a2 = OST of platform that Sonic is already on
+;	a1 = address of OST of Sonic
+;	a2 = address of OST of platform that Sonic is already on
 
 ;	uses d0.l, d1.w
+
+; usage:
+;		moveq	#0,d1
+;		move.b	ost_displaywidth(a0),d1
+;		bsr.w	DetectPlatform
 ; ---------------------------------------------------------------------------
 
 DetectPlatform:

@@ -51,7 +51,7 @@ Bonus_Main:	; Routine 0
 
 	.chkdel:
 		move.w	ost_x_pos(a0),d0
-		jsr	OffScreen
+		jsr	CheckActive
 		bne.s	.delete
 		rts	
 
@@ -70,7 +70,7 @@ Bonus_Display:	; Routine 2
 		subq.w	#1,ost_bonus_wait_time(a0)		; decrement display time
 		bmi.s	.delete					; if time is zero, branch
 		move.w	ost_x_pos(a0),d0
-		jsr	OffScreen
+		jsr	CheckActive
 		bne.s	.delete
 		jmp	(DisplaySprite).l
 

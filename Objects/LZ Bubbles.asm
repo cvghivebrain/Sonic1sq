@@ -221,7 +221,7 @@ Bub_BblMaker:	; Routine $A
 
 .chkdel:
 		move.w	ost_x_pos(a0),d0
-		bsr.w	OffScreen
+		bsr.w	CheckActive
 		bne.w	DeleteObject
 		move.w	(v_water_height_actual).w,d0
 		cmp.w	ost_y_pos(a0),d0

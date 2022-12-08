@@ -148,7 +148,7 @@ SBall_MoveAll:
 
 SBall_ChkDel:
 		move.w	ost_sball_x_start(a0),d0
-		bsr.w	OffScreen
+		bsr.w	CheckActive
 		bne.s	.delete
 		bra.w	DisplaySprite
 ; ===========================================================================

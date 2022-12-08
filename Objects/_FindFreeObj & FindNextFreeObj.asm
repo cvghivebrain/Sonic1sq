@@ -5,6 +5,11 @@
 ;	a1 = address of free OST slot
 
 ;	uses d0.w
+
+; usage:
+;		bsr.w	FindFreeObj
+;		bne.s	.fail					; branch if empty slot isn't found
+;		move.b	#id_Crabmeat,ost_id(a1)			; load Crabmeat object
 ; ---------------------------------------------------------------------------
 
 FindFreeObj:
@@ -45,6 +50,11 @@ FindFreeInert:
 ;	a1 = address of free OST slot
 
 ;	uses d0.w
+
+; usage:
+;		bsr.w	FindNextFreeObj
+;		bne.s	.fail					; branch if empty slot isn't found
+;		move.b	#id_Bomb,ost_id(a1)			; load Bomb object
 ; ---------------------------------------------------------------------------
 
 FindNextFreeObj:

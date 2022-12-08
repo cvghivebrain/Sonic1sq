@@ -21,6 +21,13 @@ level_max_height:	equ 8
 sizeof_levelrow:	equ level_max_width*2			; level row, followed by background row
 sizeof_level:		equ sizeof_levelrow*level_max_height	; includes background in $40 byte alternating strips
 
+screen_width:		equ 320
+screen_height:		equ 224
+screen_top:		equ 128					; y coordinate of top edge of screen for sprites
+screen_left:		equ 128					; x coordinate of left edge of screen for sprites
+screen_bottom:		equ screen_top+screen_height		; y coordinate of bottom edge of screen for sprites (352)
+screen_right:		equ screen_left+screen_width		; x coordinate of right edge of screen for sprites (448)
+
 ; VRAM data
 vram_window:		equ $A000	; window nametable - unused
 vram_fg:		equ $C000	; foreground nametable ($1000 bytes)

@@ -12,7 +12,7 @@ SpinConvey:
 		move.w	SpinC_Index(pc,d0.w),d1
 		jsr	SpinC_Index(pc,d1.w)
 		move.w	ost_spinc_x_pos_centre(a0),d0
-		bsr.w	OffScreen
+		bsr.w	CheckActive
 		bne.s	SpinC_ChkDel
 
 SpinC_Display:

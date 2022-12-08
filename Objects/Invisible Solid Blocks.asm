@@ -50,7 +50,7 @@ Invis_Solid:	; Routine 2
 
 .chkdel:
 		move.w	ost_x_pos(a0),d0
-		bsr.w	OffScreen
+		bsr.w	CheckActive
 		bne.s	.delete
 		tst.w	(v_debug_active).w			; are you using	debug mode?
 		beq.s	.nodisplay				; if not, branch

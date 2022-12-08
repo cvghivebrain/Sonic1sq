@@ -54,6 +54,6 @@ FireM_MakeFire:	; Routine 2
 
 	.wait:
 		move.w	ost_x_pos(a0),d0
-		bsr.w	OffScreen
+		bsr.w	CheckActive
 		bne.w	DeleteObject
 		rts

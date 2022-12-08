@@ -39,7 +39,7 @@ Conv_Main:	; Routine 0
 Conv_Action:	; Routine 2
 		bsr.s	Conv_MoveSonic				; check collision and move Sonic
 		move.w	ost_x_pos(a0),d0
-		bsr.w	OffScreen
+		bsr.w	CheckActive
 		bne.s	.delete
 		rts	
 

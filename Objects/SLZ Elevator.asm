@@ -12,7 +12,7 @@ Elevator:
 		move.w	Elev_Index(pc,d0.w),d1
 		jsr	Elev_Index(pc,d1.w)
 		move.w	ost_elev_x_start(a0),d0
-		bsr.w	OffScreen
+		bsr.w	CheckActive
 		bne.w	DeleteObject
 		bra.w	DisplaySprite
 ; ===========================================================================
@@ -279,6 +279,6 @@ Elev_MakeMulti:	; Routine 6
 	.chkdel:
 		addq.l	#4,sp
 		move.w	ost_x_pos(a0),d0
-		bsr.w	OffScreen
+		bsr.w	CheckActive
 		bne.w	DeleteObject
 		rts	

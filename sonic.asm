@@ -443,7 +443,7 @@ LGrass_Coll_Sloped:
 		include "Objects\MZ Invisible Lava Tag.asm"	; LavaTag
 
 		include "Objects\Moto Bug.asm"			; MotoBug
-		include "Objects\_DespawnObject.asm"
+		include "Objects\_DespawnObject & CheckActive.asm"
 
 		include "Objects\Yadrin.asm"			; Yadrin
 

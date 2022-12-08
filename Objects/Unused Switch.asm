@@ -42,7 +42,7 @@ Swi_Action:	; Routine 2
 
 	.display:
 		move.w	ost_x_pos(a0),d0
-		bsr.w	OffScreen
+		bsr.w	CheckActive
 		bne.s	Swi_Delete
 		bra.w	DisplaySprite
 ; ===========================================================================

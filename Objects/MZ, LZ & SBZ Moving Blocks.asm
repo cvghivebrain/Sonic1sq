@@ -91,7 +91,7 @@ MBlock_StandOn:	; Routine 4
 
 MBlock_ChkDel:
 		move.w	ost_mblock_x_start(a0),d0
-		bsr.w	OffScreen
+		bsr.w	CheckActive
 		bne.w	DeleteObject
 		bra.w	DisplaySprite
 ; ===========================================================================
@@ -209,7 +209,7 @@ MBlock_RightDrop_Button:
 	.not_pressed:
 		addq.l	#4,sp
 		move.w	ost_mblock_x_start(a0),d0
-		bsr.w	OffScreen
+		bsr.w	CheckActive
 		bne.w	DeleteObject
 		rts	
 ; ===========================================================================

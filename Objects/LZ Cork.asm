@@ -38,7 +38,7 @@ Cork_Action:	; Routine 2
 		bsr.w	Sink					; cork sinks slightly when stood on, update y pos
 		bsr.w	SolidNew
 		move.w	ost_x_pos(a0),d0
-		bsr.w	OffScreen
+		bsr.w	CheckActive
 		bne.w	DeleteObject
 		bra.w	DisplaySprite
 ; ===========================================================================

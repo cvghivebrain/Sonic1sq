@@ -133,7 +133,7 @@ FBlock_Action:	; Routine 2
 
 	.chkdel:
 		move.w	ost_fblock_x_start(a0),d0
-		bsr.w	OffScreen
+		bsr.w	CheckActive
 		bne.s	.chkdel2
 	.display:
 		bra.w	DisplaySprite
