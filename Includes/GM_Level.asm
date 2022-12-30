@@ -74,7 +74,8 @@ Level_TtlCardLoop:
 		bsr.w	WaitForVBlank
 		jsr	(ExecuteObjects).l
 		jsr	(BuildSprites).l
-		cmp.b	#$44,(v_titlecard_state).w
+		move.b	(v_titlecard_loaded).w,d0
+		cmp.b	(v_titlecard_state).w,d0
 		bne.s	Level_TtlCardLoop			; branch if title card is still moving
 		jsr	(Hud_Base).l				; load basic HUD gfx
 

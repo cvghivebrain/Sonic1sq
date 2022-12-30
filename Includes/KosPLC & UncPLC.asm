@@ -361,7 +361,7 @@ UncPLC:
 
 uplcheader:	macro *,vram
 		\*: equ *
-		uplc_count\@: equ (.end-*-2)/18			; number if items in UPLC
+		uplc_count\@: equ (.end-*-2)/18			; number of items in UPLC
 		dc.w uplc_count\@-1				; number of loops
 		last_vram: = vram				; start address in VRAM
 		last_label: equs "\*"
@@ -421,6 +421,13 @@ UncLoadCues:
 		ptr UPLC_EggmanSBZ
 		ptr UPLC_EggmanFZ
 		ptr UPLC_EndStH
+		ptr UPLC_GHZCard
+		ptr UPLC_MZCard
+		ptr UPLC_SYZCard
+		ptr UPLC_LZCard
+		ptr UPLC_SLZCard
+		ptr UPLC_SBZCard
+		ptr UPLC_FZCard
 
 UPLC_HUD:	uplcheader $D940
 		uplc Art_HUDMain,v_tile_hud
@@ -428,6 +435,114 @@ UPLC_HUD:	uplcheader $D940
 
 UPLC_TitleCard:	uplcheader $B000
 		uplc Art_TitleCard,v_tile_titlecard
+	.end:
+
+UPLC_GHZCard:	uplcheader $B000
+		uplc Art_TitleCard,v_tile_titlecard
+		uplc Art_TitleCardAct,v_tile_act
+		uplc Art_TitleCardZ,v_tile_z
+		uplc Art_TitleCardO,v_tile_o
+		uplc Art_TitleCardN,v_tile_n
+		uplc Art_TitleCardE,v_tile_e
+		uplc Art_TitleCardG,v_tile_g
+		uplc Art_TitleCardR,v_tile_r
+		uplc Art_TitleCardH,v_tile_h
+		uplc Art_TitleCardI,v_tile_i
+		uplc Art_TitleCardL,v_tile_l
+	.end:
+
+UPLC_MZCard:	uplcheader $B000
+		uplc Art_TitleCard,v_tile_titlecard
+		uplc Art_TitleCardAct,v_tile_act
+		uplc Art_TitleCardZ,v_tile_z
+		uplc Art_TitleCardO,v_tile_o
+		uplc Art_TitleCardN,v_tile_n
+		uplc Art_TitleCardE,v_tile_e
+		uplc Art_TitleCardM,v_tile_m
+		uplc Art_TitleCardA,v_tile_a
+		uplc Art_TitleCardR,v_tile_r
+		uplc Art_TitleCardB,v_tile_b
+		uplc Art_TitleCardL,v_tile_l
+	.end:
+
+UPLC_SYZCard:	uplcheader $B000
+		uplc Art_TitleCard,v_tile_titlecard
+		uplc Art_TitleCardAct,v_tile_act
+		uplc Art_TitleCardZ,v_tile_z
+		uplc Art_TitleCardO,v_tile_o
+		uplc Art_TitleCardN,v_tile_n
+		uplc Art_TitleCardE,v_tile_e
+		uplc Art_TitleCardS,v_tile_s
+		uplc Art_TitleCardP,v_tile_p
+		uplc Art_TitleCardR,v_tile_r
+		uplc Art_TitleCardI,v_tile_i
+		uplc Art_TitleCardG,v_tile_g
+		uplc Art_TitleCardY,v_tile_y
+		uplc Art_TitleCardA,v_tile_a
+		uplc Art_TitleCardD,v_tile_d
+	.end:
+
+UPLC_LZCard:	uplcheader $B000
+		uplc Art_TitleCard,v_tile_titlecard
+		uplc Art_TitleCardAct,v_tile_act
+		uplc Art_TitleCardZ,v_tile_z
+		uplc Art_TitleCardO,v_tile_o
+		uplc Art_TitleCardN,v_tile_n
+		uplc Art_TitleCardE,v_tile_e
+		uplc Art_TitleCardL,v_tile_l
+		uplc Art_TitleCardA,v_tile_a
+		uplc Art_TitleCardB,v_tile_b
+		uplc Art_TitleCardY,v_tile_y
+		uplc Art_TitleCardR,v_tile_r
+		uplc Art_TitleCardI,v_tile_i
+		uplc Art_TitleCardT,v_tile_t
+		uplc Art_TitleCardH,v_tile_h
+	.end:
+
+UPLC_SLZCard:	uplcheader $B000
+		uplc Art_TitleCard,v_tile_titlecard
+		uplc Art_TitleCardAct,v_tile_act
+		uplc Art_TitleCardZ,v_tile_z
+		uplc Art_TitleCardO,v_tile_o
+		uplc Art_TitleCardN,v_tile_n
+		uplc Art_TitleCardE,v_tile_e
+		uplc Art_TitleCardS,v_tile_s
+		uplc Art_TitleCardT,v_tile_t
+		uplc Art_TitleCardA,v_tile_a
+		uplc Art_TitleCardR,v_tile_r
+		uplc Art_TitleCardL,v_tile_l
+		uplc Art_TitleCardI,v_tile_i
+		uplc Art_TitleCardG,v_tile_g
+		uplc Art_TitleCardH,v_tile_h
+	.end:
+
+UPLC_SBZCard:	uplcheader $B000
+		uplc Art_TitleCard,v_tile_titlecard
+		uplc Art_TitleCardAct,v_tile_act
+		uplc Art_TitleCardZ,v_tile_z
+		uplc Art_TitleCardO,v_tile_o
+		uplc Art_TitleCardN,v_tile_n
+		uplc Art_TitleCardE,v_tile_e
+		uplc Art_TitleCardS,v_tile_s
+		uplc Art_TitleCardC,v_tile_c
+		uplc Art_TitleCardR,v_tile_r
+		uplc Art_TitleCardA,v_tile_a
+		uplc Art_TitleCardP,v_tile_p
+		uplc Art_TitleCardB,v_tile_b
+		uplc Art_TitleCardI,v_tile_i
+	.end:
+
+UPLC_FZCard:	uplcheader $B000
+		uplc Art_TitleCard,v_tile_titlecard
+		uplc Art_TitleCardAct,v_tile_act
+		uplc Art_TitleCardZ,v_tile_z
+		uplc Art_TitleCardO,v_tile_o
+		uplc Art_TitleCardN,v_tile_n
+		uplc Art_TitleCardE,v_tile_e
+		uplc Art_TitleCardF,v_tile_f
+		uplc Art_TitleCardI,v_tile_i
+		uplc Art_TitleCardA,v_tile_a
+		uplc Art_TitleCardL,v_tile_l
 	.end:
 
 UPLC_GameOver:	uplcheader $ABC0

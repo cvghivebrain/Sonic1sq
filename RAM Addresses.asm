@@ -141,7 +141,8 @@ v_bgm:				rs.b 1 ; music track id for current zone
 v_titlecard_zone:		rs.w 1 ; frame id of title card (zone name)
 v_titlecard_act:		rs.w 1 ; frame id of title card (act number)
 v_titlecard_uplc:		rs.w 1 ; UPLC id of title card
-v_titlecard_state:		rs.b 1 ; state of title card objects (+1 when loaded; +$10 when stopped on screen)
+v_titlecard_loaded:		rs.b 1 ; count of title card objects (+1 for each object)
+v_titlecard_state:		rs.b 1 ; state of title card objects (+1 for each object when it stops on screen)
 v_haspassed_state:		rs.b 1 ; state of "Sonic Has Passed" title card (1 = loaded; 2 = move off screen on SBZ2)
 v_tile_hud:			rs.w 1
 v_tile_swing:			rs.w 1
@@ -170,13 +171,40 @@ v_tile_burrobot			rs.w 1
 v_tile_bomb			rs.w 1
 v_tile_ballhog			rs.w 1
 v_tile_emeralds			rs.w 1
-v_tile_titlecard		rs.w 1
 v_tile_lamppost			rs.w 1
 v_tile_points			rs.w 1
 v_tile_rings			rs.w 1
 v_tile_animal1			rs.w 1
 v_tile_animal2			rs.w 1
 v_tile_credits			rs.w 1
+v_tile_titlecard		rs.w 1
+v_tile_act			rs.w 1
+v_tile_a			rs.w 1
+v_tile_b			rs.w 1
+v_tile_c			rs.w 1
+v_tile_d			rs.w 1
+v_tile_e			rs.w 1
+v_tile_f			rs.w 1
+v_tile_g			rs.w 1
+v_tile_h			rs.w 1
+v_tile_i			rs.w 1
+v_tile_j			rs.w 1
+v_tile_k			rs.w 1
+v_tile_l			rs.w 1
+v_tile_m			rs.w 1
+v_tile_n			rs.w 1
+v_tile_o			rs.w 1
+v_tile_p			rs.w 1
+v_tile_q			rs.w 1
+v_tile_r			rs.w 1
+v_tile_s			rs.w 1
+v_tile_t			rs.w 1
+v_tile_u			rs.w 1
+v_tile_v			rs.w 1
+v_tile_w			rs.w 1
+v_tile_x			rs.w 1
+v_tile_y			rs.w 1
+v_tile_z			rs.w 1
 v_palcycle_ss_num:		rs.w 1 ; $FFFFF79A ; palette cycling in Special Stage - current index number
 v_palcycle_ss_time:		rs.w 1 ; $FFFFF79C ; palette cycling in Special Stage - time until next change
 v_palcycle_ss_unused:		rs.w 1 ; $FFFFF79E ; palette cycling in Special Stage - unused offset value, always 0

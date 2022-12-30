@@ -748,6 +748,32 @@ Art_Sonic:	incbin	"Graphics\Sonic.bin"			; Sonic
 ; Compressed graphics - various
 ; ---------------------------------------------------------------------------
 		incfile Art_TitleCard,"Graphics\Title Cards",bin,dma_safe
+		incfile Art_TitleCardAct,"Graphics\Title Card Act",bin,dma_safe
+		incfile Art_TitleCard1,"Graphics\Title Card 1",bin,dma_safe
+		incfile Art_TitleCard2,"Graphics\Title Card 2",bin,dma_safe
+		incfile Art_TitleCard3,"Graphics\Title Card 3",bin,dma_safe
+		incfile Art_TitleCardBonus,"Graphics\Title Card Bonus",bin,dma_safe
+		incfile Art_TitleCardA,"Graphics\Title Card Letter A",bin,dma_safe
+		incfile Art_TitleCardB,"Graphics\Title Card Letter B",bin,dma_safe
+		incfile Art_TitleCardC,"Graphics\Title Card Letter C",bin,dma_safe
+		incfile Art_TitleCardD,"Graphics\Title Card Letter D",bin,dma_safe
+		incfile Art_TitleCardE,"Graphics\Title Card Letter E",bin,dma_safe
+		incfile Art_TitleCardF,"Graphics\Title Card Letter F",bin,dma_safe
+		incfile Art_TitleCardG,"Graphics\Title Card Letter G",bin,dma_safe
+		incfile Art_TitleCardH,"Graphics\Title Card Letter H",bin,dma_safe
+		incfile Art_TitleCardI,"Graphics\Title Card Letter I",bin,dma_safe
+		incfile Art_TitleCardK,"Graphics\Title Card Letter K",bin,dma_safe
+		incfile Art_TitleCardL,"Graphics\Title Card Letter L",bin,dma_safe
+		incfile Art_TitleCardM,"Graphics\Title Card Letter M",bin,dma_safe
+		incfile Art_TitleCardN,"Graphics\Title Card Letter N",bin,dma_safe
+		incfile Art_TitleCardO,"Graphics\Title Card Letter O",bin,dma_safe
+		incfile Art_TitleCardP,"Graphics\Title Card Letter P",bin,dma_safe
+		incfile Art_TitleCardR,"Graphics\Title Card Letter R",bin,dma_safe
+		incfile Art_TitleCardS,"Graphics\Title Card Letter S",bin,dma_safe
+		incfile Art_TitleCardT,"Graphics\Title Card Letter T",bin,dma_safe
+		incfile Art_TitleCardU,"Graphics\Title Card Letter U",bin,dma_safe
+		incfile Art_TitleCardY,"Graphics\Title Card Letter Y",bin,dma_safe
+		incfile Art_TitleCardZ,"Graphics\Title Card Letter Z",bin,dma_safe
 		incfile Art_HUDMain,"Graphics\HUD",bin,dma_safe
 		incfile Art_Lives,"Graphics\HUD - Life Counter Icon",bin,dma_safe
 		incfile Kos_Ring,"Graphics Kosinski\Rings",kos

@@ -68,3 +68,34 @@ CheckOffScreen_Wide:
 	.offscreen:
 		moveq	#1,d0					; set flag to 1
 		rts
+
+; ---------------------------------------------------------------------------
+; Subroutine to	check if title card object is off screen
+
+; output:
+;	d0.l = flag set if object is off screen
+
+; usage:
+;		bsr.w	CheckOffScreen_Card
+;		bne.s	.offscreen				; branch if off screen
+; ---------------------------------------------------------------------------
+
+CheckOffScreen_Card:
+		move.w	ost_x_pos(a0),d0			; get object x position
+		sub.w	#screen_left-32,d0			; subtract screen x position, plus 32px leeway
+		bmi.s	.offscreen				; branch if off left side of screen
+		cmpi.w	#screen_width+64,d0
+		bge.s	.offscreen				; branch if off right side of screen
+
+		move.w	ost_y_screen(a0),d0			; get object y position
+		sub.w	#screen_top-32,d0			; subtract screen y position, plus 32px leeway
+		bmi.s	.offscreen				; branch if off top of screen
+		cmpi.w	#screen_height+64,d0
+		bge.s	.offscreen				; branch if off bottom of screen
+
+		moveq	#0,d0					; set flag to 0
+		rts	
+
+	.offscreen:
+		moveq	#1,d0					; set flag to 1
+		rts

@@ -528,3 +528,34 @@ jpl:		macro
 jmi:		macro
 		jcond bpl,\1
 		endm
+
+; ---------------------------------------------------------------------------
+; Convert to absolute value (i.e. always positive)
+; ---------------------------------------------------------------------------
+
+abs:		macro
+		ifarg \0
+		tst.\0	\1
+		bpl.s	.already_pos\@				; branch if already positive
+		nxg.\0	\1
+		else
+		tst.l	\1
+		bpl.s	.already_pos\@
+		nxg.l	\1
+		endc
+	.already_pos\@:
+		endm
+
+; ---------------------------------------------------------------------------
+; Align address register to even
+; ---------------------------------------------------------------------------
+
+evenr:		macro
+		exg	d0,\1
+		btst	#0,d0
+		beq.s	.already_even\@				; branch if already even
+		add.l	#1,d0					; skip odd byte
+	.already_even\@:
+		exg	d0,\1
+		endm
+		
