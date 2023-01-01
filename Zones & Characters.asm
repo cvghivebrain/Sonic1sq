@@ -408,28 +408,28 @@ Zone_SPos_End:	dc.w $0620, $016B
 		even
 
 ; ---------------------------------------------------------------------------
-; Title card ids
+; Title card settings
 ; ---------------------------------------------------------------------------
 
-Zone_Card_GHZ:	dc.w id_CardSet_GHZ,id_frame_card_act1,id_UPLC_GHZCard,0
-		dc.w id_CardSet_GHZ,id_frame_card_act2,id_UPLC_GHZCard,0
-		dc.w id_CardSet_GHZ,id_frame_card_act3,id_UPLC_GHZCard,0
-Zone_Card_MZ:	dc.w id_CardSet_MZ,id_frame_card_act1,id_UPLC_MZCard,0
-		dc.w id_CardSet_MZ,id_frame_card_act2,id_UPLC_MZCard,0
-		dc.w id_CardSet_MZ,id_frame_card_act3,id_UPLC_MZCard,0
-Zone_Card_SYZ:	dc.w id_CardSet_SYZ,id_frame_card_act1,id_UPLC_SYZCard,0
-		dc.w id_CardSet_SYZ,id_frame_card_act2,id_UPLC_SYZCard,0
-		dc.w id_CardSet_SYZ,id_frame_card_act3,id_UPLC_SYZCard,0
-Zone_Card_LZ:	dc.w id_CardSet_LZ,id_frame_card_act1,id_UPLC_LZCard,0
-		dc.w id_CardSet_LZ,id_frame_card_act2,id_UPLC_LZCard,0
-		dc.w id_CardSet_LZ,id_frame_card_act3,id_UPLC_LZCard,0
-		dc.w id_CardSet_SBZ,id_frame_card_act3,id_UPLC_SBZCard,0 ; SBZ3
-Zone_Card_SLZ:	dc.w id_CardSet_SLZ,id_frame_card_act1,id_UPLC_SLZCard,0
-		dc.w id_CardSet_SLZ,id_frame_card_act2,id_UPLC_SLZCard,0
-		dc.w id_CardSet_SLZ,id_frame_card_act3,id_UPLC_SLZCard,0
-Zone_Card_SBZ:	dc.w id_CardSet_SBZ,id_frame_card_act1,id_UPLC_SBZCard,0
-		dc.w id_CardSet_SBZ,id_frame_card_act2,id_UPLC_SBZCard,0
-		dc.w id_CardSet_FZ,id_frame_card_act1,id_UPLC_SBZCard,0 ; FZ
+Zone_Card_GHZ:	dc.w id_CardSet_GHZ,1,id_UPLC_GHZCard,0
+		dc.w id_CardSet_GHZ,2,id_UPLC_GHZCard,0
+		dc.w id_CardSet_GHZ,3,id_UPLC_GHZCard,0
+Zone_Card_MZ:	dc.w id_CardSet_MZ,1,id_UPLC_MZCard,0
+		dc.w id_CardSet_MZ,2,id_UPLC_MZCard,0
+		dc.w id_CardSet_MZ,3,id_UPLC_MZCard,0
+Zone_Card_SYZ:	dc.w id_CardSet_SYZ,1,id_UPLC_SYZCard,0
+		dc.w id_CardSet_SYZ,2,id_UPLC_SYZCard,0
+		dc.w id_CardSet_SYZ,3,id_UPLC_SYZCard,0
+Zone_Card_LZ:	dc.w id_CardSet_LZ,1,id_UPLC_LZCard,0
+		dc.w id_CardSet_LZ,2,id_UPLC_LZCard,0
+		dc.w id_CardSet_LZ,3,id_UPLC_LZCard,0
+		dc.w id_CardSet_SBZ,3,id_UPLC_SBZCard,0		; SBZ3
+Zone_Card_SLZ:	dc.w id_CardSet_SLZ,1,id_UPLC_SLZCard,0
+		dc.w id_CardSet_SLZ,2,id_UPLC_SLZCard,0
+		dc.w id_CardSet_SLZ,3,id_UPLC_SLZCard,0
+Zone_Card_SBZ:	dc.w id_CardSet_SBZ,1,id_UPLC_SBZCard,0
+		dc.w id_CardSet_SBZ,2,id_UPLC_SBZCard,0
+		dc.w id_CardSet_FZ,0,id_UPLC_FZCard,0		; FZ
 
 ; ---------------------------------------------------------------------------
 ; Dynamic level event list pointers

@@ -60,7 +60,7 @@ Has_Main:	; Routine 0
 		bra.s	.skip_findost
 
 	.loop:
-		bsr.w	FindFreeInert
+		jsr	FindFreeInert
 		move.l	#HasPassedCard,ost_id(a1)
 		
 	.skip_findost:
@@ -82,7 +82,7 @@ Has_Main:	; Routine 0
 		move.w	(v_haspassed_character).w,d0		; change frame number
 		move.w	d0,ost_frame_hi(a1)			; set frame 
 		movea.l	#Map_Has,a2				; goto mappings
-		bsr.w	SkipMappings				; jump to data immediately after mappings
+		jsr	SkipMappings				; jump to data immediately after mappings
 		move.w	(a2),ost_x_pos(a1)			; set actual x position
 		move.w	(a2)+,ost_has_x_start(a1)		; set start x position (same as actual)
 		move.w	(a2)+,ost_has_x_stop(a1)		; set stop x position
@@ -110,7 +110,7 @@ Has_Move:	; Routine 2
 		bmi.s	.exit					; branch if object is at -ve x pos
 		cmpi.w	#$200,d0				; is object further right than $200?
 		bcc.s	.exit					; if yes, branch
-		bra.w	DisplaySprite
+		jmp	DisplaySprite
 ; ===========================================================================
 
 .exit:
@@ -137,11 +137,11 @@ Has_Wait:	; Routine 4, 8, $C
 		addq.b	#2,ost_routine(a0)			; goto Has_Bonus/Has_NextLevel/Has_MoveBack next
 
 	.wait:
-		bra.w	DisplaySprite
+		jmp	DisplaySprite
 ; ===========================================================================
 
 Has_Bonus:	; Routine 6
-		bsr.w	DisplaySprite
+		jsr	DisplaySprite
 		move.b	#1,(f_pass_bonus_update).w		; set time/ring bonus update flag
 		moveq	#0,d0
 		tst.w	(v_time_bonus).w			; is time bonus	= zero?
@@ -201,7 +201,7 @@ Has_NextLevel:	; Routine $A
 		move.w	#1,(f_restart).w			; restart level
 
 .skip_restart:
-		bra.w	DisplaySprite
+		jmp	DisplaySprite
 ; ===========================================================================
 
 Has_MoveBack:	; Routine $E
@@ -219,7 +219,7 @@ Has_MoveBack:	; Routine $E
 		bmi.s	.exit					; branch if object is at -ve x pos
 		cmpi.w	#$200,d0				; is object further right than $200?
 		bcc.s	.exit					; if yes, branch
-		bra.w	DisplaySprite
+		jmp	DisplaySprite
 ; ===========================================================================
 
 .exit:
@@ -228,7 +228,7 @@ Has_MoveBack:	; Routine $E
 
 .at_target:
 		cmpi.b	#id_frame_has_ringbonus,ost_frame(a0)	; is object the ring bonus?
-		bne.w	DeleteObject				; if not, branch
+		jne	DeleteObject				; if not, branch
 		addq.b	#2,ost_routine(a0)			; goto Has_Boundary next
 		clr.b	(f_lock_controls).w			; unlock controls
 		play.w	0, jmp, mus_FZ				; play FZ music
@@ -237,5 +237,5 @@ Has_MoveBack:	; Routine $E
 Has_Boundary:	; Routine $10
 		addq.w	#2,(v_boundary_right).w			; extend right level boundary 2px
 		cmpi.w	#$2100,(v_boundary_right).w
-		beq.w	DeleteObject				; if boundary reaches $2100, delete object
+		jeq	DeleteObject				; if boundary reaches $2100, delete object
 		rts

@@ -428,6 +428,8 @@ UncLoadCues:
 		ptr UPLC_SLZCard
 		ptr UPLC_SBZCard
 		ptr UPLC_FZCard
+		ptr UPLC_Act2Card
+		ptr UPLC_Act3Card
 
 UPLC_HUD:	uplcheader $D940
 		uplc Art_HUDMain,v_tile_hud
@@ -543,6 +545,14 @@ UPLC_FZCard:	uplcheader $B000
 		uplc Art_TitleCardI,v_tile_i
 		uplc Art_TitleCardA,v_tile_a
 		uplc Art_TitleCardL,v_tile_l
+	.end:
+
+UPLC_Act2Card:	uplcheader $B260
+		uplc Art_TitleCard2
+	.end:
+
+UPLC_Act3Card:	uplcheader $B260
+		uplc Art_TitleCard3
 	.end:
 
 UPLC_GameOver:	uplcheader $ABC0

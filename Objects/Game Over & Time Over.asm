@@ -46,7 +46,7 @@ Over_Move:	; Routine 2
 
 	.not_over:
 		add.w	d1,ost_x_pos(a0)			; update x position
-		bra.w	DisplaySprite
+		jmp	DisplaySprite
 
 .next:
 		move.w	#720,ost_over_time(a0)			; set time delay to 12 seconds
@@ -63,7 +63,7 @@ Over_Wait:	; Routine 4
 		tst.w	ost_over_time(a0)			; has time delay reached zero?
 		beq.s	Over_ChgMode				; if yes, branch
 		subq.w	#1,ost_over_time(a0)			; subtract 1 from time delay
-		bra.w	DisplaySprite
+		jmp	DisplaySprite
 ; ===========================================================================
 
 Over_ChgMode:
@@ -81,4 +81,4 @@ Over_ResetLvl:
 		move.w	#1,(f_restart).w			; restart level
 
 Over_Display:
-		bra.w	DisplaySprite
+		jmp	DisplaySprite

@@ -13,10 +13,10 @@ TitleCard:
 ; ===========================================================================
 Card_Index:	index *,,2
 		ptr Card_Main
-		ptr Card_Wait1
-		ptr Card_Move1
-		ptr Card_Wait2
-		ptr Card_Move2
+		ptr Card_WaitEnter
+		ptr Card_Enter
+		ptr Card_WaitLeave
+		ptr Card_Leave
 
 		rsobj TitleCard
 ost_card_x_stop:	rs.l 1					; on screen x position
@@ -38,62 +38,109 @@ Card_Settings:	index *
 		ptr CardSet_SBZ
 		ptr CardSet_FZ
 		
-CardSet_MZ:
-CardSet_SYZ:
-CardSet_LZ:
-CardSet_SLZ:
-CardSet_SBZ:
-CardSet_FZ:
-CardSet_GHZ:	; act
-		dc.l Map_Card					; mappings pointer
-		dc.w id_frame_card_act				; frame id
-		dc.w screen_right+32,screen_top+106		; x/y start
-		dc.w 38						; delay before entering screen
-		dc.w -16,0					; x/y speed entering screen
-		dc.w screen_left+208,screen_top+106		; x/y stop
-		dc.w 60						; delay before leaving screen
-		dc.w 32,0					; x/y speed leaving screen
-		dc.l v_tile_act					; RAM address where tile setting is stored
+autocard:	macro namestr,zonestr
+		namewidth: = 0
+		tempstr: equs \namestr				; copy string
+		rept strlen(\namestr)				; do for all chars
+		tempchr: substr ,1,"\tempstr"			; read first char
+		tempstr: substr 2,,"\tempstr"			; strip first char
+		if instr("I","\tempchr")
+		namewidth: = namewidth+8			; I is 8px wide
+		else
+		namewidth: = namewidth+16			; all other chars are 16px wide
+		endc
+		endr
+		zonewidth: = 0
+		tempstr: equs \zonestr				; copy string
+		rept strlen(\zonestr)				; do for all chars
+		tempchr: substr ,1,"\tempstr"			; read first char
+		tempstr: substr 2,,"\tempstr"			; strip first char
+		if instr("I","\tempchr")
+		zonewidth: = zonewidth+8			; I is 8px wide
+		else
+		zonewidth: = zonewidth+16			; all other chars are 16px wide
+		endc
+		endr
+		namexpos: = (screen_width-namewidth)/2
+		if ~strcmp("\3","noact")
+		zonexpos: = namexpos+namewidth-zonewidth-17
+		else
+		zonexpos: = namexpos+namewidth-zonewidth
+		endc
+		ovalxpos: = namexpos+namewidth-28
 		; green hill
 		dc.l Map_Card					; mappings pointer
-		dc.w -1						; frame id (-1 for string)
-		dc.w screen_left-12,screen_top+80		; x/y start
+		dc.b -1						; frame id (-1 for string)
+		dc.b id_Card_WaitEnter				; routine number
+		dc.w screen_left-16,screen_top+80		; x/y start
 		dc.w 10						; delay before entering screen
 		dc.w 16,0					; x/y speed entering screen
-		dc.w screen_left+84,screen_top+80		; x/y stop
+		dc.w screen_left+namexpos,screen_top+80		; x/y stop
 		dc.w 60						; delay before leaving screen
 		dc.w -32,0					; x/y speed leaving screen
 		dc.l v_tile_a					; RAM address where tile setting is stored
-		dc.b 'GREEN HILL',0
+		dc.b \namestr,0
 		even
 		; zone
 		dc.l Map_Card					; mappings pointer
-		dc.w -1						; frame id (-1 for string)
-		dc.w screen_left-20,screen_top+100		; x/y start
+		dc.b -1						; frame id (-1 for string)
+		dc.b id_Card_WaitEnter				; routine number
+		dc.w screen_left-16,screen_top+100		; x/y start
 		dc.w 40						; delay before entering screen
 		dc.w 16,0					; x/y speed entering screen
-		dc.w screen_left+156,screen_top+100		; x/y stop
+		dc.w screen_left+zonexpos,screen_top+100	; x/y stop
 		dc.w 60						; delay before leaving screen
 		dc.w -32,0					; x/y speed leaving screen
 		dc.l v_tile_a					; RAM address where tile setting is stored
-		dc.b 'ZONE',0
+		dc.b \zonestr,0
 		even
+		; act
+		dc.l Map_Card					; mappings pointer
+		dc.b id_frame_card_act				; frame id
+		if ~strcmp("\3","noact")
+		dc.b id_Card_WaitEnter				; routine number
+		else
+		dc.b id_Card_Leave				; delete if there is no act number
+		endc
+		dc.w screen_right+32,screen_top+106		; x/y start
+		dc.w 38						; delay before entering screen
+		dc.w -16,0					; x/y speed entering screen
+		dc.w screen_left+ovalxpos,screen_top+106	; x/y stop
+		dc.w 60						; delay before leaving screen
+		dc.w 32,0					; x/y speed leaving screen
+		dc.l v_tile_act					; RAM address where tile setting is stored
 		; oval
 		dc.l Map_Card					; mappings pointer
-		dc.w id_frame_card_oval				; frame id
+		dc.b id_frame_card_oval				; frame id
+		dc.b id_Card_WaitEnter				; routine number
 		dc.w screen_right+32,screen_top+96		; x/y start
 		dc.w 6						; delay before entering screen
 		dc.w -16,0					; x/y speed entering screen
-		dc.w screen_left+208,screen_top+96		; x/y stop
+		dc.w screen_left+ovalxpos,screen_top+96		; x/y stop
 		dc.w 60						; delay before leaving screen
 		dc.w 32,0					; x/y speed leaving screen
 		dc.l v_tile_titlecard				; RAM address where tile setting is stored
+		endm
+		
+CardSet_GHZ:	autocard "GREEN HILL","ZONE"
+CardSet_MZ:	autocard "MARBLE","ZONE"
+CardSet_SYZ:	autocard "SPRING YARD","ZONE"
+CardSet_LZ:	autocard "LABYRINTH","ZONE"
+CardSet_SLZ:	autocard "STAR LIGHT","ZONE"
+CardSet_SBZ:	autocard "SCRAP BRAIN","ZONE"
+CardSet_FZ:	autocard "FINAL","ZONE",noact
 ; ===========================================================================
 
 Card_Main:	; Routine 0
 		move.w	(v_titlecard_uplc).w,d0
-		jsr	UncPLC					; load title card patterns
+		jsr	UncPLC					; load title card gfx
+		move.w	(v_titlecard_act).w,d0
+		sub.w	#2,d0
+		bcs.s	.keep_act				; branch if act is 0 or 1
+		add.w	#id_UPLC_Act2Card,d0
+		jsr	UncPLC					; load act 2/3 gfx
 		
+	.keep_act:
 		lea	Card_Settings,a2
 		move.w	(v_titlecard_zone).w,d0
 		add.w	d0,d0
@@ -108,7 +155,8 @@ Card_Main:	; Routine 0
 		move.l	#TitleCard,ost_id(a1)
 	.skip_find_ost:
 		move.l	(a2)+,ost_mappings(a1)
-		move.w	(a2)+,ost_frame_hi(a1)
+		move.b	(a2)+,ost_frame(a1)
+		move.b	(a2)+,ost_routine(a1)			; goto Card_WaitEnter next
 		move.l	(a2)+,ost_x_pos(a1)			; set initial x/y position (screen-fixed)
 		move.w	(a2)+,ost_card_time(a1)			; set time delay for entering screen
 		move.l	(a2)+,ost_card_x_speed(a1)		; set x/y speed for entering screen
@@ -121,8 +169,7 @@ Card_Main:	; Routine 0
 		move.b	#$20,ost_displaywidth(a1)
 		move.b	#render_abs,ost_render(a1)
 		move.b	#0,ost_priority(a1)
-		move.b	#id_Card_Wait1,ost_routine(a1)		; goto Card_Wait1 next
-		tst.w	ost_frame_hi(a1)
+		tst.b	ost_frame(a1)
 		bpl.s	.not_a_string				; branch if object isn't a string ("ZONE" or zone name)
 		bsr.s	Card_String
 	.not_a_string:
@@ -152,7 +199,7 @@ Card_String:
 		move.b	#8,ost_displaywidth(a1)
 		move.b	#render_abs,ost_render(a1)
 		move.b	#0,ost_priority(a1)
-		move.b	#id_Card_Wait1,ost_routine(a1)		; goto Card_Wait1 next
+		move.b	ost_routine(a4),ost_routine(a1)		; goto Card_WaitEnter next
 	.skip_find_ost:
 		sub.w	#$41,d2					; convert letter from ASCII
 		add.w	d2,d2					; multiply by 2
@@ -174,7 +221,7 @@ Card_String:
 		evenr	a2					; align a2 to even byte
 		rts
 		
-Card_Wait1:	; Routine 2
+Card_WaitEnter:	; Routine 2
 		tst.b	ost_routine2(a0)
 		bne.s	.flag_set				; branch if loaded flag is set
 		addq.b	#1,(v_titlecard_loaded).w		; add to object count
@@ -183,12 +230,12 @@ Card_Wait1:	; Routine 2
 	.flag_set:
 		subq.w	#1,ost_card_time(a0)			; decrement timer
 		bpl.s	.wait					; branch if time remains
-		add.b	#2,ost_routine(a0)			; goto Card_Move1 next
+		add.b	#2,ost_routine(a0)			; goto Card_Enter next
 		
 	.wait:
 		rts
 		
-Card_Move1:	; Routine 4
+Card_Enter:	; Routine 4
 		moveq	#0,d1
 		move.w	ost_card_x_speed(a0),d2
 		beq.s	.x_stop
@@ -220,30 +267,30 @@ Card_Move1:	; Routine 4
 		bne.s	.not_at_stop				; branch if not at stop x/y pos
 		move.w	ost_card_x_stop(a0),ost_x_pos(a0)
 		move.w	ost_card_y_stop(a0),ost_y_screen(a0)	; force precise x/y pos
-		add.b	#2,ost_routine(a0)			; goto Card_Wait2 next
+		add.b	#2,ost_routine(a0)			; goto Card_WaitLeave next
 		addq.b	#1,(v_titlecard_state).w
 		
 	.not_at_stop:
-		bra.w	DisplaySprite
+		jmp	DisplaySprite
 		
-Card_Wait2:	; Routine 6
+Card_WaitLeave:	; Routine 6
 		tst.w	(v_brightness).w
 		bne.s	.wait					; branch if still fading in from black
 		subq.w	#1,ost_card_time2(a0)			; decrement timer
 		bpl.s	.wait					; branch if time remains
-		add.b	#2,ost_routine(a0)			; goto Card_Move2 next
+		add.b	#2,ost_routine(a0)			; goto Card_Leave next
 		
 	.wait:
-		bra.w	DisplaySprite
+		jmp	DisplaySprite
 		
-Card_Move2:	; Routine 8
+Card_Leave:	; Routine 8
 		move.w	ost_card_x_speed2(a0),d0
 		add.w	d0,ost_x_pos(a0)			; update x pos
 		move.w	ost_card_y_speed2(a0),d0
 		add.w	d0,ost_y_screen(a0)			; update y pos
-		bsr.w	CheckOffScreen_Card
+		jsr	CheckOffScreen_Card
 		bne.s	.offscreen				; branch if off screen
-		bra.w	DisplaySprite
+		jmp	DisplaySprite
 		
 	.offscreen:
 		subq.b	#1,(v_titlecard_state).w
@@ -254,5 +301,5 @@ Card_Move2:	; Routine 8
 		jsr	UncPLC					; load explosion gfx
 		
 	.skip_gfx:
-		bra.w	DeleteObject
+		jmp	DeleteObject
 		

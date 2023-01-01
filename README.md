@@ -23,6 +23,7 @@ _Sonic 1-squared_ is an enhanced version of the original _Sonic the Hedgehog_ ga
 * Water palettes are generated in-game by the WaterFilter subroutine, instead of being hardcoded.
 * Palette transitions are controlled by a brightness variable, and no longer require a "next" palette. This simplifies loading new palettes.
 * Monitor icons load only as needed, allowing for up to 256 unique monitor types (with a maximum of 8 loaded at any one time).
+* Each title card has its own PLC, so only letters that are used need to be loaded. Title card objects have been rewritten to display a string (which is automatically centered by the autocard macro) instead of using mappings.
 
 # Credits
 * [flamewing](https://github.com/flamewing) for [mdcomp](https://github.com/flamewing/mdcomp).

@@ -391,10 +391,6 @@ LGrass_Coll_Sloped:
 
 		include "Objects\MZ & LZ Pushable Blocks.asm"	; PushBlock
 
-		include "Objects\Title Cards.asm"		; TitleCard
-		include "Objects\Game Over & Time Over.asm"	; GameOverCard
-		include "Objects\Sonic Has Passed Title Card.asm" ; HasPassedCard
-
 		include "Objects\Special Stage Results.asm"	; SSResult
 		include "Objects\Special Stage Results Chaos Emeralds.asm" ; SSRChaos
 
@@ -600,6 +596,10 @@ Art_LivesNums:	incbin	"Graphics\Lives Counter Numbers.bin"	; 8x8 pixel numbers o
 
 		include "Objects\_DebugMode.asm"
 
+		include "Objects\Title Cards.asm"		; TitleCard
+		include "Objects\Game Over & Time Over.asm"	; GameOverCard
+		include "Objects\Sonic Has Passed Title Card.asm" ; HasPassedCard
+
 		incfile	Kos_SegaLogo,"Graphics Kosinski\Sega Logo",kos
 		incfile	KosMap_SegaLogo,"Other Kosinski\Sega Logo",kos
 		incfile	KosMap_SegaLogoBG,"Other Kosinski\Sega Logo BG",kos
@@ -749,7 +749,6 @@ Art_Sonic:	incbin	"Graphics\Sonic.bin"			; Sonic
 ; ---------------------------------------------------------------------------
 		incfile Art_TitleCard,"Graphics\Title Cards",bin,dma_safe
 		incfile Art_TitleCardAct,"Graphics\Title Card Act",bin,dma_safe
-		incfile Art_TitleCard1,"Graphics\Title Card 1",bin,dma_safe
 		incfile Art_TitleCard2,"Graphics\Title Card 2",bin,dma_safe
 		incfile Art_TitleCard3,"Graphics\Title Card 3",bin,dma_safe
 		incfile Art_TitleCardBonus,"Graphics\Title Card Bonus",bin,dma_safe
