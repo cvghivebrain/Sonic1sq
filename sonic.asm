@@ -589,11 +589,6 @@ See_DataFlat:	incbin	"Collision\SLZ Seesaw Heightmap (Flat).bin" ; used by Seesa
 ; ---------------------------------------------------------------------------
 ; Uncompressed graphics	- HUD and lives counter
 ; ---------------------------------------------------------------------------
-Art_Hud:	incbin	"Graphics\HUD Numbers.bin"		; 8x16 pixel numbers on HUD
-		even
-Art_LivesNums:	incbin	"Graphics\Lives Counter Numbers.bin"	; 8x8 pixel numbers on lives counter
-		even
-
 		include "Objects\_DebugMode.asm"
 
 		include "Objects\Title Cards.asm"		; TitleCard
@@ -775,6 +770,10 @@ Art_Sonic:	incbin	"Graphics\Sonic.bin"			; Sonic
 		incfile Art_TitleCardZ,"Graphics\Title Card Letter Z",bin,dma_safe
 		incfile Art_HUDMain,"Graphics\HUD",bin,dma_safe
 		incfile Art_Lives,"Graphics\HUD - Life Counter Icon",bin,dma_safe
+		incfile	Art_HUDNums,"Graphics\HUD Numbers",bin,dma_safe
+		incfile	Art_HUDColon,"Graphics\HUD Colon",bin,dma_safe
+		incfile	Art_LivesNums,"Graphics\Lives Counter Numbers",bin,dma_safe
+		incfile	Art_LivesLetters,"Graphics\Lives Counter Letters",bin,dma_safe
 		incfile Kos_Ring,"Graphics Kosinski\Rings",kos
 		incfile Art_Shield,"Graphics\Shield",bin,dma_safe
 		incfile Art_Stars,"Graphics\Invincibility",bin,dma_safe
@@ -1114,7 +1113,7 @@ Level_End_unused:	dc.b 0,	0, 0, 0
 
 		incfile	Art_BigRing,"Graphics\Giant Ring",bin,dma_safe
 
-		include "Includes\KosPLC & UncPLC.asm"
+		include "KosPLC & UncPLC.asm"
 		include "Objects\GHZ Giant Ball [Mappings].asm"	; Map_GBall
 		include "Objects\GHZ Bridge [Mappings].asm"	; Map_Bri
 		include "Objects\GHZ & MZ Swinging Platforms [Mappings].asm" ; Map_Swing_GHZ

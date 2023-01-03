@@ -431,8 +431,11 @@ UncLoadCues:
 		ptr UPLC_Act2Card
 		ptr UPLC_Act3Card
 
-UPLC_HUD:	uplcheader $D940
+UPLC_HUD:	uplcheader $D900
 		uplc Art_HUDMain,v_tile_hud
+		uplc Art_HUDNums
+		uplc Art_LivesNums
+		uplc Art_HUDColon
 	.end:
 
 UPLC_TitleCard:	uplcheader $B000

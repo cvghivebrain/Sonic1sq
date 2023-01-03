@@ -60,7 +60,7 @@ RangePlus:
 		neg.w	d1
 	.x_not_neg:
 		;move.b	ost_width(a1),d4
-		move.b	#9,d4
+		move.b	(v_player1_width).w,d4
 		sub.w	d4,d1
 		move.b	ost_width(a0),d4
 		sub.w	d4,d1					; d1 = x dist between hitbox edges (-ve if overlapping)

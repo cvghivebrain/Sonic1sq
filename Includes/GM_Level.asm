@@ -77,7 +77,6 @@ Level_TtlCardLoop:
 		move.b	(v_titlecard_loaded).w,d0
 		cmp.b	(v_titlecard_state).w,d0
 		bne.s	Level_TtlCardLoop			; branch if title card is still moving
-		jsr	(Hud_Base).l				; load basic HUD gfx
 
 Level_Skip_TtlCard:
 		bsr.w	LevelParameterLoad			; load level boundaries and start positions

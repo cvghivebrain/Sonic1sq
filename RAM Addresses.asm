@@ -215,6 +215,10 @@ v_sonic_pos_tracker_num:	rs.w 1 ; $FFFFF7A8 ; current location within position t
 v_sonic_pos_tracker_num_low:	equ __rs-1
 f_boss_boundary:		rs.b 1 ; $FFFFF7AA ; flag set to stop Sonic moving off the right side of the screen at a boss
 v_monitor_slots:		rs.b 1
+v_lives_spriteindex:		rs.w 1
+v_lives_spritecount:		rs.w 1
+v_lives_sprite1:		rs.w 3
+v_lives_sprite2:		rs.w 3
 v_256x256_with_loop_1:		rs.l 1 ; $FFFFF7AC ; 256x256 level tile which contains a loop (GHZ/SLZ)
 v_256x256_with_loop_2:		equ __rs-3 ; $FFFFF7AD ; 256x256 level tile which contains a loop (GHZ/SLZ)
 v_256x256_with_tunnel_1:	equ __rs-2 ; $FFFFF7AE ; 256x256 level tile which contains a roll tunnel (GHZ)

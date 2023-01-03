@@ -67,11 +67,6 @@ HUD_Update:
 		bsr.w	Hud_Secs
 
 	.chklives:
-		tst.b	(f_hud_lives_update).w			; does the lives counter need updating?
-		beq.s	.chkbonus				; if not, branch
-		clr.b	(f_hud_lives_update).w
-		bsr.w	Hud_Lives
-
 	.chkbonus:
 		tst.b	(f_pass_bonus_update).w			; do time/ring bonus counters need updating?
 		beq.s	.finish					; if not, branch
@@ -116,10 +111,6 @@ HudDebug:
 		moveq	#0,d1
 		move.b	(v_spritecount).w,d1			; load "number of objects" counter
 		bsr.w	Hud_Secs
-		tst.b	(f_hud_lives_update).w			; does the lives counter need updating?
-		beq.s	.chkbonus				; if not, branch
-		clr.b	(f_hud_lives_update).w
-		bsr.w	Hud_Lives
 
 	.chkbonus:
 		tst.b	(f_pass_bonus_update).w			; does the ring/time bonus counter need updating?
@@ -161,13 +152,12 @@ Hud_ZeroRings:
 
 Hud_Base:
 		lea	(vdp_data_port).l,a6
-		bsr.w	Hud_Lives				; update lives counter
 		locVRAM	$DC40					; VRAM address
 		lea	Hud_TilesBase(pc),a2			; tile list
 		move.w	#15-1,d2				; number of characters
 
 Hud_Base_Load:
-		lea	Art_Hud(pc),a1				; address of HUD gfx
+		;lea	Art_Hud(pc),a1				; address of HUD gfx
 
 .loop_chars:
 		move.w	#((sizeof_cell/4)*2)-1,d1		; each character consist of 2 cells
@@ -267,7 +257,7 @@ Hud_Score:
 
 Hud_LoadArt:
 		moveq	#0,d4
-		lea	Art_Hud(pc),a1				; address of HUD number gfx
+		;lea	Art_Hud(pc),a1				; address of HUD number gfx
 
 .loop:
 		moveq	#0,d2
@@ -320,7 +310,7 @@ ContScrCounter:
 		lea	(Hud_10).l,a2
 		moveq	#2-1,d6					; number of digits
 		moveq	#0,d4
-		lea	Art_Hud(pc),a1				; address of number gfx
+		;lea	Art_Hud(pc),a1				; address of number gfx
 
 .loop:
 		moveq	#0,d2
@@ -377,7 +367,7 @@ Hud_Secs:
 
 Hud_Time_Load:
 		moveq	#0,d4
-		lea	Art_Hud(pc),a1				; address of HUD number gfx
+		;lea	Art_Hud(pc),a1				; address of HUD number gfx
 
 .loop:
 		moveq	#0,d2
@@ -423,7 +413,7 @@ Hud_TimeRingBonus:
 		lea	(Hud_1000).l,a2				; multiples of 10
 		moveq	#4-1,d6					; number of digits
 		moveq	#0,d4
-		lea	Art_Hud(pc),a1				; address of HUD number gfx
+		;lea	Art_Hud(pc),a1				; address of HUD number gfx
 
 .loop:
 		moveq	#0,d2
@@ -464,68 +454,4 @@ Hud_TimeRingBonus:
 		move.l	#0,(a6)					; write blank digit to VRAM
 		dbf	d5,.loop_erase
 
-		bra.s	.next
-
-; ---------------------------------------------------------------------------
-; Subroutine to	load uncompressed lives	counter	patterns
-
-; input:
-;	a6 = vdp_data_port ($C00000)
-
-;	uses d0, d1, d2, d3, d4, d5, d6, a1, a2, a3
-; ---------------------------------------------------------------------------
-
-Hud_Lives:
-		hudVRAM	$FBA0					; VRAM address of lives counter
-		moveq	#0,d1
-		move.b	(v_lives).w,d1				; load number of lives
-		lea	(Hud_10).l,a2				; multiples of 10
-		moveq	#2-1,d6					; number of digits
-		moveq	#0,d4
-		lea	Art_LivesNums(pc),a1			; address of lives counter gfx
-
-.loop:
-		move.l	d0,4(a6)				; set VRAM address
-		moveq	#0,d2
-		move.l	(a2)+,d3				; d3 = multiple of 10
-
-	.find_digit:
-		sub.l	d3,d1
-		bcs.s	.digit_found				; branch if lives is less than the value in d3
-		addq.w	#1,d2					; increment digit counter
-		bra.s	.find_digit				; repeat until d2 = digit
-; ===========================================================================
-
-.digit_found:
-		add.l	d3,d1
-		tst.w	d2
-		beq.s	.digit_0				; branch if digit is 0
-		move.w	#1,d4					; set flag to load gfx for digit
-
-	.digit_0:
-		tst.w	d4
-		beq.s	.skip_digit				; branch if digit was 0
-
-.show_digit:
-		lsl.w	#5,d2					; multiply by $20 (size of cell)
-		lea	(a1,d2.w),a3				; jump to relevant gfx source
-		rept sizeof_cell/4
-		move.l	(a3)+,(a6)				; copy tile to VRAM
-		endr
-
-.next:
-		addi.l	#(sizeof_cell*2)<<16,d0			; next VRAM address, 2 tiles ahead (1st & 2nd digits are not adjacent)
-		dbf	d6,.loop				; repeat 1 more time
-
-		rts	
-; ===========================================================================
-
-.skip_digit:
-		tst.w	d6
-		beq.s	.show_digit				; branch if this is the 2nd digit
-		moveq	#(sizeof_cell/4)-1,d5
-
-	.loop_erase:
-		move.l	#0,(a6)					; write blank digit to VRAM
-		dbf	d5,.loop_erase
 		bra.s	.next

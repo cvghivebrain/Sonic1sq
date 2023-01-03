@@ -6,60 +6,54 @@ Map_HUD:	index *
 		ptr frame_hud_ringred
 		ptr frame_hud_timered
 		ptr frame_hud_allred
+		ptr frame_hud_lifeicon
 		
+tile_colon:	equ $34
+
 frame_hud_allyellow:
 		spritemap
-		piece	0, -$80, 4x2, 0, hi
-		piece	$20, -$80, 4x2, $18, hi
-		piece	$40, -$80, 4x2, $20, hi
-		piece	0, -$70, 4x2, $10, hi
-		piece	$28, -$70, 4x2, $28, hi
-		piece	0, -$60, 4x2, 8, hi
-		piece	$20, -$60, 1x2, 0, hi
-		piece	$30, -$60, 3x2, $30, hi
-		piece	0, $40, 2x2, $10A, hi
-		piece	$10, $40, 4x2, $10E, hi
+		piece	0, 0, 4x2, 0, hi			; SCOR
+		piece	$20, 0, 1x2, $14, hi			; E
+		piece	0, $10, 4x2, $E, hi			; TIME
+		piece	0, $20, 4x2, 6, hi			; RING
+		piece	$20, $20, 1x2, 0, hi			; S
+		piece	50, 18, 1x1, tile_colon, hi		; :
 		endsprite
 		
 frame_hud_ringred:
 		spritemap
-		piece	0, -$80, 4x2, 0, hi
-		piece	$20, -$80, 4x2, $18, hi
-		piece	$40, -$80, 4x2, $20, hi
-		piece	0, -$70, 4x2, $10, hi
-		piece	$28, -$70, 4x2, $28, hi
-		piece	0, -$60, 4x2, 8, hi, pal2
-		piece	$20, -$60, 1x2, 0, hi, pal2
-		piece	$30, -$60, 3x2, $30, hi
-		piece	0, $40, 2x2, $10A, hi
-		piece	$10, $40, 4x2, $10E, hi
+		piece	0, 0, 4x2, 0, hi			; SCOR
+		piece	$20, 0, 1x2, $14, hi			; E
+		piece	0, $10, 4x2, $E, hi			; TIME
+		piece	0, $20, 4x2, 6, hi, pal2		; RING
+		piece	$20, $20, 1x2, 0, hi, pal2		; S
+		piece	50, 18, 1x1, tile_colon, hi		; :
 		endsprite
 		
 frame_hud_timered:
 		spritemap
-		piece	0, -$80, 4x2, 0, hi
-		piece	$20, -$80, 4x2, $18, hi
-		piece	$40, -$80, 4x2, $20, hi
-		piece	0, -$70, 4x2, $10, hi, pal2
-		piece	$28, -$70, 4x2, $28, hi
-		piece	0, -$60, 4x2, 8, hi
-		piece	$20, -$60, 1x2, 0, hi
-		piece	$30, -$60, 3x2, $30, hi
-		piece	0, $40, 2x2, $10A, hi
-		piece	$10, $40, 4x2, $10E, hi
+		piece	0, 0, 4x2, 0, hi			; SCOR
+		piece	$20, 0, 1x2, $14, hi			; E
+		piece	0, $10, 4x2, $E, hi, pal2		; TIME
+		piece	0, $20, 4x2, 6, hi			; RING
+		piece	$20, $20, 1x2, 0, hi			; S
+		piece	50, 18, 1x1, tile_colon, hi		; :
 		endsprite
 		
 frame_hud_allred:
 		spritemap
-		piece	0, -$80, 4x2, 0, hi
-		piece	$20, -$80, 4x2, $18, hi
-		piece	$40, -$80, 4x2, $20, hi
-		piece	0, -$70, 4x2, $10, hi, pal2
-		piece	$28, -$70, 4x2, $28, hi
-		piece	0, -$60, 4x2, 8, hi, pal2
-		piece	$20, -$60, 1x2, 0, hi, pal2
-		piece	$30, -$60, 3x2, $30, hi
-		piece	0, $40, 2x2, $10A, hi
-		piece	$10, $40, 4x2, $10E, hi
+		piece	0, 0, 4x2, 0, hi			; SCOR
+		piece	$20, 0, 1x2, $14, hi			; E
+		piece	0, $10, 4x2, $E, hi, pal2		; TIME
+		piece	0, $20, 4x2, 6, hi, pal2		; RING
+		piece	$20, $20, 1x2, 0, hi, pal2		; S
+		piece	50, 18, 1x1, tile_colon, hi		; :
 		endsprite
-		even
+		
+frame_hud_lifeicon:
+		spritemap
+		piece	0, 0, 2x2, 0, hi			; icon
+		piece	$10, 0, 4x1, 4, hi			; SONIC
+		;piece	$30, 0, 3x1, 8, hi			; extra tiles for longer name
+		piece	$16, 8, 1x1, $B, hi			; x
+		endsprite
