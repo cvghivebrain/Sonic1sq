@@ -771,7 +771,6 @@ Art_Sonic:	incbin	"Graphics\Sonic.bin"			; Sonic
 		incfile Art_HUDMain,"Graphics\HUD",bin,dma_safe
 		incfile Art_Lives,"Graphics\HUD - Life Counter Icon",bin,dma_safe
 		incfile	Art_HUDNums,"Graphics\HUD Numbers",bin,dma_safe
-		incfile	Art_HUDColon,"Graphics\HUD Colon",bin,dma_safe
 		incfile	Art_LivesNums,"Graphics\Lives Counter Numbers",bin,dma_safe
 		incfile	Art_LivesLetters,"Graphics\Lives Counter Letters",bin,dma_safe
 		incfile Kos_Ring,"Graphics Kosinski\Rings",kos

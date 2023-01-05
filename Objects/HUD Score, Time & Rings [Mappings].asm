@@ -8,7 +8,7 @@ Map_HUD:	index *
 		ptr frame_hud_allred
 		ptr frame_hud_lifeicon
 		
-tile_colon:	equ $34
+tile_colon:	equ $2A
 
 frame_hud_allyellow:
 		spritemap

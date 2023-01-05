@@ -68,6 +68,7 @@ autocard:	macro namestr,zonestr
 		zonexpos: = namexpos+namewidth-zonewidth
 		endc
 		ovalxpos: = namexpos+namewidth-28
+		dc.w 4-1					; number of objects
 		; green hill
 		dc.l Map_Card					; mappings pointer
 		dc.b -1						; frame id (-1 for string)
@@ -146,8 +147,8 @@ Card_Main:	; Routine 0
 		add.w	d0,d0
 		move.w	(a2,d0.w),d0
 		lea	(a2,d0.w),a2				; jump to relevant card settings
+		move.w	(a2)+,d1				; get number of objects (-1 for loops)
 		movea.l	a0,a1					; first object replaces this one
-		moveq	#4-1,d1
 		bra.s	.skip_find_ost
 		
 	.loop:
