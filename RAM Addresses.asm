@@ -224,6 +224,13 @@ v_rings_spritecount:		rs.w 1
 v_rings_sprite1:		rs.w 3
 v_rings_sprite2:		rs.w 3
 v_rings_sprite3:		rs.w 3
+v_time_spriteindex:		rs.w 1 ; sprite mappings for time counter
+v_time_spritecount:		rs.w 1
+v_time_sprite1:			rs.w 3
+v_time_sprite2:			rs.w 3
+v_time_sprite3:			rs.w 3
+v_time_sprite4:			rs.w 3
+v_time_sprite5:			rs.w 3
 v_256x256_with_loop_1:		rs.l 1 ; $FFFFF7AC ; 256x256 level tile which contains a loop (GHZ/SLZ)
 v_256x256_with_loop_2:		equ __rs-3 ; $FFFFF7AD ; 256x256 level tile which contains a loop (GHZ/SLZ)
 v_256x256_with_tunnel_1:	equ __rs-2 ; $FFFFF7AE ; 256x256 level tile which contains a roll tunnel (GHZ)
@@ -332,7 +339,7 @@ v_time_sec:			equ __rs-2 ; $FFFFFE24 ; time - seconds
 v_time_frames:			equ __rs-1 ; $FFFFFE25 ; time - frames
 v_score:			rs.l 1 ; $FFFFFE26 ; score
 v_shield:			rs.b 1 ; $FFFFFE2C ; shield status - 00 = no; 01 = yes
-v_invincibility:		rs.b 1 ; $FFFFFE2D ; invinciblity status - 00 = no; 01 = yes
+v_invincibility:		rs.b 1 ; $FFFFFE2D ; invincibility status - 00 = no; 01 = yes
 v_shoes:			rs.b 1 ; $FFFFFE2E ; speed shoes status - 00 = no; 01 = yes
 
 				rsblock lamppost ; written to as a block by GM_Credits

@@ -8,6 +8,7 @@ Map_HUD:	index *
 		ptr frame_hud_allred
 		ptr frame_hud_lifeicon
 		
+tile_zero:	equ $16
 tile_colon:	equ $2A
 
 frame_hud_allyellow:
@@ -17,7 +18,8 @@ frame_hud_allyellow:
 		piece	0, $10, 4x2, $E, hi			; TIME
 		piece	0, $20, 4x2, 6, hi			; RING
 		piece	$20, $20, 1x2, 0, hi			; S
-		piece	50, 18, 1x1, tile_colon, hi		; :
+		piece	$58, 0, 1x2, tile_zero, hi		; 0
+		piece	51, 19, 1x1, tile_colon, hi		; :
 		endsprite
 		
 frame_hud_ringred:
@@ -27,7 +29,8 @@ frame_hud_ringred:
 		piece	0, $10, 4x2, $E, hi			; TIME
 		piece	0, $20, 4x2, 6, hi, pal2		; RING
 		piece	$20, $20, 1x2, 0, hi, pal2		; S
-		piece	50, 18, 1x1, tile_colon, hi		; :
+		piece	$58, 0, 1x2, tile_zero, hi		; 0
+		piece	51, 19, 1x1, tile_colon, hi		; :
 		endsprite
 		
 frame_hud_timered:
@@ -37,7 +40,8 @@ frame_hud_timered:
 		piece	0, $10, 4x2, $E, hi, pal2		; TIME
 		piece	0, $20, 4x2, 6, hi			; RING
 		piece	$20, $20, 1x2, 0, hi			; S
-		piece	50, 18, 1x1, tile_colon, hi		; :
+		piece	$58, 0, 1x2, tile_zero, hi		; 0
+		piece	51, 19, 1x1, tile_colon, hi		; :
 		endsprite
 		
 frame_hud_allred:
@@ -47,7 +51,8 @@ frame_hud_allred:
 		piece	0, $10, 4x2, $E, hi, pal2		; TIME
 		piece	0, $20, 4x2, 6, hi, pal2		; RING
 		piece	$20, $20, 1x2, 0, hi, pal2		; S
-		piece	50, 18, 1x1, tile_colon, hi		; :
+		piece	$58, 0, 1x2, tile_zero, hi		; 0
+		piece	51, 19, 1x1, tile_colon, hi		; :
 		endsprite
 		
 frame_hud_lifeicon:

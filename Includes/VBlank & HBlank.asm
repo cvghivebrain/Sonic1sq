@@ -144,7 +144,6 @@ VBlank_Level:
 DrawTiles_LevelGfx_HUD_PLC:
 		bsr.w	DrawTilesWhenMoving			; display new tiles if camera has moved
 		jsr	(AnimateLevelGfx).l			; update animated level graphics
-		;jsr	(HUD_Update).l				; update HUD graphics
 		tst.w	(v_countdown).w
 		beq.w	.end
 		subq.w	#1,(v_countdown).w			; decrement timer
@@ -192,7 +191,6 @@ VBlank_Ending:
 		movem.l	d0-d1,(v_fg_redraw_direction_copy).w	; create duplicates in RAM
 		bsr.w	DrawTilesWhenMoving			; display new tiles if camera has moved
 		jsr	(AnimateLevelGfx).l			; update animated level graphics
-		;jsr	(HUD_Update).l				; update HUD graphics
 		rts	
 ; ===========================================================================
 
