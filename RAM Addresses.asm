@@ -231,6 +231,14 @@ v_time_sprite2:			rs.w 3
 v_time_sprite3:			rs.w 3
 v_time_sprite4:			rs.w 3
 v_time_sprite5:			rs.w 3
+v_score_spriteindex:		rs.w 1 ; sprite mappings for score counter
+v_score_spritecount:		rs.w 1
+v_score_sprite1:		rs.w 3
+v_score_sprite2:		rs.w 3
+v_score_sprite3:		rs.w 3
+v_score_sprite4:		rs.w 3
+v_score_sprite5:		rs.w 3
+v_score_sprite6:		rs.w 3
 v_256x256_with_loop_1:		rs.l 1 ; $FFFFF7AC ; 256x256 level tile which contains a loop (GHZ/SLZ)
 v_256x256_with_loop_2:		equ __rs-3 ; $FFFFF7AD ; 256x256 level tile which contains a loop (GHZ/SLZ)
 v_256x256_with_tunnel_1:	equ __rs-2 ; $FFFFF7AE ; 256x256 level tile which contains a roll tunnel (GHZ)
