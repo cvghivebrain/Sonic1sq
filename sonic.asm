@@ -647,6 +647,7 @@ Art_Sonic:	incbin	"Graphics\Sonic.bin"			; Sonic
 		incfile Kos_SSWBlock,"Graphics Kosinski\Special Stage W",kos
 		incfile Kos_SSGlass,"Graphics Kosinski\Special Stage Glass",kos
 		incfile Art_ResultEm,"Graphics\Special Stage Result Emeralds",bin,dma_safe
+		incfile Art_ResultCont,"Graphics\Special Stage Result Continue",bin,dma_safe
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - GHZ stuff
 ; ---------------------------------------------------------------------------
@@ -797,7 +798,7 @@ Art_Sonic:	incbin	"Graphics\Sonic.bin"			; Sonic
 ; Compressed graphics - continue screen
 ; ---------------------------------------------------------------------------
 		incfile	Art_ContSonic,"Graphics\Continue Screen Sonic",bin,dma_safe
-		incfile	Art_MiniSonic,"Graphics\Continue Screen Stuff",bin,dma_safe
+		incfile	Art_MiniSonic,"Graphics\Continue Screen Mini Sonic",bin,dma_safe
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - animals
 ; ---------------------------------------------------------------------------

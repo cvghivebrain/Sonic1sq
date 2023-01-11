@@ -668,10 +668,17 @@ UPLC_Monitors:	uplcheader vram_monitors
 		uplc Art_Monitors
 	.end:
 
-UPLC_Continue:	uplcheader $A000
-		uplc Art_TitleCard,v_tile_titlecard
+UPLC_Continue:	uplcheader vram_continue
+		uplc Art_TitleCardC,v_tile_c
+		uplc Art_TitleCardO,v_tile_o
+		uplc Art_TitleCardN,v_tile_n
+		uplc Art_TitleCardT,v_tile_t
+		uplc Art_TitleCardI,v_tile_i
+		uplc Art_TitleCardU,v_tile_u
+		uplc Art_TitleCardE,v_tile_e
 		uplc Art_MiniSonic
 		uplc Art_ContSonic
+		uplc Art_HUDNums
 	.end:
 	
 UPLC_EggmanSBZ:	uplcheader $8000

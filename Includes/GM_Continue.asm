@@ -19,8 +19,6 @@ GM_Continue:
 		jsr	UncPLC					; load title card patterns
 		jsr	ProcessDMA
 		
-		moveq	#10,d1
-		jsr	(ContScrCounter).l			; run countdown	(start from 10)
 		moveq	#id_Pal_Continue,d0
 		bsr.w	PalLoad					; load continue	screen palette
 		play.b	0, bsr.w, mus_Continue			; play continue	music
@@ -31,9 +29,8 @@ GM_Continue:
 		jsr	FindFreeInert
 		move.l	#ContScrItem,ost_id(a1)			; load continue screen objects
 		jsr	FindFreeInert
-		move.l	#ContScrItem,ost_id(a1)
-		move.b	#3,ost_priority(a1)
-		move.b	#id_frame_cont_oval,ost_frame(a1)	; set frame for oval object
+		move.l	#ContScrItem,ost_id(a1)			; load oval object
+		move.b	#id_CSI_Oval,ost_routine(a1)
 		jsr	FindFreeInert
 		move.l	#ContScrItem,ost_id(a1)			; load mini Sonic
 		move.b	#id_CSI_MakeMiniSonic,ost_routine(a1)	; set routine for mini Sonic
@@ -49,16 +46,6 @@ GM_Continue:
 Cont_MainLoop:
 		move.b	#id_VBlank_Continue,(v_vblank_routine).w
 		bsr.w	WaitForVBlank
-		cmpi.b	#id_CSon_Run,(v_ost_player+ost_routine).w ; is Sonic running?
-		bhs.s	.sonic_running				; if yes, branch
-		disable_ints
-		move.w	(v_countdown).w,d1			; get counter
-		divu.w	#60,d1					; convert to seconds
-		andi.l	#$F,d1					; read only lowest nybble
-		jsr	(ContScrCounter).l			; display countdown on screen
-		enable_ints
-
-	.sonic_running:
 		jsr	(ExecuteObjects).l
 		jsr	(BuildSprites).l
 		cmpi.w	#$180,(v_ost_player+ost_x_pos).w	; has Sonic run off screen?

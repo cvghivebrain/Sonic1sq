@@ -2,28 +2,27 @@
 ; Sprite mappings - Continue screen
 ; ---------------------------------------------------------------------------
 Map_ContScr:	index *
+		ptr frame_cont_mini1
+		ptr frame_cont_mini2
 		ptr frame_cont_text
 		ptr frame_cont_sonic1
 		ptr frame_cont_sonic2
 		ptr frame_cont_sonic3
 		ptr frame_cont_oval
-		ptr frame_cont_mini1
-		ptr frame_cont_mini1
-		ptr frame_cont_mini2
 		
 frame_cont_text:
-		spritemap					; "CONTINUE", stars and countdown
-		piece	-60, -8, 2x2, 8
-		piece	-$2C, -8, 2x2, $32
-		piece	-$1C, -8, 2x2, $2E
-		piece	-$C, -8, 2x2, $42
-		piece	4, -8, 1x2, $20
-		piece	$C, -8, 2x2, $2E
-		piece	$1C, -8, 2x2, $46
-		piece	$2C, -8, 2x2, $10
-		piece	-$18, $38, 2x2, $BF, pal2
-		piece	8, 56, 2x2, $BF, pal2
-		piece	-8, $36, 2x2, $1FC
+		spritemap					; "CONTINUE", stars
+		piece	-60, -8, 2x2, 0
+		piece	-$2C, -8, 2x2, 4
+		piece	-$1C, -8, 2x2, 8
+		piece	-$C, -8, 2x2, 12
+		piece	4, -8, 1x2, 16
+		piece	$C, -8, 2x2, 8
+		piece	$1C, -8, 2x2, 18
+		piece	$2C, -8, 2x2, 22
+		piece	-$18, $38, 2x2, $47, pal2
+		piece	8, 56, 2x2, $47, pal2
+		;piece	-8, $36, 2x2, $1FC
 		endsprite
 		
 frame_cont_sonic1:
@@ -49,18 +48,16 @@ frame_cont_sonic3:
 		
 frame_cont_oval:
 		spritemap					; circle on the floor
-		piece	-$18, $60, 3x2, $9E, pal2
-		piece	0, $60, 3x2, $9E, pal2, xflip
+		piece	-$18, $60, 3x2, $26, pal2
+		piece	0, $60, 3x2, $26, pal2, xflip
 		endsprite
 		
 frame_cont_mini1:
 		spritemap					; mini Sonic
-		piece	0, 0, 2x3, $12
+		piece	0, 0, 2x3, 0
 		endsprite
 		
 frame_cont_mini2:
 		spritemap					; mini Sonic #2
-		piece	0, 0, 2x3, $18
+		piece	0, 0, 2x3, 6
 		endsprite
-		
-		even

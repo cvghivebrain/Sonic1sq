@@ -293,48 +293,6 @@ Hud_LoadArt:
 		rts
 
 ; ---------------------------------------------------------------------------
-; Subroutine to	load countdown numbers on the continue screen
-
-; input:
-;	d1 = number on countdown
-
-; output:
-;	a6 = vdp_data_port ($C00000)
-
-;	uses d1, d2, d3, d6, a1, a2, a3
-; ---------------------------------------------------------------------------
-
-ContScrCounter:
-		locVRAM	$DF80
-		lea	(vdp_data_port).l,a6
-		lea	(Hud_10).l,a2
-		moveq	#2-1,d6					; number of digits
-		moveq	#0,d4
-		;lea	Art_Hud(pc),a1				; address of number gfx
-
-.loop:
-		moveq	#0,d2
-		move.l	(a2)+,d3				; d3 = multiple of 10
-
-.find_digit:
-		sub.l	d3,d1
-		blo.s	.digit_found				; branch if number is less than the value in d3
-		addq.w	#1,d2					; increment digit counter
-		bra.s	.find_digit				; repeat until d2 = digit
-; ===========================================================================
-
-.digit_found:
-		add.l	d3,d1
-		lsl.w	#6,d2					; multiply by $40 (size of 2 tiles per digit)
-		lea	(a1,d2.w),a3				; jump to relevant gfx source
-		rept (sizeof_cell/4)*2
-		move.l	(a3)+,(a6)				; copy 2 tiles to VRAM
-		endr
-		dbf	d6,.loop				; repeat 1 more	time
-
-		rts
-
-; ---------------------------------------------------------------------------
 ; HUD counter sizes
 ; ---------------------------------------------------------------------------
 
