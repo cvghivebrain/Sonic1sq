@@ -392,7 +392,9 @@ uplc:		macro gfx,tileram
 UncLoadCues:
 		index *
 		ptr UPLC_HUD
-		ptr UPLC_TitleCard
+		ptr UPLC_SonicCard
+		ptr UPLC_KetchupCard
+		ptr UPLC_MustardCard
 		ptr UPLC_GameOver
 		ptr UPLC_Explode
 		ptr UPLC_Stars
@@ -437,8 +439,52 @@ UPLC_HUD:	uplcheader $D900
 		uplc Art_LivesNums
 	.end:
 
-UPLC_TitleCard:	uplcheader $B000
+UPLC_SonicCard:	uplcheader $B000
 		uplc Art_TitleCard,v_tile_titlecard
+		uplc Art_TitleCardBonus,v_tile_bonus
+		uplc Art_TitleCardAct,v_tile_act
+		uplc Art_TitleCardH,v_tile_h
+		uplc Art_TitleCardA,v_tile_a
+		uplc Art_TitleCardS,v_tile_s
+		uplc Art_TitleCardP,v_tile_p
+		uplc Art_TitleCardE,v_tile_e
+		uplc Art_TitleCardD,v_tile_d
+		uplc Art_TitleCardO,v_tile_o
+		uplc Art_TitleCardN,v_tile_n
+		uplc Art_TitleCardI,v_tile_i
+		uplc Art_TitleCardC,v_tile_c
+	.end:
+
+UPLC_KetchupCard:	uplcheader $B000
+		uplc Art_TitleCard,v_tile_titlecard
+		uplc Art_TitleCardBonus,v_tile_bonus
+		uplc Art_TitleCardAct,v_tile_act
+		uplc Art_TitleCardH,v_tile_h
+		uplc Art_TitleCardA,v_tile_a
+		uplc Art_TitleCardS,v_tile_s
+		uplc Art_TitleCardP,v_tile_p
+		uplc Art_TitleCardE,v_tile_e
+		uplc Art_TitleCardD,v_tile_d
+		uplc Art_TitleCardK,v_tile_k
+		uplc Art_TitleCardT,v_tile_t
+		uplc Art_TitleCardC,v_tile_c
+		uplc Art_TitleCardU,v_tile_u
+	.end:
+
+UPLC_MustardCard:	uplcheader $B000
+		uplc Art_TitleCard,v_tile_titlecard
+		uplc Art_TitleCardBonus,v_tile_bonus
+		uplc Art_TitleCardAct,v_tile_act
+		uplc Art_TitleCardH,v_tile_h
+		uplc Art_TitleCardA,v_tile_a
+		uplc Art_TitleCardS,v_tile_s
+		uplc Art_TitleCardP,v_tile_p
+		uplc Art_TitleCardE,v_tile_e
+		uplc Art_TitleCardD,v_tile_d
+		uplc Art_TitleCardM,v_tile_m
+		uplc Art_TitleCardU,v_tile_u
+		uplc Art_TitleCardT,v_tile_t
+		uplc Art_TitleCardR,v_tile_r
 	.end:
 
 UPLC_GHZCard:	uplcheader $B000
@@ -549,11 +595,11 @@ UPLC_FZCard:	uplcheader $B000
 		uplc Art_TitleCardL,v_tile_l
 	.end:
 
-UPLC_Act2Card:	uplcheader $B260
+UPLC_Act2Card:	uplcheader $B3E0
 		uplc Art_TitleCard2
 	.end:
 
-UPLC_Act3Card:	uplcheader $B260
+UPLC_Act3Card:	uplcheader $B3E0
 		uplc Art_TitleCard3
 	.end:
 

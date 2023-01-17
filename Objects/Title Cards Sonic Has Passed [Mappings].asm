@@ -2,13 +2,13 @@
 ; Sprite mappings - "SONIC HAS PASSED" title card
 ; ---------------------------------------------------------------------------
 Map_Has:	index *
+		ptr frame_has_ringbonus
+		ptr frame_has_timebonus
+		ptr frame_has_score
 		ptr frame_has_sonichas
 		ptr frame_has_ketchuphas
 		ptr frame_has_mustardhas
 		ptr frame_has_passed
-		ptr frame_has_score
-		ptr frame_has_timebonus
-		ptr frame_has_ringbonus
 		ptr frame_has_oval
 		ptr frame_has_act1
 		ptr frame_has_act2
@@ -71,35 +71,31 @@ frame_has_passed:
 		piece $20, -8, 2x2, $C
 		endsprite
 		
+tile_hud:	= $138
+tile_nums:	= $14E
+		
 frame_has_score:
 		spritemap					; SCORE
-		piece -$50, -8, 4x2, $14A
-		piece -$30, -8, 1x2, $162
-		piece $18, -8, 3x2, $164
-		piece $30, -8, 4x2, $16A
-		piece -$33, -9, 2x1, $6E
-		piece -$33, -1, 2x1, $6E, xflip, yflip
+		piece 0, 0, 4x2, tile_hud			; SCOR
+		piece 32, 0, 1x2, tile_hud+$14			; E
+		piece 29, -1, 2x2, 8				; mini oval
+		piece 152, 0, 1x2, tile_nums			; 0
 		endsprite
 		
 frame_has_timebonus:
 		spritemap					; TIME BONUS
-		piece -$50, -8, 4x2, $15A
-		piece -$27, -8, 4x2, $66
-		piece -7, -8, 1x2, $14A
-		piece -$A, -9, 2x1, $6E
-		piece -$A, -1, 2x1, $6E, xflip, yflip
-		piece $28, -8, 4x2, -$10
-		piece $48, -8, 1x2, $170
+		piece 0, 0, 4x2, tile_hud+$E			; TIME
+		piece 41, 0, 4x2, 0				; BONU
+		piece 73, 0, 1x2, tile_hud			; S
+		piece 70, -1, 2x2, 8				; mini oval
+		piece 152, 0, 1x2, tile_nums			; 0
 		endsprite
 		
 frame_has_ringbonus:
 		spritemap					; RING BONUS
-		piece -$50, -8, 4x2, $152
-		piece -$27, -8, 4x2, $66
-		piece -7, -8, 1x2, $14A
-		piece -$A, -9, 2x1, $6E
-		piece -$A, -1, 2x1, $6E, xflip, yflip
-		piece $28, -8, 4x2, -8
-		piece $48, -8, 1x2, $170
+		piece 0, 0, 4x2, tile_hud+6			; RING
+		piece 41, 0, 4x2, 0				; BONU
+		piece 73, 0, 1x2, tile_hud			; S
+		piece 70, -1, 2x2, 8				; mini oval
+		piece 152, 0, 1x2, tile_nums			; 0
 		endsprite
-		even

@@ -2,7 +2,6 @@
 ; Sprite mappings - zone title cards
 ; ---------------------------------------------------------------------------
 Map_Card:	index *
-		ptr frame_card_zone
 		ptr frame_card_act1
 		ptr frame_card_act2
 		ptr frame_card_act3
@@ -10,14 +9,6 @@ Map_Card:	index *
 		ptr frame_card_act
 		ptr frame_card_letter
 		ptr frame_card_i
-		
-frame_card_zone:
-		spritemap					; ZONE
-		piece -$20, -8, 2x2, $4E
-		piece -$10, -8, 2x2, $32
-		piece 0, -8, 2x2, $2E
-		piece $10, -8, 2x2, $10
-		endsprite
 		
 frame_card_letter:
 		spritemap					; letters A-Z (except I)

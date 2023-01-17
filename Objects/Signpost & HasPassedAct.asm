@@ -149,8 +149,6 @@ HasPassedAct:
 		move.l	#HasPassedCard,ost_id(a1)		; load "Sonic Has Passed" title card
 		
 	.fail:
-		moveq	#id_UPLC_TitleCard,d0
-		jsr	UncPLC					; load title card patterns
 		move.b	#1,(f_pass_bonus_update).w
 		moveq	#0,d0
 		move.b	(v_time_min).w,d0

@@ -2,7 +2,7 @@
 ; Object 34 - zone title cards
 
 ; spawned by:
-;	GM_Level, TitleCard
+;	GM_Level, TitleCard, HasPassedCard
 ; ---------------------------------------------------------------------------
 
 TitleCard:
@@ -68,15 +68,20 @@ autocard:	macro namestr,zonestr
 		zonexpos: = namexpos+namewidth-zonewidth
 		endc
 		ovalxpos: = namexpos+namewidth-28
+		ifarg \4
+		zoneypos: = \4
+		else
+		zoneypos: = 80
+		endc
 		dc.w 4-1					; number of objects
 		; green hill
 		dc.l Map_Card					; mappings pointer
 		dc.b -1						; frame id (-1 for string)
 		dc.b id_Card_WaitEnter				; routine number
-		dc.w screen_left-16,screen_top+80		; x/y start
+		dc.w screen_left-16,screen_top+zoneypos		; x/y start
 		dc.w 10						; delay before entering screen
 		dc.w 16,0					; x/y speed entering screen
-		dc.w screen_left+namexpos,screen_top+80		; x/y stop
+		dc.w screen_left+namexpos,screen_top+zoneypos	; x/y stop
 		dc.w 60						; delay before leaving screen
 		dc.w -32,0					; x/y speed leaving screen
 		dc.l v_tile_a					; RAM address where tile setting is stored
@@ -86,10 +91,10 @@ autocard:	macro namestr,zonestr
 		dc.l Map_Card					; mappings pointer
 		dc.b -1						; frame id (-1 for string)
 		dc.b id_Card_WaitEnter				; routine number
-		dc.w screen_left-16,screen_top+100		; x/y start
+		dc.w screen_left-16,screen_top+zoneypos+20	; x/y start
 		dc.w 40						; delay before entering screen
 		dc.w 16,0					; x/y speed entering screen
-		dc.w screen_left+zonexpos,screen_top+100	; x/y stop
+		dc.w screen_left+zonexpos,screen_top+zoneypos+20 ; x/y stop
 		dc.w 60						; delay before leaving screen
 		dc.w -32,0					; x/y speed leaving screen
 		dc.l v_tile_a					; RAM address where tile setting is stored
@@ -103,10 +108,10 @@ autocard:	macro namestr,zonestr
 		else
 		dc.b id_Card_Leave				; delete if there is no act number
 		endc
-		dc.w screen_right+32,screen_top+106		; x/y start
+		dc.w screen_right+32,screen_top+zoneypos+26	; x/y start
 		dc.w 38						; delay before entering screen
 		dc.w -16,0					; x/y speed entering screen
-		dc.w screen_left+ovalxpos,screen_top+106	; x/y stop
+		dc.w screen_left+ovalxpos,screen_top+zoneypos+26 ; x/y stop
 		dc.w 60						; delay before leaving screen
 		dc.w 32,0					; x/y speed leaving screen
 		dc.l v_tile_act					; RAM address where tile setting is stored
@@ -114,10 +119,10 @@ autocard:	macro namestr,zonestr
 		dc.l Map_Card					; mappings pointer
 		dc.b id_frame_card_oval				; frame id
 		dc.b id_Card_WaitEnter				; routine number
-		dc.w screen_right+32,screen_top+96		; x/y start
+		dc.w screen_right+32,screen_top+zoneypos+16	; x/y start
 		dc.w 6						; delay before entering screen
 		dc.w -16,0					; x/y speed entering screen
-		dc.w screen_left+ovalxpos,screen_top+96		; x/y stop
+		dc.w screen_left+ovalxpos,screen_top+zoneypos+16 ; x/y stop
 		dc.w 60						; delay before leaving screen
 		dc.w 32,0					; x/y speed leaving screen
 		dc.l v_tile_titlecard				; RAM address where tile setting is stored
@@ -144,6 +149,8 @@ Card_Main:	; Routine 0
 	.keep_act:
 		lea	Card_Settings,a2
 		move.w	(v_titlecard_zone).w,d0
+		
+Card_Load:
 		add.w	d0,d0
 		move.w	(a2,d0.w),d0
 		lea	(a2,d0.w),a2				; jump to relevant card settings
@@ -176,6 +183,7 @@ Card_Main:	; Routine 0
 	.not_a_string:
 		dbf	d1,.loop
 		rts
+; ===========================================================================
 		
 Card_String:
 		movea.l	a1,a4					; save OST address of first letter
@@ -221,6 +229,7 @@ Card_String:
 		bne.w	.loop					; branch if not 0
 		evenr	a2					; align a2 to even byte
 		rts
+; ===========================================================================
 		
 Card_WaitEnter:	; Routine 2
 		tst.b	ost_routine2(a0)
@@ -235,6 +244,7 @@ Card_WaitEnter:	; Routine 2
 		
 	.wait:
 		rts
+; ===========================================================================
 		
 Card_Enter:	; Routine 4
 		moveq	#0,d1
@@ -273,16 +283,20 @@ Card_Enter:	; Routine 4
 		
 	.not_at_stop:
 		jmp	DisplaySprite
+; ===========================================================================
 		
 Card_WaitLeave:	; Routine 6
 		tst.w	(v_brightness).w
 		bne.s	.wait					; branch if still fading in from black
+		tst.b	(v_haspassed_state).w
+		bne.s	.wait					; branch if on "Sonic Has Passed" card
 		subq.w	#1,ost_card_time2(a0)			; decrement timer
 		bpl.s	.wait					; branch if time remains
 		add.b	#2,ost_routine(a0)			; goto Card_Leave next
 		
 	.wait:
 		jmp	DisplaySprite
+; ===========================================================================
 		
 Card_Leave:	; Routine 8
 		move.w	ost_card_x_speed2(a0),d0
