@@ -132,7 +132,6 @@ SS_FinishLoop:
 		bsr.w	ClearScreen
 		;moveq	#id_UPLC_TitleCard,d0
 		;jsr	UncPLC					; load title card patterns
-		jsr	(Hud_Base).l
 		enable_ints
 		moveq	#id_Pal_SSResult,d0
 		bsr.w	PalLoad				; load results screen palette

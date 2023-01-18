@@ -441,8 +441,8 @@ UPLC_HUD:	uplcheader $D900
 
 UPLC_SonicCard:	uplcheader $B000
 		uplc Art_TitleCard,v_tile_titlecard
-		uplc Art_TitleCardBonus,v_tile_bonus
 		uplc Art_TitleCardAct,v_tile_act
+		uplc Art_TitleCardBonus,v_tile_bonus
 		uplc Art_TitleCardH,v_tile_h
 		uplc Art_TitleCardA,v_tile_a
 		uplc Art_TitleCardS,v_tile_s
@@ -457,8 +457,8 @@ UPLC_SonicCard:	uplcheader $B000
 
 UPLC_KetchupCard:	uplcheader $B000
 		uplc Art_TitleCard,v_tile_titlecard
-		uplc Art_TitleCardBonus,v_tile_bonus
 		uplc Art_TitleCardAct,v_tile_act
+		uplc Art_TitleCardBonus,v_tile_bonus
 		uplc Art_TitleCardH,v_tile_h
 		uplc Art_TitleCardA,v_tile_a
 		uplc Art_TitleCardS,v_tile_s
@@ -473,8 +473,8 @@ UPLC_KetchupCard:	uplcheader $B000
 
 UPLC_MustardCard:	uplcheader $B000
 		uplc Art_TitleCard,v_tile_titlecard
-		uplc Art_TitleCardBonus,v_tile_bonus
 		uplc Art_TitleCardAct,v_tile_act
+		uplc Art_TitleCardBonus,v_tile_bonus
 		uplc Art_TitleCardH,v_tile_h
 		uplc Art_TitleCardA,v_tile_a
 		uplc Art_TitleCardS,v_tile_s
@@ -595,11 +595,11 @@ UPLC_FZCard:	uplcheader $B000
 		uplc Art_TitleCardL,v_tile_l
 	.end:
 
-UPLC_Act2Card:	uplcheader $B3E0
+UPLC_Act2Card:	uplcheader $B260
 		uplc Art_TitleCard2
 	.end:
 
-UPLC_Act3Card:	uplcheader $B3E0
+UPLC_Act3Card:	uplcheader $B260
 		uplc Art_TitleCard3
 	.end:
 

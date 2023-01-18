@@ -42,7 +42,6 @@ GM_Ending:
 		move.w	#id_EndZ_bad,(v_zone).w			; set level number to 0601 (no flowers)
 
 	.all_emeralds:
-		jsr	(Hud_Base).l				; load uncompressed portion of HUD graphics
 		bsr.w	LoadPerZone
 		bsr.w	DeformLayers
 		bset	#redraw_left_bit,(v_fg_redraw_direction).w

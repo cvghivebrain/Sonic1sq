@@ -150,14 +150,10 @@ HUD_LivesCount:	; Routine 6
 		tst.b	(f_hud_lives_update).w			; does the lives counter need updating?
 		beq.s	HUD_Display				; if not, branch
 		clr.b	(f_hud_lives_update).w
-		move.w	#1,(v_lives_spritecount).w		; assume 1 digit
 		moveq	#0,d0
 		move.b	(v_lives).w,d0				; load number of lives
-		cmpi.b	#9,d0
-		bls.s	.singledigit				; branch if 9 or fewer
-		add.w	#1,(v_lives_spritecount).w		; use 2 digits
-		
-	.singledigit:
+		bsr.w	CountDigits				; d1 = number of digits
+		move.w	d1,(v_lives_spritecount).w
 		bsr.w	HexToDec
 		move.b	(a1)+,(v_lives_sprite2+3).w		; set tile for tens digit
 		move.b	(a1),(v_lives_sprite1+3).w		; set tile for low digit
@@ -167,24 +163,19 @@ HUD_RingsCount:	; Routine 8
 		tst.b	(v_hud_rings_update).w			; does the rings counter need updating?
 		beq.s	HUD_Display				; if not, branch
 		clr.b	(v_hud_rings_update).w
-		move.w	#1,(v_rings_spritecount).w		; assume 1 digit
 		moveq	#0,d0
 		move.w	(v_rings).w,d0				; load number of rings
-		cmpi.w	#9,d0
-		bls.s	.singledigit				; branch if 9 or fewer
-		cmpi.w	#99,d0
-		bls.s	.doubledigit				; branch if 99 or fewer
-		add.w	#1,(v_rings_spritecount).w
+		bsr.w	CountDigits				; d1 = number of digits
+		move.w	d1,(v_rings_spritecount).w
+		cmpi.b	#3,d1
+		bne.s	.skip_triple				; branch if not 3 digits
 		divu.w	#100,d0					; get hundreds digit
 		add.b	d0,d0
 		move.b	d0,(v_rings_sprite3+3).w		; set tile for hundreds digit
 		clr.w	d0					; remove hundreds digit
 		swap	d0					; get tens/low digits from remainder
 		
-	.doubledigit:
-		add.w	#1,(v_rings_spritecount).w
-		
-	.singledigit:
+	.skip_triple:
 		bsr.w	HexToDec2
 		move.b	(a1)+,(v_rings_sprite2+3).w		; set tile for tens digit
 		move.b	(a1),(v_rings_sprite1+3).w		; set tile for low digit
@@ -237,43 +228,30 @@ HUD_ScoreCount:	; Routine $C
 		move.w	#0,(v_score_spritecount).w		; assume 0 digits
 		move.l	(v_score).w,d0				; get score
 		beq.w	.exit					; branch if 0
+		bsr.w	CountDigits				; d1 = number of digits
+		move.w	d1,(v_score_spritecount).w
 		
-		cmpi.l	#99999,d0
-		bls.s	.skip_digit6				; branch if 99999 or less
-		add.w	#1,(v_score_spritecount).w
-		moveq	#-1,d1
+		cmpi.b	#5,d0
+		beq.s	.skip_digit6				; branch if 5 digits
+		bcs.s	.skip_digit5				; branch if 1-4 digits
+		moveq	#-1,d2
 	.loop_digit6:
-		addq.b	#1,d1					; increment digit counter
+		addq.b	#1,d2					; increment digit counter
 		sub.l	#100000,d0				; decrement highest digit
 		bcc.s	.loop_digit6				; branch if +ve
 		add.l	#100000,d0				; restore to +ve
-		move.b	d1,(v_score_sprite6+3).w		; set tile for highest digit
+		move.b	d2,(v_score_sprite6+3).w		; set tile for highest digit
 		
 	.skip_digit6:
-		cmpi.l	#9999,d0
-		bls.s	.skip_digit5				; branch if 9999 or less
-		add.w	#1,(v_score_spritecount).w
-		moveq	#-1,d1
+		moveq	#-1,d2
 	.loop_digit5:
-		addq.b	#1,d1					; increment digit counter
+		addq.b	#1,d2					; increment digit counter
 		sub.l	#10000,d0				; decrement 5th digit
 		bcc.s	.loop_digit5				; branch if +ve
 		add.l	#10000,d0				; restore to +ve
-		move.b	d1,(v_score_sprite5+3).w		; set tile for 5th digit
+		move.b	d2,(v_score_sprite5+3).w		; set tile for 5th digit
 		
 	.skip_digit5:
-		add.w	#1,(v_score_spritecount).w
-		cmpi.w	#9,d0
-		bls.s	.display				; branch if 9 or less
-		add.w	#1,(v_score_spritecount).w
-		cmpi.w	#99,d0
-		bls.s	.display				; branch if 99 or less
-		add.w	#1,(v_score_spritecount).w
-		cmpi.w	#999,d0
-		bls.s	.display				; branch if 999 or less
-		add.w	#1,(v_score_spritecount).w
-		
-	.display:
 		divu.w	#100,d0					; get digits 3 & 4
 		bsr.w	HexToDec2
 		move.b	(a1)+,(v_score_sprite4+3).w		; set tile for digit 4
@@ -286,51 +264,4 @@ HUD_ScoreCount:	; Routine $C
 		
 	.exit:
 		rts
-
-; ---------------------------------------------------------------------------
-; Subroutine to convert hex byte into decimal (up to 99)
-
-; input:
-;	d0.w = hex byte
-
-; output:
-;	(a1) = decimal tens digit
-;	1(a1) = decimal low digit
-; ---------------------------------------------------------------------------
-
-HexToDec:
-		lea	HUD_TimeList(pc),a1
-		bra.w	HexToDec_Run
-
-HUD_TimeList:	dc.b 0,0,0,1,0,2,0,3,0,4,0,5,0,6,0,7,0,8,0,9
-		dc.b 1,0,1,1,1,2,1,3,1,4,1,5,1,6,1,7,1,8,1,9
-		dc.b 2,0,2,1,2,2,2,3,2,4,2,5,2,6,2,7,2,8,2,9
-		dc.b 3,0,3,1,3,2,3,3,3,4,3,5,3,6,3,7,3,8,3,9
-		dc.b 4,0,4,1,4,2,4,3,4,4,4,5,4,6,4,7,4,8,4,9
-		dc.b 5,0,5,1,5,2,5,3,5,4,5,5,5,6,5,7,5,8,5,9
-		dc.b 6,0,6,1,6,2,6,3,6,4,6,5,6,6,6,7,6,8,6,9
-		dc.b 7,0,7,1,7,2,7,3,7,4,7,5,7,6,7,7,7,8,7,9
-		dc.b 8,0,8,1,8,2,8,3,8,4,8,5,8,6,8,7,8,8,8,9
-		dc.b 9,0,9,1,9,2,9,3,9,4,9,5,9,6,9,7,9,8,9,9
-		even
-
-HexToDec2:
-		lea	HUD_TimeList2(pc),a1
-		
-	HexToDec_Run:
-		add.b	d0,d0
-		lea	(a1,d0.w),a1
-		rts
-
-HUD_TimeList2:	dc.b 0*2,0*2,0*2,1*2,0*2,2*2,0*2,3*2,0*2,4*2,0*2,5*2,0*2,6*2,0*2,7*2,0*2,8*2,0*2,9*2
-		dc.b 1*2,0*2,1*2,1*2,1*2,2*2,1*2,3*2,1*2,4*2,1*2,5*2,1*2,6*2,1*2,7*2,1*2,8*2,1*2,9*2
-		dc.b 2*2,0*2,2*2,1*2,2*2,2*2,2*2,3*2,2*2,4*2,2*2,5*2,2*2,6*2,2*2,7*2,2*2,8*2,2*2,9*2
-		dc.b 3*2,0*2,3*2,1*2,3*2,2*2,3*2,3*2,3*2,4*2,3*2,5*2,3*2,6*2,3*2,7*2,3*2,8*2,3*2,9*2
-		dc.b 4*2,0*2,4*2,1*2,4*2,2*2,4*2,3*2,4*2,4*2,4*2,5*2,4*2,6*2,4*2,7*2,4*2,8*2,4*2,9*2
-		dc.b 5*2,0*2,5*2,1*2,5*2,2*2,5*2,3*2,5*2,4*2,5*2,5*2,5*2,6*2,5*2,7*2,5*2,8*2,5*2,9*2
-		dc.b 6*2,0*2,6*2,1*2,6*2,2*2,6*2,3*2,6*2,4*2,6*2,5*2,6*2,6*2,6*2,7*2,6*2,8*2,6*2,9*2
-		dc.b 7*2,0*2,7*2,1*2,7*2,2*2,7*2,3*2,7*2,4*2,7*2,5*2,7*2,6*2,7*2,7*2,7*2,8*2,7*2,9*2
-		dc.b 8*2,0*2,8*2,1*2,8*2,2*2,8*2,3*2,8*2,4*2,8*2,5*2,8*2,6*2,8*2,7*2,8*2,8*2,8*2,9*2
-		dc.b 9*2,0*2,9*2,1*2,9*2,2*2,9*2,3*2,9*2,4*2,9*2,5*2,9*2,6*2,9*2,7*2,9*2,8*2,9*2,9*2
-		even
 		

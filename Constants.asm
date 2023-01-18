@@ -376,31 +376,3 @@ countof_ss_update:	equ $20		; number of update slots
 year:		equ _year+1900
 month:		substr ((_month-1)*3)+1,((_month-1)*3)+3,"JANFEBMARAPRMAYJUNJULAUGSEPOCTNOVDEC"
 date:		equs "\#year\.\month"				; e.g. "1991.APR" for use in header
-
-; Title card letters
-tile_card_A:	equ 0
-tile_card_B:	equ tile_card_A+4
-tile_card_C:	equ tile_card_B+4
-tile_card_D:	equ tile_card_C+4
-tile_card_E:	equ tile_card_D+4
-tile_card_F:	equ tile_card_E+4
-tile_card_G:	equ tile_card_F+4
-tile_card_H:	equ tile_card_G+4
-tile_card_I:	equ tile_card_H+4
-tile_card_J:	equ tile_card_I
-tile_card_K:	equ tile_card_I+2
-tile_card_L:	equ tile_card_K+4
-tile_card_M:	equ tile_card_L+4
-tile_card_N:	equ tile_card_M+4
-tile_card_O:	equ tile_card_N+4
-tile_card_P:	equ tile_card_O+4
-tile_card_Q:	equ tile_card_P
-tile_card_R:	equ tile_card_P+4
-tile_card_S:	equ tile_card_R+4
-tile_card_T:	equ tile_card_S+4
-tile_card_U:	equ tile_card_T+4
-tile_card_V:	equ tile_card_U+4
-tile_card_W:	equ tile_card_V
-tile_card_X:	equ tile_card_V+4
-tile_card_Y:	equ tile_card_X+4
-tile_card_Z:	equ tile_card_Y+4

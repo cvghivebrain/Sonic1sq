@@ -42,7 +42,7 @@ HasSet_Mustard:	autocard "MUSTARD HAS","PASSED",,60
 Has_Main:	; Routine 0
 		move.b	#1,(v_haspassed_state).w
 		moveq	#id_UPLC_SonicCard,d0
-		add.w	(v_character1).w,d0
+		add.w	(v_haspassed_character).w,d0
 		jsr	UncPLC					; load title card patterns
 		move.w	(v_titlecard_act).w,d0
 		sub.w	#2,d0
@@ -53,7 +53,7 @@ Has_Main:	; Routine 0
 	.keep_act:
 		move.l	#TitleCard,ost_id(a0)			; this object becomes the oval
 		lea	Has_Settings,a2
-		move.w	(v_character1).w,d0
+		move.w	(v_haspassed_character).w,d0
 		bsr.w	Card_Load				; load "SONIC HAS PASSED" and oval objects
 		
 		moveq	#3-1,d1
@@ -176,15 +176,8 @@ Has_Time:	; Routine $A
 		beq.w	Has_Delete				; branch if time bonus is 0
 		tst.b	(f_pass_bonus_update).w
 		beq.s	Has_Score				; branch if update flag isn't set
-		move.w	#2,(v_timebonus_spritecount).w		; assume 2 digits
-		cmpi.w	#99,d0
-		bls.s	.display				; branch if 99 or less
-		add.w	#1,(v_timebonus_spritecount).w
-		cmpi.w	#999,d0
-		bls.s	.display				; branch if 999 or less
-		add.w	#1,(v_timebonus_spritecount).w
-		
-	.display:
+		jsr	CountDigits				; d1 = number of digits
+		move.w	d1,(v_timebonus_spritecount).w
 		divu.w	#100,d0					; get digits 3 & 4
 		jsr	HexToDec2
 		move.b	(a1)+,(v_timebonus_sprite4+3).w		; set tile for digit 4
@@ -202,15 +195,8 @@ Has_Rings:	; Routine $C
 		beq.s	Has_Delete				; branch if ring bonus is 0
 		tst.b	(f_pass_bonus_update).w
 		beq.s	Has_Score				; branch if update flag isn't set
-		move.w	#2,(v_ringbonus_spritecount).w		; assume 2 digits
-		cmpi.w	#99,d0
-		bls.s	.display				; branch if 99 or less
-		add.w	#1,(v_ringbonus_spritecount).w
-		cmpi.w	#999,d0
-		bls.s	.display				; branch if 999 or less
-		add.w	#1,(v_ringbonus_spritecount).w
-		
-	.display:
+		jsr	CountDigits				; d1 = number of digits
+		move.w	d1,(v_ringbonus_spritecount).w
 		divu.w	#100,d0					; get digits 3 & 4
 		jsr	HexToDec2
 		move.b	(a1)+,(v_ringbonus_sprite4+3).w		; set tile for digit 4

@@ -481,7 +481,7 @@ LGrass_Coll_Sloped:
 		include "Objects\_ReactToItem, HurtSonic & KillSonic.asm"
 
 		include "Objects\HUD.asm"			; HUD
-		include "Includes\HUD_Update, HUD_Base & ContScrCounter.asm"
+		include "Objects\_HexToDec.asm"
 
 		include "Objects\SLZ Fans.asm"			; Fan
 
