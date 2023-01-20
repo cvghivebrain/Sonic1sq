@@ -328,20 +328,14 @@ Solid_ResetFloor:
 		btst	#status_platform_bit,ost_status(a1)	; is Sonic standing on something?
 		beq.s	.notonobj				; if not, branch
 
-		moveq	#0,d0
-		move.b	ost_sonic_on_obj(a1),d0			; get OST index of object being stood on
-		lsl.w	#6,d0
-		addi.l	#(v_ost_all&$FFFFFF),d0
+		moveq	#-1,d0
+		move.w	ost_sonic_on_obj(a1),d0			; get OST of object being stood on
 		movea.l	d0,a2					; a2 = address of OST of object being stood on
 		bclr	#status_platform_bit,ost_status(a2)	; clear object's standing flags
 		clr.b	ost_solid(a2)
 
 	.notonobj:
-		move.w	a0,d0
-		subi.w	#v_ost_all&$FFFF,d0
-		lsr.w	#6,d0
-		andi.w	#$7F,d0					; convert object's OST address to index
-		move.b	d0,ost_sonic_on_obj(a1)			; save index of object being stood on
+		move.w	a0,ost_sonic_on_obj(a1)			; save OST of object being stood on
 		move.b	#0,ost_angle(a1)			; clear Sonic's angle
 		move.w	#0,ost_y_vel(a1)			; stop Sonic
 		move.w	ost_x_vel(a1),ost_inertia(a1)

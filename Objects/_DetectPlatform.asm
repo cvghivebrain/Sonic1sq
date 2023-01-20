@@ -61,10 +61,8 @@ DetectPlatform:
 Plat_NoCheck:							; jump here to skip all checks
 		btst	#status_platform_bit,ost_status(a1)	; is Sonic on a platform already?
 		beq.s	.no					; if not, branch
-		moveq	#0,d0
-		move.b	ost_sonic_on_obj(a1),d0			; get OST index for that platform
-		lsl.w	#6,d0
-		addi.l	#v_ost_all&$FFFFFF,d0			; convert index to RAM address
+		moveq	#-1,d0
+		move.w	ost_sonic_on_obj(a1),d0			; get OST address for that platform
 		movea.l	d0,a2					; point a2 to that address
 		bclr	#status_platform_bit,ost_status(a2)	; clear platform bit for the other platform
 		clr.b	ost_routine2(a2)
@@ -73,11 +71,7 @@ Plat_NoCheck:							; jump here to skip all checks
 		subq.b	#2,ost_routine(a2)			; decrement counter to "detect mode"
 
 	.no:
-		move.w	a0,d0
-		subi.w	#v_ost_all&$FFFF,d0
-		lsr.w	#6,d0
-		andi.w	#$7F,d0
-		move.b	d0,ost_sonic_on_obj(a1)			; convert current platform OST address to index and store it
+		move.w	a0,ost_sonic_on_obj(a1)			; save current platform OST address
 		move.b	#0,ost_angle(a1)
 		move.w	#0,ost_y_vel(a1)
 		move.w	ost_x_vel(a1),ost_inertia(a1)

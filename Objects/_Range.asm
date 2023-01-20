@@ -18,16 +18,12 @@ Range:
 		move.w	ost_x_pos(a1),d0
 		sub.w	ost_x_pos(a0),d0			; d0 = x dist (-ve if Sonic is to the left)
 		move.w	d0,d1
-		bpl.s	.x_not_neg
-		neg.w	d1
-	.x_not_neg:
+		abs.w	d1					; make d1 +ve
 		
 		move.w	ost_y_pos(a1),d2
 		sub.w	ost_y_pos(a0),d2			; d2 = y dist (-ve if Sonic is above)
 		move.w	d2,d3
-		bpl.s	.y_not_neg
-		neg.w	d3
-	.y_not_neg:
+		abs.w	d3					; make d3 +ve
 		
 		rts
 		
@@ -56,9 +52,7 @@ RangePlus:
 		move.w	ost_x_pos(a1),d0
 		sub.w	ost_x_pos(a0),d0			; d0 = x dist (-ve if Sonic is to the left)
 		move.w	d0,d1
-		bpl.s	.x_not_neg
-		neg.w	d1
-	.x_not_neg:
+		abs.w	d1					; make d1 +ve
 		;move.b	ost_width(a1),d4
 		move.b	(v_player1_width).w,d4
 		sub.w	d4,d1
@@ -68,9 +62,7 @@ RangePlus:
 		move.w	ost_y_pos(a1),d2
 		sub.w	ost_y_pos(a0),d2			; d2 = y dist (-ve if Sonic is above)
 		move.w	d2,d3
-		bpl.s	.y_not_neg
-		neg.w	d3
-	.y_not_neg:
+		abs.w	d3					; make d3 +ve
 		move.b	ost_height(a1),d4
 		sub.w	d4,d3
 		move.b	ost_height(a0),d4

@@ -287,14 +287,14 @@ ost_enemy_combo:	equ $3E		; number of enemies broken in a row (0-$A) (2 bytes)
 ost_sonic_flash_time:	rs.w 1					; time Sonic flashes for after getting hit (2 bytes)
 ost_sonic_invincible_time: rs.w 1				; time left for invincibility (2 bytes)
 ost_sonic_shoe_time:	rs.w 1					; time left for speed shoes (2 bytes)
+ost_sonic_restart_time:	rs.w 1					; time until level restarts (2 bytes)
+ost_sonic_lock_time:	rs.w 1					; time left for locked controls, e.g. after hitting a spring (2 bytes)
 ost_sonic_angle_right:	rs.b 1					; angle of floor on Sonic's right side
 ost_sonic_angle_left:	rs.b 1					; angle of floor on Sonic's left side
 ost_sonic_sbz_disc:	rs.b 1					; 1 if Sonic is stuck to SBZ disc
 ost_sonic_anim_next:	rs.b 1					; next animation
-ost_sonic_restart_time:	rs.w 1					; time until level restarts (2 bytes)
 ost_sonic_jump:		rs.b 1					; 1 if Sonic is jumping
-ost_sonic_on_obj:	rs.b 1					; OST index of object Sonic stands on
-ost_sonic_lock_time:	rs.w 1					; time left for locked controls, e.g. after hitting a spring (2 bytes)
+ost_sonic_on_obj:	equ ost_parent				; OST index of object Sonic stands on (2 bytes)
 		rsobjend
 
 ; Object variables used by bosses

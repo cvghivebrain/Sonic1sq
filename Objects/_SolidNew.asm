@@ -6,7 +6,7 @@
 ;	d1.l = collision type (0 = none; 1 = top; 2 = bottom; 4 = left; 8 = right)
 ;	a1 = address of OST of Sonic
 
-;	uses d2.w, d3.w, d4.l, d5.w, d6.l
+;	uses d2.w, d3.w, d4.l
 ; ---------------------------------------------------------------------------
 
 SolidNew:
@@ -14,33 +14,26 @@ SolidNew:
 		tst.b	ost_solid(a0)
 		bne.w	Sol_Stand				; branch if Sonic is already standing on object
 		cmp.w	#0,d1
-		bgt.s	.exit					; branch if outside hitbox
+		bgt.s	Sol_None				; branch if outside x hitbox
 		tst.w	d3
-		bpl.s	.exit
-		move.w	ost_y_pos(a1),d5
-		moveq	#0,d6
-		move.b	ost_height(a1),d6
-		sub.w	d6,d5					; d5 = y pos of Sonic's top edge
-		move.w	d4,d2					; d2 = object height
-		add.w	ost_y_pos(a0),d4			; d4 = y pos of obj bottom edge
-		cmp.w	d4,d5
-		bhi.s	Sol_Below				; branch if Sonic is below bottom edge
-		add.w	d6,d5
-		add.w	d6,d5					; d5 = y pos of Sonic's bottom edge
-		sub.w	#4,d5					; extra 4px leeway
-		sub.w	d2,d4
-		sub.w	d2,d4					; d4 = y pos of obj top edge
-		cmp.w	d4,d5
-		bcs.s	Sol_Above				; branch if Sonic is above top edge
-		bra.s	Sol_Side
+		bpl.s	Sol_None				; branch if outside y hitbox
 		
-	.exit:
-		moveq	#0,d1					; set collision flag to none
-		rts
+		cmp.w	d1,d3
+		blt.s	Sol_Side				; branch if Sonic is to the side
+		
+		tst.w	d2
+		bmi.s	Sol_Above				; branch if Sonic is above
 		
 Sol_Below:
 		sub.w	d3,ost_y_pos(a1)			; snap to hitbox
+		move.w	#0,ost_y_vel(a1)			; stop Sonic moving up
 		moveq	#2,d1					; set collision flag to bottom
+		btst	#status_air_bit,ost_status(a1)
+		beq.w	Sol_Kill				; branch if Sonic is on the ground
+		rts
+		
+Sol_None:
+		moveq	#0,d1					; set collision flag to none
 		rts
 		
 Sol_Above:
@@ -54,11 +47,7 @@ Sol_Above:
 		move.b	#2,ost_solid(a0)			; set flag that Sonic is standing on the object
 		bset	#status_platform_bit,ost_status(a0)	; set object's platform flag
 		bset	#status_platform_bit,ost_status(a1)	; set Sonic standing on object flag
-		move.w	a0,d5
-		subi.w	#v_ost_all&$FFFF,d5
-		lsr.w	#6,d5
-		andi.w	#$7F,d5					; convert object's OST address to index
-		move.b	d5,ost_sonic_on_obj(a1)			; save index of object being stood on
+		move.w	a0,ost_sonic_on_obj(a1)			; save OST of object being stood on
 		btst	#status_air_bit,ost_status(a1)
 		beq.s	.exit					; branch if Sonic isn't jumping
 		exg	a0,a1					; temporarily make Sonic the current object
@@ -125,6 +114,13 @@ Sol_Stand:
 		clr.b	ost_solid(a0)
 		rts
 		
+Sol_Kill:
+		movea.l	a0,a2					; this object killed Sonic
+		exg	a0,a1					; temporarily make Sonic the current object
+		jsr	KillSonic				; Sonic dies
+		exg	a0,a1					; restore this object as current
+		rts
+		
 ; ---------------------------------------------------------------------------
 ; Subroutine to make an object solid, sides only
 
@@ -133,30 +129,18 @@ Sol_Stand:
 ;	d1.l = collision type (0 = none; 4 = left; 8 = right)
 ;	a1 = address of OST of Sonic
 
-;	uses d2.w, d3.w, d4.l, d5.w, d6.l
+;	uses d2.w, d3.w, d4.l
 ; ---------------------------------------------------------------------------
 
 SolidNew_SidesOnly:
 		bsr.w	RangePlus				; get distances between Sonic (a1) and object (a0)
 		cmp.w	#0,d1
-		bgt.s	.exit					; branch if outside hitbox
+		bgt.s	.exit					; branch if outside x hitbox
 		tst.w	d3
-		bpl.s	.exit
-		move.w	ost_y_pos(a1),d5
-		moveq	#0,d6
-		move.b	ost_height(a1),d6
-		sub.w	d6,d5					; d5 = y pos of Sonic's top edge
-		move.w	d4,d2					; d2 = object height
-		add.w	ost_y_pos(a0),d4			; d4 = y pos of obj bottom edge
-		cmp.w	d4,d5
-		bhi.s	.exit					; branch if Sonic is below bottom edge
-		add.w	d6,d5
-		add.w	d6,d5					; d5 = y pos of Sonic's bottom edge
-		sub.w	d2,d4
-		sub.w	d2,d4					; d4 = y pos of obj top edge
-		cmp.w	d4,d5
-		bcs.s	.exit					; branch if Sonic is above top edge
-		bra.w	Sol_Side
+		bpl.s	.exit					; branch if outside y hitbox
+		
+		cmp.w	d1,d3
+		blt.w	Sol_Side				; branch if Sonic is to the side
 		
 	.exit:
 		moveq	#0,d1					; set collision flag to none

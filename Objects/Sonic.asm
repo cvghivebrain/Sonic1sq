@@ -304,11 +304,9 @@ Sonic_Move:
 		btst	#status_platform_bit,ost_status(a0)	; is Sonic on a platform?
 		beq.s	Sonic_Balance				; if not, branch
 		
-		moveq	#0,d0
-		move.b	ost_sonic_on_obj(a0),d0			; get OST index of platform or object
-		lsl.w	#6,d0
-		lea	(v_ost_all).w,a1
-		lea	(a1,d0.w),a1				; a1 = actual address of OST of object being stood on
+		moveq	#-1,d0
+		move.w	ost_sonic_on_obj(a0),d0			; get OST of platform or object
+		movea.l	d0,a1					; a1 = actual address of OST of object being stood on
 		tst.b	ost_status(a1)				; has object been broken?
 		bmi.s	Sonic_LookUp				; if yes, branch
 
