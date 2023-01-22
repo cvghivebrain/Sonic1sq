@@ -45,9 +45,33 @@ SSR_Config:	dc.w $20, $120,	$C4
 
 		dc.w $3A0, $120, $138
 		dc.b id_SSR_Move, id_frame_ssr_continue
+		
+SSR_Settings:	index *
+		ptr SSRSet_Special
+		ptr SSRSet_Chaos
+		ptr SSRSet_Sonic
+		ptr SSRSet_Ketchup
+		ptr SSRSet_Mustard
+		
+SSRSet_Special:	autocard "SPECIAL STAGE","",68,noact|center
+SSRSet_Chaos:	autocard "CHAOS EMERALDS","",68,noact|center
+SSRSet_Sonic:	autocard "SONIC GOT THEM ALL","",68,noact|center
+SSRSet_Ketchup:	autocard "KETCHUP","GOT THEM ALL",68,noact|center
+SSRSet_Mustard:	autocard "MUSTARD","GOT THEM ALL",68,noact|center
 ; ===========================================================================
 
 SSR_Main:	; Routine 0
+		moveq	#id_UPLC_SSResult,d0
+		jsr	UncPLC					; load results screen patterns
+		moveq	#id_UPLC_SSResult2,d0
+		jsr	UncPLC
+		move.l	#TitleCard,ost_id(a0)			; this object becomes the oval
+		lea	SSR_Settings,a2
+		moveq	#id_SSRSet_Special,d0
+		jsr	Card_Load				; load "SPECIAL STAGE" and oval objects
+		rts
+		
+		
 		movea.l	a0,a1					; replace current object with 1st from list
 		lea	(SSR_Config).l,a2			; position, routine & frame settings
 		moveq	#3,d1					; 3 additional items
@@ -57,7 +81,7 @@ SSR_Main:	; Routine 0
 		bra.s	.skip_findost
 
 	.loop:
-		bsr.w	FindFreeInert
+		;bsr.w	FindFreeInert
 		move.l	#SSResult,ost_id(a1)
 		
 	.skip_findost:
@@ -100,8 +124,8 @@ SSR_Move:	; Routine 2
 		move.w	ost_x_pos(a0),d0
 		bmi.s	.exit					; branch if object is at -ve x pos
 		cmpi.w	#$200,d0				; is object further right than $200?
-		bcc.s	.exit					; if yes, branch
-		bra.w	DisplaySprite
+		;bcc.s	.exit					; if yes, branch
+		;bra.w	DisplaySprite
 ; ===========================================================================
 
 .exit:
@@ -114,7 +138,7 @@ SSR_Move:	; Routine 2
 
 		addq.b	#2,ost_routine(a0)			; goto SSR_Wait next, and then SSR_RingBonus
 		move.w	#180,ost_ssr_time(a0)			; set time delay to 3 seconds
-		bsr.w	FindFreeInert
+		;bsr.w	FindFreeInert
 		move.l	#SSRChaos,ost_id(a1)			; load chaos emerald object
 
 SSR_Wait:	; Routine 4, 8, $C, $10
@@ -123,11 +147,11 @@ SSR_Wait:	; Routine 4, 8, $C, $10
 		addq.b	#2,ost_routine(a0)			; goto SSR_RingBonus/SSR_Exit/SSR_Continue next
 
 	.wait:
-		bra.w	DisplaySprite
+		;bra.w	DisplaySprite
 ; ===========================================================================
 
 SSR_RingBonus:	; Routine 6
-		bsr.w	DisplaySprite
+		;bsr.w	DisplaySprite
 		move.b	#1,(f_pass_bonus_update).w		; set ring bonus update flag
 		tst.w	(v_ring_bonus).w			; is ring bonus	= zero?
 		beq.s	.finish_bonus				; if yes, branch
@@ -156,11 +180,11 @@ SSR_RingBonus:	; Routine 6
 
 SSR_Exit:	; Routine $A, $12
 		move.w	#1,(f_restart).w			; restart level
-		bra.w	DisplaySprite
+		;bra.w	DisplaySprite
 ; ===========================================================================
 
 SSR_Continue:	; Routine $E
-		bsr.w	FindFreeInert
+		;bsr.w	FindFreeInert
 		move.l	#SSResult,ost_id(a1)
 		move.w	#$120,ost_x_pos(a1)
 		move.w	#$138,ost_y_screen(a1)
@@ -173,7 +197,7 @@ SSR_Continue:	; Routine $E
 		play.w	1, jsr, sfx_Continue			; play continues jingle
 		addq.b	#2,ost_routine(a0)			; goto SSR_Wait next, and then SSR_Exit
 		move.w	#360,ost_ssr_time(a0)			; set time delay to 6 seconds
-		bra.w	DisplaySprite
+		;bra.w	DisplaySprite
 ; ===========================================================================
 
 SSR_ContAni:	; Routine $14
@@ -183,4 +207,4 @@ SSR_ContAni:	; Routine $14
 		bchg	#0,ost_frame(a0)			; Sonic moves his foot every 16th frame
 
 	.wait:
-		bra.w	DisplaySprite
+		;bra.w	DisplaySprite

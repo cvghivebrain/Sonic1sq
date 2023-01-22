@@ -130,13 +130,9 @@ SS_FinishLoop:
 		move.w	#$8400+(vram_bg>>13),(a6)		; set background nametable address
 		move.w	#$9001,(a6)				; 64x32 cell plane size
 		bsr.w	ClearScreen
-		;moveq	#id_UPLC_TitleCard,d0
-		;jsr	UncPLC					; load title card patterns
 		enable_ints
 		moveq	#id_Pal_SSResult,d0
-		bsr.w	PalLoad				; load results screen palette
-		moveq	#id_UPLC_SSResult,d0
-		jsr	UncPLC					; load results screen patterns
+		bsr.w	PalLoad					; load results screen palette
 		move.b	#1,(f_hud_score_update).w		; update score counter
 		move.b	#1,(f_pass_bonus_update).w		; update ring bonus counter
 		move.w	(v_rings).w,d0

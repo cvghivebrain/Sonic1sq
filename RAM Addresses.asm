@@ -339,6 +339,7 @@ v_player1_width_roll:		rs.b 1 ; player 1 half width, rolling/jumping
 v_player1_height_roll:		rs.b 1 ; player 1 half height, rolling/jumping
 v_player1_height_diff:		rs.w 1 ; player 1 difference in height between standing and rolling
 v_haspassed_character:		rs.w 1 ; mappings frame used for "Sonic has passed"
+v_haspassed_uplc:		rs.w 1 ; UPLC used for "Sonic has passed"
 v_zone:				rs.w 1 ; $FFFFFE10 ; current zone number
 v_act:				equ __rs-1 ; $FFFFFE11 ; current act number
 v_zone_next:			rs.w 1 ; next zone number

@@ -391,9 +391,6 @@ LGrass_Coll_Sloped:
 
 		include "Objects\MZ & LZ Pushable Blocks.asm"	; PushBlock
 
-		include "Objects\Special Stage Results.asm"	; SSResult
-		include "Objects\Special Stage Results Chaos Emeralds.asm" ; SSRChaos
-
 		include "Objects\Spikes.asm"			; Spikes
 
 		include "Objects\GHZ Purple Rock.asm"		; PurpleRock
@@ -594,6 +591,8 @@ See_DataFlat:	incbin	"Collision\SLZ Seesaw Heightmap (Flat).bin" ; used by Seesa
 		include "Objects\Title Cards.asm"		; TitleCard
 		include "Objects\Game Over & Time Over.asm"	; GameOverCard
 		include "Objects\Sonic Has Passed Title Card.asm" ; HasPassedCard
+		include "Objects\Special Stage Results.asm"	; SSResult
+		include "Objects\Special Stage Results Chaos Emeralds.asm" ; SSRChaos
 
 		incfile	Kos_SegaLogo,"Graphics Kosinski\Sega Logo",kos
 		incfile	KosMap_SegaLogo,"Other Kosinski\Sega Logo",kos

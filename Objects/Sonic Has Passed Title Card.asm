@@ -34,15 +34,14 @@ Has_Settings:	index *
 		ptr HasSet_Ketchup
 		ptr HasSet_Mustard
 		
-HasSet_Sonic:	autocard "SONIC HAS","PASSED",,60
-HasSet_Ketchup:	autocard "KETCHUP HAS","PASSED",,60
-HasSet_Mustard:	autocard "MUSTARD HAS","PASSED",,60
+HasSet_Sonic:	autocard "SONIC HAS","PASSED",60
+HasSet_Ketchup:	autocard "KETCHUP HAS","PASSED",60
+HasSet_Mustard:	autocard "MUSTARD HAS","PASSED",60
 ; ===========================================================================
 
 Has_Main:	; Routine 0
 		move.b	#1,(v_haspassed_state).w
-		moveq	#id_UPLC_SonicCard,d0
-		add.w	(v_haspassed_character).w,d0
+		add.w	(v_haspassed_uplc).w,d0
 		jsr	UncPLC					; load title card patterns
 		move.w	(v_titlecard_act).w,d0
 		sub.w	#2,d0

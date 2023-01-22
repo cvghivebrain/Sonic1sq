@@ -20,34 +20,29 @@ frame_card_i:
 		piece -8, -8, 1x2, 0
 		endsprite
 		
-frame_has_act1:
 frame_card_act1:
 		spritemap					; ACT 1
 		piece -$14, 4, 4x1, $53
 		piece $C, -$C, 1x3, $57
 		endsprite
 		
-frame_has_act2:
 frame_card_act2:
 		spritemap					; ACT 2
 		piece -$14, 4, 4x1, $53
 		piece 8, -$C, 2x3, $5A
 		endsprite
 		
-frame_has_act3:
 frame_card_act3:
 		spritemap					; ACT 3
 		piece -$14, 4, 4x1, $53
 		endsprite
 		
-frame_has_act:
 frame_card_act:
 		spritemap					; ACT #
 		piece -$14, 4, 3x1, 0
 		piece 8, -$C, 2x3, 3
 		endsprite
 		
-frame_has_oval:
 frame_ssr_oval:
 frame_card_oval:
 		spritemap					; Oval

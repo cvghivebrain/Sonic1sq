@@ -495,6 +495,7 @@ LoadPerCharacter:
 		jsr	UncPLC					; load life icon graphics
 		
 		move.w	(a4)+,(v_haspassed_character).w		; set mappings frame for "Sonic has passed"
+		move.w	(a4)+,(v_haspassed_uplc).w		; set UPLC id for "Sonic has passed"
 		
 		moveq	#0,d0
 		move.b	(a4)+,(v_player1_width).w		; set width
@@ -514,6 +515,7 @@ CharDefs:
 		dc.w -1						; palette patch id (actual palette is loaded by LoadPerZone; use -1 to skip)
 		dc.w id_UPLC_SonicIcon				; life icon graphics
 		dc.w id_HasSet_Sonic				; "Sonic has passed" settings
+		dc.w id_UPLC_SonicCard				; "Sonic has passed" graphics
 		dc.b 18/2, 38/2					; width, height (standing/running etc.)
 		dc.b 14/2, 28/2					; width, height (rolling/jumping)
 	CharDefs_size:
@@ -524,6 +526,7 @@ CharDefs:
 		dc.w id_Pal_SonicRed
 		dc.w id_UPLC_SonicIcon
 		dc.w id_HasSet_Ketchup
+		dc.w id_UPLC_KetchupCard
 		dc.b 18/2, 38/2
 		dc.b 14/2, 28/2
 
@@ -533,6 +536,7 @@ CharDefs:
 		dc.w id_Pal_SonicYellow
 		dc.w id_UPLC_SonicIcon
 		dc.w id_HasSet_Mustard
+		dc.w id_UPLC_MustardCard
 		dc.b 18/2, 38/2
 		dc.b 14/2, 28/2
 		

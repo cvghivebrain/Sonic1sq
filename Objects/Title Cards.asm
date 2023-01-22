@@ -38,103 +38,117 @@ Card_Settings:	index *
 		ptr CardSet_SBZ
 		ptr CardSet_FZ
 		
-autocard:	macro namestr,zonestr
-		namewidth: = 0
-		tempstr: equs \namestr				; copy string
-		rept strlen(\namestr)				; do for all chars
+gettextwidth:	macro str1
+		textwidth: = 0
+		tempstr: equs \str1				; copy string
+		rept strlen(\str1)				; do for all chars
 		tempchr: substr ,1,"\tempstr"			; read first char
 		tempstr: substr 2,,"\tempstr"			; strip first char
 		if instr("I","\tempchr")
-		namewidth: = namewidth+8			; I is 8px wide
+		textwidth: = textwidth+8			; I is 8px wide
 		else
-		namewidth: = namewidth+16			; all other chars are 16px wide
+		textwidth: = textwidth+16			; all other chars are 16px wide
 		endc
 		endr
-		zonewidth: = 0
-		tempstr: equs \zonestr				; copy string
-		rept strlen(\zonestr)				; do for all chars
-		tempchr: substr ,1,"\tempstr"			; read first char
-		tempstr: substr 2,,"\tempstr"			; strip first char
-		if instr("I","\tempchr")
-		zonewidth: = zonewidth+8			; I is 8px wide
-		else
-		zonewidth: = zonewidth+16			; all other chars are 16px wide
-		endc
-		endr
+		endm
+		
+autocard:	macro namestr,zonestr,ypos
+		gettextwidth \namestr
+		namewidth: = textwidth
 		namexpos: = (screen_width-namewidth)/2
-		if ~strcmp("\3","noact")
+		
+		gettextwidth \zonestr
+		zonewidth: = textwidth
+		itemcount: = 4
+		
+		if instr("\4","noact")=0
 		zonexpos: = namexpos+namewidth-zonewidth-17
 		else
 		zonexpos: = namexpos+namewidth-zonewidth
+		itemcount: = itemcount-1
 		endc
+		if strlen(\zonestr)=0
+		itemcount: = itemcount-1
+		endc
+		
 		ovalxpos: = namexpos+namewidth-28
-		ifarg \4
-		zoneypos: = \4
+		nameypos: = \ypos
+		zoneypos: = nameypos+20
+		actypos: = nameypos+26
+		ovalypos: = nameypos+16
+		
+		if instr("\4","center")>0
+		zonexpos: = (screen_width-zonewidth)/2
+		ovalxpos: = (screen_width-$1C)/2
+		if strlen(\zonestr)=0
+		ovalypos: = nameypos
 		else
-		zoneypos: = 80
+		ovalypos: = nameypos+12
 		endc
-		dc.w 4-1					; number of objects
+		endc
+		
+		dc.w itemcount-1				; number of objects
 		; green hill
 		dc.l Map_Card					; mappings pointer
 		dc.b -1						; frame id (-1 for string)
 		dc.b id_Card_WaitEnter				; routine number
-		dc.w screen_left-16,screen_top+zoneypos		; x/y start
+		dc.w screen_left-16,screen_top+nameypos		; x/y start
 		dc.w 10						; delay before entering screen
 		dc.w 16,0					; x/y speed entering screen
-		dc.w screen_left+namexpos,screen_top+zoneypos	; x/y stop
+		dc.w screen_left+namexpos,screen_top+nameypos	; x/y stop
 		dc.w 60						; delay before leaving screen
 		dc.w -32,0					; x/y speed leaving screen
 		dc.l v_tile_a					; RAM address where tile setting is stored
 		dc.b \namestr,0
 		even
 		; zone
+		if strlen(\zonestr)>0
 		dc.l Map_Card					; mappings pointer
 		dc.b -1						; frame id (-1 for string)
 		dc.b id_Card_WaitEnter				; routine number
-		dc.w screen_left-16,screen_top+zoneypos+20	; x/y start
+		dc.w screen_left-16,screen_top+zoneypos		; x/y start
 		dc.w 40						; delay before entering screen
 		dc.w 16,0					; x/y speed entering screen
-		dc.w screen_left+zonexpos,screen_top+zoneypos+20 ; x/y stop
+		dc.w screen_left+zonexpos,screen_top+zoneypos	; x/y stop
 		dc.w 60						; delay before leaving screen
 		dc.w -32,0					; x/y speed leaving screen
 		dc.l v_tile_a					; RAM address where tile setting is stored
 		dc.b \zonestr,0
 		even
+		endc
+		if instr("\4","noact")=0
 		; act
 		dc.l Map_Card					; mappings pointer
 		dc.b id_frame_card_act				; frame id
-		if ~strcmp("\3","noact")
 		dc.b id_Card_WaitEnter				; routine number
-		else
-		dc.b id_Card_Leave				; delete if there is no act number
-		endc
-		dc.w screen_right+32,screen_top+zoneypos+26	; x/y start
+		dc.w screen_right+32,screen_top+actypos		; x/y start
 		dc.w 38						; delay before entering screen
 		dc.w -16,0					; x/y speed entering screen
-		dc.w screen_left+ovalxpos,screen_top+zoneypos+26 ; x/y stop
+		dc.w screen_left+ovalxpos,screen_top+actypos	; x/y stop
 		dc.w 60						; delay before leaving screen
 		dc.w 32,0					; x/y speed leaving screen
 		dc.l v_tile_act					; RAM address where tile setting is stored
+		endc
 		; oval
 		dc.l Map_Card					; mappings pointer
 		dc.b id_frame_card_oval				; frame id
 		dc.b id_Card_WaitEnter				; routine number
-		dc.w screen_right+32,screen_top+zoneypos+16	; x/y start
+		dc.w screen_right+32,screen_top+ovalypos	; x/y start
 		dc.w 6						; delay before entering screen
 		dc.w -16,0					; x/y speed entering screen
-		dc.w screen_left+ovalxpos,screen_top+zoneypos+16 ; x/y stop
+		dc.w screen_left+ovalxpos,screen_top+ovalypos	; x/y stop
 		dc.w 60						; delay before leaving screen
 		dc.w 32,0					; x/y speed leaving screen
 		dc.l v_tile_titlecard				; RAM address where tile setting is stored
 		endm
 		
-CardSet_GHZ:	autocard "GREEN HILL","ZONE"
-CardSet_MZ:	autocard "MARBLE","ZONE"
-CardSet_SYZ:	autocard "SPRING YARD","ZONE"
-CardSet_LZ:	autocard "LABYRINTH","ZONE"
-CardSet_SLZ:	autocard "STAR LIGHT","ZONE"
-CardSet_SBZ:	autocard "SCRAP BRAIN","ZONE"
-CardSet_FZ:	autocard "FINAL","ZONE",noact
+CardSet_GHZ:	autocard "GREEN HILL","ZONE",80
+CardSet_MZ:	autocard "MARBLE","ZONE",80
+CardSet_SYZ:	autocard "SPRING YARD","ZONE",80
+CardSet_LZ:	autocard "LABYRINTH","ZONE",80
+CardSet_SLZ:	autocard "STAR LIGHT","ZONE",80
+CardSet_SBZ:	autocard "SCRAP BRAIN","ZONE",80
+CardSet_FZ:	autocard "FINAL","ZONE",80,noact
 ; ===========================================================================
 
 Card_Main:	; Routine 0

@@ -33,7 +33,7 @@ SSRC_Main:	; Routine 0
 		bra.s	.skip_findost
 
 	.loop:
-		bsr.w	FindFreeInert
+		jsr	FindFreeInert
 		
 	.skip_findost:
 		move.l	#0,ost_id(a1)				; set object to none by default
@@ -62,4 +62,4 @@ SSRC_Flash:	; Routine 2
 		move.b	ost_anim(a0),ost_frame(a0)		; use original frame stored in ost_anim
 
 	.keep_frame:
-		bra.w	DisplaySprite
+		jmp	DisplaySprite

@@ -400,6 +400,7 @@ UncLoadCues:
 		ptr UPLC_Stars
 		ptr UPLC_Bonus
 		ptr UPLC_SSResult
+		ptr UPLC_SSResult2
 		ptr UPLC_Warp
 		ptr UPLC_Credits
 		ptr UPLC_TryAgain
@@ -620,10 +621,24 @@ UPLC_Bonus:	uplcheader vram_bonus
 	.end:
 
 UPLC_SSResult:	uplcheader $20
-		uplc Art_TitleCard,v_tile_titlecard
-		uplc Art_HUDMain,v_tile_hud
 		uplc Art_MiniSonic
 		uplc Art_ResultEm
+	.end:
+
+UPLC_SSResult2:	uplcheader $B000
+		uplc Art_TitleCard,v_tile_titlecard
+		uplc Art_TitleCardAct,v_tile_act
+		uplc Art_TitleCardBonus,v_tile_bonus
+		uplc Art_TitleCardC,v_tile_c
+		uplc Art_TitleCardH,v_tile_h
+		uplc Art_TitleCardA,v_tile_a
+		uplc Art_TitleCardO,v_tile_o
+		uplc Art_TitleCardS,v_tile_s
+		uplc Art_TitleCardE,v_tile_e
+		uplc Art_TitleCardM,v_tile_m
+		uplc Art_TitleCardR,v_tile_r
+		uplc Art_TitleCardL,v_tile_l
+		uplc Art_TitleCardD,v_tile_d
 	.end:
 
 UPLC_Warp:	uplcheader vram_shield
