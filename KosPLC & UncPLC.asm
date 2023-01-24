@@ -437,7 +437,6 @@ UncLoadCues:
 UPLC_HUD:	uplcheader $D900
 		uplc Art_HUDMain,v_tile_hud
 		uplc Art_HUDNums
-		uplc Art_LivesNums
 	.end:
 
 UPLC_SonicCard:	uplcheader $B000
@@ -629,15 +628,20 @@ UPLC_SSResult2:	uplcheader $B000
 		uplc Art_TitleCard,v_tile_titlecard
 		uplc Art_TitleCardAct,v_tile_act
 		uplc Art_TitleCardBonus,v_tile_bonus
-		uplc Art_TitleCardC,v_tile_c
-		uplc Art_TitleCardH,v_tile_h
-		uplc Art_TitleCardA,v_tile_a
-		uplc Art_TitleCardO,v_tile_o
+		uplc Art_ResultCont
 		uplc Art_TitleCardS,v_tile_s
+		uplc Art_TitleCardP,v_tile_p
 		uplc Art_TitleCardE,v_tile_e
+		uplc Art_TitleCardC,v_tile_c
+		uplc Art_TitleCardI,v_tile_i
+		uplc Art_TitleCardA,v_tile_a
+		uplc Art_TitleCardL,v_tile_l
+		uplc Art_TitleCardT,v_tile_t
+		uplc Art_TitleCardG,v_tile_g
+		uplc Art_TitleCardH,v_tile_h
+		uplc Art_TitleCardO,v_tile_o
 		uplc Art_TitleCardM,v_tile_m
 		uplc Art_TitleCardR,v_tile_r
-		uplc Art_TitleCardL,v_tile_l
 		uplc Art_TitleCardD,v_tile_d
 	.end:
 

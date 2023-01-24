@@ -144,6 +144,7 @@ v_titlecard_uplc:		rs.w 1 ; UPLC id of title card
 v_titlecard_loaded:		rs.b 1 ; count of title card objects (+1 for each object)
 v_titlecard_state:		rs.b 1 ; state of title card objects (+1 for each object when it stops on screen)
 v_haspassed_state:		rs.b 1 ; state of "Sonic Has Passed" title card (1 = loaded; 2 = move off screen on SBZ2)
+f_hide_hud:			rs.b 1 ; flag set to hide the HUD
 v_tile_hud:			rs.w 1
 v_tile_swing:			rs.w 1
 v_tile_wall:			rs.w 1
@@ -216,10 +217,6 @@ v_sonic_pos_tracker_num:	rs.w 1 ; $FFFFF7A8 ; current location within position t
 v_sonic_pos_tracker_num_low:	equ __rs-1
 f_boss_boundary:		rs.b 1 ; $FFFFF7AA ; flag set to stop Sonic moving off the right side of the screen at a boss
 v_monitor_slots:		rs.b 1
-v_lives_spriteindex:		rs.w 1 ; sprite mappings for lives counter
-v_lives_spritecount:		rs.w 1
-v_lives_sprite1:		rs.w 3
-v_lives_sprite2:		rs.w 3
 v_rings_spriteindex:		rs.w 1 ; sprite mappings for rings counter
 v_rings_spritecount:		rs.w 1
 v_rings_sprite1:		rs.w 3

@@ -27,16 +27,16 @@ FindFreeDMA:
 ;	d1.l = destination address (as DMA instruction)
 ;	d2.l = length (as DMA instruction)
 ;	(a2).l = source address (as DMA instruction)
-
-;	uses d0.w, a1
 ; ---------------------------------------------------------------------------
 
 AddDMA:
+		pushr	d0/a1
 		bsr.s	FindFreeDMA				; find free DMA slot (overwrites last slot if none are found)
 		move.l	(a2)+,(a1)+				; write source address
 		move.w	(a2)+,(a1)+				; write source address
 		move.l	d2,(a1)+				; write length
 		move.l	d1,(a1)					; write destination address
+		popr	d0/a1
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -45,16 +45,16 @@ AddDMA:
 ; input:
 ;	d1.l = destination address (as DMA instruction)
 ;	(a2).l = source address and length (as DMA instructions)
-
-;	uses d0.w, a1
 ; ---------------------------------------------------------------------------
 
 AddDMA2:
+		pushr	d0/a1
 		bsr.s	FindFreeDMA				; find free DMA slot (overwrites last slot if none are found)
 		move.l	(a2)+,(a1)+				; write source address
 		move.w	(a2)+,(a1)+				; write source address
 		move.l	(a2)+,(a1)+				; write length
 		move.l	d1,(a1)					; write destination address
+		popr	d0/a1
 		rts
 
 ; ---------------------------------------------------------------------------

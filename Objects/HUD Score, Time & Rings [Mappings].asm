@@ -59,6 +59,7 @@ frame_hud_lifeicon:
 		spritemap
 		piece	0, 0, 2x2, 0, hi			; icon
 		piece	$10, 0, 4x1, 4, hi			; SONIC
-		;piece	$30, 0, 3x1, 8, hi			; extra tiles for longer name
-		piece	$16, 8, 1x1, $B, hi			; x
+		piece	$30, 0, 1x1, 8, hi			; extra tiles for longer name
+		piece	$16, 8, 1x1, 9, hi			; x
+		piece	$20, 8, 2x1, 10, hi			; number
 		endsprite

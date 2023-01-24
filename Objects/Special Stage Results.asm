@@ -61,14 +61,19 @@ SSRSet_Mustard:	autocard "MUSTARD","GOT THEM ALL",68,noact|center
 ; ===========================================================================
 
 SSR_Main:	; Routine 0
-		moveq	#id_UPLC_SSResult,d0
-		jsr	UncPLC					; load results screen patterns
-		moveq	#id_UPLC_SSResult2,d0
-		jsr	UncPLC
+		move.b	#1,(v_haspassed_state).w		; keep title card from moving away
 		move.l	#TitleCard,ost_id(a0)			; this object becomes the oval
-		lea	SSR_Settings,a2
 		moveq	#id_SSRSet_Special,d0
+		tst.l	(v_emeralds).w
+		beq.s	.no_emeralds				; branch if you have no chaos emeralds
+		moveq	#id_SSRSet_Chaos,d0
+		
+	.no_emeralds:
+		lea	SSR_Settings,a2
 		jsr	Card_Load				; load "SPECIAL STAGE" and oval objects
+		jsr	FindFreeInert
+		move.l	#HUD,ost_id(a1)				; load HUD object (so that score mappings are generated)
+		move.b	#1,(f_hide_hud).w			; hide the HUD
 		rts
 		
 		

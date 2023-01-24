@@ -41,21 +41,7 @@ HUD_Main:	; Routine 0
 		move.w	#tile_Art_Lives,ost_tile(a1)
 		move.b	#render_abs,ost_render(a1)
 		move.b	#0,ost_priority(a1)
-		move.b	#id_HUD_Display,ost_routine(a1)
-		
-		jsr	FindFreeInert
-		move.l	#HUD,ost_id(a1)				; load life number object
-		move.w	#screen_left+48,ost_x_pos(a1)
-		move.w	#screen_top+208,ost_y_screen(a1)
-		move.l	#v_lives_spriteindex,ost_mappings(a1)	; read mappings from RAM
-		move.w	#tile_Art_LivesNums,ost_tile(a1)
-		move.b	#render_abs,ost_render(a1)
-		move.b	#0,ost_priority(a1)
 		move.b	#id_HUD_LivesCount,ost_routine(a1)
-		move.w	#2,(v_lives_spriteindex).w		; sprite mappings internal pointer
-		move.w	#$8000,(v_lives_sprite1+2).w		; sprite mappings priority high
-		move.w	#$8000,(v_lives_sprite2+2).w
-		move.w	#8,(v_lives_sprite1+4).w		; mappings position of low digit
 		move.b	#1,(f_hud_lives_update).w		; set flag to update
 		
 		jsr	FindFreeInert
@@ -144,7 +130,12 @@ HUD_Flash:	; Routine 2
 		move.b	d0,ost_frame(a0)
 		
 HUD_Display:	; Routine 4
+		tst.b	(f_hide_hud).w
+		bne.s	.dont_display				; branch if HUD is set to not display
 		jmp	DisplaySprite
+		
+	.dont_display:
+		rts
 		
 HUD_LivesCount:	; Routine 6
 		tst.b	(f_hud_lives_update).w			; does the lives counter need updating?
@@ -152,16 +143,42 @@ HUD_LivesCount:	; Routine 6
 		clr.b	(f_hud_lives_update).w
 		moveq	#0,d0
 		move.b	(v_lives).w,d0				; load number of lives
-		bsr.w	CountDigits				; d1 = number of digits
-		move.w	d1,(v_lives_spritecount).w
 		bsr.w	HexToDec
-		move.b	(a1)+,(v_lives_sprite2+3).w		; set tile for tens digit
-		move.b	(a1),(v_lives_sprite1+3).w		; set tile for low digit
-		jmp	DisplaySprite
+		move.b	(a1)+,d0				; get tens digit
+		tst.b	d0
+		bne.s	.two_digits				; branch if tens digit is not 0
+		move.b	#10,d0					; tens should be blank if 0
+	.two_digits:
+		lsl.b	#3,d0					; multiply by 8
+		lea	HUD_LivesGfxIndex(pc,d0.w),a2
+		set_dma_dest	$FBC0,d1			; VRAM address for tens digit
+		set_dma_size	sizeof_cell,d2
+		jsr	AddDMA					; load tens digit
 		
+		move.b	(a1),d0					; get low digit
+		lsl.b	#3,d0					; multiply by 8
+		lea	HUD_LivesGfxIndex(pc,d0.w),a2
+		set_dma_dest	$FBE0,d1			; VRAM address for low digit
+		jsr	AddDMA					; load low digit
+		
+		bra.s	HUD_Display
+		
+HUD_LivesGfxIndex:
+		set_dma_src	Art_LivesNums,0
+		set_dma_src	Art_LivesNums+sizeof_cell,0
+		set_dma_src	Art_LivesNums+(sizeof_cell*2),0
+		set_dma_src	Art_LivesNums+(sizeof_cell*3),0
+		set_dma_src	Art_LivesNums+(sizeof_cell*4),0
+		set_dma_src	Art_LivesNums+(sizeof_cell*5),0
+		set_dma_src	Art_LivesNums+(sizeof_cell*6),0
+		set_dma_src	Art_LivesNums+(sizeof_cell*7),0
+		set_dma_src	Art_LivesNums+(sizeof_cell*8),0
+		set_dma_src	Art_LivesNums+(sizeof_cell*9),0
+		set_dma_src	Art_LivesNums+(sizeof_cell*10),0
+	
 HUD_RingsCount:	; Routine 8
 		tst.b	(v_hud_rings_update).w			; does the rings counter need updating?
-		beq.s	HUD_Display				; if not, branch
+		beq.w	HUD_Display				; if not, branch
 		clr.b	(v_hud_rings_update).w
 		moveq	#0,d0
 		move.w	(v_rings).w,d0				; load number of rings
@@ -179,7 +196,7 @@ HUD_RingsCount:	; Routine 8
 		bsr.w	HexToDec2
 		move.b	(a1)+,(v_rings_sprite2+3).w		; set tile for tens digit
 		move.b	(a1),(v_rings_sprite1+3).w		; set tile for low digit
-		jmp	DisplaySprite
+		bra.w	HUD_Display
 		
 HUD_TimeCount:	; Routine $A
 		tst.b	(f_hud_time_update).w
@@ -212,7 +229,7 @@ HUD_TimeCount:	; Routine $A
 		move.b	d0,(v_time_sprite3+3).w			; set tile for minutes digit
 		
 	.display:
-		jmp	DisplaySprite
+		bra.w	HUD_Display
 		
 HUD_TimeOver:
 		lea	(v_ost_player).w,a0
@@ -260,7 +277,7 @@ HUD_ScoreCount:	; Routine $C
 		bsr.w	HexToDec2
 		move.b	(a1)+,(v_score_sprite2+3).w		; set tile for digit 2
 		move.b	(a1),(v_score_sprite1+3).w		; set tile for digit 1
-		jmp	DisplaySprite
+		bra.w	HUD_Display
 		
 	.exit:
 		rts
