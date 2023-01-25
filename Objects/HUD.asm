@@ -46,22 +46,7 @@ HUD_Main:	; Routine 0
 		
 		jsr	FindFreeInert
 		move.l	#HUD,ost_id(a1)				; load ring number object
-		move.w	#screen_left+64,ost_x_pos(a1)
-		move.w	#screen_top+40,ost_y_screen(a1)
-		move.l	#v_rings_spriteindex,ost_mappings(a1)	; read mappings from RAM
-		move.w	#tile_Art_HUDNums,ost_tile(a1)
-		move.b	#render_abs,ost_render(a1)
-		move.b	#0,ost_priority(a1)
 		move.b	#id_HUD_RingsCount,ost_routine(a1)
-		move.w	#2,(v_rings_spriteindex).w		; sprite mappings internal pointer
-		move.w	#$8000,(v_rings_sprite1+2).w		; sprite mappings priority high
-		move.w	#$8000,(v_rings_sprite2+2).w
-		move.w	#$8000,(v_rings_sprite3+2).w
-		move.w	#16,(v_rings_sprite1+4).w		; mappings position of low digit
-		move.w	#8,(v_rings_sprite2+4).w		; mappings position of middle digit
-		move.b	#1,(v_rings_sprite1+1).w		; 1x2 sprite size
-		move.b	#1,(v_rings_sprite2+1).w
-		move.b	#1,(v_rings_sprite3+1).w
 		move.b	#1,(v_hud_rings_update).w		; set flag to update
 		
 		jsr	FindFreeInert
@@ -178,25 +163,67 @@ HUD_LivesGfxIndex:
 	
 HUD_RingsCount:	; Routine 8
 		tst.b	(v_hud_rings_update).w			; does the rings counter need updating?
-		beq.w	HUD_Display				; if not, branch
+		beq.w	.exit					; if not, branch
 		clr.b	(v_hud_rings_update).w
-		moveq	#0,d0
-		move.w	(v_rings).w,d0				; load number of rings
-		bsr.w	CountDigits				; d1 = number of digits
-		move.w	d1,(v_rings_spritecount).w
-		cmpi.b	#3,d1
-		bne.s	.skip_triple				; branch if not 3 digits
-		divu.w	#100,d0					; get hundreds digit
-		add.b	d0,d0
-		move.b	d0,(v_rings_sprite3+3).w		; set tile for hundreds digit
-		clr.w	d0					; remove hundreds digit
-		swap	d0					; get tens/low digits from remainder
+		moveq	#10,d0
+		moveq	#0,d3
+		moveq	#10,d4
+		move.w	(v_rings).w,d3				; load number of rings
+		cmpi.w	#100,d3
+		bcs.s	.skip_triple				; branch if not 3 digits
+		divu.w	#100,d3					; get hundreds digit
+		move.w	d3,d0
+		swap	d3					; get tens/low digits from remainder
+		moveq	#0,d4
 		
 	.skip_triple:
-		bsr.w	HexToDec2
-		move.b	(a1)+,(v_rings_sprite2+3).w		; set tile for tens digit
-		move.b	(a1),(v_rings_sprite1+3).w		; set tile for low digit
-		bra.w	HUD_Display
+		set_dma_dest	$DBC0,d1			; VRAM address for hundreds digit
+		bsr.s	HUD_ShowDigit				; load hundreds digit gfx
+		move.w	d3,d0
+		bsr.w	HexToDec				; convert tens/low digits to decimal
+		move.b	(a1)+,d0				; get tens digit
+		bne.s	.not_zero				; branch if not 0
+		move.b	d4,d0					; blank if 0-9 rings, 0 if 100+ rings
+		
+	.not_zero:
+		set_dma_dest	$DC00,d1			; VRAM address for tens digit
+		bsr.s	HUD_ShowDigit				; load tens digit gfx
+		move.b	(a1),d0					; get low digit
+		set_dma_dest	$DC40,d1			; VRAM address for low digit
+		bsr.s	HUD_ShowDigit				; load low digit gfx
+		
+	.exit:
+		rts
+		
+; ---------------------------------------------------------------------------
+; Subroutine to load an 8x16px digit into VRAM
+
+; input:
+;	d0.w = digit value (0-9; 10 for blank)
+;	d1.l = VRAM address (as DMA instruction)
+
+;	uses d0.w, d2.l, a2
+; ---------------------------------------------------------------------------
+
+HUD_ShowDigit:
+		lsl.b	#3,d0					; multiply by 8
+		lea	HUD_DigitGfxIndex(pc,d0.w),a2
+		set_dma_size	sizeof_cell*2,d2		; set size to 2 cells
+		jmp	AddDMA					; load digit
+		
+HUD_DigitGfxIndex:
+		set_dma_src	Art_HUDNums,0
+		set_dma_src	Art_HUDNums+(sizeof_cell*2),0
+		set_dma_src	Art_HUDNums+(sizeof_cell*2*2),0
+		set_dma_src	Art_HUDNums+(sizeof_cell*3*2),0
+		set_dma_src	Art_HUDNums+(sizeof_cell*4*2),0
+		set_dma_src	Art_HUDNums+(sizeof_cell*5*2),0
+		set_dma_src	Art_HUDNums+(sizeof_cell*6*2),0
+		set_dma_src	Art_HUDNums+(sizeof_cell*7*2),0
+		set_dma_src	Art_HUDNums+(sizeof_cell*8*2),0
+		set_dma_src	Art_HUDNums+(sizeof_cell*9*2),0
+		set_dma_src	Art_HUDNums+(sizeof_cell*10*2),0
+		
 		
 HUD_TimeCount:	; Routine $A
 		tst.b	(f_hud_time_update).w

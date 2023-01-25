@@ -18,6 +18,7 @@ frame_hud_allyellow:
 		piece	0, $10, 4x2, $E, hi			; TIME
 		piece	0, $20, 4x2, 6, hi			; RING
 		piece	$20, $20, 1x2, 0, hi			; S
+		piece	$30, $20, 3x2, $16, hi			; ring count
 		piece	$58, 0, 1x2, tile_zero, hi		; 0
 		piece	51, 19, 1x1, tile_colon, hi		; :
 		endsprite
@@ -29,6 +30,7 @@ frame_hud_ringred:
 		piece	0, $10, 4x2, $E, hi			; TIME
 		piece	0, $20, 4x2, 6, hi, pal2		; RING
 		piece	$20, $20, 1x2, 0, hi, pal2		; S
+		piece	$30, $20, 3x2, $16, hi			; ring count
 		piece	$58, 0, 1x2, tile_zero, hi		; 0
 		piece	51, 19, 1x1, tile_colon, hi		; :
 		endsprite
@@ -40,6 +42,7 @@ frame_hud_timered:
 		piece	0, $10, 4x2, $E, hi, pal2		; TIME
 		piece	0, $20, 4x2, 6, hi			; RING
 		piece	$20, $20, 1x2, 0, hi			; S
+		piece	$30, $20, 3x2, $16, hi			; ring count
 		piece	$58, 0, 1x2, tile_zero, hi		; 0
 		piece	51, 19, 1x1, tile_colon, hi		; :
 		endsprite
@@ -51,6 +54,7 @@ frame_hud_allred:
 		piece	0, $10, 4x2, $E, hi, pal2		; TIME
 		piece	0, $20, 4x2, 6, hi, pal2		; RING
 		piece	$20, $20, 1x2, 0, hi, pal2		; S
+		piece	$30, $20, 3x2, $16, hi			; ring count
 		piece	$58, 0, 1x2, tile_zero, hi		; 0
 		piece	51, 19, 1x1, tile_colon, hi		; :
 		endsprite
