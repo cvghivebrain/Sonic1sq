@@ -216,19 +216,13 @@ v_boss_status:			rs.b 1 ; $FFFFF7A7 ; status of boss and prison capsule - 01 = b
 v_sonic_pos_tracker_num:	rs.w 1 ; $FFFFF7A8 ; current location within position tracking data
 v_sonic_pos_tracker_num_low:	equ __rs-1
 f_boss_boundary:		rs.b 1 ; $FFFFF7AA ; flag set to stop Sonic moving off the right side of the screen at a boss
-v_monitor_slots:		rs.b 1
+v_monitor_slots:		rs.b 1 ; bitfield of available monitor slots
+v_digit_buffer:			rs.b 6 ; decimal digit buffer for score counter
 v_rings_spriteindex:		rs.w 1 ; sprite mappings for rings counter
 v_rings_spritecount:		rs.w 1
 v_rings_sprite1:		rs.w 3
 v_rings_sprite2:		rs.w 3
 v_rings_sprite3:		rs.w 3
-v_time_spriteindex:		rs.w 1 ; sprite mappings for time counter
-v_time_spritecount:		rs.w 1
-v_time_sprite1:			rs.w 3
-v_time_sprite2:			rs.w 3
-v_time_sprite3:			rs.w 3
-v_time_sprite4:			rs.w 3
-v_time_sprite5:			rs.w 3
 v_score_spriteindex:		rs.w 1 ; sprite mappings for score counter
 v_score_spritecount:		rs.w 1
 v_score_sprite1:		rs.w 3

@@ -85,3 +85,37 @@ CountDigits:
 		moveq	#6,d1
 		rts
 		
+CountDigits_d3:
+		cmpi.l	#9,d0
+		bhi.s	.more_than_1
+		moveq	#1,d3
+		rts
+	
+	.more_than_1:
+		cmpi.l	#99,d0
+		bhi.s	.more_than_2
+		moveq	#2,d3
+		rts
+	
+	.more_than_2:
+		cmpi.l	#999,d0
+		bhi.s	.more_than_3
+		moveq	#3,d3
+		rts
+	
+	.more_than_3:
+		cmpi.l	#9999,d0
+		bhi.s	.more_than_4
+		moveq	#4,d3
+		rts
+	
+	.more_than_4:
+		cmpi.l	#99999,d0
+		bhi.s	.more_than_5
+		moveq	#5,d3
+		rts
+	
+	.more_than_5:
+		moveq	#6,d3
+		rts
+		

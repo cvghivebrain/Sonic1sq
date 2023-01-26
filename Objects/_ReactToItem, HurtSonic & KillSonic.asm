@@ -358,7 +358,7 @@ KillSonic:
 		move.b	#id_Death,ost_anim(a0)
 		bset	#tile_hi_bit,ost_tile(a0)
 		move.w	#sfx_Death,d0				; play normal death sound
-		cmpi.l	#Spikes,(a2)				; check	if you were killed by spikes
+		cmpi.l	#Spikes,ost_id(a2)			; check	if you were killed by spikes
 		bne.s	.sound
 		move.w	#sfx_SpikeHit,d0			; play spikes death sound
 
@@ -369,6 +369,24 @@ KillSonic:
 		moveq	#-1,d0
 		rts
 
+; ---------------------------------------------------------------------------
+; Subroutine to	kill Sonic (from object)
+
+; input:
+;	a0 = address of OST of object killing Sonic
+
+; output:
+;	d0.l = -1
+;	a2 = address of OST of Sonic
+; ---------------------------------------------------------------------------
+
+ObjectKillSonic:
+		movea.l	a0,a2					; object which killed Sonic
+		lea	(v_ost_player).w,a0			; make Sonic the current object
+		bsr.s	KillSonic				; kill Sonic
+		exg	a0,a2					; restore current object
+		rts
+		
 ; ===========================================================================
 
 React_Special:

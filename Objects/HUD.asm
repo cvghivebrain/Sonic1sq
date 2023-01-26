@@ -51,51 +51,11 @@ HUD_Main:	; Routine 0
 		
 		jsr	FindFreeInert
 		move.l	#HUD,ost_id(a1)				; load time object
-		move.w	#screen_left+56,ost_x_pos(a1)
-		move.w	#screen_top+24,ost_y_screen(a1)
-		move.l	#v_time_spriteindex,ost_mappings(a1)	; read mappings from RAM
-		move.w	#tile_Art_HUDNums,ost_tile(a1)
-		move.b	#render_abs,ost_render(a1)
-		move.b	#0,ost_priority(a1)
 		move.b	#id_HUD_TimeCount,ost_routine(a1)
-		move.w	#2,(v_time_spriteindex).w		; sprite mappings internal pointer
-		move.w	#3,(v_time_spritecount).w
-		move.w	#$8000,(v_time_sprite1+2).w		; sprite mappings priority high
-		move.w	#$8000,(v_time_sprite2+2).w
-		move.w	#$8000,(v_time_sprite3+2).w
-		move.w	#24,(v_time_sprite1+4).w		; mappings position of low digit
-		move.w	#16,(v_time_sprite2+4).w		; mappings position of middle digit
-		move.b	#1,(v_time_sprite1+1).w			; 1x2 sprite size
-		move.b	#1,(v_time_sprite2+1).w
-		move.b	#1,(v_time_sprite3+1).w
 		
 		jsr	FindFreeInert
 		move.l	#HUD,ost_id(a1)				; load score object
-		move.w	#screen_left+56,ost_x_pos(a1)
-		move.w	#screen_top+8,ost_y_screen(a1)
-		move.l	#v_score_spriteindex,ost_mappings(a1)	; read mappings from RAM
-		move.w	#tile_Art_HUDNums,ost_tile(a1)
-		move.b	#render_abs,ost_render(a1)
-		move.b	#0,ost_priority(a1)
 		move.b	#id_HUD_ScoreCount,ost_routine(a1)
-		move.w	#2,(v_score_spriteindex).w		; sprite mappings internal pointer
-		move.w	#$8000,(v_score_sprite1+2).w		; sprite mappings priority high
-		move.w	#$8000,(v_score_sprite2+2).w
-		move.w	#$8000,(v_score_sprite3+2).w
-		move.w	#$8000,(v_score_sprite4+2).w
-		move.w	#$8000,(v_score_sprite5+2).w
-		move.w	#$8000,(v_score_sprite6+2).w
-		move.w	#40,(v_score_sprite1+4).w		; mappings positions
-		move.w	#32,(v_score_sprite2+4).w
-		move.w	#24,(v_score_sprite3+4).w
-		move.w	#16,(v_score_sprite4+4).w
-		move.w	#8,(v_score_sprite5+4).w
-		move.b	#1,(v_score_sprite1+1).w		; 1x2 sprite size
-		move.b	#1,(v_score_sprite2+1).w
-		move.b	#1,(v_score_sprite3+1).w
-		move.b	#1,(v_score_sprite4+1).w
-		move.b	#1,(v_score_sprite5+1).w
-		move.b	#1,(v_score_sprite6+1).w
 
 HUD_Flash:	; Routine 2
 		moveq	#0,d0
@@ -227,9 +187,9 @@ HUD_DigitGfxIndex:
 		
 HUD_TimeCount:	; Routine $A
 		tst.b	(f_hud_time_update).w
-		beq.s	.display				; branch if time counter is flagged to stop
+		beq.s	.exit					; branch if time counter is flagged to stop
 		tst.w	(f_pause).w
-		bne.s	.display				; branch if game is paused
+		bne.s	.exit					; branch if game is paused
 		move.l	(v_time).w,d0
 		addq.b	#1,d0					; increment frame counter
 		cmpi.b	#60,d0
@@ -246,36 +206,52 @@ HUD_TimeCount:	; Routine $A
 	.update_time:
 		move.l	d0,(v_time).w				; update time
 		tst.b	d0
-		bne.s	.display				; branch if sec/min counter hasn't changed
+		bne.s	.exit					; branch if sec/min counter hasn't changed
 		lsr.w	#8,d0					; move seconds into low byte
-		bsr.w	HexToDec2				; jump to frame info for specified second
-		move.b	(a1)+,(v_time_sprite2+3).w		; set tile for tens digit
-		move.b	(a1),(v_time_sprite1+3).w		; set tile for low digit
+		bsr.w	HexToDec				; convert to decimal
+		move.b	(a1)+,d0				; get tens digit
+		set_dma_dest	$DD00,d1			; VRAM address for tens digit
+		bsr.w	HUD_ShowDigit				; load tens digit gfx
+		move.b	(a1),d0					; get low digit
+		set_dma_dest	$DD40,d1			; VRAM address for low digit
+		bsr.w	HUD_ShowDigit				; load low digit gfx
 		swap	d0					; move minutes into low byte
-		add.b	d0,d0
-		move.b	d0,(v_time_sprite3+3).w			; set tile for minutes digit
+		set_dma_dest	$DC80,d1			; VRAM address for minutes digit
+		bsr.w	HUD_ShowDigit				; load minutes digit gfx
 		
-	.display:
-		bra.w	HUD_Display
+	.exit:
+		rts
 		
 HUD_TimeOver:
-		lea	(v_ost_player).w,a0
-		movea.l	a0,a2					; a2 = object killing Sonic (himself in this case)
-		bsr.w	KillSonic				; kill Sonic
+		bsr.w	ObjectKillSonic				; kill Sonic
 		move.b	#1,(f_time_over).w			; flag for GAME OVER object to use correct frame
-		rts
+		jmp	DeleteObject				; delete time counter object (HUD is unaffected)
 		
 HUD_ScoreCount:	; Routine $C
 		tst.b	(f_hud_score_update).w			; does score counter need updating?
-		beq.w	HUD_Display				; if not, branch
+		beq.w	HUD_Exit				; if not, branch
 		clr.b	(f_hud_score_update).w
-		move.w	#0,(v_score_spritecount).w		; assume 0 digits
 		move.l	(v_score).w,d0				; get score
-		beq.w	.exit					; branch if 0
-		bsr.w	CountDigits				; d1 = number of digits
-		move.w	d1,(v_score_spritecount).w
+		beq.w	HUD_Exit				; branch if 0
+		moveq	#6-1,d4					; process 6 digits
+		set_dma_dest	$DEC0,d1			; VRAM address for lowest digit
 		
-		cmpi.b	#5,d0
+; ---------------------------------------------------------------------------
+; Subroutine to load gfx for a number into VRAM
+
+; input:
+;	d0.l = longword to display
+;	d1.l = VRAM address of lowest digit (as DMA instruction)
+;	d4.l = max. number of digits (minus 1)
+
+;	uses d0.w, d1.l, d2.l, d3.l, d4.l, a1, a2, a4
+; ---------------------------------------------------------------------------
+
+HUD_ShowLong:
+		bsr.w	CountDigits_d3				; d3 = number of digits
+		lea	(v_digit_buffer+2).w,a4
+		
+		cmpi.b	#5,d3
 		beq.s	.skip_digit6				; branch if 5 digits
 		bcs.s	.skip_digit5				; branch if 1-4 digits
 		moveq	#-1,d2
@@ -284,7 +260,7 @@ HUD_ScoreCount:	; Routine $C
 		sub.l	#100000,d0				; decrement highest digit
 		bcc.s	.loop_digit6				; branch if +ve
 		add.l	#100000,d0				; restore to +ve
-		move.b	d2,(v_score_sprite6+3).w		; set tile for highest digit
+		move.b	d2,-2(a4)				; set highest digit
 		
 	.skip_digit6:
 		moveq	#-1,d2
@@ -293,19 +269,29 @@ HUD_ScoreCount:	; Routine $C
 		sub.l	#10000,d0				; decrement 5th digit
 		bcc.s	.loop_digit5				; branch if +ve
 		add.l	#10000,d0				; restore to +ve
-		move.b	d2,(v_score_sprite5+3).w		; set tile for 5th digit
+		move.b	d2,-1(a4)				; set 5th digit
 		
 	.skip_digit5:
 		divu.w	#100,d0					; get digits 3 & 4
-		bsr.w	HexToDec2
-		move.b	(a1)+,(v_score_sprite4+3).w		; set tile for digit 4
-		move.b	(a1),(v_score_sprite3+3).w		; set tile for digit 3
+		bsr.w	HexToDec
+		move.b	(a1)+,(a4)+				; set digit 4
+		move.b	(a1),(a4)+				; set digit 3
 		swap	d0					; get last two digits from remainder
-		bsr.w	HexToDec2
-		move.b	(a1)+,(v_score_sprite2+3).w		; set tile for digit 2
-		move.b	(a1),(v_score_sprite1+3).w		; set tile for digit 1
-		bra.w	HUD_Display
+		bsr.w	HexToDec
+		move.b	(a1)+,(a4)+				; set digit 2
+		move.b	(a1),(a4)+				; set digit 1
+		
+	.loop:
+		moveq	#10,d0					; assume digit is blank
+		subq.b	#1,d3
+		bmi.s	.hide_digit				; branch if digit should be blank
+		move.b	-(a4),d0				; get digit
+	.hide_digit:
+		bsr.w	HUD_ShowDigit				; load digit gfx
+		sub.l	#$400000,d1				; go back 2 tiles in VRAM
+		dbf	d4,.loop				; repeat for all digits
 		
 	.exit:
+	HUD_Exit:
 		rts
 		

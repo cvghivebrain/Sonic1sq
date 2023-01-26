@@ -7,56 +7,57 @@ Map_HUD:	index *
 		ptr frame_hud_timered
 		ptr frame_hud_allred
 		ptr frame_hud_lifeicon
-		
-tile_zero:	equ $16
-tile_colon:	equ $2A
 
 frame_hud_allyellow:
 		spritemap
 		piece	0, 0, 4x2, 0, hi			; SCOR
 		piece	$20, 0, 1x2, $14, hi			; E
+		piece	$28, 0, 4x2, $24, hi			; score counter
+		piece	$48, 0, 3x2, $2C, hi
 		piece	0, $10, 4x2, $E, hi			; TIME
+		piece	$28, $10, 4x2, $1C, hi			; time counter
 		piece	0, $20, 4x2, 6, hi			; RING
 		piece	$20, $20, 1x2, 0, hi			; S
-		piece	$30, $20, 3x2, $16, hi			; ring count
-		piece	$58, 0, 1x2, tile_zero, hi		; 0
-		piece	51, 19, 1x1, tile_colon, hi		; :
+		piece	$30, $20, 3x2, $16, hi			; ring counter
 		endsprite
 		
 frame_hud_ringred:
 		spritemap
 		piece	0, 0, 4x2, 0, hi			; SCOR
 		piece	$20, 0, 1x2, $14, hi			; E
+		piece	$28, 0, 4x2, $24, hi			; score counter
+		piece	$48, 0, 3x2, $2C, hi
 		piece	0, $10, 4x2, $E, hi			; TIME
+		piece	$28, $10, 4x2, $1C, hi			; time counter
 		piece	0, $20, 4x2, 6, hi, pal2		; RING
 		piece	$20, $20, 1x2, 0, hi, pal2		; S
-		piece	$30, $20, 3x2, $16, hi			; ring count
-		piece	$58, 0, 1x2, tile_zero, hi		; 0
-		piece	51, 19, 1x1, tile_colon, hi		; :
+		piece	$30, $20, 3x2, $16, hi			; ring counter
 		endsprite
 		
 frame_hud_timered:
 		spritemap
 		piece	0, 0, 4x2, 0, hi			; SCOR
 		piece	$20, 0, 1x2, $14, hi			; E
+		piece	$28, 0, 4x2, $24, hi			; score counter
+		piece	$48, 0, 3x2, $2C, hi
 		piece	0, $10, 4x2, $E, hi, pal2		; TIME
+		piece	$28, $10, 4x2, $1C, hi			; time counter
 		piece	0, $20, 4x2, 6, hi			; RING
 		piece	$20, $20, 1x2, 0, hi			; S
-		piece	$30, $20, 3x2, $16, hi			; ring count
-		piece	$58, 0, 1x2, tile_zero, hi		; 0
-		piece	51, 19, 1x1, tile_colon, hi		; :
+		piece	$30, $20, 3x2, $16, hi			; ring counter
 		endsprite
 		
 frame_hud_allred:
 		spritemap
 		piece	0, 0, 4x2, 0, hi			; SCOR
 		piece	$20, 0, 1x2, $14, hi			; E
+		piece	$28, 0, 4x2, $24, hi			; score counter
+		piece	$48, 0, 3x2, $2C, hi
 		piece	0, $10, 4x2, $E, hi, pal2		; TIME
+		piece	$28, $10, 4x2, $1C, hi			; time counter
 		piece	0, $20, 4x2, 6, hi, pal2		; RING
 		piece	$20, $20, 1x2, 0, hi, pal2		; S
-		piece	$30, $20, 3x2, $16, hi			; ring count
-		piece	$58, 0, 1x2, tile_zero, hi		; 0
-		piece	51, 19, 1x1, tile_colon, hi		; :
+		piece	$30, $20, 3x2, $16, hi			; ring counter
 		endsprite
 		
 frame_hud_lifeicon:
