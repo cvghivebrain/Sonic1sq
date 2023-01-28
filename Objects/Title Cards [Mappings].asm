@@ -41,115 +41,68 @@ frame_card_oval:
 		piece -$14, $C, 3x1, $C
 		endsprite
 		
-frame_card_zone:
-		spritemap					; ZONE
-		piece 0, 0, 4x2, 0				; ZO
-		piece $20, 0, 4x2, 8				; NE
+titlecardmap:	macro letterset
+		letters: equs "\letterset"
+		spritemap
+		xpos: = 0
+		rept narg-1
+		ifarg \2
+		
+		letterpos: = instr("\letters","\2")-1
+		tiletmp: = letterpos*4				; get tile id
+		prevstr: substr 1,letterpos,"\letters"		; get letters before current
+		if instr("\prevstr","i")
+		tiletmp: = tiletmp-2				; take I into account when finding tile id
+		endc
+		
+		width: = strlen("\2")*16			; width of piece in px
+		if instr("\2","i")
+		width: = width-8				; take I into account for width
+		endc
+		tilewidth: = width/8				; width of piece in tiles
+		
+		piece xpos, 0, \#tilewidth\x2, tiletmp
+		xpos: = xpos+width
+		else
+		xpos: = xpos+16					; space
+		endc
+		shift						; next piece
+		endr
 		endsprite
+		endm
+		
+frame_card_zone:
+		titlecardmap	\letters_UPLC_GHZCard,ZO,NE
 		
 frame_card_greenhill:
-		spritemap					; GREEN HILL
-		piece 0, 0, 4x2, 16				; GR
-		piece $20, 0, 2x2, 12				; E
-		piece $30, 0, 2x2, 12				; E
-		piece $40, 0, 2x2, 8				; N
-		piece $60, 0, 3x2, 24				; HI
-		piece $78, 0, 2x2, 30				; L
-		piece $88, 0, 2x2, 30				; L
-		endsprite
+		titlecardmap	\letters_UPLC_GHZCard,GR,E,E,N,,HI,L,L
 		
 frame_card_marble:
-		spritemap					; MARBLE
-		piece 0, 0, 4x2, 16				; MA
-		piece $20, 0, 4x2, 24				; RB
-		piece $40, 0, 2x2, 32				; L
-		piece $50, 0, 2x2, 12				; E
-		endsprite
+		titlecardmap	\letters_UPLC_MZCard,MA,RB,L,E
 		
 frame_card_springyard:
-		spritemap					; SPRING YARD
-		piece 0, 0, 4x2, 16				; SP
-		piece $20, 0, 3x2, 24				; RI
-		piece $38, 0, 2x2, 8				; N
-		piece $48, 0, 2x2, 30				; G
-		piece $68, 0, 4x2, 34				; YA
-		piece $88, 0, 2x2, 24				; R
-		piece $98, 0, 2x2, 42				; D
-		endsprite
+		titlecardmap	\letters_UPLC_SYZCard,SP,RI,N,G,,YA,R,D
 		
 frame_card_labyrinth:
-		spritemap					; LABYRINTH
-		piece 0, 0, 4x2, 16				; LA
-		piece $20, 0, 4x2, 24				; BY
-		piece $40, 0, 3x2, 32				; RI
-		piece $58, 0, 2x2, 8				; N
-		piece $68, 0, 4x2, 38				; TH
-		endsprite
+		titlecardmap	\letters_UPLC_LZCard,LA,BY,RI,N,TH
 		
 frame_card_starlight:
-		spritemap					; STAR LIGHT
-		piece 0, 0, 4x2, 16				; ST
-		piece $20, 0, 4x2, 24				; AR
-		piece $50, 0, 3x2, 32				; LI
-		piece $68, 0, 4x2, 38				; GH
-		piece $78, 0, 2x2, 20				; T
-		endsprite
+		titlecardmap	\letters_UPLC_SLZCard,ST,AR,,LI,GH,T
 		
 frame_card_scrapbrain:
-		spritemap					; SCRAP BRAIN
-		piece 0, 0, 4x2, 16				; SC
-		piece $20, 0, 4x2, 24				; RA
-		piece $50, 0, 2x2, 32				; P
-		piece $70, 0, 2x2, 36				; B
-		piece $80, 0, 4x2, 24				; RA
-		piece $A0, 0, 1x2, 40				; I
-		piece $A8, 0, 2x2, 8				; N
-		endsprite
+		titlecardmap	\letters_UPLC_SBZCard,SC,RA,P,,B,RA,I,N
 		
 frame_card_final:
-		spritemap					; FINAL
-		piece 0, 0, 3x2, 16				; FI
-		piece $18, 0, 2x2, 8				; N
-		piece $28, 0, 4x2, 22				; AL
-		endsprite
+		titlecardmap	\letters_UPLC_FZCard,FI,N,AL
 		
 frame_card_passed:
-		spritemap					; PASSED
-		piece 0, 0, 2x2, 12				; P
-		piece $10, 0, 4x2, 4				; AS
-		piece $30, 0, 2x2, 8				; S
-		piece $40, 0, 4x2, 16				; ED
-		endsprite
+		titlecardmap	\letters_UPLC_SonicCard,P,AS,S,ED
 		
 frame_card_sonichas:
-		spritemap					; SONIC HAS
-		piece 0, 0, 2x2, 8				; S
-		piece $10, 0, 4x2, 24				; ON
-		piece $30, 0, 3x2, 32				; IC
-		piece $58, 0, 4x2, 0				; HA
-		piece $78, 0, 2x2, 8				; S
-		endsprite
+		titlecardmap	\letters_UPLC_SonicCard,S,ON,IC,,HA,S
 		
 frame_card_ketchuphas:
-		spritemap					; KETCHUP HAS
-		piece 0, 0, 2x2, 24				; K
-		piece $10, 0, 2x2, 16				; E
-		piece $20, 0, 4x2, 28				; TC
-		piece $40, 0, 2x2, 0				; H
-		piece $50, 0, 2x2, 36				; U
-		piece $60, 0, 2x2, 12				; P
-		piece $80, 0, 4x2, 0				; HA
-		piece $A0, 0, 2x2, 8				; S
-		endsprite
+		titlecardmap	\letters_UPLC_KetchupCard,K,E,TC,H,U,P,,HA,S
 		
 frame_card_mustardhas:
-		spritemap					; MUSTARD HAS
-		piece 0, 0, 4x2, 24				; MU
-		piece $20, 0, 2x2, 8				; S
-		piece $30, 0, 2x2, 32				; T
-		piece $40, 0, 2x2, 4				; A
-		piece $50, 0, 2x2, 36				; R
-		piece $60, 0, 2x2, 20				; D
-		piece $80, 0, 4x2, 0				; HA
-		piece $A0, 0, 2x2, 8				; S
-		endsprite
+		titlecardmap	\letters_UPLC_MustardCard,MU,S,T,A,R,D,,HA,S
