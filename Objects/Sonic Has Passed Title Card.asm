@@ -34,9 +34,9 @@ Has_Settings:	index *
 		ptr HasSet_Ketchup
 		ptr HasSet_Mustard
 		
-HasSet_Sonic:	autocard "SONIC HAS","PASSED",60
-HasSet_Ketchup:	autocard "KETCHUP HAS","PASSED",60
-HasSet_Mustard:	autocard "MUSTARD HAS","PASSED",60
+HasSet_Sonic:	autocard "SONIC HAS","PASSED",id_frame_card_sonichas,id_frame_card_passed,52
+HasSet_Ketchup:	autocard "KETCHUP HAS","PASSED",id_frame_card_ketchuphas,id_frame_card_passed,52
+HasSet_Mustard:	autocard "MUSTARD HAS","PASSED",id_frame_card_mustardhas,id_frame_card_passed,52
 ; ===========================================================================
 
 Has_Main:	; Routine 0

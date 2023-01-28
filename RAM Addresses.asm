@@ -181,32 +181,7 @@ v_tile_credits			rs.w 1
 v_tile_titlecard		rs.w 1
 v_tile_act			rs.w 1
 v_tile_bonus			rs.w 1
-v_tile_a			rs.w 1
-v_tile_b			rs.w 1
-v_tile_c			rs.w 1
-v_tile_d			rs.w 1
-v_tile_e			rs.w 1
-v_tile_f			rs.w 1
-v_tile_g			rs.w 1
-v_tile_h			rs.w 1
-v_tile_i			rs.w 1
-v_tile_j			rs.w 1
-v_tile_k			rs.w 1
-v_tile_l			rs.w 1
-v_tile_m			rs.w 1
-v_tile_n			rs.w 1
-v_tile_o			rs.w 1
-v_tile_p			rs.w 1
-v_tile_q			rs.w 1
-v_tile_r			rs.w 1
-v_tile_s			rs.w 1
-v_tile_t			rs.w 1
-v_tile_u			rs.w 1
-v_tile_v			rs.w 1
-v_tile_w			rs.w 1
-v_tile_x			rs.w 1
-v_tile_y			rs.w 1
-v_tile_z			rs.w 1
+v_tile_letters			rs.w 1
 v_palcycle_ss_num:		rs.w 1 ; $FFFFF79A ; palette cycling in Special Stage - current index number
 v_palcycle_ss_time:		rs.w 1 ; $FFFFF79C ; palette cycling in Special Stage - time until next change
 v_palcycle_ss_unused:		rs.w 1 ; $FFFFF79E ; palette cycling in Special Stage - unused offset value, always 0

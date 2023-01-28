@@ -53,22 +53,35 @@ SSR_Settings:	index *
 		ptr SSRSet_Ketchup
 		ptr SSRSet_Mustard
 		
-SSRSet_Special:	autocard "SPECIAL STAGE","",68,noact|center
-SSRSet_Chaos:	autocard "CHAOS EMERALDS","",68,noact|center
-SSRSet_Sonic:	autocard "SONIC GOT THEM ALL","",68,noact|center
-SSRSet_Ketchup:	autocard "KETCHUP","GOT THEM ALL",68,noact|center
-SSRSet_Mustard:	autocard "MUSTARD","GOT THEM ALL",68,noact|center
+SSRSet_Special:	autocard "SPECIAL STAGE","",0,0,60,noact|center
+SSRSet_Chaos:	autocard "CHAOS EMERALDS","",0,0,60,noact|center
+SSRSet_Sonic:	autocard "SONIC GOT THEM ALL","",0,0,60,noact|center
+SSRSet_Ketchup:	autocard "KETCHUP","GOT THEM ALL",0,0,60,noact|center
+SSRSet_Mustard:	autocard "MUSTARD","GOT THEM ALL",0,0,60,noact|center
 ; ===========================================================================
 
 SSR_Main:	; Routine 0
+		moveq	#id_UPLC_SSResult,d0
+		jsr	UncPLC
+		moveq	#id_UPLC_SSRSS,d0
+		tst.l	(v_emeralds).w
+		beq.s	.no_emeralds				; branch if you have no chaos emeralds
+		moveq	#id_UPLC_SSRChaos,d0
+		cmpi.l	#emerald_all,(v_emeralds).w
+		bne.s	.no_emeralds				; branch if you don't have all emeralds
+		moveq	#id_UPLC_SSRSonic,d0
+		
+	.no_emeralds:
+		jsr	UncPLC					; load results screen patterns
+		
 		move.b	#1,(v_haspassed_state).w		; keep title card from moving away
 		move.l	#TitleCard,ost_id(a0)			; this object becomes the oval
 		moveq	#id_SSRSet_Special,d0
 		tst.l	(v_emeralds).w
-		beq.s	.no_emeralds				; branch if you have no chaos emeralds
+		beq.s	.no_emeralds2				; branch if you have no chaos emeralds
 		moveq	#id_SSRSet_Chaos,d0
 		
-	.no_emeralds:
+	.no_emeralds2:
 		lea	SSR_Settings,a2
 		jsr	Card_Load				; load "SPECIAL STAGE" and oval objects
 		jsr	FindFreeInert

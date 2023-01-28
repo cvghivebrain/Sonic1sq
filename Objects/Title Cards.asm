@@ -52,7 +52,7 @@ gettextwidth:	macro str1
 		endr
 		endm
 		
-autocard:	macro namestr,zonestr,ypos
+autocard:	macro namestr,zonestr,nameframe,zoneframe,ypos,options
 		gettextwidth \namestr
 		namewidth: = textwidth
 		namexpos: = (screen_width-namewidth)/2
@@ -61,7 +61,7 @@ autocard:	macro namestr,zonestr,ypos
 		zonewidth: = textwidth
 		itemcount: = 4
 		
-		if instr("\4","noact")=0
+		if instr("\options","noact")=0
 		zonexpos: = namexpos+namewidth-zonewidth-17
 		else
 		zonexpos: = namexpos+namewidth-zonewidth
@@ -71,13 +71,13 @@ autocard:	macro namestr,zonestr,ypos
 		itemcount: = itemcount-1
 		endc
 		
-		ovalxpos: = namexpos+namewidth-28
+		ovalxpos: = namexpos+namewidth-24
 		nameypos: = \ypos
 		zoneypos: = nameypos+20
-		actypos: = nameypos+26
-		ovalypos: = nameypos+16
+		actypos: = nameypos+34
+		ovalypos: = nameypos+24
 		
-		if instr("\4","center")>0
+		if instr("\options","center")>0
 		zonexpos: = (screen_width-zonewidth)/2
 		ovalxpos: = (screen_width-$1C)/2
 		if strlen(\zonestr)=0
@@ -90,33 +90,29 @@ autocard:	macro namestr,zonestr,ypos
 		dc.w itemcount-1				; number of objects
 		; green hill
 		dc.l Map_Card					; mappings pointer
-		dc.b -1						; frame id (-1 for string)
+		dc.b \nameframe					; frame id
 		dc.b id_Card_WaitEnter				; routine number
-		dc.w screen_left-16,screen_top+nameypos		; x/y start
+		dc.w screen_left-namewidth,screen_top+nameypos	; x/y start
 		dc.w 10						; delay before entering screen
 		dc.w 16,0					; x/y speed entering screen
 		dc.w screen_left+namexpos,screen_top+nameypos	; x/y stop
 		dc.w 60						; delay before leaving screen
 		dc.w -32,0					; x/y speed leaving screen
-		dc.l v_tile_a					; RAM address where tile setting is stored
-		dc.b \namestr,0
-		even
+		dc.l v_tile_letters				; RAM address where tile setting is stored
 		; zone
 		if strlen(\zonestr)>0
 		dc.l Map_Card					; mappings pointer
-		dc.b -1						; frame id (-1 for string)
+		dc.b \zoneframe					; frame id
 		dc.b id_Card_WaitEnter				; routine number
-		dc.w screen_left-16,screen_top+zoneypos		; x/y start
+		dc.w screen_left-zonewidth,screen_top+zoneypos	; x/y start
 		dc.w 40						; delay before entering screen
 		dc.w 16,0					; x/y speed entering screen
 		dc.w screen_left+zonexpos,screen_top+zoneypos	; x/y stop
 		dc.w 60						; delay before leaving screen
 		dc.w -32,0					; x/y speed leaving screen
-		dc.l v_tile_a					; RAM address where tile setting is stored
-		dc.b \zonestr,0
-		even
+		dc.l v_tile_letters				; RAM address where tile setting is stored
 		endc
-		if instr("\4","noact")=0
+		if instr("\options","noact")=0
 		; act
 		dc.l Map_Card					; mappings pointer
 		dc.b id_frame_card_act				; frame id
@@ -142,13 +138,13 @@ autocard:	macro namestr,zonestr,ypos
 		dc.l v_tile_titlecard				; RAM address where tile setting is stored
 		endm
 		
-CardSet_GHZ:	autocard "GREEN HILL","ZONE",80
-CardSet_MZ:	autocard "MARBLE","ZONE",80
-CardSet_SYZ:	autocard "SPRING YARD","ZONE",80
-CardSet_LZ:	autocard "LABYRINTH","ZONE",80
-CardSet_SLZ:	autocard "STAR LIGHT","ZONE",80
-CardSet_SBZ:	autocard "SCRAP BRAIN","ZONE",80
-CardSet_FZ:	autocard "FINAL","ZONE",80,noact
+CardSet_GHZ:	autocard "GREEN HILL","ZONE",id_frame_card_greenhill,id_frame_card_zone,72
+CardSet_MZ:	autocard "MARBLE","ZONE",id_frame_card_marble,id_frame_card_zone,72
+CardSet_SYZ:	autocard "SPRING YARD","ZONE",id_frame_card_springyard,id_frame_card_zone,72
+CardSet_LZ:	autocard "LABYRINTH","ZONE",id_frame_card_labyrinth,id_frame_card_zone,72
+CardSet_SLZ:	autocard "STAR LIGHT","ZONE",id_frame_card_starlight,id_frame_card_zone,72
+CardSet_SBZ:	autocard "SCRAP BRAIN","ZONE",id_frame_card_scrapbrain,id_frame_card_zone,72
+CardSet_FZ:	autocard "FINAL","ZONE",id_frame_card_final,id_frame_card_zone,72,noact
 ; ===========================================================================
 
 Card_Main:	; Routine 0
@@ -191,57 +187,7 @@ Card_Load:
 		move.b	#$20,ost_displaywidth(a1)
 		move.b	#render_abs,ost_render(a1)
 		move.b	#0,ost_priority(a1)
-		tst.b	ost_frame(a1)
-		bpl.s	.not_a_string				; branch if object isn't a string ("ZONE" or zone name)
-		bsr.s	Card_String
-	.not_a_string:
 		dbf	d1,.loop
-		rts
-; ===========================================================================
-		
-Card_String:
-		movea.l	a1,a4					; save OST address of first letter
-		moveq	#0,d2
-		moveq	#0,d3
-		moveq	#0,d4
-		move.b	(a2)+,d2				; get first letter
-		bra.s	.skip_find_ost
-		
-	.loop:
-		cmp.b	#$20,d2
-		beq.w	.space					; branch if character is a space
-		jsr	FindFreeInert
-		move.l	#TitleCard,ost_id(a1)
-		move.l	ost_mappings(a4),ost_mappings(a1)
-		move.l	ost_x_pos(a4),ost_x_pos(a1)		; set initial x/y position (screen-fixed)
-		move.w	ost_card_time(a4),ost_card_time(a1)	; set time delay for entering screen
-		move.l	ost_card_x_speed(a4),ost_card_x_speed(a1) ; set x/y speed for entering screen
-		move.l	ost_card_x_stop(a4),ost_card_x_stop(a1)	; set x/y position for stopping on screen
-		move.w	ost_card_time2(a4),ost_card_time2(a1)	; set time delay for leaving screen
-		move.l	ost_card_x_speed2(a4),ost_card_x_speed2(a1) ; set x/y speed for leaving screen
-		move.b	#8,ost_displaywidth(a1)
-		move.b	#render_abs,ost_render(a1)
-		move.b	#0,ost_priority(a1)
-		move.b	ost_routine(a4),ost_routine(a1)		; goto Card_WaitEnter next
-	.skip_find_ost:
-		sub.w	#$41,d2					; convert letter from ASCII
-		add.w	d2,d2					; multiply by 2
-		move.w	#id_frame_card_letter,ost_frame_hi(a1)
-		add.w	d3,ost_card_x_stop(a1)
-		sub.w	d4,ost_card_time(a1)
-		cmp.w	#('I'-$41)*2,d2
-		bne.s	.not_i					; branch if letter isn't I
-		move.w	#id_frame_card_i,ost_frame_hi(a1)	; use different frame
-		sub.w	#8,d3					; next letter is shifted 8px left
-	.not_i:
-		move.w	(a3,d2.w),ost_tile(a1)			; get tile setting for specific letter
-		add.w	#tile_hi,ost_tile(a1)
-	.space:
-		add.w	#16,d3					; relative position of next letter
-		add.w	#1,d4					; extra delay for next letter
-		move.b	(a2)+,d2				; get next letter
-		bne.w	.loop					; branch if not 0
-		evenr	a2					; align a2 to even byte
 		rts
 ; ===========================================================================
 		

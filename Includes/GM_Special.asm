@@ -144,11 +144,6 @@ SS_FinishLoop:
 		move.w	#loops_to_clear_ost,d1			; size of RAM block to clear
 		bsr.w	ClearRAM				; fill OST with 0
 
-		moveq	#id_UPLC_SSResult,d0
-		jsr	UncPLC
-		moveq	#id_UPLC_SSResult2,d0
-		jsr	UncPLC					; load results screen patterns
-		jsr	ProcessDMA
 		jsr	FindFreeInert
 		move.l	#SSResult,ost_id(a1)			; load results screen object
 		bsr.w	PaletteFadeIn
