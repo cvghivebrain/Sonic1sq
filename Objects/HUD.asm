@@ -248,7 +248,7 @@ HUD_ScoreCount:	; Routine $C
 ; ---------------------------------------------------------------------------
 
 HUD_ShowLong:
-		bsr.w	CountDigits_d3				; d3 = number of digits
+		bsr.w	CountDigits				; d3 = number of digits
 		lea	(v_digit_buffer+2).w,a4
 		
 		cmpi.b	#5,d3

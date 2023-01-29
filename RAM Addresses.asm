@@ -198,26 +198,6 @@ v_rings_spritecount:		rs.w 1
 v_rings_sprite1:		rs.w 3
 v_rings_sprite2:		rs.w 3
 v_rings_sprite3:		rs.w 3
-v_score_spriteindex:		rs.w 1 ; sprite mappings for score counter
-v_score_spritecount:		rs.w 1
-v_score_sprite1:		rs.w 3
-v_score_sprite2:		rs.w 3
-v_score_sprite3:		rs.w 3
-v_score_sprite4:		rs.w 3
-v_score_sprite5:		rs.w 3
-v_score_sprite6:		rs.w 3
-v_ringbonus_spriteindex:	rs.w 1 ; sprite mappings for ring bonus counter
-v_ringbonus_spritecount:	rs.w 1
-v_ringbonus_sprite1:		rs.w 3
-v_ringbonus_sprite2:		rs.w 3
-v_ringbonus_sprite3:		rs.w 3
-v_ringbonus_sprite4:		rs.w 3
-v_timebonus_spriteindex:	rs.w 1 ; sprite mappings for time bonus counter
-v_timebonus_spritecount:	rs.w 1
-v_timebonus_sprite1:		rs.w 3
-v_timebonus_sprite2:		rs.w 3
-v_timebonus_sprite3:		rs.w 3
-v_timebonus_sprite4:		rs.w 3
 v_256x256_with_loop_1:		rs.l 1 ; $FFFFF7AC ; 256x256 level tile which contains a loop (GHZ/SLZ)
 v_256x256_with_loop_2:		equ __rs-3 ; $FFFFF7AD ; 256x256 level tile which contains a loop (GHZ/SLZ)
 v_256x256_with_tunnel_1:	equ __rs-2 ; $FFFFF7AE ; 256x256 level tile which contains a roll tunnel (GHZ)

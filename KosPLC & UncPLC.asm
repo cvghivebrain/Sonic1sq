@@ -452,7 +452,6 @@ UncLoadCues:
 
 UPLC_HUD:	uplcheader $D900
 		uplc Art_HUDMain,v_tile_hud
-		uplc Art_HUDNums
 	.end:
 
 UPLC_SonicCard:	uplcheader $B000
@@ -679,7 +678,6 @@ UPLC_Continue:	uplcheader vram_continue
 		uplc_letters CONTIUE
 		uplc Art_MiniSonic
 		uplc Art_ContSonic
-		uplc Art_HUDNums
 	.end:
 	
 UPLC_EggmanSBZ:	uplcheader $8000

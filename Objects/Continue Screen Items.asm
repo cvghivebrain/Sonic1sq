@@ -37,7 +37,7 @@ CSI_Main:	; Routine 0
 		move.w	#screen_left+152,ost_x_pos(a1)
 		move.w	#screen_top+118,ost_y_screen(a1)
 		move.l	#v_rings_spriteindex,ost_mappings(a1)	; read mappings from RAM
-		move.w	#tile_Art_HUDNums_UPLC_Continue,ost_tile(a1)
+		;move.w	#tile_Art_HUDNums_UPLC_Continue,ost_tile(a1)
 		move.b	#render_abs,ost_render(a1)
 		move.b	#0,ost_priority(a1)
 		move.b	#id_CSI_Counter,ost_routine(a1)

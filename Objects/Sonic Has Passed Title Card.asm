@@ -16,7 +16,6 @@ Has_Index:	index *,,2
 		ptr Has_WaitEnter
 		ptr Has_Enter
 		ptr Has_Display
-		ptr Has_Score
 		ptr Has_Time
 		ptr Has_Rings
 		ptr Has_WaitBonus
@@ -75,67 +74,21 @@ Has_Main:	; Routine 0
 		add.w	#16,d2					; spacing between lines of text
 		move.w	d3,ost_has_time(a1)
 		add.w	#2,d3					; 2 frame delay between each line
-		pushr.w	a1					; save OST address to stack
 		dbf	d1,.loop
-		
-		jsr	FindFreeInert
-		move.l	#HasPassedCard,ost_id(a1)		; load ring bonus object
-		move.b	#id_Has_Rings,ost_routine(a1)
-		move.l	#v_ringbonus_spriteindex,ost_mappings(a1) ; use mappings in RAM
-		move.w	#2,(v_ringbonus_spriteindex).w		; sprite mappings internal pointer
-		move.w	#$8000,(v_ringbonus_sprite1+2).w	; sprite mappings priority high
-		move.w	#$8000,(v_ringbonus_sprite2+2).w
-		move.w	#$8000,(v_ringbonus_sprite3+2).w
-		move.w	#$8000,(v_ringbonus_sprite4+2).w
-		move.w	#40,(v_ringbonus_sprite1+4).w		; mappings position of low digit
-		move.w	#32,(v_ringbonus_sprite2+4).w
-		move.w	#24,(v_ringbonus_sprite3+4).w
-		move.w	#16,(v_ringbonus_sprite4+4).w
-		move.b	#1,(v_ringbonus_sprite1+1).w		; 1x2 sprite size
-		move.b	#1,(v_ringbonus_sprite2+1).w
-		move.b	#1,(v_ringbonus_sprite3+1).w
-		move.b	#1,(v_ringbonus_sprite4+1).w
-		move.w	#tile_Art_HUDNums,ost_tile(a1)
-		popr.w	ost_parent(a1)
-		move.b	#render_abs,ost_render(a1)
-		move.b	#0,ost_priority(a1)
 		
 		jsr	FindFreeInert
 		move.l	#HasPassedCard,ost_id(a1)		; load time bonus object
 		move.b	#id_Has_Time,ost_routine(a1)
-		move.l	#v_timebonus_spriteindex,ost_mappings(a1) ; use mappings in RAM
-		move.w	#2,(v_timebonus_spriteindex).w		; sprite mappings internal pointer
-		move.w	#$8000,(v_timebonus_sprite1+2).w	; sprite mappings priority high
-		move.w	#$8000,(v_timebonus_sprite2+2).w
-		move.w	#$8000,(v_timebonus_sprite3+2).w
-		move.w	#$8000,(v_timebonus_sprite4+2).w
-		move.w	#40,(v_timebonus_sprite1+4).w		; mappings position of low digit
-		move.w	#32,(v_timebonus_sprite2+4).w
-		move.w	#24,(v_timebonus_sprite3+4).w
-		move.w	#16,(v_timebonus_sprite4+4).w
-		move.b	#1,(v_timebonus_sprite1+1).w		; 1x2 sprite size
-		move.b	#1,(v_timebonus_sprite2+1).w
-		move.b	#1,(v_timebonus_sprite3+1).w
-		move.b	#1,(v_timebonus_sprite4+1).w
-		move.w	#tile_Art_HUDNums,ost_tile(a1)
-		popr.w	ost_parent(a1)
-		move.b	#render_abs,ost_render(a1)
-		move.b	#0,ost_priority(a1)
 		
 		jsr	FindFreeInert
-		move.l	#HasPassedCard,ost_id(a1)		; load score object
-		move.b	#id_Has_Score,ost_routine(a1)
-		move.l	#v_score_spriteindex,ost_mappings(a1)	; use same mappings as score
-		move.w	#tile_Art_HUDNums,ost_tile(a1)
-		popr.w	ost_parent(a1)				; get parent OST address from stack
-		move.b	#render_abs,ost_render(a1)
-		move.b	#0,ost_priority(a1)
-		move.b	#1,(f_pass_bonus_update).w		; set flag to update
+		move.l	#HasPassedCard,ost_id(a1)		; load ring bonus object
+		move.b	#id_Has_Rings,ost_routine(a1)
 		
 		jsr	FindFreeInert
 		move.l	#HasPassedCard,ost_id(a1)		; load bonus helper object
 		move.b	#id_Has_WaitBonus,ost_routine(a1)
 		move.w	#240,ost_has_time(a1)			; set delay for bonus counting
+		move.b	#1,(f_pass_bonus_update).w		; set flag to update
 		rts
 		
 Has_WaitEnter:	; Routine 2
@@ -162,55 +115,36 @@ Has_Display:	; Routine 6
 		jmp	DisplaySprite
 ; ===========================================================================
 		
-Has_Score:	; Routine 8
-		jsr	GetParent
-		move.l	ost_x_pos(a1),ost_x_pos(a0)		; match parent x/y pos
-		add.w	#104,ost_x_pos(a0)
-		bra.s	Has_Display
-; ===========================================================================
-		
-Has_Time:	; Routine $A
+Has_Time:	; Routine 8
+		tst.b	(f_pass_bonus_update).w
+		beq.s	.exit					; branch if update flag isn't set
 		moveq	#0,d0
 		move.w	(v_time_bonus).w,d0
-		beq.w	Has_Delete				; branch if time bonus is 0
-		tst.b	(f_pass_bonus_update).w
-		beq.s	Has_Score				; branch if update flag isn't set
-		jsr	CountDigits				; d1 = number of digits
-		move.w	d1,(v_timebonus_spritecount).w
-		divu.w	#100,d0					; get digits 3 & 4
-		jsr	HexToDec2
-		move.b	(a1)+,(v_timebonus_sprite4+3).w		; set tile for digit 4
-		move.b	(a1),(v_timebonus_sprite3+3).w		; set tile for digit 3
-		swap	d0					; get last two digits from remainder
-		jsr	HexToDec2
-		move.b	(a1)+,(v_timebonus_sprite2+3).w		; set tile for digit 2
-		move.b	(a1),(v_timebonus_sprite1+3).w		; set tile for digit 1
-		bra.s	Has_Score
+		moveq	#4-1,d4					; process 4 digits
+		set_dma_dest	$B560,d1			; VRAM address for lowest digit
+		jsr	HUD_ShowLong				; load gfx to VRAM
+		
+	.exit:
+		rts
 ; ===========================================================================
 		
-Has_Rings:	; Routine $C
+Has_Rings:	; Routine $A
+		tst.b	(f_pass_bonus_update).w
+		beq.s	.exit					; branch if update flag isn't set
 		moveq	#0,d0
 		move.w	(v_ring_bonus).w,d0
-		beq.s	Has_Delete				; branch if ring bonus is 0
-		tst.b	(f_pass_bonus_update).w
-		beq.s	Has_Score				; branch if update flag isn't set
-		jsr	CountDigits				; d1 = number of digits
-		move.w	d1,(v_ringbonus_spritecount).w
-		divu.w	#100,d0					; get digits 3 & 4
-		jsr	HexToDec2
-		move.b	(a1)+,(v_ringbonus_sprite4+3).w		; set tile for digit 4
-		move.b	(a1),(v_ringbonus_sprite3+3).w		; set tile for digit 3
-		swap	d0					; get last two digits from remainder
-		jsr	HexToDec2
-		move.b	(a1)+,(v_ringbonus_sprite2+3).w		; set tile for digit 2
-		move.b	(a1),(v_ringbonus_sprite1+3).w		; set tile for digit 1
-		bra.w	Has_Score
+		moveq	#4-1,d4					; process 4 digits
+		set_dma_dest	$B6A0,d1			; VRAM address for lowest digit
+		jsr	HUD_ShowLong				; load gfx to VRAM
+		
+	.exit:
+		rts
 		
 Has_Delete:
 		jmp	DeleteObject
 ; ===========================================================================
 		
-Has_WaitBonus:	; Routine $E
+Has_WaitBonus:	; Routine $C
 		clr.b	(f_pass_bonus_update).w			; clear time/ring bonus update flag
 		subq.w	#1,ost_has_time(a0)			; decrement timer
 		bpl.s	.wait					; branch if time remains
@@ -220,7 +154,7 @@ Has_WaitBonus:	; Routine $E
 		rts
 ; ===========================================================================
 		
-Has_Bonus:	; Routine $10
+Has_Bonus:	; Routine $E
 		clr.b	(f_pass_bonus_update).w			; clear time/ring bonus update flag
 		moveq	#0,d0
 		tst.w	(v_time_bonus).w			; is time bonus	= zero?
@@ -263,7 +197,7 @@ Has_Bonus:	; Routine $10
 		play.w	1, jmp, sfx_Switch			; play "blip" sound every 4th frame
 ; ===========================================================================
 
-Has_Finish:	; Routine $12
+Has_Finish:	; Routine $10
 		subq.w	#1,ost_has_time(a0)			; decrement timer
 		bpl.s	.wait					; branch if time remains
 		cmpi.w	#id_SBZ_act2,(v_zone).w
@@ -274,6 +208,7 @@ Has_Finish:	; Routine $12
 		tst.b	(f_giantring_collected).w		; has Sonic jumped into	a giant	ring?
 		beq.s	.restart				; if not, branch
 		move.b	#id_Special,(v_gamemode).w		; set game mode to Special Stage ($10)
+		bra.s	.wait
 
 	.restart:
 		move.w	#1,(f_restart).w			; restart level
@@ -288,7 +223,7 @@ Has_Finish:	; Routine $12
 		play.w	0, jmp, mus_FZ				; play FZ music
 ; ===========================================================================
 
-Has_Boundary:	; Routine $14
+Has_Boundary:	; Routine $12
 		addq.w	#2,(v_boundary_right).w			; extend right level boundary 2px
 		cmpi.w	#$2100,(v_boundary_right).w
 		beq.w	Has_Delete				; if boundary reaches $2100, delete object

@@ -48,44 +48,16 @@ HUD_TimeList2:	rept 10
 ;	d0.l = longword
 
 ; output:
-;	d1.l = number of digits (1-6)
+;	d3.l = number of digits (1-6, or 0 if d0 is 0)
 ; ---------------------------------------------------------------------------
 
 CountDigits:
-		cmpi.l	#9,d0
-		bhi.s	.more_than_1
-		moveq	#1,d1
+		tst.l	d0
+		bne.s	.more_than_0
+		moveq	#0,d3
 		rts
 	
-	.more_than_1:
-		cmpi.l	#99,d0
-		bhi.s	.more_than_2
-		moveq	#2,d1
-		rts
-	
-	.more_than_2:
-		cmpi.l	#999,d0
-		bhi.s	.more_than_3
-		moveq	#3,d1
-		rts
-	
-	.more_than_3:
-		cmpi.l	#9999,d0
-		bhi.s	.more_than_4
-		moveq	#4,d1
-		rts
-	
-	.more_than_4:
-		cmpi.l	#99999,d0
-		bhi.s	.more_than_5
-		moveq	#5,d1
-		rts
-	
-	.more_than_5:
-		moveq	#6,d1
-		rts
-		
-CountDigits_d3:
+	.more_than_0:
 		cmpi.l	#9,d0
 		bhi.s	.more_than_1
 		moveq	#1,d3
