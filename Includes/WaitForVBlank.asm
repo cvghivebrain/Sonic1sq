@@ -14,8 +14,10 @@ WaitForVBlank:
 ; Subroutine to	freeze the game for a set time
 
 ; inputs:
-;	d0 = number of frames to wait
-;	d1 = VBlank routine
+;	d0.w = number of frames to wait
+;	d1.b = VBlank routine
+
+;	uses d0.w
 ; ---------------------------------------------------------------------------
 
 WaitLoop:

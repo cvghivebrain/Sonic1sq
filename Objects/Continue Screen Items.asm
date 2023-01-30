@@ -36,18 +36,11 @@ CSI_Main:	; Routine 0
 		move.l	#ContScrItem,ost_id(a1)			; load countdown object
 		move.w	#screen_left+152,ost_x_pos(a1)
 		move.w	#screen_top+118,ost_y_screen(a1)
-		move.l	#v_rings_spriteindex,ost_mappings(a1)	; read mappings from RAM
-		;move.w	#tile_Art_HUDNums_UPLC_Continue,ost_tile(a1)
+		move.l	#Map_ContScr,ost_mappings(a1)
+		move.w	(v_tile_hud).w,ost_tile(a1)
 		move.b	#render_abs,ost_render(a1)
 		move.b	#0,ost_priority(a1)
 		move.b	#id_CSI_Counter,ost_routine(a1)
-		move.w	#2,(v_rings_spriteindex).w		; sprite mappings internal pointer
-		move.w	#2,(v_rings_spritecount).w		; 2 digits
-		move.w	#$8000,(v_rings_sprite1+2).w		; sprite mappings priority high
-		move.w	#$8000,(v_rings_sprite2+2).w
-		move.w	#8,(v_rings_sprite1+4).w		; mappings position of low digit
-		move.b	#1,(v_rings_sprite1+1).w		; 1x2 sprite size
-		move.b	#1,(v_rings_sprite2+1).w
 
 CSI_Display:	; Routine 2
 		jmp	(DisplaySprite).l
@@ -122,12 +115,12 @@ CSI_Counter:	; Routine 8
 		move.w	(v_countdown).w,d0			; get counter
 		divu.w	#60,d0					; convert to seconds
 		andi.w	#$F,d0					; read only lowest nybble
-		jsr	HexToDec2
-		move.b	(a1)+,(v_rings_sprite2+3).w		; set tile for tens digit
-		move.b	(a1),(v_rings_sprite1+3).w		; set tile for low digit
+		add.w	#id_frame_cont_0,d0			; start from 0
+		move.b	d0,ost_frame(a0)			; update frame
 		
 	.sonic_running:
 		jmp	(DisplaySprite).l
+; ===========================================================================
 
 CSI_Oval:	; Routine $A
 		move.l	#Map_ContScr,ost_mappings(a0)

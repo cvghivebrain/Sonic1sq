@@ -678,6 +678,7 @@ UPLC_Continue:	uplcheader vram_continue
 		uplc_letters CONTIUE
 		uplc Art_MiniSonic
 		uplc Art_ContSonic
+		uplc Art_HUDNums,v_tile_hud
 	.end:
 	
 UPLC_EggmanSBZ:	uplcheader $8000
