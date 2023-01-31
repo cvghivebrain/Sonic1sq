@@ -186,10 +186,17 @@ bumper_power:			equ $700
 spring_power_red:		equ $1000
 spring_power_yellow:		equ $A00
 
+; General gameplay
+lives_start:			equ 3				; lives at start of game
+rings_for_life:			equ 100				; rings needed for first extra life
+rings_for_life2:		equ 200				; rings needed for second extra life
+rings_for_special_stage:	equ 50				; rings needed for special stage giant ring to appear
+rings_for_continue:		equ 5				; rings needed for continue in special stage
+rings_from_monitor:		equ 10				; rings given by ring monitor
 combo_max:			equ 16*2			; value at which v_enemy_combo gives the max points
 combo_max_points:		equ 10000/10			; points given after 16 enemies are broken in a row
-
-; General gameplay
+bonus_points_per_ring:		equ 100/10			; points given per ring at the end of a level
+points_for_life:		equ 50000/10			; points needed for extra life (awarded every 50000 points without cap)
 emerald_count:			equ 6				; number of emeralds
 emerald_all:			equ (1<<emerald_count)-1	; value stored in emerald bitfield when all 6 are collected ($3F)
 

@@ -81,7 +81,7 @@ autocard:	macro namestr,zonestr,nameframe,zoneframe,ypos,options
 		zonexpos: = (screen_width-zonewidth)/2
 		ovalxpos: = (screen_width-$1C)/2
 		if strlen(\zonestr)=0
-		ovalypos: = nameypos
+		ovalypos: = nameypos+8
 		else
 		ovalypos: = nameypos+12
 		endc

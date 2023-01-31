@@ -5,6 +5,7 @@ Map_Has:	index *
 		ptr frame_has_ringbonus
 		ptr frame_has_timebonus
 		ptr frame_has_score
+		ptr frame_has_continue
 		
 tile_tmphud:	= tile_Art_HUDMain-tile_Art_TitleCardBonus
 		
@@ -35,4 +36,11 @@ frame_has_ringbonus:
 		piece 70, -1, 2x2, 8				; mini oval
 		piece 120, 0, 4x2, 22				; ring bonus counter
 		piece 152, 0, 1x2, 30
+		endsprite
+		
+frame_has_continue:
+		spritemap					; CONTINUE
+		piece 0, 0, 4x2, $20				; CONT
+		piece 32, 0, 4x2, $28				; INUE
+		piece 64, 0, 1x2, $30				; edge of mini oval
 		endsprite

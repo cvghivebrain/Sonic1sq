@@ -16,6 +16,12 @@ Map_Card:	index *
 		ptr frame_card_ketchuphas
 		ptr frame_card_mustardhas
 		ptr frame_card_passed
+		ptr frame_card_specialstage
+		ptr frame_card_chaosemeralds
+		ptr frame_card_sonicgot
+		ptr frame_card_ketchupgot
+		ptr frame_card_mustardgot
+		ptr frame_card_gotthemall
 		
 frame_card_act:
 		spritemap					; ACT #
@@ -64,12 +70,14 @@ titlecardmap:	macro letterset
 		piece xpos, 0, \#tilewidth\x2, tiletmp
 		xpos: = xpos+width
 		else
-		xpos: = xpos+16					; space
+		xpos: = xpos+titlecardspace			; space
 		endc
 		shift						; next piece
 		endr
 		endsprite
 		endm
+		
+		titlecardspace: = 16				; 16px space between words
 		
 frame_card_zone:
 		titlecardmap	\letters_UPLC_GHZCard,ZO,NE
@@ -106,3 +114,23 @@ frame_card_ketchuphas:
 		
 frame_card_mustardhas:
 		titlecardmap	\letters_UPLC_MustardCard,MU,S,T,A,R,D,,HA,S
+		
+frame_card_specialstage:
+		titlecardmap	\letters_UPLC_SSRSS,SP,EC,IA,L,,S,T,A,G,E
+		
+frame_card_chaosemeralds:
+		titlecardmap	\letters_UPLC_SSRChaos,CH,AO,S,,EM,E,R,A,LD,S
+		
+		titlecardspace: = 8				; 8px spacing for "got them all"
+		
+frame_card_sonicgot:
+		titlecardmap	\letters_UPLC_SSRSonic,S,O,NI,C,,GO,T,,TH,EM,,AL,L
+		
+frame_card_ketchupgot:
+		titlecardmap	\letters_UPLC_SSRKetchup,K,E,T,C,H,UP
+		
+frame_card_mustardgot:
+		titlecardmap	\letters_UPLC_SSRMustard,M,US,T,A,RD
+		
+frame_card_gotthemall:
+		titlecardmap	\letters_UPLC_SSRKetchup,GO,T,,TH,EM,,AL,L

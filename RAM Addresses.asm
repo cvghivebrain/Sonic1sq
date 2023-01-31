@@ -20,11 +20,11 @@ v_hscroll_buffer:		rs.b sizeof_vram_hscroll ; scrolling table data ($380 bytes)
 				rsblockend hscroll
 v_hscroll_buffer_padding:	rs.b sizeof_vram_hscroll_padded-sizeof_vram_hscroll ; not needed but cleared by ClearScreen ($80 bytes)
 
-				rsblock ost ; $D000-$EFFF cleared by GM_Title, GM_Level, GM_Special, GM_Continue, GM_Credits, GM_Ending
+				rsblock ost ; cleared by GM_Title, GM_Level, GM_Special, GM_Continue, GM_Credits, GM_Ending
 v_ost_all:			rs.b sizeof_ost*countof_ost ; object variable space ($40 bytes per object; $80 objects) ($2000 bytes)
 	v_ost_player:		equ v_ost_all ; object variable space for Sonic ($40 bytes)
 	v_ost_level_obj:	equ v_ost_all+(sizeof_ost*countof_ost_inert) ; level object variable space ($1800 bytes)
-v_ost_end:			equ v_ost_all+(sizeof_ost*countof_ost) ; $FFFFF000
+v_ost_end:			equ v_ost_all+(sizeof_ost*countof_ost)
 				rsblockend ost
 
 v_snddriver_ram:		rs.b v_snddriver_size ; start of RAM for the sound driver data ($5C0 bytes)
@@ -46,7 +46,7 @@ v_bg_y_pos_vsram:		equ __rs-2 ; background y position, sent to VSRAM during VBla
 v_vdp_hint_counter:		rs.w 1 ; VDP register $8A buffer - horizontal interrupt counter ($8Axx)
 v_vdp_hint_line:		equ __rs-1 ; screen line where water starts and palette is changed by HBlank
 
-				rsblock vblankstuff ; $F628-$F67F cleared by GM_Level, GM_Ending
+				rsblock vblankstuff ; cleared by GM_Level, GM_Ending
 v_vblank_routine:		rs.b 1 ; VBlank routine counter
 v_spritecount:			rs.b 1 ; number of sprites on-screen
 v_palcycle_num:			rs.w 1 ; palette cycling - current index number
@@ -68,7 +68,7 @@ v_palcycle_buffer:		rs.w $20 ; palette data buffer (used for palette cycling)
 
 v_dma_queue:			rs.w (sizeof_dma/2)*countof_dma ; ROM/RAM to VRAM DMA transfer queue ($140 bytes)
 
-				rsblock levelinfo ; $F700-$F7FF cleared by GM_Level, GM_Special, GM_Ending
+				rsblock levelinfo ; cleared by GM_Level, GM_Special, GM_Ending
 v_camera_x_pos:			rs.l 1 ; foreground camera x position
 v_camera_y_pos:			rs.l 1 ; foreground camera y position
 v_bg1_x_pos:			rs.l 1 ; background x position
@@ -273,8 +273,10 @@ v_player1_height:		rs.b 1 ; player 1 half height, standing/running etc.
 v_player1_width_roll:		rs.b 1 ; player 1 half width, rolling/jumping
 v_player1_height_roll:		rs.b 1 ; player 1 half height, rolling/jumping
 v_player1_height_diff:		rs.w 1 ; player 1 difference in height between standing and rolling
-v_haspassed_character:		rs.w 1 ; mappings frame used for "Sonic has passed"
+v_haspassed_character:		rs.w 1 ; settings used for "Sonic has passed"
 v_haspassed_uplc:		rs.w 1 ; UPLC used for "Sonic has passed"
+v_gotthemall_character:		rs.w 1 ; settings used for "Sonic got them all"
+v_gotthemall_uplc:		rs.w 1 ; UPLC used for "Sonic got them all"
 v_zone:				rs.w 1 ; current zone number
 v_act:				equ __rs-1 ; current act number
 v_zone_next:			rs.w 1 ; next zone number
@@ -328,8 +330,8 @@ v_ring_reward_lampcopy:		rs.b 1 ; lamppost copy of v_ring_reward
 v_emeralds:			rs.l 1 ; number of chaos emeralds
 v_oscillating_direction:	rs.w 1 ; bitfield for the direction values in the table below are moving - 0 = up; 1 = down
 
-				rsblock synctables ; $FE60-$FEFF cleared by GM_Special
-				rsblock synctables2 ; $FE60-$FF7F cleared by GM_Level, GM_Ending
+				rsblock synctables ; cleared by GM_Special
+				rsblock synctables2 ; cleared by GM_Level, GM_Ending
 v_oscillating_table:		rs.l $10 ; table of 16 oscillating values, for platform movement - 1 word for current value, 1 word for rate
 v_oscillating_0_to_20:		equ v_oscillating_table
 v_oscillating_0_to_30:		equ v_oscillating_table+4

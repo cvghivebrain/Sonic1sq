@@ -16,12 +16,12 @@ SSRC_Index:	index *,,2
 		ptr SSRC_Flash
 
 SSRC_PosData:	; x positions for chaos emeralds
-		dc.w $110					; blue
-		dc.w $128					; yellow
-		dc.w $F8					; pink
-		dc.w $140					; green
-		dc.w $E0					; red
-		dc.w $158					; grey
+		dc.w screen_left+144					; blue
+		dc.w screen_left+168					; yellow
+		dc.w screen_left+120					; pink
+		dc.w screen_left+192					; green
+		dc.w screen_left+96					; red
+		dc.w screen_left+216					; grey
 ; ===========================================================================
 
 SSRC_Main:	; Routine 0
@@ -29,7 +29,7 @@ SSRC_Main:	; Routine 0
 		lea	(SSRC_PosData).l,a2
 		moveq	#0,d2
 		moveq	#emerald_count-1,d1
-		move.l	(v_emeralds).w,d0			; get emerald bitfield
+		move.l	(v_emeralds).w,d4			; get emerald bitfield
 		bra.s	.skip_findost
 
 	.loop:
@@ -37,12 +37,14 @@ SSRC_Main:	; Routine 0
 		
 	.skip_findost:
 		move.l	#0,ost_id(a1)				; set object to none by default
-		btst	d2,d0					; check if emerald was collected
+		btst	d2,d4					; check if emerald was collected
 		beq.s	.emerald_not_got			; branch if not
 
 		move.l	#SSRChaos,ost_id(a1)
-		move.w	(a2)+,ost_x_pos(a1)			; set x position from list
-		move.w	#$F0,ost_y_screen(a1)			; set y position
+		move.w	d2,d3
+		add.w	d3,d3
+		move.w	(a2,d3.w),ost_x_pos(a1)			; set x position from list
+		move.w	#screen_top+112,ost_y_screen(a1)	; set y position
 		move.b	d2,ost_frame(a1)			; set frame number
 		move.b	d2,ost_anim(a1)				; copy frame number (not an animation number)
 		addq.b	#2,ost_routine(a1)			; goto SSRC_Flash next
@@ -53,6 +55,7 @@ SSRC_Main:	; Routine 0
 	.emerald_not_got:
 		addq.b	#1,d2					; next emerald value
 		dbf	d1,.loop				; repeat for rest of emeralds
+; ===========================================================================
 
 SSRC_Flash:	; Routine 2
 		move.b	ost_frame(a0),d0			; get previous frame
