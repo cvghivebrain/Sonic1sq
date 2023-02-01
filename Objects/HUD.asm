@@ -19,6 +19,7 @@ HUD_Index:	index *,,2
 		ptr HUD_RingsCount
 		ptr HUD_TimeCount
 		ptr HUD_ScoreCount
+		ptr HUD_Debug
 ; ===========================================================================
 
 HUD_Main:	; Routine 0
@@ -56,6 +57,17 @@ HUD_Main:	; Routine 0
 		jsr	FindFreeInert
 		move.l	#HUD,ost_id(a1)				; load score object
 		move.b	#id_HUD_ScoreCount,ost_routine(a1)
+		
+		jsr	FindFreeInert
+		move.l	#HUD,ost_id(a1)				; load debug object
+		move.w	#screen_left+16,ost_x_pos(a1)
+		move.w	#screen_top+56,ost_y_screen(a1)
+		move.l	#Map_HUD,ost_mappings(a1)
+		move.b	#id_frame_hud_debug,ost_frame(a1)
+		move.w	(v_tile_hud).w,ost_tile(a1)
+		move.b	#render_abs,ost_render(a1)
+		move.b	#0,ost_priority(a1)
+		move.b	#id_HUD_Debug,ost_routine(a1)
 
 HUD_Flash:	; Routine 2
 		moveq	#0,d0
@@ -81,6 +93,7 @@ HUD_Display:	; Routine 4
 		
 	.dont_display:
 		rts
+; ===========================================================================
 		
 HUD_LivesCount:	; Routine 6
 		tst.b	(f_hud_lives_update).w			; does the lives counter need updating?
@@ -119,7 +132,7 @@ HUD_LivesGfxIndex:
 		set_dma_src	Art_LivesNums+(sizeof_cell*7),0
 		set_dma_src	Art_LivesNums+(sizeof_cell*8),0
 		set_dma_src	Art_LivesNums+(sizeof_cell*9),0
-		set_dma_src	Art_LivesNums+(sizeof_cell*10),0
+		set_dma_src	Art_LivesNums+(sizeof_cell*36),0
 	
 HUD_RingsCount:	; Routine 8
 		tst.b	(v_hud_rings_update).w			; does the rings counter need updating?
@@ -221,11 +234,13 @@ HUD_TimeCount:	; Routine $A
 		
 	.exit:
 		rts
+; ===========================================================================
 		
 HUD_TimeOver:
 		bsr.w	ObjectKillSonic				; kill Sonic
 		move.b	#1,(f_time_over).w			; flag for GAME OVER object to use correct frame
 		jmp	DeleteObject				; delete time counter object (HUD is unaffected)
+; ===========================================================================
 		
 HUD_ScoreCount:	; Routine $C
 		tst.b	(f_hud_score_update).w			; does score counter need updating?
@@ -294,4 +309,60 @@ HUD_ShowLong:
 	.exit:
 	HUD_Exit:
 		rts
+; ===========================================================================
+
+HUD_Debug:	; Routine $E
+		moveq	#0,d0
+		move.b	(v_spritecount).w,d0			; get sprite count
+		cmp.b	ost_anim(a0),d0
+		beq.s	.skip_sprite				; branch if counter is unchanged
+		move.b	d0,ost_anim(a0)				; save recent sprite count
+		set_dma_dest	$DF80,d1			; VRAM address
+		bsr.s	HUD_ShowByte				; update sprite counter
 		
+	.skip_sprite:
+		bra.w	HUD_Display
+		
+; ---------------------------------------------------------------------------
+; Subroutine to load a byte into VRAM
+
+; input:
+;	d0.b = byte value
+;	d1.l = VRAM address (as DMA instruction)
+
+;	uses d1.l, d2.l, d3.w, a2
+; ---------------------------------------------------------------------------
+
+HUD_ShowByte:
+		moveq	#0,d3
+		move.b	d0,d3
+		andi.b	#$F0,d3					; read high nybble of byte
+		lsr.b	#1,d3					; multiply by 8
+		lea	HUD_ByteGfxIndex(pc,d3.w),a2
+		set_dma_size	sizeof_cell,d2			; set size to 1 cell
+		jsr	AddDMA					; load high digit
+		
+		add.l	#$200000,d1				; next tile in VRAM
+		move.b	d0,d3
+		andi.b	#$F,d3					; read low nybble of byte
+		lsl.b	#3,d3					; multiply by 8
+		lea	HUD_ByteGfxIndex(pc,d3.w),a2
+		jmp	AddDMA					; load low digit
+		
+HUD_ByteGfxIndex:
+		set_dma_src	Art_LivesNums,0
+		set_dma_src	Art_LivesNums+sizeof_cell,0
+		set_dma_src	Art_LivesNums+(sizeof_cell*2),0
+		set_dma_src	Art_LivesNums+(sizeof_cell*3),0
+		set_dma_src	Art_LivesNums+(sizeof_cell*4),0
+		set_dma_src	Art_LivesNums+(sizeof_cell*5),0
+		set_dma_src	Art_LivesNums+(sizeof_cell*6),0
+		set_dma_src	Art_LivesNums+(sizeof_cell*7),0
+		set_dma_src	Art_LivesNums+(sizeof_cell*8),0
+		set_dma_src	Art_LivesNums+(sizeof_cell*9),0
+		set_dma_src	Art_LivesNums+(sizeof_cell*10),0
+		set_dma_src	Art_LivesNums+(sizeof_cell*11),0
+		set_dma_src	Art_LivesNums+(sizeof_cell*12),0
+		set_dma_src	Art_LivesNums+(sizeof_cell*13),0
+		set_dma_src	Art_LivesNums+(sizeof_cell*14),0
+		set_dma_src	Art_LivesNums+(sizeof_cell*15),0

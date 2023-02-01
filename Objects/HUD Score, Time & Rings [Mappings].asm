@@ -7,6 +7,7 @@ Map_HUD:	index *
 		ptr frame_hud_timered
 		ptr frame_hud_allred
 		ptr frame_hud_lifeicon
+		ptr frame_hud_debug
 
 frame_hud_allyellow:
 		spritemap
@@ -67,4 +68,10 @@ frame_hud_lifeicon:
 		piece	$30, 0, 1x1, 8, hi			; extra tiles for longer name
 		piece	$16, 8, 1x1, 9, hi			; x
 		piece	$20, 8, 2x1, 10, hi			; number
+		endsprite
+		
+frame_hud_debug:
+		spritemap
+		piece	0, 0, 2x1, $32, hi			; cpu usage
+		piece	$18, 0, 2x1, $34, hi			; sprite counter
 		endsprite

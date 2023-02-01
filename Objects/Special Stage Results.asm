@@ -194,6 +194,7 @@ SSR_Continue:	; Routine 8
 		move.l	#Map_SSR,ost_mappings(a0)
 		move.w	#tile_Art_MiniSonic+tile_hi,ost_tile(a0)
 		move.b	#render_abs,ost_render(a0)
+		move.b	#id_frame_ssr_contsonic1,ost_frame(a0)
 		move.b	#id_SSR_ContAni,ost_routine(a0)		; goto SSR_ContAni next
 		play.w	1, jsr, sfx_Continue			; play continues jingle
 		

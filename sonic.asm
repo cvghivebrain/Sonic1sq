@@ -53,7 +53,7 @@ Vectors:	dc.l v_stack_pointer&$FFFFFF			; Initial stack pointer value
 		dc.l ErrorTrap					; IRQ level 7
 		dcb.l 16,ErrorTrap				; TRAP #00..#15 exceptions
 		dcb.l 8,ErrorTrap				; Unused (reserved)
-		dcb.l 8,ErrorTrap			; Unused (reserved)
+		dcb.l 8,ErrorTrap				; Unused (reserved)
 	Spike_Bugfix:
 								; Relocated code from Spike_Hurt. REVXB was a nasty hex-edit.
 		;	move.l	ost_y_pos(a0),d3
@@ -772,7 +772,6 @@ Art_Sonic:	incbin	"Graphics\Sonic.bin"			; Sonic
 		incfile Art_Lives,"Graphics\HUD - Life Counter Icon",bin,dma_safe
 		incfile	Art_HUDNums,"Graphics\HUD Numbers",bin,dma_safe
 		incfile	Art_LivesNums,"Graphics\Lives Counter Numbers",bin,dma_safe
-		incfile	Art_LivesLetters,"Graphics\Lives Counter Letters",bin,dma_safe
 		incfile Kos_Ring,"Graphics Kosinski\Rings",kos
 		incfile Art_Shield,"Graphics\Shield",bin,dma_safe
 		incfile Art_Stars,"Graphics\Invincibility",bin,dma_safe
