@@ -3,12 +3,10 @@
 ; ---------------------------------------------------------------------------
 
 WaitForVBlank_CPU:
-		pushr	d0-d3/a2
 		move.w	(vdp_counter).l,d0			; get HV counter
 		lsr.w	#8,d0					; get vertical position
 		set_dma_dest	$DF40,d1			; VRAM address
 		jsr	HUD_ShowByte				; update CPU usage monitor
-		popr	d0-d3/a2
 
 WaitForVBlank:
 		enable_ints

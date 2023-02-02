@@ -321,7 +321,37 @@ HUD_Debug:	; Routine $E
 		bsr.s	HUD_ShowByte				; update sprite counter
 		
 	.skip_sprite:
+		tst.b	(v_fg_x_redraw_flag).w
+		beq.s	.skip_x					; branch if camera hasn't moved
+		move.w	(v_camera_x_pos).w,d0
+		set_dma_dest	$F300,d1			; VRAM address
+		bsr.s	HUD_ShowWord
+		
+	.skip_x:
+		tst.b	(v_fg_y_redraw_flag).w
+		beq.s	.skip_y					; branch if camera hasn't moved
+		move.w	(v_camera_y_pos).w,d0
+		set_dma_dest	$F380,d1			; VRAM address
+		bsr.s	HUD_ShowWord
+		
+	.skip_y:
 		bra.w	HUD_Display
+		
+; ---------------------------------------------------------------------------
+; Subroutine to load a word into VRAM
+
+; input:
+;	d0.w = word value
+;	d1.l = VRAM address (as DMA instruction)
+
+;	uses d1.l, d2.l, d3.l, a2
+; ---------------------------------------------------------------------------
+
+HUD_ShowWord:
+		ror.w	#8,d0					; move high byte into low d0
+		bsr.s	HUD_ShowByte				; load high byte
+		add.l	#$200000,d1				; next tile in VRAM
+		lsr.w	#8,d0					; move low byte back
 		
 ; ---------------------------------------------------------------------------
 ; Subroutine to load a byte into VRAM
@@ -330,7 +360,7 @@ HUD_Debug:	; Routine $E
 ;	d0.b = byte value
 ;	d1.l = VRAM address (as DMA instruction)
 
-;	uses d1.l, d2.l, d3.w, a2
+;	uses d1.l, d2.l, d3.l, a2
 ; ---------------------------------------------------------------------------
 
 HUD_ShowByte:

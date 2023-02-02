@@ -74,4 +74,6 @@ frame_hud_debug:
 		spritemap
 		piece	0, 0, 2x1, $32, hi			; cpu usage
 		piece	$18, 0, 2x1, $34, hi			; sprite counter
+		piece	0, 12, 4x1, $D0, hi			; camera x pos
+		piece	0, 20, 4x1, $D4, hi			; camera y pos
 		endsprite
