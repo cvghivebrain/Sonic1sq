@@ -465,12 +465,6 @@ LGrass_Coll_Sloped:
 
 		include "Objects\SLZ Pylon.asm"			; Pylon
 
-		include "Objects\LZ Water Surface.asm"		; WaterSurface
-
-		include "Objects\LZ Pole.asm"			; Pole
-
-		include "Objects\LZ Flapping Door.asm"		; FlapDoor
-
 		include "Objects\Invisible Solid Blocks.asm"	; Invisibarrier
 
 		include "Objects\Sonic.asm"			; SonicPlayer
@@ -493,27 +487,24 @@ See_DataFlat:	incbin	"Collision\SLZ Seesaw Heightmap (Flat).bin" ; used by Seesa
 		include "Objects\Orbinaut.asm"			; Orbinaut
 
 		include "Objects\LZ Harpoon.asm"		; Harpoon
-
 		include "Objects\LZ Blocks.asm"			; LabyrinthBlock
-
 		include "Objects\LZ Cork.asm"			; Cork
 		include "Objects\_Sink.asm"
 		include "Objects\LZ Rising Platform.asm"	; LabyrinthPlatform
-
 		include "Objects\LZ Gargoyle Head.asm"		; Gargoyle
-
 		include "Objects\LZ Conveyor Belt Platforms.asm" ; LabyrinthConvey
-
 		include "Objects\LZ Bubbles.asm"		; Bubble
-
 		include "Objects\LZ Waterfall.asm"		; Waterfall
-
 		include "Objects\LZ Drowning Numbers.asm"	; DrownCount
 		include "Objects\_ResumeMusic.asm"
+		include "Objects\LZ Pole.asm"			; Pole
+		include "Objects\LZ Flapping Door.asm"		; FlapDoor
+		include "Objects\LZ Door Vertical.asm"		; LabyrinthDoorV
 
 		include "Objects\Shield & Invincibility.asm"	; ShieldItem
 		include "Objects\Unused Special Stage Warp.asm"	; VanishSonic
 		include "Objects\LZ Water Splash.asm"		; Splash
+		include "Objects\LZ Water Surface.asm"		; WaterSurface
 
 		include "Objects\_FindNearestTile, FindFloor & FindWall.asm"
 
@@ -1154,6 +1145,7 @@ Level_End_unused:	dc.b 0,	0, 0, 0
 		include "Objects\LZ Waterfall [Mappings].asm"	; Map_WFall
 		include "Objects\LZ Sonic's Drowning Face [Mappings].asm" ; Map_Drown
 		include "Objects\LZ Water Splash [Mappings].asm" ; Map_Splash
+		include "Objects\LZ Door Vertical [Mappings].asm" ; Map_DoorV
 		include "Objects\SLZ Fireball Launcher [Mappings].asm" ; Map_Scen
 		include "Objects\SLZ Elevator [Mappings].asm"	; Map_Elev
 		include "Objects\SLZ Circling Platform [Mappings].asm" ; Map_Circ

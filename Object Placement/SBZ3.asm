@@ -53,7 +53,7 @@ ObjPos_SBZ3:
 		objpos $04D0,$0348,Button,$01
 		objpos $04F0,$0290,LabyrinthBlock,type_lblock_sink
 		objpos $04F0,$04F0,Burrobot,$00,rem
-		objpos $04F8,$05A0,FloatingBlock,type_fblock_lzvert+type_fblock_button+$A,rem
+		objpos $04F8,$05A0,LabyrinthDoorV,$A,rem
 		objpos $0506,$01B0,Spikes,type_spike_3up+type_spike_still,yflip
 		objpos $0510,$00F1,Monitor,type_monitor_rings,rem
 		objpos $0510,$0290,LabyrinthBlock,type_lblock_solid
@@ -103,7 +103,7 @@ ObjPos_SBZ3:
 		objpos $09D0,$028D,Gargoyle,$04,rem
 		objpos $09D0,$0514,Rings,$41,rem
 		objpos $09E0,$06E0,Orbinaut,$00,rem
-		objpos $09E8,$05A0,FloatingBlock,type_fblock_lzvert+type_fblock_button+5,rem
+		objpos $09E8,$05A0,LabyrinthDoorV,5,rem
 		objpos $0A10,$0230,Gargoyle,$02,xflip,rem
 		objpos $0A10,$02B0,Gargoyle,$02,xflip,rem
 		objpos $0A18,$0510,Burrobot,$00,rem
@@ -148,7 +148,7 @@ ObjPos_SBZ3:
 		objpos $0DB0,$0330,FloatingBlock,type_fblock_lzhoriz+type_fblock_button+7,rem
 		objpos $0DB0,$0468,Button,$06
 		objpos $0DC0,$0310,Burrobot,$00,xflip,rem
-		objpos $0DF8,$03E0,FloatingBlock,type_fblock_lzvert+type_fblock_button+6,rem
+		objpos $0DF8,$03E0,LabyrinthDoorV,6,rem
 		objpos $0E10,$0098,Springs,type_spring_red+type_spring_up
 		objpos $0E10,$0461,Monitor,type_monitor_rings,rem
 		objpos $0E28,$01D0,Spikes,type_spike_3up+type_spike_still,yflip
@@ -167,7 +167,7 @@ ObjPos_SBZ3:
 		objpos $0ED0,$0150,Burrobot,$00,rem
 		objpos $0EF0,$0098,Springs,type_spring_red+type_spring_up
 		objpos $0EF0,$04B0,LabyrinthBlock,type_lblock_solid
-		objpos $0EF8,$0440,FloatingBlock,type_fblock_lzvert+type_fblock_button+9,rem
+		objpos $0EF8,$0440,LabyrinthDoorV,9,rem
 		objpos $0F10,$04F8,Button,$09
 		objpos $0F50,$0530,Burrobot,$00,xflip,rem
 		objpos $0F80,$04C0,SpikeBall,$44

@@ -62,7 +62,6 @@ CheckActive:
 
 ; usage:
 ;		bsr.w	GetState
-;		tst.b	d0
 ;		bne.w	.remembered				; branch if anything was remembered
 ; ---------------------------------------------------------------------------
 

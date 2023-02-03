@@ -8,7 +8,6 @@ Map_FBlock:	index *
 		ptr frame_fblock_syzrect2x2
 		ptr frame_fblock_syzrect1x3
 		ptr frame_fblock_slz
-		ptr frame_fblock_lzvert
 		ptr frame_fblock_lzhoriz
 		
 frame_fblock_syz1x1:
@@ -48,12 +47,6 @@ frame_fblock_syzrect1x3:
 frame_fblock_slz:
 		spritemap					; SLZ - 1x1 square block
 		piece	-$10, -$10, 4x4, $21
-		endsprite
-		
-frame_fblock_lzvert:
-		spritemap					; LZ - small vertical door
-		piece	-8, -$20, 2x4, 0
-		piece	-8, 0, 2x4, 0, yflip
 		endsprite
 		
 frame_fblock_lzhoriz:

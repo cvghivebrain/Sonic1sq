@@ -14,7 +14,7 @@ ObjPos_LZ1:
 		objpos $0570,$0130,SpikeBall,$D5
 		objpos $05F0,$00F0,Monitor,type_monitor_shield,rem
 		objpos $05F0,$01F8,Button,$00
-		objpos $0608,$01A0,FloatingBlock,type_fblock_lzvert+type_fblock_button,rem
+		objpos $0608,$01A0,LabyrinthDoorV,0,rem
 		objpos $0640,$01F8,Bubble,$80
 		objpos $0710,$0190,Rings,$41,rem
 		objpos $0720,$0130,FloatingBlock,type_fblock_lzhoriz+type_fblock_button+1,rem
@@ -34,7 +34,7 @@ ObjPos_LZ1:
 		objpos $09B0,$0198,Bubble,$81
 		objpos $09B0,$0280,Jaws,$06,rem
 		objpos $09C0,$0108,MovingBlock,type_mblock_1+type_mblock_rightdrop_button
-		objpos $09F8,$02A0,FloatingBlock,type_fblock_lzvert+type_fblock_button+2,rem
+		objpos $09F8,$02A0,LabyrinthDoorV,2,rem
 		objpos $0A10,$02F8,Button,$02
 		objpos $0A20,$0230,Spikes,type_spike_3upwide+type_spike_still,yflip
 		objpos $0A20,$0298,Jaws,$06,xflip,rem
@@ -48,7 +48,7 @@ ObjPos_LZ1:
 		objpos $0AE0,$0210,Jaws,$06,rem
 		objpos $0AF0,$02D8,Button,$03
 		objpos $0AF0,$02F0,LabyrinthBlock,type_lblock_solid
-		objpos $0B08,$02E0,FloatingBlock,type_fblock_lzvert+type_fblock_button+3,rem
+		objpos $0B08,$02E0,LabyrinthDoorV,$83,rem
 		objpos $0B50,$01F0,Spikes,type_spike_6upwide+type_spike_still
 		objpos $0BE4,$01F0,Spikes,type_spike_6upwide+type_spike_still
 		objpos $0C20,$0330,Spikes,type_spike_3upwide+type_spike_still,yflip
@@ -111,7 +111,7 @@ ObjPos_LZ1:
 		objpos $10F0,$0268,Button,$04
 		objpos $10F0,$027B,LabyrinthBlock,type_lblock_solid
 		objpos $10F0,$03F8,Springs,type_spring_red+type_spring_up
-		objpos $1118,$05A0,FloatingBlock,type_fblock_lzvert+type_fblock_button+5,rem
+		objpos $1118,$05A0,LabyrinthDoorV,5,rem
 		objpos $1150,$05DC,Rings,$41,rem
 		objpos $1170,$05BC,Rings,$41,rem
 		objpos $11B0,$05BC,Rings,$41,rem
@@ -160,7 +160,7 @@ ObjPos_LZ1:
 		objpos $1590,$02A0,Burrobot,$00,rem
 		objpos $15D0,$01A0,Jaws,$0A,rem
 		objpos $15D4,$0274,Rings,$11,rem
-		objpos $15E8,$01A0,FloatingBlock,type_fblock_lzvert+type_fblock_button+8,rem
+		objpos $15E8,$01A0,LabyrinthDoorV,8,rem
 		objpos $1600,$0150,FloatingBlock,type_fblock_lzhoriz+type_fblock_button+9,rem
 		objpos $1610,$0190,Rings,$11,rem
 		objpos $1610,$01A8,Rings,$10,rem
@@ -172,7 +172,7 @@ ObjPos_LZ1:
 		objpos $1690,$01A8,Button,$09
 		objpos $16B0,$0170,LabyrinthBlock,type_lblock_solid
 		objpos $16B0,$0288,Button,$07
-		objpos $16E8,$0220,FloatingBlock,type_fblock_lzvert+type_fblock_button+7,rem
+		objpos $16E8,$0220,LabyrinthDoorV,7,rem
 		objpos $16F0,$0110,LabyrinthBlock,type_lblock_solid
 		objpos $16F0,$0130,LabyrinthBlock,type_lblock_solid
 		objpos $1700,$0110,Burrobot,$00,rem

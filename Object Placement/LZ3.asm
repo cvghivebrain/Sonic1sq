@@ -102,7 +102,7 @@ ObjPos_LZ3:
 		objpos $0CF0,$03F8,Button,$06
 		objpos $0CF0,$0510,Burrobot,$00,rem
 		objpos $0D00,$0280,LabyrinthConvey,$84
-		objpos $0D08,$04A0,FloatingBlock,type_fblock_lzvert+type_fblock_button+1,rem
+		objpos $0D08,$04A0,LabyrinthDoorV,1,rem
 		objpos $0D48,$03F0,Spikes,type_spike_6upwide+type_spike_still
 		objpos $0D80,$0280,LabyrinthConvey,$84
 		objpos $0D90,$04D0,Burrobot,$00,rem
@@ -126,7 +126,7 @@ ObjPos_LZ3:
 		objpos $11D0,$0421,Monitor,type_monitor_invincible,rem
 		objpos $11D0,$04F8,Button,$02
 		objpos $11E0,$0680,Pole,$04
-		objpos $1208,$04A0,FloatingBlock,type_fblock_lzvert+type_fblock_button+2,rem
+		objpos $1208,$04A0,LabyrinthDoorV,2,rem
 		objpos $1218,$02F0,Spikes,type_spike_3up+type_spike_still
 		objpos $1240,$04F8,Bubble,$80
 		objpos $1250,$0668,Spikes,type_spike_3left+type_spike_still
@@ -194,7 +194,7 @@ ObjPos_LZ3:
 		objpos $1708,$02F8,Waterfall,type_wfall_cornermedium,xflip
 		objpos $1720,$0270,Spikes,type_spike_3upwide+type_spike_still,yflip
 		objpos $1720,$07F8,Bubble,$80
-		objpos $1798,$06A0,FloatingBlock,type_fblock_lzvert+type_fblock_button+7,rem
+		objpos $1798,$06A0,LabyrinthDoorV,7,rem
 		objpos $17C0,$06F8,Bubble,$80
 		objpos $1808,$03F8,Waterfall,type_wfall_cornernarrow,xflip
 		objpos $1808,$04F0,Waterfall,type_wfall_vert,xflip
