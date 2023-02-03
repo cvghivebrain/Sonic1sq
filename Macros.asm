@@ -415,8 +415,7 @@ piece:		macro
 ; ---------------------------------------------------------------------------
 
 objpos:		macro xpos,ypos,id,subtype
-		dc.w \xpos
-		obj_ypos: = \ypos
+		dc.w \xpos, \ypos
 		obj_id: = \id
 		ifarg \subtype
 		obj_sub\@: equ \subtype
@@ -429,9 +428,9 @@ objpos:		macro xpos,ypos,id,subtype
 		ifarg \5
 		rept narg-4
 			if strcmp("\5","xflip")
-			obj_xflip: = $4000
+			obj_xflip: = 1
 			elseif strcmp("\5","yflip")
-			obj_yflip: = $8000
+			obj_yflip: = 2
 			elseif strcmp("\5","rem")
 			obj_rem: = $80
 			else
@@ -440,8 +439,7 @@ objpos:		macro xpos,ypos,id,subtype
 		endr
 		endc
 		
-		dc.w obj_ypos+obj_xflip+obj_yflip
-		dc.b obj_rem, obj_sub\@
+		dc.b obj_rem+obj_xflip+obj_yflip, obj_sub\@
 		dc.l obj_id
 		endm
 

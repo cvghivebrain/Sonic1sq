@@ -14,7 +14,7 @@ countof_ost_inert:	equ $20					; number of OSTs that don't interact with Sonic (
 countof_ost_ert:	equ countof_ost-countof_ost_inert	; number of OSTs that do interact with Sonic ($60)
 sizeof_priority:	equ $80					; size of one priority section in sprite queue
 sizeof_dma:		equ 14					; size of one DMA command
-countof_dma:		equ 24					; number of DMA slots in queue
+countof_dma:		equ 28					; number of DMA slots in queue
 
 level_max_width:	equ $40
 level_max_height:	equ 8

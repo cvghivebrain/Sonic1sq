@@ -52,7 +52,7 @@ LBlk_Action:	; Routine 2
 	.wait:
 		subq.w	#1,ost_lblock_wait_time(a0)		; decrement waiting time
 		bne.s	LBlk_Update				; branch if time > 0
-		addq.b	#2,ost_routine(a0)			; goto LPlat_Rise next
+		addq.b	#2,ost_routine(a0)			; goto LBlk_Sink next
 		
 LBlk_Update:
 		move.w	ost_lblock_y_pos(a0),d0

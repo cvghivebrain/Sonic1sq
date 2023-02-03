@@ -34,7 +34,6 @@ DespawnObject:
 ; usage:
 ;		bsr.w	CheckActive
 ;		bne.w	.offscreen				; branch if outside active area
-
 ; ---------------------------------------------------------------------------
 
 CheckActive:
@@ -52,3 +51,51 @@ CheckActive:
 	.offscreen:
 		moveq	#1,d0
 		rts
+
+; ---------------------------------------------------------------------------
+; Subroutine to get the state of an object from v_respawn_list
+
+; output:
+;	d0.b = byte from v_respawn_list for current object
+
+;	uses d0.l, a2
+
+; usage:
+;		bsr.w	GetState
+;		tst.b	d0
+;		bne.w	.remembered				; branch if anything was remembered
+; ---------------------------------------------------------------------------
+
+GetState:
+		lea	(v_respawn_list+2).w,a2
+		moveq	#0,d0
+		move.b	ost_respawn(a0),d0
+		beq.s	.exit					; branch if object isn't in the respawn table
+		adda.w	d0,a2					; jump to relevant position in respawn table
+		bclr	#7,(a2)					; clear the already-loaded flag
+		move.b	(a2),d0					; get value
+		
+	.exit:
+		rts
+
+; ---------------------------------------------------------------------------
+; Subroutine to save the state of an object in v_respawn_list
+
+; output:
+;	a2 = address in v_respawn_list for current object
+;	(a2).b = state of current object
+
+;	uses d0.l
+
+; usage:
+;		bsr.w	SaveState
+;		bset	#0,(a2)					; set bit to remember
+; ---------------------------------------------------------------------------
+
+SaveState:
+		lea	(v_respawn_list+2).w,a2
+		moveq	#0,d0
+		move.b	ost_respawn(a0),d0
+		adda.w	d0,a2					; jump to relevant position in respawn table
+		rts
+		

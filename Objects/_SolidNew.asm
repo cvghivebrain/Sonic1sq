@@ -7,6 +7,14 @@
 ;	a1 = address of OST of Sonic
 
 ;	uses d2.w, d3.w, d4.l
+
+; usage (if object only moves vertically or not at all):
+;		bsr.w	SolidNew
+
+; usage (if object moves horizontally):
+;		move.w	ost_x_pos(a0),ost_x_prev(a0)		; save x pos before moving
+;		bsr.w	.moveobject				; move object
+;		bsr.w	SolidNew
 ; ---------------------------------------------------------------------------
 
 SolidNew:
@@ -102,6 +110,7 @@ Sol_Stand:
 		beq.s	.skip_x					; branch if previous x pos is unused
 		move.w	ost_x_pos(a0),d2
 		sub.w	ost_x_prev(a0),d2			; subtract previous x pos for distance in pixels moved (+ve if moved right)
+		clr.w	ost_x_prev(a0)
 		add.w	d2,ost_x_pos(a1)			; update Sonic's x position
 		
 	.skip_x:
@@ -115,11 +124,7 @@ Sol_Stand:
 		rts
 		
 Sol_Kill:
-		movea.l	a0,a2					; this object killed Sonic
-		exg	a0,a1					; temporarily make Sonic the current object
-		jsr	KillSonic				; Sonic dies
-		exg	a0,a1					; restore this object as current
-		rts
+		jmp	ObjectKillSonic				; Sonic dies
 		
 ; ---------------------------------------------------------------------------
 ; Subroutine to make an object solid, sides only

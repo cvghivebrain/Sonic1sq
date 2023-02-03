@@ -191,7 +191,8 @@ OPL_NoMove:
 ; output:
 ;	d0 = 0 if object is spawned (or skipped because it was broken)
 ;	a1 = address of OST of spawned object
-;	uses d1, a0
+
+;	uses a0
 ; ---------------------------------------------------------------------------
 
 OPL_SpawnObj:
@@ -208,19 +209,15 @@ OPL_MakeItem:
 		bsr.w	FindFreeObj				; find free OST slot
 		bne.s	.fail					; branch if not found
 		move.w	(a0)+,ost_x_pos(a1)			; set x pos
-		move.w	(a0)+,d0				; get y pos and x/yflip flags
-		move.w	d0,d1
-		andi.w	#$FFF,d0				; ignore x/yflip bits
-		move.w	d0,ost_y_pos(a1)			; set y pos
-		rol.w	#2,d1
-		andi.b	#render_xflip+render_yflip,d1		; read only x/yflip bits
-		move.b	d1,ost_render(a1)			; apply x/yflip
-		move.b	d1,ost_status(a1)
+		move.w	(a0)+,ost_y_pos(a1)			; set y pos
 		move.b	(a0)+,d0				; get respawn flag
 		bpl.s	.no_respawn_bit				; branch if remember respawn bit is not set
 		move.b	d2,ost_respawn(a1)			; give object its place in the respawn table
+		andi.b	#render_xflip+render_yflip,d0		; read only x/yflip bits
 
 	.no_respawn_bit:
+		move.b	d0,ost_render(a1)			; apply x/yflip
+		move.b	d0,ost_status(a1)
 		move.b	(a0)+,ost_subtype(a1)			; set subtype
 		move.l	(a0)+,ost_id(a1)			; load object
 		moveq	#0,d0

@@ -20,6 +20,10 @@ HUD_Index:	index *,,2
 		ptr HUD_TimeCount
 		ptr HUD_ScoreCount
 		ptr HUD_Debug
+		
+		rsobj HUD
+ost_hud_sprites:	rs.b 1					; sprite counter from previous frame
+		rsobjend
 ; ===========================================================================
 
 HUD_Main:	; Routine 0
@@ -314,9 +318,9 @@ HUD_ShowLong:
 HUD_Debug:	; Routine $E
 		moveq	#0,d0
 		move.b	(v_spritecount).w,d0			; get sprite count
-		cmp.b	ost_anim(a0),d0
+		cmp.b	ost_hud_sprites(a0),d0
 		beq.s	.skip_sprite				; branch if counter is unchanged
-		move.b	d0,ost_anim(a0)				; save recent sprite count
+		move.b	d0,ost_hud_sprites(a0)			; save recent sprite count
 		set_dma_dest	$DF80,d1			; VRAM address
 		bsr.s	HUD_ShowByte				; update sprite counter
 		

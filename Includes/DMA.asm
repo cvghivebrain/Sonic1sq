@@ -15,7 +15,7 @@ FindFreeDMA:
 		tst.b	(a1)					; is DMA slot empty?
 		beq.s	.found					; if yes, branch
 		lea	sizeof_dma(a1),a1			; goto next DMA slot
-		dbf	d0,.loop				; repeat 15 times
+		dbf	d0,.loop				; repeat for all DMA slots
 
 	.found:
 		rts
@@ -31,11 +31,14 @@ FindFreeDMA:
 
 AddDMA:
 		pushr	d0/a1
-		bsr.s	FindFreeDMA				; find free DMA slot (overwrites last slot if none are found)
+		bsr.s	FindFreeDMA				; find free DMA slot
+		bne.s	.not_found				; branch if no slots are available
 		move.l	(a2)+,(a1)+				; write source address
 		move.w	(a2)+,(a1)+				; write source address
 		move.l	d2,(a1)+				; write length
 		move.l	d1,(a1)					; write destination address
+		
+	.not_found:
 		popr	d0/a1
 		rts
 
@@ -49,11 +52,14 @@ AddDMA:
 
 AddDMA2:
 		pushr	d0/a1
-		bsr.s	FindFreeDMA				; find free DMA slot (overwrites last slot if none are found)
+		bsr.s	FindFreeDMA				; find free DMA slot
+		bne.s	.not_found				; branch if no slots are available
 		move.l	(a2)+,(a1)+				; write source address
 		move.w	(a2)+,(a1)+				; write source address
 		move.l	(a2)+,(a1)+				; write length
 		move.l	d1,(a1)					; write destination address
+		
+	.not_found:
 		popr	d0/a1
 		rts
 
@@ -86,5 +92,5 @@ ProcessDMA:
 	
 	.empty:
 		lea	sizeof_dma(a1),a1			; goto next DMA slot
-		dbf	d0,.loop				; repeat 15 times
+		dbf	d0,.loop				; repeat for all DMA slots
 		rts
