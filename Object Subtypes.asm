@@ -145,7 +145,6 @@ type_fblock_syz1x2:	equ id_frame_fblock_syz1x2<<4		; $2x - 1x2 32x32 squares
 type_fblock_syzrect2x2:	equ id_frame_fblock_syzrect2x2<<4	; $3x - 2x2 32x26 squares
 type_fblock_syzrect1x3:	equ id_frame_fblock_syzrect1x3<<4	; $4x - 1x3 32x26 squares
 type_fblock_slz:	equ id_frame_fblock_slz<<4		; $5x - 32x32 square
-type_fblock_lzhoriz:	equ id_frame_fblock_lzhoriz<<4		; $7x - LZ large horizontal door
 type_fblock_still:	equ id_FBlock_Still			; $x0 - doesn't move
 type_fblock_leftright:	equ id_FBlock_LeftRight			; $x1 - moves side to side
 type_fblock_leftrightwide: equ id_FBlock_LeftRightWide		; $x2 - moves side to side, larger distance

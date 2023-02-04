@@ -451,7 +451,7 @@ LGrass_Coll_Sloped:
 
 		include "Objects\Batbrain.asm"			; Batbrain
 
-		include "Objects\SYZ & SLZ Floating Blocks, LZ Doors.asm" ; FloatingBlock
+		include "Objects\SYZ & SLZ Floating Blocks.asm"	; FloatingBlock
 
 		include "Objects\SYZ & LZ Spike Ball Chain.asm"	; SpikeBall
 
@@ -500,6 +500,7 @@ See_DataFlat:	incbin	"Collision\SLZ Seesaw Heightmap (Flat).bin" ; used by Seesa
 		include "Objects\LZ Pole.asm"			; Pole
 		include "Objects\LZ Flapping Door.asm"		; FlapDoor
 		include "Objects\LZ Door Vertical.asm"		; LabyrinthDoorV
+		include "Objects\LZ Door Horizontal.asm"	; LabyrinthDoorH
 
 		include "Objects\Shield & Invincibility.asm"	; ShieldItem
 		include "Objects\Unused Special Stage Warp.asm"	; VanishSonic
@@ -1128,7 +1129,7 @@ Level_End_unused:	dc.b 0,	0, 0, 0
 		include "Objects\MZ, LZ & SBZ Moving Blocks [Mappings].asm" ; Map_MBlock, Map_MBlockLZ
 		include "Objects\SYZ Lamp [Mappings].asm"	; Map_Light
 		include "Objects\SYZ Bumper [Mappings].asm"	; Map_Bump
-		include "Objects\SYZ & SLZ Floating Blocks, LZ Doors [Mappings].asm" ; Map_FBlock
+		include "Objects\SYZ & SLZ Floating Blocks [Mappings].asm" ; Map_FBlock
 		include "Objects\SYZ & LZ Spike Ball Chain [Mappings].asm" ; Map_SBall, Map_SBall2
 		include "Objects\SYZ & SBZ Large Spike Balls [Mappings].asm" ; Map_BBall
 		include "Objects\SYZ Blocks at Boss [Mappings].asm" ; Map_BossBlock
@@ -1146,6 +1147,7 @@ Level_End_unused:	dc.b 0,	0, 0, 0
 		include "Objects\LZ Sonic's Drowning Face [Mappings].asm" ; Map_Drown
 		include "Objects\LZ Water Splash [Mappings].asm" ; Map_Splash
 		include "Objects\LZ Door Vertical [Mappings].asm" ; Map_DoorV
+		include "Objects\LZ Door Horizontal [Mappings].asm" ; Map_DoorH
 		include "Objects\SLZ Fireball Launcher [Mappings].asm" ; Map_Scen
 		include "Objects\SLZ Elevator [Mappings].asm"	; Map_Elev
 		include "Objects\SLZ Circling Platform [Mappings].asm" ; Map_Circ

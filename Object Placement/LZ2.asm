@@ -89,8 +89,8 @@ ObjPos_LZ2:
 		objpos $0940,$06F8,Bubble,$80
 		objpos $0948,$01A0,LabyrinthDoorV,2,rem
 		objpos $0970,$05C0,SpikeBall,$54
-		objpos $09C0,$0310,FloatingBlock,type_fblock_lzhoriz+type_fblock_button,rem
-		objpos $09C0,$0510,FloatingBlock,type_fblock_lzhoriz+type_fblock_button+1,rem
+		objpos $09C0,$0310,LabyrinthDoorH,0,rem
+		objpos $09C0,$0510,LabyrinthDoorH,1,rem
 		objpos $09C0,$06A4,Jaws,$09,rem
 		objpos $09E0,$01EC,Lamppost,$01,rem
 		objpos $09E0,$05B0,Spikes,type_spike_3upwide+type_spike_still,yflip

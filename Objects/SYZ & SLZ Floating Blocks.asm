@@ -3,7 +3,6 @@
 
 ; spawned by:
 ;	ObjPos_SYZ1, ObjPos_SYZ2, ObjPos_SYZ3 - subtypes 0/1/2/$13/$17/$20/$37/$A0
-;	ObjPos_LZ1, ObjPos_LZ2, ObjPos_LZ3, ObjPos_SBZ3 - subtypes $E0-$EA, $F0-$FA
 ;	ObjPos_SLZ2, ObjPos_SLZ3 - subtypes $58-$5B
 ; ---------------------------------------------------------------------------
 
@@ -40,11 +39,6 @@ FBlock_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto FBlock_Action next
 		move.l	#Map_FBlock,ost_mappings(a0)
 		move.w	#0+tile_pal3,ost_tile(a0)
-		cmpi.b	#id_LZ,(v_zone).w			; check if level is LZ
-		bne.s	.not_lz					; if not, branch
-		move.w	#tile_Kos_LzDoorV+tile_pal3,ost_tile(a0) ; LZ specific code
-
-	.not_lz:
 		move.b	#render_rel,ost_render(a0)
 		move.b	#3,ost_priority(a0)
 		moveq	#0,d0
@@ -95,12 +89,6 @@ FBlock_Main:	; Routine 0
 		andi.b	#$F,d0					; read low nybble
 		move.b	d0,ost_fblock_btn_num(a0)		; save to variable
 		move.b	#id_FBlock_UpButton,ost_subtype(a0)	; force subtype to 5 (moves up when button is pressed)
-		cmpi.b	#id_frame_fblock_lzhoriz,ost_frame(a0)	; is object a large horizontal LZ door?
-		bne.s	.chkstate				; if not, branch
-		move.b	#id_FBlock_LeftButton,ost_subtype(a0)	; force subtype to $C (moves left when button is pressed)
-		move.w	#$80,ost_fblock_move_dist(a0)
-
-	.chkstate:
 		lea	(v_respawn_list).w,a2
 		moveq	#0,d0
 		move.b	ost_respawn(a0),d0
@@ -225,29 +213,11 @@ FBlock_UpDown_Move:
 FBlock_UpButton:
 		tst.b	ost_fblock_move_flag(a0)		; is object moving?
 		bne.s	.chk_distance				; if yes, branch
-		cmpi.w	#id_LZ_act1,(v_zone).w			; is level LZ1 ?
-		bne.s	.not_lz1				; if not, branch
-		cmpi.b	#3,ost_fblock_btn_num(a0)		; is object linked to button 3?
-		bne.s	.not_lz1				; if not, branch
-		clr.b	(f_water_tunnel_disable).w		; enable water tunnels
-		move.w	(v_ost_player+ost_x_pos).w,d0
-		cmp.w	ost_x_pos(a0),d0			; is Sonic to the right?
-		bcc.s	.not_lz1				; if yes, branch
-		move.b	#1,(f_water_tunnel_disable).w		; disable water tunnels if Sonic is to the left
-
-	.not_lz1:
 		lea	(v_button_state).w,a2
 		moveq	#0,d0
 		move.b	ost_fblock_btn_num(a0),d0
 		btst	#0,(a2,d0.w)				; check status of linked button
 		beq.s	.not_pressed				; branch if not pressed
-		cmpi.w	#id_LZ_act1,(v_zone).w			; is level LZ1 ?
-		bne.s	.not_lz1_again				; if not, branch
-		cmpi.b	#3,d0					; is object linked to button 3?
-		bne.s	.not_lz1_again				; if not, branch
-		clr.b	(f_water_tunnel_disable).w		; enable water tunnels
-
-	.not_lz1_again:
 		move.b	#1,ost_fblock_move_flag(a0)		; flag object as moving
 
 	.chk_distance:
