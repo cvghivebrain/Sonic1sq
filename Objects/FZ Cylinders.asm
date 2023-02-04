@@ -48,8 +48,7 @@ Cyl_Main:	; Routine 0
 		move.w	(a1)+,ost_x_pos(a0)
 		move.w	(a1),ost_y_pos(a0)
 		move.w	(a1)+,ost_cylinder_y_start(a0)
-		move.b	#$20,ost_height(a0)
-		move.b	#$60,ost_width(a0)
+		move.b	#$20,ost_width(a0)
 		move.b	#$20,ost_displaywidth(a0)
 		move.b	#$60,ost_height(a0)
 		move.b	#3,ost_priority(a0)
@@ -88,11 +87,7 @@ Cyl_Update:
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 
 	.skip_eggman:
-		move.w	#$2B,d1
-		move.w	#$60,d2
-		move.w	#$61,d3
-		move.w	ost_x_pos(a0),d4
-		jsr	(SolidObject).l
+		jsr	SolidNew
 		moveq	#0,d0
 		move.w	ost_cylinder_y_move(a0),d1		; distance cylinder has moved
 		bpl.s	.moved_down				; branch if 0 or +ve

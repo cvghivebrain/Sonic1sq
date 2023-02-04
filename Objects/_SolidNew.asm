@@ -84,10 +84,14 @@ Sol_Side:
 		bmi.s	.away					; branch if Sonic is moving away
 		
 	.push:
-		bset	#status_pushing_bit,ost_status(a1)	; make Sonic push object
-		bset	#status_pushing_bit,ost_status(a0)	; make object be pushed
+		btst	#status_pushing_bit,ost_status(a0)
+		beq.s	.keep_speed				; don't stop Sonic for the first frame pushing
 		move.w	#0,ost_inertia(a1)
 		move.w	#0,ost_x_vel(a1)			; stop Sonic moving
+		
+	.keep_speed:
+		bset	#status_pushing_bit,ost_status(a1)	; make Sonic push object
+		bset	#status_pushing_bit,ost_status(a0)	; make object be pushed
 		rts
 		
 	.away:

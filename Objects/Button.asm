@@ -33,64 +33,47 @@ But_Main:	; Routine 0
 		move.b	#$10,ost_displaywidth(a0)
 		move.b	#4,ost_priority(a0)
 		addq.w	#3,ost_y_pos(a0)
+		move.b	#$10,ost_width(a0)
+		move.b	#5,ost_height(a0)
 
 But_Action:	; Routine 2
-		tst.b	ost_render(a0)				; is button on screen?
-		bpl.s	But_Display				; if not, branch
-		move.w	#$1B,d1					; width
-		move.w	#5,d2					; height
-		move.w	#5,d3					; height
-		move.w	ost_x_pos(a0),d4
-		bsr.w	SolidObject
-		bclr	#0,ost_frame(a0)			; use "unpressed" frame
 		move.b	ost_subtype(a0),d0
 		andi.w	#$F,d0					; get low nybble of subtype
 		lea	(v_button_state).w,a3
 		lea	(a3,d0.w),a3				; (a3) = button status
-		moveq	#0,d3
+		moveq	#0,d5
 		btst	#6,ost_subtype(a0)			; is subtype $4x or $Cx? (unused)
 		beq.s	.not_secondary				; if not, branch
-		moveq	#7,d3					; d3 = bit to set/clear in button status
-
+		moveq	#7,d5					; d5 = bit to set/clear in button status
 	.not_secondary:
-		tst.b	ost_subtype(a0)				; is subtype +$80?
-		bpl.s	.subtype_0x				; if not, branch
-		bsr.w	But_PBlock_Chk				; check collision with MZ pushable block
-		bne.s	But_Press				; branch if found
-
-	.subtype_0x:
-		tst.b	ost_solid(a0)				; is Sonic standing on the button?
-		bne.s	But_Press				; if yes, branch
-		bclr	d3,(a3)					; clear button status
-		bra.s	But_Flash
-; ===========================================================================
-
-But_Press:
-		tst.b	(a3)					; is button already pressed?
-		bne.s	.already_pressed			; if yes, branch
+		
+		bsr.w	SolidNew
+		btst	#0,d1
+		beq.s	.unpressed				; branch if Sonic isn't on top of the button
+		
+		tst.b	(a3)
+		bne.s	.already_pressed			; branch if button is already pressed
 		play.w	1, jsr, sfx_Switch			; play "blip" sound
-
 	.already_pressed:
-		bset	d3,(a3)
+		bset	d5,(a3)					; set button status
 		bset	#0,ost_frame(a0)			; use "pressed" frame
-
-But_Flash:
+		bra.s	But_Display
+		
+	.unpressed:
+		bclr	d5,(a3)					; clear button status
+		bclr	#0,ost_frame(a0)			; use "unpressed" frame
 		btst	#5,ost_subtype(a0)			; is subtype +$20?
 		beq.s	But_Display				; if not, branch
-		subq.b	#1,ost_anim_time(a0)			; decrement timer
-		bpl.s	But_Display				; branch if time remains
-		move.b	#7,ost_anim_time(a0)			; set timer to 7 frames
-		bchg	#1,ost_frame(a0)			; use frame 2/3
+		move.b	(v_frame_counter_low).w,d0
+		andi.b	#7,d0
+		bne.s	But_Display				; branch if 3 lowest bits of counter <> 0
+		bchg	#1,ost_frame(a0)			; change frame every 8 frames
 
 But_Display:
 		move.w	ost_x_pos(a0),d0
 		bsr.w	CheckActive
-		bne.s	But_Delete
+		bne.w	DeleteObject
 		bra.w	DisplaySprite
-; ===========================================================================
-
-But_Delete:
-		bra.w	DeleteObject
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to detect collision with MZ pushable green block
