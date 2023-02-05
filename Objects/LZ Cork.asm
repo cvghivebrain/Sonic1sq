@@ -32,10 +32,14 @@ Cork_Main:	; Routine 0
 		move.w	ost_y_pos(a0),ost_cork_y_pos(a0)
 		
 Cork_Action:	; Routine 2
-		;move.w	ost_x_pos(a0),ost_x_prev(a0)		; save x pos before moving
 		bsr.s	Cork_Float
+		move.w	ost_cork_y_pos(a0),ost_y_pos(a0)
+		tst.b	d2
+		bne.s	.skip_sink				; branch if cork is on the ground
 		move.w	ost_cork_y_pos(a0),d0
 		bsr.w	Sink					; cork sinks slightly when stood on, update y pos
+		
+	.skip_sink:
 		bsr.w	SolidNew
 		move.w	ost_x_pos(a0),d0
 		bsr.w	CheckActive
@@ -44,6 +48,7 @@ Cork_Action:	; Routine 2
 ; ===========================================================================
 
 Cork_Float:
+		moveq	#0,d2
 		move.w	(v_water_height_actual).w,d0
 		sub.w	ost_cork_y_pos(a0),d0			; is block level with water?
 		beq.s	.exit					; if yes, branch
@@ -72,6 +77,7 @@ Cork_Float:
 		bpl.s	.exit					; if not, branch
 		addq.w	#1,d1
 		add.w	d1,ost_cork_y_pos(a0)			; stop block
+		moveq	#1,d2					; set flag to prevent cork sinking
 
 	.exit:
 		rts

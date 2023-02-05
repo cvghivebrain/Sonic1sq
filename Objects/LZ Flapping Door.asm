@@ -27,6 +27,8 @@ Flap_Main:	; Routine 0
 		move.w	#tile_Kos_FlapDoor+tile_pal3,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#$28,ost_displaywidth(a0)
+		move.b	#8,ost_width(a0)
+		move.b	#32,ost_height(a0)
 		moveq	#0,d0
 		move.b	ost_subtype(a0),d0			; get object type
 		mulu.w	#60,d0					; multiply by 60 (1 second)
@@ -53,12 +55,7 @@ Flap_OpenClose:	; Routine 2
 		cmp.w	ost_x_pos(a0),d0			; has Sonic passed through the door?
 		bcc.s	.display				; if yes, branch
 		move.b	#1,(f_water_tunnel_disable).w		; disable wind tunnel
-		move.w	#$13,d1
-		move.w	#$20,d2
-		move.w	d2,d3
-		addq.w	#1,d3
-		move.w	ost_x_pos(a0),d4
-		bsr.w	SolidObject				; make the door	solid
+		bsr.w	SolidNew				; make the door	solid
 
 	.display:
 		bra.w	DespawnObject

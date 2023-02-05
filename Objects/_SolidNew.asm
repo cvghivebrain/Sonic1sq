@@ -46,13 +46,18 @@ Sol_None:
 		
 Sol_Above:
 		tst.w	ost_y_vel(a1)
-		bmi.s	.exit					; branch if Sonic is moving up
+		bmi.s	Sol_None				; branch if Sonic is moving up
 		add.w	d3,ost_y_pos(a1)			; snap to hitbox
 		subq.w	#1,ost_y_pos(a1)			; move Sonic up 1px
 		move.w	#0,ost_y_vel(a1)			; stop Sonic falling
 		move.w	ost_x_vel(a1),ost_inertia(a1)
 		move.b	#0,ost_angle(a1)			; clear Sonic's angle
-		move.b	#2,ost_solid(a0)			; set flag that Sonic is standing on the object
+		move.b	#2,ost_solid(a0)			; set flag - Sonic is on the object
+		cmpi.b	#id_Roll,ost_anim(a1)
+		bne.s	.not_rolling				; branch if Sonic wasn't rolling/jumping
+		addi.b	#2,ost_solid(a0)			; set flag - Sonic hit the object rolling/jumping
+		
+	.not_rolling:
 		bset	#status_platform_bit,ost_status(a0)	; set object's platform flag
 		bset	#status_platform_bit,ost_status(a1)	; set Sonic standing on object flag
 		move.w	a0,ost_sonic_on_obj(a1)			; save OST of object being stood on
@@ -61,9 +66,9 @@ Sol_Above:
 		exg	a0,a1					; temporarily make Sonic the current object
 		jsr	Sonic_ResetOnFloor			; reset Sonic as if on floor
 		exg	a0,a1
-		moveq	#1,d1					; set collision flag to top
 		
 	.exit:
+		moveq	#1,d1					; set collision flag to top
 		rts
 		
 Sol_Side:
@@ -125,6 +130,7 @@ Sol_Stand:
 		bclr	#status_platform_bit,ost_status(a1)	; clear Sonic's standing flag
 		bclr	#status_platform_bit,ost_status(a0)	; clear object's standing flag
 		clr.b	ost_solid(a0)
+		moveq	#0,d1
 		rts
 		
 Sol_Kill:

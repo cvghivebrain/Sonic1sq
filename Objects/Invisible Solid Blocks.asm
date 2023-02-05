@@ -22,7 +22,7 @@ Invis_Index:	index *,,2
 Invis_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Invis_Solid next
 		move.l	#Map_Invis,ost_mappings(a0)
-		move.w	#tile_Art_Monitors+tile_hi,ost_tile(a0)
+		move.w	#tile_Art_Lives+tile_hi,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.b	ost_subtype(a0),d0			; get object type
 		move.b	d0,d1
@@ -30,6 +30,7 @@ Invis_Main:	; Routine 0
 		addi.w	#$10,d0					; add $10
 		lsr.w	#1,d0					; divide by 2
 		move.b	d0,ost_displaywidth(a0)			; set object width
+		move.b	d0,ost_width(a0)
 		andi.w	#$F,d1					; read only the	low nybble
 		addq.w	#1,d1					; add 1
 		lsl.w	#3,d1					; multiply by 8
@@ -38,15 +39,7 @@ Invis_Main:	; Routine 0
 Invis_Solid:	; Routine 2
 		bsr.w	CheckOffScreen				; is object off screen?
 		bne.s	.chkdel					; if yes, branch
-		moveq	#0,d1
-		move.b	ost_displaywidth(a0),d1
-		addi.w	#$B,d1
-		moveq	#0,d2
-		move.b	ost_height(a0),d2
-		move.w	d2,d3
-		addq.w	#1,d3
-		move.w	ost_x_pos(a0),d4
-		bsr.w	SolidObject_NoRenderChk
+		bsr.w	SolidNew
 
 .chkdel:
 		move.w	ost_x_pos(a0),d0

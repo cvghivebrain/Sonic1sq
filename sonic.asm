@@ -396,7 +396,8 @@ LGrass_Coll_Sloped:
 		include "Objects\GHZ Purple Rock.asm"		; PurpleRock
 		include "Objects\GHZ Waterfall Sound.asm"	; WaterSound
 
-		include "Objects\GHZ & SLZ Smashable Walls & SmashObject.asm" ; SmashWall
+		include "Objects\GHZ & SLZ Smashable Walls.asm"	; SmashWall
+		include "Objects\_Shatter.asm"
 
 		include "Includes\ExecuteObjects.asm"
 
