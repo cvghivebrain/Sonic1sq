@@ -14,7 +14,7 @@ LabyrinthBlock:
 LBlk_Index:	index *,,2
 		ptr LBlk_Main
 		ptr LBlk_Action
-		ptr LBlk_Sink
+		ptr LBlk_Fall
 		ptr LBlk_Stop
 
 		rsobj LabyrinthBlock
@@ -52,7 +52,7 @@ LBlk_Action:	; Routine 2
 	.wait:
 		subq.w	#1,ost_lblock_wait_time(a0)		; decrement waiting time
 		bne.s	LBlk_Update				; branch if time > 0
-		addq.b	#2,ost_routine(a0)			; goto LBlk_Sink next
+		addq.b	#2,ost_routine(a0)			; goto LBlk_Fall next
 		
 LBlk_Update:
 		move.w	ost_lblock_y_pos(a0),d0
@@ -66,27 +66,14 @@ LBlk_Stop:	; Routine 6
 		bra.w	DisplaySprite
 ; ===========================================================================
 
-LBlk_Sink:	; Routine 4
-		;bsr.w	SpeedToPos				; update position
-		move.l	ost_x_pos(a0),d2
-		move.l	ost_lblock_y_pos(a0),d3
-		move.w	ost_x_vel(a0),d0			; load horizontal speed
-		ext.l	d0
-		asl.l	#8,d0					; multiply speed by $100
-		add.l	d0,d2					; add to x position
-		move.w	ost_y_vel(a0),d0			; load vertical speed
-		ext.l	d0
-		asl.l	#8,d0					; multiply by $100
-		add.l	d0,d3					; add to y position
-		move.l	d2,ost_x_pos(a0)			; update x position
-		move.l	d3,ost_lblock_y_pos(a0)			; update y position
-		
+LBlk_Fall:	; Routine 4
+		bsr.w	SpeedToPos				; update position
 		addq.w	#8,ost_y_vel(a0)			; make block fall
 		bsr.w	FindFloorObj
 		tst.w	d1					; has block hit the floor?
-		bpl.w	LBlk_Update				; if not, branch
+		bpl.w	LBlk_Stop				; if not, branch
 		addq.w	#1,d1
 		add.w	d1,ost_y_pos(a0)			; align to floor
 		clr.w	ost_y_vel(a0)				; stop when it touches the floor
 		addq.b	#2,ost_routine(a0)			; goto LBlk_Stop next
-		bra.w	LBlk_Update
+		bra.w	LBlk_Stop

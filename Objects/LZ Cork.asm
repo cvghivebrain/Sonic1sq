@@ -14,10 +14,6 @@ Cork:
 Cork_Index:	index *,,2
 		ptr Cork_Main
 		ptr Cork_Action
-		
-		rsobj Cork
-ost_cork_y_pos:	rs.w 1						; y pos without sink
-		rsobjend
 ; ===========================================================================
 
 Cork_Main:	; Routine 0
@@ -29,17 +25,9 @@ Cork_Main:	; Routine 0
 		move.b	#16,ost_displaywidth(a0)
 		move.b	#16,ost_width(a0)
 		move.b	#16,ost_height(a0)
-		move.w	ost_y_pos(a0),ost_cork_y_pos(a0)
 		
 Cork_Action:	; Routine 2
 		bsr.s	Cork_Float
-		move.w	ost_cork_y_pos(a0),ost_y_pos(a0)
-		tst.b	d2
-		bne.s	.skip_sink				; branch if cork is on the ground
-		move.w	ost_cork_y_pos(a0),d0
-		bsr.w	Sink					; cork sinks slightly when stood on, update y pos
-		
-	.skip_sink:
 		bsr.w	SolidNew
 		move.w	ost_x_pos(a0),d0
 		bsr.w	CheckActive
@@ -48,9 +36,13 @@ Cork_Action:	; Routine 2
 ; ===========================================================================
 
 Cork_Float:
-		moveq	#0,d2
 		move.w	(v_water_height_actual).w,d0
-		sub.w	ost_cork_y_pos(a0),d0			; is block level with water?
+		tst.b	ost_solid(a0)
+		beq.s	.not_stood_on				; branch if block isn't being stood on
+		addq.w	#4,d0					; pretend water surface is 4px lower
+		
+	.not_stood_on:
+		sub.w	ost_y_pos(a0),d0			; is block level with water?
 		beq.s	.exit					; if yes, branch
 		bcc.s	.fall					; branch if block is above water
 		cmpi.w	#-2,d0					; is block within 2px of water surface?
@@ -58,11 +50,11 @@ Cork_Float:
 		moveq	#-2,d0					; set maximum rate for block rising
 
 	.near_surface:
-		add.w	d0,ost_cork_y_pos(a0)			; make the block rise
+		add.w	d0,ost_y_pos(a0)			; make the block rise
 		bsr.w	FindCeilingObj
 		tst.w	d1					; has block hit the ceiling?
 		bpl.s	.exit					; if not, branch
-		sub.w	d1,ost_cork_y_pos(a0)			; stop block
+		sub.w	d1,ost_y_pos(a0)			; stop block
 		rts
 
 .fall:
@@ -71,13 +63,12 @@ Cork_Float:
 		moveq	#2,d0					; set maximum rate for block sinking
 
 	.near_surface2:
-		add.w	d0,ost_cork_y_pos(a0)			; make the block sink
+		add.w	d0,ost_y_pos(a0)			; make the block sink
 		bsr.w	FindFloorObj
 		tst.w	d1					; has block hit the floor?
 		bpl.s	.exit					; if not, branch
-		addq.w	#1,d1
-		add.w	d1,ost_cork_y_pos(a0)			; stop block
-		moveq	#1,d2					; set flag to prevent cork sinking
+		add.w	d1,ost_y_pos(a0)			; stop block
 
 	.exit:
 		rts
+		

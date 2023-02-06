@@ -157,14 +157,14 @@ Sonic_RecordPosition:
 ; ---------------------------------------------------------------------------
 
 Sonic_Water:
-		cmpi.b	#id_LZ,(v_zone).w			; is level LZ?
-		beq.s	.islabyrinth				; if yes, branch
+		tst.b	(f_water_enable).w
+		bne.s	.waterok				; branch if water is enabled
 
 	.exit:
 		rts	
 ; ===========================================================================
 
-	.islabyrinth:
+	.waterok:
 		move.w	(v_water_height_actual).w,d0
 		cmp.w	ost_y_pos(a0),d0			; is Sonic above the water?
 		bge.s	.abovewater				; if yes, branch
@@ -185,9 +185,12 @@ Sonic_Water:
 		asr	ost_y_vel(a0)
 		asr	ost_y_vel(a0)				; slow Sonic
 		beq.s	.exit					; branch if Sonic stops moving
+		tst.b	(f_splash).w
+		bne.s	.exit					; branch if splash is already loaded
 		bsr.w	FindFreeInert
 		bne.s	.fail2
 		move.l	#Splash,ost_id(a1)			; load splash object
+		move.b	#1,(f_splash).w
 		
 	.fail2:
 		play.w	1, jmp, sfx_Splash			; play splash sound
@@ -203,9 +206,12 @@ Sonic_Water:
 		move.w	#sonic_deceleration,(v_sonic_deceleration).w ; restore Sonic's deceleration
 		asl	ost_y_vel(a0)
 		beq.w	.exit
+		tst.b	(f_splash).w
+		bne.w	.exit					; branch if splash is already loaded
 		bsr.w	FindFreeInert
 		bne.s	.fail3
 		move.l	#Splash,ost_id(a1)			; load splash object
+		move.b	#1,(f_splash).w
 		
 	.fail3:
 		cmpi.w	#-sonic_max_speed_surface,ost_y_vel(a0)

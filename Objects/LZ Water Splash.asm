@@ -34,6 +34,7 @@ Spla_Display:	; Routine 2
 ; ===========================================================================
 
 Spla_Delete:	; Routine 4
+		clr.b	(f_splash).w
 		jmp	(DeleteObject).l			; delete when animation	is complete
 
 ; ---------------------------------------------------------------------------
