@@ -22,13 +22,13 @@ ost_brick_y_start:	rs.w 1 ; $30				; original y position (2 bytes)
 
 Brick_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Brick_Action next
-		move.b	#$F,ost_height(a0)
-		move.b	#$F,ost_width(a0)
 		move.l	#Map_Brick,ost_mappings(a0)
 		move.w	#0+tile_pal3,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#3,ost_priority(a0)
 		move.b	#$10,ost_displaywidth(a0)
+		move.b	#$10,ost_width(a0)
+		move.b	#$10,ost_height(a0)
 		move.w	ost_y_pos(a0),ost_brick_y_start(a0)
 
 Brick_Action:	; Routine 2
@@ -40,11 +40,7 @@ Brick_Action:	; Routine 2
 		add.w	d0,d0
 		move.w	Brick_TypeIndex(pc,d0.w),d1
 		jsr	Brick_TypeIndex(pc,d1.w)
-		move.w	#$1B,d1
-		move.w	#$10,d2
-		move.w	#$11,d3
-		move.w	ost_x_pos(a0),d4
-		bsr.w	SolidObject
+		bsr.w	SolidNew
 
 	.chkdel:
 		move.w	ost_x_pos(a0),d0

@@ -33,7 +33,7 @@ But_Main:	; Routine 0
 		move.b	#$10,ost_displaywidth(a0)
 		move.b	#4,ost_priority(a0)
 		addq.w	#3,ost_y_pos(a0)
-		move.b	#$10,ost_width(a0)
+		move.b	#$F,ost_width(a0)
 		move.b	#5,ost_height(a0)
 
 But_Action:	; Routine 2

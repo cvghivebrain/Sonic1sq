@@ -68,5 +68,8 @@ RangePlus:
 		move.b	ost_height(a0),d4
 		sub.w	d4,d3					; d3 = y dist between hitbox edges (-ve if overlapping)
 		
+		subq.w	#2,d1
+		subq.w	#1,d3
+		
 		rts
 		

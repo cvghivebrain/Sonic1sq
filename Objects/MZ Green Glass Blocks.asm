@@ -77,6 +77,7 @@ Glass_Main:	; Routine 0
 		move.w	ost_y_pos(a1),ost_glass_y_start(a1)
 		move.b	ost_subtype(a0),ost_subtype(a1)
 		move.b	#$20,ost_displaywidth(a1)
+		move.b	#$20,ost_width(a1)
 		move.b	#4,ost_priority(a1)
 		move.b	(a2)+,ost_frame(a1)			; get frame
 		move.l	a0,ost_glass_parent(a1)			; save address of OST of parent object
@@ -93,11 +94,7 @@ Glass_Main:	; Routine 0
 
 Glass_Block012:	; Routine 2
 		bsr.w	Glass_Types				; update position
-		move.w	#$2B,d1
-		move.w	#$48,d2
-		move.w	#$49,d3
-		move.w	ost_x_pos(a0),d4
-		bra.w	SolidObject
+		bra.w	SolidNew
 ; ===========================================================================
 
 Glass_Reflect012:
@@ -109,11 +106,7 @@ Glass_Reflect012:
 
 Glass_Block34:	; Routine 6
 		bsr.w	Glass_Types				; update position
-		move.w	#$2B,d1
-		move.w	#$38,d2
-		move.w	#$39,d3
-		move.w	ost_x_pos(a0),d4
-		bra.w	SolidObject
+		bra.w	SolidNew
 ; ===========================================================================
 
 Glass_Reflect34:

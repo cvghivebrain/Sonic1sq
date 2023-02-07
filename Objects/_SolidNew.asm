@@ -24,13 +24,16 @@ SolidNew:
 		cmp.w	#0,d1
 		bgt.s	Sol_None				; branch if outside x hitbox
 		tst.w	d3
-		bpl.s	Sol_None				; branch if outside y hitbox
+		bpl.s	Sol_None_ChkPush			; branch if outside y hitbox
 		
 		cmp.w	d1,d3
-		blt.s	Sol_Side				; branch if Sonic is to the side
+		blt.w	Sol_Side				; branch if Sonic is to the side
 		
 		tst.w	d2
 		bmi.s	Sol_Above				; branch if Sonic is above
+		
+		cmpi.w	#-1,d1
+		bge.s	Sol_None				; branch if Sonic is below, but within 1px of the sides
 		
 Sol_Below:
 		sub.w	d3,ost_y_pos(a1)			; snap to hitbox
@@ -40,6 +43,12 @@ Sol_Below:
 		beq.w	Sol_Kill				; branch if Sonic is on the ground
 		rts
 		
+Sol_None_ChkPush:
+		btst	#status_pushing_bit,ost_status(a0)
+		beq.s	Sol_None				; branch if object isn't being pushed
+		bclr	#status_pushing_bit,ost_status(a1)	; stop pushing
+		bclr	#status_pushing_bit,ost_status(a0)
+		
 Sol_None:
 		moveq	#0,d1					; set collision flag to none
 		rts
@@ -48,7 +57,6 @@ Sol_Above:
 		tst.w	ost_y_vel(a1)
 		bmi.s	Sol_None				; branch if Sonic is moving up
 		add.w	d3,ost_y_pos(a1)			; snap to hitbox
-		subq.w	#1,ost_y_pos(a1)			; move Sonic up 1px
 		move.w	#0,ost_y_vel(a1)			; stop Sonic falling
 		move.w	ost_x_vel(a1),ost_inertia(a1)
 		move.b	#0,ost_angle(a1)			; clear Sonic's angle
