@@ -31,7 +31,7 @@ Smab_Solid:	; Routine 2
 		pushr.w	(v_enemy_combo).w
 		bsr.w	SolidNew
 		popr.w	(v_enemy_combo).w			; don't reset combo counter on collision
-		andi.b	#1,d1
+		andi.b	#solid_top,d1
 		beq.w	.dont_break				; branch if no collision with top
 		cmpi.b	#4,ost_solid(a0)
 		bne.w	.dont_break				; branch if Sonic wasn't rolling/jumping

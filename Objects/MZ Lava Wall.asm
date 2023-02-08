@@ -45,6 +45,8 @@ LWall_Main:	; Routine 0
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		move.b	#1,ost_priority(a1)
+		move.b	#$28,ost_width(a1)
+		move.b	#16,ost_height(a1)
 		move.b	#id_ani_lavawall_0,ost_anim(a1)
 		move.b	#id_col_64x32+id_col_hurt,ost_col_type(a1)
 		move.l	a0,ost_lwall_parent(a1)
@@ -72,16 +74,7 @@ LWall_Action:	; Routine 4
 		subq.b	#2,ost_routine(a0)			; goto LWall_Solid next
 
 LWall_Solid:	; Routine 2
-		move.w	#$2B,d1
-		move.w	#$18,d2
-		move.w	d2,d3
-		addq.w	#1,d3
-		move.w	ost_x_pos(a0),d4
-		move.b	ost_routine(a0),d0
-		move.w	d0,-(sp)				; save routine counter to stack
-		bsr.w	SolidObject
-		move.w	(sp)+,d0
-		move.b	d0,ost_routine(a0)			; restore routine counter from stack (unnecessary?)
+		bsr.w	SolidNew
 		cmpi.w	#$6A0,ost_x_pos(a0)			; has object reached $6A0 on the x-axis?
 		bne.s	.animate				; if not, branch
 		clr.w	ost_x_vel(a0)				; stop object moving

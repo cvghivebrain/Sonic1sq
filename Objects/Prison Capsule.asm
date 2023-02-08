@@ -25,10 +25,7 @@ Pri_Index:	index *,,2
 		ptr Pri_Explosion
 		ptr Pri_Animals
 		ptr Pri_EndAct
-
-		; routine, width, priority, frame
-Pri_Var:	dc.b id_Pri_Body, $20, 4, id_frame_prison_capsule ; 0 - body
-		dc.b id_Pri_Switch, $C, 5, id_frame_prison_switch1 ; 1 - switch
+		ptr Pri_Display
 
 		rsobj Prison
 ost_prison_y_start:	rs.w 1 ; $30				; original y position (2 bytes)
@@ -43,30 +40,30 @@ Pri_Main:	; Routine 0
 		move.w	ost_y_pos(a0),ost_prison_y_start(a0)
 		moveq	#0,d0
 		move.b	ost_subtype(a0),d0			; get subtype (0 or 1)
-		lsl.w	#2,d0					; multiply by 4
-		lea	Pri_Var(pc,d0.w),a1
-		move.b	(a1)+,ost_routine(a0)			; goto Pri_Body/Pri_Switch next
-		move.b	(a1)+,ost_displaywidth(a0)
-		move.b	(a1)+,ost_priority(a0)
-		move.b	(a1)+,ost_frame(a0)
-		cmpi.w	#0,d0					; is subtype = 0 ?
-		bne.s	.not00					; if not, branch
-
+		beq.s	.main					; branch if 0
+		move.b	#id_Pri_Switch,ost_routine(a0)		; goto Pri_Switch next
+		move.b	#$C,ost_displaywidth(a0)
+		move.b	#$C,ost_width(a0)
+		move.b	#8,ost_height(a0)
+		move.b	#5,ost_priority(a0)
+		move.b	#id_frame_prison_switch1,ost_frame(a0)
+		rts
+		
+	.main:
+		move.b	#id_Pri_Body,ost_routine(a0)		; goto Pri_Body next
+		move.b	#$20,ost_displaywidth(a0)
+		move.b	#$20,ost_width(a0)
+		move.b	#$20,ost_height(a0)
+		move.b	#4,ost_priority(a0)
+		move.b	#id_frame_prison_capsule,ost_frame(a0)
 		moveq	#id_UPLC_Prison,d0
-		jsr	UncPLC					; load prison gfx
-
-	.not00:
-		rts	
+		jmp	UncPLC					; load prison gfx
 ; ===========================================================================
 
 Pri_Body:	; Routine 2
 		cmpi.b	#2,(v_boss_status).w			; has prison been opened?
 		beq.s	.is_open				; if yes, branch
-		move.w	#$2B,d1
-		move.w	#$18,d2
-		move.w	#$18,d3
-		move.w	ost_x_pos(a0),d4
-		jmp	(SolidObject).l
+		jmp	(SolidNew).l
 ; ===========================================================================
 
 .is_open:
@@ -80,15 +77,14 @@ Pri_Body:	; Routine 2
 		move.b	#id_frame_prison_broken,ost_frame(a0)	; use use broken prison frame (2)
 		moveq	#id_UPLC_Prison2,d0
 		jsr	UncPLC					; load new gfx
+		move.b	#id_Pri_Display,ost_routine(a0)		; goto Pri_Display next
+
+Pri_Display:	; Routine $C
 		rts	
 ; ===========================================================================
 
 Pri_Switch:	; Routine 4
-		move.w	#$17,d1
-		move.w	#8,d2
-		move.w	#8,d3
-		move.w	ost_x_pos(a0),d4
-		jsr	(SolidObject).l
+		jsr	(SolidNew).l
 		lea	(Ani_Pri).l,a1
 		jsr	(AnimateSprite).l
 		move.w	ost_prison_y_start(a0),ost_y_pos(a0)

@@ -62,11 +62,7 @@ Plasma_Generator:
 		jsr	NewAnim
 
 Plasma_Update:
-		move.w	#$13,d1
-		move.w	#8,d2
-		move.w	#$11,d3
-		move.w	ost_x_pos(a0),d4
-		jsr	(SolidObject).l
+		jsr	(SolidNew).l
 		move.w	(v_ost_player+ost_x_pos).w,d0
 		sub.w	ost_x_pos(a0),d0
 		bmi.s	.animate				; branch if Sonic is left of the plasma launcher

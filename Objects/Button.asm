@@ -48,7 +48,7 @@ But_Action:	; Routine 2
 	.not_secondary:
 		
 		bsr.w	SolidNew
-		btst	#0,d1
+		btst	#solid_top_bit,d1
 		beq.s	.unpressed				; branch if Sonic isn't on top of the button
 		
 		tst.b	(a3)

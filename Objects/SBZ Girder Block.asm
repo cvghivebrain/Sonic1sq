@@ -31,13 +31,14 @@ Gird_Main:	; Routine 0
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#4,ost_priority(a0)
 		move.b	#$60,ost_displaywidth(a0)
+		move.b	#$60,ost_width(a0)
 		move.b	#$18,ost_height(a0)
 		move.w	ost_x_pos(a0),ost_girder_x_start(a0)
 		move.w	ost_y_pos(a0),ost_girder_y_start(a0)
 		bsr.w	Gird_ChgDir				; set initial speed & direction
 
 Gird_Action:	; Routine 2
-		move.w	ost_x_pos(a0),-(sp)
+		pushr.w	ost_x_pos(a0)
 		tst.w	ost_girder_wait_time(a0)		; has time delay hit 0?
 		beq.s	.beginmove				; if yes, branch
 		subq.w	#1,ost_girder_wait_time(a0)		; decrement delay timer
@@ -51,17 +52,10 @@ Gird_Action:	; Routine 2
 
 	.skip_move:
 	.skip_chg:
-		move.w	(sp)+,d4
+		popr.w	ost_x_prev(a0)				; get previous x pos
 		tst.b	ost_render(a0)				; is object on-screen?
 		bpl.s	.chkdel					; if not, branch
-		moveq	#0,d1
-		move.b	ost_displaywidth(a0),d1
-		addi.w	#$B,d1
-		moveq	#0,d2
-		move.b	ost_height(a0),d2
-		move.w	d2,d3
-		addq.w	#1,d3
-		bsr.w	SolidObject
+		bsr.w	SolidNew
 
 	.chkdel:
 		move.w	ost_girder_x_start(a0),d0

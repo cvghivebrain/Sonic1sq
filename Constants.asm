@@ -186,6 +186,16 @@ bumper_power:			equ $700
 spring_power_red:		equ $1000
 spring_power_yellow:		equ $A00
 
+solid_none:			equ 0
+solid_top:			equ 1
+solid_bottom:			equ 2
+solid_left:			equ 4
+solid_right:			equ 8
+solid_top_bit:			equ 0
+solid_bottom_bit:		equ 1
+solid_left_bit:			equ 2
+solid_right_bit:		equ 3
+
 ; General gameplay
 lives_start:			equ 3				; lives at start of game
 rings_for_life:			equ 100				; rings needed for first extra life

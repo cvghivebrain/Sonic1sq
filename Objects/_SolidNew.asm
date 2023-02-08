@@ -38,7 +38,7 @@ SolidNew:
 Sol_Below:
 		sub.w	d3,ost_y_pos(a1)			; snap to hitbox
 		move.w	#0,ost_y_vel(a1)			; stop Sonic moving up
-		moveq	#2,d1					; set collision flag to bottom
+		moveq	#solid_bottom,d1			; set collision flag to bottom
 		btst	#status_air_bit,ost_status(a1)
 		beq.w	Sol_Kill				; branch if Sonic is on the ground
 		rts
@@ -50,7 +50,7 @@ Sol_None_ChkPush:
 		bclr	#status_pushing_bit,ost_status(a0)
 		
 Sol_None:
-		moveq	#0,d1					; set collision flag to none
+		moveq	#solid_none,d1				; set collision flag to none
 		rts
 		
 Sol_Above:
@@ -76,7 +76,7 @@ Sol_Above:
 		exg	a0,a1
 		
 	.exit:
-		moveq	#1,d1					; set collision flag to top
+		moveq	#solid_top,d1				; set collision flag to top
 		rts
 		
 Sol_Side:
@@ -85,14 +85,14 @@ Sol_Side:
 		
 	.right:
 		sub.w	d1,ost_x_pos(a1)			; snap to hitbox
-		moveq	#8,d1					; set collision flag to right
+		moveq	#solid_right,d1				; set collision flag to right
 		tst.w	ost_x_vel(a1)
 		bpl.s	.away					; branch if Sonic is moving away
 		bra.s	.push
 		
 	.left:
 		add.w	d1,ost_x_pos(a1)			; snap to hitbox
-		moveq	#4,d1					; set collision flag to left
+		moveq	#solid_left,d1				; set collision flag to left
 		tst.w	ost_x_vel(a1)
 		bmi.s	.away					; branch if Sonic is moving away
 		
@@ -131,14 +131,14 @@ Sol_Stand:
 		add.w	d2,ost_x_pos(a1)			; update Sonic's x position
 		
 	.skip_x:
-		moveq	#1,d1					; set collision flag to top
+		moveq	#solid_top,d1				; set collision flag to top
 		rts
 
 	.leave:
 		bclr	#status_platform_bit,ost_status(a1)	; clear Sonic's standing flag
 		bclr	#status_platform_bit,ost_status(a0)	; clear object's standing flag
 		clr.b	ost_solid(a0)
-		moveq	#0,d1
+		moveq	#solid_none,d1
 		rts
 		
 Sol_Kill:
@@ -166,5 +166,5 @@ SolidNew_SidesOnly:
 		blt.w	Sol_Side				; branch if Sonic is to the side
 		
 	.exit:
-		moveq	#0,d1					; set collision flag to none
+		moveq	#solid_none,d1				; set collision flag to none
 		rts

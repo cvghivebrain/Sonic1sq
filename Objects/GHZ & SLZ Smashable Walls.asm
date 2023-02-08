@@ -31,7 +31,7 @@ Smash_Main:	; Routine 0
 
 Smash_Solid:	; Routine 2
 		bsr.w	SolidNew
-		andi.b	#4+8,d1
+		andi.b	#solid_left+solid_right,d1
 		beq.s	.dont_break				; branch if no collision with left/right
 		cmpi.b	#id_Roll,ost_anim(a1)
 		bne.s	.dont_break				; branch if Sonic isn't rolling

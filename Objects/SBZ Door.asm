@@ -22,6 +22,8 @@ ADoor_Main:	; Routine 0
 		move.w	#tile_Kos_SbzDoorV+tile_pal3,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#8,ost_displaywidth(a0)
+		move.b	#6,ost_width(a0)
+		move.b	#32,ost_height(a0)
 		move.b	#4,ost_priority(a0)
 
 ADoor_OpenShut:	; Routine 2
@@ -55,12 +57,7 @@ ADoor_Animate:
 		bsr.w	AnimateSprite
 		tst.b	ost_frame(a0)				; is the door open?
 		bne.s	.remember				; if yes, branch
-		move.w	#$11,d1
-		move.w	#$20,d2
-		move.w	d2,d3
-		addq.w	#1,d3
-		move.w	ost_x_pos(a0),d4
-		bsr.w	SolidObject
+		bsr.w	SolidNew
 
 	.remember:
 		bra.w	DespawnObject

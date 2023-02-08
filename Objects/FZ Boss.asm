@@ -80,7 +80,8 @@ BFZ_Main:	; Routine 0
 		move.b	(a3)+,ost_routine(a1)			; goto BFZ_Main/BFZ_Eggman/BFZ_Panel/BFZ_Legs/BFZ_Cockpit/BFZ_EmptyShip/BFZ_Flame next
 		move.b	(a3)+,ost_anim(a1)
 		move.b	(a3)+,ost_priority(a1)
-		move.b	(a3)+,ost_displaywidth(a1)
+		move.b	(a3),ost_displaywidth(a1)
+		move.b	(a3)+,ost_width(a1)
 		move.b	(a3)+,ost_height(a1)
 		move.b	#render_rel,ost_render(a1)
 		bset	#render_onscreen_bit,ost_render(a0)
@@ -183,13 +184,9 @@ BFZ_Eggman_Crush:
 		bset	#status_xflip_bit,ost_status(a0)	; Eggman faces right
 
 	.sonic_is_left:
-		move.w	#$2B,d1
-		move.w	#$14,d2
-		move.w	#$14,d3
-		move.w	ost_x_pos(a0),d4
-		jsr	(SolidObject).l
-		tst.w	d4
-		bgt.s	.side_collision				; branch if Sonic touches the side of the cylinder with Eggman
+		jsr	(SolidNew).l
+		andi.w	#solid_left+solid_right,d1
+		bne.s	.side_collision				; branch if Sonic touches the side of the cylinder with Eggman
 
 .just_solid:
 		tst.b	ost_fz_flash_num(a0)			; is boss flashing from hit?
@@ -395,11 +392,7 @@ BFZ_Eggman_Scroll:
 	.chk_ship:
 		cmpi.b	#id_BFZ_Eggman_Ship,ost_fz_mode(a0)	; is Eggman in his ship?
 		bge.s	.not_solid				; if yes, branch
-		move.w	#$1B,d1
-		move.w	#$70,d2
-		move.w	#$71,d3
-		move.w	ost_x_pos(a0),d4
-		jmp	(SolidObject).l				; Eggman is solid
+		jmp	(SolidNew).l				; Eggman is solid
 ; ===========================================================================
 
 .not_solid:

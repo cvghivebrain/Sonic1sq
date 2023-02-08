@@ -143,6 +143,8 @@ SpinC_LoadPlatforms:
 		move.w	(a2)+,ost_y_pos(a1)
 		move.w	(a2)+,d0
 		move.b	d0,ost_subtype(a1)
+		move.b	#16,ost_width(a1)
+		move.b	#7,ost_height(a1)
 
 	.fail:
 		dbf	d1,.loop				; repeat for number of objects
@@ -156,14 +158,9 @@ SpinC_Solid:	; Routine 2
 		jsr	(AnimateSprite).l
 		tst.b	ost_frame(a0)				; is platform on a spinning frame?
 		bne.s	.spinning				; if yes, branch
-		move.w	ost_x_pos(a0),-(sp)
+		move.w	ost_x_pos(a0),ost_x_prev(a0)
 		bsr.w	SpinC_Update
-		move.w	#$1B,d1
-		move.w	#7,d2
-		move.w	d2,d3
-		addq.w	#1,d3
-		move.w	(sp)+,d4
-		bra.w	SolidObject				; make platform solid on flat frame
+		bra.w	SolidNew				; make platform solid on flat frame
 ; ===========================================================================
 
 .spinning:
