@@ -21,22 +21,42 @@ Springs:
 		bra.w	DisplaySprite
 ; ===========================================================================
 Spring_Index:	index *,,2
-		ptr Spring_Main					; 0
-		ptr Spring_Up					; 2
-		ptr Spring_AniUp				; 4
-		ptr Spring_ResetUp				; 6
-		ptr Spring_LR					; 8
-		ptr Spring_AniLR				; $A
-		ptr Spring_ResetLR				; $C
-		ptr Spring_Dwn					; $E
-		ptr Spring_AniDwn				; $10
-		ptr Spring_ResetDwn				; $12
+		ptr Spring_Main
+		ptr Spring_Up
+		ptr Spring_Animate
+		ptr Spring_Reset
+		ptr Spring_LR
+		ptr Spring_Down
 
 Spring_Powers:	dc.w -spring_power_red				; power	of red spring
 		dc.w -spring_power_yellow			; power	of yellow spring
 
+Spring_Settings:
+		; up ($0x)
+		dc.b 16, 8					; width, height
+		dc.b id_ani_spring_up				; animation
+		dc.b id_frame_spring_up				; frame
+		dc.b id_Spring_Up				; routine number
+		even
+	Spring_Settings_end:
+		
+		; left/right ($1x)
+		dc.b 8, 16
+		dc.b id_ani_spring_left
+		dc.b id_frame_spring_left
+		dc.b id_Spring_LR
+		even
+		
+		; down ($2x)
+		dc.b 16, 8
+		dc.b id_ani_spring_up
+		dc.b id_frame_spring_up
+		dc.b id_Spring_Down
+		even
+
 		rsobj Springs
-ost_spring_power:	rs.w 1 ; $30				; power of current spring (2 bytes)
+ost_spring_power:	rs.w 1					; power of current spring (2 bytes)
+ost_spring_routine:	rs.b 1					; buffered routine number while spring animates
 		rsobjend
 ; ===========================================================================
 
@@ -45,50 +65,55 @@ Spring_Main:	; Routine 0
 		move.l	#Map_Spring,ost_mappings(a0)
 		move.w	(v_tile_hspring).w,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
-		move.b	#$10,ost_displaywidth(a0)
 		move.b	#4,ost_priority(a0)
-		move.b	ost_subtype(a0),d0
-		btst	#4,d0					; is spring type $1x? (horizontal)
-		beq.s	.not_horizontal				; if not, branch
-
-		move.b	#id_Spring_LR,ost_routine(a0)		; goto Spring_LR next
-		move.b	#id_ani_spring_left,ost_anim(a0)
-		move.b	#id_frame_spring_left,ost_frame(a0)
-		move.w	(v_tile_vspring).w,ost_tile(a0)
-		move.b	#8,ost_displaywidth(a0)
-
-	.not_horizontal:
-		btst	#5,d0					; is spring type $2x? (downwards)
-		beq.s	.not_down				; if not, branch
-
-		move.b	#id_Spring_Dwn,ost_routine(a0)		; goto Spring_Dwn next
-		bset	#status_yflip_bit,ost_status(a0)
-
-	.not_down:
-		btst	#1,d0					; is spring subtype $x2?
-		beq.s	.not_yellow				; if not, branch
+		moveq	#0,d0
+		move.b	ost_subtype(a0),d0			; get subtype
+		move.l	d0,d1
+		btst	#1,d1
+		beq.s	.not_yellow				; branch if not type $x2
 		bset	#tile_pal12_bit,ost_tile(a0)		; use 2nd palette (yellow spring)
 
 	.not_yellow:
-		andi.w	#$F,d0					; read only low nybble of subtype (0 or 2)
-		move.w	Spring_Powers(pc,d0.w),ost_spring_power(a0) ; get power level
+		andi.w	#$F,d1					; read only low nybble of subtype (0 or 2)
+		move.w	Spring_Powers(pc,d1.w),ost_spring_power(a0) ; get power level
+		
+		btst	#4,d0
+		beq.s	.is_flat				; branch if type is not $1x
+		move.w	(v_tile_vspring).w,ost_tile(a0)
+
+	.is_flat:
+		btst	#5,d0
+		beq.s	.not_down				; branch if type is not $2x
+		bset	#status_yflip_bit,ost_status(a0)	; force yflip
+		neg.w	ost_spring_power(a0)			; reverse direction
+
+	.not_down:
+		andi.b	#$F0,d0					; read only high nybble
+		lsr.b	#4,d0					; move to low nybble
+		mulu.w	#Spring_Settings_end-Spring_Settings,d0
+		lea	Spring_Settings(pc,d0.w),a2
+		move.b	(a2),ost_displaywidth(a0)
+		move.b	(a2)+,ost_width(a0)
+		move.b	(a2)+,ost_height(a0)
+		move.b	(a2)+,ost_anim(a0)
+		move.b	(a2)+,ost_frame(a0)
+		move.b	(a2),ost_routine(a0)
+		move.b	(a2)+,ost_spring_routine(a0)
 		rts	
 ; ===========================================================================
+
+Spring_None:
+		rts
 
 Spring_Up:	; Routine 2
-		move.w	#$1B,d1
-		move.w	#8,d2
-		move.w	#$10,d3
-		move.w	ost_x_pos(a0),d4
-		bsr.w	SolidObject				; detect collision
-		tst.b	ost_solid(a0)				; is Sonic on top of the spring?
-		bne.s	Spring_BounceUp				; if yes, branch
-		rts	
-; ===========================================================================
-
-Spring_BounceUp:
-		addq.b	#2,ost_routine(a0)			; goto Spring_AniUp next
+		bsr.w	SolidNew				; detect collision
+		andi.b	#solid_top,d1
+		beq.s	Spring_None				; branch if no collision on top
+		
 		addq.w	#8,ost_y_pos(a1)
+		
+Spring_Bounce:
+		move.b	#id_Spring_Animate,ost_routine(a0)	; goto Spring_Animate next
 		move.w	ost_spring_power(a0),ost_y_vel(a1)	; move Sonic upwards
 		bset	#status_air_bit,ost_status(a1)
 		bclr	#status_platform_bit,ost_status(a1)
@@ -98,36 +123,24 @@ Spring_BounceUp:
 		clr.b	ost_solid(a0)
 		play.w	1, jsr, sfx_Spring			; play spring sound
 
-Spring_AniUp:	; Routine 4
+Spring_Animate:	; Routine 4
 		lea	(Ani_Spring).l,a1
-		bra.w	AnimateSprite				; animate and goto Spring_ResetUp next
+		bra.w	AnimateSprite				; animate and goto Spring_Reset next
 ; ===========================================================================
 
-Spring_ResetUp:	; Routine 6
+Spring_Reset:	; Routine 6
 		move.b	#0,ost_anim_frame(a0)			; reset animation
 		move.b	#0,ost_anim_time(a0)
-		subq.b	#4,ost_routine(a0)			; goto Spring_Up next
+		move.b	ost_spring_routine(a0),ost_routine(a0)	; goto previous routine
 		rts	
 ; ===========================================================================
 
 Spring_LR:	; Routine 8
-		move.w	#$13,d1
-		move.w	#$E,d2
-		move.w	#$F,d3
-		move.w	ost_x_pos(a0),d4
-		bsr.w	SolidObject				; detect collision
-		cmpi.b	#id_Spring_Up,ost_routine(a0)		; has routine changed? (unused; SolidObject doesn't change it)
-		bne.s	.routine_ok				; if not, branch
-		move.b	#id_Spring_LR,ost_routine(a0)
-
-	.routine_ok:
-		btst	#status_pushing_bit,ost_status(a0)
-		bne.s	Spring_BounceLR
-		rts	
-; ===========================================================================
-
-Spring_BounceLR:
-		addq.b	#2,ost_routine(a0)			; goto Spring_AniLR next
+		bsr.w	SolidNew				; detect collision
+		andi.b	#solid_left+solid_right,d1
+		beq.s	Spring_None				; branch if no collision on left/right
+		
+		move.b	#id_Spring_Animate,ost_routine(a0)	; goto Spring_Animate next
 		move.w	ost_spring_power(a0),ost_x_vel(a1)	; move Sonic to the left
 		addq.w	#8,ost_x_pos(a1)
 		btst	#status_xflip_bit,ost_status(a0)	; is object flipped?
@@ -147,62 +160,16 @@ Spring_BounceLR:
 		bclr	#status_pushing_bit,ost_status(a0)
 		bclr	#status_pushing_bit,ost_status(a1)
 		play.w	1, jsr, sfx_Spring			; play spring sound
-
-Spring_AniLR:	; Routine $A
-		lea	(Ani_Spring).l,a1
-		bra.w	AnimateSprite				; animate and goto Spring_ResetLR next
+		bra.w	Spring_Animate
 ; ===========================================================================
 
-Spring_ResetLR:	; Routine $C
-		move.b	#0,ost_anim_frame(a0)			; reset animation
-		move.b	#0,ost_anim_time(a0)
-		subq.b	#4,ost_routine(a0)			; goto Spring_LR next
-		rts	
-; ===========================================================================
-
-Spring_Dwn:	; Routine $E
-		move.w	#$1B,d1
-		move.w	#8,d2
-		move.w	#$10,d3
-		move.w	ost_x_pos(a0),d4
-		bsr.w	SolidObject				; detect collision
-		cmpi.b	#id_Spring_Up,ost_routine(a0)		; has routine changed? (unused; SolidObject doesn't change it)
-		bne.s	.routine_ok				; if not, branch
-		move.b	#id_Spring_Dwn,ost_routine(a0)
-
-	.routine_ok:
-		tst.b	ost_solid(a0)				; is Sonic on top of the spring?
-		bne.s	.on_top					; if yes, branch
-		tst.w	d4
-		bmi.s	Spring_BounceDwn			; branch if Sonic hits spring from beneath
-
-	.on_top:
-		rts	
-; ===========================================================================
-
-Spring_BounceDwn:
-		addq.b	#2,ost_routine(a0)			; goto Spring_AniDwn next
+Spring_Down:	; Routine $A
+		bsr.w	SolidNew				; detect collision
+		andi.b	#solid_bottom,d1
+		beq.w	Spring_None				; branch if no collision on bottom
+		
 		subq.w	#8,ost_y_pos(a1)
-		move.w	ost_spring_power(a0),ost_y_vel(a1)
-		neg.w	ost_y_vel(a1)				; move Sonic downwards
-		bset	#status_air_bit,ost_status(a1)
-		bclr	#status_platform_bit,ost_status(a1)
-		move.b	#id_Sonic_Control,ost_routine(a1)
-		bclr	#status_platform_bit,ost_status(a0)
-		clr.b	ost_solid(a0)
-		play.w	1, jsr, sfx_Spring			; play spring sound
-
-Spring_AniDwn:	; Routine $10
-		lea	(Ani_Spring).l,a1
-		bra.w	AnimateSprite				; animate and goto Spring_ResetDwn next
-; ===========================================================================
-
-Spring_ResetDwn:
-		; Routine $12
-		move.b	#0,ost_anim_frame(a0)			; reset animation
-		move.b	#0,ost_anim_time(a0)
-		subq.b	#4,ost_routine(a0)			; goto Spring_Dwn next
-		rts	
+		bra.w	Spring_Bounce
 
 ; ---------------------------------------------------------------------------
 ; Animation script

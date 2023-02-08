@@ -44,4 +44,3 @@ frame_spring_leftext:
 		piece	-8, -$10, 1x1, 0
 		piece	-8, 8, 1x1, 3
 		endsprite
-		even
