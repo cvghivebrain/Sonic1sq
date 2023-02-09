@@ -18,20 +18,22 @@ Spike_Index:	index *,,2
 		ptr Spike_Main
 		ptr Spike_Solid
 
-Spike_Var:	; frame	number,	object width
-Spike_Var_0:	dc.b id_frame_spike_3up, $14			; $0x
-Spike_Var_1:	dc.b id_frame_spike_3left, $10			; $1x
-Spike_Var_2:	dc.b id_frame_spike_1up, 4			; $2x
-Spike_Var_3:	dc.b id_frame_spike_3upwide, $1C		; $3x
-Spike_Var_4:	dc.b id_frame_spike_6upwide, $40		; $4x
-Spike_Var_5:	dc.b id_frame_spike_1left, $10			; $5x
+Spike_Var:	; frame	number, width, height, sidedness
+Spike_Var_0:	dc.b id_frame_spike_3up, 20, 16, solid_top+solid_bottom ; $0x
+Spike_Var_1:	dc.b id_frame_spike_3left, 16, 20, solid_left+solid_right ; $1x
+Spike_Var_2:	dc.b id_frame_spike_1up, 4, 16, solid_top+solid_bottom ; $2x
+Spike_Var_3:	dc.b id_frame_spike_3upwide, 28, 16, solid_top+solid_bottom ; $3x
+Spike_Var_4:	dc.b id_frame_spike_6upwide, 64, 16, solid_top+solid_bottom ; $4x
+Spike_Var_5:	dc.b id_frame_spike_1left, 16, 4, solid_left+solid_right ; $5x
 
 		rsobj Spikes
-ost_spike_x_start:	rs.w 1 ; $30				; original X position (2 bytes)
-ost_spike_y_start:	rs.w 1 ; $32				; original Y position (2 bytes)
-ost_spike_move_dist:	rs.w 1 ; $34				; pixel distance to move object * $100, either direction (2 bytes)
-ost_spike_move_flag:	rs.w 1 ; $36				; 0 = original position; 1 = moved position (2 bytes)
-ost_spike_move_time:	rs.w 1 ; $38				; time until object moves again (2 bytes)
+ost_spike_x_start:	rs.w 1					; original X position (2 bytes)
+ost_spike_y_start:	rs.w 1					; original Y position (2 bytes)
+ost_spike_move_dist:	rs.w 1					; pixel distance to move object * $100, either direction (2 bytes)
+ost_spike_move_time:	rs.w 1					; time until object moves again (2 bytes)
+ost_spike_move_flag:	rs.b 1					; 0 = original position; 1 = moved position
+ost_spike_side:		rs.b 1					; sidedness bitmask
+ost_spike_doublekill:	rs.b 1					; 0 = bugfix version; 1 = classic version (kills Sonic after losing rings)
 		rsobjend
 ; ===========================================================================
 
@@ -42,81 +44,49 @@ Spike_Main:	; Routine 0
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#4,ost_priority(a0)
 		move.b	ost_subtype(a0),d0
-		andi.b	#$F,ost_subtype(a0)			; read only low nybble of subtype
-		andi.w	#$F0,d0					; read high nybble
-		lea	(Spike_Var).l,a1
-		lsr.w	#3,d0
-		adda.w	d0,a1					; use high nybble of subtype to get frame & width info
+		bpl.s	.bugfix_version				; branch if high bit isn't set
+		move.b	#1,ost_spike_doublekill(a0)		; set flag for double-killing Sonic
+		
+	.bugfix_version:
+		andi.b	#$F,ost_subtype(a0)			; leave only low nybble of subtype
+		andi.w	#$70,d0					; read high nybble (excluding high bit)
+		lsr.w	#2,d0
+		lea	Spike_Var(pc,d0.w),a1
 		move.b	(a1)+,ost_frame(a0)
-		move.b	(a1)+,ost_displaywidth(a0)
+		move.b	(a1),ost_displaywidth(a0)
+		move.b	(a1)+,ost_width(a0)
+		move.b	(a1)+,ost_height(a0)
+		move.b	(a1)+,ost_spike_side(a0)
 		move.w	ost_x_pos(a0),ost_spike_x_start(a0)
 		move.w	ost_y_pos(a0),ost_spike_y_start(a0)
 
 Spike_Solid:	; Routine 2
 		bsr.w	Spike_Move				; update position
-		move.w	#4,d2					; height for type $5x
-		cmpi.b	#id_frame_spike_1left,ost_frame(a0)	; is object type $5x ?
-		beq.s	Spike_SideWays				; if yes, branch
-		cmpi.b	#id_frame_spike_3left,ost_frame(a0)	; is object type $1x ?
-		bne.s	Spike_Upright				; if not, branch
-		move.w	#$14,d2					; height for type $1x
-
-; Spikes types $1x and $5x face	sideways
-
-Spike_SideWays:
-		move.w	#$1B,d1
-		move.w	d2,d3
-		addq.w	#1,d3
-		move.w	ost_x_pos(a0),d4
-		bsr.w	SolidObject				; detect collision
-		btst	#status_platform_bit,ost_status(a0)	; is Sonic on top of the spikes?
-		bne.s	Spike_Display				; if yes, branch
-		cmpi.w	#1,d4					; is Sonic touching the sides?
-		beq.s	Spike_Hurt				; if yes, branch
-		bra.s	Spike_Display
-; ===========================================================================
-
-; Spikes types $0x, $2x, $3x and $4x face up or	down
-
-Spike_Upright:
-		moveq	#0,d1
-		move.b	ost_displaywidth(a0),d1
-		addi.w	#$B,d1
-		move.w	#$10,d2					; height
-		move.w	#$11,d3
-		move.w	ost_x_pos(a0),d4
-		bsr.w	SolidObject				; detect collision
-		btst	#status_platform_bit,ost_status(a0)	; is Sonic on top of the spikes?
-		bne.s	Spike_Hurt				; if yes, branch
-		tst.w	d4
-		bpl.s	Spike_Display				; branch if Sonic is touching sides, or not touching at all
-
-Spike_Hurt:
-		tst.b	(v_invincibility).w			; is Sonic invincible?
-		bne.s	Spike_Display				; if yes, branch
-		move.l	a0,-(sp)				; save OST address for spikes to stack
-		movea.l	a0,a2					; a2 is OST for spikes now
-		lea	(v_ost_player).w,a0			; a0 is temporarily Sonic now
-		cmpi.b	#id_Sonic_Hurt,ost_routine(a0)		; is Sonic hurt or dead?
-		bcc.s	Spike_Skip_Hurt				; if yes, branch
-		;if Revision<>2
-			move.l	ost_y_pos(a0),d3
-			move.w	ost_y_vel(a0),d0
-			ext.l	d0
-			asl.l	#8,d0
-		;else
-								; this fixes the infamous "spike bug"
-		;	tst.w	ost_sonic_flash_rate(a0)	; is Sonic flashing after being hurt?
-		;	bne.s	Spike_Skip_Hurt			; if yes, branch
-		;	jmp	(Spike_Bugfix).l		; this is a copy of the above code that was pushed aside for this
-	Spike_Resume:
-		;endc
-		sub.l	d0,d3
-		move.l	d3,ost_y_pos(a0)			; move Sonic away from spikes, based on his y speed
+		bsr.w	SolidNew
+		tst.b	(v_invincibility).w
+		bne.s	Spike_Display				; branch if Sonic is invincible
+		cmpi.b	#id_Sonic_Hurt,ost_routine(a1)
+		bcc.s	Spike_Display				; branch if Sonic is hurt or dead
+		tst.b	ost_spike_doublekill(a0)
+		bne.s	.skip_flashchk				; branch if spikes are set to classic double-kill
+		tst.w	ost_sonic_flash_time(a1)
+		bne.s	Spike_Display				; branch if Sonic is flashing
+		
+	.skip_flashchk:
+		moveq	#0,d0
+		move.b	ost_spike_side(a0),d0			; get sidedness
+		and.b	d0,d1					; mask with collision
+		beq.s	Spike_Display				; branch if no collision
+		move.l	ost_y_pos(a1),d1
+		move.w	ost_y_vel(a1),d0
+		ext.l	d0
+		asl.l	#8,d0
+		sub.l	d0,d1
+		move.l	d1,ost_y_pos(a1)			; move Sonic away from spikes, based on his y speed
+		movea.l	a0,a2					; a2 = OST of object that hurt Sonic
+		exg	a0,a1					; temporarily make Sonic the current object
 		jsr	(HurtSonic).l				; lose rings/die
-
-	Spike_Skip_Hurt:
-		movea.l	(sp)+,a0				; restore OST address for spikes from stack
+		exg	a0,a2					; restore spikes as current object
 
 Spike_Display:
 		move.w	ost_spike_x_start(a0),d0
@@ -176,12 +146,12 @@ Spike_Wait:
 ; ===========================================================================
 
 .update:
-		tst.w	ost_spike_move_flag(a0)			; are spikes in original position?
+		tst.b	ost_spike_move_flag(a0)			; are spikes in original position?
 		beq.s	.original_pos				; if yes, branch
 		subi.w	#$800,ost_spike_move_dist(a0)		; subtract 8px from distance
 		bcc.s	.exit					; branch if 0 or more
 		move.w	#0,ost_spike_move_dist(a0)		; set minimum distance
-		move.w	#0,ost_spike_move_flag(a0)		; set flag that spikes are in original position
+		move.b	#0,ost_spike_move_flag(a0)		; set flag that spikes are in original position
 		move.w	#60,ost_spike_move_time(a0)		; set time delay to 1 second
 		bra.s	.exit
 ; ===========================================================================
@@ -191,7 +161,7 @@ Spike_Wait:
 		cmpi.w	#$2000,ost_spike_move_dist(a0)		; has it moved 32px?
 		bcs.s	.exit					; if not, branch
 		move.w	#$2000,ost_spike_move_dist(a0)		; set max distance
-		move.w	#1,ost_spike_move_flag(a0)		; set flag that spikes are in new position
+		move.b	#1,ost_spike_move_flag(a0)		; set flag that spikes are in new position
 		move.w	#60,ost_spike_move_time(a0)		; set time delay to 1 second
 
 .exit:

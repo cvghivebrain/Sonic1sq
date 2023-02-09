@@ -54,14 +54,6 @@ Vectors:	dc.l v_stack_pointer&$FFFFFF			; Initial stack pointer value
 		dcb.l 16,ErrorTrap				; TRAP #00..#15 exceptions
 		dcb.l 8,ErrorTrap				; Unused (reserved)
 		dcb.l 8,ErrorTrap				; Unused (reserved)
-	Spike_Bugfix:
-								; Relocated code from Spike_Hurt. REVXB was a nasty hex-edit.
-		;	move.l	ost_y_pos(a0),d3
-		;	move.w	ost_y_vel(a0),d0
-		;	ext.l	d0
-		;	asl.l	#8,d0
-		;	jmp	(Spike_Resume).l
-
 		dc.b "SEGA MEGA DRIVE "				; Hardware system ID (Console name)
 		dc.b "(C)SEGA \date"				; Copyright holder and release date (generally year)
 		dc.b "SONIC 1-SQUARED                                 " ; Domestic name
