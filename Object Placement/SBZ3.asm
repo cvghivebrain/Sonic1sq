@@ -95,7 +95,7 @@ ObjPos_SBZ3:
 		objpos $0930,$028D,Gargoyle,$03,xflip,rem
 		objpos $0930,$0510,Burrobot,$00,rem
 		objpos $0970,$05E8,Button,$05
-		objpos $0980,$0140,ScrapStomp,type_stomp_sbz3_final,rem ; final position of large diagonal-moving block
+		objpos $0980,$0140,BigPillar,$80		; final position of large diagonal-moving block
 		objpos $0980,$03F8,Bubble,$81
 		objpos $0980,$0710,Burrobot,$00,rem
 		objpos $09A0,$06F8,Bubble,$82
@@ -111,7 +111,7 @@ ObjPos_SBZ3:
 		objpos $0A50,$06F0,Burrobot,$00,rem
 		objpos $0A60,$0510,Burrobot,$00,rem
 		objpos $0A70,$03D0,Jaws,$0A,rem
-		objpos $0A80,$00C0,ScrapStomp,type_stomp_sbz3+$B,rem ; large diagonal-moving block, linked to button $B
+		objpos $0A80,$00C0,BigPillar,$B			; large diagonal-moving block, linked to button $B
 		objpos $0A90,$04F8,Bubble,$81
 		objpos $0A90,$06D0,Burrobot,$00,rem
 		objpos $0AB0,$0510,Burrobot,$00,rem

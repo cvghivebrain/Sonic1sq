@@ -28,7 +28,6 @@ ost_stair_wait_time:	rs.w 1 ; $34				; time delay for stairs to move (2 bytes)
 ost_stair_flag:		rs.b 1 ; $36				; 1 = stood on; $80+ = hit from below
 ost_stair_child_id:	rs.b 1 ; $37				; which child the current object is; $38-$3B
 ost_stair_y_diff_list:	rs.b 4 ; $38				; distance moved by each child object (4 bytes)
-ost_stair_parent:	rs.l 1 ; $3C				; address of OST of parent object (4 bytes)
 		rsobjend
 ; ===========================================================================
 
@@ -60,6 +59,8 @@ Stair_Main:	; Routine 0
 		move.b	#render_rel,ost_render(a1)
 		move.b	#3,ost_priority(a1)
 		move.b	#$10,ost_displaywidth(a1)
+		move.b	#$10,ost_width(a1)
+		move.b	#$10,ost_height(a1)
 		move.b	ost_subtype(a0),ost_subtype(a1)
 		move.w	d2,ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
@@ -67,7 +68,7 @@ Stair_Main:	; Routine 0
 		move.w	ost_y_pos(a1),ost_stair_y_start(a1)
 		addi.w	#$20,d2					; next stair is 32px to the right of previous
 		move.b	d3,ost_stair_child_id(a1)		; values $38-$3B (or $3B-$38 if flipped)
-		move.l	a0,ost_stair_parent(a1)
+		bsr.w	SaveParent
 		add.b	d4,d3					; next child id
 		dbf	d1,.loop				; repeat sequence 3 times
 
@@ -82,24 +83,18 @@ Stair_Move:	; Routine 2
 		jsr	Stair_TypeIndex(pc,d1.w)
 
 Stair_Solid:	; Routine 4
-		movea.l	ost_stair_parent(a0),a2			; get address of OST of parent object
+		bsr.w	GetParent_a2				; get address of OST of parent object
 		moveq	#0,d0
 		move.b	ost_stair_child_id(a0),d0		; get current stair id ($38-$3B)
 		move.b	(a2,d0.w),d0				; get y distance moved for current stair
 		add.w	ost_stair_y_start(a0),d0		; add to initial y position
 		move.w	d0,ost_y_pos(a0)			; update position
-		moveq	#0,d1
-		move.b	ost_displaywidth(a0),d1
-		addi.w	#$B,d1
-		move.w	#$10,d2
-		move.w	#$11,d3
-		move.w	ost_x_pos(a0),d4
-		bsr.w	SolidObject				; detect collision
-		tst.b	d4					; has Sonic touched top/bottom of stair?
-		bpl.s	.not_topbottom				; if not, branch
-		move.b	d4,ost_stair_flag(a2)			; set collision flag
+		bsr.w	SolidNew				; detect collision
+		andi.b	#solid_bottom+solid_top,d1		; has Sonic touched top/bottom of stair?
+		beq.s	.not_bottom				; if not, branch
+		move.b	#-1,ost_stair_flag(a2)			; set collision flag
 
-	.not_topbottom:
+	.not_bottom:
 		btst	#status_platform_bit,ost_status(a0)	; is Sonic standing on the stair?
 		beq.s	.exit					; if not, branch
 		move.b	#1,ost_stair_flag(a2)			; set collision flag

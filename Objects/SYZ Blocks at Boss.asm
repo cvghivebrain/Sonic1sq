@@ -41,6 +41,7 @@ BBlock_Main:	; Routine 0
 		move.w	#0+tile_pal3,ost_tile(a1)
 		move.b	#render_rel,ost_render(a1)
 		move.b	#$10,ost_displaywidth(a1)
+		move.b	#$10,ost_width(a1)
 		move.b	#$10,ost_height(a1)
 		move.b	#3,ost_priority(a1)
 		move.w	d5,ost_x_pos(a1)			; set x position
@@ -86,11 +87,7 @@ BBlock_Action:	; Routine 2
 ; ===========================================================================
 
 .is_solid:
-		move.w	#$1B,d1
-		move.w	#$10,d2
-		move.w	#$11,d3
-		move.w	ost_x_pos(a0),d4
-		jsr	(SolidObject).l
+		jsr	(SolidNew).l
 
 .display:
 		jmp	(DisplaySprite).l

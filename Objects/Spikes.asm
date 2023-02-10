@@ -33,7 +33,6 @@ ost_spike_move_dist:	rs.w 1					; pixel distance to move object * $100, either d
 ost_spike_move_time:	rs.w 1					; time until object moves again (2 bytes)
 ost_spike_move_flag:	rs.b 1					; 0 = original position; 1 = moved position
 ost_spike_side:		rs.b 1					; sidedness bitmask
-ost_spike_doublekill:	rs.b 1					; 0 = bugfix version; 1 = classic version (kills Sonic after losing rings)
 		rsobjend
 ; ===========================================================================
 
@@ -44,11 +43,6 @@ Spike_Main:	; Routine 0
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#4,ost_priority(a0)
 		move.b	ost_subtype(a0),d0
-		bpl.s	.bugfix_version				; branch if high bit isn't set
-		move.b	#1,ost_spike_doublekill(a0)		; set flag for double-killing Sonic
-		
-	.bugfix_version:
-		andi.b	#$F,ost_subtype(a0)			; leave only low nybble of subtype
 		andi.w	#$70,d0					; read high nybble (excluding high bit)
 		lsr.w	#2,d0
 		lea	Spike_Var(pc,d0.w),a1
@@ -67,8 +61,8 @@ Spike_Solid:	; Routine 2
 		bne.s	Spike_Display				; branch if Sonic is invincible
 		cmpi.b	#id_Sonic_Hurt,ost_routine(a1)
 		bcc.s	Spike_Display				; branch if Sonic is hurt or dead
-		tst.b	ost_spike_doublekill(a0)
-		bne.s	.skip_flashchk				; branch if spikes are set to classic double-kill
+		tst.b	ost_subtype(a0)
+		bmi.s	.skip_flashchk				; branch if spikes are set to classic double-kill
 		tst.w	ost_sonic_flash_time(a1)
 		bne.s	Spike_Display				; branch if Sonic is flashing
 		
@@ -97,7 +91,8 @@ Spike_Display:
 
 Spike_Move:
 		moveq	#0,d0
-		move.b	ost_subtype(a0),d0			; get subtype (only low nybble remains)
+		move.b	ost_subtype(a0),d0			; get subtype
+		andi.b	#$F,d0					; read only low nybble
 		add.w	d0,d0
 		move.w	Spike_TypeIndex(pc,d0.w),d1
 		jmp	Spike_TypeIndex(pc,d1.w)

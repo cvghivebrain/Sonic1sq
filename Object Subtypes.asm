@@ -228,5 +228,3 @@ type_stomp_door:	equ (((Sto_Var_0-Sto_Var)/sizeof_Sto_Var)<<4)+$80			; $8x - hor
 type_stomp_slow:	equ (((Sto_Var_1-Sto_Var)/sizeof_Sto_Var)<<4)+id_Sto_Drop_RiseSlow	; $13 - stomper, drops quickly and rises slowly
 type_stomp_fast_short:	equ (((Sto_Var_2-Sto_Var)/sizeof_Sto_Var)<<4)+id_Sto_Drop_RiseFast	; $24 - stomper, drops quickly and rises quickly (64px)
 type_stomp_fast_long:	equ (((Sto_Var_3-Sto_Var)/sizeof_Sto_Var)<<4)+id_Sto_Drop_RiseFast	; $34 - stomper, drops quickly and rises quickly (96px)
-type_stomp_sbz3:	equ (((Sto_Var_4-Sto_Var)/sizeof_Sto_Var)<<4)+$80			; $Cx - large SBZ3 diagonal door, activated by button x
-type_stomp_sbz3_final:	equ (((Sto_Var_4-Sto_Var)/sizeof_Sto_Var)<<4)+id_Sto_Still		; $40 - large SBZ3 diagonal door in final position

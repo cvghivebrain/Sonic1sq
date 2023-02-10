@@ -507,24 +507,16 @@ See_DataFlat:	incbin	"Collision\SLZ Seesaw Heightmap (Flat).bin" ; used by Seesa
 		include "Objects\_FindFloorObj, FindWallRightObj, FindCeilingObj & FindWallLeftObj.asm"
 
 		include "Objects\SBZ Rotating Disc Junction.asm" ; Junction
-
 		include "Objects\SBZ Running Disc.asm"		; RunningDisc
-
 		include "Objects\SBZ Conveyor Belt.asm"		; Conveyor
 		include "Objects\SBZ Trapdoor & Spinning Platforms.asm" ; SpinPlatform
-
 		include "Objects\SBZ Saws.asm"			; Saws
-
 		include "Objects\SBZ Stomper & Sliding Doors.asm" ; ScrapStomp
-
+		include "Objects\SBZ3 Big Pillar Door.asm"	; BigPillar
 		include "Objects\SBZ Vanishing Platform.asm"	; VanishPlatform
-
 		include "Objects\SBZ Electric Orb.asm"		; Electro
-
 		include "Objects\SBZ Conveyor Belt Platforms.asm" ; SpinConvey
-
 		include "Objects\SBZ Girder Block.asm"		; Girder
-
 		include "Objects\SBZ Teleporter.asm"		; Teleport
 
 		include "Objects\Caterkiller.asm"		; Caterkiller
@@ -1157,6 +1149,7 @@ Level_End_unused:	dc.b 0,	0, 0, 0
 		include "Objects\SBZ Trapdoor & Spinning Platforms [Mappings].asm" ; Map_Trap, Map_Spin
 		include "Objects\SBZ Saws [Mappings].asm"	; Map_Saw
 		include "Objects\SBZ Stomper & Sliding Doors [Mappings].asm" ; Map_Stomp
+		include "Objects\SBZ3 Big Pillar Door [Mappings].asm" ; Map_Pillar
 		include "Objects\SBZ Vanishing Platform [Mappings].asm" ; Map_VanP
 		include "Objects\SBZ Electric Orb [Mappings].asm" ; Map_Elec
 		include "Objects\SBZ Girder Block [Mappings].asm" ; Map_Gird
