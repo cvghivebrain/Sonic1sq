@@ -338,13 +338,13 @@ DebugList_SBZ:
 		dbug	Map_Saw,	Saws,		type_saw_pizza_updown,	0,	tile_Kos_Cutter+tile_pal3
 		dbug	Map_CFlo,	CollapseFloor,	0,	0,	tile_Kos_SbzFloor+tile_pal3
 		dbug	Map_MBlock,	MovingBlock,	type_mblock_sbzwide+type_mblock_slide,	id_frame_mblock_sbzwide,	tile_Kos_SlideFloor+tile_pal3
-		dbug	Map_Stomp,	ScrapStomp,	0,	id_frame_stomp_door,	tile_Kos_Stomper+tile_pal2
+		dbug	Map_Stomp,	ScrapDoorH,	0,	0,	tile_Kos_Stomper+tile_pal2
 		dbug	Map_ADoor,	AutoDoor,	0,	0,	tile_Kos_SbzDoorV+tile_pal3
-		dbug	Map_Stomp,	ScrapStomp,	type_stomp_slow,	id_frame_stomp_stomper,	tile_Kos_Stomper+tile_pal2
+		dbug	Map_Stomp,	ScrapStomp,	type_stomp_slow,	0,	tile_Kos_Stomper+tile_pal2
 		dbug	Map_Saw,	Saws,		type_saw_pizza_sideways,	id_frame_saw_pizzacutter1,	tile_Kos_Cutter+tile_pal3
-		dbug	Map_Stomp,	ScrapStomp,	type_stomp_fast_short,	id_frame_stomp_stomper,	tile_Kos_Stomper+tile_pal2
+		dbug	Map_Stomp,	ScrapStomp,	type_stomp_fast_short,	0,	tile_Kos_Stomper+tile_pal2
 		dbug	Map_Saw,	Saws,		type_saw_ground_left,	id_frame_saw_groundsaw1,	tile_Kos_Cutter+tile_pal3
-		dbug	Map_Stomp,	ScrapStomp,	type_stomp_fast_long,	id_frame_stomp_stomper,	tile_Kos_Stomper+tile_pal2
+		dbug	Map_Stomp,	ScrapStomp,	type_stomp_fast_long,	0,	tile_Kos_Stomper+tile_pal2
 		dbug	Map_VanP,	VanishPlatform, 0,	0,	tile_Kos_SbzBlock+tile_pal3
 		dbug	Map_Flame,	Flamethrower,	$64,	id_frame_flame_pipe1,	tile_Kos_FlamePipe+tile_hi
 		dbug	Map_Flame,	Flamethrower,	$64,	id_frame_flame_valve1,	tile_Kos_FlamePipe+tile_hi

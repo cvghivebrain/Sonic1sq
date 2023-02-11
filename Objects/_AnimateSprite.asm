@@ -19,8 +19,7 @@ AnimateSprite:
 		moveq	#0,d0
 		moveq	#status_xflip+status_yflip,d2		; use x/yflip from status and flags
 		move.b	ost_anim(a0),d0				; get animation number
-		btst	#7,d0					; is animation set to restart?
-		bne.s	Anim_Run				; if not, branch
+		bmi.s	Anim_Run				; branch if animation is set to restart
 
 		bset	#7,ost_anim(a0)				; set to "no restart"
 		move.b	#0,ost_anim_frame(a0)			; reset animation

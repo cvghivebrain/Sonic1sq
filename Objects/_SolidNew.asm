@@ -24,7 +24,7 @@ SolidNew:
 		cmp.w	#0,d1
 		bgt.s	Sol_None				; branch if outside x hitbox
 		tst.w	d3
-		bpl.s	Sol_None_ChkPush			; branch if outside y hitbox
+		bpl.s	Sol_None				; branch if outside y hitbox
 		
 		cmp.w	d1,d3
 		blt.w	Sol_Side				; branch if Sonic is to the side
@@ -43,13 +43,13 @@ Sol_Below:
 		beq.w	Sol_Kill				; branch if Sonic is on the ground
 		rts
 		
-Sol_None_ChkPush:
+Sol_None:
 		btst	#status_pushing_bit,ost_status(a0)
-		beq.s	Sol_None				; branch if object isn't being pushed
+		beq.s	.no_push				; branch if object isn't being pushed
 		bclr	#status_pushing_bit,ost_status(a1)	; stop pushing
 		bclr	#status_pushing_bit,ost_status(a0)
 		
-Sol_None:
+	.no_push:
 		moveq	#solid_none,d1				; set collision flag to none
 		rts
 		
