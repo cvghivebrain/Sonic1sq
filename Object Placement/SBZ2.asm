@@ -46,7 +46,7 @@ ObjPos_SBZ2:
 		objpos $0490,$06B0,Invisibarrier,$11
 		objpos $04A8,$0398,Rings,$10,rem
 		objpos $04B0,$05B0,RunningDisc,$40
-		objpos $04C1,$06C4,ScrapStomp,type_stomp_door+0
+		objpos $04C1,$06C4,ScrapDoorH,0
 		objpos $04E0,$0508,Button,$01
 		objpos $0510,$0127,SpinPlatform,type_spin_platform_alt+$E
 		objpos $0530,$0127,SpinPlatform,type_spin_platform_alt+$C
@@ -63,7 +63,7 @@ ObjPos_SBZ2:
 		objpos $05A8,$0394,Rings,$12,rem
 		objpos $05B0,$0127,SpinPlatform,type_spin_platform_alt+4
 		objpos $05B0,$0167,SpinPlatform,type_spin_platform_alt+4
-		objpos $05C1,$04CC,ScrapStomp,type_stomp_door+1
+		objpos $05C1,$04CC,ScrapDoorH,1
 		objpos $05D0,$0127,SpinPlatform,type_spin_platform_alt+2
 		objpos $05D0,$0167,SpinPlatform,type_spin_platform_alt+2
 		objpos $05D0,$01E8,Electro,$04
@@ -251,7 +251,7 @@ ObjPos_SBZ2:
 		objpos $1470,$02F1,Monitor,type_monitor_shield,rem
 		objpos $1476,$0190,Flamethrower,$43,yflip
 		objpos $1490,$01D0,Invisibarrier,$15
-		objpos $14C1,$01FC,ScrapStomp,type_stomp_door+3
+		objpos $14C1,$01FC,ScrapDoorH,3
 		objpos $14F8,$0480,AutoDoor,$00
 		objpos $1520,$028C,BallHog,$08,xflip,rem
 		objpos $1520,$038C,BallHog,$08,xflip,rem

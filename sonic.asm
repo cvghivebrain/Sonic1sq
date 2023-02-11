@@ -512,6 +512,7 @@ See_DataFlat:	incbin	"Collision\SLZ Seesaw Heightmap (Flat).bin" ; used by Seesa
 		include "Objects\SBZ Trapdoor & Spinning Platforms.asm" ; SpinPlatform
 		include "Objects\SBZ Saws.asm"			; Saws
 		include "Objects\SBZ Stomper & Sliding Doors.asm" ; ScrapStomp
+		include "Objects\SBZ Door Horizontal.asm"	; ScrapDoorH
 		include "Objects\SBZ3 Big Pillar Door.asm"	; BigPillar
 		include "Objects\SBZ Vanishing Platform.asm"	; VanishPlatform
 		include "Objects\SBZ Electric Orb.asm"		; Electro
@@ -1149,6 +1150,7 @@ Level_End_unused:	dc.b 0,	0, 0, 0
 		include "Objects\SBZ Trapdoor & Spinning Platforms [Mappings].asm" ; Map_Trap, Map_Spin
 		include "Objects\SBZ Saws [Mappings].asm"	; Map_Saw
 		include "Objects\SBZ Stomper & Sliding Doors [Mappings].asm" ; Map_Stomp
+		include "Objects\SBZ Door Horizontal [Mappings].asm" ; Map_SDoorH
 		include "Objects\SBZ3 Big Pillar Door [Mappings].asm" ; Map_Pillar
 		include "Objects\SBZ Vanishing Platform [Mappings].asm" ; Map_VanP
 		include "Objects\SBZ Electric Orb [Mappings].asm" ; Map_Elec

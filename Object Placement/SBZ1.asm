@@ -116,7 +116,7 @@ ObjPos_SBZ1:
 		objpos $0DD4,$0550,Rings,$11,rem
 		objpos $0DE0,$07C0,Saws,type_saw_ground_right
 		objpos $0DF0,$03C0,Invisibarrier,$13
-		objpos $0E00,$0280,ScrapStomp,type_stomp_door+8
+		objpos $0E00,$0280,ScrapDoorH,8
 		objpos $0E10,$0265,Monitor,type_monitor_rings,rem
 		objpos $0E30,$0265,Monitor,type_monitor_shield,rem
 		objpos $0E3B,$0548,Flamethrower,$43,xflip
@@ -124,7 +124,7 @@ ObjPos_SBZ1:
 		objpos $0EA5,$0548,Flamethrower,$43
 		objpos $0ED0,$0792,Rings,$14,rem
 		objpos $0EF0,$05F0,Invisibarrier,$17
-		objpos $0F40,$060C,ScrapStomp,type_stomp_door+1,xflip
+		objpos $0F40,$060C,ScrapDoorH,1,xflip
 		objpos $0F40,$06E8,Electro,$08
 		objpos $0F70,$0648,VanishPlatform,$00
 		objpos $0F70,$06A8,VanishPlatform,$C0
@@ -243,7 +243,7 @@ ObjPos_SBZ1:
 		objpos $193B,$0646,Flamethrower,$43,xflip
 		objpos $1940,$0618,Electro,$08,yflip
 		objpos $195C,$060D,Rings,$13,rem
-		objpos $1980,$04CC,ScrapStomp,type_stomp_door+0
+		objpos $1980,$04CC,ScrapDoorH,0
 		objpos $1980,$050D,MovingBlock,type_mblock_sbzwide+type_mblock_slide
 		objpos $1980,$0550,MovingBlock,type_mblock_sbzwide+type_mblock_slide
 		objpos $1994,$00F1,Rings,$44,rem

@@ -2,8 +2,7 @@
 ; Object 6B - stomper and sliding door (SBZ)
 
 ; spawned by:
-;	ObjPos_SBZ1, ObjPos_SBZ2 - subtypes $13/$24/$34/$80/$81/$83/$88
-;	ObjPos_SBZ3 - subtypes $40/$CB
+;	ObjPos_SBZ1, ObjPos_SBZ2 - subtypes $13/$24/$34
 ; ---------------------------------------------------------------------------
 
 ScrapStomp:

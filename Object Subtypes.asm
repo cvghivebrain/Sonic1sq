@@ -224,7 +224,6 @@ type_saw_ground_right:	equ id_Saw_Ground_Right	 	; 3 - ground saw, moves right
 type_saw_ground_left:	equ id_Saw_Ground_Left	 	; 4 - ground saw, moves left
 
 ; ScrapStomp
-type_stomp_door:	equ (((Sto_Var_0-Sto_Var)/sizeof_Sto_Var)<<4)+$80			; $8x - horizontal door, activated by button x
 type_stomp_slow:	equ (((Sto_Var_1-Sto_Var)/sizeof_Sto_Var)<<4)+id_Sto_Drop_RiseSlow	; $13 - stomper, drops quickly and rises slowly
 type_stomp_fast_short:	equ (((Sto_Var_2-Sto_Var)/sizeof_Sto_Var)<<4)+id_Sto_Drop_RiseFast	; $24 - stomper, drops quickly and rises quickly (64px)
 type_stomp_fast_long:	equ (((Sto_Var_3-Sto_Var)/sizeof_Sto_Var)<<4)+id_Sto_Drop_RiseFast	; $34 - stomper, drops quickly and rises quickly (96px)

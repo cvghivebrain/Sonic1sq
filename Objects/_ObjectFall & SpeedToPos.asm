@@ -17,17 +17,22 @@ ObjectFall:
 ; ---------------------------------------------------------------------------
 
 SpeedToPos:
-		move.l	ost_x_pos(a0),d2
 		move.w	ost_x_vel(a0),d0			; load horizontal speed
+		beq.s	.skip_x					; branch if 0
+		move.l	ost_x_pos(a0),d2
 		ext.l	d0
 		asl.l	#8,d0					; multiply speed by $100
 		add.l	d0,d2					; add to x position
 		move.l	d2,ost_x_pos(a0)			; update x position
 		
-		move.l	ost_y_pos(a0),d2
+	.skip_x:
 		move.w	ost_y_vel(a0),d0			; load vertical speed
+		beq.s	.skip_y					; branch if 0
+		move.l	ost_y_pos(a0),d2
 		ext.l	d0
 		asl.l	#8,d0					; multiply by $100
 		add.l	d0,d2					; add to y position
 		move.l	d2,ost_y_pos(a0)			; update y position
+		
+	.skip_y:
 		rts
