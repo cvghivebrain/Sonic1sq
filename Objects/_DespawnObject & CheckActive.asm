@@ -1,7 +1,7 @@
 ; ---------------------------------------------------------------------------
 ; Routine to check if object is still on-screen: display if yes, delete if not
 
-;	uses d0.l, d1.l, a1, a2
+;	uses d0.l, d1.w, a1, a2
 ; ---------------------------------------------------------------------------
 
 DespawnObject:
@@ -16,6 +16,26 @@ DespawnObject:
 		move.b	ost_respawn(a0),d0			; get respawn id
 		beq.s	.delete					; branch if not set
 		bclr	#7,2(a2,d0.w)				; clear high bit of respawn entry (i.e. object was despawned not broken)
+
+	.delete:
+		bra.w	DeleteObject				; delete the object
+
+; ---------------------------------------------------------------------------
+; As above, but without checking the respawn table
+
+; input:
+;	d0.w = x position (DespawnQuick_AltX only)
+
+;	uses d0.l, d1.w, a1
+; ---------------------------------------------------------------------------
+
+DespawnQuick:
+		move.w	ost_x_pos(a0),d0
+		
+DespawnQuick_AltX:
+		bsr.s	CheckActive
+		bne.s	.delete					; branch if object moves off screen
+		bra.w	DisplaySprite				; display instead of despawn
 
 	.delete:
 		bra.w	DeleteObject				; delete the object

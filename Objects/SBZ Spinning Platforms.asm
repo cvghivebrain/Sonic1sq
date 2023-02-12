@@ -1,8 +1,8 @@
 ; ---------------------------------------------------------------------------
-; Object 69 - spinning platforms and trapdoors (SBZ)
+; Object 69 - spinning platforms (SBZ)
 
 ; spawned by:
-;	ObjPos_SBZ1, ObjPos_SBZ2 - subtypes 1/2, $80-$83, $90-$9E
+;	ObjPos_SBZ1, ObjPos_SBZ2 - subtypes $80-$83, $90-$9E
 ; ---------------------------------------------------------------------------
 
 SpinPlatform:
@@ -141,24 +141,8 @@ Spin_Spinner:	; Routine 4
 ; ---------------------------------------------------------------------------
 
 Ani_Spin:	index *
-		ptr ani_spin_trapopen
-		ptr ani_spin_trapclose
 		ptr ani_spin_1
 		ptr ani_spin_2
-		
-ani_spin_trapopen:
-		dc.w 3
-		dc.w id_frame_trap_closed
-		dc.w id_frame_trap_half
-		dc.w id_frame_trap_open
-		dc.w id_Anim_Flag_Back, 1
-
-ani_spin_trapclose:
-		dc.w 3
-		dc.w id_frame_trap_open
-		dc.w id_frame_trap_half
-		dc.w id_frame_trap_closed
-		dc.w id_Anim_Flag_Back, 1
 
 ani_spin_1:
 		dc.w 1

@@ -168,3 +168,21 @@ SolidNew_SidesOnly:
 	.exit:
 		moveq	#solid_none,d1				; set collision flag to none
 		rts
+
+; ---------------------------------------------------------------------------
+; Subroutine to cancel a solid object
+
+; output:
+;	d1.l = 0
+;	a1 = address of OST of Sonic
+; ---------------------------------------------------------------------------
+
+UnSolid:
+		lea	(v_ost_player).w,a1
+		btst	#status_platform_bit,ost_status(a0)
+		beq.w	Sol_None				; branch if Sonic isn't standing on the object
+		bclr	#status_platform_bit,ost_status(a1)	; remove platform effect
+		bclr	#status_platform_bit,ost_status(a0)
+		clr.b	ost_solid(a0)
+		bra.w	Sol_None				; stop pushing
+		

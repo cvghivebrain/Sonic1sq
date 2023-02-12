@@ -212,7 +212,6 @@ type_elev_up_vanish_1:	equ (Elev_Var2_E-Elev_Var2)/sizeof_Elev_Var2	; $E - rises
 type_elev_up_vanish:	equ $80						; $80 - rises when stood on and vanishes, respawns repeatedly
 
 ; SpinPlatform
-type_spin_trapdoor:	equ 0				; $0x - trapdoor
 type_spin_platform:	equ $80				; $8x - small spinning platform
 type_spin_platform_alt:	equ $90				; $9x - small spinning platform, longer delay between spins
 

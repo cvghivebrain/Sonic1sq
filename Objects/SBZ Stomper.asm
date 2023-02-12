@@ -11,13 +11,7 @@ ScrapStomp:
 		move.w	Sto_Index(pc,d0.w),d1
 		jsr	Sto_Index(pc,d1.w)
 		bsr.w	SolidNew
-		move.w	ost_x_pos(a0),d0
-		bsr.w	CheckActive
-		bne.s	.delete
-		jmp	DisplaySprite
-		
-	.delete:
-		jmp	DeleteObject
+		bra.w	DespawnQuick
 ; ===========================================================================
 Sto_Index:	index *,,2
 		ptr Sto_Main

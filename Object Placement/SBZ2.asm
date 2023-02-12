@@ -51,7 +51,7 @@ ObjPos_SBZ2:
 		objpos $0510,$0127,SpinPlatform,type_spin_platform_alt+$E
 		objpos $0530,$0127,SpinPlatform,type_spin_platform_alt+$C
 		objpos $0540,$01E8,Electro,$04
-		objpos $0540,$03AC,SpinPlatform,type_spin_trapdoor+1
+		objpos $0540,$03AC,Trapdoor,1
 		objpos $0540,$03E8,Electro,$04
 		objpos $0550,$0127,SpinPlatform,type_spin_platform_alt+$A
 		objpos $0570,$0127,SpinPlatform,type_spin_platform_alt+8
@@ -74,9 +74,9 @@ ObjPos_SBZ2:
 		objpos $0628,$0490,Rings,$12,rem
 		objpos $0630,$0167,SpinPlatform,type_spin_platform_alt+$C
 		objpos $0630,$01A7,SpinPlatform,type_spin_platform_alt+$C
-		objpos $0640,$03AC,SpinPlatform,type_spin_trapdoor+1
+		objpos $0640,$03AC,Trapdoor,1
 		objpos $0640,$03E8,Electro,$04
-		objpos $0640,$04AC,SpinPlatform,type_spin_trapdoor+1
+		objpos $0640,$04AC,Trapdoor,1
 		objpos $064B,$06A8,Flamethrower,$43,xflip
 		objpos $0650,$0167,SpinPlatform,type_spin_platform_alt+$A
 		objpos $0650,$01A7,SpinPlatform,type_spin_platform_alt+$A

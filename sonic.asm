@@ -509,7 +509,8 @@ See_DataFlat:	incbin	"Collision\SLZ Seesaw Heightmap (Flat).bin" ; used by Seesa
 		include "Objects\SBZ Rotating Disc Junction.asm" ; Junction
 		include "Objects\SBZ Running Disc.asm"		; RunningDisc
 		include "Objects\SBZ Conveyor Belt.asm"		; Conveyor
-		include "Objects\SBZ Trapdoor & Spinning Platforms.asm" ; SpinPlatform
+		include "Objects\SBZ Spinning Platforms.asm"	; SpinPlatform
+		include "Objects\SBZ Trapdoor.asm"		; Trapdoor
 		include "Objects\SBZ Saws.asm"			; Saws
 		include "Objects\SBZ Stomper.asm"		; ScrapStomp
 		include "Objects\SBZ Door Horizontal.asm"	; ScrapDoorH
@@ -1147,7 +1148,8 @@ Level_End_unused:	dc.b 0,	0, 0, 0
 		include "Objects\SBZ Flamethrower [Mappings].asm" ; Map_Flame
 		include "Objects\SBZ Rotating Disc Junction [Mappings].asm" ; Map_Jun
 		include "Objects\SBZ Running Disc [Mappings].asm" ; Map_Disc
-		include "Objects\SBZ Trapdoor & Spinning Platforms [Mappings].asm" ; Map_Trap, Map_Spin
+		include "Objects\SBZ Spinning Platforms [Mappings].asm" ; Map_Spin
+		include "Objects\SBZ Trapdoor [Mappings].asm"	; Map_Trap
 		include "Objects\SBZ Saws [Mappings].asm"	; Map_Saw
 		include "Objects\SBZ Stomper [Mappings].asm"	; Map_Stomp
 		include "Objects\SBZ Door Horizontal [Mappings].asm" ; Map_SDoorH
