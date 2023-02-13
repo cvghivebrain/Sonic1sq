@@ -1,15 +1,12 @@
 ; ---------------------------------------------------------------------------
 ; Subroutine to	load uncompressed gfx for level animations & giant ring
 
-; output:
-;	a6 = vdp_data_port ($C00000)
-;	uses d0, d1, d2, d3, a1, a2, a3, a4
+;	uses d0.l, d1.l, d2.l, d3.l, a1, a2, a3, a4
 ; ---------------------------------------------------------------------------
 
 AnimateLevelGfx:
 		tst.w	(f_pause).w				; is the game paused?
 		bne.s	.exit					; if yes, branch
-		lea	(vdp_data_port).l,a6
 		tst.l	(v_aniart_ptr).w
 		beq.s	.exit					; branch if pointer is empty
 		movea.l	(v_aniart_ptr).w,a1
@@ -128,6 +125,7 @@ AniArt_MZ_Magma:
 
 tilecount:	= 4						; 4 per column, 16 total
 
+		lea	(vdp_data_port).l,a2
 		subq.w	#1,(v_levelani_2_time).w		; decrement timer
 		bpl.s	.exit					; branch if not -1
 		
@@ -294,30 +292,14 @@ AniArt_none:
 		rts	
 
 ; ---------------------------------------------------------------------------
-; Subroutine to	transfer graphics to VRAM
-
-; input:
-;	a1 = source address
-;	a6 = vdp_data_port ($C00000)
-;	d1 = number of tiles to load (minus one)
-; ---------------------------------------------------------------------------
-
-LoadTiles:
-		rept sizeof_cell/4
-		move.l	(a1)+,(a6)				; copy 1 tile to VRAM
-		endr
-		dbf	d1,LoadTiles				; repeat for number of tiles
-		rts
-
-; ---------------------------------------------------------------------------
 ; Subroutines to animate MZ magma
 
 ; input:
-;	d1 = number of longwords to write to VRAM
+;	d1.w = number of longwords to write to VRAM
 ;	a1 = address of magma gfx (stored as 32x32 image)
-;	a6 = vdp_data_port ($C00000)
+;	a2 = vdp_data_port ($C00000)
 
-;	uses d0
+;	uses d0.l
 ; ---------------------------------------------------------------------------
 
 AniArt_MZ_Magma_Index:
@@ -341,7 +323,7 @@ AniArt_MZ_Magma_Index:
 ; ===========================================================================
 
 AniArt_MZ_Magma_Shift0_Col0:
-		move.l	(a1),(a6)				; write 8px row to VRAM
+		move.l	(a1),(a2)				; write 8px row to VRAM
 		lea	$10(a1),a1				; read next 32px row from source
 		dbf	d1,AniArt_MZ_Magma_Shift0_Col0		; repeat for column of 4 tiles
 		rts	
@@ -351,14 +333,14 @@ AniArt_MZ_Magma_Shift1_Col0:
 		move.l	2(a1),d0
 		move.b	1(a1),d0
 		ror.l	#8,d0
-		move.l	d0,(a6)
+		move.l	d0,(a2)
 		lea	$10(a1),a1
 		dbf	d1,AniArt_MZ_Magma_Shift1_Col0
 		rts	
 ; ===========================================================================
 
 AniArt_MZ_Magma_Shift2_Col0:
-		move.l	2(a1),(a6)
+		move.l	2(a1),(a2)
 		lea	$10(a1),a1
 		dbf	d1,AniArt_MZ_Magma_Shift2_Col0
 		rts	
@@ -368,14 +350,14 @@ AniArt_MZ_Magma_Shift3_Col0:
 		move.l	4(a1),d0
 		move.b	3(a1),d0
 		ror.l	#8,d0
-		move.l	d0,(a6)
+		move.l	d0,(a2)
 		lea	$10(a1),a1
 		dbf	d1,AniArt_MZ_Magma_Shift3_Col0
 		rts	
 ; ===========================================================================
 
 AniArt_MZ_Magma_Shift0_Col1:
-		move.l	4(a1),(a6)
+		move.l	4(a1),(a2)
 		lea	$10(a1),a1
 		dbf	d1,AniArt_MZ_Magma_Shift0_Col1
 		rts	
@@ -385,14 +367,14 @@ AniArt_MZ_Magma_Shift1_Col1:
 		move.l	6(a1),d0
 		move.b	5(a1),d0
 		ror.l	#8,d0
-		move.l	d0,(a6)
+		move.l	d0,(a2)
 		lea	$10(a1),a1
 		dbf	d1,AniArt_MZ_Magma_Shift1_Col1
 		rts	
 ; ===========================================================================
 
 AniArt_MZ_Magma_Shift2_Col1:
-		move.l	6(a1),(a6)
+		move.l	6(a1),(a2)
 		lea	$10(a1),a1
 		dbf	d1,AniArt_MZ_Magma_Shift2_Col1
 		rts	
@@ -402,14 +384,14 @@ AniArt_MZ_Magma_Shift3_Col1:
 		move.l	8(a1),d0
 		move.b	7(a1),d0
 		ror.l	#8,d0
-		move.l	d0,(a6)
+		move.l	d0,(a2)
 		lea	$10(a1),a1
 		dbf	d1,AniArt_MZ_Magma_Shift3_Col1
 		rts	
 ; ===========================================================================
 
 AniArt_MZ_Magma_Shift0_Col2:
-		move.l	8(a1),(a6)
+		move.l	8(a1),(a2)
 		lea	$10(a1),a1
 		dbf	d1,AniArt_MZ_Magma_Shift0_Col2
 		rts	
@@ -419,14 +401,14 @@ AniArt_MZ_Magma_Shift1_Col2:
 		move.l	$A(a1),d0
 		move.b	9(a1),d0
 		ror.l	#8,d0
-		move.l	d0,(a6)
+		move.l	d0,(a2)
 		lea	$10(a1),a1
 		dbf	d1,AniArt_MZ_Magma_Shift1_Col2
 		rts	
 ; ===========================================================================
 
 AniArt_MZ_Magma_Shift2_Col2:
-		move.l	$A(a1),(a6)
+		move.l	$A(a1),(a2)
 		lea	$10(a1),a1
 		dbf	d1,AniArt_MZ_Magma_Shift2_Col2
 		rts	
@@ -436,14 +418,14 @@ AniArt_MZ_Magma_Shift3_Col2:
 		move.l	$C(a1),d0
 		move.b	$B(a1),d0
 		ror.l	#8,d0
-		move.l	d0,(a6)
+		move.l	d0,(a2)
 		lea	$10(a1),a1
 		dbf	d1,AniArt_MZ_Magma_Shift3_Col2
 		rts	
 ; ===========================================================================
 
 AniArt_MZ_Magma_Shift0_Col3:
-		move.l	$C(a1),(a6)
+		move.l	$C(a1),(a2)
 		lea	$10(a1),a1
 		dbf	d1,AniArt_MZ_Magma_Shift0_Col3
 		rts	
@@ -453,15 +435,15 @@ AniArt_MZ_Magma_Shift1_Col3:
 		move.l	$C(a1),d0
 		rol.l	#8,d0
 		move.b	0(a1),d0
-		move.l	d0,(a6)
+		move.l	d0,(a2)
 		lea	$10(a1),a1
 		dbf	d1,AniArt_MZ_Magma_Shift1_Col3
 		rts	
 ; ===========================================================================
 
 AniArt_MZ_Magma_Shift2_Col3:
-		move.w	$E(a1),(a6)
-		move.w	0(a1),(a6)
+		move.w	$E(a1),(a2)
+		move.w	0(a1),(a2)
 		lea	$10(a1),a1
 		dbf	d1,AniArt_MZ_Magma_Shift2_Col3
 		rts	
@@ -471,7 +453,7 @@ AniArt_MZ_Magma_Shift3_Col3:
 		move.l	0(a1),d0
 		move.b	$F(a1),d0
 		ror.l	#8,d0
-		move.l	d0,(a6)
+		move.l	d0,(a2)
 		lea	$10(a1),a1
 		dbf	d1,AniArt_MZ_Magma_Shift3_Col3
 		rts

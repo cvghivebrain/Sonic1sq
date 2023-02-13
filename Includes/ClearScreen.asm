@@ -3,9 +3,9 @@
 ; Deletes fg/bg nametables and sprite/hscroll buffers
 
 ; output:
-;	a5 = vdp_control_port ($C00004)
+;	a6 = vdp_control_port ($C00004)
 
-;	uses d0, d1, a1
+;	uses d0.l, d1.l, a1
 ; ---------------------------------------------------------------------------
 
 ClearScreen:
@@ -32,10 +32,10 @@ ClearScreen:
 ; Subroutine to	clear RAM
 
 ; input:
+;	d1.w = (size/4)-1
 ;	a1 = RAM address to start clearing
-;	d1 = (size/4)-1
 
-;	uses d0, d1, a1
+;	uses d0.l, d1.w, a1
 ; ---------------------------------------------------------------------------
 
 ClearRAM:
@@ -49,32 +49,32 @@ ClearRAM:
 ; Subroutine to	clear VRAM
 
 ; input:
-;	d0 = VRAM address to start clearing (as VDP instruction)
-;	d1 = bytes to clear
-;	d2 = byte value to fill with (usually 0)
+;	d0.l = VRAM address to start clearing (as VDP instruction)
+;	d1.l = bytes to clear
+;	d2.l = byte value to fill with (usually 0)
 
 ; output:
-;	a5 = vdp_control_port ($C00004)
+;	a6 = vdp_control_port ($C00004)
 
-;	uses d1
+;	uses d1.l, d2.w
 ; ---------------------------------------------------------------------------
 
 ClearVRAM:
-		lea	(vdp_control_port).l,a5
-		move.w	#$8F01,(a5)				; set VDP increment to 1 byte
+		lea	(vdp_control_port).l,a6
+		move.w	#vdp_auto_inc+1,(a6)			; set VDP increment to 1 byte
 		lsl.l	#8,d1					; move high byte into high word
 		lsr.w	#8,d1					; move low byte back
 		add.l	#$94009300,d1				; apply VDP registers
-		move.l	d1,(a5)
-		move.w	#$9780,(a5)				; set DMA mode to fill
+		move.l	d1,(a6)
+		move.w	#$9780,(a6)				; set DMA mode to fill
 		add.w	#$80,d0
-		move.l	d0,(a5)
+		move.l	d0,(a6)
 		lsl.w	#8,d2					; move fill value to high byte
-		move.w	d2,(vdp_data_port).l
+		move.w	d2,-4(a6)
 	.wait_for_dma:
-		move.w	(a5),d1					; get status register
-		btst	#1,d1					; is DMA in progress?
+		move.w	(a6),d1					; get status register
+		btst	#dma_status_bit,d1			; is DMA in progress?
 		bne.s	.wait_for_dma				; if yes, branch
-		move.w	#$8F02,(a5)				; set VDP increment to 2 bytes
+		move.w	#vdp_auto_inc+2,(a6)			; set VDP increment to 2 bytes
 		rts
 		

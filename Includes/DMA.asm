@@ -27,6 +27,8 @@ FindFreeDMA:
 ;	d1.l = destination address (as DMA instruction)
 ;	d2.l = length (as DMA instruction)
 ;	(a2).l = source address (as DMA instruction)
+
+;	uses a2
 ; ---------------------------------------------------------------------------
 
 AddDMA:

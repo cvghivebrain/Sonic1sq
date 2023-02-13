@@ -105,8 +105,8 @@ FirstRun:
 		jsr	ClearRAM				; clear RAM ($FE00-$FFFF)
 
 		move.b	(console_version).l,d0
-		andi.b	#$C0,d0
-		move.b	d0,(v_console_region).w			; get region setting
+		andi.b	#console_region+console_speed,d0	; get bits 7+6 of console version
+		move.b	d0,(v_console_region).w			; save to RAM
 		move.l	#'init',(v_checksum_pass).w		; set flag so checksum won't run again
 
 GameInit:
@@ -157,19 +157,6 @@ id_Ending:	equ id_GM_Ending
 id_Credits:	equ id_GM_Credits
 id_HiddenCredits: equ id_GM_HiddenCredits
 id_TryAgain:	equ id_GM_TryAgain
-; ===========================================================================
-
-CheckSumError:
-		bsr.w	VDPSetupGame
-		move.l	#$C0000000,(vdp_control_port).l		; set VDP to CRAM write
-		moveq	#(sizeof_pal_all/2)-1,d7
-
-	.fillred:
-		move.w	#cRed,(vdp_data_port).l			; fill palette with red
-		dbf	d7,.fillred				; repeat $3F more times
-
-	.endlessloop:
-		bra.s	.endlessloop
 ; ===========================================================================
 
 		incfile	Kos_Text,"Graphics Kosinski\Level Select & Debug Text",kos

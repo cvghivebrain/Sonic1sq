@@ -7,12 +7,12 @@ GM_Special:
 		bsr.w	PaletteWhiteOut				; fade to white from previous gamemode
 		disable_ints
 		lea	(vdp_control_port).l,a6
-		move.w	#$8B03,(a6)				; 1-pixel line scroll mode
-		move.w	#$8200+($A000>>10),(a6)			; set foreground nametable address
-		;move.w	#$8400+($E000>>13),(a6)			; set background nametable address
-		move.w	#$8004,(a6)				; normal colour mode
-		move.w	#$8A00+175,(v_vdp_hint_counter).w
-		move.w	#$9011,(a6)				; 64x64 cell plane size
+		move.w	#vdp_full_vscroll|vdp_1px_hscroll,(a6)	; 1-pixel line scroll mode
+		move.w	#vdp_fg_nametable+($A000>>10),(a6)	; set foreground nametable address
+		;move.w	#vdp_bg_nametable+($E000>>13),(a6)	; set background nametable address
+		move.w	#vdp_md_color,(a6)			; normal colour mode
+		move.w	#vdp_hint_counter+175,(v_vdp_hint_counter).w
+		move.w	#vdp_plane_width_64|vdp_plane_height_64,(a6) ; 64x64 cell plane size
 		disable_display
 		bsr.w	ClearScreen
 		enable_ints
@@ -126,9 +126,9 @@ SS_FinishLoop:
 
 		disable_ints
 		lea	(vdp_control_port).l,a6
-		move.w	#$8200+(vram_fg>>10),(a6)		; set foreground nametable address
-		move.w	#$8400+(vram_bg>>13),(a6)		; set background nametable address
-		move.w	#$9001,(a6)				; 64x32 cell plane size
+		move.w	#vdp_fg_nametable+(vram_fg>>10),(a6)	; set foreground nametable address
+		move.w	#vdp_bg_nametable+(vram_bg>>13),(a6)	; set background nametable address
+		move.w	#vdp_plane_width_64|vdp_plane_height_32,(a6) ; 64x32 cell plane size
 		bsr.w	ClearScreen
 		enable_ints
 		moveq	#id_Pal_SSResult,d0

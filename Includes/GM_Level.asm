@@ -36,21 +36,21 @@ GM_Demo:
 		disable_ints
 		bsr.w	ClearScreen
 		lea	(vdp_control_port).l,a6
-		move.w	#$8B03,(a6)				; single pixel line horizontal scrolling
-		move.w	#$8200+(vram_fg>>10),(a6)		; set foreground nametable address
-		move.w	#$8400+(vram_bg>>13),(a6)		; set background nametable address
-		move.w	#$8500+(vram_sprites>>9),(a6)		; set sprite table address
-		move.w	#$9001,(a6)				; 64x32 cell plane size
-		move.w	#$8004,(a6)				; normal colour mode
-		move.w	#$8720,(a6)				; set background colour (line 3; colour 0)
-		move.w	#$8A00+223,(v_vdp_hint_counter).w	; set palette change position (for water)
+		move.w	#vdp_full_vscroll|vdp_1px_hscroll,(a6)	; single pixel line horizontal scrolling
+		move.w	#vdp_fg_nametable+(vram_fg>>10),(a6)	; set foreground nametable address
+		move.w	#vdp_bg_nametable+(vram_bg>>13),(a6)	; set background nametable address
+		move.w	#vdp_sprite_table+(vram_sprites>>9),(a6) ; set sprite table address
+		move.w	#vdp_plane_width_64|vdp_plane_height_32,(a6) ; 64x32 cell plane size
+		move.w	#vdp_md_color,(a6)			; normal colour mode
+		move.w	#vdp_bg_color+$20,(a6)			; set background colour (line 3; colour 0)
+		move.w	#vdp_hint_counter+223,(v_vdp_hint_counter).w ; set palette change position (for water)
 		move.w	(v_vdp_hint_counter).w,(a6)
 		bsr.w	LoadPerZone
 		move.w	#air_full,(v_air).w
 		tst.b	(f_water_enable).w			; is water enabled?
 		beq.s	.skip_water				; if not, branch
 
-		move.w	#$8014,(a6)				; enable horizontal interrupts
+		move.w	#vdp_md_color|vdp_enable_hint,(a6)	; enable horizontal interrupts
 		clr.b	(v_water_routine).w			; clear water routine counter
 		clr.b	(f_water_pal_full).w			; clear	water state
 		move.b	#1,(v_water_direction).w		; enable water
@@ -135,9 +135,6 @@ Level_Skip_TtlCard:
 		move.w	d0,(f_restart).w
 		move.w	d0,(v_frame_counter).w
 		bsr.w	OscillateNumInit
-		move.b	#1,(f_hud_score_update).w		; update score counter
-		move.b	#1,(v_hud_rings_update).w		; update rings counter
-		move.b	#1,(f_hud_time_update).w		; update time counter
 
 		move.w	#0,(v_demo_input_counter).w
 		movea.l	(v_demo_ptr).w,a1			; get pointer for demo data
