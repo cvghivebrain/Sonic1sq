@@ -10,7 +10,7 @@
 
 VDPSetupGame:
 		lea	(vdp_control_port).l,a6
-		lea	(vdp_data_port).l,a1
+		lea	-4(a6),a1				; vdp_data_port
 		lea	VDPSetupArray(pc),a2
 		moveq	#((VDPSetupArray_end-VDPSetupArray)/2)-1,d7
 	.setreg:

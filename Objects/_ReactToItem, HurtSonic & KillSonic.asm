@@ -349,6 +349,7 @@ KillSonic:
 		tst.w	(v_debug_active).w			; is debug mode	active?
 		bne.s	.dontdie				; if yes, branch
 		move.b	#0,(v_invincibility).w			; remove invincibility
+		move.b	#0,(f_hud_time_update).w		; stop HUD time counter
 		move.b	#id_Sonic_Death,ost_routine(a0)		; run death animation/action
 		bsr.w	Sonic_ResetOnFloor			; reset several of Sonic's flags
 		bset	#status_air_bit,ost_status(a0)

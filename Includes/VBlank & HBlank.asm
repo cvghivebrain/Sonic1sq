@@ -6,8 +6,9 @@ VBlank:
 		movem.l	d0-a6,-(sp)				; save all registers to stack
 		tst.b	(v_vblank_routine).w			; is routine number 0?
 		beq.s	VBlank_Lag				; if yes, branch
-		move.l	#$40000010+(0<<16),(vdp_control_port).l	; set write destination to VSRAM address 0
-		move.l	(v_fg_y_pos_vsram).w,(vdp_data_port).l	; send screen y-axis pos. to VSRAM
+		lea	(vdp_control_port).l,a6
+		move.l	#$40000010+(0<<16),(a6)			; set write destination to VSRAM address 0
+		move.l	(v_fg_y_pos_vsram).w,-4(a6)		; send screen y-axis pos. to VSRAM
 		btst	#6,(v_console_region).w			; is Mega Drive PAL?
 		beq.s	.notPAL					; if not, branch
 
@@ -71,7 +72,7 @@ VBlank_Lag:
 		stopZ80
 		waitZ80
 		bsr.w	UpdatePalette
-		move.w	(v_vdp_hint_counter).w,(a5)		; set water palette position by sending VDP register $8Axx to control port (vdp_control_port)
+		move.w	(v_vdp_hint_counter).w,(a6)		; set water palette position by sending VDP register $8Axx to control port (vdp_control_port)
 		startZ80
 		bra.w	VBlank_Music
 ; ===========================================================================
@@ -120,7 +121,7 @@ VBlank_Level:
 		waitZ80
 		bsr.w	ReadJoypads
 		bsr.w	UpdatePalette
-		move.w	(v_vdp_hint_counter).w,(a5)		; set water palette position by sending VDP register $8Axx to control port (vdp_control_port)
+		move.w	(v_vdp_hint_counter).w,(a6)		; set water palette position by sending VDP register $8Axx to control port (vdp_control_port)
 
 		dma	v_hscroll_buffer,sizeof_vram_hscroll,vram_hscroll
 		dma	v_sprite_buffer,sizeof_vram_sprites,vram_sprites
@@ -180,7 +181,7 @@ VBlank_Ending:
 		waitZ80
 		bsr.w	ReadJoypads
 		bsr.w	UpdatePalette
-		move.w	(v_vdp_hint_counter).w,(a5)		; set water palette position by sending VDP register $8Axx to control port (vdp_control_port)
+		move.w	(v_vdp_hint_counter).w,(a6)		; set water palette position by sending VDP register $8Axx to control port (vdp_control_port)
 		dma	v_hscroll_buffer,sizeof_vram_hscroll,vram_hscroll
 		dma	v_sprite_buffer,sizeof_vram_sprites,vram_sprites
 		bsr.w	ProcessDMA
@@ -202,7 +203,7 @@ VBlank_0E:
 ; $12 - PaletteFadeIn, PaletteWhiteOut, PaletteFadeOut
 VBlank_Fade:
 		bsr.w	ReadPad_Palette_Sprites_HScroll		; read joypad, DMA palettes, sprites and hscroll
-		move.w	(v_vdp_hint_counter).w,(a5)		; set water palette position by sending VDP register $8Axx to control port (vdp_control_port)
+		move.w	(v_vdp_hint_counter).w,(a6)		; set water palette position by sending VDP register $8Axx to control port (vdp_control_port)
 ; ===========================================================================
 
 ; $16 - GM_Special> SS_FinLoop; GM_Continue> Cont_MainLoop
@@ -427,7 +428,7 @@ HBlank:
 		rept sizeof_pal_all/4
 		move.l	(a0)+,(a1)				; copy palette to CRAM
 		endr
-		move.w	#$8A00+223,4(a1)			; reset HBlank register
+		move.w	#vdp_hint_counter+223,4(a1)		; reset HBlank register
 		movem.l	(sp)+,a0-a1				; restore a0-a1 from stack
 		tst.b	(f_hblank_run_snd).w			; is flag set to update sound & some graphics during HBlank?
 		bne.s	.update_hblank				; if yes, branch

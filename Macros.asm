@@ -276,13 +276,13 @@ dma:		macro source,length,dest1,dest2
 		dma_dest: = \dest1
 		endc
 		
-		lea	(vdp_control_port).l,a5
-		move.l	#$94000000+(((\length>>1)&$FF00)<<8)+$9300+((\length>>1)&$FF),(a5)
-		move.l	#$96000000+(((\source>>1)&$FF00)<<8)+$9500+((\source>>1)&$FF),(a5)
-		move.w	#$9700+((((\source>>1)&$FF0000)>>16)&$7F),(a5)
-		move.w	#dma_type+(dma_dest&$3FFF),(a5)
+		lea	(vdp_control_port).l,a6
+		move.l	#$94000000+(((\length>>1)&$FF00)<<8)+$9300+((\length>>1)&$FF),(a6)
+		move.l	#$96000000+(((\source>>1)&$FF00)<<8)+$9500+((\source>>1)&$FF),(a6)
+		move.w	#$9700+((((\source>>1)&$FF0000)>>16)&$7F),(a6)
+		move.w	#dma_type+(dma_dest&$3FFF),(a6)
 		move.w	#dma_type2+((dma_dest&$C000)>>14),(v_vdp_dma_buffer).w
-		move.w	(v_vdp_dma_buffer).w,(a5)
+		move.w	(v_vdp_dma_buffer).w,(a6)
 		endm
 
 ; ---------------------------------------------------------------------------

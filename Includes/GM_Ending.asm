@@ -146,8 +146,7 @@ End_FlashLoop:
 
 		clr.w	(f_restart).w
 		move.w	#$2E2F,(v_level_layout+(sizeof_levelrow*1)+0).w ; modify level layout to include extra flowers (row 1, columns 0/1)
-		lea	(vdp_control_port).l,a5
-		lea	(vdp_data_port).l,a6
+		lea	(vdp_control_port).l,a6
 		lea	(v_camera_x_pos).w,a3
 		lea	(v_level_layout).w,a4
 		move.w	#draw_fg,d2

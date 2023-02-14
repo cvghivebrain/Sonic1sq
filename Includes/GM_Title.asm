@@ -51,8 +51,7 @@ GM_Title:
 		bsr.w	LevelLayoutLoad				; load GHZ1 level layout including background
 		disable_ints
 		bsr.w	ClearScreen
-		lea	(vdp_control_port).l,a5
-		lea	(vdp_data_port).l,a6
+		lea	(vdp_control_port).l,a6
 		lea	(v_bg1_x_pos).w,a3
 		lea	(v_level_layout+level_max_width).w,a4	; background layout start address ($FFFFA440)
 		move.w	#draw_bg,d2
@@ -318,7 +317,7 @@ LevSel_Left:
 LevSel_Display:
 		lea	(LevSel_Strings).l,a1
 		lea	(LevSel_CharStrings).l,a2
-		lea	(vdp_data_port).l,a6
+		lea	(vdp_control_port).l,a6
 		locVRAM	vram_bg+linestart,d3
 		move.l	d3,d4
 		move.w	#linecount-1,d0
@@ -326,7 +325,7 @@ LevSel_Display:
 		moveq	#0,d6
 	
 	.loop:
-		move.l	d3,4(a6)
+		move.l	d3,(a6)
 		bsr.w	LevSel_Line				; draw line of text
 		lea	6(a1),a1				; next string
 		addi.l	#sizeof_vram_row<<16,d3			; jump to next line in nametable
@@ -381,7 +380,7 @@ LevSel_Line:
 		sub.w	#$2000,d2				; use yellow text
 		
 	.unselected:
-		move.w	d2,(a6)					; write to nametable in VRAM
+		move.w	d2,-4(a6)				; write to nametable in VRAM
 		dbf	d1,.loop				; repeat for all characters in line
 		rts
 		

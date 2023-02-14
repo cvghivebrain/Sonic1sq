@@ -24,7 +24,7 @@ Rock_Main:	; Routine 0
 		move.b	#$13,ost_displaywidth(a0)
 		move.b	#4,ost_priority(a0)
 		move.b	#16,ost_height(a0)
-		move.b	#21,ost_width(a0)
+		move.b	#16,ost_width(a0)
 
 Rock_Solid:	; Routine 2
 		bsr.w	SolidNew

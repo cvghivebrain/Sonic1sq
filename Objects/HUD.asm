@@ -57,6 +57,7 @@ HUD_Main:	; Routine 0
 		jsr	FindFreeInert
 		move.l	#HUD,ost_id(a1)				; load time object
 		move.b	#id_HUD_TimeCount,ost_routine(a1)
+		move.b	#1,(f_hud_time_update).w		; set flag to update
 		
 		jsr	FindFreeInert
 		move.l	#HUD,ost_id(a1)				; load score object
