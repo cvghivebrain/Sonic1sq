@@ -114,7 +114,7 @@ ObjPos_MZ1:
 		objpos $1030,$032C,Batbrain,$00,rem
 		objpos $1030,$043C,ChainStomp,type_cstomp_medium+type_cstomp_1
 		objpos $1050,$0330,MarbleBrick,type_brick_still
-		objpos $1050,$035C,ChainStomp,type_cstomp_small+type_cstomp_3
+		objpos $1050,$035C,ChainStomp,type_cstomp_small+type_cstomp_proximity+type_cstomp_3
 		objpos $1070,$032C,Batbrain,$00,rem
 		objpos $1070,$03F0,Invisibarrier,$11
 		objpos $1090,$0408,MovingBlock,type_mblock_3+type_mblock_leftright

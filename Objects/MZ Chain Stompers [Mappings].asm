@@ -2,17 +2,17 @@
 ; Sprite mappings - metal stomping blocks on chains (MZ)
 ; ---------------------------------------------------------------------------
 Map_CStom:	index *
-		ptr frame_cstomp_wideblock			; 0
-		ptr frame_cstomp_spikes				; 1
-		ptr frame_cstomp_ceiling			; 2
-		ptr frame_cstomp_chain1				; 3
-		ptr frame_cstomp_chain2				; 4
-		ptr frame_cstomp_chain3				; 5
-		ptr frame_cstomp_chain4				; 6
-		ptr frame_cstomp_chain5				; 7
-		ptr frame_cstomp_chain5				; 8
-		ptr frame_cstomp_mediumblock			; 9
-		ptr frame_cstomp_smallblock			; $A
+		ptr frame_cstomp_wideblock
+		ptr frame_cstomp_spikes
+		ptr frame_cstomp_ceiling
+		ptr frame_cstomp_chain1
+		ptr frame_cstomp_chain2
+		ptr frame_cstomp_chain3
+		ptr frame_cstomp_chain4
+		ptr frame_cstomp_chain5
+		ptr frame_cstomp_chain6
+		ptr frame_cstomp_mediumblock
+		ptr frame_cstomp_smallblock
 		
 frame_cstomp_wideblock:
 		spritemap
@@ -87,6 +87,21 @@ frame_cstomp_chain5:
 		piece	-4, $10, 1x2, $3F
 		endsprite
 		
+frame_cstomp_chain6:
+		spritemap
+		piece	-4, -$80, 1x2, $3F
+		piece	-4, -$70, 1x2, $3F
+		piece	-4, -$60, 1x2, $3F
+		piece	-4, -$50, 1x2, $3F
+		piece	-4, -$40, 1x2, $3F
+		piece	-4, -$30, 1x2, $3F
+		piece	-4, -$20, 1x2, $3F
+		piece	-4, -$10, 1x2, $3F
+		piece	-4, 0, 1x2, $3F
+		piece	-4, $10, 1x2, $3F
+		piece	-4, $20, 1x2, $3F
+		endsprite
+		
 frame_cstomp_mediumblock:
 		spritemap
 		piece	-$30, -$C, 2x3, 0
@@ -100,4 +115,3 @@ frame_cstomp_smallblock:
 		spritemap
 		piece	-$10, -$14, 4x4, $2F
 		endsprite
-		even

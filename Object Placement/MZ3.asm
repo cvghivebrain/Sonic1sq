@@ -38,8 +38,8 @@ ObjPos_MZ3:
 		objpos $0240,$06D0,Splats,$00,xflip,rem
 		objpos $0260,$03A8,CollapseFloor,$01
 		objpos $0280,$04E8,CollapseFloor,$01
-		objpos $0290,$031C,ChainStomp,type_cstomp_small+type_cstomp_3
-		objpos $02D0,$031C,ChainStomp,type_cstomp_small+type_cstomp_3
+		objpos $0290,$031C,ChainStomp,type_cstomp_small+type_cstomp_proximity+type_cstomp_3
+		objpos $02D0,$031C,ChainStomp,type_cstomp_small+type_cstomp_proximity+type_cstomp_3
 		objpos $02D0,$046C,Batbrain,$00,rem
 		objpos $02D0,$04F0,MarbleBrick,type_brick_still
 		objpos $02F0,$0150,BuzzBomber,$00,rem
@@ -54,7 +54,7 @@ ObjPos_MZ3:
 		objpos $0420,$04A8,CollapseFloor,$01
 		objpos $0430,$0150,BuzzBomber,$00,rem
 		objpos $0430,$029C,ChainStomp,type_cstomp_wide+type_cstomp_2
-		objpos $0470,$041C,ChainStomp,type_cstomp_small+type_cstomp_3
+		objpos $0470,$041C,ChainStomp,type_cstomp_small+type_cstomp_proximity+type_cstomp_3
 		objpos $0480,$04E8,LavaTag,$02
 		objpos $0480,$06E8,LavaTag,$02
 		objpos $0490,$0680,MarbleBrick,type_brick_still
@@ -62,7 +62,7 @@ ObjPos_MZ3:
 		objpos $04B0,$0410,MarbleBrick,type_brick_falls
 		objpos $04C0,$0160,BuzzBomber,$00,rem
 		objpos $04C8,$06A8,Rings,$14,rem
-		objpos $04F0,$041C,ChainStomp,type_cstomp_small+type_cstomp_3
+		objpos $04F0,$041C,ChainStomp,type_cstomp_small+type_cstomp_proximity+type_cstomp_3
 		objpos $04F0,$05A0,Invisibarrier,$00
 		objpos $0510,$05B8,MovingBlock,type_mblock_1+type_mblock_leftright
 		objpos $0510,$0610,MarbleBrick,type_brick_still
@@ -72,7 +72,7 @@ ObjPos_MZ3:
 		objpos $0540,$02C8,Splats,$00,rem
 		objpos $0554,$01CE,Rings,$10,rem
 		objpos $0570,$01EC,Rings,$10,rem
-		objpos $0570,$041C,ChainStomp,type_cstomp_small+type_cstomp_3
+		objpos $0570,$041C,ChainStomp,type_cstomp_small+type_cstomp_proximity+type_cstomp_3
 		objpos $0580,$04E8,LavaTag,$02
 		objpos $0580,$06E8,LavaTag,$02
 		objpos $058C,$0208,Rings,$10,rem
@@ -151,7 +151,7 @@ ObjPos_MZ3:
 		objpos $1008,$0514,Rings,$12,rem
 		objpos $1014,$06F2,Rings,$11,rem
 		objpos $1030,$0540,Invisibarrier,$11
-		objpos $1040,$033C,ChainStomp,type_cstomp_small+type_cstomp_3
+		objpos $1040,$033C,ChainStomp,type_cstomp_small+type_cstomp_proximity+type_cstomp_3
 		objpos $1060,$069A,GlassBlock,type_glass_updown_rev
 		objpos $1080,$0598,LavaTag,$02
 		objpos $1094,$06F2,Rings,$11,rem
@@ -171,7 +171,7 @@ ObjPos_MZ3:
 		objpos $1130,$0540,Invisibarrier,$11
 		objpos $1130,$06F0,SmashBlock,$00
 		objpos $1130,$0710,SmashBlock,$00
-		objpos $1140,$033C,ChainStomp,type_cstomp_small+type_cstomp_3
+		objpos $1140,$033C,ChainStomp,type_cstomp_small+type_cstomp_proximity+type_cstomp_3
 		objpos $1160,$0710,Invisibarrier,$31
 		objpos $1160,$07A7,GlassBlock,type_glass_updown
 		objpos $1180,$0598,LavaTag,$02
@@ -186,12 +186,12 @@ ObjPos_MZ3:
 		objpos $1210,$07B8,MovingBlock,type_mblock_1+type_mblock_right
 		objpos $1230,$0540,Invisibarrier,$11
 		objpos $1230,$0790,MarbleBrick,type_brick_still
-		objpos $1250,$031C,ChainStomp,type_cstomp_small+type_cstomp_3
+		objpos $1250,$031C,ChainStomp,type_cstomp_small+type_cstomp_proximity+type_cstomp_3
 		objpos $1280,$0598,LavaTag,$02
 		objpos $1280,$0620,LavaTag,$02
 		objpos $1280,$07D0,GeyserMaker,$01
 		objpos $1280,$07E8,LavaTag,$02
-		objpos $12B0,$031C,ChainStomp,type_cstomp_small+type_cstomp_3
+		objpos $12B0,$031C,ChainStomp,type_cstomp_small+type_cstomp_proximity+type_cstomp_3
 		objpos $12D0,$0768,MovingBlock,type_mblock_1+type_mblock_right
 		objpos $12F0,$06F0,Monitor,type_monitor_shield,rem
 		objpos $1310,$02F0,MarbleBrick,type_brick_still

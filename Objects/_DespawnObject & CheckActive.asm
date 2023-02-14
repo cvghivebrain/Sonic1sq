@@ -7,7 +7,7 @@
 DespawnObject:
 		move.w	ost_x_pos(a0),d0
 		bsr.s	CheckActive
-		bne.s	.offscreen				; branch if object moves off screen
+		bne.w	DeleteObject				; delete if object moves off screen
 		bra.w	DisplaySprite				; display instead of despawn
 
 	.offscreen:
@@ -34,11 +34,8 @@ DespawnQuick:
 		
 DespawnQuick_AltX:
 		bsr.s	CheckActive
-		bne.s	.delete					; branch if object moves off screen
+		bne.w	DeleteObject				; delete if object moves off screen
 		bra.w	DisplaySprite				; display instead of despawn
-
-	.delete:
-		bra.w	DeleteObject				; delete the object
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to check if object is within active space around the screen

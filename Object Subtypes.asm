@@ -93,17 +93,18 @@ type_grass_sinks:	equ id_LGrass_Type05					; $x5 - sinks and catches fire when s
 type_grass_rev:		equ 8							; +8 - reverse movement direction
 
 ; ChainStomp
-type_cstomp_wide:	equ ((CStom_Var2_0-CStom_Var2)/sizeof_cstom_var2)<<4	; $0x - wide stomper
-type_cstomp_medium:	equ ((CStom_Var2_1-CStom_Var2)/sizeof_cstom_var2)<<4	; $1x - medium stomper
-type_cstomp_small:	equ ((CStom_Var2_2-CStom_Var2)/sizeof_cstom_var2)<<4	; $2x - small stomper, no spikes
+type_cstomp_wide:	equ 0							; $0x - wide stomper
+type_cstomp_medium:	equ $10							; $1x - medium stomper
+type_cstomp_small:	equ $20							; $2x - small stomper, no spikes
+type_cstomp_proximity:	equ $40							; +$40 - activates when Sonic is near
 type_cstomp_controlled:	equ $80							; +$80 - controlled by button 0
-type_cstomp_0:		equ (CStom_Length_0-CStom_Lengths)/2			; $x0 - chain length $70, rises when switch is pressed
-type_cstomp_1:		equ (CStom_Length_1-CStom_Lengths)/2			; $x1 - chain length $A0
-type_cstomp_2:		equ (CStom_Length_2-CStom_Lengths)/2			; $x2 - chain length $50
-type_cstomp_3:		equ (CStom_Length_3-CStom_Lengths)/2			; $x3 - chain length $78, only triggers when Sonic is near
-type_cstomp_4:		equ (CStom_Length_4-CStom_Lengths)/2			; $x4 - chain length $38
-type_cstomp_5:		equ (CStom_Length_5-CStom_Lengths)/2			; $x5 - chain length $58, only triggers when Sonic is near
-type_cstomp_6:		equ (CStom_Length_6-CStom_Lengths)/2			; $x6 - chain length $B8
+type_cstomp_0:		equ 0							; $x0 - chain length $70
+type_cstomp_1:		equ 1							; $x1 - chain length $A0
+type_cstomp_2:		equ 2							; $x2 - chain length $50
+type_cstomp_3:		equ 3							; $x3 - chain length $78
+type_cstomp_4:		equ 4							; $x4 - chain length $38
+type_cstomp_5:		equ 5							; $x5 - chain length $58
+type_cstomp_6:		equ 6							; $x6 - chain length $B8
 
 ; MarbleBrick
 type_brick_still:	equ id_Brick_Still		; 0 - doesn't move
