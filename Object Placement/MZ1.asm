@@ -104,6 +104,7 @@ ObjPos_MZ1:
 		objpos $0ED8,$0348,Rings,$40,rem
 		objpos $0EF0,$0530,MarbleBrick,type_brick_falls
 		objpos $0F20,$03D8,LargeGrass,type_grass_narrow+type_grass_3
+		objpos $F54,$31E,SideStomp,0
 		objpos $0F50,$0530,MarbleBrick,type_brick_falls
 		objpos $0F60,$0398,LargeGrass,type_grass_narrow+type_grass_still
 		objpos $0F70,$035D,Monitor,type_monitor_shield,rem

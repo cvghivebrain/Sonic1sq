@@ -11,7 +11,7 @@ Map_SStom:	index *
 		ptr frame_mash_pole3
 		ptr frame_mash_pole4
 		ptr frame_mash_pole5
-		ptr frame_mash_pole5
+		ptr frame_mash_pole6
 		
 frame_mash_block:
 		spritemap					; main metal block
@@ -78,8 +78,22 @@ frame_mash_pole5:
 		piece	$30, -8, 2x2, $41
 		piece	$40, -8, 2x2, $41
 		piece	$50, -8, 2x2, $41
-		endsprite					; incorrect: this should be moved down 2 lines
 		piece	$60, -8, 2x2, $41
 		piece	$70, -8, 2x2, $41
-		; frame_mash_pole6 should be here, but it isn't...
-		even
+		endsprite
+		
+frame_mash_pole6:
+		spritemap
+		piece	-$20, -8, 2x2, $41
+		piece	-$10, -8, 2x2, $41
+		piece	0, -8, 2x2, $41
+		piece	$10, -8, 2x2, $41
+		piece	$20, -8, 2x2, $41
+		piece	$30, -8, 2x2, $41
+		piece	$40, -8, 2x2, $41
+		piece	$50, -8, 2x2, $41
+		piece	$60, -8, 2x2, $41
+		piece	$70, -8, 2x2, $41
+		piece	$90, -8, 2x2, $41
+		piece	$A0, -8, 2x2, $41
+		endsprite
