@@ -74,7 +74,7 @@ LWall_Action:	; Routine 4
 		subq.b	#2,ost_routine(a0)			; goto LWall_Solid next
 
 LWall_Solid:	; Routine 2
-		bsr.w	SolidNew
+		bsr.w	SolidObject
 		cmpi.w	#$6A0,ost_x_pos(a0)			; has object reached $6A0 on the x-axis?
 		bne.s	.animate				; if not, branch
 		clr.w	ost_x_vel(a0)				; stop object moving

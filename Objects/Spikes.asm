@@ -56,7 +56,7 @@ Spike_Main:	; Routine 0
 
 Spike_Solid:	; Routine 2
 		bsr.w	Spike_Move				; update position
-		bsr.w	SolidNew
+		bsr.w	SolidObject
 		tst.b	(v_invincibility).w
 		bne.s	Spike_Display				; branch if Sonic is invincible
 		cmpi.b	#id_Sonic_Hurt,ost_routine(a1)

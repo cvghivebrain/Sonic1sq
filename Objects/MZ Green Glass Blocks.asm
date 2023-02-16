@@ -94,7 +94,7 @@ Glass_Main:	; Routine 0
 
 Glass_Block012:	; Routine 2
 		bsr.w	Glass_Types				; update position
-		bra.w	SolidNew
+		bra.w	SolidObject
 ; ===========================================================================
 
 Glass_Reflect012:
@@ -106,7 +106,7 @@ Glass_Reflect012:
 
 Glass_Block34:	; Routine 6
 		bsr.w	Glass_Types				; update position
-		bra.w	SolidNew
+		bra.w	SolidObject
 ; ===========================================================================
 
 Glass_Reflect34:

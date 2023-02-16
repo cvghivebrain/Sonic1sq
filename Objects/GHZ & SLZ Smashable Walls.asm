@@ -30,7 +30,7 @@ Smash_Main:	; Routine 0
 		move.b	#32,ost_height(a0)
 
 Smash_Solid:	; Routine 2
-		bsr.w	SolidNew
+		bsr.w	SolidObject
 		andi.b	#solid_left+solid_right,d1
 		beq.s	.dont_break				; branch if no collision with left/right
 		cmpi.b	#id_Roll,ost_anim(a1)

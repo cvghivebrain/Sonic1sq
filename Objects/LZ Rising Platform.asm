@@ -52,7 +52,7 @@ LPlat_Update:
 		bsr.w	Sink					; platform sinks slightly when stood on, update y pos
 		
 LPlat_Stop:	; Routine 6
-		bsr.w	SolidNew
+		bsr.w	SolidObject
 		move.w	ost_x_pos(a0),d0
 		bsr.w	CheckActive
 		bne.w	DeleteObject

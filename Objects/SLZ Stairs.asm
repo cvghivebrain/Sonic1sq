@@ -89,7 +89,7 @@ Stair_Solid:	; Routine 4
 		move.b	(a2,d0.w),d0				; get y distance moved for current stair
 		add.w	ost_stair_y_start(a0),d0		; add to initial y position
 		move.w	d0,ost_y_pos(a0)			; update position
-		bsr.w	SolidNew				; detect collision
+		bsr.w	SolidObject				; detect collision
 		andi.b	#solid_bottom+solid_top,d1		; has Sonic touched top/bottom of stair?
 		beq.s	.not_bottom				; if not, branch
 		move.b	#-1,ost_stair_flag(a2)			; set collision flag

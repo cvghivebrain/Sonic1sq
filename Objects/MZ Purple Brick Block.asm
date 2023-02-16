@@ -40,7 +40,7 @@ Brick_Action:	; Routine 2
 		add.w	d0,d0
 		move.w	Brick_TypeIndex(pc,d0.w),d1
 		jsr	Brick_TypeIndex(pc,d1.w)
-		bsr.w	SolidNew
+		bsr.w	SolidObject
 
 	.chkdel:
 		move.w	ost_x_pos(a0),d0

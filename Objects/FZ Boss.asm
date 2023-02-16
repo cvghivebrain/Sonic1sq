@@ -184,7 +184,7 @@ BFZ_Eggman_Crush:
 		bset	#status_xflip_bit,ost_status(a0)	; Eggman faces right
 
 	.sonic_is_left:
-		jsr	(SolidNew).l
+		jsr	(SolidObject).l
 		andi.w	#solid_left+solid_right,d1
 		bne.s	.side_collision				; branch if Sonic touches the side of the cylinder with Eggman
 
@@ -392,7 +392,7 @@ BFZ_Eggman_Scroll:
 	.chk_ship:
 		cmpi.b	#id_BFZ_Eggman_Ship,ost_fz_mode(a0)	; is Eggman in his ship?
 		bge.s	.not_solid				; if yes, branch
-		jmp	(SolidNew).l				; Eggman is solid
+		jmp	(SolidObject).l				; Eggman is solid
 ; ===========================================================================
 
 .not_solid:

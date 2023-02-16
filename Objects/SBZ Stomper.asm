@@ -10,7 +10,7 @@ ScrapStomp:
 		move.b	ost_routine(a0),d0
 		move.w	Sto_Index(pc,d0.w),d1
 		jsr	Sto_Index(pc,d1.w)
-		bsr.w	SolidNew
+		bsr.w	SolidObject
 		bra.w	DespawnQuick
 ; ===========================================================================
 Sto_Index:	index *,,2

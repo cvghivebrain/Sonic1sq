@@ -55,7 +55,7 @@ Gird_Action:	; Routine 2
 		popr.w	ost_x_prev(a0)				; get previous x pos
 		tst.b	ost_render(a0)				; is object on-screen?
 		bpl.s	.chkdel					; if not, branch
-		bsr.w	SolidNew
+		bsr.w	SolidObject
 
 	.chkdel:
 		move.w	ost_girder_x_start(a0),d0

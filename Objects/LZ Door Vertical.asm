@@ -39,7 +39,7 @@ DoorV_Main:	; Routine 0
 
 DoorV_Solid:	; Routine 2
 		bsr.s	DoorV_ChkTunnel
-		bsr.w	SolidNew
+		bsr.w	SolidObject
 		move.w	ost_x_pos(a0),d0
 		bsr.w	CheckActive
 		bne.w	DeleteObject

@@ -15,87 +15,56 @@ LGrass_Index:	index *,,2
 		ptr LGrass_Main
 		ptr LGrass_Action
 
-LGrass_Data:	index *
-LGrass_Data_0:	ptr LGrass_Coll_Wide				; heightmap data
-		dc.b id_frame_grass_wide, $40			; frame number,	platform width
-LGrass_Data_1:	ptr LGrass_Coll_Sloped
-		dc.b id_frame_grass_sloped, $40
-LGrass_Data_2:	ptr LGrass_Coll_Narrow
-		dc.b id_frame_grass_narrow, $20
-
 		rsobj LargeGrass
-ost_grass_x_start:	rs.w 1 ; $2A				; original x position (2 bytes)
-ost_grass_y_start:	rs.w 1 ; $2C				; original y position (2 bytes)
-ost_grass_coll_ptr:	rs.l 1 ; $30				; pointer to collision data (4 bytes)
-ost_grass_sink:		rs.b 1 ; $34				; pixels the platform has sunk when stood on
-ost_grass_burn_flag:	rs.b 1 ; $35				; 0 = not burning; 1 = burning
-ost_grass_children:	rs.b 8 ; $36				; OST indices of child objects (8 bytes)
+ost_grass_x_start:	rs.w 1					; original x position (2 bytes)
+ost_grass_y_start:	rs.w 1					; original y position (2 bytes)
+ost_grass_coll_ptr:	rs.l 1					; pointer to collision data (4 bytes)
+ost_grass_sink:		rs.b 1					; pixels the platform has sunk when stood on
+ost_grass_burn_flag:	rs.b 1					; 0 = not burning; 1 = burning
+ost_grass_children:	rs.b 8					; OST indices of child objects (8 bytes)
 		rsobjend
-
-sizeof_grass_data:	equ LGrass_Data_1-LGrass_Data
+		
+LGrass_Sizes:	; heightmap pointer, frame, width, height
+		dc.l LGrass_Coll_Wide
+		dc.b id_frame_grass_wide, $40, 40, 0
+		
+		dc.l LGrass_Coll_Sloped
+		dc.b id_frame_grass_sloped, $40, 48, 0
+		
+		dc.l 0
+		dc.b id_frame_grass_narrow, $20, 48, 0
 ; ===========================================================================
 
 LGrass_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto LGrass_Action next
 		move.l	#Map_LGrass,ost_mappings(a0)
 		move.w	#tile_pal3+tile_hi,ost_tile(a0)
-		move.b	#render_rel,ost_render(a0)
+		move.b	#render_rel+render_useheight,ost_render(a0)
 		move.b	#5,ost_priority(a0)
 		move.w	ost_y_pos(a0),ost_grass_y_start(a0)
 		move.w	ost_x_pos(a0),ost_grass_x_start(a0)
 		moveq	#0,d0
 		move.b	ost_subtype(a0),d0
-		lsr.w	#2,d0
-		andi.w	#$1C,d0					; d0 = high nybble of subtype, multiplied by 4
-		lea	LGrass_Data(pc,d0.w),a1
-		move.w	(a1)+,d0				; get pointer to heightmap data
-		lea	LGrass_Data(pc,d0.w),a2
-		move.l	a2,ost_grass_coll_ptr(a0)		; get pointer to heightmap data again
-		move.b	(a1)+,ost_frame(a0)
-		move.b	(a1),ost_displaywidth(a0)
-		andi.b	#$F,ost_subtype(a0)			; clear high nybble of subtype
-		move.b	#$40,ost_height(a0)
-		bset	#render_useheight_bit,ost_render(a0)
+		andi.w	#$70,d0
+		lsr.w	#1,d0
+		lea	LGrass_Sizes(pc,d0.w),a2
+		move.l	(a2)+,ost_grass_coll_ptr(a0)
+		move.b	(a2)+,ost_frame(a0)
+		move.b	(a2),ost_displaywidth(a0)
+		move.b	(a2)+,ost_width(a0)
+		move.b	(a2),ost_height(a0)
 
 LGrass_Action:	; Routine 2
 		bsr.w	LGrass_Types
-		tst.b	ost_solid(a0)				; is platform being stood on?
-		beq.s	LGrass_Solid				; if not, branch
-		moveq	#0,d1
-		move.b	ost_displaywidth(a0),d1
-		addi.w	#$B,d1
-		bsr.w	ExitPlatform				; update flags if Sonic leaves plaform
-		btst	#status_platform_bit,ost_status(a1)	; is Sonic still on platform?
-		bne.w	LGrass_Slope				; if yes, branch
-		clr.b	ost_solid(a0)
-		bra.s	LGrass_Display
-; ===========================================================================
-
-LGrass_Slope:
-		moveq	#0,d1
-		move.b	ost_displaywidth(a0),d1
-		addi.w	#$B,d1
-		movea.l	ost_grass_coll_ptr(a0),a2
-		move.w	ost_x_pos(a0),d2
-		bsr.w	SlopeObject_NoChk
-		bra.s	LGrass_Display
-; ===========================================================================
-
-LGrass_Solid:
-		moveq	#0,d1
-		move.b	ost_displaywidth(a0),d1
-		addi.w	#$B,d1					; width
-		move.w	#$20,d2					; height
-		cmpi.b	#id_frame_grass_narrow,ost_frame(a0)	; is this a narrow platform?
-		bne.s	.not_narrow				; if not, branch
-		move.w	#$30,d2					; use larger height
-
-	.not_narrow:
+		tst.l	ost_grass_coll_ptr(a0)
+		beq.s	.no_heightmap				; branch if there is no heightmap
 		movea.l	ost_grass_coll_ptr(a0),a2
 		bsr.w	SolidObject_Heightmap
-
-LGrass_Display:
-		bra.w	LGrass_ChkDel
+		bra.w	DespawnQuick
+		
+	.no_heightmap:
+		bsr.w	SolidObject
+		bra.w	DespawnQuick
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to update platform position and load burning grass object
@@ -108,7 +77,6 @@ LGrass_Types:
 		add.w	d0,d0
 		move.w	LGrass_TypeIndex(pc,d0.w),d1
 		jmp	LGrass_TypeIndex(pc,d1.w)
-; End of function LGrass_Types
 
 ; ===========================================================================
 LGrass_TypeIndex:
@@ -167,6 +135,7 @@ LGrass_Move:
 
 ; Type 5 - sinks when stood on and catches fire
 LGrass_Type05:
+		rts
 		move.b	ost_grass_sink(a0),d0			; get current sink distance
 		tst.b	ost_solid(a0)				; is platform being stood on?
 		bne.s	.stood_on				; if yes, branch

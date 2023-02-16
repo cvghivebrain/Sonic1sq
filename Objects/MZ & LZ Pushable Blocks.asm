@@ -268,6 +268,7 @@ PushB_LoadLava:
 ; ---------------------------------------------------------------------------
 
 PushB_Solid:
+		rts
 		move.b	ost_routine2(a0),d0
 		beq.w	PushB_Solid_Detect			; branch if ost_routine2 = 0
 		subq.b	#2,d0
@@ -322,7 +323,7 @@ PushB_Solid_Push:
 ; ===========================================================================
 
 PushB_Solid_Detect:
-		bsr.w	Solid_ChkCollision			; make block solid & update flags for interaction
+		;bsr.w	Solid_ChkCollision			; make block solid & update flags for interaction
 		tst.w	d4
 		beq.w	PushB_Solid_Exit			; branch if no collision
 		bmi.w	PushB_Solid_Exit			; branch if top/bottom collision

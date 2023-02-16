@@ -44,7 +44,7 @@ Pillar_Main:	; Routine 0
 		bne.s	Pillar_Delete				; delete if object has already moved
 		
 Pillar_Start:	; Routine 2
-		bsr.w	SolidNew
+		bsr.w	SolidObject
 		lea	(v_button_state).w,a2
 		moveq	#0,d0
 		move.b	ost_subtype(a0),d0
@@ -64,7 +64,7 @@ Pillar_Move:	; Routine 4
 		subi.w	#1,ost_x_pos(a0)			; move left 1px
 		addi.l	#$8000,ost_y_pos(a0)			; move down 0.5px
 		addq.w	#1,ost_pillar_x_dist(a0)
-		bsr.w	SolidNew
+		bsr.w	SolidObject
 		cmpi.w	#$100,ost_pillar_x_dist(a0)
 		bne.s	.exit					; branch if object hasn't reached destination
 		
@@ -76,7 +76,7 @@ Pillar_Move:	; Routine 4
 ; ===========================================================================
 
 Pillar_Finish:	; Routine 6
-		bra.w	SolidNew
+		bra.w	SolidObject
 ; ===========================================================================
 		
 Pillar_Final:

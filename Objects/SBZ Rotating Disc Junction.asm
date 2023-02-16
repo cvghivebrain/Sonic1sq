@@ -63,7 +63,7 @@ Jun_Action:	; Routine 2
 		bsr.w	Jun_Update				; check if button is pressed and animate the junction
 		tst.b	ost_render(a0)				; is object on-screen?
 		bpl.w	Jun_Display				; if not, branch
-		bsr.w	SolidNew
+		bsr.w	SolidObject
 		btst	#status_pushing_bit,ost_status(a0)	; is Sonic pushing the disc?
 		beq.w	Jun_Display				; if not, branch
 

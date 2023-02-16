@@ -67,7 +67,7 @@ Spin_Spinner:	; Routine 2
 		jsr	(AnimateSprite).l
 		tst.b	ost_frame(a0)				; check	if frame number	0 is displayed
 		bne.s	.notsolid2				; if not, branch
-		bsr.w	SolidNew
+		bsr.w	SolidObject
 		bra.w	DespawnQuick
 ; ===========================================================================
 

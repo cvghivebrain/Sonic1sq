@@ -115,7 +115,7 @@ CStom_Main:	; Routine 0
 CStom_Block:	; Routine 2
 		bsr.w	CStom_Types				; update speed & position
 		move.w	ost_y_pos(a0),(v_cstomp_y_pos).w	; store y position for pushable green block interaction
-		bsr.w	SolidNew
+		bsr.w	SolidObject
 		andi.b	#1,d1
 		beq.s	CStom_Ceiling				; branch if Sonic isn't on top
 		cmpi.b	#$10,ost_cstomp_chain_length(a0)

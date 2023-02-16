@@ -63,7 +63,7 @@ Pri_Main:	; Routine 0
 Pri_Body:	; Routine 2
 		cmpi.b	#2,(v_boss_status).w			; has prison been opened?
 		beq.s	.is_open				; if yes, branch
-		jmp	(SolidNew).l
+		jmp	(SolidObject).l
 ; ===========================================================================
 
 .is_open:
@@ -84,7 +84,7 @@ Pri_Display:	; Routine $C
 ; ===========================================================================
 
 Pri_Switch:	; Routine 4
-		jsr	(SolidNew).l
+		jsr	(SolidObject).l
 		lea	(Ani_Pri).l,a1
 		jsr	(AnimateSprite).l
 		move.w	ost_prison_y_start(a0),ost_y_pos(a0)

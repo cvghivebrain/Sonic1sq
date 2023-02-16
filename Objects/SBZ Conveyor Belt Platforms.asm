@@ -160,7 +160,7 @@ SpinC_Solid:	; Routine 2
 		bne.s	.spinning				; if yes, branch
 		move.w	ost_x_pos(a0),ost_x_prev(a0)
 		bsr.w	SpinC_Update
-		bra.w	SolidNew				; make platform solid on flat frame
+		bra.w	SolidObject				; make platform solid on flat frame
 ; ===========================================================================
 
 .spinning:

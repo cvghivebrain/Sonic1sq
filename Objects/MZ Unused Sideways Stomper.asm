@@ -84,7 +84,7 @@ SStom_Main:	; Routine 0
 SStom_Block:	; Routine 2
 		move.w	ost_x_pos(a0),ost_x_prev(a0)
 		bsr.w	SStom_Move				; update position of main block
-		bsr.w	SolidNew
+		bsr.w	SolidObject
 
 SStom_Display:	; Routine 6
 		move.w	ost_mash_x_start(a0),d0

@@ -106,7 +106,7 @@ Spring_None:
 		rts
 
 Spring_Up:	; Routine 2
-		bsr.w	SolidNew				; detect collision
+		bsr.w	SolidObject				; detect collision
 		andi.b	#solid_top,d1
 		beq.s	Spring_None				; branch if no collision on top
 		
@@ -136,7 +136,7 @@ Spring_Reset:	; Routine 6
 ; ===========================================================================
 
 Spring_LR:	; Routine 8
-		bsr.w	SolidNew				; detect collision
+		bsr.w	SolidObject				; detect collision
 		andi.b	#solid_left+solid_right,d1
 		beq.s	Spring_None				; branch if no collision on left/right
 		
@@ -164,7 +164,7 @@ Spring_LR:	; Routine 8
 ; ===========================================================================
 
 Spring_Down:	; Routine $A
-		bsr.w	SolidNew				; detect collision
+		bsr.w	SolidObject				; detect collision
 		andi.b	#solid_bottom,d1
 		beq.w	Spring_None				; branch if no collision on bottom
 		

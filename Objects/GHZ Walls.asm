@@ -35,7 +35,7 @@ Edge_Main:	; Routine 0
 ; ===========================================================================
 
 Edge_Solid:	; Routine 2
-		bsr.w	SolidNew_SidesOnly
+		bsr.w	SolidObject_SidesOnly
 
 Edge_Display:	; Routine 4
 		move.w	ost_x_pos(a0),d0

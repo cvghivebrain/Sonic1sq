@@ -87,7 +87,7 @@ Cyl_Update:
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 
 	.skip_eggman:
-		jsr	SolidNew
+		jsr	SolidObject
 		moveq	#0,d0
 		move.w	ost_cylinder_y_move(a0),d1		; distance cylinder has moved
 		bpl.s	.moved_down				; branch if 0 or +ve

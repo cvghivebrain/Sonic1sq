@@ -24,7 +24,7 @@ FFloor_Index:	index *,,2
 		ptr FFloor_Frag
 
 		rsobj FalseFloor
-ost_ffloor_children:	rs.w 8 ; $30				; addresses of OSTs of child objects (2 bytes * 8)
+ost_ffloor_children:	rs.w 8					; addresses of OSTs of child objects (2 bytes * 8)
 		rsobjend
 ; ===========================================================================
 
@@ -49,6 +49,7 @@ FFloor_Main:	; Routine 0
 		move.w	#tile_Kos_SbzBlock+tile_pal3,ost_tile(a1)
 		move.b	#render_rel,ost_render(a1)
 		move.b	#$10,ost_displaywidth(a1)
+		move.b	#$10,ost_width(a1)
 		move.b	#$10,ost_height(a1)
 		move.b	#3,ost_priority(a1)
 		move.w	d5,ost_x_pos(a1)			; set x position
@@ -78,11 +79,8 @@ FFloor_Solid:
 		move.w	#$2100,d4				; initial x position
 		sub.w	d0,d4					; move right as the block shrinks
 		move.b	d0,ost_displaywidth(a0)
+		move.b	d0,ost_width(a0)
 		move.w	d4,ost_x_pos(a0)			; set x position
-		moveq	#$B,d1
-		add.w	d0,d1					; set width
-		moveq	#$10,d2					; height
-		moveq	#$11,d3
 		jmp	(SolidObject).l
 ; ===========================================================================
 

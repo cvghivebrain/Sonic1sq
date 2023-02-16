@@ -55,7 +55,7 @@ Flap_OpenClose:	; Routine 2
 		cmp.w	ost_x_pos(a0),d0			; has Sonic passed through the door?
 		bcc.s	.display				; if yes, branch
 		move.b	#1,(f_water_tunnel_disable).w		; disable wind tunnel
-		bsr.w	SolidNew				; make the door	solid
+		bsr.w	SolidObject				; make the door	solid
 
 	.display:
 		bra.w	DespawnObject

@@ -57,7 +57,7 @@ ADoor_Animate:
 		bsr.w	AnimateSprite
 		tst.b	ost_frame(a0)				; is the door open?
 		bne.s	.remember				; if yes, branch
-		bsr.w	SolidNew
+		bsr.w	SolidObject
 
 	.remember:
 		bra.w	DespawnObject

@@ -47,7 +47,7 @@ But_Action:	; Routine 2
 		moveq	#7,d5					; d5 = bit to set/clear in button status
 	.not_secondary:
 		
-		bsr.w	SolidNew
+		bsr.w	SolidObject
 		btst	#solid_top_bit,d1
 		beq.s	.unpressed				; branch if Sonic isn't on top of the button
 		

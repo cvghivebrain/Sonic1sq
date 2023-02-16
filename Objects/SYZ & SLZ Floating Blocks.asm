@@ -1,5 +1,5 @@
 ; ---------------------------------------------------------------------------
-; Object 56 - floating blocks (SYZ/SLZ), large doors (LZ)
+; Object 56 - floating blocks (SYZ/SLZ)
 
 ; spawned by:
 ;	ObjPos_SYZ1, ObjPos_SYZ2, ObjPos_SYZ3 - subtypes 0/1/2/$13/$17/$20/$37/$A0
@@ -27,11 +27,11 @@ FBlock_Var:	; width/2, height/2
 		dc.b  $40, $10					; subtype 7x/Fx
 
 		rsobj FloatingBlock
-ost_fblock_y_start:	rs.w 1 ; $30				; original y position (2 bytes)
-ost_fblock_x_start:	rs.w 1 ; $34				; original x position (2 bytes)
-ost_fblock_move_flag:	rs.b 1 ; $38				; 1 = block/door is moving
-ost_fblock_move_dist:	rs.w 1 ; $3A				; distance to move (2 bytes)
-ost_fblock_btn_num:	rs.b 1 ; $3C				; which button the block is linked to
+ost_fblock_y_start:	rs.w 1					; original y position (2 bytes)
+ost_fblock_x_start:	rs.w 1					; original x position (2 bytes)
+ost_fblock_move_dist:	rs.w 1					; distance to move (2 bytes)
+ost_fblock_move_flag:	rs.b 1					; 1 = block/door is moving
+ost_fblock_btn_num:	rs.b 1					; which button the block is linked to
 		rsobjend
 ; ===========================================================================
 
@@ -46,6 +46,7 @@ FBlock_Main:	; Routine 0
 		lsr.w	#3,d0
 		andi.w	#$E,d0					; read only bits 4-6 (high nybble sans high bit)
 		lea	FBlock_Var(pc,d0.w),a2			; get size data
+		move.b	(a2),ost_width(a0)
 		move.b	(a2)+,ost_displaywidth(a0)
 		move.b	(a2),ost_height(a0)
 		lsr.w	#1,d0
@@ -70,8 +71,6 @@ FBlock_Main:	; Routine 0
 		jmp	(DeleteObject).l
 	.dontdelete:
 		moveq	#0,d0
-		cmpi.b	#id_LZ,(v_zone).w			; check if level is LZ
-		beq.s	.not_syzslz				; if yes, branch
 		move.b	ost_subtype(a0),d0			; SYZ/SLZ specific code
 		andi.w	#$F,d0					; read low nybble of subtype
 		subq.w	#8,d0					; subtract 8
@@ -100,23 +99,15 @@ FBlock_Main:	; Routine 0
 		clr.w	ost_fblock_move_dist(a0)
 
 FBlock_Action:	; Routine 2
-		move.w	ost_x_pos(a0),-(sp)
+		move.w	ost_x_pos(a0),ost_x_prev(a0)
 		moveq	#0,d0
 		move.b	ost_subtype(a0),d0			; get object subtype (changed if original was $80+)
 		andi.w	#$F,d0					; read only the	low nybble
 		add.w	d0,d0
 		move.w	FBlock_Types(pc,d0.w),d1
 		jsr	FBlock_Types(pc,d1.w)			; update position
-		move.w	(sp)+,d4
 		tst.b	ost_render(a0)
 		bpl.s	.chkdel
-		moveq	#0,d1
-		move.b	ost_displaywidth(a0),d1
-		addi.w	#$B,d1
-		moveq	#0,d2
-		move.b	ost_height(a0),d2
-		move.w	d2,d3
-		addq.w	#1,d3
 		bsr.w	SolidObject				; detect collision
 
 	.chkdel:

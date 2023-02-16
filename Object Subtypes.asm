@@ -81,9 +81,9 @@ type_fire_slow:		equ $40					; $4x - every 2.5 seconds
 type_fire_slowest:	equ $50					; $5x - every 3 seconds
 
 ; LargeGrass
-type_grass_wide:	equ ((LGrass_Data_0-LGrass_Data)/sizeof_grass_data)<<4	; $0x - wide platform
-type_grass_sloped:	equ ((LGrass_Data_1-LGrass_Data)/sizeof_grass_data)<<4	; $1x - sloped platform, usually sinks and catches fire
-type_grass_narrow:	equ ((LGrass_Data_2-LGrass_Data)/sizeof_grass_data)<<4	; $2x - narrow platform
+type_grass_wide:	equ 0							; $0x - wide platform
+type_grass_sloped:	equ $10							; $1x - sloped platform, usually sinks and catches fire
+type_grass_narrow:	equ $20							; $2x - narrow platform
 type_grass_still:	equ id_LGrass_Type00					; $x0 - doesn't move
 type_grass_1:		equ id_LGrass_Type01					; $x1 - moves up and down 32 pixels
 type_grass_2:		equ id_LGrass_Type02					; $x2 - moves up and down 48 pixels

@@ -29,7 +29,7 @@ Smab_Main:	; Routine 0
 
 Smab_Solid:	; Routine 2
 		pushr.w	(v_enemy_combo).w
-		bsr.w	SolidNew
+		bsr.w	SolidObject
 		popr.w	(v_enemy_combo).w			; don't reset combo counter on collision
 		andi.b	#solid_top,d1
 		beq.w	.dont_break				; branch if no collision with top

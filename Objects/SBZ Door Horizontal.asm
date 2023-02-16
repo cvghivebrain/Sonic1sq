@@ -58,7 +58,7 @@ SDoorH_ChkBtn:	; Routine 2
 		addq.b	#2,ost_routine(a0)			; goto SDoorH_Move next
 		
 	.not_pressed:
-		bra.w	SolidNew
+		bra.w	SolidObject
 ; ===========================================================================
 
 SDoorH_Move:	; Routine 4
@@ -78,7 +78,7 @@ SDoorH_Move:	; Routine 4
 		move.w	#180,ost_sdoorh_time(a0)		; set timer to 3 seconds
 		
 	.keep_moving:
-		bra.w	SolidNew
+		bra.w	SolidObject
 ; ===========================================================================
 
 SDoorH_Wait:	; Routine 6
@@ -87,7 +87,7 @@ SDoorH_Wait:	; Routine 6
 		addq.b	#2,ost_routine(a0)			; goto SDoorH_Reset next
 		
 	.wait:
-		bra.w	SolidNew
+		bra.w	SolidObject
 ; ===========================================================================
 
 SDoorH_Reset:	; Routine 8
@@ -105,5 +105,5 @@ SDoorH_Reset:	; Routine 8
 		move.b	#id_SDoorH_ChkBtn,ost_routine(a0)	; goto SDoorH_ChkBtn next
 		
 	.keep_moving:
-		bra.w	SolidNew
+		bra.w	SolidObject
 		

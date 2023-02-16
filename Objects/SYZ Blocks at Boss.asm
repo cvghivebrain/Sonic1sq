@@ -87,7 +87,7 @@ BBlock_Action:	; Routine 2
 ; ===========================================================================
 
 .is_solid:
-		jsr	(SolidNew).l
+		jsr	(SolidObject).l
 
 .display:
 		jmp	(DisplaySprite).l

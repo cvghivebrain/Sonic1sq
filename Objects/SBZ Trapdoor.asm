@@ -43,7 +43,7 @@ Trap_Main:	; Routine 0
 
 Trap_Wait:	; Routine 2
 		subq.w	#1,ost_trap_wait_time(a0)
-		bpl.w	SolidNew				; branch if time remains
+		bpl.w	SolidObject				; branch if time remains
 		addq.b	#2,ost_routine(a0)			; goto Trap_Open next
 		bsr.w	UnSolid
 		tst.b	ost_render(a0)

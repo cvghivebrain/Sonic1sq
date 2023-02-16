@@ -350,15 +350,8 @@ Ledge_SlopeData:
 		include "Objects\Burrobot.asm"			; Burrobot
 
 		include "Objects\MZ Grass Platforms.asm"	; LargeGrass
-LGrass_Coll_Wide:
-		incbin	"Collision\MZ Grass Platforms Heightmap (Wide).bin" ; used by LargeGrass
-		even
-LGrass_Coll_Narrow:
-		incbin	"Collision\MZ Grass Platforms Heightmap (Narrow).bin" ; used by LargeGrass
-		even
-LGrass_Coll_Sloped:
-		incbin	"Collision\MZ Grass Platforms Heightmap (Sloped).bin" ; used by LargeGrass
-		even
+		incfile	LGrass_Coll_Wide,"Collision\MZ Grass Platforms Heightmap (Wide)",bin
+		incfile LGrass_Coll_Sloped,"Collision\MZ Grass Platforms Heightmap (Sloped)",bin
 		include "Objects\MZ Burning Grass.asm"		; GrassFire
 
 		include "Objects\MZ Green Glass Blocks.asm"	; GlassBlock
@@ -421,7 +414,6 @@ LGrass_Coll_Sloped:
 		include "Objects\Yadrin.asm"			; Yadrin
 
 		include "Objects\_SolidObject.asm"
-		include "Objects\_SolidNew.asm"
 		include "Objects\_SkipMappings.asm"
 		include "Objects\_Range.asm"
 

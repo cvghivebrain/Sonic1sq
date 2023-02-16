@@ -28,7 +28,7 @@ Cork_Main:	; Routine 0
 		
 Cork_Action:	; Routine 2
 		bsr.s	Cork_Float
-		bsr.w	SolidNew
+		bsr.w	SolidObject
 		move.w	ost_x_pos(a0),d0
 		bsr.w	CheckActive
 		bne.w	DeleteObject

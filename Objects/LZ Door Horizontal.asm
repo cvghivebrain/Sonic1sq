@@ -48,7 +48,7 @@ DoorH_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto DoorH_ChkBtn next
 
 DoorH_Solid:	; Routine 2
-		bsr.w	SolidNew
+		bsr.w	SolidObject
 		move.w	ost_doorh_x_start(a0),d0
 		bsr.w	CheckActive
 		bne.w	DeleteObject
