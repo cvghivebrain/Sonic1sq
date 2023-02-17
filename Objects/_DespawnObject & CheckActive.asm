@@ -38,6 +38,23 @@ DespawnQuick_AltX:
 		bra.w	DisplaySprite				; display instead of despawn
 
 ; ---------------------------------------------------------------------------
+; As DespawnQuick, but also deletes child objects
+
+; input:
+;	d0.w = x position (DespawnFamily_AltX only)
+
+;	uses d0.l, d1.w, a1
+; ---------------------------------------------------------------------------
+
+DespawnFamily:
+		move.w	ost_x_pos(a0),d0
+		
+DespawnFamily_AltX:
+		bsr.s	CheckActive
+		bne.w	DeleteFamily				; delete if object moves off screen
+		bra.w	DisplaySprite				; display instead of despawn
+
+; ---------------------------------------------------------------------------
 ; Subroutine to check if object is within active space around the screen
 
 ; input:

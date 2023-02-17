@@ -75,26 +75,6 @@ RangePlus_SkipY:
 		rts
 		
 ; ---------------------------------------------------------------------------
-; As above, but x distance only
-;
-; input:
-;	a0 = address of OST of object
-;
-; output:
-;	d0.w = x distance (-ve if Sonic is to the left)
-;	d1.w = x distance between hitbox edges (-ve if overlapping)
-;	d4.b = object width
-;	a1 = address of OST of Sonic
-
-;	uses d4.l
-; ---------------------------------------------------------------------------
-
-RangePlus_X:
-		lea	(v_ost_player).w,a1			; get OST of Sonic
-		moveq	#0,d4
-		bra.s	RangePlus_SkipY
-		
-; ---------------------------------------------------------------------------
 ; As above, using a heightmap instead of ost_height
 ;
 ; input:
@@ -113,7 +93,9 @@ RangePlus_X:
 ; ---------------------------------------------------------------------------
 
 RangePlus_Heightmap:
-		bsr.s	RangePlus_X
+		lea	(v_ost_player).w,a1			; get OST of Sonic
+		moveq	#0,d4
+		bsr.s	RangePlus_SkipY
 		
 		moveq	#0,d5
 		move.w	ost_y_pos(a1),d2

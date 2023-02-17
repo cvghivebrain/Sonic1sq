@@ -19,9 +19,7 @@ LGrass_Index:	index *,,2
 ost_grass_x_start:	rs.w 1					; original x position (2 bytes)
 ost_grass_y_start:	rs.w 1					; original y position (2 bytes)
 ost_grass_coll_ptr:	rs.l 1					; pointer to collision data (4 bytes)
-ost_grass_sink:		rs.b 1					; pixels the platform has sunk when stood on
 ost_grass_burn_flag:	rs.b 1					; 0 = not burning; 1 = burning
-ost_grass_children:	rs.b 8					; OST indices of child objects (8 bytes)
 		rsobjend
 		
 LGrass_Sizes:	; heightmap pointer, frame, width, height
@@ -42,7 +40,6 @@ LGrass_Main:	; Routine 0
 		move.b	#render_rel+render_useheight,ost_render(a0)
 		move.b	#5,ost_priority(a0)
 		move.w	ost_y_pos(a0),ost_grass_y_start(a0)
-		move.w	ost_x_pos(a0),ost_grass_x_start(a0)
 		moveq	#0,d0
 		move.b	ost_subtype(a0),d0
 		andi.w	#$70,d0
@@ -60,6 +57,8 @@ LGrass_Action:	; Routine 2
 		beq.s	.no_heightmap				; branch if there is no heightmap
 		movea.l	ost_grass_coll_ptr(a0),a2
 		bsr.w	SolidObject_Heightmap
+		cmpi.b	#id_frame_grass_sloped,ost_frame(a0)
+		beq.w	DespawnFamily				; branch if object is the sloped burning kind
 		bra.w	DespawnQuick
 		
 	.no_heightmap:
@@ -135,124 +134,21 @@ LGrass_Move:
 
 ; Type 5 - sinks when stood on and catches fire
 LGrass_Type05:
-		rts
-		move.b	ost_grass_sink(a0),d0			; get current sink distance
-		tst.b	ost_solid(a0)				; is platform being stood on?
-		bne.s	.stood_on				; if yes, branch
-		subq.b	#2,d0					; decrement sink distance
-		bcc.s	.update_sink				; branch if not < 0
-		moveq	#0,d0					; reset to 0
-		bra.s	.update_sink
-; ===========================================================================
-
-.stood_on:
-		addq.b	#4,d0					; add 4 to sink distance
-		cmpi.b	#$40,d0					; has it reached $40?
-		bcs.s	.update_sink				; if not, branch
-		move.b	#$40,d0					; max $40
-
-.update_sink:
-		move.b	d0,ost_grass_sink(a0)			; update sink distance
-		jsr	(CalcSine).l				; convert to sine
-		lsr.w	#4,d0
-		move.w	d0,d1
-		add.w	ost_grass_y_start(a0),d0
-		move.w	d0,ost_y_pos(a0)			; update position
-		cmpi.b	#$20,ost_grass_sink(a0)
-		bne.s	.skip_fire				; branch if not at $20
+		move.w	ost_grass_y_start(a0),d0
+		bsr.w	SinkBig
+		cmpi.b	#$20,ost_sink(a0)
+		bne.s	.exit					; branch if not at $20
 		tst.b	ost_grass_burn_flag(a0)
-		bne.s	.skip_fire				; branch if already burning
+		bne.s	.exit					; branch if already burning
 		move.b	#1,ost_grass_burn_flag(a0)		; set burning flag
 		bsr.w	FindNextFreeObj				; find free OST slot
-		bne.s	.skip_fire				; branch if not found
-
+		bne.s	.exit
 		move.l	#GrassFire,ost_id(a1)			; load sitting flame object (this spreads itself)
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
-		move.w	ost_grass_y_start(a0),ost_burn_y_start(a1)
-		addq.w	#8,ost_burn_y_start(a1)
-		subq.w	#3,ost_burn_y_start(a1)
+		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		subi.w	#$40,ost_x_pos(a1)			; start at left side of platform
 		move.l	ost_grass_coll_ptr(a0),ost_burn_coll_ptr(a1)
-		move.l	a0,ost_burn_parent(a1)			; save parent OST address
-		movea.l	a0,a2
-		bsr.s	LGrass_AddChildToList			; save first flame OST index to list in parent OST
-
-	.skip_fire:
-		moveq	#0,d2
-		lea	ost_grass_children(a0),a2		; get address of child list
-		move.b	(a2)+,d2				; get quantity
-		subq.b	#1,d2
-		bcs.s	.skip_fire_sink				; branch if 0
-
-	.loop_fire_sink:
-		moveq	#0,d0
-		move.b	(a2)+,d0
-		lsl.w	#6,d0
-		addi.w	#v_ost_all&$FFFF,d0			; convert child OST index to address
-		movea.w	d0,a1
-		move.w	d1,ost_burn_sink(a1)			; copy parent sink distance to child
-		dbf	d2,.loop_fire_sink			; repeat for all children
-
-	.skip_fire_sink:
-		rts	
-
-; ---------------------------------------------------------------------------
-; Subroutine to add child to list in parent OST
-
-; input:
-;	a1 = address of OST of child fire
-;	a2 = address of OST of parent platform
-; ---------------------------------------------------------------------------
-
-LGrass_AddChildToList:
-		lea	ost_grass_children(a2),a2		; load list of child objects
-		moveq	#0,d0
-		move.b	(a2),d0					; get child count
-		addq.b	#1,(a2)					; increment child counter
-		lea	1(a2,d0.w),a2				; go to end of list
-		move.w	a1,d0					; get child OST address
-		subi.w	#v_ost_all&$FFFF,d0
-		lsr.w	#6,d0
-		andi.w	#$7F,d0					; d0 = OST index of child
-		move.b	d0,(a2)					; copy d0 to end of list
-		rts	
-; End of function LGrass_AddChildToList
-
-; ===========================================================================
-
-LGrass_ChkDel:
-		tst.b	ost_grass_burn_flag(a0)			; is platform burning?
-		beq.s	.not_burning				; if not, branch
-		tst.b	ost_render(a0)				; is platform off screen?
-		bpl.s	LGrass_DelFlames			; if yes, branch
-
-	.not_burning:
-		move.w	ost_grass_x_start(a0),d0
-		bsr.w	CheckActive
-		bne.w	DeleteObject
-		bra.w	DisplaySprite
-; ===========================================================================
-
-LGrass_DelFlames:
-		moveq	#0,d2
-		lea	ost_grass_children(a0),a2		; get child OST list
-		move.b	(a2),d2					; get quantity
-		clr.b	(a2)+					; clear quantity
-		subq.b	#1,d2
-		bcs.s	.no_fire				; branch if 0
-
-	.loop_del:
-		moveq	#0,d0
-		move.b	(a2),d0
-		clr.b	(a2)+
-		lsl.w	#6,d0
-		addi.w	#v_ost_all&$FFFF,d0			; convert child OST index to address
-		movea.w	d0,a1
-		bsr.w	DeleteChild				; delete child object
-		dbf	d2,.loop_del				; repeat for all children
-
-		move.b	#0,ost_grass_burn_flag(a0)
-		move.b	#0,ost_grass_sink(a0)
-
-	.no_fire:
+		bsr.w	SaveParent
+		
+	.exit:
 		rts
