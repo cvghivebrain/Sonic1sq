@@ -62,7 +62,10 @@ DoorH_ChkBtn:	; Routine 4
 		tst.b	(a2,d0.w)				; check state of linked button
 		beq.s	DoorH_Solid				; branch if button isn't pressed
 		bsr.w	SaveState
+		beq.s	.not_found				; branch if not in respawn table
 		bset	#0,(a2)					; remember door state
+		
+	.not_found:
 		addq.b	#2,ost_routine(a0)			; goto DoorH_Move next
 
 DoorH_Move:	; Routine 6

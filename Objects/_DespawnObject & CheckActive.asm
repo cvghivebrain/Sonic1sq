@@ -100,10 +100,10 @@ CheckActive:
 ; ---------------------------------------------------------------------------
 
 GetState:
-		lea	(v_respawn_list+2).w,a2
 		moveq	#0,d0
 		move.b	ost_respawn(a0),d0
 		beq.s	.exit					; branch if object isn't in the respawn table
+		lea	(v_respawn_list+2).w,a2
 		adda.w	d0,a2					; jump to relevant position in respawn table
 		bclr	#7,(a2)					; clear the already-loaded flag
 		move.b	(a2),d0					; get value
@@ -122,13 +122,35 @@ GetState:
 
 ; usage:
 ;		bsr.w	SaveState
-;		bset	#0,(a2)					; set bit to remember
+;		beq.s	.not_found				; branch if not in respawn table
+;		bset	#0,(a2)					; remember bit
 ; ---------------------------------------------------------------------------
 
 SaveState:
-		lea	(v_respawn_list+2).w,a2
 		moveq	#0,d0
 		move.b	ost_respawn(a0),d0
+		beq.s	.exit					; branch if object isn't in the respawn table
+		lea	(v_respawn_list+2).w,a2
 		adda.w	d0,a2					; jump to relevant position in respawn table
+		
+	.exit:
 		rts
 		
+; ---------------------------------------------------------------------------
+; Subroutine to prevent duplicate objects being loaded
+
+;	uses d0.l, a2
+; ---------------------------------------------------------------------------
+
+PreventDupe:
+		moveq	#0,d0
+		move.b	ost_respawn(a0),d0
+		beq.s	.exit					; branch if object isn't in the respawn table
+		lea	(v_respawn_list+2).w,a2
+		adda.w	d0,a2					; jump to relevant position in respawn table
+		bclr	#7,(a2)					; clear the already-loaded flag
+		bset	#0,(a2)					; remember this was loaded
+		bne.w	DeleteObject				; delete object if previously loaded
+		
+	.exit:
+		rts

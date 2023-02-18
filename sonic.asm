@@ -361,7 +361,7 @@ Ledge_SlopeData:
 
 		include "Objects\Button.asm"			; Button
 
-		include "Objects\MZ & LZ Pushable Blocks.asm"	; PushBlock
+		include "Objects\MZ Pushable Blocks.asm"	; PushBlock
 
 		include "Objects\Spikes.asm"			; Spikes
 
@@ -1087,7 +1087,7 @@ Level_End_unused:	dc.b 0,	0, 0, 0
 		include "Objects\MZ Green Glass Blocks [Mappings].asm" ; Map_Glass
 		include "Objects\MZ Chain Stompers [Mappings].asm" ; Map_CStom
 		include "Objects\MZ Unused Sideways Stomper [Mappings].asm" ; Map_SStom
-		include "Objects\MZ & LZ Pushable Blocks [Mappings].asm" ; Map_Push
+		include "Objects\MZ Pushable Blocks [Mappings].asm" ; Map_Push
 		include "Objects\MZ Purple Brick Block [Mappings].asm" ; Map_Brick
 		include "Objects\MZ Invisible Lava Tag [Mappings].asm" ; Map_LTag
 		include "Objects\MZ Lava Geyser [Mappings].asm"	; Map_Geyser

@@ -1,5 +1,5 @@
 ; ---------------------------------------------------------------------------
-; Object 33 - pushable blocks (MZ, unused in LZ)
+; Object 33 - pushable blocks (MZ)
 
 ; spawned by:
 ;	ObjPos_MZ1, ObjPos_MZ2, ObjPos_MZ3 - subtypes 0/$81
@@ -23,49 +23,92 @@ PushB_Var_1:	dc.b $40, id_frame_pblock_four
 sizeof_PushB_Var:	equ PushB_Var_1-PushB_Var
 
 		rsobj PushBlock
-ost_pblock_lava_speed:	rs.w 1 ; $30				; x axis speed when block is on lava (2 bytes)
-ost_pblock_lava_flag:	rs.b 1 ; $32				; 1 = block is on lava
-ost_pblock_x_start:	rs.w 1 ; $34				; original x position (2 bytes)
-ost_pblock_y_start:	rs.w 1 ; $36				; original y position (2 bytes)
+ost_pblock_x_start:	rs.w 1					; original x position
+ost_pblock_y_start:	rs.w 1					; original y position
+ost_pblock_time:	rs.w 1					; event timer
+ost_pblock_lava_speed:	rs.w 1					; x axis speed when block is on lava (2 bytes)
+ost_pblock_lava_flag:	rs.b 1					; 1 = block is on lava
 		rsobjend
 ; ===========================================================================
 
 PushB_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto PushB_Action next
-		move.b	#$F,ost_height(a0)
-		move.b	#$F,ost_width(a0)
+		move.b	#16,ost_height(a0)
 		move.l	#Map_Push,ost_mappings(a0)
-		move.w	#tile_Kos_MzBlock+tile_pal3,ost_tile(a0) ; MZ specific code
-		cmpi.b	#id_LZ,(v_zone).w			; is current zone Labyrinth?
-		bne.s	.notLZ					; if not, branch
-		move.w	#tile_Kos_LzHalfBlock+tile_pal3,ost_tile(a0) ; LZ specific code
-
-	.notLZ:
+		move.w	#tile_Kos_MzBlock+tile_pal3,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#3,ost_priority(a0)
 		move.w	ost_x_pos(a0),ost_pblock_x_start(a0)
 		move.w	ost_y_pos(a0),ost_pblock_y_start(a0)
 		moveq	#0,d0
 		move.b	ost_subtype(a0),d0			; get subtype
+		beq.s	.type0					; branch if 0
+		bset	#tile_hi_bit,ost_tile(a0)		; make sprite appear in foreground
+		
+	.type0:
+		andi.w	#$F,d0					; read low nybble
 		add.w	d0,d0
-		andi.w	#$E,d0					; read low nybble
 		lea	PushB_Var(pc,d0.w),a2			; get width & frame values from array
+		move.b	(a2),ost_width(a0)
 		move.b	(a2)+,ost_displaywidth(a0)
 		move.b	(a2)+,ost_frame(a0)
-		tst.b	ost_subtype(a0)				; is subtype 0?
-		beq.s	.chkgone				; if yes, branch
-		bset	#tile_hi_bit,ost_tile(a0)		; make sprite appear in foreground
-
-	.chkgone:
-		lea	(v_respawn_list).w,a2
-		moveq	#0,d0
-		move.b	ost_respawn(a0),d0
-		beq.s	PushB_Action
-		bclr	#7,2(a2,d0.w)
-		bset	#0,2(a2,d0.w)
-		bne.w	DeleteObject
+		move.w	#2,ost_pblock_time(a0)
+		bsr.w	PreventDupe				; flag object as loaded & prevent the same object loading again
 
 PushB_Action:	; Routine 2
+		bsr.w	SolidObject
+		bsr.s	PushB_Pushing
+		
+		move.w	ost_x_pos(a0),d0
+		bsr.w	CheckActive
+		beq.w	DisplaySprite
+		bsr.w	SaveState
+		beq.w	DeleteObject				; branch if not in respawn table
+		bclr	#0,(a2)					; allow object to load again later
+		bra.w	DeleteObject
+
+; ---------------------------------------------------------------------------
+; Subroutine to move block when pushed
+; ---------------------------------------------------------------------------
+
+PushB_Pushing:
+		subq.w	#1,ost_pblock_time(a0)			; decrement timer
+		bpl.s	.exit					; branch if time remains
+		btst	#status_pushing_bit,ost_status(a1)
+		beq.s	.push_reset				; branch if Sonic isn't pushing anything
+		cmpi.b	#id_Walk,ost_anim(a1)
+		bne.s	.push_reset				; branch if Sonic isn't trying to move
+		btst	#status_pushing_bit,ost_status(a0)
+		beq.s	.push_other				; branch if Sonic isn't pushing the block
+		andi.b	#solid_right,d1
+		beq.s	.push_left				; branch if pushing left side
+		
+	.push_right:
+		subq.w	#1,ost_x_pos(a1)			; Sonic moves left
+	.push_right2:
+		subq.w	#1,ost_x_pos(a0)			; block moves left
+		bra.s	.push_reset
+		
+	.push_left:
+		addq.w	#1,ost_x_pos(a1)			; Sonic moves right
+	.push_left2:
+		addq.w	#1,ost_x_pos(a0)			; block moves right
+		
+	.push_reset:
+		move.w	#2,ost_pblock_time(a0)			; 3 frame delay between movements
+	
+	.exit:
+		rts
+		
+	.push_other:
+		andi.b	#solid_top,d1
+		beq.s	.exit					; branch if Sonic isn't on top
+		btst	#status_xflip_bit,ost_status(a1)
+		beq.s	.push_right2				; branch if Sonic is facing right
+		bra.s	.push_left2
+; ===========================================================================
+		
+		
 		tst.b	ost_pblock_lava_flag(a0)		; is block on lava?
 		bne.w	PushB_OnLava				; if yes, branch
 		moveq	#0,d1

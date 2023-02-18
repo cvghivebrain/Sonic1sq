@@ -100,7 +100,7 @@ Sol_Side:
 		
 	.push:
 		btst	#status_air_bit,ost_status(a1)
-		bne.s	.stop_moving				; branch if Sonic is in the air
+		bne.s	.in_air					; branch if Sonic is in the air
 		btst	#status_pushing_bit,ost_status(a1)
 		bne.s	.stop_moving				; branch if Sonic has started pushing
 		bset	#status_pushing_bit,ost_status(a1)	; make Sonic push object
@@ -111,6 +111,10 @@ Sol_Side:
 		bclr	#status_pushing_bit,ost_status(a1)
 		bclr	#status_pushing_bit,ost_status(a0)
 		rts
+		
+	.in_air:
+		bclr	#status_pushing_bit,ost_status(a1)
+		bclr	#status_pushing_bit,ost_status(a0)
 		
 	.stop_moving:
 		move.w	#0,ost_inertia(a1)

@@ -1,5 +1,5 @@
 ; ---------------------------------------------------------------------------
-; Sprite mappings - pushable blocks (MZ, LZ)
+; Sprite mappings - pushable blocks (MZ)
 ; ---------------------------------------------------------------------------
 Map_Push:	index *
 		ptr frame_pblock_single
@@ -17,4 +17,3 @@ frame_pblock_four:
 		piece	0, -$10, 4x4, 8
 		piece	$20, -$10, 4x4, 8
 		endsprite
-		even
