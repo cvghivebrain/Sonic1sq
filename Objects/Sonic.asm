@@ -81,7 +81,7 @@ Sonic_Control:	; Routine 2
 		jsr	(ReactToItem).l				; run collisions with enemies or anything that uses ost_col_type
 
 	.no_collision:
-		bsr.w	Sonic_LoopPlane				; move Sonic to correct plane when in a GHZ/SLZ loop
+		;bsr.w	Sonic_LoopPlane				; move Sonic to correct plane when in a GHZ/SLZ loop
 		bsr.w	Sonic_LoadGfx				; load new gfx when Sonic's frame changes
 		rts	
 
@@ -1647,7 +1647,6 @@ Sonic_AnglePos:
 		ext.w	d0
 		add.w	d0,d3					; d3 = x pos of right edge of Sonic
 		lea	(v_angle_right).w,a4			; write angle here
-		movea.w	#$10,a3					; tile height
 		move.w	#0,d6
 		moveq	#tilemap_solid_top_bit,d5		; bit to test for solidness (top solid)
 		bsr.w	FindFloor
@@ -1664,7 +1663,6 @@ Sonic_AnglePos:
 		neg.w	d0
 		add.w	d0,d3					; d3 = x pos of left edge of Sonic
 		lea	(v_angle_left).w,a4			; write angle here
-		movea.w	#$10,a3					; tile height
 		move.w	#0,d6
 		moveq	#tilemap_solid_top_bit,d5		; bit to test for solidness (top solid)
 		bsr.w	FindFloor				; d1 = distance to floor left side
@@ -1794,7 +1792,6 @@ Sonic_WalkVertR:
 		ext.w	d0
 		add.w	d0,d3					; d3 = x pos of bottom edge of Sonic (i.e. his feet)
 		lea	(v_angle_right).w,a4			; write angle here
-		movea.w	#$10,a3					; tile width
 		move.w	#0,d6
 		moveq	#tilemap_solid_top_bit,d5		; bit to test for solidness (top solid)
 		bsr.w	FindWall
@@ -1810,7 +1807,6 @@ Sonic_WalkVertR:
 		ext.w	d0
 		add.w	d0,d3					; d3 = x pos of bottom edge of Sonic (i.e. his feet)
 		lea	(v_angle_left).w,a4			; write angle here
-		movea.w	#$10,a3					; tile width
 		move.w	#0,d6
 		moveq	#tilemap_solid_top_bit,d5		; bit to test for solidness (top solid)
 		bsr.w	FindWall				; d1 = distance to wall lower side
@@ -1860,10 +1856,9 @@ Sonic_WalkCeiling:
 		ext.w	d0
 		add.w	d0,d3					; d3 = x pos of right edge of Sonic
 		lea	(v_angle_right).w,a4			; write angle here
-		movea.w	#-$10,a3				; tile height
 		move.w	#tilemap_yflip,d6			; yflip tile
 		moveq	#tilemap_solid_top_bit,d5		; bit to test for solidness (top solid)
-		bsr.w	FindFloor
+		bsr.w	FindCeiling
 		move.w	d1,-(sp)				; save d1 (distance to ceiling) to stack
 
 		move.w	ost_y_pos(a0),d2
@@ -1877,10 +1872,9 @@ Sonic_WalkCeiling:
 		ext.w	d0
 		sub.w	d0,d3					; d3 = x pos of left edge of Sonic
 		lea	(v_angle_left).w,a4			; write angle here
-		movea.w	#-$10,a3				; tile height
 		move.w	#tilemap_yflip,d6			; yflip tile
 		moveq	#tilemap_solid_top_bit,d5		; bit to test for solidness (top solid)
-		bsr.w	FindFloor				; d1 = distance to ceiling left side
+		bsr.w	FindCeiling				; d1 = distance to ceiling left side
 		move.w	(sp)+,d0				; d0 = distance to ceiling right side
 		bsr.w	Sonic_Angle				; update angle
 		tst.w	d1
@@ -1927,10 +1921,9 @@ Sonic_WalkVertL:
 		sub.w	d0,d3					; d3 = x pos of bottom edge of Sonic (i.e. his feet)
 		eori.w	#$F,d3					; add some amount
 		lea	(v_angle_right).w,a4			; write angle here
-		movea.w	#-$10,a3				; tile width
 		move.w	#tilemap_xflip,d6			; xflip tile
 		moveq	#tilemap_solid_top_bit,d5		; bit to test for solidness (top solid)
-		bsr.w	FindWall
+		bsr.w	FindWallLeft
 		move.w	d1,-(sp)				; save d1 (distance to wall) to stack
 
 		move.w	ost_y_pos(a0),d2
@@ -1944,10 +1937,9 @@ Sonic_WalkVertL:
 		sub.w	d0,d3					; d3 = x pos of bottom edge of Sonic (i.e. his feet)
 		eori.w	#$F,d3
 		lea	(v_angle_left).w,a4			; write angle here
-		movea.w	#-$10,a3				; tile width
 		move.w	#tilemap_xflip,d6			; xflip tile
 		moveq	#tilemap_solid_top_bit,d5		; bit to test for solidness (top solid)
-		bsr.w	FindWall				; d1 = distance to wall lower side
+		bsr.w	FindWallLeft				; d1 = distance to wall lower side
 		move.w	(sp)+,d0				; d0 = distance to wall upper side
 		bsr.w	Sonic_Angle				; update angle
 		tst.w	d1
@@ -2082,7 +2074,6 @@ Sonic_FindFloor:
 		ext.w	d0
 		add.w	d0,d3					; d3 = x pos. of Sonic's right edge
 		lea	(v_angle_right).w,a4			; write angle here
-		movea.w	#$10,a3					; tile height
 		move.w	#0,d6
 		moveq	#tilemap_solid_top_bit,d5		; bit to test for solidness (top solid)
 		bsr.w	FindFloor
@@ -2098,7 +2089,6 @@ Sonic_FindFloor:
 		ext.w	d0
 		sub.w	d0,d3					; d3 = x pos. of Sonic's left edge
 		lea	(v_angle_left).w,a4			; write angle here
-		movea.w	#$10,a3					; tile height
 		move.w	#0,d6
 		moveq	#tilemap_solid_top_bit,d5		; bit to test for solidness (top solid)
 		bsr.w	FindFloor				; d1 = distance to floor left side
@@ -2141,7 +2131,6 @@ Sonic_FindSmaller:
 Sonic_FindFloor_Quick:
 		addi.w	#sonic_average_radius,d2
 		lea	(v_angle_right).w,a4			; write angle here
-		movea.w	#$10,a3					; tile height
 		move.w	#0,d6
 		moveq	#tilemap_solid_lrb_bit,d5		; bit to test for solidness (left/right/bottom solid)
 		bsr.w	FindFloor
@@ -2178,7 +2167,6 @@ Sonic_FindWallRight:
 		ext.w	d0
 		add.w	d0,d3					; d3 = x pos. of Sonic's rightmost edge (his feet/head)
 		lea	(v_angle_right).w,a4			; write angle here
-		movea.w	#$10,a3					; tile height
 		move.w	#0,d6
 		moveq	#tilemap_solid_lrb_bit,d5		; bit to test for solidness (left/right/bottom solid)
 		bsr.w	FindWall
@@ -2194,7 +2182,6 @@ Sonic_FindWallRight:
 		ext.w	d0
 		add.w	d0,d3					; d3 = x pos. of Sonic's rightmost edge (his feet/head)
 		lea	(v_angle_left).w,a4			; write angle here
-		movea.w	#$10,a3					; tile height
 		move.w	#0,d6
 		moveq	#tilemap_solid_lrb_bit,d5		; bit to test for solidness (left/right/bottom solid)
 		bsr.w	FindWall				; d1 = distance to wall upper side
@@ -2224,7 +2211,6 @@ Sonic_FindWallRight_Quick_UsePos:
 Sonic_FindWallRight_Quick:
 		addi.w	#sonic_average_radius,d3
 		lea	(v_angle_right).w,a4			; write angle here
-		movea.w	#$10,a3					; tile height
 		move.w	#0,d6
 		moveq	#tilemap_solid_lrb_bit,d5		; bit to test for solidness (left/right/bottom solid)
 		bsr.w	FindWall
@@ -2254,10 +2240,9 @@ Sonic_FindCeiling:
 		ext.w	d0
 		add.w	d0,d3					; d3 = x pos. of Sonic's right edge
 		lea	(v_angle_right).w,a4			; write angle here
-		movea.w	#-$10,a3				; tile height
 		move.w	#tilemap_yflip,d6			; yflip tile
 		moveq	#tilemap_solid_lrb_bit,d5		; bit to test for solidness (left/right/bottom solid)
-		bsr.w	FindFloor
+		bsr.w	FindCeiling
 		move.w	d1,-(sp)				; save d1 (distance to ceiling) to stack
 		
 		move.w	ost_y_pos(a0),d2
@@ -2271,10 +2256,9 @@ Sonic_FindCeiling:
 		ext.w	d0
 		sub.w	d0,d3					; d3 = x pos. of Sonic's left edge
 		lea	(v_angle_left).w,a4			; write angle here
-		movea.w	#-$10,a3				; tile height
 		move.w	#tilemap_yflip,d6			; yflip tile
 		moveq	#tilemap_solid_lrb_bit,d5		; bit to test for solidness (left/right/bottom solid)
-		bsr.w	FindFloor				; d1 = distance to ceiling on left side
+		bsr.w	FindCeiling				; d1 = distance to ceiling on left side
 		move.w	(sp)+,d0				; d0 = distance to ceiling on right side
 		
 		move.b	#$80,d2
@@ -2301,10 +2285,9 @@ Sonic_FindCeiling_Quick:
 		subi.w	#sonic_average_radius,d2
 		eori.w	#$F,d2
 		lea	(v_angle_right).w,a4			; write angle here
-		movea.w	#-$10,a3				; tile height
 		move.w	#tilemap_yflip,d6			; yflip tile
 		moveq	#tilemap_solid_lrb_bit,d5		; bit to test for solidness (left/right/bottom solid)
-		bsr.w	FindFloor
+		bsr.w	FindCeiling
 		move.b	#-$80,d2
 		bra.w	Sonic_SnapAngle				; check for snap to 90 degrees
 
@@ -2331,10 +2314,9 @@ Sonic_FindWallLeft:
 		sub.w	d0,d3					; d3 = x pos. of Sonic's leftmost edge (his feet/head)
 		eori.w	#$F,d3
 		lea	(v_angle_right).w,a4			; write angle here
-		movea.w	#-$10,a3				; tile height
 		move.w	#tilemap_xflip,d6			; xflip tile
 		moveq	#tilemap_solid_lrb_bit,d5		; bit to test for solidness (left/right/bottom solid)
-		bsr.w	FindWall
+		bsr.w	FindWallLeft
 		move.w	d1,-(sp)				; save d1 (distance to wall) to stack
 		
 		move.w	ost_y_pos(a0),d2
@@ -2348,10 +2330,9 @@ Sonic_FindWallLeft:
 		sub.w	d0,d3					; d3 = x pos. of Sonic's leftmost edge (his feet/head)
 		eori.w	#$F,d3
 		lea	(v_angle_left).w,a4			; write angle here
-		movea.w	#-$10,a3				; tile height
 		move.w	#tilemap_xflip,d6			; xflip tile
 		moveq	#tilemap_solid_lrb_bit,d5		; bit to test for solidness (left/right/bottom solid)
-		bsr.w	FindWall				; d1 = distance to wall lower side
+		bsr.w	FindWallLeft				; d1 = distance to wall lower side
 		move.w	(sp)+,d0				; d0 = distance to wall upper side
 		
 		move.b	#$40,d2
@@ -2379,9 +2360,8 @@ Sonic_FindWallLeft_Quick:
 		subi.w	#sonic_average_radius,d3
 		eori.w	#$F,d3
 		lea	(v_angle_right).w,a4			; write angle here
-		movea.w	#-$10,a3				; tile height
 		move.w	#tilemap_xflip,d6			; xflip tile
 		moveq	#tilemap_solid_lrb_bit,d5		; bit to test for solidness (left/right/bottom solid)
-		bsr.w	FindWall
+		bsr.w	FindWallLeft
 		move.b	#$40,d2
 		bra.w	Sonic_SnapAngle				; check for snap to 90 degrees

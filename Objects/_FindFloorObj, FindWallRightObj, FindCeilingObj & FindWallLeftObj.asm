@@ -9,8 +9,8 @@
 ; output:
 ;	d1.w = distance to the floor
 ;	d3.b = floor angle
-;	a1 = address within 256x256 mappings where object is standing
-;	(a1).w = 16x16 tile number, x/yflip, solidness
+;	a3 = address within 256x256 mappings where object is standing
+;	(a3).w = 16x16 tile number, x/yflip, solidness
 ;	(a4).b = floor angle
 
 ;	uses d0.w, d2.w, d4.w, d5.l, d6.w
@@ -28,7 +28,6 @@ FindFloorObj2:
 		add.w	d0,d2					; d2 = y pos of bottom edge
 		lea	(v_angle_right).w,a4			; write angle here
 		move.b	#0,(a4)
-		movea.w	#$10,a3					; height of a 16x16 tile
 		move.w	#0,d6
 		moveq	#tilemap_solid_top_bit,d5		; bit to test for solidness
 		bsr.w	FindFloor
@@ -60,8 +59,8 @@ SnapFloor:
 ; output:
 ;	d1.w = distance to the wall
 ;	d3.b = wall angle
-;	a1 = address within 256x256 mappings where object is standing
-;	(a1).w = 16x16 tile number, x/yflip, solidness
+;	a3 = address within 256x256 mappings where object is standing
+;	(a3).w = 16x16 tile number, x/yflip, solidness
 ;	(a4).b = wall angle
 
 ;	uses d0.w, d3.w, d4.w, d5.l, d6.w
@@ -72,7 +71,6 @@ FindWallRightObj:
 		move.w	ost_y_pos(a0),d2
 		lea	(v_angle_right).w,a4			; write angle here
 		move.b	#0,(a4)
-		movea.w	#$10,a3					; width of a 16x16 tile
 		move.w	#0,d6
 		moveq	#tilemap_solid_lrb_bit,d5		; bit to test for solidness
 		bsr.w	FindWall
@@ -92,8 +90,8 @@ FindWallRightObj:
 ; output:
 ;	d1.w = distance to the ceiling
 ;	d3.b = ceiling angle
-;	a1 = address within 256x256 mappings where object is standing
-;	(a1).w = 16x16 tile number, x/yflip, solidness
+;	a3 = address within 256x256 mappings where object is standing
+;	(a3).w = 16x16 tile number, x/yflip, solidness
 ;	(a4).b = ceiling angle
 
 ;	uses d0.w, d2.w, d4.w, d5.l, d6.w
@@ -108,10 +106,9 @@ FindCeilingObj:
 		sub.w	d0,d2					; d2 = y pos of top edge
 		eori.w	#$F,d2
 		lea	(v_angle_right).w,a4			; write angle here
-		movea.w	#-$10,a3				; height of a 16x16 tile
 		move.w	#tilemap_yflip,d6			; eor mask
 		moveq	#tilemap_solid_lrb_bit,d5		; bit to test for solidness
-		bsr.w	FindFloor
+		bsr.w	FindCeiling
 		move.b	(v_angle_right).w,d3
 		btst	#0,d3					; is angle snap bit set?
 		beq.s	.no_snap
@@ -140,8 +137,8 @@ SnapCeiling:
 ; output:
 ;	d1.w = distance to the wall
 ;	d3.b = wall angle
-;	a1 = address within 256x256 mappings where object is standing
-;	(a1).w = 16x16 tile number, x/yflip, solidness
+;	a3 = address within 256x256 mappings where object is standing
+;	(a3).w = 16x16 tile number, x/yflip, solidness
 ;	(a4).b = wall angle
 
 ;	uses d0.w, d3.w, d4.w, d5.l, d6.w
@@ -153,10 +150,9 @@ FindWallLeftObj:
 		eori.w	#$F,d3					; enable this line to fix bug
 		lea	(v_angle_right).w,a4			; write angle here
 		move.b	#0,(a4)
-		movea.w	#-$10,a3				; width of a 16x16 tile
 		move.w	#tilemap_xflip,d6			; eor mask
 		moveq	#tilemap_solid_lrb_bit,d5		; bit to test for solidness
-		bsr.w	FindWall
+		bsr.w	FindWallLeft
 		move.b	(v_angle_right).w,d3
 		btst	#0,d3					; is angle snap bit set?
 		beq.s	.no_snap

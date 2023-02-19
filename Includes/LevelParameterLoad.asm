@@ -53,27 +53,6 @@ LPL_Camera:
 
 	.set_camera_y:
 		move.w	d0,(v_camera_y_pos).w			; set vertical screen position
-		bsr.w	LPL_InitBG
-		moveq	#0,d0
-		move.b	(v_zone).w,d0
-		lsl.b	#2,d0
-		move.l	LoopTunnelList(pc,d0.w),(v_256x256_with_loop_1).w ; load level tile ids that contain loops and tunnels
-		rts
-
-; ---------------------------------------------------------------------------
-; Which	256x256	tiles contain loops or roll-tunnels
-; ---------------------------------------------------------------------------
-
-LoopTunnelList:
-		;	loop	loop	tunnel	tunnel
-		dc.b	$B5,	$7F,	$1F,	$20		; Green Hill
-		dc.b	$7F,	$7F,	$7F,	$7F		; Labyrinth
-		dc.b	$7F,	$7F,	$7F,	$7F		; Marble
-		dc.b	$AA,	$B4,	$7F,	$7F		; Star Light
-		dc.b	$7F,	$7F,	$7F,	$7F		; Spring Yard
-		dc.b	$7F,	$7F,	$7F,	$7F		; Scrap Brain
-		dc.b	$7F,	$7F,	$7F,	$7F		; Ending (Green Hill)
-		even
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	initialise background position and scrolling
