@@ -26,12 +26,10 @@ FindFloorObj2:
 		move.b	ost_height(a0),d0
 		ext.w	d0
 		add.w	d0,d2					; d2 = y pos of bottom edge
-		lea	(v_angle_right).w,a4			; write angle here
-		move.b	#0,(a4)
 		move.w	#0,d6
 		moveq	#tilemap_solid_top_bit,d5		; bit to test for solidness
+		lea	(v_angle_right).w,a4			; write angle here
 		bsr.w	FindFloor
-		move.b	(v_angle_right).w,d3
 		btst	#0,d3					; is angle snap bit set?
 		beq.s	.no_snap
 		move.b	#0,d3					; snap to flat floor
@@ -69,12 +67,10 @@ SnapFloor:
 FindWallRightObj:
 		add.w	ost_x_pos(a0),d3
 		move.w	ost_y_pos(a0),d2
-		lea	(v_angle_right).w,a4			; write angle here
-		move.b	#0,(a4)
 		move.w	#0,d6
 		moveq	#tilemap_solid_lrb_bit,d5		; bit to test for solidness
+		lea	(v_angle_right).w,a4			; write angle here
 		bsr.w	FindWall
-		move.b	(v_angle_right).w,d3
 		btst	#0,d3					; is angle snap bit set?
 		beq.s	.no_snap
 		move.b	#$C0,d3					; snap to flat right wall
@@ -105,11 +101,10 @@ FindCeilingObj:
 		ext.w	d0
 		sub.w	d0,d2					; d2 = y pos of top edge
 		eori.w	#$F,d2
-		lea	(v_angle_right).w,a4			; write angle here
 		move.w	#tilemap_yflip,d6			; eor mask
 		moveq	#tilemap_solid_lrb_bit,d5		; bit to test for solidness
+		lea	(v_angle_right).w,a4			; write angle here
 		bsr.w	FindCeiling
-		move.b	(v_angle_right).w,d3
 		btst	#0,d3					; is angle snap bit set?
 		beq.s	.no_snap
 		move.b	#$80,d3					; snap to flat ceiling
@@ -148,12 +143,10 @@ FindWallLeftObj:
 		add.w	ost_x_pos(a0),d3
 		move.w	ost_y_pos(a0),d2
 		eori.w	#$F,d3					; enable this line to fix bug
-		lea	(v_angle_right).w,a4			; write angle here
-		move.b	#0,(a4)
 		move.w	#tilemap_xflip,d6			; eor mask
 		moveq	#tilemap_solid_lrb_bit,d5		; bit to test for solidness
+		lea	(v_angle_right).w,a4			; write angle here
 		bsr.w	FindWallLeft
-		move.b	(v_angle_right).w,d3
 		btst	#0,d3					; is angle snap bit set?
 		beq.s	.no_snap
 		move.b	#$40,d3					; snap to flat left wall

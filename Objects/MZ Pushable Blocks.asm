@@ -84,12 +84,23 @@ PushB_Pushing:
 		beq.s	.push_left				; branch if pushing left side
 		
 	.push_right:
+		moveq	#0,d3
+		move.b	ost_width(a0),d3
+		not.w	d3
+		bsr.w	FindWallLeftObj
+		tst.w	d1
+		bmi.s	.exit					; branch if block is against wall
 		subq.w	#1,ost_x_pos(a1)			; Sonic moves left
 	.push_right2:
 		subq.w	#1,ost_x_pos(a0)			; block moves left
 		bra.s	.push_reset
 		
 	.push_left:
+		moveq	#0,d3
+		move.b	ost_width(a0),d3
+		bsr.w	FindWallRightObj
+		tst.w	d1
+		bmi.s	.exit					; branch if block is against wall
 		addq.w	#1,ost_x_pos(a1)			; Sonic moves right
 	.push_left2:
 		addq.w	#1,ost_x_pos(a0)			; block moves right

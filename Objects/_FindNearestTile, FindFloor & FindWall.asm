@@ -14,11 +14,14 @@
 
 FindNearestTile:
 		move.w	d2,d0					; copy y pos
-		andi.w	#$700,d0				; ignore precision below 256px
+		andi.w	#$700,d0				; round down 256px
 		lsr.w	#1,d0					; divide by 256 (tile height), multiply by 128 (level width)
-		move.w	d3,d1					; copy x pos
-		andi.w	#$7F00,d1				; ignore precision below 256px
-		lsr.w	#8,d1					; divide by 256 (tile width)
+		move.w	a5,d1					; copy x pos
+		andi.w	#$7F00,d1				; round down 256px
+		pushr.w	d1
+		moveq	#0,d1
+		popr.b	d1
+		;lsr.w	#8,d1					; divide by 256 (tile width)
 		add.w	d1,d0					; combine for position within layout
 		moveq	#-1,d1					; d1 = $FFFFFFFF
 		clr.w	d1					; d1 = $FFFF0000
@@ -26,14 +29,15 @@ FindNearestTile:
 		move.b	(a3,d0.w),d1				; get 256x256 tile number
 		beq.s	.blanktile				; branch if 0
 
-		subq.b	#1,d1					; make tiles start at 0
-		ror.w	#7,d1					; d1 = $FFFFxx00 where xx is multiplied by 2
+		add.w	d1,d1
+		move.w	TileOffsetList(pc,d1.w),d1		; get RAM address of 256x256 tile
+		
 		move.w	d2,d0					; copy y pos
 		andi.w	#$F0,d0
 		add.w	d0,d0					; get y pos within 256x256 tile
 		add.w	d0,d1					; add to base address
 		
-		move.w	d3,d0					; copy x pos
+		move.w	a5,d0					; copy x pos
 		andi.w	#$F0,d0
 		lsr.w	#3,d0					; get x pos within 256x256 tile
 		add.w	d0,d1					; add to base address
@@ -42,6 +46,12 @@ FindNearestTile:
 		movea.l	d1,a3
 		rts
 
+TileOffsetList:
+		c: = -$200
+		rept countof_256x256+1
+		dc.w c
+		c: = c+$200
+		endr
 ; ---------------------------------------------------------------------------
 ; Subroutine to	find the floor
 
@@ -54,15 +64,18 @@ FindNearestTile:
 
 ; output:
 ;	d1.w = distance to the floor
+;	d3.b = floor angle
 ;	a3 = address within 256x256 mappings where object is standing
 ;	(a3).w = 16x16 tile number, x/yflip, solidness
 ;	(a4).b = floor angle
 
-;	uses d0.w, d2.w, d4.w, a2
+;	uses d0.w, d2.w, d3.l, d4.w, a2, a5
 ; ---------------------------------------------------------------------------
 
 FindFloor:
-		bsr.s	FindNearestTile				; a3 = address within 256x256 mappings of 16x16 tile being stood on
+		move.w	d3,a5
+		moveq	#0,d3
+		bsr.w	FindNearestTile				; a3 = address within 256x256 mappings of 16x16 tile being stood on
 		move.w	(a3),d0					; get value for solidness, orientation and 16x16 tile number
 		move.w	d0,d4
 		andi.w	#$7FF,d0				; ignore solid/orientation bits
@@ -73,7 +86,7 @@ FindFloor:
 .isblank:
 		addi.w	#16,d2
 		bsr.w	FindFloor2				; try tile below the nearest
-		subi.w	#16,d2
+		;subi.w	#16,d2
 		addi.w	#$10,d1					; return distance to floor
 		rts	
 ; ===========================================================================
@@ -102,11 +115,13 @@ FindFloor:
 .maxfloor:
 		subi.w	#16,d2
 		bsr.w	FindFloor2				; try tile above the nearest
-		addi.w	#16,d2
+		;addi.w	#16,d2
 		subi.w	#$10,d1					; return distance to floor
 		rts
 
 FindCeiling:
+		move.w	d3,a5
+		moveq	#0,d3
 		bsr.w	FindNearestTile				; a3 = address within 256x256 mappings of 16x16 tile being stood on
 		move.w	(a3),d0					; get value for solidness, orientation and 16x16 tile number
 		move.w	d0,d4
@@ -118,7 +133,7 @@ FindCeiling:
 .isblank:
 		subi.w	#16,d2
 		bsr.w	FindFloor2				; try tile below the nearest
-		addi.w	#16,d2
+		;addi.w	#16,d2
 		addi.w	#$10,d1					; return distance to floor
 		rts	
 ; ===========================================================================
@@ -147,7 +162,7 @@ FindCeiling:
 .maxfloor:
 		addi.w	#16,d2
 		bsr.s	FindFloor2				; try tile above the nearest
-		subi.w	#16,d2
+		;subi.w	#16,d2
 		subi.w	#$10,d1					; return distance to floor
 		rts
 
@@ -198,23 +213,24 @@ FindFloor_GetHeight:
 		move.b	(a2,d0.w),d0				; get collision heightmap id
 		andi.w	#$FF,d0					; heightmap id is 1 byte
 		beq.s	.exit					; branch if 0
+		move.w	a5,d1					; get x pos of object
 		lea	(AngleMap).l,a2
-		move.b	(a2,d0.w),(a4)				; get collision angle value
+		move.b	(a2,d0.w),d3				; get collision angle value
 		lsl.w	#4,d0					; d0 = heightmap id * $10 (the width of a heightmap for 1 tile)
-		move.w	d3,d1					; get x pos of object
 		btst	#tilemap_xflip_bit,d4			; is tile flipped horizontally?
 		beq.s	.no_xflip				; if not, branch
 		not.w	d1
-		neg.b	(a4)					; xflip angle
+		neg.b	d3					; xflip angle
 
 	.no_xflip:
 		btst	#tilemap_yflip_bit,d4			; is tile flipped vertically?
 		beq.s	.no_yflip				; if not, branch
-		addi.b	#$40,(a4)
-		neg.b	(a4)
-		subi.b	#$40,(a4)				; yflip angle
+		addi.b	#$40,d3
+		neg.b	d3
+		subi.b	#$40,d3					; yflip angle
 
 	.no_yflip:
+		move.b	d3,(a4)
 		andi.w	#$F,d1					; read only low nybble of x pos (i.e. x pos within 16x16 tile)
 		add.w	d0,d1					; (id * $10) + x pos. = place in heightmap data
 		lea	(CollArray1).l,a2
@@ -240,14 +256,17 @@ FindFloor_GetHeight:
 
 ; output:
 ;	d1.w = distance to the wall
+;	d3.b = floor angle
 ;	a3 = address within 256x256 mappings where object is standing
 ;	(a3).w = 16x16 tile number, x/yflip, solidness
 ;	(a4).b = floor angle
 
-;	uses d0.w, d3.w, d4.w, a2
+;	uses d0.w, d3.l, d4.w, a2, a5
 ; ---------------------------------------------------------------------------
 
 FindWall:
+		move.w	d3,a5
+		moveq	#0,d3
 		bsr.w	FindNearestTile				; a3 = address within 256x256 mappings of 16x16 tile being stood on
 		move.w	(a3),d0					; get value for solidness, orientation and 16x16 tile number
 		move.w	d0,d4
@@ -257,9 +276,9 @@ FindWall:
 		bne.s	.issolid				; if yes, branch
 
 .isblank:
-		addi.w	#16,d3
+		adda.w	#16,a5
 		bsr.w	FindWall2				; try tile to the right
-		subi.w	#16,d3
+		;suba.w	#16,a5
 		addi.w	#$10,d1					; return distance to wall
 		rts	
 ; ===========================================================================
@@ -271,7 +290,7 @@ FindWall:
 		bmi.s	.negfloor				; branch if height is negative
 		cmpi.b	#$10,d0
 		beq.s	.maxfloor				; branch if height is $10 (max)
-		move.w	d3,d1					; get x pos of object
+		move.w	a5,d1					; get x pos of object
 		andi.w	#$F,d1					; read only low nybble for x pos within 16x16 tile
 		add.w	d1,d0
 		move.w	#$F,d1
@@ -280,19 +299,21 @@ FindWall:
 ; ===========================================================================
 
 .negfloor:
-		move.w	d3,d1
+		move.w	a5,d1
 		andi.w	#$F,d1
 		add.w	d1,d0
 		bpl.w	.isblank
 
 .maxfloor:
-		subi.w	#16,d3
+		suba.w	#16,a5
 		bsr.w	FindWall2				; try tile to the left
-		addi.w	#16,d3
+		;adda.w	#16,a5
 		subi.w	#$10,d1					; return distance to wall
 		rts
 
 FindWallLeft:
+		move.w	d3,a5
+		moveq	#0,d3
 		bsr.w	FindNearestTile				; a3 = address within 256x256 mappings of 16x16 tile being stood on
 		move.w	(a3),d0					; get value for solidness, orientation and 16x16 tile number
 		move.w	d0,d4
@@ -302,9 +323,9 @@ FindWallLeft:
 		bne.s	.issolid				; if yes, branch
 
 .isblank:
-		subi.w	#16,d3
+		suba.w	#16,a5
 		bsr.w	FindWall2				; try tile to the right
-		addi.w	#16,d3
+		;adda.w	#16,a5
 		addi.w	#$10,d1					; return distance to wall
 		rts	
 ; ===========================================================================
@@ -316,7 +337,7 @@ FindWallLeft:
 		bmi.s	.negfloor				; branch if height is negative
 		cmpi.b	#$10,d0
 		beq.s	.maxfloor				; branch if height is $10 (max)
-		move.w	d3,d1					; get x pos of object
+		move.w	a5,d1					; get x pos of object
 		andi.w	#$F,d1					; read only low nybble for x pos within 16x16 tile
 		add.w	d1,d0
 		move.w	#$F,d1
@@ -325,15 +346,15 @@ FindWallLeft:
 ; ===========================================================================
 
 .negfloor:
-		move.w	d3,d1
+		move.w	a5,d1
 		andi.w	#$F,d1
 		add.w	d1,d0
 		bpl.w	.isblank
 
 .maxfloor:
-		addi.w	#16,d3
+		adda.w	#16,a5
 		bsr.s	FindWall2				; try tile to the left
-		subi.w	#16,d3
+		;suba.w	#16,a5
 		subi.w	#$10,d1					; return distance to wall
 		rts
 
@@ -352,7 +373,7 @@ FindWall2:
 
 .isblank:
 		move.w	#$F,d1
-		move.w	d3,d0
+		move.w	a5,d0
 		andi.w	#$F,d0
 		sub.w	d0,d1
 		rts	
@@ -363,7 +384,7 @@ FindWall2:
 		tst.w	d0
 		beq.s	.isblank
 		bmi.s	.negfloor
-		move.w	d3,d1
+		move.w	a5,d1
 		andi.w	#$F,d1
 		add.w	d1,d0
 		move.w	#$F,d1
@@ -372,7 +393,7 @@ FindWall2:
 ; ===========================================================================
 
 .negfloor:
-		move.w	d3,d1
+		move.w	a5,d1
 		andi.w	#$F,d1
 		add.w	d1,d0
 		bpl.w	.isblank
@@ -385,22 +406,23 @@ FindWall_GetHeight:
 		andi.w	#$FF,d0					; heightmap id is 1 byte
 		beq.s	.exit					; branch if 0
 		lea	(AngleMap).l,a2
-		move.b	(a2,d0.w),(a4)				; get collision angle value
+		move.b	(a2,d0.w),d3				; get collision angle value
 		lsl.w	#4,d0					; d0 = heightmap id * $10 (the width of a heightmap for 1 tile)
 		move.w	d2,d1					; get y pos of object
 		btst	#tilemap_yflip_bit,d4			; is block flipped vertically?
 		beq.s	.no_yflip				; if not, branch
 		not.w	d1
-		addi.b	#$40,(a4)
-		neg.b	(a4)
-		subi.b	#$40,(a4)				; yflip angle
+		addi.b	#$40,d3
+		neg.b	d3
+		subi.b	#$40,d3					; yflip angle
 
 	.no_yflip:
 		btst	#tilemap_xflip_bit,d4			; is block flipped horizontally?
 		beq.s	.no_xflip				; if not, branch
-		neg.b	(a4)					; xflip angle
+		neg.b	d3					; xflip angle
 
 	.no_xflip:
+		move.b	d3,(a4)
 		andi.w	#$F,d1					; read only low nybble of x pos (i.e. x pos within 16x16 tile)
 		add.w	d0,d1					; (id * $10) + x pos. = place in heightmap data
 		lea	(CollArray2).l,a2

@@ -7,14 +7,13 @@
 DespawnObject:
 		move.w	ost_x_pos(a0),d0
 		bsr.s	CheckActive
-		bne.w	DeleteObject				; delete if object moves off screen
+		bne.s	.offscreen				; delete if object moves off screen
 		bra.w	DisplaySprite				; display instead of despawn
 
 	.offscreen:
-		lea	(v_respawn_list).w,a2
-		moveq	#0,d0
 		move.b	ost_respawn(a0),d0			; get respawn id
 		beq.s	.delete					; branch if not set
+		lea	(v_respawn_list).w,a2
 		bclr	#7,2(a2,d0.w)				; clear high bit of respawn entry (i.e. object was despawned not broken)
 
 	.delete:
