@@ -51,9 +51,6 @@ SnapFloor:
 
 ; Runs FindWall without the need for inputs, taking inputs from local OST variables
 
-; input:
-;	d3.w = x radius of object, right side
-
 ; output:
 ;	d1.w = distance to the wall
 ;	d3.b = wall angle
@@ -65,7 +62,10 @@ SnapFloor:
 ; ---------------------------------------------------------------------------
 
 FindWallRightObj:
-		add.w	ost_x_pos(a0),d3
+		move.w	ost_x_pos(a0),d3
+		moveq	#0,d0
+		move.b	ost_width(a0),d0
+		add.w	d0,d3
 		move.w	ost_y_pos(a0),d2
 		move.w	#0,d6
 		moveq	#tilemap_solid_lrb_bit,d5		; bit to test for solidness
@@ -126,9 +126,6 @@ SnapCeiling:
 
 ; Runs FindWall without the need for inputs, taking inputs from local OST variables
 
-; input:
-;	d3.w = x radius of object, left side (negative)
-
 ; output:
 ;	d1.w = distance to the wall
 ;	d3.b = wall angle
@@ -140,7 +137,10 @@ SnapCeiling:
 ; ---------------------------------------------------------------------------
 
 FindWallLeftObj:
-		add.w	ost_x_pos(a0),d3
+		move.w	ost_x_pos(a0),d3
+		moveq	#0,d0
+		move.b	ost_width(a0),d0
+		sub.w	d0,d3
 		move.w	ost_y_pos(a0),d2
 		eori.w	#$F,d3					; enable this line to fix bug
 		move.w	#tilemap_xflip,d6			; eor mask

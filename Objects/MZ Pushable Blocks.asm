@@ -56,8 +56,19 @@ PushB_Main:	; Routine 0
 		bsr.w	PreventDupe				; flag object as loaded & prevent the same object loading again
 
 PushB_Action:	; Routine 2
+		tst.w	ost_parent(a0)
+		bne.s	.stomper_skip				; branch if chain stomper was found
+		move.b	(v_frame_counter_low).w,d0
+		andi.b	#$1F,d0
+		bne.s	.stomper_skip				; branch except every 32 frames (approx 0.5 seconds)
+		move.l	#ChainStomp,d0
+		moveq	#id_CStom_Block,d1
+		bsr.w	FindNearestObj				; find nearest chain stomper & save to ost_parent
+		
+	.stomper_skip:
 		bsr.w	SolidObject
 		bsr.s	PushB_Pushing
+		bsr.w	PushB_ChkFloor
 		
 		move.w	ost_x_pos(a0),d0
 		bsr.w	CheckActive
@@ -84,26 +95,23 @@ PushB_Pushing:
 		beq.s	.push_left				; branch if pushing left side
 		
 	.push_right:
-		moveq	#0,d3
-		move.b	ost_width(a0),d3
-		not.w	d3
 		bsr.w	FindWallLeftObj
 		tst.w	d1
-		bmi.s	.exit					; branch if block is against wall
+		beq.s	.exit					; branch if block is against wall
 		subq.w	#1,ost_x_pos(a1)			; Sonic moves left
 	.push_right2:
 		subq.w	#1,ost_x_pos(a0)			; block moves left
+		play.w	1, jsr, sfx_Push			; play pushing sound
 		bra.s	.push_reset
 		
 	.push_left:
-		moveq	#0,d3
-		move.b	ost_width(a0),d3
 		bsr.w	FindWallRightObj
 		tst.w	d1
-		bmi.s	.exit					; branch if block is against wall
+		beq.s	.exit					; branch if block is against wall
 		addq.w	#1,ost_x_pos(a1)			; Sonic moves right
 	.push_left2:
 		addq.w	#1,ost_x_pos(a0)			; block moves right
+		play.w	1, jsr, sfx_Push			; play pushing sound
 		
 	.push_reset:
 		move.w	#2,ost_pblock_time(a0)			; 3 frame delay between movements
@@ -117,6 +125,39 @@ PushB_Pushing:
 		btst	#status_xflip_bit,ost_status(a1)
 		beq.s	.push_right2				; branch if Sonic is facing right
 		bra.s	.push_left2
+		
+; ---------------------------------------------------------------------------
+; Subroutine to check if block is on the floor or nearest chain stomper
+; ---------------------------------------------------------------------------
+
+PushB_ChkFloor:
+		tst.w	ost_parent(a0)
+		beq.s	.use_gravity				; branch if no chain stomper was found
+		bsr.w	GetParent				; a1 = OST of chain stomper
+		move.w	ost_y_pos(a1),d0
+		sub.w	ost_y_pos(a0),d0
+		bcs.s	.use_gravity				; branch if block is below stomper
+		moveq	#0,d2
+		move.b	ost_height(a1),d2
+		add.b	ost_height(a0),d2
+		cmp.w	d0,d2
+		blt.s	.use_gravity				; branch if block is above stomper (and not touching)
+		move.w	ost_x_pos(a1),d0
+		sub.w	ost_x_pos(a0),d0
+		abs.w	d0					; d0 = x dist between block & stomper
+		moveq	#0,d1
+		move.b	ost_width(a1),d1
+		cmp.w	d0,d1
+		bcs.s	.use_gravity				; branch if block is outside width
+		move.w	ost_y_pos(a1),d0
+		sub.w	d2,d0
+		move.w	d0,ost_y_pos(a0)			; match block y pos with stomper
+		rts
+		
+	.use_gravity:
+		rts
+
+
 ; ===========================================================================
 		
 		

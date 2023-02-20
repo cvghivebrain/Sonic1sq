@@ -146,7 +146,6 @@ FBall_Type_Down:
 
 FBall_Type_Left:
 		bset	#status_xflip_bit,ost_status(a0)
-		moveq	#-8,d3					; dist. centre to left edge of fireball
 		bsr.w	FindWallLeftObj
 		tst.w	d1					; distance to wall
 		bpl.s	.no_wall				; branch if > 0
@@ -160,7 +159,6 @@ FBall_Type_Left:
 
 FBall_Type_Right:
 		bclr	#status_xflip_bit,ost_status(a0)
-		moveq	#8,d3					; dist. centre to right edge of fireball
 		bsr.w	FindWallRightObj
 		tst.w	d1					; distance to wall
 		bpl.s	.no_wall				; branch if > 0

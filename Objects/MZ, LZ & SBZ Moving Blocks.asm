@@ -155,8 +155,6 @@ MBlock_Slide:
 
 ; Type 3
 MBlock_Right_Now:
-		moveq	#0,d3
-		move.b	ost_displaywidth(a0),d3
 		bsr.w	FindWallRightObj
 		tst.w	d1					; has the platform hit a wall?
 		bmi.s	.hit_wall				; if yes, branch
@@ -171,8 +169,6 @@ MBlock_Right_Now:
 
 ; Type 5
 MBlock_RightDrop_Now:
-		moveq	#0,d3
-		move.b	ost_displaywidth(a0),d3
 		bsr.w	FindWallRightObj
 		tst.w	d1					; has the platform hit a wall?
 		bmi.s	.hit_wall				; if yes, branch

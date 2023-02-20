@@ -26,6 +26,7 @@ Splats_Main:	; Routine 0
 		move.b	#render_rel,ost_render(a0)
 		move.b	#4,ost_priority(a0)
 		move.b	#$C,ost_displaywidth(a0)
+		move.b	#$C,ost_width(a0)
 		move.b	#$14,ost_height(a0)
 		move.b	#id_col_12x20,ost_col_type(a0)
 		tst.b	ost_subtype(a0)
@@ -108,8 +109,6 @@ Splats_ChkWalls:
 		add.w	d7,d0
 		andi.w	#3,d0					; subroutine only runs every 4th frame (different for each Splats)
 		bne.s	.no_wall				; branch if not on specific frame
-		moveq	#0,d3
-		move.b	ost_displaywidth(a0),d3
 		tst.w	ost_x_vel(a0)
 		bmi.s	.moving_left				; branch if Splats is moving left
 		bsr.w	FindWallRightObj
@@ -122,7 +121,6 @@ Splats_ChkWalls:
 ; ---------------------------------------------------------------------------
 
 .moving_left:
-		not.w	d3
 		bsr.w	FindWallLeftObj
 		tst.w	d1
 		bmi.s	.found_wall

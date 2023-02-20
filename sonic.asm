@@ -383,6 +383,7 @@ Ledge_SlopeData:
 		include "Includes\ObjPosLoad.asm"
 		include "Objects\_FindFreeObj & FindNextFreeObj.asm"
 		include "Objects\_SaveParent & GetParent.asm"
+		include "Objects\_FindNearestObj.asm"
 
 		include "Objects\Springs.asm"			; Springs
 

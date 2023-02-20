@@ -28,7 +28,7 @@ Yad_Main:	; Routine 0
 		move.b	#4,ost_priority(a0)
 		move.b	#$14,ost_displaywidth(a0)
 		move.b	#$11,ost_height(a0)
-		move.b	#8,ost_width(a0)
+		move.b	#$14,ost_width(a0)
 		move.b	#id_col_20x16+id_col_custom,ost_col_type(a0)
 		bsr.w	ObjectFall				; apply gravity & update position
 		bsr.w	FindFloorObj
@@ -107,8 +107,6 @@ Yad_ChkWall:
 		add.w	d7,d0					; add OST id (so that multiple yadrins don't do wall check on the same frame)
 		andi.w	#3,d0					; read only bits 0-1
 		bne.s	.no_collision				; branch if either are set
-		moveq	#0,d3
-		move.b	ost_displaywidth(a0),d3
 		tst.w	ost_x_vel(a0)				; is yadrin moving to the left?
 		bmi.s	.moving_left				; if yes, branch
 		bsr.w	FindWallRightObj
@@ -121,7 +119,6 @@ Yad_ChkWall:
 ; ===========================================================================
 
 .moving_left:
-		not.w	d3					; flip width
 		bsr.w	FindWallLeftObj
 		tst.w	d1					; has yadrin hit wall to the left?
 		bmi.s	.collision				; if yes, branch
