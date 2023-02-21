@@ -56,6 +56,11 @@ CStom_Main:	; Routine 0
 		andi.b	#$F,d1					; read low nybble
 		add.b	d1,d1					; multiply by 2
 		move.w	CStom_Lengths(pc,d1.w),ost_cstomp_chain_max(a0)
+		tst.b	ost_subtype(a0)
+		bpl.s	.start_short				; branch if not controlled by button
+		move.w	ost_cstomp_chain_max(a0),ost_cstomp_chain_length(a0) ; start fully extended
+		
+	.start_short:
 		move.l	#Map_CStom,ost_mappings(a0)
 		move.w	#tile_Kos_MzMetal,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
@@ -114,7 +119,6 @@ CStom_Main:	; Routine 0
 
 CStom_Block:	; Routine 2
 		bsr.w	CStom_Types				; update speed & position
-		move.w	ost_y_pos(a0),(v_cstomp_y_pos).w	; store y position for pushable green block interaction
 		bsr.w	SolidObject
 		andi.b	#1,d1
 		beq.s	CStom_Ceiling				; branch if Sonic isn't on top
@@ -164,12 +168,8 @@ CStom_TypeBtn:
 		move.b	ost_cstomp_btn_id(a0),d0		; move number 0 or 1 to d0
 		tst.b	(a2,d0.w)				; has button (d0) been pressed?
 		beq.s	CStom_TypeBtn_Fall			; if not, branch
-		tst.w	(v_cstomp_y_pos).w			; is stomper below the top edge of the level?
-		bpl.s	.within_boundary			; is yes, branch
 		cmpi.b	#$10,ost_cstomp_chain_length(a0)	; is chain at its shortest?
 		beq.s	.stop					; if yes, branch
-
-	.within_boundary:
 		tst.w	ost_cstomp_chain_length(a0)
 		beq.s	.stop
 		move.b	(v_vblank_counter_byte).w,d0		; get byte that increments every frame

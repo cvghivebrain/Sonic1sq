@@ -181,7 +181,6 @@ v_palcycle_ss_num:		rs.w 1 ; palette cycling in Special Stage - current index nu
 v_palcycle_ss_time:		rs.w 1 ; palette cycling in Special Stage - time until next change
 v_palcycle_ss_unused:		rs.w 1 ; palette cycling in Special Stage - unused offset value, always 0
 v_ss_bg_mode:			rs.w 1 ; Special Stage fish/bird background animation mode
-v_cstomp_y_pos:			rs.w 1 ; y position of MZ chain stomper, used for interaction with pushable green block
 v_boss_status:			rs.b 1 ; status of boss and prison capsule - 01 = boss defeated; 02 = prison opened
 v_sonic_pos_tracker_num:	rs.w 1 ; current location within position tracking data
 v_sonic_pos_tracker_num_low:	equ __rs-1

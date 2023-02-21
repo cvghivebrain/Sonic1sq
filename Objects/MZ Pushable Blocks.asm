@@ -14,6 +14,9 @@ PushBlock:
 PushB_Index:	index *,,2
 		ptr PushB_Main
 		ptr PushB_Action
+		ptr PushB_Drop
+		ptr PushB_Lava
+		ptr PushB_Sink
 		ptr PushB_ChkVisible
 
 PushB_Var:
@@ -28,6 +31,7 @@ ost_pblock_y_start:	rs.w 1					; original y position
 ost_pblock_time:	rs.w 1					; event timer
 ost_pblock_lava_speed:	rs.w 1					; x axis speed when block is on lava (2 bytes)
 ost_pblock_lava_flag:	rs.b 1					; 1 = block is on lava
+ost_pblock_pushed:	rs.b 1					; 0 = not pushed; -16 = pushed left; 16 = pushed right
 		rsobjend
 ; ===========================================================================
 
@@ -42,11 +46,11 @@ PushB_Main:	; Routine 0
 		move.w	ost_y_pos(a0),ost_pblock_y_start(a0)
 		moveq	#0,d0
 		move.b	ost_subtype(a0),d0			; get subtype
+		andi.w	#$F,d0					; read low nybble
 		beq.s	.type0					; branch if 0
 		bset	#tile_hi_bit,ost_tile(a0)		; make sprite appear in foreground
 		
 	.type0:
-		andi.w	#$F,d0					; read low nybble
 		add.w	d0,d0
 		lea	PushB_Var(pc,d0.w),a2			; get width & frame values from array
 		move.b	(a2),ost_width(a0)
@@ -67,22 +71,97 @@ PushB_Action:	; Routine 2
 		
 	.stomper_skip:
 		bsr.w	SolidObject
-		bsr.s	PushB_Pushing
-		bsr.w	PushB_ChkFloor
+		bsr.w	PushB_Pushing
+		tst.b	ost_subtype(a0)
+		bmi.s	PushB_Display				; branch if subtype is +$80
+		bsr.w	PushB_ChkStomp
+		beq.s	PushB_Display				; branch if block is on stomper
+		bsr.w	FindFloorObj
+		tst.w	d1
+		beq.s	PushB_Display				; branch if block is touching the floor
+		addi.b	#2,ost_routine(a0)			; goto PushB_Drop next
+		move.b	ost_pblock_pushed(a0),d0
+		ext.w	d0
+		add.w	d0,ost_x_pos(a0)			; align with edge if pushed
 		
+PushB_Display:
 		move.w	ost_x_pos(a0),d0
 		bsr.w	CheckActive
 		beq.w	DisplaySprite
+		
+PushB_Delete:
 		bsr.w	SaveState
 		beq.w	DeleteObject				; branch if not in respawn table
 		bclr	#0,(a2)					; allow object to load again later
 		bra.w	DeleteObject
+; ===========================================================================
+
+PushB_Drop:	; Routine 4
+		bsr.w	SolidObject
+		bsr.w	PushB_ChkStomp
+		bne.s	.gravity				; branch if block isn't on stomper
+		subi.b	#2,ost_routine(a0)			; goto PushB_Action next
+		bra.s	PushB_Display
+		
+	.gravity:
+		bsr.w	SpeedToPos
+		addi.w	#$18,ost_y_vel(a0)			; apply gravity
+		bsr.w	FindFloorObj
+		tst.w	d1
+		bpl.s	PushB_Display				; branch if block hasn't reached floor
+		add.w	d1,ost_y_pos(a0)			; align to floor
+		clr.w	ost_y_vel(a0)				; stop falling
+		subi.b	#2,ost_routine(a0)			; goto PushB_Action next
+		move.w	(a3),d0					; get 16x16 tile the block is on
+		andi.w	#$3FF,d0
+		cmpi.w	#$16A,d0				; is it block $16A+ (lava)?
+		bcs.s	PushB_Display				; branch if not lava
+		move.b	#id_PushB_Lava,ost_routine(a0)		; goto PushB_Lava next
+		move.b	ost_pblock_pushed(a0),d0
+		ext.w	d0
+		lsl.w	#3,d0
+		move.w	d0,ost_x_vel(a0)			; start moving in direction it was pushed
+		bra.s	PushB_Display
+; ===========================================================================
+
+PushB_Lava:	; Routine 6
+		move.w	ost_x_pos(a0),ost_x_prev(a0)
+		bsr.w	SpeedToPos
+		bsr.w	SolidObject
+		tst.w	ost_x_vel(a0)
+		bmi.s	.moving_left				; branch if moving left
+		bsr.w	FindWallRightObj
+		bra.s	.hit_wall
+		
+	.moving_left:
+		bsr.w	FindWallLeftObj
+		
+	.hit_wall:
+		tst.w	d1
+		bne.w	PushB_Display				; branch if not at wall
+		addi.b	#2,ost_routine(a0)			; goto PushB_Sink next
+		clr.w	ost_x_vel(a0)				; stop moving
+		bra.w	PushB_Display
+; ===========================================================================
+
+PushB_Sink:	; Routine 8
+		bsr.w	SolidObject
+		addi.l	#$2001,ost_y_pos(a0)			; sink in lava, $2001 subpixels each frame
+		cmpi.b	#160,ost_y_sub+1(a0)
+		bcc.s	.sunk					; branch after 160 frames
+		bra.w	PushB_Display
+		
+	.sunk:
+		bclr	#status_platform_bit,ost_status(a1)
+		bclr	#status_platform_bit,ost_status(a0)
+		bra.w	PushB_Delete
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to move block when pushed
 ; ---------------------------------------------------------------------------
 
 PushB_Pushing:
+		clr.b	ost_pblock_pushed(a0)
 		subq.w	#1,ost_pblock_time(a0)			; decrement timer
 		bpl.s	.exit					; branch if time remains
 		btst	#status_pushing_bit,ost_status(a1)
@@ -102,6 +181,7 @@ PushB_Pushing:
 	.push_right2:
 		subq.w	#1,ost_x_pos(a0)			; block moves left
 		play.w	1, jsr, sfx_Push			; play pushing sound
+		move.b	#-16,ost_pblock_pushed(a0)
 		bra.s	.push_reset
 		
 	.push_left:
@@ -112,6 +192,7 @@ PushB_Pushing:
 	.push_left2:
 		addq.w	#1,ost_x_pos(a0)			; block moves right
 		play.w	1, jsr, sfx_Push			; play pushing sound
+		move.b	#16,ost_pblock_pushed(a0)
 		
 	.push_reset:
 		move.w	#2,ost_pblock_time(a0)			; 3 frame delay between movements
@@ -127,16 +208,17 @@ PushB_Pushing:
 		bra.s	.push_left2
 		
 ; ---------------------------------------------------------------------------
-; Subroutine to check if block is on the floor or nearest chain stomper
+; Subroutine to align block with nearest chain stomper
 ; ---------------------------------------------------------------------------
 
-PushB_ChkFloor:
+PushB_ChkStomp:
 		tst.w	ost_parent(a0)
 		beq.s	.use_gravity				; branch if no chain stomper was found
 		bsr.w	GetParent				; a1 = OST of chain stomper
 		move.w	ost_y_pos(a1),d0
 		sub.w	ost_y_pos(a0),d0
-		bcs.s	.use_gravity				; branch if block is below stomper
+		cmpi.w	#-224,d0
+		ble.s	.use_gravity				; branch if block is > 224px below stomper
 		moveq	#0,d2
 		move.b	ost_height(a1),d2
 		add.b	ost_height(a0),d2
@@ -147,14 +229,18 @@ PushB_ChkFloor:
 		abs.w	d0					; d0 = x dist between block & stomper
 		moveq	#0,d1
 		move.b	ost_width(a1),d1
+		add.b	ost_width(a0),d1
 		cmp.w	d0,d1
 		bcs.s	.use_gravity				; branch if block is outside width
 		move.w	ost_y_pos(a1),d0
 		sub.w	d2,d0
 		move.w	d0,ost_y_pos(a0)			; match block y pos with stomper
+		clr.w	ost_y_vel(a0)				; stop falling
+		moveq	#0,d0
 		rts
 		
 	.use_gravity:
+		moveq	#1,d0					; set flag to enable gravity
 		rts
 
 
@@ -171,21 +257,21 @@ PushB_ChkFloor:
 		move.w	ost_x_pos(a0),d4
 		bsr.w	PushB_Solid				; make block solid & update its position
 		cmpi.w	#id_MZ_act1,(v_zone).w			; is the level MZ act 1?
-		bne.s	PushB_Display				; if not, branch
+		bne.s	PushB_Display_				; if not, branch
 		bclr	#7,ost_subtype(a0)
 		move.w	ost_x_pos(a0),d0
 		cmpi.w	#$A20,d0
-		bcs.s	PushB_Display
+		bcs.s	PushB_Display_
 		cmpi.w	#$AA1,d0				; is block between $A20 and $AA1 on x axis?
-		bcc.s	PushB_Display				; if not, branch
+		bcc.s	PushB_Display_				; if not, branch
 		
-		move.w	(v_cstomp_y_pos).w,d0			; get y pos of nearby chain stomper
+		;move.w	(v_cstomp_y_pos).w,d0			; get y pos of nearby chain stomper
 		subi.w	#$1C,d0
 		move.w	d0,ost_y_pos(a0)			; set y pos of block so it's resting on the stomper
-		bset	#7,(v_cstomp_y_pos).w			; set high bit of high byte of stomper y pos
+		;bset	#7,(v_cstomp_y_pos).w			; set high bit of high byte of stomper y pos
 		bset	#7,ost_subtype(a0)			; set flag to disable gravity for block
 
-	PushB_Display:
+	PushB_Display_:
 		move.w	ost_x_pos(a0),d0
 		bsr.w	CheckActive
 		bne.s	PushB_ChkDel
@@ -299,7 +385,7 @@ PushB_OnLava_Solid:
 		move.w	(sp)+,d4
 		bsr.w	PushB_Solid				; make block solid & update its position
 		bsr.s	PushB_ChkGeyser
-		bra.w	PushB_Display
+		bra.w	PushB_Display_
 ; ===========================================================================
 
 PushB_OnLava_Sunk:

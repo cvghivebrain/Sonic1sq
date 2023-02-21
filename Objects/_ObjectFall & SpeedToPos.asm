@@ -12,6 +12,7 @@ ObjectFall:
 
 ; ---------------------------------------------------------------------------
 ; Subroutine translating object	speed to update	object position
+; (speed of $100 will move an object 1px per frame)
 
 ;	uses d0.l, d2.l
 ; ---------------------------------------------------------------------------

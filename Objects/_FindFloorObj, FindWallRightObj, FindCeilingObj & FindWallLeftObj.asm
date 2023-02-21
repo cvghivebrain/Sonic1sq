@@ -35,6 +35,7 @@ FindFloorObj2:
 		move.b	#0,d3					; snap to flat floor
 
 	.no_snap:
+		addi.w	#1,d1
 		rts
 		
 SnapFloor:
