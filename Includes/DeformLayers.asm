@@ -730,7 +730,7 @@ UpdateCamera_Y:
 		beq.s	.ground					; if not, branch
 
 		addi.w	#32,d0					; pretend Sonic is 32px lower
-		sub.w	(v_camera_y_shift).w,d0			; is Sonic within 96px of top of screen? (or other value if looked up/down recenly)
+		sub.w	(v_camera_y_shift).w,d0			; is Sonic within 96px of top of screen? (or other value if looked up/down recently)
 		bcs.s	UCY_OutsideMid_Air			; if yes, branch
 		subi.w	#64,d0					; is distance more than 160px?
 		bcc.s	UCY_OutsideMid_Air			; if yes, branch

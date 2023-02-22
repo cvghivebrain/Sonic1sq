@@ -73,6 +73,8 @@ HUD_Main:	; Routine 0
 		move.b	#render_abs,ost_render(a1)
 		move.b	#0,ost_priority(a1)
 		move.b	#id_HUD_Debug,ost_routine(a1)
+		bsr.w	HUD_CameraX				; display camera x pos
+		bsr.w	HUD_CameraY				; display camera y pos
 
 HUD_Flash:	; Routine 2
 		moveq	#0,d0
@@ -326,21 +328,26 @@ HUD_Debug:	; Routine $E
 		bsr.s	HUD_ShowByte				; update sprite counter
 		
 	.skip_sprite:
-		tst.b	(v_fg_x_redraw_flag).w
+		tst.b	(v_camera_x_diff).w
 		beq.s	.skip_x					; branch if camera hasn't moved
-		move.w	(v_camera_x_pos).w,d0
-		set_dma_dest	$F300,d1			; VRAM address
-		bsr.s	HUD_ShowWord
+		bsr.s	HUD_CameraX
 		
 	.skip_x:
-		tst.b	(v_fg_y_redraw_flag).w
+		tst.b	(v_camera_y_diff).w
 		beq.s	.skip_y					; branch if camera hasn't moved
-		move.w	(v_camera_y_pos).w,d0
-		set_dma_dest	$F380,d1			; VRAM address
-		bsr.s	HUD_ShowWord
+		bsr.s	HUD_CameraY
 		
 	.skip_y:
 		bra.w	HUD_Display
+		
+HUD_CameraY:
+		move.w	(v_camera_y_pos).w,d0
+		set_dma_dest	$F380,d1			; VRAM address
+		bra.s	HUD_ShowWord
+		
+HUD_CameraX:
+		move.w	(v_camera_x_pos).w,d0
+		set_dma_dest	$F300,d1			; VRAM address
 		
 ; ---------------------------------------------------------------------------
 ; Subroutine to load a word into VRAM
@@ -356,7 +363,10 @@ HUD_ShowWord:
 		ror.w	#8,d0					; move high byte into low d0
 		bsr.s	HUD_ShowByte				; load high byte
 		add.l	#$200000,d1				; next tile in VRAM
-		lsr.w	#8,d0					; move low byte back
+		pushr.w	d0
+		moveq	#0,d0
+		popr.b	d0
+		;lsr.w	#8,d0					; move low byte back
 		
 ; ---------------------------------------------------------------------------
 ; Subroutine to load a byte into VRAM

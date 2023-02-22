@@ -153,7 +153,6 @@ PushB_Sink:	; Routine 8
 		
 	.sunk:
 		bclr	#status_platform_bit,ost_status(a1)
-		bclr	#status_platform_bit,ost_status(a0)
 		bra.w	PushB_Delete
 
 ; ---------------------------------------------------------------------------

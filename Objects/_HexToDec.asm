@@ -12,8 +12,9 @@
 ; ---------------------------------------------------------------------------
 
 HexToDec:
-		lea	HUD_TimeList(pc),a1
-		bra.w	HexToDec_Run
+		add.b	d0,d0
+		lea	HUD_TimeList(pc,d0.w),a1
+		rts
 
 		decnum: = 0
 HUD_TimeList:	rept 10
@@ -25,11 +26,8 @@ HUD_TimeList:	rept 10
 		endr
 
 HexToDec2:
-		lea	HUD_TimeList2(pc),a1
-		
-	HexToDec_Run:
 		add.b	d0,d0
-		lea	(a1,d0.w),a1
+		lea	HUD_TimeList2(pc,d0.w),a1
 		rts
 
 		decnum: = 0

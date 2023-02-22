@@ -116,9 +116,6 @@ Level_Skip_TtlCard:
 		move.w	#$120,ost_x_pos(a1)
 
 	.skip_water_surface:
-		jsr	(ObjPosLoad).l
-		jsr	(ExecuteObjects).l
-		jsr	(BuildSprites).l
 		moveq	#0,d0
 		tst.b	(v_last_lamppost).w			; are you starting from	a lamppost?
 		bne.s	.skip_clear				; if yes, branch
@@ -134,6 +131,9 @@ Level_Skip_TtlCard:
 		move.w	d0,(v_debug_active).w
 		move.w	d0,(f_restart).w
 		move.w	d0,(v_frame_counter).w
+		jsr	(ObjPosLoad).l
+		jsr	(ExecuteObjects).l
+		jsr	(BuildSprites).l
 		bsr.w	OscillateNumInit
 
 		move.w	#0,(v_demo_input_counter).w

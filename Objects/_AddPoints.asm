@@ -35,6 +35,5 @@ AddPoints:
 		addq.b  #1,(f_hud_lives_update).w
 		play.w	0, jmp, mus_ExtraLife			; play extra life music
 
-.nohighscore:
-.noextralife:
+	.noextralife:
 		rts
