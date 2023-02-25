@@ -126,8 +126,8 @@ MainGameLoop:
 		moveq	#0,d0
 		move.b	(v_gamemode).w,d0			; load gamemode
 		and.b	#$7F,d0					; ignore high bit
-		add.b	d0,d0
-		add.b	d0,d0					; multiply by 4
+		add.w	d0,d0
+		add.w	d0,d0					; multiply by 4
 		movea.l	GameModeArray(pc,d0.w),a1		; get pointer
 		jsr	(a1)					; jump to gamemode
 		bra.s	MainGameLoop				; loop indefinitely

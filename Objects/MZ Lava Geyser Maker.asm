@@ -46,8 +46,8 @@ GMake_Wait:	; Routine 2
 
 		move.w	ost_gmake_wait_total(a0),ost_gmake_wait_time(a0) ; reset timer
 		bsr.w	Range
-		tst.w	d0
-		bpl.s	.cancel					; branch if Sonic is to the right
+		;tst.w	d0
+		;bpl.s	.cancel					; branch if Sonic is to the right
 		cmp.w	#386,d1
 		bcc.s	.cancel					; branch if Sonic is > 368px away
 		addq.b	#2,ost_routine(a0)			; if Sonic is within range, goto GMake_ChkType next
@@ -75,9 +75,9 @@ GMake_MakeLava:	; Routine 6
 ; ===========================================================================
 
 	.isgeyser:
-		movea.l	ost_gmake_parent(a0),a1			; copy address of parent OST (from PushBlock)
-		bset	#status_yflip_bit,ost_status(a1)
-		move.w	#-$580,ost_y_vel(a1)
+		;movea.l	ost_gmake_parent(a0),a1			; copy address of parent OST (from PushBlock)
+		;bset	#status_yflip_bit,ost_status(a1)
+		;move.w	#-$580,ost_y_vel(a1)
 		bra.s	GMake_Display
 ; ===========================================================================
 
