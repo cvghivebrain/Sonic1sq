@@ -61,7 +61,7 @@ type_plat_falls:	equ id_Plat_Type_Falls			; 3 - falls when stood on
 type_plat_sideways_rev:	equ id_Plat_Type_Sideways_Rev		; 5 - moves side-to-side, reversed
 type_plat_updown_rev:	equ id_Plat_Type_UpDown_Rev		; 6 - moves up and down, reversed
 type_plat_rises:	equ id_Plat_Type_Rises			; 7 - rises 512 pixels 1 second after a button is pressed
-type_plat_updown_large:	equ id_Plat_Type_UpDown_Large		; $A - moves up and down, large column-shaped platform
+type_plat_updown_large:	equ id_Plat_Type_UpDown_Large+(id_frame_plat_large<<4) ; $A - moves up and down, large column-shaped platform
 type_plat_updown_slow:	equ id_Plat_Type_UpDown_Slow		; $B - moves up and down, slow
 type_plat_updown_slow_rev: equ id_Plat_Type_UpDown_Slow_Rev	; $C - moves up and down, slow reversed
 

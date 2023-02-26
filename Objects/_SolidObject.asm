@@ -174,6 +174,32 @@ SolidObject_SidesOnly:
 		rts
 
 ; ---------------------------------------------------------------------------
+; Subroutine to make an object solid, top only
+
+; output:
+;	d1.l = collision type (0 = none; 1 = top)
+;	a1 = address of OST of Sonic
+
+;	uses d0.w, d2.w, d3.w, d4.l
+; ---------------------------------------------------------------------------
+
+SolidObject_TopOnly:
+		bsr.w	RangePlus				; get distances between Sonic (a1) and object (a0)
+		tst.b	ost_solid(a0)
+		bne.w	Sol_Stand				; branch if Sonic is already standing on object
+		cmp.w	#0,d1
+		bgt.s	.exit					; branch if outside x hitbox
+		tst.w	d3
+		bpl.s	.exit					; branch if outside y hitbox
+		
+		cmpi.w	#-16,d3
+		bge.w	Sol_Above				; branch if Sonic is above
+		
+	.exit:
+		moveq	#solid_none,d1				; set collision flag to none
+		rts
+
+; ---------------------------------------------------------------------------
 ; Subroutine to cancel a solid object
 
 ; output:
@@ -189,6 +215,20 @@ UnSolid:
 		bclr	#status_platform_bit,ost_status(a0)
 		clr.b	ost_solid(a0)
 		bra.w	Sol_None				; stop pushing
+		
+UnSolid_TopOnly:
+		lea	(v_ost_player).w,a1
+		btst	#status_platform_bit,ost_status(a0)
+		beq.s	.exit					; branch if Sonic isn't standing on the object
+		bset	#status_air_bit,ost_status(a1)
+		bclr	#status_platform_bit,ost_status(a1)	; remove platform effect
+		bclr	#status_platform_bit,ost_status(a0)
+		move.b	#id_Sonic_Control,ost_routine(a1)
+		clr.b	ost_solid(a0)
+		moveq	#solid_none,d1
+		
+	.exit:
+		rts
 		
 ; ---------------------------------------------------------------------------
 ; Subroutine to make an object solid using a heightmap
