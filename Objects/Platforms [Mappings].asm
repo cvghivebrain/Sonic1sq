@@ -2,9 +2,11 @@
 ; Sprite mappings - platforms (GHZ, SYZ, SLZ)
 ; ---------------------------------------------------------------------------
 
-Map_Plat_GHZ:	index *
+Map_Platform:	index *
 		ptr frame_plat_small
 		ptr frame_plat_large
+		ptr frame_plat_syz
+		ptr frame_plat_slz
 		
 frame_plat_small:
 		spritemap					; small platform
@@ -28,18 +30,12 @@ frame_plat_large:
 		piece	0, $64, 4x4, $D5, xflip
 		endsprite
 
-Map_Plat_SYZ:	index *
-		ptr frame_plat_syz
-		
 frame_plat_syz:	spritemap
 		piece	-$20, -$A, 3x4, $49
 		piece	-8, -$A, 2x4, $51
 		piece	8, -$A, 3x4, $55
 		endsprite
 
-Map_Plat_SLZ:	index *
-		ptr frame_plat_slz
-		
 frame_plat_slz:	spritemap
 		piece	-$20, -8, 4x4, $21
 		piece	0, -8, 4x4, $21

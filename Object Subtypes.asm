@@ -64,6 +64,8 @@ type_plat_rises:	equ id_Plat_Type_Rises			; 7 - rises 512 pixels 1 second after 
 type_plat_updown_large:	equ id_Plat_Type_UpDown_Large+(id_frame_plat_large<<4) ; $A - moves up and down, large column-shaped platform
 type_plat_updown_slow:	equ id_Plat_Type_UpDown_Slow		; $B - moves up and down, slow
 type_plat_updown_slow_rev: equ id_Plat_Type_UpDown_Slow_Rev	; $C - moves up and down, slow reversed
+type_plat_syz:		equ id_frame_plat_syz<<4		; +$20
+type_plat_slz:		equ id_frame_plat_slz<<4		; +$30
 
 ; FireMaker
 type_fire_updown_low:	equ id_FBall_Type_UpDown		; $x0 - flies up, falls down

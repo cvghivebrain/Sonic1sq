@@ -203,19 +203,19 @@ ObjPos_SLZ3:
 		objpos $1978,$0370,Scenery,type_scen_cannon,xflip
 		objpos $19F0,$0210,Bomb,$00,yflip,rem
 		objpos $1A10,$0210,Bomb,$00,yflip,rem
-		objpos $1A20,$0668,BasicPlatform,type_plat_falls
+		objpos $1A20,$0668,BasicPlatform,type_plat_slz+type_plat_falls
 		objpos $1A30,$0210,Bomb,$00,yflip,rem
-		objpos $1A60,$0668,BasicPlatform,type_plat_falls
+		objpos $1A60,$0668,BasicPlatform,type_plat_slz+type_plat_falls
 		objpos $1A88,$0370,Scenery,type_scen_cannon
 		objpos $1AA0,$0370,FireMaker,type_fire_medium+type_fire_right
 		objpos $1AB0,$05F0,Seesaw,$00
 		objpos $1B10,$02F0,Staircase,type_stair_above,xflip
-		objpos $1B20,$0668,BasicPlatform,type_plat_falls
+		objpos $1B20,$0668,BasicPlatform,type_plat_slz+type_plat_falls
 		objpos $1B30,$05C0,Orbinaut,$03,xflip,rem
 		objpos $1B60,$0370,FireMaker,type_fire_medium+type_fire_left
 		objpos $1B78,$02D0,Springs,type_spring_red+type_spring_right,xflip
 		objpos $1B78,$0370,Scenery,type_scen_cannon,xflip
-		objpos $1B60,$0668,BasicPlatform,type_plat_falls
+		objpos $1B60,$0668,BasicPlatform,type_plat_slz+type_plat_falls
 		objpos $1B70,$0490,Bomb,$00,yflip,rem
 		objpos $1B90,$0490,Bomb,$00,yflip,rem
 		objpos $1BA0,$0310,Rings,$14,rem

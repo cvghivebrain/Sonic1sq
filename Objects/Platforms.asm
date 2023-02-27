@@ -29,22 +29,10 @@ ost_plat_wait_time:	rs.w 1					; time delay for platform moving when stood on (2
 Plat_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Plat_Solid next
 		move.w	#0+tile_pal3,ost_tile(a0)
-		move.l	#Map_Plat_GHZ,ost_mappings(a0)
+		move.l	#Map_Platform,ost_mappings(a0)
 		move.b	#$20,ost_displaywidth(a0)
 		move.b	#$20,ost_width(a0)
 		move.b	#8,ost_height(a0)
-		cmpi.b	#id_SYZ,(v_zone).w			; check if level is SYZ
-		bne.s	.notSYZ
-
-		move.l	#Map_Plat_SYZ,ost_mappings(a0)		; SYZ specific code
-
-	.notSYZ:
-		cmpi.b	#id_SLZ,(v_zone).w			; check if level is SLZ
-		bne.s	.notSLZ
-
-		move.l	#Map_Plat_SLZ,ost_mappings(a0)		; SLZ specific code
-
-	.notSLZ:
 		move.b	#render_rel,ost_render(a0)
 		move.b	#4,ost_priority(a0)
 		move.w	ost_y_pos(a0),ost_plat_y_pos(a0)

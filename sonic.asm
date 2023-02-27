@@ -1076,7 +1076,7 @@ Level_End_unused:	dc.b 0,	0, 0, 0
 		include "Objects\GHZ & MZ Swinging Platforms [Mappings].asm" ; Map_Swing_GHZ
 		include "Objects\SLZ Swinging Platforms [Mappings].asm" ; Map_Swing_SLZ
 		include "Objects\GHZ Spiked Helix Pole [Mappings].asm" ; Map_Hel
-		include "Objects\Platforms [Mappings].asm"	; Map_Plat_Unused, Map_Plat_GHZ, Map_Plat_SYZ, Map_Plat_SLZ
+		include "Objects\Platforms [Mappings].asm"	; Map_Plat_Unused, Map_Platform, Map_Plat_SYZ, Map_Plat_SLZ
 		include "Objects\GHZ Collapsing Ledge [Mappings].asm" ; Map_Ledge
 		include "Objects\GHZ Purple Rock [Mappings].asm" ; Map_PRock
 		include "Objects\GHZ & SLZ Smashable Walls [Mappings].asm" ; Map_Smash

@@ -129,9 +129,9 @@ ObjPos_SLZ2:
 		objpos $1790,$01F0,Staircase,type_stair_above,xflip
 		objpos $1790,$0270,Fan,type_fan_left_on,xflip
 		objpos $17D8,$01AC,Orbinaut,$03,rem
-		objpos $17E0,$05C8,BasicPlatform,type_plat_falls
-		objpos $1820,$05A8,BasicPlatform,type_plat_falls
-		objpos $1860,$0588,BasicPlatform,type_plat_falls
+		objpos $17E0,$05C8,BasicPlatform,type_plat_slz+type_plat_falls
+		objpos $1820,$05A8,BasicPlatform,type_plat_slz+type_plat_falls
+		objpos $1860,$0588,BasicPlatform,type_plat_slz+type_plat_falls
 		objpos $1890,$0210,Rings,$14,rem
 		objpos $1928,$0350,Rings,$45,rem
 		objpos $1940,$0350,Rings,$45,rem

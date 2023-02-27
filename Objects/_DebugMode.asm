@@ -216,7 +216,7 @@ DebugList_GHZ:
 		dbug	Map_Buzz,	BuzzBomber,	0,	0,	tile_Kos_Buzz
 		dbug	Map_Chop,	Chopper,	0,	0,	tile_Kos_Chopper
 		dbug	Map_Spike,	Spikes,		type_spike_3up+type_spike_still,	0,	tile_Kos_Spikes
-		dbug	Map_Plat_GHZ,	BasicPlatform,	type_plat_still,	0,	0+tile_pal3
+		dbug	Map_Platform,	BasicPlatform,type_plat_slz+	type_plat_still,	0,	0+tile_pal3
 		dbug	Map_PRock,	PurpleRock,	0,	0,	tile_Kos_PurpleRock+tile_pal4
 		dbug	Map_Moto,	MotoBug,	0,	0,	tile_Kos_Motobug
 		dbug	Map_Spring,	Springs,	type_spring_red+type_spring_up,	0,	tile_Kos_HSpring
@@ -288,7 +288,7 @@ DebugList_SLZ:
 		dbug	Map_Monitor,	Monitor,	0,	0,	tile_Art_Monitors
 		dbug	Map_Elev,	Elevator,	type_elev_up_short,	0,	0+tile_pal3
 		dbug	Map_CFlo,	CollapseFloor,	0,	id_frame_cfloor_slz,	tile_Kos_SlzBlock+tile_pal3
-		dbug	Map_Plat_SLZ,	BasicPlatform,	type_plat_still,	0,	0+tile_pal3
+		dbug	Map_Platform,	BasicPlatform,	type_plat_slz+type_plat_still,	0,	0+tile_pal3
 		dbug	Map_Circ,	CirclingPlatform, 0,	0,	0+tile_pal3
 		dbug	Map_Stair,	Staircase,	type_stair_above,	0,	0+tile_pal3
 		dbug	Map_Fan,	Fan,		type_fan_left_onoff,	0,	tile_Kos_Fan+tile_pal3
@@ -315,7 +315,7 @@ DebugList_SYZ:
 		dbug	Map_Crab,	Crabmeat,	0,	0,	tile_Kos_Crabmeat_KPLC_SYZ
 		dbug	Map_Buzz,	BuzzBomber,	0,	0,	tile_Kos_Buzz_KPLC_SYZ
 		dbug	Map_Yad,	Yadrin,		0,	0,	tile_Kos_Yadrin+tile_pal2
-		dbug	Map_Plat_SYZ,	BasicPlatform,	type_plat_still,	0,	0+tile_pal3
+		dbug	Map_Platform,	BasicPlatform,	type_plat_syz+type_plat_still,	0,	0+tile_pal3
 		dbug	Map_FBlock,	FloatingBlock,	type_fblock_syz1x1+type_fblock_still,	0,	0+tile_pal3
 		dbug	Map_But,	Button,		0,	0,	tile_Kos_Button
 		dbug	Map_Lamp,	Lamppost,	1,	0,	tile_Kos_Lamp_KPLC_SYZ
