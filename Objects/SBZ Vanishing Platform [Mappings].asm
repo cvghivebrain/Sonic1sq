@@ -25,4 +25,3 @@ frame_vanish_quarter:
 frame_vanish_gone:
 		spritemap
 		endsprite
-		even

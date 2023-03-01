@@ -49,7 +49,7 @@ Smab_Solid:	; Routine 2
 		move.b	#id_frame_smash_four,ost_frame(a0)	; use sprite consisting of four pieces
 		lea	Smab_Speeds(pc),a4
 		move.w	#$38,d2
-		bsr.w	Shatter
+		bra.w	Shatter
 
 	.dont_break:
 		bra.w	DespawnObject

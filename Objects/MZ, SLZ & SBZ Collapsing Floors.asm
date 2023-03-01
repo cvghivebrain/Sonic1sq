@@ -140,7 +140,8 @@ CFlo_Collapse_Now:
 	.type_0:
 		moveq	#8-1,d1
 		addq.b	#1,ost_frame(a0)			; use broken frame which comprises 8 sprites
-		bra.w	FragmentObject				; split into 8 fragments, goto CFlo_WaitFall next
+		rts
+		;bra.w	FragmentObject				; split into 8 fragments, goto CFlo_WaitFall next
 								; see GHZ Collapsing Ledge.asm
 
 CFlo_FragTiming_0:

@@ -13,24 +13,25 @@ VanishPlatform:
 ; ===========================================================================
 VanP_Index:	index *,,2
 		ptr VanP_Main
-		ptr VanP_Detect
-		ptr VanP_StoodOn
 		ptr VanP_Sync
+		ptr VanP_Solid
 
 		rsobj VanishPlatform
-ost_vanish_wait_time:	rs.w 1 ; $30				; time until change (2 bytes)
-ost_vanish_wait_master:	rs.w 1 ; $32				; time between changes (2 bytes)
-ost_vanish_sync_sub:	rs.w 1 ; $36				; value to subtract from framecount for synchronising (2 bytes)
-ost_vanish_sync_mask:	rs.w 1 ; $38				; bitmask for synchronising (2 bytes)
+ost_vanish_wait_time:	rs.w 1					; time until change (2 bytes)
+ost_vanish_wait_master:	rs.w 1					; time between changes (2 bytes)
+ost_vanish_sync_sub:	rs.w 1					; value to subtract from framecount for synchronising (2 bytes)
+ost_vanish_sync_mask:	rs.w 1					; bitmask for synchronising (2 bytes)
 		rsobjend
 ; ===========================================================================
 
 VanP_Main:	; Routine 0
-		addq.b	#6,ost_routine(a0)			; goto VanP_Sync next
+		addq.b	#2,ost_routine(a0)			; goto VanP_Sync next
 		move.l	#Map_VanP,ost_mappings(a0)
 		move.w	#tile_Kos_SbzBlock+tile_pal3,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#$10,ost_displaywidth(a0)
+		move.b	#$10,ost_width(a0)
+		move.b	#8,ost_height(a0)
 		move.b	#4,ost_priority(a0)
 		moveq	#0,d0
 		move.b	ost_subtype(a0),d0			; get object type
@@ -51,13 +52,13 @@ VanP_Main:	; Routine 0
 		subq.w	#1,d1					; d1 = $FF if type $x0; $3FF if type $x6
 		move.w	d1,ost_vanish_sync_mask(a0)
 
-VanP_Sync:	; Routine 6
+VanP_Sync:	; Routine 2
 		move.w	(v_frame_counter).w,d0			; get word that increments every frame
 		sub.w	ost_vanish_sync_sub(a0),d0
 		and.w	ost_vanish_sync_mask(a0),d0		; apply bitmask
 		bne.s	.animate				; branch if any bits are set
-		subq.b	#4,ost_routine(a0)			; goto VanP_Detect next (every $100 or $400 frames)
-		bra.s	VanP_Detect
+		addq.b	#2,ost_routine(a0)			; goto VanP_Solid next (every $100 or $400 frames)
+		bra.s	VanP_Solid
 ; ===========================================================================
 
 .animate:
@@ -66,8 +67,7 @@ VanP_Sync:	; Routine 6
 		bra.w	DespawnObject
 ; ===========================================================================
 
-VanP_Detect:	; Routine 2
-VanP_StoodOn:	; Routine 4
+VanP_Solid:	; Routine 4
 		subq.w	#1,ost_vanish_wait_time(a0)		; decrement timer
 		bpl.s	.wait					; branch if time remains
 		move.w	#127,ost_vanish_wait_time(a0)		; reset timer to 2 seconds
@@ -84,35 +84,13 @@ VanP_StoodOn:	; Routine 4
 		jsr	(AnimateSprite).l
 		btst	#1,ost_frame(a0)			; has platform vanished?
 		bne.s	.notsolid				; if yes, branch
-		cmpi.b	#id_VanP_Detect,ost_routine(a0)		; is platform being stood on?
-		bne.s	.stood_on				; if yes, branch
-
-		moveq	#0,d1
-		move.b	ost_displaywidth(a0),d1
-		jsr	(DetectPlatform).l			; detect collision and goto VanP_StoodOn next if true
-		bra.w	DespawnObject
-; ===========================================================================
-
-.stood_on:
-		moveq	#0,d1
-		move.b	ost_displaywidth(a0),d1
-		jsr	(ExitPlatform).l			; goto VanP_Detect next if Sonic leaves platform
-		move.w	ost_x_pos(a0),d2
-		jsr	(MoveWithPlatform2).l
-		bra.w	DespawnObject
+		bsr.w	SolidObject_TopOnly
+		bra.w	DespawnQuick
 ; ===========================================================================
 
 .notsolid:
-		btst	#status_platform_bit,ost_status(a0)	; is Sonic on the platform?
-		beq.s	.skip_clear				; if not, branch
-		lea	(v_ost_player).w,a1
-		bclr	#status_platform_bit,ost_status(a1)	; clear all platform flags
-		bclr	#status_platform_bit,ost_status(a0)
-		move.b	#id_VanP_Detect,ost_routine(a0)
-		clr.b	ost_solid(a0)
-
-	.skip_clear:
-		bra.w	DespawnObject
+		bsr.w	UnSolid_TopOnly
+		bra.w	DespawnQuick
 
 ; ---------------------------------------------------------------------------
 ; Animation script

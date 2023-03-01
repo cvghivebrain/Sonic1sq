@@ -234,6 +234,7 @@ UnSolid_TopOnly:
 ; Subroutine to make an object solid using a heightmap
 
 ; input:
+;	d6.l = resolution of heightmap (0 = 1px per byte; 1 = 2px; 2 = 4px; 3 = 8px)
 ;	a2 = address of heightmap
 
 ; output:
@@ -244,12 +245,14 @@ UnSolid_TopOnly:
 ;	uses d0.w, d2.w, d3.w, d4.l
 
 ; usage (if object only moves vertically or not at all):
+;		moveq	#1,d6					; 1 byte in heightmap = 2px
 ;		lea	HeightmapData(pc),a2
 ;		bsr.w	SolidObject_Heightmap
 
 ; usage (if object moves horizontally):
 ;		move.w	ost_x_pos(a0),ost_x_prev(a0)		; save x pos before moving
 ;		bsr.w	.moveobject				; move object
+;		moveq	#1,d6					; 1 byte in heightmap = 2px
 ;		lea	HeightmapData(pc),a2
 ;		bsr.w	SolidObject_Heightmap
 ; ---------------------------------------------------------------------------
@@ -258,3 +261,35 @@ SolidObject_Heightmap:
 		bsr.w	RangePlus_Heightmap			; get distances between Sonic (a1) and object (a0)
 		bra.w	Sol_SkipRange
 		
+; ---------------------------------------------------------------------------
+; Subroutine to make an object solid, top only
+
+; input:
+;	d6.l = resolution of heightmap (0 = 1px per byte; 1 = 2px; 2 = 4px; 3 = 8px)
+;	a2 = address of heightmap
+
+; output:
+;	d1.l = collision type (0 = none; 1 = top)
+;	d4.w = x position of Sonic on object, starting at 0 on left edge
+;	a1 = address of OST of Sonic
+
+;	uses d0.w, d2.w, d3.w, d4.l
+; ---------------------------------------------------------------------------
+
+SolidObject_TopOnly_Heightmap:
+		bsr.w	RangePlus_Heightmap_NoPlayerWidth	; get distances between Sonic (a1) and object (a0)
+		tst.b	ost_solid(a0)
+		bne.w	Sol_Stand				; branch if Sonic is already standing on object
+		cmp.w	#0,d1
+		bgt.s	.exit					; branch if outside x hitbox
+		tst.w	d3
+		bpl.s	.exit					; branch if outside y hitbox
+		tst.w	d2
+		bpl.s	.exit					; branch if below middle
+		
+		cmpi.w	#-16,d3
+		bge.w	Sol_Above				; branch if Sonic is above
+		
+	.exit:
+		moveq	#solid_none,d1				; set collision flag to none
+		rts

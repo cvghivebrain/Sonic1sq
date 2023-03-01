@@ -104,4 +104,3 @@ frame_ledge_rightsmash:
 		piece	$10, $10, 2x2, $AB
 		piece	0, $10, 2x2, $B7
 		endsprite
-		even

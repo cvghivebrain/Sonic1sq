@@ -46,7 +46,7 @@ Smash_Solid:	; Routine 2
 		
 	.right:
 		move.w	#$70,d2					; gravity
-		bsr.s	Shatter
+		bra.s	Shatter
 		
 	.dont_break:
 		bra.w	DespawnObject
