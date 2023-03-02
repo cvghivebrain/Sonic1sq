@@ -17,8 +17,8 @@ ObjPos_SLZ2:
 		objpos $07A1,$0235,Rings,$10,rem
 		objpos $07BB,$024E,Rings,$10,rem
 		objpos $07C5,$026F,Rings,$10,rem
-		objpos $09A0,$0268,CollapseFloor,$81
-		objpos $09E0,$0268,CollapseFloor,$81
+		objpos $09A0,$0268,CollapseFloor,type_cfloor_slz+type_cfloor_sided+1
+		objpos $09E0,$0268,CollapseFloor,type_cfloor_slz+type_cfloor_sided+1
 		objpos $0A10,$01D0,Fan,type_fan_right_onoff,xflip
 		objpos $0A20,$02D0,Fan,type_fan_left_on,xflip
 		objpos $0C10,$0170,Bomb,$00,xflip,rem
@@ -90,16 +90,16 @@ ObjPos_SLZ2:
 		objpos $13BB,$014E,Rings,$10,rem
 		objpos $13C5,$016F,Rings,$10,rem
 		objpos $1410,$03F8,Springs,type_spring_red+type_spring_up
-		objpos $1420,$0288,CollapseFloor,$81
+		objpos $1420,$0288,CollapseFloor,type_cfloor_slz+type_cfloor_sided+1
 		objpos $1430,$03F8,Springs,type_spring_red+type_spring_up
 		objpos $1450,$03F8,Springs,type_spring_red+type_spring_up
-		objpos $1460,$02A8,CollapseFloor,$81
+		objpos $1460,$02A8,CollapseFloor,type_cfloor_slz+type_cfloor_sided+1
 		objpos $1470,$03F8,Springs,type_spring_red+type_spring_up
 		objpos $1490,$03F8,Springs,type_spring_red+type_spring_up
-		objpos $14A0,$02C8,CollapseFloor,$81
+		objpos $14A0,$02C8,CollapseFloor,type_cfloor_slz+type_cfloor_sided+1
 		objpos $14B0,$03F8,Springs,type_spring_red+type_spring_up
 		objpos $14D0,$03F8,Springs,type_spring_red+type_spring_up
-		objpos $14E0,$02E8,CollapseFloor,$81
+		objpos $14E0,$02E8,CollapseFloor,type_cfloor_slz+type_cfloor_sided+1
 		objpos $14E8,$00D4,Rings,$12,rem
 		objpos $14F0,$03F8,Springs,type_spring_red+type_spring_up
 		objpos $1508,$0150,Fan,type_fan_left_on,xflip
@@ -171,10 +171,10 @@ ObjPos_SLZ2:
 		objpos $1C18,$03D0,Fan,type_fan_left_on,xflip
 		objpos $1C70,$00D1,Monitor,type_monitor_rings,rem
 		objpos $1C90,$00D1,Monitor,type_monitor_rings,rem
-		objpos $1CA0,$03E8,CollapseFloor,$81
+		objpos $1CA0,$03E8,CollapseFloor,type_cfloor_slz+type_cfloor_sided+1
 		objpos $1CB0,$00D1,Monitor,type_monitor_rings,rem
 		objpos $1CD0,$00D1,Monitor,type_monitor_rings,rem
-		objpos $1CE0,$03E8,CollapseFloor,$81
+		objpos $1CE0,$03E8,CollapseFloor,type_cfloor_slz+type_cfloor_sided+1
 		objpos $1CF0,$00D1,Monitor,type_monitor_rings,rem
 		objpos $1D18,$03D0,Rings,$14,rem
 		objpos $1D70,$0390,Bomb,$00,yflip,rem

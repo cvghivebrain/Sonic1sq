@@ -2,7 +2,7 @@
 ; Object 53 - collapsing floors	(MZ, SLZ, SBZ)
 
 ; spawned by:
-;	ObjPos_MZ1 - subtype 1
+;	ObjPos_MZ3 - subtype 1
 ;	ObjPos_SLZ1, ObjPos_SLZ2, ObjPos_SLZ3 - subtypes 1/$81
 ;	ObjPos_SBZ1, ObjPos_SBZ2 - subtype 1
 ; ---------------------------------------------------------------------------
@@ -15,134 +15,67 @@ CollapseFloor:
 ; ===========================================================================
 CFlo_Index:	index *,,2
 		ptr CFlo_Main
-		ptr CFlo_Touch
+		ptr CFlo_Solid
+		ptr CFlo_Wait
 		ptr CFlo_Collapse
-		ptr CFlo_WaitFall
-		ptr CFlo_Delete
-		ptr CFlo_WalkOff
 
 		rsobj CollapseFloor
-ost_cfloor_wait_time:	rs.b 1 ; $38				; time delay for collapsing floor
-ost_cfloor_flag:	rs.b 1 ; $3A				; 1 = Sonic has touched the floor
+ost_cfloor_wait_time:	rs.b 1					; time delay for collapsing floor
 		rsobjend
 ; ===========================================================================
 
 CFlo_Main:	; Routine 0
-		addq.b	#2,ost_routine(a0)			; goto CFlo_Touch next
+		addq.b	#2,ost_routine(a0)			; goto CFlo_Solid next
 		move.l	#Map_CFlo,ost_mappings(a0)
-		move.w	#tile_Kos_MzBlock+tile_pal3,ost_tile(a0)
-		cmpi.b	#id_SLZ,(v_zone).w			; check if level is SLZ
-		bne.s	.notSLZ
-
-		move.w	#tile_Kos_SlzBlock+tile_pal3,ost_tile(a0) ; SLZ specific code
-		addq.b	#id_frame_cfloor_slz,ost_frame(a0)
-
-	.notSLZ:
-		cmpi.b	#id_SBZ,(v_zone).w			; check if level is SBZ
-		bne.s	.notSBZ
-		move.w	#tile_Kos_SbzFloor+tile_pal3,ost_tile(a0) ; SBZ specific code
-
-	.notSBZ:
+		move.w	(v_tile_floor).w,ost_tile(a0)
+		addi.w	#tile_pal3,ost_tile(a0)
+		move.b	ost_subtype(a0),d0
+		andi.b	#%01110000,d0				; read bits 4-6 of subtype
+		lsr.b	#3,d0
+		move.b	d0,ost_frame(a0)			; set as frame
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#4,ost_priority(a0)
 		move.b	#7,ost_cfloor_wait_time(a0)
 		move.b	#$44,ost_displaywidth(a0)
+		move.b	#32,ost_width(a0)
+		move.b	#8,ost_height(a0)
 
-CFlo_Touch:	; Routine 2
-		tst.b	ost_cfloor_flag(a0)			; has Sonic touched the object?
-		beq.s	.solid					; if not, branch
-		tst.b	ost_cfloor_wait_time(a0)		; has time delay reached zero?
-		beq.w	CFlo_Fragment				; if yes, branch
-		subq.b	#1,ost_cfloor_wait_time(a0)		; subtract 1 from time
+CFlo_Solid:	; Routine 2
+		bsr.w	SolidObject_TopOnly
+		tst.b	d1
+		beq.w	DespawnObject				; branch if no collision
+		addq.b	#2,ost_routine(a0)			; goto CFlo_Wait next
+		bra.w	DespawnObject
+; ===========================================================================
 
-	.solid:
-		move.w	#$20,d1					; width
-		bsr.w	DetectPlatform				; set platform status bit & goto CFlo_Collapse next if platform is touched
-		tst.b	ost_subtype(a0)				; is subtype over $80?
-		bpl.s	.remstate				; if not, branch
-		btst	#status_platform_bit,ost_status(a1)
-		beq.s	.remstate
+CFlo_Wait:	; Routine 4
+		subq.b	#1,ost_cfloor_wait_time(a0)		; decrement timer
+		bpl.s	.wait					; branch if time remains
+		addq.b	#2,ost_routine(a0)			; goto CFlo_Collapse next
+		
+	.wait:
+		bsr.w	SolidObject_TopOnly
+		bra.w	DespawnObject
+; ===========================================================================
+
+CFlo_Collapse:	; Routine 6
+		bsr.w	UnSolid_TopOnly
+		addq.b	#1,ost_frame(a0)			; use frame consisting of smaller pieces
+		tst.b	ost_subtype(a0)
+		bpl.s	.no_sidedness				; branch if high bit of subtype is 0
 		bclr	#render_xflip_bit,ost_render(a0)
 		move.w	ost_x_pos(a1),d0
 		sub.w	ost_x_pos(a0),d0
-		bcc.s	.remstate				; branch if Sonic is left of the platform
+		bcc.s	.no_sidedness				; branch if Sonic is left of the platform
 		bset	#render_xflip_bit,ost_render(a0)
-
-	.remstate:
-		bra.w	DespawnObject
-; ===========================================================================
-
-CFlo_Collapse:	; Routine 4
-		tst.b	ost_cfloor_wait_time(a0)		; has time delay reached zero?
-		beq.w	CFlo_Collapse_Now			; if yes, branch
-		move.b	#1,ost_cfloor_flag(a0)			; set object as "touched"
-		subq.b	#1,ost_cfloor_wait_time(a0)		; decrement timer
-
-
-CFlo_WalkOff:	; Routine $A
-		move.w	#$20,d1
-		bsr.w	ExitPlatform				; goto CFlo_Touch next if Sonic leaves platform
-		move.w	ost_x_pos(a0),d2
-		bsr.w	MoveWithPlatform2
-		bra.w	DespawnObject
-
-; ===========================================================================
-
-CFlo_WaitFall:	; Routine 6
-		tst.b	ost_cfloor_wait_time(a0)		; has time delay reached zero?
-		beq.s	CFlo_FallNow				; if yes, branch
-		tst.b	ost_cfloor_flag(a0)			; has Sonic touched the object?
-		bne.w	.has_touched				; if yes, branch
-		subq.b	#1,ost_cfloor_wait_time(a0)		; decrement timer
-		bra.w	DisplaySprite
-; ===========================================================================
-
-.has_touched:
-		subq.b	#1,ost_cfloor_wait_time(a0)		; decrement timer
-		bsr.w	CFlo_WalkOff				; check if Sonic leaves platform
-		lea	(v_ost_player).w,a1
-		btst	#status_platform_bit,ost_status(a1)	; is Sonic on platform?
-		beq.s	.skip_platform				; if not, branch
-		tst.b	ost_cfloor_wait_time(a0)
-		bne.s	.skip_platform2				; branch if time delay > 0
-		bclr	#status_platform_bit,ost_status(a1)
-		bclr	#status_pushing_bit,ost_status(a1)
-		move.b	#id_Run,ost_sonic_anim_next(a1)
-
-	.skip_platform:
-		move.b	#0,ost_cfloor_flag(a0)
-		move.b	#id_CFlo_WaitFall,ost_routine(a0)	; goto CFlo_WaitFall next
-
-	.skip_platform2:
-		rts	
-; ===========================================================================
-
-CFlo_FallNow:
-		bsr.w	ObjectFall				; apply gravity & update position
-		tst.b	ost_render(a0)				; is object on-screen?
-		bpl.s	CFlo_Delete				; if not, branch
-		bra.w	DisplaySprite
-; ===========================================================================
-
-CFlo_Delete:	; Routine 8
-		bra.w	DeleteObject
-; ===========================================================================
-
-CFlo_Fragment:
-		move.b	#0,ost_cfloor_flag(a0)
-
-CFlo_Collapse_Now:
-		lea	(CFlo_FragTiming_0).l,a4
-		btst	#0,ost_subtype(a0)			; is subtype = 0?
-		beq.s	.type_0					; if yes, branch
-		lea	(CFlo_FragTiming_1).l,a4
-
-	.type_0:
-		moveq	#8-1,d1
-		addq.b	#1,ost_frame(a0)			; use broken frame which comprises 8 sprites
-		rts
-		;bra.w	FragmentObject				; split into 8 fragments, goto CFlo_WaitFall next
-								; see GHZ Collapsing Ledge.asm
+		
+	.no_sidedness:
+		moveq	#0,d0
+		move.b	ost_subtype(a0),d0
+		andi.b	#$F,d0					; read low nybble of subtype
+		lsl.b	#3,d0					; multiply by 8
+		lea	CFlo_FragTiming_0(pc,d0.w),a4
+		bra.w	Crumble					; spawn fragments and delete original
 
 CFlo_FragTiming_0:
 		dc.b $1E, $16, $E, 6, $1A, $12,	$A, 2		; unused

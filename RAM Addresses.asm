@@ -143,6 +143,7 @@ f_hide_hud:			rs.b 1 ; flag set to hide the HUD
 v_tile_hud:			rs.w 1
 v_tile_swing:			rs.w 1
 v_tile_wall:			rs.w 1
+v_tile_floor:			rs.w 1
 v_tile_crabmeat			rs.w 1
 v_tile_buzzbomber		rs.w 1
 v_tile_chopper			rs.w 1

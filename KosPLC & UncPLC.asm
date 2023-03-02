@@ -118,7 +118,7 @@ KPLC_GHZ:	kplcheader
 
 KPLC_MZ:	kplcheader
 		kplc Kos_MZ
-		kplc Kos_MzBlock
+		kplc Kos_MzBlock,v_tile_floor
 		kplc Kos_Swing,v_tile_swing
 		kplc Kos_MzMetal
 		kplc Kos_Fireball,v_tile_fireball
@@ -201,7 +201,7 @@ KPLC_SLZ:	kplcheader
 		kplc Kos_SlzCannon
 		kplc Kos_Orbinaut,v_tile_orbinaut
 		kplc Kos_Fireball,v_tile_fireball
-		kplc Kos_SlzBlock
+		kplc Kos_SlzBlock,v_tile_floor
 		kplc Kos_SlzWall,v_tile_wall
 		kplc Kos_Lamp,v_tile_lamppost
 		kplc Kos_Points,v_tile_points
@@ -224,7 +224,7 @@ KPLC_SBZ:	kplcheader
 		kplc Kos_BigSpike,v_tile_spikeball
 		kplc Kos_Cutter
 		kplc Kos_FlamePipe
-		kplc Kos_SbzFloor
+		kplc Kos_SbzFloor,v_tile_floor
 		kplc Kos_SlideFloor
 		kplc Kos_SbzDoorH
 		kplc Kos_Electric

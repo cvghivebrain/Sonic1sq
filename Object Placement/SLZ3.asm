@@ -28,11 +28,11 @@ ObjPos_SLZ3:
 		objpos $0684,$02BC,Rings,$41,rem
 		objpos $0690,$0110,Bomb,$00,yflip,rem
 		objpos $0690,$0650,Fan,type_fan_left_on,xflip
-		objpos $0720,$04E8,CollapseFloor,$81
+		objpos $0720,$04E8,CollapseFloor,type_cfloor_slz+type_cfloor_sided+1
 		objpos $0728,$04D0,Rings,$12,rem
 		objpos $0728,$0548,Rings,$12,rem
 		objpos $0740,$0300,Seesaw,$00
-		objpos $0760,$04E8,CollapseFloor,$81
+		objpos $0760,$04E8,CollapseFloor,type_cfloor_slz+type_cfloor_sided+1
 		objpos $0770,$04B0,Orbinaut,$03,rem
 		objpos $0790,$0670,Bomb,$00,xflip,rem
 		objpos $07F0,$0670,Bomb,$00,rem
@@ -91,10 +91,10 @@ ObjPos_SLZ3:
 		objpos $0E68,$0030,Rings,$12,rem
 		objpos $0E60,$0650,FireMaker,type_fire_medium+type_fire_left
 		objpos $0E78,$0650,Scenery,type_scen_cannon,xflip
-		objpos $0F20,$0768,CollapseFloor,$01
+		objpos $0F20,$0768,CollapseFloor,type_cfloor_slz+$01
 		objpos $0F28,$0750,Rings,$12,rem
 		objpos $0F30,$0210,Rings,$44,rem
-		objpos $0F60,$0768,CollapseFloor,$01
+		objpos $0F60,$0768,CollapseFloor,type_cfloor_slz+$01
 		objpos $0F68,$0130,Rings,$12,rem
 		objpos $1000,$0750,Fan,type_fan_left_on,xflip
 		objpos $1010,$05D1,Monitor,type_monitor_invincible,rem
@@ -126,12 +126,12 @@ ObjPos_SLZ3:
 		objpos $1184,$0750,Fan,type_fan_left_onoff
 		objpos $1188,$0070,Rings,$10,rem
 		objpos $1200,$00C0,SwingingPlatform,$07
-		objpos $1220,$0768,CollapseFloor,$01
+		objpos $1220,$0768,CollapseFloor,type_cfloor_slz+$01
 		objpos $1228,$0750,Rings,$12,rem
 		objpos $1230,$0210,Bomb,$00,yflip,rem
 		objpos $1250,$0210,Bomb,$00,yflip,rem
 		objpos $1260,$00A0,Rings,$12,rem
-		objpos $1260,$0768,CollapseFloor,$01
+		objpos $1260,$0768,CollapseFloor,type_cfloor_slz+$01
 		objpos $126C,$0088,Rings,$11,rem
 		objpos $1270,$0210,Bomb,$00,yflip,rem
 		objpos $1278,$0070,Rings,$10,rem
@@ -152,13 +152,13 @@ ObjPos_SLZ3:
 		objpos $13C0,$0448,Rings,$12,rem
 		objpos $13D8,$05E8,Elevator,type_elev_up_vanish+$A
 		objpos $1440,$06E8,Elevator,type_elev_up_medium
-		objpos $1460,$04E8,CollapseFloor,$81
+		objpos $1460,$04E8,CollapseFloor,type_cfloor_slz+type_cfloor_sided+1
 		objpos $1510,$0550,Bomb,$00,xflip,rem
-		objpos $1520,$03E8,CollapseFloor,$81
+		objpos $1520,$03E8,CollapseFloor,type_cfloor_slz+type_cfloor_sided+1
 		objpos $1528,$03D0,Rings,$12,rem
 		objpos $1538,$05D8,Rings,$16,rem
 		objpos $1540,$0530,Seesaw,$00
-		objpos $1560,$03E8,CollapseFloor,$81
+		objpos $1560,$03E8,CollapseFloor,type_cfloor_slz+type_cfloor_sided+1
 		objpos $1560,$0550,Bomb,$00,rem
 		objpos $1570,$0550,Bomb,$00,xflip,rem
 		objpos $1580,$0670,FloatingBlock,type_fblock_slz+type_fblock_squaresmall

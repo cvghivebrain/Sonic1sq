@@ -47,4 +47,3 @@ frame_cfloor_slz_break:
 		piece	0, 8, 2x2, 8
 		piece	$10, 8, 2x2, $C
 		endsprite
-		even

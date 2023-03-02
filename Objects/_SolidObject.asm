@@ -18,6 +18,8 @@
 ; ---------------------------------------------------------------------------
 
 SolidObject:
+		tst.b	ost_render(a0)
+		bpl.s	Sol_OffScreen				; branch if object isn't on screen
 		bsr.w	RangePlus				; get distances between Sonic (a1) and object (a0)
 		
 Sol_SkipRange:
@@ -45,6 +47,9 @@ Sol_Below:
 		beq.w	Sol_Kill				; branch if Sonic is on the ground
 		rts
 		
+Sol_OffScreen:
+		lea	(v_ost_player).w,a1
+
 Sol_None:
 		btst	#status_pushing_bit,ost_status(a0)
 		beq.s	.no_push				; branch if object isn't being pushed
@@ -160,6 +165,8 @@ Sol_Kill:
 ; ---------------------------------------------------------------------------
 
 SolidObject_SidesOnly:
+		tst.b	ost_render(a0)
+		bpl.w	Sol_OffScreen				; branch if object isn't on screen
 		bsr.w	RangePlus				; get distances between Sonic (a1) and object (a0)
 		cmp.w	#0,d1
 		bgt.s	.exit					; branch if outside x hitbox
@@ -184,6 +191,8 @@ SolidObject_SidesOnly:
 ; ---------------------------------------------------------------------------
 
 SolidObject_TopOnly:
+		tst.b	ost_render(a0)
+		bpl.w	Sol_OffScreen				; branch if object isn't on screen
 		bsr.w	RangePlus				; get distances between Sonic (a1) and object (a0)
 		tst.b	ost_solid(a0)
 		bne.w	Sol_Stand				; branch if Sonic is already standing on object
@@ -258,6 +267,8 @@ UnSolid_TopOnly:
 ; ---------------------------------------------------------------------------
 
 SolidObject_Heightmap:
+		tst.b	ost_render(a0)
+		bpl.w	Sol_OffScreen				; branch if object isn't on screen
 		bsr.w	RangePlus_Heightmap			; get distances between Sonic (a1) and object (a0)
 		bra.w	Sol_SkipRange
 		
@@ -277,6 +288,8 @@ SolidObject_Heightmap:
 ; ---------------------------------------------------------------------------
 
 SolidObject_TopOnly_Heightmap:
+		tst.b	ost_render(a0)
+		bpl.w	Sol_OffScreen				; branch if object isn't on screen
 		bsr.w	RangePlus_Heightmap_NoPlayerWidth	; get distances between Sonic (a1) and object (a0)
 		tst.b	ost_solid(a0)
 		bne.w	Sol_Stand				; branch if Sonic is already standing on object

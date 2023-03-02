@@ -142,6 +142,10 @@ type_pblock_single:	equ (PushB_Var_0-PushB_Var)/sizeof_PushB_Var		; 0 - single b
 type_pblock_four:	equ (PushB_Var_1-PushB_Var)/sizeof_PushB_Var		; 1 - four blocks in a row
 type_pblock_nograv:	equ $80							; +$80 - no gravity
 
+; CollapseFloor
+type_cfloor_slz:	equ id_frame_cfloor_slz<<3				; +$10 - SLZ mappings
+type_cfloor_sided:	equ $80							; +$80 - collapse pattern depends on which side was touched
+
 ; FloatingBlock
 type_fblock_syz1x1:	equ id_frame_fblock_syz1x1<<4		; $0x - single 32x32 square
 type_fblock_syz2x2:	equ id_frame_fblock_syz2x2<<4		; $1x - 2x2 32x32 squares
