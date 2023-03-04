@@ -43,16 +43,16 @@ Sine_Data:	dc.w      0,      6,     $C,    $12,    $19,    $1F,    $25,    $2B, 
 ; Subroutine to calculate the square root of a number (0 to $FFFF)
 
 ; input:
-;	d0.w = number
+;	d1.w = number
 
 ; output:
 ;	d0.w = square root of number
+
+;	uses d0.l, d1.l, d2.l
 ; ---------------------------------------------------------------------------
 
 CalcSqrt:
-		movem.l	d1-d2,-(sp)				; preserve d1 and d2 in stack
-		move.w	d0,d1
-		swap	d1					; copy input to high word of d1
+		swap	d1					; move input to high word of d1
 		moveq	#0,d0
 		move.w	d0,d1					; clear low word of d1
 		moveq	#8-1,d2					; number of loops
@@ -67,7 +67,6 @@ CalcSqrt:
 		subq.w	#1,d0
 		dbf	d2,.loop
 		lsr.w	#1,d0
-		movem.l	(sp)+,d1-d2				; retrieve d1 and d2 from stack
 		rts	
 ; ===========================================================================
 
@@ -75,7 +74,6 @@ CalcSqrt:
 		addq.w	#1,d0
 		dbf	d2,.loop
 		lsr.w	#1,d0
-		movem.l	(sp)+,d1-d2
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -250,3 +248,66 @@ Atan2Table:
 		dc.b    $16, $16, $16, $17, $17, $17, $18, $18
 		dc.b    $19, $19, $1A, $1A, $1A, $1B, $1B, $1C
 		dc.b    $1C, $1C, $1D, $1D, $1E, $1E, $1F, $1F
+
+; ---------------------------------------------------------------------------
+; Subroutine to convert x/y distance to actual distance
+
+; input:
+;	d1.w = x-axis distance
+;	d2.w = y-axis distance
+;	a0/a1 = addresses of OSTs of objects (CalcDistanceObj only)
+
+; output:
+;	d0.w = actual distance
+
+;	uses d0.l, d1.l, d2.l
+; ---------------------------------------------------------------------------
+
+CalcDistanceObj:
+		move.w	ost_x_pos(a0),d1
+		sub.w	ost_x_pos(a1),d1
+		move.w	ost_y_pos(a0),d2
+		sub.w	ost_y_pos(a1),d2
+		
+CalcDistance:
+		abs.w	d1					; make x/y distances +ve
+		beq.s	.use_y					; branch if x distance is 0
+		abs.w	d2
+		beq.s	.use_x					; branch if y distance is 0
+		cmpi.w	#$80,d1
+		bcc.s	.too_far				; branch if 128px away or more
+		cmpi.w	#$80,d2
+		bcc.s	.too_far
+		lsr.w	#1,d1					; round down to nearest 2px
+		andi.w	#$7E,d2
+		lsl.w	#5,d2					; multiply by 64
+		add.w	d1,d2
+		moveq	#0,d0
+		move.b	Dist_Table(pc,d2.w),d0			; get distance from table
+		rts
+		
+	.too_far:
+		mulu.w	d1,d1					; square of x distance
+		mulu.w	d2,d2					; square of y distance
+		add.w	d2,d1					; sum of both
+		bra.w	CalcSqrt				; d0 = square root of sum (pythagoras)
+		
+	.use_y:
+		abs.w	d2
+		move.w	d2,d0
+		rts
+		
+	.use_x:
+		move.w	d1,d0
+		rts
+		
+		i1: = 0
+Dist_Table:	rept 64
+		i2: = 0
+		rept 64
+		dc.b sqrt((i1*i1)+(i2*i2))
+		i2: = i2+2
+		endr
+		i1: = i1+2
+		endr
+		

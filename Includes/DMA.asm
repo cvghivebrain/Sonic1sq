@@ -50,6 +50,8 @@ AddDMA:
 ; input:
 ;	d1.l = destination address (as DMA instruction)
 ;	(a2).l = source address and length (as DMA instructions)
+
+;	uses a2
 ; ---------------------------------------------------------------------------
 
 AddDMA2:
