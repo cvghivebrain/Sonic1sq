@@ -9,4 +9,3 @@ frame_elev_0:	spritemap
 		piece	-8, -8, 4x4, $41
 		piece	$18, -8, 2x4, $41
 		endsprite
-		even

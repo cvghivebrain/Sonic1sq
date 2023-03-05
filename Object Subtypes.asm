@@ -211,12 +211,11 @@ type_fan_left_on:	equ 2				; 2 - blows left, always on
 type_fan_right_on:	equ 3				; 3 - blows right, always on
 
 ; Elevator
-type_elev_up_short:	equ (Elev_Var2_0-Elev_Var2)/sizeof_Elev_Var2	; 0 - rises 128px when stood on
-type_elev_up_medium:	equ (Elev_Var2_1-Elev_Var2)/sizeof_Elev_Var2	; 1 - rises 256px when stood on
-type_elev_down_short:	equ (Elev_Var2_3-Elev_Var2)/sizeof_Elev_Var2	; 3 - falls 128px when stood on
-type_elev_upright:	equ (Elev_Var2_C-Elev_Var2)/sizeof_Elev_Var2	; $C - rises diagonally right when stood on
-type_elev_up_vanish_1:	equ (Elev_Var2_E-Elev_Var2)/sizeof_Elev_Var2	; $E - rises when stood on and vanishes
-type_elev_up_vanish:	equ $80						; $80 - rises when stood on and vanishes, respawns repeatedly
+type_elev_up_short:	equ id_Elev_Up+$10		; rises 128px when stood on
+type_elev_up_medium:	equ id_Elev_Up+$20		; rises 256px when stood on
+type_elev_down_short:	equ id_Elev_Down+$10		; falls 128px when stood on
+type_elev_upright:	equ id_Elev_UpRight+$20		; rises diagonally right when stood on
+type_elev_up_vanish:	equ id_Elev_UpVanish+$30	; rises when stood on and vanishes
 
 ; SpinPlatform
 type_spin_platform:	equ $80				; $8x - small spinning platform

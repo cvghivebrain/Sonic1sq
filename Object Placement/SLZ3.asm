@@ -144,13 +144,13 @@ ObjPos_SLZ3:
 		objpos $1310,$0370,Bomb,$00,xflip,rem
 		objpos $1310,$0448,Rings,$12,rem
 		objpos $1310,$06D0,Fan,type_fan_left_on,xflip
-		objpos $1328,$05E8,Elevator,type_elev_up_vanish+$A
+		objpos $1328,$05E8,ElevatorMaker,$A
 		objpos $1358,$0168,Elevator,type_elev_up_short
 		objpos $1358,$0268,Elevator,type_elev_up_short
 		objpos $1370,$0370,Bomb,$00,rem
 		objpos $13A8,$00D0,Rings,$12,rem
 		objpos $13C0,$0448,Rings,$12,rem
-		objpos $13D8,$05E8,Elevator,type_elev_up_vanish+$A
+		objpos $13D8,$05E8,ElevatorMaker,$A
 		objpos $1440,$06E8,Elevator,type_elev_up_medium
 		objpos $1460,$04E8,CollapseFloor,type_cfloor_slz+type_cfloor_sided+1
 		objpos $1510,$0550,Bomb,$00,xflip,rem

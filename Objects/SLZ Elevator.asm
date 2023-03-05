@@ -2,88 +2,41 @@
 ; Object 59 - platforms	that move when you stand on them (SLZ)
 
 ; spawned by:
-;	ObjPos_SLZ1, ObjPos_SLZ2, ObjPos_SLZ3 - subtypes 0/1/3/$C/$8A
-;	Elevator - subtype $E
+;	ObjPos_SLZ1, ObjPos_SLZ2, ObjPos_SLZ3 - subtypes 0/1/3/$C
+;	ElevatorMaker - subtype $E
 ; ---------------------------------------------------------------------------
 
 Elevator:
 		moveq	#0,d0
 		move.b	ost_routine(a0),d0
 		move.w	Elev_Index(pc,d0.w),d1
-		jsr	Elev_Index(pc,d1.w)
-		move.w	ost_elev_x_start(a0),d0
-		bsr.w	CheckActive
-		bne.w	DeleteObject
-		bra.w	DisplaySprite
+		jmp	Elev_Index(pc,d1.w)
 ; ===========================================================================
 Elev_Index:	index *,,2
 		ptr Elev_Main
-		ptr Elev_Platform
-		ptr Elev_StoodOn
-		ptr Elev_MakeMulti
-
-Elev_Var1:	dc.b $28, id_frame_elev_0			; width, frame number
-
-Elev_Var2:	; distance to move (div 8), action type
-Elev_Var2_0:	dc.b $10, id_Elev_Up
-Elev_Var2_1:	dc.b $20, id_Elev_Up
-Elev_Var2_2:	dc.b $34, id_Elev_Up				; unused
-Elev_Var2_3:	dc.b $10, id_Elev_Down
-Elev_Var2_4:	dc.b $20, id_Elev_Down				; unused
-Elev_Var2_5:	dc.b $34, id_Elev_Down				; unused
-Elev_Var2_6:	dc.b $14, id_Elev_Up				; unused
-Elev_Var2_7:	dc.b $24, id_Elev_Up				; unused
-Elev_Var2_8:	dc.b $2C, id_Elev_Up				; unused
-Elev_Var2_9:	dc.b $14, id_Elev_Down				; unused
-Elev_Var2_A:	dc.b $24, id_Elev_Down				; unused
-Elev_Var2_B:	dc.b $2C, id_Elev_Down				; unused
-Elev_Var2_C:	dc.b $20, id_Elev_UpRight
-Elev_Var2_D:	dc.b $20, id_Elev_DownLeft			; unused
-Elev_Var2_E:	dc.b $30, id_Elev_UpVanish
-
-sizeof_Elev_Var2:	equ Elev_Var2_1-Elev_Var2
+		ptr Elev_Solid
 
 		rsobj Elevator
-ost_elev_y_start:	rs.w 1 ; $30				; original y-axis position (2 bytes)
-ost_elev_x_start:	rs.w 1 ; $32				; original x-axis position (2 bytes)
-ost_elev_moved:		rs.l 1 ; $34				; distance moved
-ost_elev_acceleration:	rs.w 1 ; $38				; acceleration - i.e. its movement is not linear (2 bytes)
-ost_elev_dec_flag:	rs.b 1 ; $3A				; 1 = decelerate
-ost_elev_distance:	rs.w 1 ; $3C				; half distance to move (2 bytes)
-ost_elev_dist_master:	rs.w 1 ; $3E				; master copy of ost_elev_distance (2 bytes)
+ost_elev_y_start:	rs.w 1					; original y-axis position (2 bytes)
+ost_elev_x_start:	rs.w 1					; original x-axis position (2 bytes)
+ost_elev_moved:		rs.l 1					; distance moved
+ost_elev_acceleration:	rs.w 1					; acceleration - i.e. its movement is not linear (2 bytes)
+ost_elev_distance:	rs.w 1					; half distance to move (2 bytes)
+ost_elev_dec_flag:	rs.b 1					; 1 = decelerate
 		rsobjend
 ; ===========================================================================
 
 Elev_Main:	; Routine 0
-		addq.b	#2,ost_routine(a0)			; goto Elev_Platform next
+		addq.b	#2,ost_routine(a0)			; goto Elev_Solid next
+		move.b	#$28,ost_displaywidth(a0)
+		move.b	#$28,ost_width(a0)
+		move.b	#8,ost_height(a0)
 		moveq	#0,d0
 		move.b	ost_subtype(a0),d0			; get subtype
-		bpl.s	.normal					; branch for types 0-$7F
-
-		addq.b	#4,ost_routine(a0)			; goto Elev_MakeMulti next
-		andi.w	#$7F,d0					; ignore high bit
-		mulu.w	#6,d0					; multiply by 6
-		move.w	d0,ost_elev_distance(a0)		; set as time between platform spawns
-		move.w	d0,ost_elev_dist_master(a0)
-		addq.l	#4,sp
-		rts	
-; ===========================================================================
-
-	.normal:
-		lsr.w	#3,d0
-		andi.w	#$1E,d0					; read only high nybble
-		lea	Elev_Var1(pc,d0.w),a2
-		move.b	(a2)+,ost_displaywidth(a0)		; set width
-		move.b	(a2)+,ost_frame(a0)			; set frame
-		moveq	#0,d0
-		move.b	ost_subtype(a0),d0			; get subtype
-		add.w	d0,d0
-		andi.w	#$1E,d0					; read only low nybble
-		lea	Elev_Var2(pc,d0.w),a2
-		move.b	(a2)+,d0				; get distance value
+		andi.w	#$F0,d0					; read only high nybble
 		lsl.w	#2,d0					; multiply by 4
 		move.w	d0,ost_elev_distance(a0)		; set distance to move
-		move.b	(a2)+,ost_subtype(a0)			; set type
+		andi.b	#$F,ost_subtype(a0)			; clear high nybble
 		move.l	#Map_Elev,ost_mappings(a0)
 		move.w	#0+tile_pal3,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
@@ -91,32 +44,22 @@ Elev_Main:	; Routine 0
 		move.w	ost_x_pos(a0),ost_elev_x_start(a0)
 		move.w	ost_y_pos(a0),ost_elev_y_start(a0)
 
-Elev_Platform:	; Routine 2
-		moveq	#0,d1
-		move.b	ost_displaywidth(a0),d1
-		jsr	(DetectPlatform).l			; detect collision and goto Elev_StoodOn next if true
-		bra.w	Elev_Types
-; ===========================================================================
-
-Elev_StoodOn:	; Routine 4
-		moveq	#0,d1
-		move.b	ost_displaywidth(a0),d1
-		jsr	(ExitPlatform).l			; goto Elev_Platform next if Sonic leaves platform
-		move.w	ost_x_pos(a0),-(sp)
-		bsr.w	Elev_Types
-		move.w	(sp)+,d2
+Elev_Solid:	; Routine 2
+		move.w	ost_x_pos(a0),ost_x_prev(a0)		; save x pos before moving
+		bsr.s	Elev_Types				; move object
 		tst.l	ost_id(a0)				; does object still exist?
 		beq.s	.deleted				; if not, branch
-		jmp	(MoveWithPlatform2).l			; update Sonic's position
+		bsr.w	SolidObject_TopOnly
+		move.w	ost_elev_x_start(a0),d0
+		bra.w	DespawnQuick_AltX
 
 	.deleted:
-		rts	
+		rts
 ; ===========================================================================
 
 Elev_Types:
 		moveq	#0,d0
-		move.b	ost_subtype(a0),d0			; subtype has changed by now, see Elev_Var2
-		andi.w	#$F,d0					; read only low nybble
+		move.b	ost_subtype(a0),d0
 		add.w	d0,d0
 		move.w	Elev_Type_Index(pc,d0.w),d1
 		jmp	Elev_Type_Index(pc,d1.w)
@@ -144,8 +87,8 @@ Elev_Up:
 Elev_Down:
 Elev_UpRight:
 Elev_DownLeft:
-		cmpi.b	#id_Elev_StoodOn,ost_routine(a0)	; check if Sonic is standing on the object
-		bne.s	.notstanding
+		tst.b	ost_solid(a0)				; check if Sonic is standing on the object
+		beq.s	.notstanding
 		addq.b	#1,ost_subtype(a0)			; if yes, add 1 to type (goes to 2, 4, 6 or 8)
 
 	.notstanding:
@@ -212,13 +155,7 @@ Elev_UpVanish:
 ; ===========================================================================
 
 	.typereset:
-		btst	#status_platform_bit,ost_status(a0)	; is platform being stood on?
-		beq.s	.delete					; if not, branch
-		bset	#status_air_bit,ost_status(a1)
-		bclr	#status_platform_bit,ost_status(a1)
-		move.b	#id_Sonic_Control,ost_routine(a1)
-
-	.delete:
+		bsr.w	UnSolid_TopOnly
 		bra.w	DeleteObject
 
 ; ---------------------------------------------------------------------------
@@ -259,25 +196,56 @@ Elev_Move:
 		clr.b	ost_subtype(a0)				; convert to type 0 (non-moving)
 
 	.keep_type:
-		rts	
-; End of function Elev_Move
+		rts
 
+; ---------------------------------------------------------------------------
+; Platform spawner (SLZ)
+
+; spawned by:
+;	ObjPos_SLZ3 - subtype $A
+; ---------------------------------------------------------------------------
+
+ElevatorMaker:
+		moveq	#0,d0
+		move.b	ost_routine(a0),d0
+		move.w	EMake_Index(pc,d0.w),d1
+		jmp	EMake_Index(pc,d1.w)
+; ===========================================================================
+EMake_Index:	index *,,2
+		ptr EMake_Main
+		ptr EMake_Spawn
+
+		rsobj ElevatorMaker
+ost_emake_time:		rs.w 1					; time until next spawn (2 bytes)
+ost_emake_time_master:	rs.w 1					; master copy of ost_emake_time (2 bytes)
+		rsobjend
 ; ===========================================================================
 
-Elev_MakeMulti:	; Routine 6
-		subq.w	#1,ost_elev_distance(a0)		; decrement timer
+EMake_Main:	; Routine 0
+		addq.b	#2,ost_routine(a0)			; goto EMake_Spawn next
+		moveq	#0,d0
+		moveq	#0,d1
+		move.b	ost_subtype(a0),d0			; get subtype
+		add.w	d0,d0
+		move.w	d0,d1
+		add.w	d0,d0
+		add.w	d1,d0					; multiply by 6
+		move.w	d0,ost_emake_time(a0)			; set as time between platform spawns
+		move.w	d0,ost_emake_time_master(a0)
+
+EMake_Spawn:	; Routine 2
+		subq.w	#1,ost_emake_time(a0)			; decrement timer
 		bne.s	.chkdel					; branch if time remains
 
-		move.w	ost_elev_dist_master(a0),ost_elev_distance(a0) ; reset timer
+		move.w	ost_emake_time_master(a0),ost_emake_time(a0) ; reset timer
 		bsr.w	FindFreeObj				; find free OST slot
 		bne.s	.chkdel					; branch if not found
 		move.l	#Elevator,ost_id(a1)			; create elevator object
 		move.w	ost_x_pos(a0),ost_x_pos(a1)		; match position
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
-		move.b	#type_elev_up_vanish_1,ost_subtype(a1)	; platform rises and vanishes
-
+		move.b	#type_elev_up_vanish,ost_subtype(a1)	; platform rises and vanishes
+		
 	.chkdel:
-		addq.l	#4,sp
 		move.w	ost_x_pos(a0),d0
 		bsr.w	CheckActive
 		bne.w	DeleteObject
