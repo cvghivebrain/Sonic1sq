@@ -124,7 +124,7 @@ ObjPos_SBZ3:
 		objpos $0BB0,$05C0,Rings,$41,rem
 		objpos $0BB8,$01F4,Rings,$12,rem
 		objpos $0BD0,$05E0,Rings,$41,rem
-		objpos $0C10,$0208,MovingBlock,type_mblock_1+type_mblock_rightdrop,rem
+		objpos $0C10,$0208,HalfBlock,$10
 		objpos $0C10,$030D,Gargoyle,$03,xflip,rem
 		objpos $0C10,$03F1,Monitor,type_monitor_rings,rem
 		objpos $0C20,$0610,Burrobot,$00,rem

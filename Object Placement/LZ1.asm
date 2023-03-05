@@ -33,7 +33,7 @@ ObjPos_LZ1:
 		objpos $09B0,$0170,Jaws,$0C,xflip,rem
 		objpos $09B0,$0198,Bubble,$81
 		objpos $09B0,$0280,Jaws,$06,rem
-		objpos $09C0,$0108,MovingBlock,type_mblock_1+type_mblock_rightdrop_button
+		objpos $09C0,$0108,HalfBlock,2
 		objpos $09F8,$02A0,LabyrinthDoorV,2,rem
 		objpos $0A10,$02F8,Button,$02
 		objpos $0A20,$0230,Spikes,type_spike_3upwide+type_spike_still,yflip

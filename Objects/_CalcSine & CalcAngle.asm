@@ -40,43 +40,6 @@ Sine_Data:	dc.w      0,      6,     $C,    $12,    $19,    $1F,    $25,    $2B, 
 		dc.w    $EC,    $EE,    $F1,    $F3,    $F4,    $F6,    $F8,    $F9,    $FB,    $FC,    $FD,    $FE,    $FE,    $FF,    $FF,    $FF
 
 ; ---------------------------------------------------------------------------
-; Subroutine to calculate the square root of a number (0 to $FFFF)
-
-; input:
-;	d1.w = number
-
-; output:
-;	d0.w = square root of number
-
-;	uses d0.l, d1.l, d2.l
-; ---------------------------------------------------------------------------
-
-CalcSqrt:
-		swap	d1					; move input to high word of d1
-		moveq	#0,d0
-		move.w	d0,d1					; clear low word of d1
-		moveq	#8-1,d2					; number of loops
-
-	.loop:
-		rol.l	#2,d1
-		add.w	d0,d0
-		addq.w	#1,d0
-		sub.w	d0,d1
-		bcc.s	.loc_2C9A
-		add.w	d0,d1
-		subq.w	#1,d0
-		dbf	d2,.loop
-		lsr.w	#1,d0
-		rts	
-; ===========================================================================
-
-	.loc_2C9A:
-		addq.w	#1,d0
-		dbf	d2,.loop
-		lsr.w	#1,d0
-		rts
-
-; ---------------------------------------------------------------------------
 ; Subroutine to convert x/y distance to an angle
 
 ; input:
@@ -250,6 +213,42 @@ Atan2Table:
 		dc.b    $1C, $1C, $1D, $1D, $1E, $1E, $1F, $1F
 
 ; ---------------------------------------------------------------------------
+; Subroutine to calculate the square root of a number (0 to $FFFF)
+
+; input:
+;	d1.w = number
+
+; output:
+;	d0.w = square root of number
+
+;	uses d0.l, d1.l, d2.l
+; ---------------------------------------------------------------------------
+
+CalcSqrt:
+		swap	d1					; move input to high word of d1
+		moveq	#0,d0
+		move.w	d0,d1					; clear low word of d1
+		moveq	#8-1,d2					; number of loops
+
+	.loop:
+		rol.l	#2,d1
+		add.w	d0,d0
+		addq.w	#1,d0
+		sub.w	d0,d1
+		bcc.s	.loc_2C9A
+		add.w	d0,d1
+		subq.w	#1,d0
+		dbf	d2,.loop
+		lsr.w	#1,d0
+		rts
+
+	.loc_2C9A:
+		addq.w	#1,d0
+		dbf	d2,.loop
+		lsr.w	#1,d0
+		rts
+
+; ---------------------------------------------------------------------------
 ; Subroutine to convert x/y distance to actual distance
 
 ; input:
@@ -271,9 +270,48 @@ CalcDistanceObj:
 		
 CalcDistance:
 		abs.w	d1					; make x/y distances +ve
-		beq.s	.use_y					; branch if x distance is 0
+		beq.s	CalcDist_UseY				; branch if x distance is 0
 		abs.w	d2
-		beq.s	.use_x					; branch if y distance is 0
+		beq.s	CalcDist_UseX				; branch if y distance is 0
+		mulu.w	d1,d1					; square of x distance
+		mulu.w	d2,d2					; square of y distance
+		add.w	d2,d1					; sum of both
+		bra.s	CalcSqrt				; d0 = square root of sum (pythagoras)
+		
+	CalcDist_UseY:
+		abs.w	d2
+		move.w	d2,d0
+		rts
+		
+	CalcDist_UseX:
+		move.w	d1,d0
+		rts
+		
+; ---------------------------------------------------------------------------
+; As above, but limited to 127px x/y distance and 2px accuracy
+
+; input:
+;	d1.w = x-axis distance
+;	d2.w = y-axis distance
+;	a0/a1 = addresses of OSTs of objects (CalcDistObjQuick only)
+
+; output:
+;	d0.w = actual distance (-1 if out of range)
+
+;	uses d0.l, d1.l, d2.l
+; ---------------------------------------------------------------------------
+
+CalcDistObjQuick:
+		move.w	ost_x_pos(a0),d1
+		sub.w	ost_x_pos(a1),d1
+		move.w	ost_y_pos(a0),d2
+		sub.w	ost_y_pos(a1),d2
+		
+CalcDistQuick:
+		abs.w	d1					; make x/y distances +ve
+		beq.s	CalcDist_UseY				; branch if x distance is 0
+		abs.w	d2
+		beq.s	CalcDist_UseX				; branch if y distance is 0
 		cmpi.w	#$80,d1
 		bcc.s	.too_far				; branch if 128px away or more
 		cmpi.w	#$80,d2
@@ -287,18 +325,7 @@ CalcDistance:
 		rts
 		
 	.too_far:
-		mulu.w	d1,d1					; square of x distance
-		mulu.w	d2,d2					; square of y distance
-		add.w	d2,d1					; sum of both
-		bra.w	CalcSqrt				; d0 = square root of sum (pythagoras)
-		
-	.use_y:
-		abs.w	d2
-		move.w	d2,d0
-		rts
-		
-	.use_x:
-		move.w	d1,d0
+		moveq	#-1,d0					; set invalid distance flag
 		rts
 		
 		i1: = 0

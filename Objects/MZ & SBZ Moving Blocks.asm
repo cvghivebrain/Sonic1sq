@@ -1,11 +1,9 @@
 ; ---------------------------------------------------------------------------
-; Object 52 - moving platform blocks (MZ, LZ, SBZ)
+; Object 52 - moving platform blocks (MZ, SBZ)
 
 ; spawned by:
 ;	ObjPos_MZ1, ObjPos_MZ2, ObjPos_MZ3 - subtypes 1/2/$41
-;	ObjPos_LZ1 - subtype 7
 ;	ObjPos_SBZ1, ObjPos_SBZ2 - subtypes $28/$39
-;	ObjPos_SBZ3 - subtype 4
 ; ---------------------------------------------------------------------------
 
 MovingBlock:
@@ -16,90 +14,60 @@ MovingBlock:
 ; ===========================================================================
 MBlock_Index:	index *,,2
 		ptr MBlock_Main
-		ptr MBlock_Platform
-		ptr MBlock_StandOn
+		ptr MBlock_Solid
 
 MBlock_Var:	; object width,	frame number
 MBlock_Var_0:	dc.b $10, id_frame_mblock_mz1			; $0x - single block
+		dc.w tile_Kos_MzBlock+tile_pal3
 MBlock_Var_1:	dc.b $20, id_frame_mblock_mz2			; $1x - double block (unused)
+		dc.w tile_Kos_MzBlock+tile_pal3
 MBlock_Var_2:	dc.b $20, id_frame_mblock_sbz			; $2x - SBZ black & yellow platform
+		dc.w tile_Kos_Stomper+tile_pal2
 MBlock_Var_3:	dc.b $40, id_frame_mblock_sbzwide		; $3x - SBZ red horizontal door
+		dc.w tile_Kos_SlideFloor+tile_pal3
 MBlock_Var_4:	dc.b $30, id_frame_mblock_mz3			; $4x - triple block
+		dc.w tile_Kos_MzBlock+tile_pal3
 
 sizeof_MBlock_Var:	equ MBlock_Var_1-MBlock_Var
 
-
 		rsobj MovingBlock
-ost_mblock_x_start:	rs.w 1 ; $30				; original x position (2 bytes)
-ost_mblock_y_start:	rs.w 1 ; $32				; original y position (2 bytes)
-ost_mblock_wait_time:	rs.w 1 ; $34				; time delay before moving platform back - subtype x9/xA only (2 bytes)
-ost_mblock_move_flag:	rs.w 1 ; $36				; 1 = move platform back to its original position - subtype x9/xA only
+ost_mblock_x_start:	rs.w 1					; original x position (2 bytes)
+ost_mblock_y_start:	rs.w 1					; original y position (2 bytes)
+ost_mblock_wait_time:	rs.w 1					; time delay before moving platform back - subtype x9/xA only (2 bytes)
+ost_mblock_move_flag:	rs.b 1					; 1 = move platform back to its original position - subtype x9/xA only
 		rsobjend
 ; ===========================================================================
 
 MBlock_Main:	; Routine 0
-		addq.b	#2,ost_routine(a0)			; goto MBlock_Platform next
+		addq.b	#2,ost_routine(a0)			; goto MBlock_Solid next
 		move.l	#Map_MBlock,ost_mappings(a0)
-		move.w	#tile_Kos_MzBlock+tile_pal3,ost_tile(a0)
-		cmpi.b	#id_LZ,(v_zone).w			; check if level is LZ
-		bne.s	.not_lz
-
-		move.l	#Map_MBlockLZ,ost_mappings(a0)		; LZ specific code
-		move.w	#tile_Kos_LzHalfBlock+tile_pal3,ost_tile(a0)
-		move.b	#7,ost_height(a0)
-
-	.not_lz:
-		cmpi.b	#id_SBZ,(v_zone).w			; check if level is SBZ
-		bne.s	.not_sbz
-
-		move.w	#tile_Kos_Stomper+tile_pal2,ost_tile(a0) ; SBZ specific code (object 5228)
-		cmpi.b	#type_mblock_sbz+type_mblock_updown,ost_subtype(a0) ; is object 5228 ?
-		beq.s	.is_sbz_28				; if yes, branch
-		move.w	#tile_Kos_SlideFloor+tile_pal3,ost_tile(a0) ; SBZ specific code (object 523x)
-
-	.not_sbz:
-	.is_sbz_28:
 		move.b	#render_rel,ost_render(a0)
 		moveq	#0,d0
 		move.b	ost_subtype(a0),d0			; get subtype
-		lsr.w	#3,d0
-		andi.w	#$1E,d0					; read only high nybble
+		andi.w	#$F0,d0					; read only high nybble
+		lsr.w	#2,d0
 		lea	MBlock_Var(pc,d0.w),a2			; get variables
-		move.b	(a2)+,ost_displaywidth(a0)
+		move.b	(a2),ost_displaywidth(a0)
+		move.b	(a2)+,ost_width(a0)
 		move.b	(a2)+,ost_frame(a0)
+		move.w	(a2)+,ost_tile(a0)
+		move.b	#8,ost_height(a0)
 		move.b	#4,ost_priority(a0)
 		move.w	ost_x_pos(a0),ost_mblock_x_start(a0)
 		move.w	ost_y_pos(a0),ost_mblock_y_start(a0)
 		andi.b	#$F,ost_subtype(a0)			; clear high nybble of subtype
 
-MBlock_Platform: ; Routine 2
-		bsr.w	MBlock_Move				; move & update position
-		moveq	#0,d1
-		move.b	ost_displaywidth(a0),d1
-		jsr	(DetectPlatform).l			; check for collision & goto MBlock_StandOn next if stood on
-		bra.s	MBlock_ChkDel
-; ===========================================================================
-
-MBlock_StandOn:	; Routine 4
-		moveq	#0,d1
-		move.b	ost_displaywidth(a0),d1
-		jsr	(ExitPlatform).l
-		move.w	ost_x_pos(a0),-(sp)
-		bsr.w	MBlock_Move
-		move.w	(sp)+,d2
-		jsr	(MoveWithPlatform2).l
-
-MBlock_ChkDel:
+MBlock_Solid:	; Routine 2
+		move.w	ost_x_pos(a0),ost_x_prev(a0)
+		bsr.s	MBlock_Move				; move & update position
+		bsr.w	SolidObject_TopOnly
 		move.w	ost_mblock_x_start(a0),d0
-		bsr.w	CheckActive
-		bne.w	DeleteObject
-		bra.w	DisplaySprite
+		bsr.w	DespawnQuick_AltX
 ; ===========================================================================
 
 MBlock_Move:
 		moveq	#0,d0
 		move.b	ost_subtype(a0),d0
-		andi.w	#$F,d0
 		add.w	d0,d0
 		move.w	MBlock_TypeIndex(pc,d0.w),d1
 		jmp	MBlock_TypeIndex(pc,d1.w)
@@ -145,8 +113,8 @@ MBlock_LeftRight:
 MBlock_Right:
 MBlock_RightDrop:
 MBlock_Slide:
-		cmpi.b	#id_MBlock_StandOn,ost_routine(a0)	; is Sonic standing on the platform?
-		bne.s	.wait
+		tst.b	ost_solid(a0)				; is Sonic standing on the platform?
+		beq.s	.wait
 		addq.b	#1,ost_subtype(a0)			; if yes, add 1 to type
 
 	.wait:
@@ -200,7 +168,7 @@ MBlock_Drop_Now:
 MBlock_RightDrop_Button:
 		tst.b	(v_button_state+2).w			; has button number 02 been pressed?
 		beq.s	.not_pressed
-		subq.b	#3,ost_subtype(a0)			; if yes, change object type to 04
+		move.b	#id_MBlock_RightDrop,ost_subtype(a0)	; if yes, change object type to 04
 
 	.not_pressed:
 		addq.l	#4,sp
@@ -238,7 +206,7 @@ MBlock_Slide_Now:
 		neg.w	d3
 
 	.no_xflip:
-		tst.w	ost_mblock_move_flag(a0)		; is platform set to move back?
+		tst.b	ost_mblock_move_flag(a0)		; is platform set to move back?
 		bne.s	MBlock_0A_Back				; if yes, branch
 		move.w	ost_x_pos(a0),d0
 		sub.w	ost_mblock_x_start(a0),d0
@@ -252,7 +220,7 @@ MBlock_Slide_Now:
 MBlock_0A_Wait:
 		subq.w	#1,ost_mblock_wait_time(a0)		; subtract 1 from time delay
 		bne.s	.wait					; if time remains, branch
-		move.w	#1,ost_mblock_move_flag(a0)		; set platform to move back to its original position
+		move.b	#1,ost_mblock_move_flag(a0)		; set platform to move back to its original position
 
 	.wait:
 		rts	
@@ -267,6 +235,6 @@ MBlock_0A_Back:
 ; ===========================================================================
 
 MBlock_0A_Reset:
-		clr.w	ost_mblock_move_flag(a0)
+		clr.b	ost_mblock_move_flag(a0)
 		subq.b	#1,ost_subtype(a0)			; restore subtype to 9
 		rts	
