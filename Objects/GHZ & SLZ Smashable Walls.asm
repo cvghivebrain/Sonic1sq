@@ -39,6 +39,7 @@ Smash_Solid:	; Routine 2
 		abs.w	d0					; make it +ve
 		cmpi.w	#$480,d0
 		bcs.s	.dont_break				; branch if speed is too low
+		bclr	#status_pushing_bit,ost_status(a1)
 		lea	Smash_FragRight(pc),a4			; use fragments that move right
 		andi.b	#8,d1
 		bne.s	.right					; branch if collision with right side

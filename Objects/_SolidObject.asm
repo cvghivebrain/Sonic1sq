@@ -20,6 +20,8 @@
 SolidObject:
 		tst.b	ost_render(a0)
 		bpl.s	Sol_OffScreen				; branch if object isn't on screen
+		
+SolidObject_SkipRender:
 		bsr.w	RangePlus				; get distances between Sonic (a1) and object (a0)
 		
 Sol_SkipRange:

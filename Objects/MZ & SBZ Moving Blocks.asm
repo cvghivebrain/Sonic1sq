@@ -23,7 +23,7 @@ MBlock_Var_1:	dc.b $20, id_frame_mblock_mz2			; $1x - double block (unused)
 		dc.w tile_Kos_MzBlock+tile_pal3
 MBlock_Var_2:	dc.b $20, id_frame_mblock_sbz			; $2x - SBZ black & yellow platform
 		dc.w tile_Kos_Stomper+tile_pal2
-MBlock_Var_3:	dc.b $40, id_frame_mblock_sbzwide		; $3x - SBZ red horizontal door
+MBlock_Var_3:	dc.b $3F, id_frame_mblock_sbzwide		; $3x - SBZ red horizontal door
 		dc.w tile_Kos_SlideFloor+tile_pal3
 MBlock_Var_4:	dc.b $30, id_frame_mblock_mz3			; $4x - triple block
 		dc.w tile_Kos_MzBlock+tile_pal3
@@ -196,9 +196,7 @@ MBlock_UpDown:
 
 ; Type $A
 MBlock_Slide_Now:
-		moveq	#0,d3
-		move.b	ost_displaywidth(a0),d3
-		add.w	d3,d3
+		move.w	#$80,d3
 		moveq	#8,d1
 		btst	#status_xflip_bit,ost_status(a0)
 		beq.s	.no_xflip

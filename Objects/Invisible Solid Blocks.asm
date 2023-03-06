@@ -39,9 +39,9 @@ Invis_Main:	; Routine 0
 Invis_Solid:	; Routine 2
 		bsr.w	CheckOffScreen				; is object off screen?
 		bne.s	.chkdel					; if yes, branch
-		bsr.w	SolidObject
+		bsr.w	SolidObject_SkipRender
 
-.chkdel:
+	.chkdel:
 		move.w	ost_x_pos(a0),d0
 		bsr.w	CheckActive
 		bne.s	.delete
