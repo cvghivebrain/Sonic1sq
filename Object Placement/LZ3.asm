@@ -91,24 +91,23 @@ ObjPos_LZ3:
 		objpos $0BD0,$03B1,Monitor,type_monitor_rings,rem
 		objpos $0BE0,$0290,Burrobot,$00,rem
 		objpos $0C40,$0470,LabyrinthDoorH,6,xflip,rem
-		objpos $0C5C,$03D4,LabyrinthConvey,type_lcon_wheel
-		objpos $0C5F,$02A3,LabyrinthConvey,type_lcon_wheel
+		objpos $0C5C,$03D4,Wheel,0
+		objpos $0C5F,$02A3,Wheel,0
 		objpos $0C60,$04B8,Bubble,$80
 		objpos $0C90,$04C8,Button,$01
 		objpos $0C98,$0450,Spikes,type_spike_3up+type_spike_still
 		objpos $0CB0,$0438,Springs,type_spring_red+type_spring_up
-		objpos $0CB1,$024F,LabyrinthConvey,type_lcon_wheel
+		objpos $0CB1,$024F,Wheel,0
 		objpos $0CD8,$0420,Spikes,type_spike_3up+type_spike_still
 		objpos $0CF0,$03F8,Button,$06
 		objpos $0CF0,$0510,Burrobot,$00,rem
-		objpos $0D00,$0280,LabyrinthConvey,$84
+		objpos $0D00,$0280,LabyrinthConvey,4,rem
 		objpos $0D08,$04A0,LabyrinthDoorV,1,rem
 		objpos $0D48,$03F0,Spikes,type_spike_6upwide+type_spike_still
-		objpos $0D80,$0280,LabyrinthConvey,$84
 		objpos $0D90,$04D0,Burrobot,$00,rem
 		objpos $0DB4,$03F0,Spikes,type_spike_3upwide+type_spike_still
-		objpos $0DD4,$024C,LabyrinthConvey,type_lcon_wheel
-		objpos $0DD4,$03D4,LabyrinthConvey,type_lcon_wheel
+		objpos $0DD4,$024C,Wheel,0
+		objpos $0DD4,$03D4,Wheel,0
 		objpos $0E20,$02D0,Spikes,type_spike_3upwide+type_spike_still
 		objpos $0E90,$03A1,Monitor,type_monitor_rings,rem
 		objpos $0E90,$04A8,Bubble,$80
@@ -130,26 +129,25 @@ ObjPos_LZ3:
 		objpos $1218,$02F0,Spikes,type_spike_3up+type_spike_still
 		objpos $1240,$04F8,Bubble,$80
 		objpos $1250,$0668,Spikes,type_spike_3left+type_spike_still
-		objpos $125C,$02B3,LabyrinthConvey,type_lcon_wheel
-		objpos $125D,$0214,LabyrinthConvey,type_lcon_wheel
+		objpos $125C,$02B3,Wheel,0
+		objpos $125D,$0214,Wheel,0
 		objpos $1270,$0670,LabyrinthBlock,type_lblock_solid
 		objpos $1290,$04AC,Lamppost,$01,rem
 		objpos $12CC,$06D0,Spikes,type_spike_6upwide+type_spike_still
 		objpos $12F0,$01B8,Button,$0E
 		objpos $12F0,$01D0,LabyrinthBlock,type_lblock_solid
 		objpos $12F0,$01F0,LabyrinthBlock,type_lblock_solid
-		objpos $1300,$0280,LabyrinthConvey,$85
+		objpos $1300,$0280,LabyrinthConvey,5,rem
 		objpos $1320,$02F0,Spikes,type_spike_3upwide+type_spike_still
 		objpos $1330,$0580,Jaws,$0C,xflip,rem
 		objpos $1350,$0188,Spikes,type_spike_3left+type_spike_still,xflip
 		objpos $1350,$01B8,Spikes,type_spike_3left+type_spike_still,xflip
 		objpos $1350,$01E8,Spikes,type_spike_3left+type_spike_still,xflip
-		objpos $1380,$0280,LabyrinthConvey,$85
 		objpos $13A0,$0330,Spikes,type_spike_3upwide+type_spike_still
 		objpos $13A0,$0450,SpikeBall,$26
 		objpos $13B0,$05F8,Bubble,$81
-		objpos $13D4,$0214,LabyrinthConvey,type_lcon_wheel
-		objpos $13D4,$02B3,LabyrinthConvey,type_lcon_wheel
+		objpos $13D4,$0214,Wheel,0
+		objpos $13D4,$02B3,Wheel,0
 		objpos $1400,$04F8,Bubble,$80
 		objpos $1420,$0410,SpikeBall,$26
 		objpos $1420,$0660,Pole,$04

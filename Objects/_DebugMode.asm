@@ -247,7 +247,7 @@ DebugList_LZ:
 		dbug	Map_Gar,	Gargoyle,	0,	0,	tile_Kos_Gargoyle+tile_pal3
 		dbug	Map_Cork,	Cork, 		0,	0,	tile_Kos_Cork+tile_pal3
 		dbug	Map_LBlock,	LabyrinthBlock, type_lblock_solid,	id_frame_lblock_block,	tile_Kos_LzBlock+tile_pal3
-		dbug	Map_LConv,	LabyrinthConvey, type_lcon_wheel,	0,	tile_Kos_LzWheel
+		dbug	Map_LConv,	Wheel,		0,	0,	tile_Kos_LzWheel
 		dbug	Map_Orb,	Orbinaut,	0,	0,	tile_Kos_Orbinaut
 		dbug	Map_Bub,	Bubble,		$84,	id_frame_bubble_bubmaker1,	tile_Kos_Bubbles+tile_hi
 		dbug	Map_WFall,	Waterfall,	type_wfall_cornermedium,	id_frame_wfall_cornermedium,	tile_Kos_Splash+tile_pal3+tile_hi

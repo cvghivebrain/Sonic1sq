@@ -195,7 +195,7 @@ SolidObject_SidesOnly:
 SolidObject_TopOnly:
 		tst.b	ost_render(a0)
 		bpl.w	Sol_OffScreen				; branch if object isn't on screen
-		bsr.w	RangePlus				; get distances between Sonic (a1) and object (a0)
+		bsr.w	RangePlus_NoPlayerWidth			; get distances between Sonic (a1) and object (a0)
 		tst.b	ost_solid(a0)
 		bne.w	Sol_Stand				; branch if Sonic is already standing on object
 		cmp.w	#0,d1

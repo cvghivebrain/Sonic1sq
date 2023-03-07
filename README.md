@@ -30,6 +30,9 @@ _Sonic 1-squared_ is an enhanced version of the original _Sonic the Hedgehog_ ga
 * Monitor icons load only as needed, allowing for up to 256 unique monitor types (with a maximum of 8 loaded at any one time).
 * Each title card has its own PLC, so only letters that are used need to be loaded. Title cards are automatically centered by the __autocard__ macro. Title card mappings are also automated, and can use sprite mappings more efficiently by joining two letters together as a single sprite.
 
+## Bugfixes
+* Spikes no longer kill Sonic immediately after losing rings. Add $80 to the subtype to restore the original lethal behaviour.
+
 # Credits
 * [flamewing](https://github.com/flamewing) for [mdcomp](https://github.com/flamewing/mdcomp).
 * [vladikcomper](https://github.com/vladikcomper) for the advanced error handler.

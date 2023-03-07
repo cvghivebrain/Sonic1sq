@@ -183,9 +183,6 @@ type_harp_v:		equ id_ani_harp_v_extending	; 2 - vertical
 type_lblock_solid:	equ 0				; doesn't move
 type_lblock_sink:	equ 1				; sinks when stood on
 
-; LabyrinthConvey
-type_lcon_wheel:	equ $7F				; wheel on conveyor belt corner
-
 ; Waterfall
 type_wfall_vert:	equ id_frame_wfall_vertnarrow		; 0 - vertical narrow
 type_wfall_cornermedium: equ id_frame_wfall_cornermedium	; 2 - corner

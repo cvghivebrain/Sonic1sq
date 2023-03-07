@@ -1,79 +1,101 @@
 ; ---------------------------------------------------------------------------
-; Object 63 - platforms	on a conveyor belt (LZ)
+; Spawner for platforms on a conveyor belt (LZ)
 
 ; spawned by:
-;	ObjPos_LZ1 - subtypes $7F (wheel), $80/$81
-;	ObjPos_LZ2 - subtypes $7F (wheel), $82/$83
-;	ObjPos_LZ3 - subtypes $7F (wheel), $84/$85
-;	LabyrinthConvey - subtypes 0-$53
+;	ObjPos_LZ1 - subtypes 0/1
+;	ObjPos_LZ2 - subtypes 2/3
+;	ObjPos_LZ3 - subtypes 4/5
 ; ---------------------------------------------------------------------------
 
 LabyrinthConvey:
 		moveq	#0,d0
 		move.b	ost_routine(a0),d0
 		move.w	LCon_Index(pc,d0.w),d1
-		jsr	LCon_Index(pc,d1.w)
-		move.w	ost_lcon_x_pos_centre(a0),d0
-		bsr.w	CheckActive
-		bne.s	LCon_ChkDel
-
-LCon_Display:
-		bra.w	DisplaySprite
-; ===========================================================================
-
-LCon_ChkDel:
-		cmpi.b	#2,(v_act).w				; is this act 3?
-		bne.s	.not_act3				; if not, branch
-		cmpi.w	#-$80,d0				; is object to the right?
-		bcc.s	LCon_Display				; if yes, branch
-
-	.not_act3:
-		move.b	ost_lcon_subtype_copy(a0),d0		; get original subtype
-		bpl.w	DeleteObject				; branch if not the parent object
-		andi.w	#$7F,d0
-		lea	(v_convey_init_list).w,a2
-		bclr	#0,(a2,d0.w)
-		bra.w	DeleteObject
+		jmp	LCon_Index(pc,d1.w)
 ; ===========================================================================
 LCon_Index:	index *,,2
 		ptr LCon_Main
-		ptr LCon_Platform
-		ptr LCon_OnPlatform
-		ptr LCon_Wheel
-
-		rsobj LabyrinthConvey
-ost_lcon_subtype_copy:	rs.b 1 ; $2F				; copy of the initial subtype ($80/$81/etc.)
-ost_lcon_x_pos_centre:	rs.w 1 ; $30				; approximate x position of centre of conveyor (2 bytes)
-ost_lcon_corner_x_pos:	rs.w 1 ; $34				; x position of next corner (2 bytes)
-ost_lcon_corner_y_pos:	rs.w 1 ; $36				; y position of next corner (2 bytes)
-ost_lcon_corner_next:	rs.b 1 ; $38				; index of next corner
-ost_lcon_corner_count:	rs.b 1 ; $39				; total number of corners +1, times 4
-ost_lcon_corner_inc:	rs.b 1 ; $3A				; amount to add to corner index (4 or -4)
-ost_lcon_reverse:	rs.b 1 ; $3B				; 1 = conveyors run backwards
-ost_lcon_corner_ptr:	rs.l 1 ; $3C				; address of corner position data (4 bytes)
-		rsobjend
+		ptr LCon_ChkDist
 ; ===========================================================================
 
 LCon_Main:	; Routine 0
+		addq.b	#2,ost_routine(a0)			; goto LCon_ChkDist next
 		move.b	ost_subtype(a0),d0
-		bmi.w	LCon_LoadPlatforms			; branch if subtype is $80+
-		addq.b	#2,ost_routine(a0)			; goto LCon_Platform next
+		add.w	d0,d0
+		add.w	d0,d0
+		lea	(ObjPosLZPlatform_Index).l,a2
+		movea.l	(a2,d0.w),a2				; get address of platform position data
+		move.w	(a2)+,d1				; get object count
+
+	.loop:
+		bsr.w	FindNextFreeObj				; find free OST slot
+		bne.s	.fail					; branch if not found
+		move.l	#LabyrinthConveyPlatform,ost_id(a1)	; load platform object
+		move.w	(a2)+,ost_x_pos(a1)
+		move.w	(a2)+,ost_y_pos(a1)
+		move.w	(a2)+,d0
+		move.b	d0,ost_subtype(a1)
+		bsr.w	SaveParent
+
+	.fail:
+		dbf	d1,.loop				; repeat for number of objects
+		rts
+; ===========================================================================
+
+LCon_ChkDist:	; Routine 2
+		bsr.w	Range
+		cmpi.w	#512,d1
+		bcs.s	.exit					; branch if Sonic is < 512px away
+		moveq	#0,d0
+		move.b	ost_respawn(a0),d0			; get respawn id
+		beq.s	.delete					; branch if not set
+		lea	(v_respawn_list).w,a2
+		bclr	#7,2(a2,d0.w)				; allow object to respawn later
+
+	.delete:
+		bra.w	DeleteFamily				; delete the object and all platforms
+		
+	.exit:
+		rts
+
+; ---------------------------------------------------------------------------
+; Object 63 - platforms on a conveyor belt (LZ)
+
+; spawned by:
+;	LabyrinthConvey - subtypes 0-$53
+; ---------------------------------------------------------------------------
+
+LabyrinthConveyPlatform:
+		moveq	#0,d0
+		move.b	ost_routine(a0),d0
+		move.w	LConP_Index(pc,d0.w),d1
+		jmp	LConP_Index(pc,d1.w)
+; ===========================================================================
+LConP_Index:	index *,,2
+		ptr LConP_Main
+		ptr LConP_Platform
+
+		rsobj LabyrinthConveyPlatform
+ost_lcon_corner_ptr:	rs.l 1					; address of corner position data (4 bytes)
+ost_lcon_corner_x_pos:	rs.w 1					; x position of next corner (2 bytes)
+ost_lcon_corner_y_pos:	rs.w 1					; y position of next corner (2 bytes)
+ost_lcon_corner_next:	rs.w 1					; index of next corner
+ost_lcon_corner_count:	equ __rs-1				; total number of corners +1, times 4
+ost_lcon_corner_inc:	rs.b 1					; amount to add to corner index (4 or -4)
+ost_lcon_reverse:	rs.b 1					; 1 = conveyors run backwards
+		rsobjend
+; ===========================================================================
+
+LConP_Main:	; Routine 0
+		addq.b	#2,ost_routine(a0)			; goto LConP_Platform next
 		move.l	#Map_LConv,ost_mappings(a0)
 		move.w	#tile_Kos_LzWheel+tile_pal3,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#$10,ost_displaywidth(a0)
+		move.b	#$10,ost_width(a0)
+		move.b	#8,ost_height(a0)
 		move.b	#4,ost_priority(a0)
-		cmpi.b	#type_lcon_wheel,ost_subtype(a0)	; is object a wheel? ($7F)
-		bne.s	LCon_Platform_Init			; if not, branch
-		
-		addq.b	#4,ost_routine(a0)			; goto LCon_Wheel next
-		move.w	#tile_Kos_LzWheel,ost_tile(a0)
-		move.b	#1,ost_priority(a0)
-		bra.w	LCon_Wheel
-; ===========================================================================
-
-LCon_Platform_Init:
-		move.b	#id_frame_lcon_platform,ost_frame(a0)	; use plaform sprite
+		move.b	#id_frame_lcon_platform,ost_frame(a0)	; use platform sprite
 		moveq	#0,d0
 		move.b	ost_subtype(a0),d0			; get subtype (not the same as initial subtype)
 		move.w	d0,d1
@@ -82,7 +104,6 @@ LCon_Platform_Init:
 		lea	LCon_Corner_Data(pc),a2
 		adda.w	(a2,d0.w),a2				; get address of corner data
 		move.w	(a2)+,ost_lcon_corner_count-1(a0)	; get corner count
-		move.w	(a2)+,ost_lcon_x_pos_centre(a0)
 		move.l	a2,ost_lcon_corner_ptr(a0)		; pointer to corner x/y values
 		andi.w	#$F,d1					; read low nybble of subtype
 		lsl.w	#2,d1					; multiply by 4
@@ -112,81 +133,13 @@ LCon_Platform_Init:
 		move.w	(a2,d1.w),ost_lcon_corner_x_pos(a0)	; get corner position data
 		move.w	2(a2,d1.w),ost_lcon_corner_y_pos(a0)
 		bsr.w	LCon_Platform_Move			; begin platform moving
-		bra.w	LCon_Platform
-; ===========================================================================
+		move.l	#LConP_Platform,ost_id(a0)		; skip routine check in future
 
-LCon_LoadPlatforms:
-		move.b	d0,ost_lcon_subtype_copy(a0)
-		andi.w	#$7F,d0					; d0 = bits 0-6 of subtype
-		lea	(v_convey_init_list).w,a2
-		bset	#0,(a2,d0.w)				; set flag to indicate object exists
-		beq.s	.not_set				; branch if not previously set
-		addq.l	#4,sp
-		bra.w	DeleteObject
-; ===========================================================================
-
-	.not_set:
-		add.w	d0,d0
-		add.w	d0,d0
-		lea	(ObjPosLZPlatform_Index).l,a2
-		movea.l	(a2,d0.w),a2				; get address of platform position data
-		move.w	(a2)+,d1				; get object count
-		movea.l	a0,a1					; overwrite current object with 1st platform
-		bra.s	.makefirst
-; ===========================================================================
-
-	.loop:
-		bsr.w	FindFreeObj				; find free OST slot
-		bne.s	.fail					; branch if not found
-
-	.makefirst:
-		move.l	#LabyrinthConvey,ost_id(a1)		; load platform object
-		move.w	(a2)+,ost_x_pos(a1)
-		move.w	(a2)+,ost_y_pos(a1)
-		move.w	(a2)+,d0
-		move.b	d0,ost_subtype(a1)
-
-	.fail:
-		dbf	d1,.loop				; repeat for number of objects
-
-		addq.l	#4,sp
-		rts	
-; ===========================================================================
-
-LCon_Platform:	; Routine 2
-		moveq	#0,d1
-		move.b	ost_displaywidth(a0),d1
-		jsr	(DetectPlatform).l			; goto LCon_OnPlatform next if Sonic stands on platform
-		bra.w	LCon_Platform_Update
-; ===========================================================================
-
-LCon_OnPlatform:
-		; Routine 4
-		moveq	#0,d1
-		move.b	ost_displaywidth(a0),d1
-		jsr	(ExitPlatform).l
-		move.w	ost_x_pos(a0),-(sp)
-		bsr.w	LCon_Platform_Update
-		move.w	(sp)+,d2
-		jmp	(MoveWithPlatform2).l
-; ===========================================================================
-
-LCon_Wheel:	; Routine 6
-		move.w	(v_frame_counter).w,d0			; get synchronised frame counter
-		andi.w	#3,d0					; read only bits 0-1 (max. 4 frames)
-		bne.s	.frame_not_0				; branch if not 0
-		moveq	#1,d1
-		tst.b	(f_convey_reverse).w			; is conveyor running in reverse?
-		beq.s	.no_reverse				; if not, branch
-		neg.b	d1					; reverse animation
-
-	.no_reverse:
-		add.b	d1,ost_frame(a0)			; increment or decrement frame
-		andi.b	#3,ost_frame(a0)
-
-	.frame_not_0:
-		addq.l	#4,sp
-		bra.w	DespawnObject
+LConP_Platform:	; Routine 2
+		move.w	ost_x_pos(a0),ost_x_prev(a0)
+		bsr.s	LCon_Platform_Update
+		bsr.w	SolidObject_TopOnly
+		bra.w	DisplaySprite
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to get next corner coordinates and update platform position
@@ -232,8 +185,7 @@ LCon_Platform_Update:
 		bsr.w	LCon_Platform_Move
 
 	.not_at_corner:
-		bsr.w	SpeedToPos
-		rts
+		bra.w	SpeedToPos
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to set direction and speed of platform
@@ -292,8 +244,7 @@ LCon_Platform_Move:
 		swap	d1
 		move.w	d1,ost_y_sub(a0)
 		clr.w	ost_x_sub(a0)
-		rts	
-; End of function LCon_Platform_Move
+		rts
 
 ; ===========================================================================
 LCon_Corner_Data:
@@ -304,8 +255,7 @@ LCon_Corner_Data:
 		ptr LCon_Corners_3
 		ptr LCon_Corners_4
 		ptr LCon_Corners_5
-LCon_Corners_0:	dc.w .end-(*+4)					; act 1
-		dc.w $1070
+LCon_Corners_0:	dc.w .end-(*+2)					; act 1
 		dc.w $1078, $21A
 		dc.w $10BE, $260
 		dc.w $10BE, $393
@@ -314,8 +264,7 @@ LCon_Corners_0:	dc.w .end-(*+4)					; act 1
 		dc.w $1022, $244
 	.end:
 
-LCon_Corners_1:	dc.w .end-(*+4)					; act 1
-		dc.w $1280
+LCon_Corners_1:	dc.w .end-(*+2)					; act 1
 		dc.w $127E, $280
 		dc.w $12CE, $2D0
 		dc.w $12CE, $46E
@@ -323,24 +272,21 @@ LCon_Corners_1:	dc.w .end-(*+4)					; act 1
 		dc.w $1232, $2CC
 	.end:
 
-LCon_Corners_2:	dc.w .end-(*+4)					; act 2
-		dc.w $D68
+LCon_Corners_2:	dc.w .end-(*+2)					; act 2
 		dc.w $D22, $482
 		dc.w $D22, $5DE
 		dc.w $DAE, $5DE
 		dc.w $DAE, $482
 	.end:
 
-LCon_Corners_3:	dc.w .end-(*+4)					; act 2
-		dc.w $DA0
+LCon_Corners_3:	dc.w .end-(*+2)					; act 2
 		dc.w $D62, $3A2
 		dc.w $DEE, $3A2
 		dc.w $DEE, $4DE
 		dc.w $D62, $4DE
 	.end:
 
-LCon_Corners_4:	dc.w .end-(*+4)					; act 3
-		dc.w $D00
+LCon_Corners_4:	dc.w .end-(*+2)					; act 3
 		dc.w $CAC, $242
 		dc.w $DDE, $242
 		dc.w $DDE, $3DE
@@ -348,8 +294,7 @@ LCon_Corners_4:	dc.w .end-(*+4)					; act 3
 		dc.w $C52, $29C
 	.end:
 
-LCon_Corners_5:	dc.w .end-(*+4)					; act 3
-		dc.w $1300
+LCon_Corners_5:	dc.w .end-(*+2)					; act 3
 		dc.w $1252, $20A
 		dc.w $13DE, $20A
 		dc.w $13DE, $2BE

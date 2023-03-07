@@ -74,6 +74,21 @@ RangePlus_SkipY:
 		subq.w	#2,d1
 		rts
 		
+RangePlus_NoPlayerWidth:
+		lea	(v_ost_player).w,a1			; get OST of Sonic
+		moveq	#0,d4
+		
+		move.w	ost_y_pos(a1),d2
+		sub.w	ost_y_pos(a0),d2			; d2 = y dist (-ve if Sonic is above)
+		move.w	d2,d3
+		abs.w	d3					; make d3 +ve
+		move.b	ost_height(a1),d4
+		sub.w	d4,d3
+		move.b	ost_height(a0),d4
+		sub.w	d4,d3					; d3 = y dist between hitbox edges (-ve if overlapping)
+		
+		subq.w	#1,d3
+		
 RangePlus_SkipY_NoPlayerWidth:
 		move.w	ost_x_pos(a1),d0
 		sub.w	ost_x_pos(a0),d0			; d0 = x dist (-ve if Sonic is to the left)
