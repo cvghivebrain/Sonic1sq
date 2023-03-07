@@ -13,18 +13,24 @@
 ; ---------------------------------------------------------------------------
 
 Range:
+		bsr.s	RangeX
+		bra.s	RangeY2
+
+RangeX:
 		lea	(v_ost_player).w,a1			; get OST of Sonic
 		
 		move.w	ost_x_pos(a1),d0
 		sub.w	ost_x_pos(a0),d0			; d0 = x dist (-ve if Sonic is to the left)
-		move.w	d0,d1
-		abs.w	d1					; make d1 +ve
+		mvabs.w	d0,d1					; make d1 +ve
+		rts
 		
+RangeY:
+		lea	(v_ost_player).w,a1			; get OST of Sonic
+		
+RangeY2:
 		move.w	ost_y_pos(a1),d2
 		sub.w	ost_y_pos(a0),d2			; d2 = y dist (-ve if Sonic is above)
-		move.w	d2,d3
-		abs.w	d3					; make d3 +ve
-		
+		mvabs.w	d2,d3					; make d3 +ve		
 		rts
 		
 ; ---------------------------------------------------------------------------
@@ -42,29 +48,20 @@ Range:
 ;	d4.w = x position of Sonic on object, starting at 0 on left edge
 ;	a1 = address of OST of Sonic
 
-;	uses d4.l
+;	uses d4.l, d5.l
 ; ---------------------------------------------------------------------------
 
 RangePlus:
+		bsr.s	RangePlusX
+		bra.s	RangePlusY2
+
+RangePlusX:
 		lea	(v_ost_player).w,a1			; get OST of Sonic
+		
 		moveq	#0,d4
-		
-		move.w	ost_y_pos(a1),d2
-		sub.w	ost_y_pos(a0),d2			; d2 = y dist (-ve if Sonic is above)
-		move.w	d2,d3
-		abs.w	d3					; make d3 +ve
-		move.b	ost_height(a1),d4
-		sub.w	d4,d3
-		move.b	ost_height(a0),d4
-		sub.w	d4,d3					; d3 = y dist between hitbox edges (-ve if overlapping)
-		
-		subq.w	#1,d3
-		
-RangePlus_SkipY:
 		move.w	ost_x_pos(a1),d0
 		sub.w	ost_x_pos(a0),d0			; d0 = x dist (-ve if Sonic is to the left)
-		move.w	d0,d1
-		abs.w	d1					; make d1 +ve
+		mvabs.w	d0,d1					; make d1 +ve
 		move.b	(v_player1_width).w,d4			; use fixed player width
 		sub.w	d4,d1
 		move.b	ost_width(a0),d4
@@ -74,26 +71,29 @@ RangePlus_SkipY:
 		subq.w	#2,d1
 		rts
 		
-RangePlus_NoPlayerWidth:
+RangePlusY:
 		lea	(v_ost_player).w,a1			; get OST of Sonic
-		moveq	#0,d4
 		
+RangePlusY2:
+		moveq	#0,d5
 		move.w	ost_y_pos(a1),d2
 		sub.w	ost_y_pos(a0),d2			; d2 = y dist (-ve if Sonic is above)
-		move.w	d2,d3
-		abs.w	d3					; make d3 +ve
-		move.b	ost_height(a1),d4
-		sub.w	d4,d3
-		move.b	ost_height(a0),d4
-		sub.w	d4,d3					; d3 = y dist between hitbox edges (-ve if overlapping)
+		mvabs.w	d2,d3					; make d3 +ve
+		move.b	ost_height(a1),d5
+		sub.w	d5,d3
+		move.b	ost_height(a0),d5
+		sub.w	d5,d3					; d3 = y dist between hitbox edges (-ve if overlapping)
 		
 		subq.w	#1,d3
+		rts
 		
-RangePlus_SkipY_NoPlayerWidth:
+RangePlusX_NoPlayerWidth:
+		lea	(v_ost_player).w,a1			; get OST of Sonic
+		
+		moveq	#0,d4
 		move.w	ost_x_pos(a1),d0
 		sub.w	ost_x_pos(a0),d0			; d0 = x dist (-ve if Sonic is to the left)
-		move.w	d0,d1
-		abs.w	d1					; make d1 +ve
+		mvabs.w	d0,d1					; make d1 +ve
 		move.b	ost_width(a0),d4
 		sub.w	d4,d1					; d1 = x dist between hitbox edges (-ve if overlapping)
 		add.w	d0,d4					; d4 = Sonic's x pos relative to left edge
@@ -121,16 +121,14 @@ RangePlus_SkipY_NoPlayerWidth:
 ; ---------------------------------------------------------------------------
 
 RangePlus_Heightmap:
-		lea	(v_ost_player).w,a1			; get OST of Sonic
-		moveq	#0,d4
-		bsr.s	RangePlus_SkipY
+		bsr.s	RangePlusX
+		cmp.w	#0,d1
+		bgt.s	.outside_x				; branch if outside x hitbox
 		
-RPH_SkipY:
 		moveq	#0,d5
 		move.w	ost_y_pos(a1),d2
 		sub.w	ost_y_pos(a0),d2			; d2 = y dist (-ve if Sonic is above)
-		move.w	d2,d3
-		abs.w	d3					; make d3 +ve
+		mvabs.w	d2,d3					; make d3 +ve
 		tst.w	d2
 		bmi.s	.use_heightmap				; branch if Sonic is above object
 		move.b	ost_height(a0),d5			; use regular height if below
@@ -153,26 +151,20 @@ RPH_SkipY:
 		
 		subq.w	#1,d3
 		rts
+		
+	.outside_x:
+		moveq	#1,d3					; d3 = arbitrary +ve number
+		rts
 
 RangePlus_Heightmap_NoPlayerWidth:
-		lea	(v_ost_player).w,a1			; get OST of Sonic
-		moveq	#0,d4
-		
-		move.w	ost_x_pos(a1),d0
-		sub.w	ost_x_pos(a0),d0			; d0 = x dist (-ve if Sonic is to the left)
-		move.w	d0,d1
-		abs.w	d1					; make d1 +ve
-		move.b	ost_width(a0),d4
-		sub.w	d4,d1					; d1 = x dist between hitbox edges (-ve if overlapping)
-		add.w	d0,d4					; d4 = Sonic's x pos relative to left edge
-		
-		subq.w	#2,d1
+		bsr.s	RangePlusX_NoPlayerWidth
+		cmp.w	#0,d1
+		bgt.s	.outside_x				; branch if outside x hitbox
 		
 		moveq	#0,d5
 		move.w	ost_y_pos(a1),d2
 		sub.w	ost_y_pos(a0),d2			; d2 = y dist (-ve if Sonic is above)
-		move.w	d2,d3
-		abs.w	d3					; make d3 +ve
+		mvabs.w	d2,d3					; make d3 +ve
 		tst.w	d4
 		bmi.s	.left_edge				; branch if outside left edge (d5 stays 0)
 		move.w	d4,d5					; d5 = x pos on object
@@ -186,5 +178,9 @@ RangePlus_Heightmap_NoPlayerWidth:
 		sub.w	d5,d3					; d3 = y dist between hitbox edges (-ve if overlapping)
 		
 		subq.w	#1,d3
+		rts
+		
+	.outside_x:
+		moveq	#1,d3					; d3 = arbitrary +ve number
 		rts
 		

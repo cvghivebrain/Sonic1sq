@@ -263,7 +263,7 @@ CStom_TypeNormal_SetPos:
 
 ; Type $40 - drops when Sonic is nearby
 CStom_TypeProx:
-		bsr.w	Range
+		bsr.w	RangeX
 		cmpi.w	#144,d1					; is Sonic within 144px?
 		bcc.s	.over_144				; if not, branch
 		andi.b	#$3F,ost_subtype(a0)			; allow stomper to drop by changing subtype

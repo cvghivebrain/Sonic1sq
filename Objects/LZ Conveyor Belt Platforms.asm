@@ -43,7 +43,7 @@ LCon_Main:	; Routine 0
 ; ===========================================================================
 
 LCon_ChkDist:	; Routine 2
-		bsr.w	Range
+		bsr.w	RangeX
 		cmpi.w	#512,d1
 		bcs.s	.exit					; branch if Sonic is < 512px away
 		moveq	#0,d0

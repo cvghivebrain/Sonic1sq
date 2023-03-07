@@ -27,7 +27,7 @@ ADoor_Main:	; Routine 0
 		move.b	#4,ost_priority(a0)
 
 ADoor_OpenShut:	; Routine 2
-		bsr.w	Range
+		bsr.w	RangeX
 		cmp.w	#64,d1
 		bcc.s	ADoor_Close				; branch if Sonic is > 64px away
 
