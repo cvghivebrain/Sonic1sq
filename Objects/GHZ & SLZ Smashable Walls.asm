@@ -35,8 +35,7 @@ Smash_Solid:	; Routine 2
 		beq.s	.dont_break				; branch if no collision with left/right
 		cmpi.b	#id_Roll,ost_anim(a1)
 		bne.s	.dont_break				; branch if Sonic isn't rolling
-		move.w	ost_x_vel(a1),d0			; get Sonic's speed
-		abs.w	d0					; make it +ve
+		mvabs.w	ost_x_vel(a1),d0			; get Sonic's speed (and make it +ve)
 		cmpi.w	#$480,d0
 		bcs.s	.dont_break				; branch if speed is too low
 		bclr	#status_pushing_bit,ost_status(a1)
