@@ -33,6 +33,7 @@ SpinC_Main:	; Routine 0
 		move.w	(a2)+,ost_y_pos(a1)
 		move.w	(a2)+,d0
 		move.b	d0,ost_subtype(a1)
+		move.w	ost_y_pos(a0),ost_spinc_parent_y_pos(a1)
 		bsr.w	SaveParent
 
 	.fail:
@@ -43,7 +44,7 @@ SpinC_Main:	; Routine 0
 SpinC_ChkDist:	; Routine 2
 		bsr.w	RangeX
 		cmpi.w	#256+160,d1
-		bcs.s	.exit					; branch if Sonic is < 512px away
+		bcs.s	.exit					; branch if Sonic is nearby
 		moveq	#0,d0
 		move.b	ost_respawn(a0),d0			; get respawn id
 		beq.s	.delete					; branch if not set
@@ -64,6 +65,8 @@ SpinC_ChkDist:	; Routine 2
 ; ---------------------------------------------------------------------------
 
 SpinConveyPlatform:
+		move.w	ost_spinc_parent_y_pos(a0),d0
+		bsr.w	FreezeObject				; don't run if not near screen
 		moveq	#0,d0
 		move.b	ost_routine(a0),d0
 		move.w	SpinCP_Index(pc,d0.w),d1
@@ -75,9 +78,10 @@ SpinCP_Index:	index *,,2
 		ptr SpinCP_Spin
 
 		rsobj SpinConveyPlatform
-ost_spinc_corner_ptr:	rs.l 1					; address of corner position data (4 bytes)
-ost_spinc_corner_x_pos:	rs.w 1					; x position of next corner (2 bytes)
-ost_spinc_corner_y_pos:	rs.w 1					; y position of next corner (2 bytes)
+ost_spinc_corner_ptr:	rs.l 1					; address of corner position data
+ost_spinc_corner_x_pos:	rs.w 1					; x position of next corner
+ost_spinc_corner_y_pos:	rs.w 1					; y position of next corner
+ost_spinc_parent_y_pos:	rs.w 1					; y position of parent
 ost_spinc_corner_next:	rs.w 1					; index of next corner
 ost_spinc_corner_count:	equ __rs-1				; total number of corners +1, times 4
 		rsobjend
