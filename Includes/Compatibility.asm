@@ -121,7 +121,7 @@ v_lani5_frame:		equ v_levelani_5_frame
 v_lani5_time:		equ v_levelani_5_time
 v_gfxbigring:		equ v_giantring_gfx_offset
 f_conveyrev:		equ f_convey_reverse
-v_obj63:		equ v_convey_init_list
+;v_obj63:		equ v_convey_init_list
 f_wtunnelmode:		equ f_water_tunnel_now
 f_lockmulti:		equ v_lock_multi
 f_wtunnelallow:		equ f_water_tunnel_disable

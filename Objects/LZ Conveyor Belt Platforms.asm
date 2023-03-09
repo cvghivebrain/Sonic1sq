@@ -182,7 +182,7 @@ LCon_Platform_Update:
 		movea.l	ost_lcon_corner_ptr(a0),a1
 		move.w	(a1,d1.w),ost_lcon_corner_x_pos(a0)
 		move.w	2(a1,d1.w),ost_lcon_corner_y_pos(a0)
-		bsr.w	LCon_Platform_Move
+		bsr.s	LCon_Platform_Move
 
 	.not_at_corner:
 		bra.w	SpeedToPos

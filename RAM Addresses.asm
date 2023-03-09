@@ -205,7 +205,6 @@ v_levelani_4_time:		rs.w 1 ; level graphics animation 4 - time until next frame
 v_levelani_5_frame:		rs.w 1 ; level graphics animation 5 - current frame
 v_levelani_5_time:		rs.w 1 ; level graphics animation 5 - time until next frame
 f_convey_reverse:		rs.b 1 ; flag set to reverse conveyor belts in LZ/SBZ
-v_convey_init_list:		rs.b 6 ; LZ/SBZ conveyor belt platform flags set when the parent object is loaded - 1 byte per conveyor set
 f_water_tunnel_now:		rs.b 1 ; flag set when Sonic is in a LZ water tunnel
 v_lock_multi:			rs.b 1 ; +1 = lock controls, lock Sonic's position & animation; +$80 = no collision with objects
 f_water_tunnel_disable:		rs.b 1 ; flag set to disable LZ water tunnels

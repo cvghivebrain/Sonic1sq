@@ -41,10 +41,10 @@ But_Action:	; Routine 2
 		andi.w	#$F,d0					; get low nybble of subtype
 		lea	(v_button_state).w,a3
 		lea	(a3,d0.w),a3				; (a3) = button status
-		moveq	#0,d5
+		moveq	#0,d6
 		btst	#6,ost_subtype(a0)			; is subtype $4x or $Cx? (unused)
 		beq.s	.not_secondary				; if not, branch
-		moveq	#7,d5					; d5 = bit to set/clear in button status
+		moveq	#7,d6					; d6 = bit to set/clear in button status
 	.not_secondary:
 		
 		bsr.w	SolidObject
@@ -55,12 +55,12 @@ But_Action:	; Routine 2
 		bne.s	.already_pressed			; branch if button is already pressed
 		play.w	1, jsr, sfx_Switch			; play "blip" sound
 	.already_pressed:
-		bset	d5,(a3)					; set button status
+		bset	d6,(a3)					; set button status
 		bset	#0,ost_frame(a0)			; use "pressed" frame
 		bra.s	But_Display
 		
 	.unpressed:
-		bclr	d5,(a3)					; clear button status
+		bclr	d6,(a3)					; clear button status
 		bclr	#0,ost_frame(a0)			; use "unpressed" frame
 		btst	#5,ost_subtype(a0)			; is subtype +$20?
 		beq.s	But_Display				; if not, branch
@@ -70,10 +70,7 @@ But_Action:	; Routine 2
 		bchg	#1,ost_frame(a0)			; change frame every 8 frames
 
 But_Display:
-		move.w	ost_x_pos(a0),d0
-		bsr.w	CheckActive
-		bne.w	DeleteObject
-		bra.w	DisplaySprite
+		bsr.w	DespawnQuick
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to detect collision with MZ pushable green block

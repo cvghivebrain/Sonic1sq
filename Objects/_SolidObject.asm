@@ -6,7 +6,7 @@
 ;	d4.w = x position of Sonic on object, starting at 0 on left edge
 ;	a1 = address of OST of Sonic
 
-;	uses d0.w, d2.w, d3.w, d4.l
+;	uses d0.w, d2.w, d3.w, d4.l, d5.l
 
 ; usage (if object only moves vertically or not at all):
 ;		bsr.w	SolidObject
@@ -165,7 +165,7 @@ Sol_Kill:
 ;	d1.l = collision type (0 = none; 4 = left; 8 = right)
 ;	a1 = address of OST of Sonic
 
-;	uses d0.w, d2.w, d3.w, d4.l
+;	uses d0.w, d2.w, d3.w, d4.l, d5.l
 ; ---------------------------------------------------------------------------
 
 SolidObject_SidesOnly:
@@ -191,7 +191,7 @@ SolidObject_SidesOnly:
 ;	d1.l = collision type (0 = none; 1 = top)
 ;	a1 = address of OST of Sonic
 
-;	uses d0.w, d2.w, d3.w, d4.l
+;	uses d0.w, d2.w, d3.w, d4.l, d5.l
 ; ---------------------------------------------------------------------------
 
 SolidObject_TopOnly:
@@ -225,7 +225,7 @@ SolidObject_TopOnly:
 ;	d4.w = x position of Sonic on object, starting at 0 on left edge
 ;	a1 = address of OST of Sonic
 
-;	uses d0.w, d2.w, d3.w, d4.l
+;	uses d0.w, d2.w, d3.w, d4.l, d5.l
 
 ; usage (if object only moves vertically or not at all):
 ;		moveq	#1,d6					; 1 byte in heightmap = 2px
@@ -268,7 +268,7 @@ SolidObject_Heightmap:
 ;	d4.w = x position of Sonic on object, starting at 0 on left edge
 ;	a1 = address of OST of Sonic
 
-;	uses d0.w, d2.w, d3.w, d4.l
+;	uses d0.w, d2.w, d3.w, d4.l, d5.l
 ; ---------------------------------------------------------------------------
 
 SolidObject_TopOnly_Heightmap:
