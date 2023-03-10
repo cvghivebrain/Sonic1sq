@@ -125,7 +125,7 @@ ObjPos_SLZ3:
 		objpos $1180,$0420,FloatingBlock,type_fblock_slz+type_fblock_squarebiggest,yflip
 		objpos $1184,$0750,Fan,type_fan_left_onoff
 		objpos $1188,$0070,Rings,$10,rem
-		objpos $1200,$00C0,SwingingPlatform,$07
+		objpos $1200,$00C0,SwingingPlatform,$27
 		objpos $1220,$0768,CollapseFloor,type_cfloor_slz+$01
 		objpos $1228,$0750,Rings,$12,rem
 		objpos $1230,$0210,Bomb,$00,yflip,rem
@@ -189,7 +189,7 @@ ObjPos_SLZ3:
 		objpos $18A8,$01D0,Rings,$12,rem
 		objpos $18B0,$00D0,Rings,$12,rem
 		objpos $18D8,$03B0,Orbinaut,$03,rem
-		objpos $1900,$05E0,SwingingPlatform,$07
+		objpos $1900,$05E0,SwingingPlatform,$27
 		objpos $1910,$03C0,SmashWall,id_frame_smash_middle,rem
 		objpos $1910,$0451,Monitor,type_monitor_invincible,rem
 		objpos $1930,$03C0,SmashWall,id_frame_smash_middle,rem

@@ -36,6 +36,12 @@ DespawnQuick_AltX:
 		bne.w	DeleteObject				; delete if object moves off screen
 		bra.w	DisplaySprite				; display instead of despawn
 
+DespawnNoDisplay:
+		move.w	ost_x_pos(a0),d0
+		bsr.s	CheckActive
+		bne.w	DeleteObject				; delete if object moves off screen
+		rts						; don't display
+
 ; ---------------------------------------------------------------------------
 ; As DespawnQuick, but also deletes child objects
 

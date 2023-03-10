@@ -131,7 +131,7 @@ Anml_Main:	; Routine 0
 
 Anml_FromEnemy:
 		addq.b	#2,ost_routine(a0)			; goto Anml_ChkFloor next
-		bsr.w	RandomNumber
+		jsr	RandomNumber
 		andi.w	#1,d0					; d0 = random 0 or 1
 		moveq	#0,d1
 		move.b	(v_zone).w,d1				; get zone number

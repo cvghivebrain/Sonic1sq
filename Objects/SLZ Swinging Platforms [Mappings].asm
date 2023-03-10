@@ -27,4 +27,3 @@ frame_swing_slz_anchor:
 		spritemap
 		piece	-8, -8, 2x2, $1C
 		endsprite
-		even

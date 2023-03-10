@@ -66,7 +66,7 @@ SpinC_ChkDist:	; Routine 2
 
 SpinConveyPlatform:
 		move.w	ost_spinc_parent_y_pos(a0),d0
-		bsr.w	FreezeObject				; don't run if not near screen
+		bsr.w	FreezeQuick				; don't run if not near screen
 		moveq	#0,d0
 		move.b	ost_routine(a0),d0
 		move.w	SpinCP_Index(pc,d0.w),d1

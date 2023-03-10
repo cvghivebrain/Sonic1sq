@@ -25,4 +25,3 @@ frame_bball_anchor:
 		piece	-$10, -8, 4x2, $18
 		piece	-$10, -$18, 4x2, $18, yflip
 		endsprite
-		even

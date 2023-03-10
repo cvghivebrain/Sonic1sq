@@ -21,4 +21,3 @@ frame_swing_anchor:
 		spritemap
 		piece	-8, -8, 2x2, $A
 		endsprite
-		even
