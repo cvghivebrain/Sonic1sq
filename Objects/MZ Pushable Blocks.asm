@@ -29,6 +29,7 @@ sizeof_PushB_Var:	equ PushB_Var_1-PushB_Var
 		rsobj PushBlock
 ost_pblock_time:	rs.w 1					; event timer
 ost_pblock_pushed:	rs.b 1					; 0 = not pushed; -16 = pushed left; 16 = pushed right
+ost_pblock_stompchk:	rs.b 1					; flag set when check for stomper has been performed
 		rsobjend
 ; ===========================================================================
 
@@ -57,18 +58,19 @@ PushB_Main:	; Routine 0
 PushB_Action:	; Routine 2
 		tst.w	ost_parent(a0)
 		bne.s	.stomper_skip				; branch if chain stomper was found
-		move.b	(v_frame_counter_low).w,d0
-		andi.b	#$1F,d0
-		bne.s	.stomper_skip				; branch except every 32 frames (approx 0.5 seconds)
-		move.l	#ChainStomp,d0
-		moveq	#id_CStom_Block,d1
+		tst.b	ost_render(a0)
+		bpl.s	PushB_Display				; branch if block is off screen
+		tst.b	ost_pblock_stompchk(a0)
+		bne.s	.stomper_skip				; branch if chain stomper check was already done
+		move.l	#CStom_Block,d0
 		bsr.w	FindNearestObj				; find nearest chain stomper & save to ost_parent
+		move.b	#1,ost_pblock_stompchk(a0)
 		
 	.stomper_skip:
 		bsr.w	SolidObject
 		bsr.w	PushB_Pushing
 		tst.b	ost_subtype(a0)
-		bmi.s	PushB_Display				; branch if subtype is +$80
+		bmi.s	PushB_Display				; branch if subtype is +$80 (no gravity)
 		bsr.w	PushB_ChkStomp
 		beq.s	PushB_Display				; branch if block is on stomper
 		bsr.w	FindFloorObj
@@ -249,7 +251,7 @@ PushB_ChkStomp:
 		bsr.w	GetParent				; a1 = OST of chain stomper
 		move.w	ost_y_pos(a1),d0
 		sub.w	ost_y_pos(a0),d0
-		cmpi.w	#-224,d0
+		cmpi.w	#-screen_height,d0
 		ble.s	.use_gravity				; branch if block is > 224px below stomper
 		moveq	#0,d2
 		move.b	ost_height(a1),d2

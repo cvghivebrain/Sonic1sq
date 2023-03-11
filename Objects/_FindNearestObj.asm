@@ -3,7 +3,6 @@
 
 ; input:
 ;	d0.l = id of object to search for
-;	d1.b = routine number to search for (-1 to ignore)
 
 ; output:
 ;	d5.w = x+y distance ($FFFF if not found)
@@ -13,7 +12,6 @@
 
 ; usage:
 ;		move.l	#Crabmeat,d0
-;		moveq	#id_Crab_Main,d1
 ;		bsr.w	FindNearestObj
 ;		beq.s	.fail					; branch if no match is found
 ; ---------------------------------------------------------------------------
@@ -27,12 +25,6 @@ FindNearestObj:
 	.loop:
 		cmp.l	ost_id(a1),d0
 		bne.s	.next					; branch if id doesn't match
-		tst.b	d1
-		bmi.s	.ignore_routine				; branch if d1 is -1
-		cmp.b	ost_routine(a1),d1
-		bne.s	.next					; branch if routine doesn't match
-		
-	.ignore_routine:
 		move.w	ost_x_pos(a1),d3
 		sub.w	ost_x_pos(a0),d3			; d3 = x dist
 		abs.w	d3					; make d3 +ve

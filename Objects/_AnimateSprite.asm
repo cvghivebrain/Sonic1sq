@@ -57,12 +57,12 @@ Anim_Wait:
 
 Anim_Flag:
 		neg.w	d0
-		subq.w	#2,d0					; flags start at 2
 		move.w	Anim_Flag_Index(pc,d0.w),d0
 		jmp	Anim_Flag_Index(pc,d0.w)
 ; ===========================================================================
 Anim_Flag_Index:
-		index *,-2,-2
+		index *,0,-2
+		ptr Anim_Flag_0
 		ptr Anim_Flag_Restart
 		ptr Anim_Flag_Back
 		ptr Anim_Flag_Change
@@ -75,6 +75,7 @@ Anim_Flag_Index:
 		ptr Anim_Flag_Restart_Sonic
 ; ===========================================================================
 
+Anim_Flag_0:
 Anim_Flag_Restart:
 		move.b	#0,ost_anim_frame(a0)			; restart the animation
 		move.w	2(a1),d0				; read sprite number
@@ -130,14 +131,14 @@ Anim_Flag_WalkRun:
 	.noxflip:
 		lsr.b	#2,d0					; divide angle by 4
 		
-		lea	(Anim_WalkList).l,a2
+		lea	Anim_WalkList(pc),a2
 		move.w	ost_inertia(a0),d1			; get Sonic's speed
 		bpl.s	.speed_ok
 		neg.w	d1					; absolute speed
 	.speed_ok:
 		cmpi.w	#sonic_max_speed,d1
 		bcs.s	.walking				; branch if Sonic is below max speed
-		lea	(Anim_RunList).l,a2			; use running animation
+		lea	Anim_RunList(pc),a2			; use running animation
 	.walking:
 		neg.w	d1
 		addi.w	#$800,d1				; d1 = $800 minus Sonic's speed
@@ -150,8 +151,7 @@ Anim_Flag_WalkRun:
 		andi.b	#$FF-render_xflip-render_yflip,ost_render(a0) ; clear x/yflip flags
 		move.b	(a2,d0.w),d0				; get animation for specified angle
 		bpl.s	.noinvert				; branch if invert flag is not set
-		bset	#render_xflip_bit,ost_render(a0)
-		bset	#render_yflip_bit,ost_render(a0)	; x/yflip sprite
+		ori.b	#render_xflip+render_yflip,ost_render(a0) ; x/yflip sprite
 		and.b	#$7F,d0					; remove invert flag
 	.noinvert:
 		eor.b	d2,ost_render(a0)			; apply xflip from status
@@ -301,7 +301,7 @@ DPLCSprite:
 		bsr.w	SkipMappings				; jump to data after mappings (where DPLCs are stored)
 		tst.w	d0
 		beq.s	.exit					; branch if mappings contained 0 pieces (i.e. blank)
-		jsr	AddDMA2					; add to DMA queue
+		jmp	AddDMA2					; add to DMA queue
 		
 	.exit:
 		rts

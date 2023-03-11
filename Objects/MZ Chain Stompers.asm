@@ -66,7 +66,7 @@ CStom_Main:	; Routine 0
 		move.b	#render_rel,ost_render(a0)
 		move.w	ost_y_pos(a0),ost_cstomp_y_start(a0)
 		move.b	#4,ost_priority(a0)
-		addi.b	#2,ost_routine(a0)			; goto CStom_Block next
+		move.l	#CStom_Block,ost_id(a0)			; goto CStom_Block next, and skip routine check in future
 		
 		bsr.w	FindNextFreeObj				; find free OST slot
 		bne.w	CStom_Block
