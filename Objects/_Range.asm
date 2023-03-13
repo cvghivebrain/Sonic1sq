@@ -97,8 +97,6 @@ RangePlusX_NoPlayerWidth:
 		move.b	ost_width(a0),d4
 		sub.w	d4,d1					; d1 = x dist between hitbox edges (-ve if overlapping)
 		add.w	d0,d4					; d4 = Sonic's x pos relative to left edge
-		
-		subq.w	#2,d1
 		rts
 		
 ; ---------------------------------------------------------------------------

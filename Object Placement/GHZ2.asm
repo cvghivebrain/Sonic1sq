@@ -10,8 +10,8 @@ ObjPos_GHZ2:
 		objpos $0130,$02B1,Monitor,type_monitor_rings,rem
 		objpos $0180,$00BF,Rings,$13,rem
 		objpos $0180,$01F0,Chopper,$00,rem
+		objpos $01A0,$0118,Bridge,$0C
 		objpos $01A8,$0118,WaterSound,$00
-		objpos $01A8,$0118,Bridge,$0C
 		objpos $01C0,$01C0,Chopper,$00,rem
 		objpos $020E,$010A,Scenery,type_scen_stump
 		objpos $0248,$0190,Spikes,type_spike_1up+type_spike_still
@@ -41,8 +41,8 @@ ObjPos_GHZ2:
 		objpos $0570,$0100,Rings,$14,rem
 		objpos $0580,$01F0,Chopper,$00,rem
 		objpos $0590,$03D0,Spikes,type_spike_6upwide+type_spike_still
+		objpos $05A0,$0118,Bridge,$0C
 		objpos $05A8,$0118,WaterSound,$00
-		objpos $05A8,$0118,Bridge,$0C
 		objpos $05B0,$02B0,MotoBug,$00,rem
 		objpos $05C0,$01C0,Chopper,$00,rem
 		objpos $05C8,$0340,SwingingPlatform,$06
@@ -96,9 +96,9 @@ ObjPos_GHZ2:
 		objpos $0A18,$0348,Newtron,$00,rem
 		objpos $0A2C,$0208,Scenery,type_scen_stump,xflip
 		objpos $0A68,$02B0,Chopper,$00,rem
+		objpos $0AA0,$0218,Bridge,$0C
 		objpos $0AA0,$0290,Chopper,$00,rem
 		objpos $0AA8,$0218,WaterSound,$00
-		objpos $0AA8,$0218,Bridge,$0C
 		objpos $0AD8,$02E0,Chopper,$00,rem
 		objpos $0B10,$0208,Scenery,type_scen_stump
 		objpos $0B58,$03B0,Springs,type_spring_red+type_spring_right,xflip
@@ -199,9 +199,9 @@ ObjPos_GHZ2:
 		objpos $1864,$01C0,Rings,$15,rem
 		objpos $1880,$02C0,Chopper,$00,rem
 		objpos $188C,$04D0,Spikes,type_spike_6upwide+type_spike_still
+		objpos $18A0,$0218,Bridge,$0C
 		objpos $18A0,$03B0,MotoBug,$00,xflip,rem
 		objpos $18A8,$0218,WaterSound,$00
-		objpos $18A8,$0218,Bridge,$0C
 		objpos $18C0,$02A0,Chopper,$00,rem
 		objpos $18C8,$0448,SwingingPlatform,$06
 		objpos $1908,$03B0,EdgeWalls,type_edge_shadow

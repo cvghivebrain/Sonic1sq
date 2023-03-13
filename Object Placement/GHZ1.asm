@@ -10,9 +10,9 @@ ObjPos_GHZ1:
 		objpos $0420,$0330,BuzzBomber,$00,rem
 		objpos $0430,$0378,Scenery,type_scen_stump,xflip
 		objpos $046C,$0320,Rings,$14,rem
+		objpos $04A0,$0388,Bridge,$0C
 		objpos $04A0,$0460,Chopper,$00,rem
 		objpos $04A8,$0388,WaterSound,$00
-		objpos $04A8,$0388,Bridge,$0C
 		objpos $0510,$0378,Scenery,type_scen_stump
 		objpos $05D6,$0320,Monitor,type_monitor_invincible,rem
 		objpos $0680,$0387,Rings,$10,rem
@@ -28,8 +28,8 @@ ObjPos_GHZ1:
 		objpos $09CD,$02FD,PurpleRock,$00
 		objpos $0A30,$0308,Scenery,type_scen_stump,xflip
 		objpos $0A78,$0400,Chopper,$00,rem
+		objpos $0AA0,$0318,Bridge,$0C
 		objpos $0AA8,$0318,WaterSound,$00
-		objpos $0AA8,$0318,Bridge,$0C
 		objpos $0AC8,$03C0,Chopper,$00,rem
 		objpos $0B10,$0308,Scenery,type_scen_stump
 		objpos $0B94,$02D0,Rings,$11,rem
@@ -176,8 +176,8 @@ ObjPos_GHZ1:
 		objpos $1F64,$0480,Rings,$15,rem
 		objpos $1F70,$02B4,Rings,$14,rem
 		objpos $1F80,$03C0,Chopper,$00,rem
+		objpos $1FA0,$0318,Bridge,$0C
 		objpos $1FA8,$0318,WaterSound,$00
-		objpos $1FA8,$0318,Bridge,$0C
 		objpos $1FC0,$03D0,Chopper,$00,rem
 		objpos $2010,$030A,Scenery,type_scen_stump
 		objpos $2020,$04B0,Spikes,type_spike_3up+type_spike_still

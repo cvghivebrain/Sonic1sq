@@ -11,7 +11,6 @@
 ExecuteObjects:
 		lea	(v_ost_all).w,a0			; set address for object RAM
 		moveq	#countof_ost-1,d7			; $80 objects -1
-		moveq	#0,d0
 		cmpi.b	#id_Sonic_Death,(v_ost_player+ost_routine).w ; is Sonic dead?
 		bhs.s	.dead					; if yes, branch
 
@@ -20,7 +19,6 @@ ExecuteObjects:
 		beq.s	.no_object				; branch if 0
 		movea.l	d0,a1
 		jsr	(a1)					; run the object's code
-		moveq	#0,d0
 
 	.no_object:
 		lea	sizeof_ost(a0),a0			; next object
@@ -34,7 +32,6 @@ ExecuteObjects:
 		moveq	#countof_ost_ert-1,d7			; remaining $60 objects are display only
 
 .display_object:
-		moveq	#0,d0
 		move.l	(a0),d0					; load object number
 		beq.s	.no_object2				; branch if 0
 		tst.b	ost_render(a0)

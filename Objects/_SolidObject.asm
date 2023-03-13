@@ -133,8 +133,8 @@ Sol_Stand:
 Sol_Stand_SkipRange:
 		btst	#status_air_bit,ost_status(a1)
 		bne.s	.leave					; branch if Sonic jumps
-		cmp.w	#0,d1
-		bgt.s	.leave					; branch if Sonic is outside left/right edges
+		tst	d1
+		bpl.s	.leave					; branch if Sonic is outside left/right edges
 		
 		add.w	d3,ost_y_pos(a1)			; align Sonic with top of object
 		tst.w	ost_x_prev(a0)
@@ -189,6 +189,7 @@ SolidObject_SidesOnly:
 
 ; output:
 ;	d1.l = collision type (0 = none; 1 = top)
+;	d4.w = x position of Sonic on object, starting at 0 on left edge
 ;	a1 = address of OST of Sonic
 
 ;	uses d0.w, d2.w, d3.w, d4.l, d5.l
@@ -197,6 +198,8 @@ SolidObject_SidesOnly:
 SolidObject_TopOnly:
 		tst.b	ost_render(a0)
 		bpl.w	Sol_OffScreen				; branch if object isn't on screen
+		
+SolidObject_TopOnly_SkipRender:
 		bsr.w	RangePlusX_NoPlayerWidth		; get distances between Sonic (a1) and object (a0)
 		bsr.w	RangePlusY2
 		tst.b	ost_solid(a0)

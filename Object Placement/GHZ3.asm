@@ -24,7 +24,7 @@ ObjPos_GHZ3:
 		objpos $03F0,$0278,Scenery,type_scen_stump,xflip
 		objpos $0408,$0334,Rings,$10,rem
 		objpos $0420,$0258,Rings,$15,rem
-		objpos $0468,$0288,Bridge,$0C
+		objpos $0460,$0288,Bridge,$0C
 		objpos $04D0,$0278,Scenery,type_scen_stump
 		objpos $0530,$0238,BuzzBomber,$00,rem
 		objpos $0530,$0278,Springs,type_spring_yellow+type_spring_up
@@ -64,7 +64,7 @@ ObjPos_GHZ3:
 		objpos $08F0,$0278,Scenery,type_scen_stump,xflip
 		objpos $0920,$01C0,BuzzBomber,$00,rem
 		objpos $0920,$0250,Rings,$15,rem
-		objpos $0968,$0288,Bridge,$0C
+		objpos $0960,$0288,Bridge,$0C
 		objpos $09D0,$0278,Scenery,type_scen_stump
 		objpos $0A08,$02C0,EdgeWalls,type_edge_light
 		objpos $0A08,$02F0,EdgeWalls,type_edge_light
@@ -89,7 +89,7 @@ ObjPos_GHZ3:
 		objpos $0D20,$02B0,Rings,$10,rem
 		objpos $0D47,$02A7,Rings,$10,rem
 		objpos $0D58,$0570,Springs,type_spring_red+type_spring_right,xflip
-		objpos $0D68,$0188,Bridge,$0C
+		objpos $0D60,$0188,Bridge,$0C
 		objpos $0D68,$0297,Rings,$10,rem
 		objpos $0D8D,$0284,Rings,$10,rem
 		objpos $0DBC,$0275,Rings,$10,rem
@@ -278,7 +278,7 @@ ObjPos_GHZ3:
 		objpos $2530,$03B8,Scenery,type_scen_stump,xflip
 		objpos $2535,$0320,Monitor,type_monitor_invincible,rem
 		objpos $2588,$03F0,Spikes,type_spike_6upwide+type_spike_still
-		objpos $25A8,$03C8,Bridge,$0C
+		objpos $25A0,$03C8,Bridge,$0C
 		objpos $25DC,$03F0,Spikes,type_spike_1up+type_spike_still
 		objpos $25F4,$03F0,Spikes,type_spike_1up+type_spike_still
 		objpos $2608,$03F0,EdgeWalls,type_edge_shadow
