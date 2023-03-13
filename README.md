@@ -9,7 +9,7 @@ _Sonic 1-squared_ is an enhanced version of the original _Sonic the Hedgehog_ ga
 * LoadPerDemo loads the level number, demo data, character and start position for all demos, including those during the credits.
 * Rewritten level select routine to be more customisable. It now uses standard ASCII, and supports multiple columns (which are automatically generated based on the lines-per-column setting).
 * The hidden Japanese credits, "try again" and "end" screens have been given their own gamemodes, which are accessible through the level select.
-* The HUD has new debug features, including a CPU cycle usage counter ($DF is max) and sprite counter ($4F is max).
+* The HUD has new debug features, including a CPU cycle usage counter (displayed as a decimal percentage) and sprite counter ($4F is max).
 
 ## Graphics
 * KosPLC subroutine loads Kosinski-compressed graphics at the beginning of a level.
@@ -29,6 +29,7 @@ _Sonic 1-squared_ is an enhanced version of the original _Sonic the Hedgehog_ ga
 * ost_parent contains the parent object's OST address (shortened to a word), if GetParent was called when the child object was created.
 * Monitor icons load only as needed, allowing for up to 256 unique monitor types (with a maximum of 8 loaded at any one time).
 * Each title card has its own PLC, so only letters that are used need to be loaded. Title cards are automatically centered by the __autocard__ macro. Title card mappings are also automated, and can use sprite mappings more efficiently by joining two letters together as a single sprite.
+* GHZ loops use an object instead of being hard-coded. The object reads Sonic's position within the loop and updates the level layout accordingly.
 
 ## Bugfixes
 * Spikes no longer kill Sonic immediately after losing rings. Add $80 to the subtype to restore the original lethal behaviour.

@@ -67,15 +67,10 @@ Bri_Solid:	; Routine 2
 		bsr.s	Bri_Sink
 		bsr.w	SolidObject_TopOnly_SkipRender
 		tst.b	d1
-		beq.s	.display				; branch if no collision
+		beq.w	DespawnFamily_NoDisplay			; branch if no collision
 		lsr.w	#4,d4
 		move.b	d4,ost_bridge_current_log(a0)		; set current log based on Sonic's x pos on object
-		
-	.display:
-		move.w	ost_x_pos(a0),d0
-		bsr.w	CheckActive
-		bne.w	DeleteFamily
-		rts
+		bra.w	DespawnFamily_NoDisplay
 		
 ; ---------------------------------------------------------------------------
 ; Subroutine to sink bridge when stood on
@@ -155,7 +150,10 @@ BridgeLog:
 		addq.b	#1,d1
 		mulu.w	d1,d0
 		mulu.w	d2,d0
-		lsr.w	#8,d0
+		pushr.w	d0
+		moveq	#0,d0
+		popr.b	d0
+		;lsr.w	#8,d0
 		add.w	ost_bridge_y_start(a1),d0
 		move.w	d0,ost_y_pos(a0)
 		bra.w	DisplaySprite

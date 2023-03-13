@@ -365,6 +365,7 @@ Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 
 		include "Objects\GHZ Purple Rock.asm"		; PurpleRock
 		include "Objects\GHZ Waterfall Sound.asm"	; WaterSound
+		include "Objects\Tile Switcher.asm"		; TileSwitch
 
 		include "Objects\GHZ & SLZ Smashable Walls.asm"	; SmashWall
 		include "Objects\_Shatter & Crumble.asm"

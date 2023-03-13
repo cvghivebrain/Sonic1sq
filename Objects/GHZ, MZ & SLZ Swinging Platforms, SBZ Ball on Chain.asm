@@ -85,9 +85,9 @@ Swing_Main:	; Routine 0
 		move.w	ost_y_pos(a0),d0
 		sub.w	(v_camera_y_pos).w,d0			; d0 = -ve if object is above screen
 		cmpi.w	#-256,d0
-		ble.w	DespawnNoDisplay			; branch if anchor is 256px+ above screen
+		ble.w	DespawnQuick_NoDisplay			; branch if anchor is 256px+ above screen
 		cmpi.w	#screen_height,d0
-		bge.w	DespawnNoDisplay			; branch if anchor is below screen
+		bge.w	DespawnQuick_NoDisplay			; branch if anchor is below screen
 		
 		addq.b	#2,ost_routine(a0)			; goto Swing_Anchor next
 		moveq	#0,d0

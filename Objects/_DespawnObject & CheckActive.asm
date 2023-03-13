@@ -36,7 +36,7 @@ DespawnQuick_AltX:
 		bne.w	DeleteObject				; delete if object moves off screen
 		bra.w	DisplaySprite				; display instead of despawn
 
-DespawnNoDisplay:
+DespawnQuick_NoDisplay:
 		move.w	ost_x_pos(a0),d0
 		bsr.s	CheckActive
 		bne.w	DeleteObject				; delete if object moves off screen
@@ -58,6 +58,12 @@ DespawnFamily_AltX:
 		bsr.s	CheckActive
 		bne.w	DeleteFamily				; delete if object moves off screen
 		bra.w	DisplaySprite				; display instead of despawn
+
+DespawnFamily_NoDisplay:
+		move.w	ost_x_pos(a0),d0
+		bsr.s	CheckActive
+		bne.w	DeleteFamily				; delete if object moves off screen
+		rts						; don't display
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to check if object is within active space around the screen
@@ -155,7 +161,9 @@ PreventDupe:
 		adda.w	d0,a2					; jump to relevant position in respawn table
 		bclr	#7,(a2)					; clear the already-loaded flag
 		bset	#0,(a2)					; remember this was loaded
-		bne.w	DeleteObject				; delete object if previously loaded
+		beq.s	.exit					; branch if not previously loaded
+		addq.l	#4,sp					; don't execute object code after leaving this subroutine
+		bra.w	DeleteObject				; delete object if previously loaded
 		
 	.exit:
 		rts

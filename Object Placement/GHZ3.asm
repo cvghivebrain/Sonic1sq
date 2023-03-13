@@ -127,6 +127,7 @@ ObjPos_GHZ3:
 		objpos $1060,$0188,BasicPlatform,type_plat_updown_rev
 		objpos $1064,$0320,Rings,$10,rem
 		objpos $107E,$031C,Rings,$10,rem
+		objpos $1080,$0380,TileSwitch,$35
 		objpos $1080,$04D0,BuzzBomber,$00,rem
 		objpos $1084,$02F0,Monitor,type_monitor_1up,rem
 		objpos $1098,$0320,Rings,$10,rem
