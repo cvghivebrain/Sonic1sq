@@ -103,7 +103,7 @@ ObjPos_GHZ1:
 		objpos $154E,$0230,Rings,$10,rem
 		objpos $1580,$01F1,Monitor,type_monitor_shield,rem
 		objpos $1580,$021D,Rings,$10,rem
-		objpos $1580,$0280,TileSwitch,$35
+		objpos $1580,$0280,TileSwitch,0
 		objpos $15AF,$0230,Rings,$10,rem
 		objpos $15C3,$0260,Rings,$10,rem
 		objpos $1610,$0130,BuzzBomber,$00,rem

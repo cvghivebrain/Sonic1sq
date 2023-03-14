@@ -124,7 +124,7 @@ ObjPos_GHZ2:
 		objpos $0D5C,$0223,Rings,$10,rem
 		objpos $0D80,$01F1,Monitor,type_monitor_1up,rem
 		objpos $0D80,$021C,Rings,$10,rem
-		objpos $0D80,$0280,TileSwitch,$35
+		objpos $0D80,$0280,TileSwitch,0
 		objpos $0D80,$0350,Crabmeat,$00,rem
 		objpos $0DA0,$01F0,Rings,$13,rem
 		objpos $0DA0,$0223,Rings,$10,rem
