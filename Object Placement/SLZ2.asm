@@ -10,10 +10,12 @@ ObjPos_SLZ2:
 		objpos $0390,$00B0,Orbinaut,$03,rem
 		objpos $0630,$0210,Rings,$42,rem
 		objpos $0668,$0130,Rings,$12,rem
+		objpos $0680,$0180,TileSwitch,2
 		objpos $073A,$026F,Rings,$10,rem
 		objpos $0743,$024E,Rings,$10,rem
 		objpos $075D,$0235,Rings,$10,rem
 		objpos $0780,$022C,Rings,$10,rem
+		objpos $0780,$0280,TileSwitch,1
 		objpos $07A1,$0235,Rings,$10,rem
 		objpos $07BB,$024E,Rings,$10,rem
 		objpos $07C5,$026F,Rings,$10,rem
@@ -27,6 +29,7 @@ ObjPos_SLZ2:
 		objpos $0D30,$0410,Rings,$46,rem
 		objpos $0D30,$04B8,Rings,$46,rem
 		objpos $0D68,$0330,Rings,$12,rem
+		objpos $0D80,$0380,TileSwitch,2
 		objpos $0D90,$0210,Bomb,$00,yflip,rem
 		objpos $0D90,$0270,Bomb,$00,xflip,rem
 		objpos $0DE0,$0270,Bomb,$00,xflip,rem
@@ -73,6 +76,7 @@ ObjPos_SLZ2:
 		objpos $1243,$014E,Rings,$10,rem
 		objpos $125D,$0135,Rings,$10,rem
 		objpos $1280,$012C,Rings,$10,rem
+		objpos $1280,$0180,TileSwitch,1
 		objpos $12A1,$0135,Rings,$10,rem
 		objpos $12BB,$014E,Rings,$10,rem
 		objpos $12C5,$016F,Rings,$10,rem
@@ -83,6 +87,8 @@ ObjPos_SLZ2:
 		objpos $135D,$0135,Rings,$10,rem
 		objpos $1368,$0430,Rings,$12,rem
 		objpos $1380,$012C,Rings,$10,rem
+		objpos $1380,$0180,TileSwitch,1
+		objpos $1380,$0480,TileSwitch,2
 		objpos $1388,$0270,Scenery,type_scen_cannon
 		objpos $13A0,$0270,FireMaker,type_fire_fastest+type_fire_right
 		objpos $13A1,$0135,Rings,$10,rem
@@ -114,6 +120,7 @@ ObjPos_SLZ2:
 		objpos $1643,$064E,Rings,$10,rem
 		objpos $165D,$0635,Rings,$10,rem
 		objpos $1680,$062C,Rings,$10,rem
+		objpos $1680,$0680,TileSwitch,1
 		objpos $1690,$00F0,Staircase,type_stair_above,xflip
 		objpos $1694,$0250,Rings,$12,rem
 		objpos $16A1,$0635,Rings,$10,rem

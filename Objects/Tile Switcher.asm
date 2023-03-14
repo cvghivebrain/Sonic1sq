@@ -2,7 +2,8 @@
 ; Tile switcher for loops (GHZ/SLZ)
 
 ; spawned by:
-;	ObjPos_GHZ1, ObjPos_GHZ2, ObjPos_GHZ3
+;	ObjPos_GHZ1, ObjPos_GHZ2, ObjPos_GHZ3 - subtype 0
+;	ObjPos_SLZ1, ObjPos_SLZ2, ObjPos_SLZ3 - subtypes 1/2
 ; ---------------------------------------------------------------------------
 
 TileSwitch:
@@ -28,7 +29,18 @@ TSwi_Info_0:	; GHZ loops
 		dc.b 256-16, 128, 32/2, 128/2, id_Hotspot_Replace ; hotspot #2
 		dc.b 128, 32, 32/2, 64/2, id_Hotspot_LR		; hotspot #3
 		even
-TSwi_Info_1:
+TSwi_Info_1:	; SLZ loops (left-right)
+		dc.b $2A, $2B					; default/replacement tile ids
+		dc.b 16, 160, 32/2, 128/2, id_Hotspot_Default	; hotspot #1 (x pos, y pos, width, height, type)
+		dc.b 256-16, 160, 32/2, 128/2, id_Hotspot_Replace ; hotspot #2
+		dc.b 128, 48, 32/2, 96/2, id_Hotspot_LR		; hotspot #3
+		even
+TSwi_Info_2:	; SLZ loops (left-down)
+		dc.b $34, $35					; default/replacement tile ids
+		dc.b 16, 142, 32/2, 160/2, id_Hotspot_Default	; hotspot #1 (x pos, y pos, width, height, type)
+		dc.b 80, 255, 96/2, 30/2, id_Hotspot_Replace	; hotspot #2
+		dc.b 128, 48, 32/2, 96/2, id_Hotspot_LR		; hotspot #3
+		even
 ; ===========================================================================
 
 TSwi_Main:	; Routine 0
@@ -112,6 +124,7 @@ Hotspot_Index:	index *,,2
 		ptr Hotspot_Default
 		ptr Hotspot_Replace
 		ptr Hotspot_LR
+		ptr Hotspot_Delete
 		
 Hotspot_Default:
 		move.b	ost_tswi_tile_default(a2),(a3)		; set tile to default value
@@ -124,4 +137,7 @@ Hotspot_LR:
 Hotspot_Replace:
 		move.b	ost_tswi_tile_alt(a2),(a3)		; set tile to replacement value
 		rts
+		
+Hotspot_Delete:
+		bra.w	DeleteObject				; use id_Hotspot_Delete if you don't need 3 hotspots
 		

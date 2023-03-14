@@ -58,6 +58,7 @@ ObjPos_SLZ3:
 		objpos $0A40,$00AC,Orbinaut,$03,rem
 		objpos $0A40,$0690,Seesaw,$00
 		objpos $0A68,$0130,Rings,$12,rem
+		objpos $0A80,$0180,TileSwitch,2
 		objpos $0A90,$05D0,Bomb,$00,xflip,rem
 		objpos $0AA0,$00AC,Orbinaut,$03,rem
 		objpos $0AF0,$05D0,Bomb,$00,rem
@@ -91,17 +92,20 @@ ObjPos_SLZ3:
 		objpos $0E68,$0030,Rings,$12,rem
 		objpos $0E60,$0650,FireMaker,type_fire_medium+type_fire_left
 		objpos $0E78,$0650,Scenery,type_scen_cannon,xflip
+		objpos $0E80,$0080,TileSwitch,2
 		objpos $0F20,$0768,CollapseFloor,type_cfloor_slz+$01
 		objpos $0F28,$0750,Rings,$12,rem
 		objpos $0F30,$0210,Rings,$44,rem
 		objpos $0F60,$0768,CollapseFloor,type_cfloor_slz+$01
 		objpos $0F68,$0130,Rings,$12,rem
+		objpos $0F80,$0180,TileSwitch,2
 		objpos $1000,$0750,Fan,type_fan_left_on,xflip
 		objpos $1010,$05D1,Monitor,type_monitor_invincible,rem
 		objpos $103C,$0270,Rings,$10,rem
 		objpos $1044,$024E,Rings,$10,rem
 		objpos $105E,$0233,Rings,$10,rem
 		objpos $1080,$022C,Rings,$10,rem
+		objpos $1080,$0280,TileSwitch,1
 		objpos $1090,$0770,Bomb,$00,xflip,rem
 		objpos $10A3,$0233,Rings,$10,rem
 		objpos $10B0,$05D8,Springs,type_spring_red+type_spring_up
@@ -175,6 +179,7 @@ ObjPos_SLZ3:
 		objpos $1620,$0450,Rings,$12,rem
 		objpos $1630,$0210,Rings,$42,rem
 		objpos $1668,$0130,Rings,$12,rem
+		objpos $1680,$0180,TileSwitch,2
 		objpos $1710,$0250,Fan,type_fan_left_on,xflip
 		objpos $1710,$05D1,Monitor,type_monitor_shield,rem
 		objpos $1710,$0650,Fan,type_fan_left_on,xflip
@@ -236,6 +241,7 @@ ObjPos_SLZ3:
 		objpos $1D50,$0410,Bomb,$00,yflip,rem
 		objpos $1D60,$0310,Bomb,$00,yflip,rem
 		objpos $1D68,$0130,Rings,$12,rem
+		objpos $1D80,$0180,TileSwitch,2
 		objpos $1D80,$0310,Bomb,$00,yflip,rem
 		objpos $1D80,$0344,Orbinaut,$03,rem
 		objpos $1DA0,$0310,Bomb,$00,yflip,rem

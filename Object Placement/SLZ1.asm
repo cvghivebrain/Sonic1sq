@@ -57,6 +57,7 @@ ObjPos_SLZ1:
 		objpos $0C70,$0100,Rings,$44,rem
 		objpos $0C70,$01D8,Springs,type_spring_yellow+type_spring_up
 		objpos $0C80,$062C,Rings,$10,rem
+		objpos $0C80,$0680,TileSwitch,1
 		objpos $0C88,$0570,Scenery,type_scen_cannon
 		objpos $0C90,$02F0,Staircase,type_stair_above
 		objpos $0CA0,$0570,FireMaker,type_fire_medium+type_fire_right
@@ -186,6 +187,7 @@ ObjPos_SLZ1:
 		objpos $1A64,$0255,Rings,$10,rem
 		objpos $1A78,$0670,Scenery,type_scen_cannon,xflip
 		objpos $1A80,$012C,Rings,$10,rem
+		objpos $1A80,$0180,TileSwitch,1
 		objpos $1A85,$024C,Rings,$10,rem
 		objpos $1AA4,$0136,Rings,$10,rem
 		objpos $1ABC,$0150,Rings,$10,rem
