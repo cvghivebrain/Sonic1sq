@@ -7,7 +7,7 @@
 ;	ObjPos_SYZ1, ObjPos_SYZ2, ObjPos_SYZ3 - subtypes 2/3/4/5/6
 ;	ObjPos_LZ1, ObjPos_LZ2, ObjPos_LZ3 - subtypes 2/4/5/6
 ;	ObjPos_SLZ1, ObjPos_SLZ2, ObjPos_SLZ3 - subtypes 2/4/5/6
-;	ObjPos_SBZ1, ObjPos_SBZ2, ObjPos_SBZ3 - subtypes 2/4/5/6/$11/$13/$15/$17
+;	ObjPos_SBZ1, ObjPos_SBZ2, ObjPos_SBZ3 - subtypes 2/4/5/6
 ; ---------------------------------------------------------------------------
 
 Monitor:
@@ -19,7 +19,7 @@ Monitor:
 Mon_Index:	index *,,2
 		ptr Mon_Main
 		ptr Mon_Solid
-		ptr Mon_BreakOpen
+		ptr Mon_Break
 		ptr Mon_Animate
 		ptr Mon_Display
 
@@ -38,19 +38,15 @@ Mon_Main:	; Routine 0
 		move.b	#3,ost_priority(a0)
 		move.b	#$F,ost_displaywidth(a0)
 		move.b	#-1,ost_monitor_slot(a0)		; assume there are no free slots
-		lea	(v_respawn_list).w,a2
-		moveq	#0,d0
-		move.b	ost_respawn(a0),d0
-		bclr	#7,2(a2,d0.w)
-		btst	#0,2(a2,d0.w)				; has monitor been broken?
-		beq.s	.notbroken				; if not, branch
+		bsr.w	GetState
+		andi.b	#1,d0
+		beq.s	.not_broken				; branch if monitor wasn't broken
 		move.b	#id_Mon_Display,ost_routine(a0)		; goto Mon_Display next
 		move.b	#id_frame_monitor_broken,ost_frame(a0)	; use broken monitor frame
 		rts	
 ; ===========================================================================
 
-	.notbroken:
-		move.b	#id_col_16x16+id_col_item,ost_col_type(a0)
+	.not_broken:
 		cmp.b	#type_monitor_1up,ost_subtype(a0)
 		bne.s	.not_1up				; branch if monitor isn't a 1-up
 		move.b	#id_ani_monitor_sonic,ost_anim(a0)	; use 1-up animation
@@ -60,119 +56,28 @@ Mon_Main:	; Routine 0
 		bsr.w	Mon_FindSlot
 
 Mon_Solid:	; Routine 2
-		move.b	ost_routine2(a0),d0			; is monitor being stood on or falling?
-		beq.s	Mon_Solid_Normal			; if not, branch
-		subq.b	#2,d0
-		bne.s	Mon_Solid_Fall				; branch if ost_routine2 > 2
-
-		; ost_routine2 = 2
-		moveq	#0,d1
-		move.b	ost_displaywidth(a0),d1
-		addi.w	#$B,d1
-		bsr.w	ExitPlatform				; clear platform flags if Sonic walks off the monitor
-		btst	#status_platform_bit,ost_status(a1)	; is Sonic on top of the monitor?
-		bne.w	.ontop					; if yes, branch
-		clr.b	ost_routine2(a0)
-		bra.w	Mon_Animate
-; ===========================================================================
-
-	.ontop:
-		move.w	#$10,d3
-		move.w	ost_x_pos(a0),d2
-		bsr.w	MoveWithPlatform			; update Sonic's position
-		bra.w	Mon_Animate
-; ===========================================================================
-
-Mon_Solid_Fall:	; ost_routine2 = 4
-		bsr.w	ObjectFall				; apply gravity and update position
-		jsr	(FindFloorObj).l
-		tst.w	d1					; has monitor hit the floor?
-		bpl.w	Mon_Animate				; if not, branch
-		add.w	d1,ost_y_pos(a0)			; align to floor
-		clr.w	ost_y_vel(a0)				; stop moving
-		clr.b	ost_routine2(a0)
-		bra.w	Mon_Animate
-; ===========================================================================
-
-Mon_Solid_Normal:
-		; ost_routine2 = 0
-		move.w	#$1A,d1					; monitor width/2
-		move.w	#$F,d2					; monitor height/2
-		bsr.w	Mon_Solid_Detect			; detect collision
-		beq.w	Mon_Solid_ChkPush			; branch if none
-		tst.w	ost_y_vel(a1)				; is Sonic moving upwards?
-		bmi.s	.dont_break				; if yes, branch
-		cmpi.b	#id_Roll,ost_anim(a1)			; is Sonic rolling/jumping?
-		beq.s	Mon_Solid_ChkPush			; if yes, branch
-
-	.dont_break:
-		tst.w	d1					; is side collision flag set?
-		bpl.s	Mon_Solid_Side				; if yes, branch
-		sub.w	d3,ost_y_pos(a1)			; align Sonic to top of monitor
-		bsr.w	Plat_NoCheck				; update platform status flags for Sonic/monitor
-		move.b	#2,ost_routine2(a0)			; Sonic is standing on monitor
-		bra.w	Mon_Animate
-; ===========================================================================
-
-Mon_Solid_Side:
-		tst.w	d0
-		beq.w	.sonic_push				; branch if Sonic is touching right side of monitor
-		bmi.s	.sonic_left				; branch if Sonic is to the left
-		tst.w	ost_x_vel(a1)				; is Sonic moving left?
-		bmi.s	.sonic_push				; if yes, branch
-		bra.s	.sonic_right				; Sonic is moving right/stationary
-; ===========================================================================
-
-.sonic_left:
-		tst.w	ost_x_vel(a1)				; is Sonic moving right?
-		bpl.s	.sonic_push				; if yes, branch
-
-.sonic_right:
-		sub.w	d0,ost_x_pos(a1)			; align Sonic to side of monitor
-		move.w	#0,ost_inertia(a1)
-		move.w	#0,ost_x_vel(a1)			; stop Sonic moving
-
-.sonic_push:
-		btst	#status_air_bit,ost_status(a1)		; is Sonic in the air?
-		bne.s	Mon_Solid_ClearPush			; if yes, branch
-		bset	#status_pushing_bit,ost_status(a1)	; set pushing flags
-		bset	#status_pushing_bit,ost_status(a0)
-		bra.s	Mon_Animate
-; ===========================================================================
-
-Mon_Solid_ChkPush:
-		btst	#status_pushing_bit,ost_status(a0)	; is monitor being pushed?
-		beq.s	Mon_Animate				; if not, branch
-		move.b	#id_Run,ost_sonic_anim_next(a1)
-
-Mon_Solid_ClearPush:
-		bclr	#status_pushing_bit,ost_status(a0)
-		bclr	#status_pushing_bit,ost_status(a1)
-
-Mon_Animate:	; Routine 6
-		lea	(Ani_Monitor).l,a1
-		bsr.w	AnimateSprite
-
-Mon_Display:	; Routine 8
-		move.w	ost_x_pos(a0),d0
-		bsr.w	CheckActive
-		bne.s	Mon_ClearSlot
-		bra.w	DisplaySprite
+		bsr.w	Mon_Solid_Detect
+		cmpi.b	#4,ost_solid(a0)
+		beq.s	.top_bounce				; branch if monitor was jumped on
+		andi.b	#solid_left+solid_right,d1
+		beq.w	Mon_Animate				; branch if no collision
+		tst.w	ost_x_vel(a1)
+		beq.w	Mon_Animate				; branch if Sonic isn't moving sideways
+		tst.w	ost_y_vel(a1)
+		bmi.w	Mon_Animate				; branch if Sonic is moving upwards
+		cmpi.b	#id_Roll,ost_anim(a1)
+		bne.w	Mon_Animate				; branch if Sonic isn't rolling/jumping
 		
-Mon_ClearSlot:
-		move.b	ost_monitor_slot(a0),d0
-		bmi.s	.no_slot				; branch if slot isn't used
-		bclr.b	d0,(v_monitor_slots).w
-		
-	.no_slot:
-		bra.w	DeleteObject
+	.top_bounce:
+		neg.w	ost_y_vel(a1)				; reverse Sonic's y speed
+		addq.b	#2,ost_routine(a0)			; goto Mon_Break next
+		bra.w	Mon_Animate
 ; ===========================================================================
 
-Mon_BreakOpen:	; Routine 4
+Mon_Break:	; Routine 4
 		addq.b	#2,ost_routine(a0)			; goto Mon_Animate next
-		move.b	#0,ost_col_type(a0)
 		bsr.w	FindFreeObj				; find free OST slot
-		bne.s	Mon_Explode				; branch if not found
+		bne.s	.fail					; branch if not found
 		move.l	#PowerUp,ost_id(a1)			; load monitor contents object
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
@@ -185,11 +90,10 @@ Mon_BreakOpen:	; Routine 4
 		
 	.not_1up:
 		tst.b	ost_monitor_slot(a0)
-		bmi.s	Mon_Explode				; branch if monitor isn't using a slot
+		bmi.s	.no_slot				; branch if monitor isn't using a slot
 		move.b	ost_monitor_slot(a0),ost_frame(a1)
-		add.b	#id_frame_monitor_7,ost_frame(a1)	; icon is based on monitor slot number
 
-Mon_Explode:
+	.no_slot:
 		bsr.w	FindFreeObj				; find free OST slot
 		bne.s	.fail					; branch if not found
 		move.l	#ExplosionItem,ost_id(a1)		; load explosion object
@@ -198,131 +102,162 @@ Mon_Explode:
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 
 	.fail:
-		lea	(v_respawn_list).w,a2
-		moveq	#0,d0
-		move.b	ost_respawn(a0),d0
-		bset	#0,2(a2,d0.w)
 		move.b	#id_ani_monitor_breaking,ost_anim(a0)	; set monitor type to broken
-		move.b	#-1,ost_monitor_slot(a0)		; cancel slot use (monitor contents now use that slot)
+		move.b	#-1,ost_monitor_slot(a0)		; PowerUp object takes over the monitor slot
+		bsr.w	SaveState
+		beq.w	Mon_Animate
+		bset	#0,(a2)					; remember broken
+		bra.w	Mon_Animate
+; ===========================================================================
+
+Mon_Solid_Fall:	; ost_routine2 = 4
+		bsr.w	ObjectFall				; apply gravity and update position
+		jsr	(FindFloorObj).l
+		tst.w	d1					; has monitor hit the floor?
+		bpl.w	Mon_Animate				; if not, branch
+		add.w	d1,ost_y_pos(a0)			; align to floor
+		clr.w	ost_y_vel(a0)				; stop moving
+		clr.b	ost_routine2(a0)
+		;bra.w	Mon_Animate
+; ===========================================================================
+
+Mon_Animate:	; Routine 6
+		lea	(Ani_Monitor).l,a1
+		bsr.w	AnimateSprite
+
+Mon_Display:	; Routine 8
+		move.w	ost_x_pos(a0),d0
+		bsr.w	CheckActive
+		bne.s	.clear_slot
 		bra.w	DisplaySprite
+		
+	.clear_slot:
+		moveq	#0,d0
+		move.b	ost_monitor_slot(a0),d0
+		bmi.w	DeleteObject				; branch if slot isn't used
+		lea	(v_monitor_slots).w,a1
+		add.w	d0,d0
+		subq.b	#1,(a1,d0.w)				; decrement slot usage counter
+		bra.w	DeleteObject
 
 ; ---------------------------------------------------------------------------
-; Subroutine to	make the sides of a monitor solid
-
-; input:
-;	d1 = width/2
-;	d2 = height/2
-
-; output:
-;	d0 = distance from right side of monitor
-;	d1 = collision type: 0 = none; 1 = side collision; -1 = top/bottom collision
-;	d3 = distance from top of monitor
+; Subroutine to	make a monitor solid (mostly the same as SolidObject)
 ; ---------------------------------------------------------------------------
 
 Mon_Solid_Detect:
-		lea	(v_ost_player).w,a1
-		move.w	ost_x_pos(a1),d0
-		sub.w	ost_x_pos(a0),d0
-		add.w	d1,d0					; d0 = distance from left side of monitor
-		bmi.s	.no_collision				; branch if Sonic is left of object
-		move.w	d1,d3
-		add.w	d3,d3
-		cmp.w	d3,d0
-		bhi.s	.no_collision				; branch if Sonic is right of object
-		move.b	ost_height(a1),d3
-		ext.w	d3
-		add.w	d3,d2
-		move.w	ost_y_pos(a1),d3
-		sub.w	ost_y_pos(a0),d3
-		add.w	d2,d3					; d3 = distance from top of monitor
-		bmi.s	.no_collision				; branch if Sonic is above object
-		add.w	d2,d2
-		cmp.w	d2,d3
-		bcc.s	.no_collision				; branch if Sonic is below object
+		tst.b	ost_render(a0)
+		bpl.w	Sol_OffScreen				; branch if object isn't on screen
+		tst.b	ost_solid(a0)
+		bne.w	Sol_Stand				; branch if Sonic is already standing on object
+		bsr.w	RangePlusX				; get distances between Sonic (a1) and object (a0)
+		cmp.w	#0,d1
+		bgt.w	Sol_None				; branch if outside x hitbox
+		bsr.w	RangePlusY2
+		bpl.w	Sol_None				; branch if outside y hitbox
 		
-		tst.b	(v_lock_multi).w
-		bmi.s	.no_collision				; branch if object collision is disabled
-		cmpi.b	#id_Sonic_Death,(v_ost_player+ost_routine).w
-		bcc.s	.no_collision				; branch if Sonic is dead
-		tst.w	(v_debug_active).w
-		bne.s	.no_collision				; branch if debug mode is in use
+		cmp.w	d1,d3
+		blt.w	.side					; branch if Sonic is to the side
 		
-		cmp.w	d0,d1					; is Sonic between left side & middle of monitor?
-		bcc.s	.left_hit				; if yes, branch
-		add.w	d1,d1
-		sub.w	d1,d0					; d0 = distance from right side of monitor
-
-	.left_hit:
-		cmpi.w	#$10,d3					; is Sonic between top & middle of monitor?
-		bcs.s	.top_hit				; if yes, branch
-
-.side_hit:
-		moveq	#1,d1					; set side collision flag
-		rts	
-; ===========================================================================
-
-.no_collision:
-		moveq	#0,d1					; set no collision flag
-		rts	
-; ===========================================================================
-
-.top_hit:
-		moveq	#0,d1
-		move.b	ost_displaywidth(a0),d1
-		addq.w	#4,d1
-		move.w	d1,d2
-		add.w	d2,d2
-		add.w	ost_x_pos(a1),d1
-		sub.w	ost_x_pos(a0),d1
-		bmi.s	.side_hit				; branch if Sonic is to the left
-		cmp.w	d2,d1
-		bcc.s	.side_hit				; branch if Sonic is to the right
-		moveq	#-1,d1					; set top/bottom collision flag
+		tst.w	d2
+		bmi.w	.above					; branch if Sonic is above
+		
+		sub.w	d3,ost_y_pos(a1)			; snap to hitbox
+		move.w	#0,ost_y_vel(a1)			; stop Sonic moving up
+		moveq	#solid_bottom,d1			; set collision flag to bottom
+		rts
+		
+	.side:
+		cmpi.b	#id_Roll,ost_anim(a1)
+		bne.w	Sol_Side				; use regular side collision if not rolling/jumping
+		tst.w	d0
+		bmi.s	.left					; branch if Sonic is on left side
+		moveq	#solid_right,d1				; set collision flag to right
+		rts
+		
+	.left:
+		moveq	#solid_left,d1				; set collision flag to left
+		rts
+		
+	.above:
+		cmpi.b	#id_Roll,ost_anim(a1)
+		bne.w	Sol_Above				; use regular top collision if not rolling/jumping
+		tst.w	ost_y_vel(a1)
+		bmi.w	Sol_None				; branch if Sonic is moving up
+		add.w	d3,ost_y_pos(a1)			; snap to hitbox
+		move.b	#4,ost_solid(a0)
+		moveq	#solid_top,d1				; set collision flag to top
 		rts
 		
 ; ---------------------------------------------------------------------------
 ; Subroutine to	find a free monitor slot, set animation and load graphics
 
-;	uses d0.l, d1.l, d2.l, a1, a2
+;	uses d0.l, d1.l, d2.l, d3.w, a1, a2
 ; ---------------------------------------------------------------------------
 
 Mon_FindSlot:
 		lea	(v_monitor_slots).w,a1
-		moveq	#8-1,d1					; number of slots to check
+		movea.l	a1,a2
+		moveq	#0,d0
+		move.b	ost_subtype(a0),d0
 		
-	.loop:
-		btst	d1,(a1)
-		beq.s	.found_slot				; branch if free slot found
-		dbf	d1,.loop				; repeat for all slots
+		moveq	#8-1,d1					; number of slots to check
+	.loop1:
+		cmp.b	1(a1),d0
+		beq.s	.found_match				; branch if type matches existing type
+		adda.w	#2,a1					; next slot
+		dbf	d1,.loop1				; repeat for all slots
+		
+		movea.l	a2,a1
+		moveq	#8-1,d1
+	.loop2:
+		tst.w	(a1)
+		beq.s	.found_empty				; branch if slot is fully empty
+		adda.w	#2,a1					; next slot
+		dbf	d1,.loop2				; repeat for all slots
+		
+		movea.l	a2,a1
+		moveq	#8-1,d1
+	.loop3:
+		tst.b	(a1)
+		beq.s	.found_empty				; branch if slot is available but not empty
+		adda.w	#2,a1					; next slot
+		dbf	d1,.loop3				; repeat for all slots
 		
 		move.b	#id_ani_monitor_static,ost_anim(a0)	; use static animation
 		rts
 		
-	.found_slot:
-		bset	d1,(a1)					; set slot as used
+	.found_match:
+		addq.b	#1,(a1)+				; increment usage counter
+		neg.w	d1
+		addq.w	#7,d1					; convert d0 from 7~0 to 0~7
 		move.b	d1,ost_monitor_slot(a0)
 		move.b	d1,ost_anim(a0)
-		add.b	#id_ani_monitor_7,ost_anim(a0)		; use animation based on slot number
+		rts
+		
+	.found_empty:
+		bsr.s	.found_match				; set ost_anim & ost_monitor_slot
+		move.b	d0,(a1)					; save type to slot
 		
 		set_dma_size	sizeof_cell*4,d2		; number of tiles to load
-		lea	Mon_GfxSlots(pc),a1
-		lsl.w	#2,d1
-		move.l	(a1,d1.w),d1				; get VRAM address from list below
-		moveq	#0,d0
-		move.b	ost_subtype(a0),d0
-		mulu.w	#6,d0
+		add.w	d1,d1
+		add.w	d1,d1					; d1 * 4
+		move.l	Mon_GfxSlots(pc,d1.w),d1		; get VRAM address from list below
+		add.w	d0,d0
+		move.w	d0,d3
+		add.w	d0,d0
+		add.w	d3,d0					; d0 * 6
 		lea	Mon_GfxSource(pc,d0.w),a2		; get ROM address for gfx
 		jmp	AddDMA					; add gfx to DMA queue
 
 Mon_GfxSlots:
-		set_dma_dest	vram_monitors+$780
-		set_dma_dest	vram_monitors+$700
-		set_dma_dest	vram_monitors+$680
-		set_dma_dest	vram_monitors+$600
-		set_dma_dest	vram_monitors+$580
-		set_dma_dest	vram_monitors+$500
-		set_dma_dest	vram_monitors+$480
 		set_dma_dest	vram_monitors+$400
+		set_dma_dest	vram_monitors+$480
+		set_dma_dest	vram_monitors+$500
+		set_dma_dest	vram_monitors+$580
+		set_dma_dest	vram_monitors+$600
+		set_dma_dest	vram_monitors+$680
+		set_dma_dest	vram_monitors+$700
+		set_dma_dest	vram_monitors+$780
 
 Mon_GfxSource:
 		set_dma_src	Art_EggmanIcon			; Eggman
@@ -340,16 +275,16 @@ countof_monitor_types:	equ (*-Mon_GfxSource)/6
 ; ---------------------------------------------------------------------------
 
 Ani_Monitor:	index *
+		ptr ani_monitor_0
+		ptr ani_monitor_1
+		ptr ani_monitor_2
+		ptr ani_monitor_3
+		ptr ani_monitor_4
+		ptr ani_monitor_5
+		ptr ani_monitor_6
+		ptr ani_monitor_7
 		ptr ani_monitor_static
 		ptr ani_monitor_sonic
-		ptr ani_monitor_7
-		ptr ani_monitor_6
-		ptr ani_monitor_5
-		ptr ani_monitor_4
-		ptr ani_monitor_3
-		ptr ani_monitor_2
-		ptr ani_monitor_1
-		ptr ani_monitor_0
 		ptr ani_monitor_breaking
 		
 ani_monitor_static:

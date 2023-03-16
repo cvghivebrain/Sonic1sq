@@ -37,15 +37,11 @@ Pow_Main:	; Routine 0
 		move.l	a1,ost_mappings(a0)
 
 Pow_Move:	; Routine 2
-		bsr.s	.move
-		bra.w	DisplaySprite
-
-	.move:
-		tst.w	ost_y_vel(a0)				; is object moving?
-		bpl.w	Pow_Checks				; if not, branch
+		tst.w	ost_y_vel(a0)
+		bpl.s	Pow_Checks				; branch if object has stopped rising
 		bsr.w	SpeedToPos				; update position
 		addi.w	#$18,ost_y_vel(a0)			; reduce object speed
-		rts	
+		bra.w	DisplaySprite
 ; ===========================================================================
 
 Pow_Checks:
@@ -56,7 +52,8 @@ Pow_Checks:
 		move.b	ost_subtype(a0),d0
 		add.w	d0,d0
 		move.w	Pow_Index2(pc,d0.w),d1
-		jmp	Pow_Index2(pc,d1.w)
+		jsr	Pow_Index2(pc,d1.w)
+		bra.w	DisplaySprite
 ; ===========================================================================
 Pow_Index2:	index *
 		ptr Pow_Eggman
@@ -159,13 +156,14 @@ Pow_Goggles:
 
 Pow_Delete:	; Routine 4
 		subq.b	#1,ost_anim_time(a0)
-		bmi.s	Pow_ClearSlot				; delete after half a second
+		bmi.s	.clear_slot				; delete after half a second
 		bra.w	DisplaySprite
 		
-Pow_ClearSlot:
+	.clear_slot:
+		moveq	#0,d0
 		move.b	ost_pow_slot(a0),d0
-		bmi.s	.no_slot				; branch if slot isn't used
-		bclr.b	d0,(v_monitor_slots).w
-		
-	.no_slot:
+		bmi.w	DeleteObject				; branch if slot isn't used
+		lea	(v_monitor_slots).w,a1
+		add.w	d0,d0
+		subq.b	#1,(a1,d0.w)				; decrement slot usage counter
 		bra.w	DeleteObject

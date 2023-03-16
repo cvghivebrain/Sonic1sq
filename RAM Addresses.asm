@@ -186,8 +186,8 @@ v_boss_status:			rs.b 1 ; status of boss and prison capsule - 01 = boss defeated
 v_sonic_pos_tracker_num:	rs.w 1 ; current location within position tracking data
 v_sonic_pos_tracker_num_low:	equ __rs-1
 f_boss_boundary:		rs.b 1 ; flag set to stop Sonic moving off the right side of the screen at a boss
-v_monitor_slots:		rs.b 1 ; bitfield of available monitor slots
 v_digit_buffer:			rs.b 6 ; decimal digit buffer for score counter
+v_monitor_slots:		rs.w 8 ; available monitor slots
 v_256x256_with_loop_1:		rs.l 1 ; 256x256 level tile which contains a loop (GHZ/SLZ)
 v_256x256_with_loop_2:		equ __rs-3 ; 256x256 level tile which contains a loop (GHZ/SLZ)
 v_256x256_with_tunnel_1:	equ __rs-2 ; 256x256 level tile which contains a roll tunnel (GHZ)

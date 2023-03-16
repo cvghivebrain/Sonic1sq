@@ -2,18 +2,18 @@
 ; Sprite mappings - monitors
 ; ---------------------------------------------------------------------------
 Map_Monitor:	index *
+		ptr frame_monitor_0
+		ptr frame_monitor_1
+		ptr frame_monitor_2
+		ptr frame_monitor_3
+		ptr frame_monitor_4
+		ptr frame_monitor_5
+		ptr frame_monitor_6
+		ptr frame_monitor_7
 		ptr frame_monitor_static0
 		ptr frame_monitor_static1
 		ptr frame_monitor_static2
 		ptr frame_monitor_sonic
-		ptr frame_monitor_7
-		ptr frame_monitor_6
-		ptr frame_monitor_5
-		ptr frame_monitor_4
-		ptr frame_monitor_3
-		ptr frame_monitor_2
-		ptr frame_monitor_1
-		ptr frame_monitor_0
 		ptr frame_monitor_broken
 		
 frame_monitor_static0:
