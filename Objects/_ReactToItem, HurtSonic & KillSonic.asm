@@ -142,41 +142,12 @@ React_ChkDist:
 		; ost_col_type is $40-$7F (monitor, ring, giant ring)
 		move.b	ost_col_type(a1),d0
 		andi.b	#$3F,d0					; read only bits 0-5 (size)
-		cmpi.b	#id_col_16x16,d0			; is collision type $46 (monitor)?
-		beq.s	React_Monitor				; if yes, branch
 		cmpi.w	#sonic_flash_time-ring_delay,ost_sonic_flash_time(a0) ; has Sonic been hit recently?
 		bcc.w	.invincible				; if yes, branch
 		addq.b	#2,ost_routine(a1)			; goto Ring_Collect (if ring), RLoss_Collect (if bouncing ring), GRing_Collect (if giant ring) next
 
 	.invincible:
-		rts	
-; ===========================================================================
-
-React_Monitor:
-		tst.w	ost_y_vel(a0)				; is Sonic moving upwards?
-		bpl.s	.sonic_down				; if not, branch
-
-		move.w	ost_y_pos(a0),d0
-		subi.w	#$10,d0					; d0 = y pos above Sonic
-		cmp.w	ost_y_pos(a1),d0
-		bcs.s	.donothing				; branch if monitor is below d0
-
-		neg.w	ost_y_vel(a0)				; reverse Sonic's vertical speed
-		move.w	#-$180,ost_y_vel(a1)			; move monitor upwards
-		tst.b	ost_routine2(a1)
-		bne.s	.donothing				; branch if monitor is stood on or falling
-		addq.b	#4,ost_routine2(a1)			; set routine counter to goto Mon_Solid_Fall
-		rts	
-; ===========================================================================
-
-.sonic_down:
-		cmpi.b	#id_Roll,ost_anim(a0)			; is Sonic rolling/jumping?
-		bne.s	.donothing				; if not, branch
-		neg.w	ost_y_vel(a0)				; reverse Sonic's y speed
-		addq.b	#2,ost_routine(a1)			; set routine counter to goto Mon_BreakOpen next
-
-	.donothing:
-		rts	
+		rts
 ; ===========================================================================
 
 React_Enemy:

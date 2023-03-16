@@ -22,6 +22,7 @@ Mon_Index:	index *,,2
 		ptr Mon_Break
 		ptr Mon_Animate
 		ptr Mon_Display
+		ptr Mon_Drop
 
 		rsobj Monitor
 ost_monitor_slot:	rs.b 1					; slot used by monitor (0-7; -1 if none)
@@ -57,8 +58,10 @@ Mon_Main:	; Routine 0
 
 Mon_Solid:	; Routine 2
 		bsr.w	Mon_Solid_Detect
+		cmpi.b	#solid_bottom,d1
+		beq.s	.drop					; branch if hit from bottom
 		cmpi.b	#4,ost_solid(a0)
-		beq.s	.top_bounce				; branch if monitor was jumped on
+		beq.s	.break					; branch if monitor was jumped on
 		andi.b	#solid_left+solid_right,d1
 		beq.w	Mon_Animate				; branch if no collision
 		tst.w	ost_x_vel(a1)
@@ -68,9 +71,14 @@ Mon_Solid:	; Routine 2
 		cmpi.b	#id_Roll,ost_anim(a1)
 		bne.w	Mon_Animate				; branch if Sonic isn't rolling/jumping
 		
-	.top_bounce:
+	.break:
 		neg.w	ost_y_vel(a1)				; reverse Sonic's y speed
 		addq.b	#2,ost_routine(a0)			; goto Mon_Break next
+		bra.w	Mon_Animate
+		
+	.drop:
+		move.w	#-$180,ost_y_vel(a0)			; move monitor upwards
+		move.b	#id_Mon_Drop,ost_routine(a0)		; goto Mon_Drop next
 		bra.w	Mon_Animate
 ; ===========================================================================
 
@@ -105,21 +113,8 @@ Mon_Break:	; Routine 4
 		move.b	#id_ani_monitor_breaking,ost_anim(a0)	; set monitor type to broken
 		move.b	#-1,ost_monitor_slot(a0)		; PowerUp object takes over the monitor slot
 		bsr.w	SaveState
-		beq.w	Mon_Animate
+		beq.s	Mon_Animate
 		bset	#0,(a2)					; remember broken
-		bra.w	Mon_Animate
-; ===========================================================================
-
-Mon_Solid_Fall:	; ost_routine2 = 4
-		bsr.w	ObjectFall				; apply gravity and update position
-		jsr	(FindFloorObj).l
-		tst.w	d1					; has monitor hit the floor?
-		bpl.w	Mon_Animate				; if not, branch
-		add.w	d1,ost_y_pos(a0)			; align to floor
-		clr.w	ost_y_vel(a0)				; stop moving
-		clr.b	ost_routine2(a0)
-		;bra.w	Mon_Animate
-; ===========================================================================
 
 Mon_Animate:	; Routine 6
 		lea	(Ani_Monitor).l,a1
@@ -139,6 +134,17 @@ Mon_Display:	; Routine 8
 		add.w	d0,d0
 		subq.b	#1,(a1,d0.w)				; decrement slot usage counter
 		bra.w	DeleteObject
+; ===========================================================================
+
+Mon_Drop:	; Routine $A
+		bsr.w	ObjectFall				; apply gravity and update position
+		jsr	(FindFloorObj).l
+		tst.w	d1					; has monitor hit the floor?
+		bpl.s	Mon_Animate				; if not, branch
+		add.w	d1,ost_y_pos(a0)			; align to floor
+		clr.w	ost_y_vel(a0)				; stop moving
+		move.b	#id_Mon_Solid,ost_routine(a0)		; goto Mon_Solid next
+		bra.s	Mon_Animate
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	make a monitor solid (mostly the same as SolidObject)
@@ -162,7 +168,7 @@ Mon_Solid_Detect:
 		bmi.w	.above					; branch if Sonic is above
 		
 		sub.w	d3,ost_y_pos(a1)			; snap to hitbox
-		move.w	#0,ost_y_vel(a1)			; stop Sonic moving up
+		neg.w	ost_y_vel(a1)				; stop Sonic moving up
 		moveq	#solid_bottom,d1			; set collision flag to bottom
 		rts
 		
