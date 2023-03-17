@@ -215,10 +215,10 @@ ChkPartiallyVisible:	equ CheckOffScreen_Wide
 ;DeleteObject
 ;DeleteChild
 RememberState:		equ DespawnObject
-PlatformObject:		equ DetectPlatform
+;PlatformObject:		equ DetectPlatform
 ;Plat_NoXCheck
-Platform3:		equ Plat_NoXCheck_AltY
-loc_74AE:		equ Plat_NoCheck
+;Platform3:		equ Plat_NoXCheck_AltY
+;loc_74AE:		equ Plat_NoCheck
 ;DisplaySprite
 DisplaySprite1:		equ DisplaySprite_a1
 ;ExitPlatform
@@ -235,8 +235,8 @@ ObjHitWallLeft:		equ FindWallLeftObj
 ;FindFloor2
 ;FindWall
 ;FindWall2
-MvSonicOnPtfm:		equ MoveWithPlatform
-MvSonicOnPtfm2:		equ MoveWithPlatform2
+;MvSonicOnPtfm:		equ MoveWithPlatform
+;MvSonicOnPtfm2:		equ MoveWithPlatform2
 ;ObjectFall
 ;SpeedToPos
 ;RandomNumber

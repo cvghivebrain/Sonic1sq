@@ -273,6 +273,10 @@ v_player1_height:		rs.b 1 ; player 1 half height, standing/running etc.
 v_player1_width_roll:		rs.b 1 ; player 1 half width, rolling/jumping
 v_player1_height_roll:		rs.b 1 ; player 1 half height, rolling/jumping
 v_player1_height_diff:		rs.w 1 ; player 1 difference in height between standing and rolling
+v_player1_hitbox_width:		rs.b 1 ; player 1 half width, standing/running etc. (hitbox)
+v_player1_hitbox_height:	rs.b 1 ; player 1 half height, standing/running etc. (hitbox)
+v_player1_hitbox_width_roll:	rs.b 1 ; player 1 half width, rolling/jumping (hitbox)
+v_player1_hitbox_height_roll:	rs.b 1 ; player 1 half height, rolling/jumping (hitbox)
 v_haspassed_character:		rs.w 1 ; settings used for "Sonic has passed"
 v_haspassed_uplc:		rs.w 1 ; UPLC used for "Sonic has passed"
 v_gotthemall_character:		rs.w 1 ; settings used for "Sonic got them all"

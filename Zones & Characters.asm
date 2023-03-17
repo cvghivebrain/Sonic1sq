@@ -507,6 +507,10 @@ LoadPerCharacter:
 		sub.b	(a4),d0
 		move.w	d0,(v_player1_height_diff).w		; set height difference
 		move.b	(a4)+,(v_player1_height_roll).w		; set height (rolling/jumping)
+		move.b	(a4)+,(v_player1_hitbox_width).w	; set hitbox
+		move.b	(a4)+,(v_player1_hitbox_height).w
+		move.b	(a4)+,(v_player1_hitbox_width_roll).w
+		move.b	(a4)+,(v_player1_hitbox_height_roll).w
 		
 		rts
 
@@ -522,6 +526,8 @@ CharDefs:
 		dc.w id_UPLC_SSRSonic				; "Sonic got them all" graphics
 		dc.b 18/2, 38/2					; width, height (standing/running etc.)
 		dc.b 14/2, 28/2					; width, height (rolling/jumping)
+		dc.b 18/2, 34/2					; hitbox width, height (standing/running etc.)
+		dc.b 18/2, 24/2					; hitbox width, height (rolling/jumping)
 	CharDefs_size:
 
 		; Red Sonic
@@ -535,6 +541,8 @@ CharDefs:
 		dc.w id_UPLC_SSRKetchup
 		dc.b 18/2, 38/2
 		dc.b 14/2, 28/2
+		dc.b 18/2, 34/2
+		dc.b 18/2, 24/2
 
 		; Yellow Sonic
 		dc.l SonicPlayer
@@ -547,6 +555,8 @@ CharDefs:
 		dc.w id_UPLC_SSRMustard
 		dc.b 18/2, 38/2
 		dc.b 14/2, 28/2
+		dc.b 18/2, 34/2
+		dc.b 18/2, 24/2
 		
 ; ---------------------------------------------------------------------------
 ; Subroutine to load demo data

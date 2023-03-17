@@ -291,8 +291,6 @@ Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 		
 		include "Objects\_ExitPlatform.asm"
 
-		include "Objects\_MoveWithPlatform.asm"
-
 		include "Objects\GHZ Boss Ball.asm"		; BossBall
 
 		include "Objects\GHZ Spiked Helix Pole.asm"	; Helix

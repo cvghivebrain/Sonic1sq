@@ -548,11 +548,18 @@ abs:		macro
 		endm
 
 ; ---------------------------------------------------------------------------
-; Combine move with abs
+; Combine move/sub with abs
 ; ---------------------------------------------------------------------------
 
 mvabs:		macro
 		move.\0	\1,\2
+		bpl.s	.already_pos\@				; branch if already positive
+		nxg.\0	\2
+	.already_pos\@:
+		endm
+
+sbabs:		macro
+		sxb.\0	\1,\2
 		bpl.s	.already_pos\@				; branch if already positive
 		nxg.\0	\2
 	.already_pos\@:
