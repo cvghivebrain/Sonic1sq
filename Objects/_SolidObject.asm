@@ -22,6 +22,8 @@ SolidObject:
 		bpl.s	Sol_OffScreen				; branch if object isn't on screen
 		
 SolidObject_SkipRender:
+		tst.w	(v_debug_active_hi).w
+		bne.s	Sol_None				; branch if debug mode is in use
 		tst.b	ost_solid(a0)
 		bne.w	Sol_Stand				; branch if Sonic is already standing on object
 		bsr.w	RangePlusX				; get distances between Sonic (a1) and object (a0)
@@ -171,6 +173,8 @@ Sol_Kill:
 SolidObject_SidesOnly:
 		tst.b	ost_render(a0)
 		bpl.w	Sol_OffScreen				; branch if object isn't on screen
+		tst.w	(v_debug_active_hi).w
+		bne.w	Sol_None				; branch if debug mode is in use
 		bsr.w	RangePlusX				; get distances between Sonic (a1) and object (a0)
 		cmp.w	#0,d1
 		bgt.s	.exit					; branch if outside x hitbox
@@ -200,6 +204,8 @@ SolidObject_TopOnly:
 		bpl.w	Sol_OffScreen				; branch if object isn't on screen
 		
 SolidObject_TopOnly_SkipRender:
+		tst.w	(v_debug_active_hi).w
+		bne.w	Sol_None				; branch if debug mode is in use
 		bsr.w	RangePlusX_NoPlayerWidth		; get distances between Sonic (a1) and object (a0)
 		bsr.w	RangePlusY2
 		tst.b	ost_solid(a0)
@@ -246,6 +252,8 @@ SolidObject_TopOnly_SkipRender:
 SolidObject_Heightmap:
 		tst.b	ost_render(a0)
 		bpl.w	Sol_OffScreen				; branch if object isn't on screen
+		tst.w	(v_debug_active_hi).w
+		bne.w	Sol_None				; branch if debug mode is in use
 		bsr.w	RangePlus_Heightmap			; get distances between Sonic (a1) and object (a0)
 		tst.b	ost_solid(a0)
 		bne.w	Sol_Stand_SkipRange			; branch if Sonic is already standing on object
@@ -277,6 +285,8 @@ SolidObject_Heightmap:
 SolidObject_TopOnly_Heightmap:
 		tst.b	ost_render(a0)
 		bpl.w	Sol_OffScreen				; branch if object isn't on screen
+		tst.w	(v_debug_active_hi).w
+		bne.w	Sol_None				; branch if debug mode is in use
 		bsr.w	RangePlus_Heightmap_NoPlayerWidth	; get distances between Sonic (a1) and object (a0)
 		tst.b	ost_solid(a0)
 		bne.w	Sol_Stand_SkipRange			; branch if Sonic is already standing on object

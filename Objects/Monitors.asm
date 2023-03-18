@@ -153,6 +153,8 @@ Mon_Drop:	; Routine $A
 Mon_Solid_Detect:
 		tst.b	ost_render(a0)
 		bpl.w	Sol_OffScreen				; branch if object isn't on screen
+		tst.w	(v_debug_active_hi).w
+		bne.w	Sol_None				; branch if debug mode is in use
 		tst.b	ost_solid(a0)
 		bne.w	Sol_Stand				; branch if Sonic is already standing on object
 		bsr.w	RangePlusX				; get distances between Sonic (a1) and object (a0)

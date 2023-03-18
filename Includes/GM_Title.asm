@@ -108,9 +108,7 @@ Title_MainLoop:
 		bsr.w	DeformLayers				; scroll background
 		jsr	(BuildSprites).l			; create sprite table
 		bsr.w	PCycle_Title				; animate water palette
-		move.w	(v_ost_player+ost_x_pos).w,d0		; x pos of dummy object (there is no actual object loaded)
-		addq.w	#2,d0
-		move.w	d0,(v_ost_player+ost_x_pos).w		; move dummy 2px to the right
+		addq.w	#2,(v_ost_player+ost_x_pos).w		; move dummy object 2px to the right (there is no actual object loaded)
 		bsr.s	Title_Dpad
 		tst.w	(v_countdown).w				; has counter hit 0? (started at 406)
 		beq.w	PlayDemo				; if yes, branch
@@ -122,17 +120,17 @@ Title_MainLoop:
 		btst	#bitA,(v_joypad_hold_actual).w		; check if A is pressed
 		beq.w	PlayLevel				; if not, play level
 		bra.w	LevSel_Init				; goto level select
+; ===========================================================================
 		
 Title_Dpad:
 		tst.b	(f_levelselect_cheat).w
 		bne.s	.exit					; branch if code has been entered
-		lea	(LevSelCode).l,a0			; get cheat code
 		move.w	(v_title_d_count).w,d0			; get number of times d-pad has been pressed in correct order
-		adda.w	d0,a0					; jump to relevant position in sequence
-		move.b	(v_joypad_press_actual).w,d0		; get button press
-		andi.b	#btnDir,d0				; read only UDLR buttons
+		lea	LevSelCode(pc,d0.w),a0			; jump to relevant position in cheat code
+		move.b	(v_joypad_press_actual).w,d1		; get button press
+		andi.b	#btnDir,d1				; read only UDLR buttons
 		beq.s	.exit					; branch if not pressed
-		cmp.b	(a0),d0					; does button press match the cheat code?
+		cmp.b	(a0),d1					; does button press match the cheat code?
 		bne.s	.reset_cheat				; if not, branch
 		addq.w	#1,(v_title_d_count).w			; next input
 		tst.b	1(a0)
@@ -147,6 +145,7 @@ Title_Dpad:
 		
 	.complete:
 		move.b	#1,(f_levelselect_cheat).w		; set level select flag
+		move.b	#1,(f_debug_cheat).w			; set debug mode flag
 		play.b	1, bsr.w, sfx_Ring			; play ring sound
 		rts
 		
@@ -156,7 +155,7 @@ LevSelCode:	dc.b btnUp,btnDn,btnL,btnR,$FF
 
 LevSel_Init:
 		moveq	#id_Pal_LevelSel,d0
-		bsr.w	PalLoad				; load level select palette
+		bsr.w	PalLoad					; load level select palette
 		lea	(v_hscroll_buffer).w,a1
 		move.w	#loops_to_clear_hscroll,d1
 		bsr.w	ClearRAM				; clear hscroll buffer (in RAM)
@@ -181,10 +180,8 @@ LevelSelect:
 		bsr.s	LevSel_Control
 		bsr.s	LevSel_Hold
 		bsr.w	LevSel_Select
-		beq.s	.stay					; branch if d0 is 0
-		rts						; exit level select if do is 1
-	.stay:
-		bra.s	LevelSelect
+		beq.s	LevelSelect				; branch if d0 is 0
+		rts						; exit level select if d0 is 1
 
 linesize:	equ LevSel_Strings_end1-LevSel_Strings-6	; characters per line
 linecount:	equ (LevSel_Strings_end2-LevSel_Strings)/(linesize+6) ; number of lines

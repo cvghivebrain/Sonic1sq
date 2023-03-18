@@ -22,97 +22,84 @@ Debug_Main:	; Routine 0
 		andi.w	#$7FF,(v_ost_player+ost_y_pos).w
 		andi.w	#$7FF,(v_camera_y_pos).w
 		andi.w	#$3FF,(v_bg1_y_pos).w
-		move.w	#0,ost_frame_hi(a0)
 		move.b	#0,ost_anim(a0)
+		move.w	#0,ost_inertia(a0)
+		move.w	#0,ost_x_vel(a0)
+		move.w	#0,ost_y_vel(a0)
 		movea.l	(v_debug_ptr).w,a2
-		move.w	(v_debug_count).w,d6			; get number of items in list
-		cmp.b	(v_debug_item_index).w,d6		; have you gone past the last item?
-		bhi.s	.noreset				; if not, branch
-		move.b	#0,(v_debug_item_index).w		; back to start of list
-
-	.noreset:
-		bsr.w	Debug_GetFrame				; get mappings, VRAM & frame id from debug list
-		move.b	#12,(v_debug_move_delay).w
-		move.b	#1,(v_debug_move_speed).w
+		
+Debug_GetFrame:
+		move.w	(v_debug_item_index).w,d0
+		move.l	4(a2,d0.w),ost_mappings(a0)		; load mappings for item
+		move.l	12(a2,d0.w),d1				; load VRAM setting
+		bpl.s	.not_ram				; branch if not a RAM address
+		movea.l	d1,a3
+		move.w	(a3),d1					; get tile setting from RAM
+		
+	.not_ram:
+		or.w	16(a2,d0.w),d1				; add modifier to VRAM setting
+		move.w	d1,ost_tile(a0)				; load VRAM setting for item
+		move.w	10(a2,d0.w),ost_frame_hi(a0)		; load frame number for item
+		rts
+; ===========================================================================
 
 Debug_Action:	; Routine 2
 		movea.l	(v_debug_ptr).w,a2
 		move.w	(v_debug_count).w,d6
 		bsr.s	Debug_Control
+		bsr.w	Debug_Restore
 		jmp	(DisplaySprite).l
 
 ; ---------------------------------------------------------------------------
-; Subroutine for controls while debug is in use
-
-; input:
-;	d6 = number of items in debug list
-;	a2 = address of first item in debug list
+; Subroutine for directional movement in debug mode
 ; ---------------------------------------------------------------------------
 
 Debug_Control:
-		moveq	#0,d4
-		move.w	#1,d1
-		move.b	(v_joypad_press_actual).w,d4
-		andi.w	#btnDir,d4				; is up/down/left/right	pressed?
-		bne.s	.dirpressed				; if yes, branch
-
 		move.b	(v_joypad_hold_actual).w,d0
-		andi.w	#btnDir,d0				; is up/down/left/right	held?
-		bne.s	.dirheld				; if yes, branch
-
-		move.b	#12,(v_debug_move_delay).w
-		move.b	#15,(v_debug_move_speed).w
-		bra.w	Debug_ChgItem
+		btst	#bitA,d0
+		bne.s	.exit					; branch if A is held
+		andi.w	#btnDir,d0
+		bne.s	.move_constant				; branch if direction held
+		
+	.exit:
+		move.w	#0,(v_debug_move_time).w		; reset timer
+		rts
+		
+	.move_constant:
+		move.w	(v_debug_move_time).w,d1
+		move.w	Debug_Speeds(pc,d1.w),d2
+		
+		btst	#bitUp,d0
+		beq.s	.not_up
+		sub.w	d2,ost_y_pos(a0)
+		
+	.not_up:
+		btst	#bitDn,d0
+		beq.s	.not_down
+		add.w	d2,ost_y_pos(a0)
+		
+	.not_down:
+		btst	#bitL,d0
+		beq.s	.not_left
+		sub.w	d2,ost_x_pos(a0)
+		
+	.not_left:
+		btst	#bitR,d0
+		beq.s	.exit2
+		add.w	d2,ost_x_pos(a0)
+		
+	.exit2:
+		cmpi.w	#Debug_Speeds_end-Debug_Speeds-2,d1
+		beq.s	.dont_inc				; branch if at max
+		addq.w	#2,d1					; increment timer
+		move.w	d1,(v_debug_move_time).w		; update timer
+		
+	.dont_inc:
+		rts
+		
+Debug_Speeds:	dc.w 1,0,0,0,0,1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6,7,7,7,7,8,8,8,8
+	Debug_Speeds_end:
 ; ===========================================================================
-
-.dirheld:
-		subq.b	#1,(v_debug_move_delay).w		; decrement timer
-		bne.s	.chk_up					; if not 0, branch
-		move.b	#1,(v_debug_move_delay).w		; set delay timer to 1 frame
-		addq.b	#1,(v_debug_move_speed).w		; increment speed
-		bne.s	.dirpressed				; if not 0, branch
-		move.b	#-1,(v_debug_move_speed).w
-
-.dirpressed:
-		move.b	(v_joypad_hold_actual).w,d4
-
-	.chk_up:
-		moveq	#0,d1
-		move.b	(v_debug_move_speed).w,d1
-		addq.w	#1,d1
-		swap	d1
-		asr.l	#4,d1					; d1 = speed * $1000
-		move.l	ost_y_pos(a0),d2
-		move.l	ost_x_pos(a0),d3
-		btst	#bitUp,d4				; is up	being held?
-		beq.s	.chk_down				; if not, branch
-		sub.l	d1,d2					; move Sonic up
-		bcc.s	.chk_down
-		moveq	#0,d2					; keep Sonic within top boundary
-
-	.chk_down:
-		btst	#bitDn,d4				; is down being held?
-		beq.s	.chk_left				; if not, branch
-		add.l	d1,d2					; move Sonic down
-		cmpi.l	#$7FF0000,d2				; is Sonic above $7FF? (bottom boundary)
-		bcs.s	.chk_left				; if yes, branch
-		move.l	#$7FF0000,d2				; keep Sonic within bottom boundary
-
-	.chk_left:
-		btst	#bitL,d4				; is left being held?
-		beq.s	.chk_right				; if not, branch
-		sub.l	d1,d3					; move Sonic left
-		bcc.s	.chk_right
-		moveq	#0,d3					; keep Sonic within left boundary
-
-	.chk_right:
-		btst	#bitR,d4				; is right being held?
-		beq.s	.update_pos				; if not, branch
-		add.l	d1,d3					; move Sonic right (no boundary check for right side)
-
-	.update_pos:
-		move.l	d2,ost_y_pos(a0)
-		move.l	d3,ost_x_pos(a0)
 
 Debug_ChgItem:
 		btst	#bitA,(v_joypad_hold_actual).w		; is button A held?
@@ -153,46 +140,34 @@ Debug_ChgItem:
 		mulu.w	#12,d0
 		move.b	4(a2,d0.w),ost_subtype(a1)		; get subtype from debug list
 		move.l	8(a2,d0.w),ost_id(a1)			; create object
-		rts	
-; ===========================================================================
+		rts
 
 .backtonormal:
+; ---------------------------------------------------------------------------
+; Subroutine to restore Sonic from debug mode
+; ---------------------------------------------------------------------------
+
+Debug_Restore:
 		btst	#bitB,(v_joypad_press_actual).w		; is button B pressed?
-		beq.s	.stayindebug				; if not, branch
+		beq.s	.exit					; if not, branch
 		moveq	#0,d0
 		move.w	d0,(v_debug_active).w			; deactivate debug mode
-		move.l	#Map_Sonic,(v_ost_player+ost_mappings).w
-		move.w	#tile_sonic,(v_ost_player+ost_tile).w
-		move.b	d0,(v_ost_player+ost_anim).w
+		move.l	#Map_Sonic,ost_mappings(a0)
+		move.w	#tile_sonic,ost_tile(a0)
+		move.b	d0,ost_anim(a0)
 		move.w	d0,ost_x_sub(a0)
 		move.w	d0,ost_y_sub(a0)
 		move.w	(v_boundary_top_debugcopy).w,(v_boundary_top).w ; restore level boundaries
 		move.w	(v_boundary_bottom_debugcopy).w,(v_boundary_bottom_next).w
-		cmpi.b	#id_Special,(v_gamemode).w		; are you in the special stage?
-		bne.s	.stayindebug				; if not, branch
+		cmpi.b	#id_Special,(v_gamemode).w
+		bne.s	.exit					; branch if not in the special stage
 
 		clr.w	(v_ss_angle).w
 		move.w	#$40,(v_ss_rotation_speed).w		; set new level rotation speed
-		move.l	#Map_Sonic,(v_ost_player+ost_mappings).w
-		move.w	#tile_sonic,(v_ost_player+ost_tile).w
-		move.b	#id_Roll,(v_ost_player+ost_anim).w
-		bset	#status_jump_bit,(v_ost_player+ost_status).w
-		bset	#status_air_bit,(v_ost_player+ost_status).w
+		move.b	#id_Roll,ost_anim(a0)
+		or.b	#status_jump+status_air,ost_status(a0)
 
-	.stayindebug:
-		rts
-
-; ---------------------------------------------------------------------------
-; Subroutine to get mappings, VRAM & frame info from debug list
-; ---------------------------------------------------------------------------
-
-Debug_GetFrame:
-		moveq	#0,d0
-		move.b	(v_debug_item_index).w,d0
-		mulu.w	#12,d0
-		move.l	(a2,d0.w),ost_mappings(a0)		; load mappings for item
-		move.w	6(a2,d0.w),ost_tile(a0)			; load VRAM setting for item
-		move.b	5(a2,d0.w),ost_frame(a0)		; load frame number for item
+	.exit:
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -205,12 +180,26 @@ dbug:		macro map,object,subtype,frame,vram
 		dc.w vram
 		dc.l object
 		endm
+		
+dbitem:		macro object,mappings,subtype,xyflip,frame,vramsetting,vrammod
+		dc.l object, mappings
+		dc.b subtype, xyflip
+		dc.w frame
+		dc.l vramsetting
+		dc.w vrammod
+		endm
 
 DebugList_GHZ:
-		dc.w (DebugList_GHZ_end-DebugList_GHZ-2)/12
+DebugList_LZ:
+DebugList_MZ:
+DebugList_SYZ:
+DebugList_SLZ:
+DebugList_SBZ:
+DebugList_Ending:
+		dbitem	Rings, Map_Ring, 0, 0, 0, v_tile_rings, tile_pal2
+		dc.l 0
 
 ;			mappings	object		subtype	frame	VRAM setting
-		dbug 	Map_Ring,	Rings,		0,	0,	tile_Kos_Ring+tile_pal2
 		dbug	Map_Monitor,	Monitor,	0,	0,	tile_Art_Monitors
 		dbug	Map_Crab,	Crabmeat,	0,	0,	tile_Kos_Crabmeat
 		dbug	Map_Buzz,	BuzzBomber,	0,	0,	tile_Kos_Buzz
@@ -225,10 +214,6 @@ DebugList_GHZ:
 		dbug	Map_Lamp,	Lamppost,	1,	0,	tile_Kos_Lamp
 		dbug	Map_GRing,	GiantRing,	0,	0,	(vram_giantring/sizeof_cell)+tile_pal2
 		dbug	Map_Bonus,	HiddenBonus,	type_bonus_10k,	id_frame_bonus_10000,	(vram_bonus/sizeof_cell)+tile_hi
-	DebugList_GHZ_end:
-
-DebugList_LZ:
-		dc.w (DebugList_LZ_end-DebugList_LZ-2)/12
 
 ;			mappings	object		subtype	frame	VRAM setting
 		dbug	Map_Ring,	Rings,		0,	0,	tile_Kos_Ring_KPLC_LZ+tile_pal2
@@ -255,10 +240,6 @@ DebugList_LZ:
 		dbug	Map_Pole,	Pole,		0,	0,	tile_Kos_LzPole+tile_pal3
 		dbug	Map_Flap,	FlapDoor,	2,	0,	tile_Kos_FlapDoor+tile_pal3
 		dbug	Map_Lamp,	Lamppost,	1,	0,	tile_Kos_Lamp_KPLC_LZ
-	DebugList_LZ_end:
-
-DebugList_MZ:
-		dc.w (DebugList_MZ_end-DebugList_MZ-2)/12
 
 ;			mappings	object		subtype	frame	VRAM setting
 		dbug	Map_Ring,	Rings,		0,	0,	tile_Kos_Ring_KPLC_MZ+tile_pal2
@@ -278,10 +259,6 @@ DebugList_MZ:
 		dbug	Map_Bat,	Batbrain,	0,	0,	tile_Kos_Batbrain
 		dbug	Map_Cat,	Caterkiller,	0,	0,	tile_Kos_Cater+tile_pal2
 		dbug	Map_Lamp,	Lamppost,	1,	0,	tile_Kos_Lamp_KPLC_MZ
-	DebugList_MZ_end:
-
-DebugList_SLZ:
-		dc.w (DebugList_SLZ_end-DebugList_SLZ-2)/12
 
 ;			mappings	object		subtype	frame	VRAM setting
 		dbug	Map_Ring,	Rings,		0,	0,	tile_Kos_Ring_KPLC_SLZ+tile_pal2
@@ -299,10 +276,6 @@ DebugList_SLZ:
 		dbug	Map_Bomb,	Bomb,		0,	0,	tile_Kos_Bomb
 		dbug	Map_Orb,	Orbinaut,	0,	0,	tile_Kos_Orbinaut_KPLC_SLZ+tile_pal2
 		dbug	Map_Lamp,	Lamppost,	1,	0,	tile_Kos_Lamp_KPLC_SLZ
-	DebugList_SLZ_end:
-
-DebugList_SYZ:
-		dc.w (DebugList_SYZ_end-DebugList_SYZ-2)/12
 
 ;			mappings	object		subtype	frame	VRAM setting
 		dbug	Map_Ring,	Rings,		0,	0,	tile_Kos_Ring_KPLC_SYZ+tile_pal2
@@ -319,10 +292,6 @@ DebugList_SYZ:
 		dbug	Map_FBlock,	FloatingBlock,	type_fblock_syz1x1+type_fblock_still,	0,	0+tile_pal3
 		dbug	Map_But,	Button,		0,	0,	tile_Kos_Button
 		dbug	Map_Lamp,	Lamppost,	1,	0,	tile_Kos_Lamp_KPLC_SYZ
-	DebugList_SYZ_end:
-
-DebugList_SBZ:
-		dc.w (DebugList_SBZ_end-DebugList_SBZ-2)/12
 
 ;			mappings	object		subtype	frame	VRAM setting
 		dbug	Map_Ring,	Rings,		0,	0,	tile_Kos_Ring_KPLC_SBZ+tile_pal2
@@ -353,14 +322,7 @@ DebugList_SBZ:
 		dbug	Map_Invis,	Invisibarrier,	$11,	0,	tile_Art_Monitors+tile_hi
 		dbug	Map_Hog,	BallHog,	4,	0,	tile_Kos_BallHog+tile_pal2
 		dbug	Map_Lamp,	Lamppost,	1,	0,	tile_Kos_Lamp_KPLC_SBZ
-	DebugList_SBZ_end:
-
-DebugList_Ending:
-		dc.w (DebugList_Ending_end-DebugList_Ending-2)/12
 
 ;			mappings	object		subtype	frame	VRAM setting
 		dbug	Map_Ring,	Rings,		0,	0,	tile_Kos_Ring+tile_pal2
 		dbug	Map_Ring,	Rings,		0,	id_frame_ring_blank,	tile_Kos_Ring+tile_pal2
-	DebugList_Ending_end:
-
-		even

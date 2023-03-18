@@ -63,6 +63,8 @@ HUD_Main:	; Routine 0
 		move.l	#HUD,ost_id(a1)				; load score object
 		move.b	#id_HUD_ScoreCount,ost_routine(a1)
 		
+		tst.w	(f_debug_enable).w
+		beq.s	HUD_Flash				; branch if debug mode is disabled
 		jsr	FindFreeInert
 		move.l	#HUD,ost_id(a1)				; load debug object
 		move.w	#screen_left+16,ost_x_pos(a1)

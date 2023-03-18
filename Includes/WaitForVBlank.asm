@@ -14,6 +14,8 @@ CPUGfxIndex:	set_dma_src	Art_LivesNums
 		set_dma_src	Art_LivesNums+(sizeof_cell*9)
 		
 WaitForVBlank_CPU:
+		tst.w	(f_debug_enable).w
+		beq.s	WaitForVBlank				; branch if debug mode is disabled
 		pushr.w	(vdp_counter).l
 		moveq	#0,d0
 		popr.b	d0					; get vertical position

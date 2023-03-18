@@ -256,11 +256,10 @@ v_keep_after_reset:		equ v_stack_pointer ; everything after this address is kept
 f_restart:			rs.w 1 ; flag set to end/restart level
 v_frame_counter:		rs.w 1 ; frame counter, increments every frame
 v_frame_counter_low:		equ __rs-1 ; low byte for frame counter
-v_debug_item_index:		rs.b 1 ; debug item currently selected (NOT the object id of the item)
+v_debug_item_index:		rs.w 1 ; position within debug item list
 v_debug_active:			rs.w 1 ; xx01 when debug mode is in use and Sonic is an item; 0 otherwise
 v_debug_active_hi:		equ v_debug_active ; high byte of v_debug_active, routine counter for DebugMode (00/02)
-v_debug_move_delay:		rs.b 1 ; debug mode - horizontal speed
-v_debug_move_speed:		rs.b 1 ; debug mode - vertical speed
+v_debug_move_time:		rs.w 1 ; debug mode - amount of time any direction has been held
 v_vblank_counter:		rs.l 1 ; vertical interrupt counter, increments every VBlank
 v_vblank_counter_word:		equ __rs-2 ; low word for v_vblank_counter
 v_vblank_counter_byte:		equ __rs-1 ; low byte for v_vblank_counter
