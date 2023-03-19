@@ -6,7 +6,8 @@ DebugMode:
 		moveq	#0,d0
 		move.b	(v_debug_active_hi).w,d0
 		move.w	Debug_Index(pc,d0.w),d1
-		jmp	Debug_Index(pc,d1.w)
+		jsr	Debug_Index(pc,d1.w)
+		jmp	DisplaySprite
 ; ===========================================================================
 Debug_Index:	index *
 		ptr Debug_Main
@@ -19,36 +20,38 @@ Debug_Main:	; Routine 0
 		move.w	(v_boundary_bottom_next).w,(v_boundary_bottom_debugcopy).w ; buffer level bottom boundary
 		move.w	#0,(v_boundary_top).w
 		move.w	#$720,(v_boundary_bottom_next).w	; set new boundaries
-		andi.w	#$7FF,(v_ost_player+ost_y_pos).w
+		andi.w	#$7FF,ost_y_pos(a0)
 		andi.w	#$7FF,(v_camera_y_pos).w
 		andi.w	#$3FF,(v_bg1_y_pos).w
+		andi.b	#$FF-render_xflip-render_yflip,ost_render(a0)
 		move.b	#0,ost_anim(a0)
 		move.w	#0,ost_inertia(a0)
 		move.w	#0,ost_x_vel(a0)
 		move.w	#0,ost_y_vel(a0)
 		movea.l	(v_debug_ptr).w,a2
+		move.w	(v_debug_item_index).w,d0
+		movea.l	a0,a3
 		
 Debug_GetFrame:
-		move.w	(v_debug_item_index).w,d0
-		move.l	4(a2,d0.w),ost_mappings(a0)		; load mappings for item
+		move.l	4(a2,d0.w),ost_mappings(a3)		; load mappings for item
+		move.w	10(a2,d0.w),ost_frame_hi(a3)		; load frame number for item
 		move.l	12(a2,d0.w),d1				; load VRAM setting
 		bpl.s	.not_ram				; branch if not a RAM address
-		movea.l	d1,a3
-		move.w	(a3),d1					; get tile setting from RAM
+		movea.l	d1,a4
+		move.w	(a4),d1					; get tile setting from RAM
 		
 	.not_ram:
 		or.w	16(a2,d0.w),d1				; add modifier to VRAM setting
-		move.w	d1,ost_tile(a0)				; load VRAM setting for item
-		move.w	10(a2,d0.w),ost_frame_hi(a0)		; load frame number for item
+		move.w	d1,ost_tile(a3)				; load VRAM setting for item
 		rts
 ; ===========================================================================
 
 Debug_Action:	; Routine 2
 		movea.l	(v_debug_ptr).w,a2
-		move.w	(v_debug_count).w,d6
 		bsr.s	Debug_Control
-		bsr.w	Debug_Restore
-		jmp	(DisplaySprite).l
+		bsr.w	Debug_ChgItem
+		bsr.w	Debug_Create
+		bra.w	Debug_Restore
 
 ; ---------------------------------------------------------------------------
 ; Subroutine for directional movement in debug mode
@@ -99,50 +102,71 @@ Debug_Control:
 		
 Debug_Speeds:	dc.w 1,0,0,0,0,1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6,7,7,7,7,8,8,8,8
 	Debug_Speeds_end:
-; ===========================================================================
+
+; ---------------------------------------------------------------------------
+; Subroutine to switch between objects
+; ---------------------------------------------------------------------------
 
 Debug_ChgItem:
 		btst	#bitA,(v_joypad_hold_actual).w		; is button A held?
-		beq.s	.createitem				; if not, branch
-		btst	#bitC,(v_joypad_press_actual).w		; is button C pressed?
-		beq.s	.nextitem				; if not, branch
+		beq.s	.exit					; if not, branch
+		move.b	(v_joypad_press_actual).w,d1
+		btst	#bitL,d1
+		bne.s	.left					; branch if left is pressed
+		btst	#bitR,d1
+		beq.s	.exit					; branch if right isn't pressed
 
-		subq.b	#1,(v_debug_item_index).w		; go back 1 item
-		bcc.s	.display				; if item is 0 or higher, branch
-		add.b	d6,(v_debug_item_index).w		; if item is -1, loop to last item
+.right:
+		move.w	(v_debug_item_index).w,d0
+		cmp.w	(v_debug_lastitem).w,d0
+		beq.s	.last_item				; branch if on the last item
+		addi.w	#18,d0					; next item
+		bra.s	.display				; update visual
+		
+	.last_item:
+		moveq	#0,d0					; wrap to start
 		bra.s	.display
-; ===========================================================================
 
-.nextitem:
-		btst	#bitA,(v_joypad_press_actual).w		; is button A pressed?
-		beq.s	.createitem				; if not, branch
-		addq.b	#1,(v_debug_item_index).w		; go forwards 1 item
-		cmp.b	(v_debug_item_index).w,d6
-		bhi.s	.display
-		move.b	#0,(v_debug_item_index).w		; loop back to first item
+.left:
+		move.w	(v_debug_item_index).w,d0
+		beq.s	.first_item				; branch if on the first item
+		subi.w	#18,d0					; previous item
+		bra.s	.display
+		
+	.first_item:
+		move.w	(v_debug_lastitem).w,d0			; wrap to end
 
 	.display:
-		bra.w	Debug_GetFrame
-; ===========================================================================
+		move.w	d0,(v_debug_item_index).w
+		movea.l	a0,a3
+		bsr.w	Debug_GetFrame
+		play.w	1, jmp, sfx_Switch			; play sound
 
-.createitem:
+	.exit:
+		rts
+		
+; ---------------------------------------------------------------------------
+; Subroutine to create an object
+; ---------------------------------------------------------------------------
+
+Debug_Create:
 		btst	#bitC,(v_joypad_press_actual).w		; is button C pressed?
-		beq.s	.backtonormal				; if not, branch
+		beq.s	.exit					; if not, branch
 		jsr	(FindFreeObj).l
-		bne.s	.backtonormal
+		bne.s	.exit
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
-		move.b	ost_render(a0),ost_render(a1)
-		move.b	ost_render(a0),ost_status(a1)
-		andi.b	#$FF-status_broken,ost_status(a1)	; remove broken flag from status
-		moveq	#0,d0
-		move.b	(v_debug_item_index).w,d0
-		mulu.w	#12,d0
-		move.b	4(a2,d0.w),ost_subtype(a1)		; get subtype from debug list
-		move.l	8(a2,d0.w),ost_id(a1)			; create object
+		move.w	(v_debug_item_index).w,d0
+		move.l	(a2,d0.w),ost_id(a1)			; create object
+		move.b	8(a2,d0.w),ost_subtype(a1)
+		move.b	9(a2,d0.w),ost_status(a1)
+		movea.l	a1,a3
+		bsr.w	Debug_GetFrame				; get mappings, frame & tile setting
+		play.w	1, jmp, sfx_ActionBlock			; play sound
+		
+	.exit:
 		rts
-
-.backtonormal:
+		
 ; ---------------------------------------------------------------------------
 ; Subroutine to restore Sonic from debug mode
 ; ---------------------------------------------------------------------------
@@ -165,7 +189,7 @@ Debug_Restore:
 		clr.w	(v_ss_angle).w
 		move.w	#$40,(v_ss_rotation_speed).w		; set new level rotation speed
 		move.b	#id_Roll,ost_anim(a0)
-		or.b	#status_jump+status_air,ost_status(a0)
+		ori.b	#status_jump+status_air,ost_status(a0)
 
 	.exit:
 		rts
@@ -181,6 +205,9 @@ dbug:		macro map,object,subtype,frame,vram
 		dc.l object
 		endm
 		
+dbheader:	macros
+		dc.w .end-*-18-2
+		
 dbitem:		macro object,mappings,subtype,xyflip,frame,vramsetting,vrammod
 		dc.l object, mappings
 		dc.b subtype, xyflip
@@ -190,30 +217,47 @@ dbitem:		macro object,mappings,subtype,xyflip,frame,vramsetting,vrammod
 		endm
 
 DebugList_GHZ:
-DebugList_LZ:
-DebugList_MZ:
-DebugList_SYZ:
-DebugList_SLZ:
-DebugList_SBZ:
-DebugList_Ending:
+		dbheader
 		dbitem	Rings, Map_Ring, 0, 0, 0, v_tile_rings, tile_pal2
-		dc.l 0
-
-;			mappings	object		subtype	frame	VRAM setting
-		dbug	Map_Monitor,	Monitor,	0,	0,	tile_Art_Monitors
-		dbug	Map_Crab,	Crabmeat,	0,	0,	tile_Kos_Crabmeat
-		dbug	Map_Buzz,	BuzzBomber,	0,	0,	tile_Kos_Buzz
-		dbug	Map_Chop,	Chopper,	0,	0,	tile_Kos_Chopper
-		dbug	Map_Spike,	Spikes,		type_spike_3up+type_spike_still,	0,	tile_Kos_Spikes
-		dbug	Map_Platform,	BasicPlatform,type_plat_slz+	type_plat_still,	0,	0+tile_pal3
-		dbug	Map_PRock,	PurpleRock,	0,	0,	tile_Kos_PurpleRock+tile_pal4
-		dbug	Map_Moto,	MotoBug,	0,	0,	tile_Kos_Motobug
-		dbug	Map_Spring,	Springs,	type_spring_red+type_spring_up,	0,	tile_Kos_HSpring
-		dbug	Map_Newt,	Newtron,	0,	0,	tile_Kos_Newtron+tile_pal2
-		dbug	Map_Edge,	EdgeWalls,	type_edge_shadow,	0,	tile_Kos_GhzEdgeWall+tile_pal3
-		dbug	Map_Lamp,	Lamppost,	1,	0,	tile_Kos_Lamp
-		dbug	Map_GRing,	GiantRing,	0,	0,	(vram_giantring/sizeof_cell)+tile_pal2
-		dbug	Map_Bonus,	HiddenBonus,	type_bonus_10k,	id_frame_bonus_10000,	(vram_bonus/sizeof_cell)+tile_hi
+		dbitem	Monitor, Map_Monitor, type_monitor_rings, 0, 0, tile_Art_Monitors, 0
+		dbitem	Crabmeat, Map_Crab, 0, 0, 0, v_tile_crabmeat, 0
+		dbitem	BuzzBomber, Map_Buzz, 0, 0, 0, v_tile_buzzbomber, 0
+		dbitem	Chopper, Map_Chop, 0, 0, 0, v_tile_chopper, 0
+		dbitem	MotoBug, Map_Moto, 0, 0, 0, v_tile_motobug, 0
+		dbitem	Newtron, Map_Newt, 0, 0, id_frame_newt_norm, v_tile_newtron, 0
+		dbitem	Newtron, Map_Newt, 1, 0, id_frame_newt_norm, v_tile_newtron, tile_pal2
+		dbitem	Spikes, Map_Spike, type_spike_3up, 0, id_frame_spike_3up, v_tile_spikes, 0
+		dbitem	Lamppost, Map_Lamp, 1, 0, 0, v_tile_lamppost, 0
+		dbitem	Springs, Map_Spring, type_spring_red, 0, id_frame_spring_up, v_tile_hspring, 0
+		dbitem	Springs, Map_Spring, type_spring_yellow, 0, id_frame_spring_up, v_tile_hspring, tile_pal2
+		dbitem	PurpleRock, Map_PRock, 0, 0, 0, tile_Kos_PurpleRock, tile_pal4
+		dbitem	EdgeWalls, Map_Edge, type_edge_shadow, 0, id_frame_edge_shadow, tile_Kos_GhzEdgeWall, tile_pal3
+		dbitem	BasicPlatform, Map_Platform, type_plat_still, 0, id_frame_plat_small, 0, tile_pal3
+	.end:
+DebugList_LZ:
+		dbheader
+		dbitem	Rings, Map_Ring, 0, 0, 0, v_tile_rings, tile_pal2
+	.end:
+DebugList_MZ:
+		dbheader
+		dbitem	Rings, Map_Ring, 0, 0, 0, v_tile_rings, tile_pal2
+	.end:
+DebugList_SYZ:
+		dbheader
+		dbitem	Rings, Map_Ring, 0, 0, 0, v_tile_rings, tile_pal2
+	.end:
+DebugList_SLZ:
+		dbheader
+		dbitem	Rings, Map_Ring, 0, 0, 0, v_tile_rings, tile_pal2
+	.end:
+DebugList_SBZ:
+		dbheader
+		dbitem	Rings, Map_Ring, 0, 0, 0, v_tile_rings, tile_pal2
+	.end:
+DebugList_Ending:
+		dbheader
+		dbitem	Rings, Map_Ring, 0, 0, 0, v_tile_rings, tile_pal2
+	.end:
 
 ;			mappings	object		subtype	frame	VRAM setting
 		dbug	Map_Ring,	Rings,		0,	0,	tile_Kos_Ring_KPLC_LZ+tile_pal2

@@ -77,7 +77,9 @@ LoadPerZone:
 		move.w	(a1)+,(v_ost_player+ost_x_pos).w	; set Sonic's x pos
 		move.w	(a1)+,(v_ost_player+ost_y_pos).w	; set Sonic's y pos
 		
-		move.l	(a4)+,(v_debug_ptr).w			; get pointer for debug list
+		movea.l	(a4)+,a1				; get pointer for debug list
+		move.w	(a1)+,(v_debug_lastitem).w
+		move.l	a1,(v_debug_ptr).w			; save address of first item in list
 		
 		movea.l	(a4)+,a1				; get pointer for title card list
 		lea	(a1,d5.w),a1

@@ -125,10 +125,10 @@ v_16x16_ptr:			rs.l 1 ; pointer to 16x16 mappings
 v_opl_data_ptr:			rs.l 1 ; pointer to start of OPL data
 v_aniart_ptr:			rs.l 1 ; pointer to animated level art routine
 v_debug_ptr:			rs.l 1 ; pointer to debug list
+v_debug_lastitem:		rs.w 1 ; location of last item in debug list
 v_palcycle_ptr:			rs.l 1 ; pointer to palette cycling routine
 v_dle_ptr:			rs.l 1 ; pointer to dynamic level event routine
 v_deformlayer_ptr:		rs.l 1 ; pointer to bg deformation routine
-v_debug_count:			rs.w 1 ; number of items in debug list
 f_water_enable:			rs.b 1 ; flag set to enable water
 f_splash:			rs.b 1 ; flag set when Sonic has made a splash
 v_waterfilter_id:		rs.b 1 ; water palette filter id
