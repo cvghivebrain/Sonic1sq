@@ -108,6 +108,24 @@ Debug_Speeds:	dc.w 1,0,0,0,0,1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6,7,7
 ; ---------------------------------------------------------------------------
 
 Debug_ChgItem:
+		btst	#bitA,(v_joypad_press_actual).w		; is button A pressed?
+		beq.s	.skip_item_menu				; if not, branch
+		moveq	#2-1,d1
+		move.w	#$40,d2
+		
+	.loop:
+		jsr	FindFreeInert
+		bne.s	.skip_item_menu
+		move.l	#DebugItemAdjacent,ost_id(a1)		; load debug item menu
+		move.b	d1,ost_subtype(a1)
+		move.w	ost_x_pos(a0),ost_x_pos(a1)
+		move.w	ost_y_pos(a0),ost_y_pos(a1)
+		add.w	d2,ost_x_pos(a1)			; first object is to the right
+		move.b	#render_rel,ost_render(a1)
+		neg.w	d2					; second object will be to the left
+		dbf	d1,.loop
+		
+	.skip_item_menu:
 		btst	#bitA,(v_joypad_hold_actual).w		; is button A held?
 		beq.s	.exit					; if not, branch
 		move.b	(v_joypad_press_actual).w,d1
@@ -120,7 +138,7 @@ Debug_ChgItem:
 		move.w	(v_debug_item_index).w,d0
 		cmp.w	(v_debug_lastitem).w,d0
 		beq.s	.last_item				; branch if on the last item
-		addi.w	#18,d0					; next item
+		addi.w	#sizeof_dbitem,d0			; next item
 		bra.s	.display				; update visual
 		
 	.last_item:
@@ -130,7 +148,7 @@ Debug_ChgItem:
 .left:
 		move.w	(v_debug_item_index).w,d0
 		beq.s	.first_item				; branch if on the first item
-		subi.w	#18,d0					; previous item
+		subi.w	#sizeof_dbitem,d0			; previous item
 		bra.s	.display
 		
 	.first_item:
@@ -144,6 +162,51 @@ Debug_ChgItem:
 
 	.exit:
 		rts
+		
+; ---------------------------------------------------------------------------
+; Debug item menu objects
+; ---------------------------------------------------------------------------
+
+DebugItemAdjacent:
+		tst.l	ost_mappings(a0)
+		beq.s	.first_load				; branch if object has just been loaded
+		btst	#bitA,(v_joypad_hold_actual).w		; is button A held?
+		beq.s	.delete					; if not, branch
+		move.b	(v_joypad_press_actual).w,d1
+		andi.b	#btnL+btnR,d1
+		beq.s	.display				; branch if left/right isn't pressed
+		
+	.first_load:
+		tst.b	ost_subtype(a0)
+		bne.s	.next_item				; branch if this is the "next item" object
+		move.w	(v_debug_item_index).w,d0
+		bne.s	.not_first				; branch if selected item isn't first item
+		move.w	(v_debug_lastitem).w,d0			; wrap to end
+		bra.s	.get_frame
+		
+	.not_first:
+		subi.w	#sizeof_dbitem,d0			; use item before current one
+		
+	.get_frame:
+		movea.l	a0,a3
+		bsr.w	Debug_GetFrame				; get appropriate mappings/frame/VRAM settings
+		
+	.display:
+		jmp	DisplaySprite
+		
+	.delete:
+		jmp	DeleteObject
+
+.next_item:
+		move.w	(v_debug_item_index).w,d0
+		cmp.w	(v_debug_lastitem).w,d0
+		bne.s	.not_last				; branch if selected item isn't last item
+		moveq	#0,d0					; wrap to start
+		bra.s	.get_frame
+		
+	.not_last:
+		addi.w	#sizeof_dbitem,d0			; use item after current one
+		bra.s	.get_frame
 		
 ; ---------------------------------------------------------------------------
 ; Subroutine to create an object
@@ -198,6 +261,8 @@ Debug_Restore:
 ; Debug	mode item lists
 ; ---------------------------------------------------------------------------
 
+sizeof_dbitem:	equ 18
+
 dbug:		macro map,object,subtype,frame,vram
 		dc.l map
 		dc.b subtype,frame
@@ -206,7 +271,7 @@ dbug:		macro map,object,subtype,frame,vram
 		endm
 		
 dbheader:	macros
-		dc.w .end-*-18-2
+		dc.w .end-*-sizeof_dbitem-2
 		
 dbitem:		macro object,mappings,subtype,xyflip,frame,vramsetting,vrammod
 		dc.l object, mappings
@@ -234,15 +299,15 @@ DebugList_GHZ:
 		dbitem	EdgeWalls, Map_Edge, type_edge_shadow, 0, id_frame_edge_shadow, tile_Kos_GhzEdgeWall, tile_pal3
 		dbitem	BasicPlatform, Map_Platform, type_plat_still, 0, id_frame_plat_small, 0, tile_pal3
 	.end:
-DebugList_LZ:
-		dbheader
-		dbitem	Rings, Map_Ring, 0, 0, 0, v_tile_rings, tile_pal2
-	.end:
 DebugList_MZ:
 		dbheader
 		dbitem	Rings, Map_Ring, 0, 0, 0, v_tile_rings, tile_pal2
 	.end:
 DebugList_SYZ:
+		dbheader
+		dbitem	Rings, Map_Ring, 0, 0, 0, v_tile_rings, tile_pal2
+	.end:
+DebugList_LZ:
 		dbheader
 		dbitem	Rings, Map_Ring, 0, 0, 0, v_tile_rings, tile_pal2
 	.end:
