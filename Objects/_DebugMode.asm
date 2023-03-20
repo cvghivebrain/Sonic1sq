@@ -24,6 +24,7 @@ Debug_Main:	; Routine 0
 		andi.w	#$7FF,(v_camera_y_pos).w
 		andi.w	#$3FF,(v_bg1_y_pos).w
 		andi.b	#$FF-render_xflip-render_yflip,ost_render(a0)
+		bclr	#status_platform_bit,ost_status(a0)
 		move.b	#0,ost_anim(a0)
 		move.w	#0,ost_inertia(a0)
 		move.w	#0,ost_x_vel(a0)
@@ -263,13 +264,6 @@ Debug_Restore:
 
 sizeof_dbitem:	equ 18
 
-dbug:		macro map,object,subtype,frame,vram
-		dc.l map
-		dc.b subtype,frame
-		dc.w vram
-		dc.l object
-		endm
-		
 dbheader:	macros
 		dc.w .end-*-sizeof_dbitem-2
 		
@@ -283,155 +277,122 @@ dbitem:		macro object,mappings,subtype,xyflip,frame,vramsetting,vrammod
 
 DebugList_GHZ:
 		dbheader
-		dbitem	Rings, Map_Ring, 0, 0, 0, v_tile_rings, tile_pal2
-		dbitem	Monitor, Map_Monitor, type_monitor_rings, 0, 0, tile_Art_Monitors, 0
-		dbitem	Crabmeat, Map_Crab, 0, 0, 0, v_tile_crabmeat, 0
-		dbitem	BuzzBomber, Map_Buzz, 0, 0, 0, v_tile_buzzbomber, 0
-		dbitem	Chopper, Map_Chop, 0, 0, 0, v_tile_chopper, 0
-		dbitem	MotoBug, Map_Moto, 0, 0, 0, v_tile_motobug, 0
+		dbitem	Rings, Map_Ring, 0, 0, id_frame_ring_front, v_tile_rings, tile_pal2
+		dbitem	Monitor, Map_Monitor, type_monitor_rings, 0, id_frame_monitor_static0, tile_Art_Monitors, 0
+		dbitem	Crabmeat, Map_Crab, 0, 0, id_frame_crab_stand, v_tile_crabmeat, 0
+		dbitem	BuzzBomber, Map_Buzz, 0, 0, id_frame_buzz_fly1, v_tile_buzzbomber, 0
+		dbitem	Chopper, Map_Chop, 0, 0, id_frame_chopper_shut, v_tile_chopper, 0
+		dbitem	MotoBug, Map_Moto, 0, 0, id_frame_moto_0, v_tile_motobug, 0
 		dbitem	Newtron, Map_Newt, 0, 0, id_frame_newt_norm, v_tile_newtron, 0
 		dbitem	Newtron, Map_Newt, 1, 0, id_frame_newt_norm, v_tile_newtron, tile_pal2
 		dbitem	Spikes, Map_Spike, type_spike_3up, 0, id_frame_spike_3up, v_tile_spikes, 0
-		dbitem	Lamppost, Map_Lamp, 1, 0, 0, v_tile_lamppost, 0
+		dbitem	Lamppost, Map_Lamp, 1, 0, id_frame_lamp_blue, v_tile_lamppost, 0
 		dbitem	Springs, Map_Spring, type_spring_red, 0, id_frame_spring_up, v_tile_hspring, 0
 		dbitem	Springs, Map_Spring, type_spring_yellow, 0, id_frame_spring_up, v_tile_hspring, tile_pal2
-		dbitem	PurpleRock, Map_PRock, 0, 0, 0, tile_Kos_PurpleRock, tile_pal4
+		dbitem	PurpleRock, Map_PRock, 0, 0, id_frame_rock_0, tile_Kos_PurpleRock, tile_pal4
 		dbitem	EdgeWalls, Map_Edge, type_edge_shadow, 0, id_frame_edge_shadow, tile_Kos_GhzEdgeWall, tile_pal3
 		dbitem	BasicPlatform, Map_Platform, type_plat_still, 0, id_frame_plat_small, 0, tile_pal3
 	.end:
 DebugList_MZ:
 		dbheader
-		dbitem	Rings, Map_Ring, 0, 0, 0, v_tile_rings, tile_pal2
+		dbitem	Rings, Map_Ring, 0, 0, id_frame_ring_front, v_tile_rings, tile_pal2
+		dbitem	Monitor, Map_Monitor, type_monitor_rings, 0, id_frame_monitor_static0, tile_Art_Monitors, 0
+		dbitem	BuzzBomber, Map_Buzz, 0, 0, id_frame_buzz_fly1, v_tile_buzzbomber, 0
+		dbitem	Batbrain, Map_Bat, 0, 0, id_frame_bat_hanging, v_tile_batbrain, 0
+		dbitem	Caterkiller, Map_Cat, 0, 0, id_frame_cat_head1, v_tile_caterkiller, tile_pal2
+		dbitem	Splats, Map_Splats, 0, 0, id_frame_splats_fall, v_tile_splats, tile_pal2
+		dbitem	Spikes, Map_Spike, type_spike_3up, 0, id_frame_spike_3up, v_tile_spikes, 0
+		dbitem	Lamppost, Map_Lamp, 1, 0, id_frame_lamp_blue, v_tile_lamppost, 0
+		dbitem	Springs, Map_Spring, type_spring_red, 0, id_frame_spring_up, v_tile_hspring, 0
+		dbitem	Springs, Map_Spring, type_spring_yellow, 0, id_frame_spring_up, v_tile_hspring, tile_pal2
+		dbitem	MarbleBrick, Map_Brick, type_brick_still, 0, id_frame_brick_0, 0, tile_pal3
+		dbitem	PushBlock, Map_Push, type_pblock_single, 0, id_frame_pblock_single, tile_Kos_MzBlock, tile_pal3
+		dbitem	SmashBlock, Map_Smab, 0, 0, id_frame_smash_two, tile_Kos_MzBlock, tile_pal3
+		dbitem	CollapseFloor, Map_CFlo, 0, 0, id_frame_cfloor_mz, tile_Kos_MzBlock, tile_pal3
 	.end:
 DebugList_SYZ:
 		dbheader
-		dbitem	Rings, Map_Ring, 0, 0, 0, v_tile_rings, tile_pal2
+		dbitem	Rings, Map_Ring, 0, 0, id_frame_ring_front, v_tile_rings, tile_pal2
+		dbitem	Monitor, Map_Monitor, type_monitor_rings, 0, id_frame_monitor_static0, tile_Art_Monitors, 0
+		dbitem	Roller, Map_Roll, 0, 0, id_frame_roll_stand, v_tile_roller, 0
+		dbitem	Crabmeat, Map_Crab, 0, 0, id_frame_crab_stand, v_tile_crabmeat, 0
+		dbitem	BuzzBomber, Map_Buzz, 0, 0, id_frame_buzz_fly1, v_tile_buzzbomber, 0
+		dbitem	Yadrin, Map_Yad, 0, 0, id_frame_yadrin_walk0, v_tile_yadrin, tile_pal2
+		dbitem	Spikes, Map_Spike, type_spike_3up, 0, id_frame_spike_3up, v_tile_spikes, 0
+		dbitem	Lamppost, Map_Lamp, 1, 0, id_frame_lamp_blue, v_tile_lamppost, 0
+		dbitem	Springs, Map_Spring, type_spring_red, 0, id_frame_spring_up, v_tile_hspring, 0
+		dbitem	Springs, Map_Spring, type_spring_yellow, 0, id_frame_spring_up, v_tile_hspring, tile_pal2
+		dbitem	SpinningLight, Map_Light, 0, 0, id_frame_light_0, 0, 0
+		dbitem	Bumper, Map_Bump, 0, 0, id_frame_bump_normal, v_tile_bumper, 0
+		dbitem	Button, Map_But, 0, 0, id_frame_button_up, v_tile_button, 0
+		dbitem	BasicPlatform, Map_Platform, type_plat_syz+type_plat_still, 0, id_frame_plat_syz, 0, tile_pal3
 	.end:
 DebugList_LZ:
 		dbheader
-		dbitem	Rings, Map_Ring, 0, 0, 0, v_tile_rings, tile_pal2
+		dbitem	Rings, Map_Ring, 0, 0, id_frame_ring_front, v_tile_rings, tile_pal2
+		dbitem	Monitor, Map_Monitor, type_monitor_rings, 0, id_frame_monitor_static0, tile_Art_Monitors, 0
+		dbitem	Jaws, Map_Jaws, 8, 0, id_frame_jaws_open1, v_tile_jaws, tile_pal2
+		dbitem	Burrobot, Map_Burro, 0, 0, id_frame_burro_walk1, v_tile_burrobot, tile_hi
+		dbitem	Orbinaut, Map_Orb, 0, 0, id_frame_orb_normal, v_tile_orbinaut, 0
+		dbitem	Spikes, Map_Spike, type_spike_3up, 0, id_frame_spike_3up, v_tile_spikes, 0
+		dbitem	Harpoon, Map_Harp, type_harp_h, 0, id_frame_harp_h_extended, tile_Kos_Harpoon, 0
+		dbitem	Harpoon, Map_Harp, type_harp_v, 0, id_frame_harp_v_extended, tile_Kos_Harpoon, 0
+		dbitem	Gargoyle, Map_Gar, 0, 0, id_frame_gargoyle_head, tile_Kos_Gargoyle, tile_pal3
+		dbitem	Lamppost, Map_Lamp, 1, 0, id_frame_lamp_blue, v_tile_lamppost, 0
+		dbitem	Springs, Map_Spring, type_spring_red, 0, id_frame_spring_up, v_tile_hspring, 0
+		dbitem	Springs, Map_Spring, type_spring_yellow, 0, id_frame_spring_up, v_tile_hspring, tile_pal2
+		dbitem	Button, Map_But, 0, 0, id_frame_button_up, v_tile_button, 0
+		dbitem	Cork, Map_Cork, 0, 0, id_frame_cork_0, tile_Kos_Cork, tile_pal3
+		dbitem	LabyrinthBlock, Map_LBlock, type_lblock_sink, 0, id_frame_lblock_sinkblock, tile_Kos_LzDoorH, tile_pal3
+		dbitem	LabyrinthPlatform, Map_LPlat, 0, 0, id_frame_lplat_0, tile_Kos_LzPlatform, tile_pal3
+		dbitem	Wheel, Map_LConv, 0, 0, id_frame_lcon_wheel1, tile_Kos_LzWheel, 0
+		dbitem	Pole, Map_Pole, 0, 0, id_frame_pole_normal, tile_Kos_LzPole, tile_pal3
+		dbitem	FlapDoor, Map_Flap, 2, 0, id_frame_flap_closed, tile_Kos_FlapDoor, tile_pal3
 	.end:
 DebugList_SLZ:
 		dbheader
-		dbitem	Rings, Map_Ring, 0, 0, 0, v_tile_rings, tile_pal2
+		dbitem	Rings, Map_Ring, 0, 0, id_frame_ring_front, v_tile_rings, tile_pal2
+		dbitem	Monitor, Map_Monitor, type_monitor_rings, 0, id_frame_monitor_static0, tile_Art_Monitors, 0
+		dbitem	Orbinaut, Map_Orb, 3, 0, id_frame_orb_normal, v_tile_orbinaut, tile_pal2
+		dbitem	Bomb, Map_Bomb, 0, 0, id_frame_bomb_stand1, v_tile_bomb, 0
+		dbitem	Spikes, Map_Spike, type_spike_3up, 0, id_frame_spike_3up, v_tile_spikes, 0
+		dbitem	Lamppost, Map_Lamp, 1, 0, id_frame_lamp_blue, v_tile_lamppost, 0
+		dbitem	Springs, Map_Spring, type_spring_red, 0, id_frame_spring_up, v_tile_hspring, 0
+		dbitem	Springs, Map_Spring, type_spring_yellow, 0, id_frame_spring_up, v_tile_hspring, tile_pal2
+		dbitem	Seesaw, Map_Seesaw, 0, 0, id_frame_seesaw_sloping_leftup, tile_Kos_Seesaw, 0
+		dbitem	Fan, Map_Fan, type_fan_left_onoff, 0, id_frame_fan_0, tile_Kos_Fan, tile_pal3
+		dbitem	BasicPlatform, Map_Platform, type_plat_slz+type_plat_still, 0, id_frame_plat_slz, 0, tile_pal3
+		dbitem	CollapseFloor, Map_CFlo, type_cfloor_slz+type_cfloor_sided+1, 0, id_frame_cfloor_slz, tile_Kos_SlzBlock, tile_pal3
+		dbitem	Elevator, Map_Elev, type_elev_up_short, 0, id_frame_elev_0, 0, tile_pal3
 	.end:
 DebugList_SBZ:
 		dbheader
-		dbitem	Rings, Map_Ring, 0, 0, 0, v_tile_rings, tile_pal2
+		dbitem	Rings, Map_Ring, 0, 0, id_frame_ring_front, v_tile_rings, tile_pal2
+		dbitem	Monitor, Map_Monitor, type_monitor_rings, 0, id_frame_monitor_static0, tile_Art_Monitors, 0
+		dbitem	Bomb, Map_Bomb, 0, 0, id_frame_bomb_stand1, v_tile_bomb, 0
+		dbitem	Caterkiller, Map_Cat, 0, 0, id_frame_cat_head1, v_tile_caterkiller, tile_pal2
+		dbitem	BallHog, Map_Hog, 4, 0, id_frame_hog_standing, v_tile_ballhog, tile_pal2
+		dbitem	Spikes, Map_Spike, type_spike_3up, 0, id_frame_spike_3up, v_tile_spikes, 0
+		dbitem	Saws, Map_Saw, type_saw_pizza_updown, 0, id_frame_saw_pizzacutter1, tile_Kos_Cutter, tile_pal3
+		dbitem	Saws, Map_Saw, type_saw_ground_left, 0, id_frame_saw_groundsaw1, tile_Kos_Cutter, tile_pal3
+		dbitem	Electro, Map_Elec, 4, 0, id_frame_electro_normal, tile_Kos_Electric, 0
+		dbitem	ScrapStomp, Map_Stomp, type_stomp_slow, 0, id_frame_stomp_0, tile_Kos_Stomper, tile_pal2
+		dbitem	Flamethrower, Map_Flame, $64, 0, id_frame_flame_pipe1, tile_Kos_FlamePipe, tile_hi
+		dbitem	Lamppost, Map_Lamp, 1, 0, id_frame_lamp_blue, v_tile_lamppost, 0
+		dbitem	Springs, Map_Spring, type_spring_red, 0, id_frame_spring_up, v_tile_hspring, 0
+		dbitem	Springs, Map_Spring, type_spring_yellow, 0, id_frame_spring_up, v_tile_hspring, tile_pal2
+		dbitem	Button, Map_But, 0, 0, id_frame_button_up, v_tile_button, 0
+		dbitem	AutoDoor, Map_ADoor, 0, 0, id_frame_autodoor_closed, tile_Kos_SbzDoorV, tile_pal3
+		dbitem	ScrapDoorH, Map_SDoorH, 0, 0, id_frame_sdoorh_0, tile_Kos_SbzDoorH, tile_pal3
+		dbitem	Trapdoor, Map_Trap, 3, 0, id_frame_trap_closed, tile_Kos_TrapDoor, tile_pal3
+		dbitem	Girder, Map_Gird, 0, 0, id_frame_girder_0, tile_Kos_Girder, tile_pal3
 	.end:
 DebugList_Ending:
 		dbheader
-		dbitem	Rings, Map_Ring, 0, 0, 0, v_tile_rings, tile_pal2
+		dbitem	Rings, Map_Ring, 0, 0, id_frame_ring_front, v_tile_rings, tile_pal2
+		dbitem	Monitor, Map_Monitor, type_monitor_rings, 0, id_frame_monitor_static0, tile_Art_Monitors, 0
+		dbitem	Spikes, Map_Spike, type_spike_3up, 0, id_frame_spike_3up, v_tile_spikes, 0
+		dbitem	Lamppost, Map_Lamp, 1, 0, id_frame_lamp_blue, v_tile_lamppost, 0
+		dbitem	Springs, Map_Spring, type_spring_red, 0, id_frame_spring_up, v_tile_hspring, 0
+		dbitem	Springs, Map_Spring, type_spring_yellow, 0, id_frame_spring_up, v_tile_hspring, tile_pal2
 	.end:
-
-;			mappings	object		subtype	frame	VRAM setting
-		dbug	Map_Ring,	Rings,		0,	0,	tile_Kos_Ring_KPLC_LZ+tile_pal2
-		dbug	Map_Monitor,	Monitor,	0,	0,	tile_Art_Monitors
-		dbug	Map_Spring,	Springs,	type_spring_red+type_spring_up,	0,	tile_Kos_HSpring_KPLC_LZ
-		dbug	Map_Jaws,	Jaws,		8,	0,	tile_Kos_Jaws+tile_pal2
-		dbug	Map_Burro,	Burrobot,	0,	id_frame_burro_dig1,	tile_Kos_Burrobot+tile_hi
-		dbug	Map_Harp,	Harpoon,	type_harp_h,	id_frame_harp_h_retracted,	tile_Kos_Harpoon
-		dbug	Map_Harp,	Harpoon,	type_harp_v,	id_frame_harp_v_retracted,	tile_Kos_Harpoon
-		dbug	Map_Push,	PushBlock,	0,	0,	tile_Kos_LzHalfBlock+tile_pal3
-		dbug	Map_But,	Button,		0,	0,	tile_Kos_Button_KPLC_LZ
-		dbug	Map_Spike,	Spikes,		type_spike_3up+type_spike_still,	0,	tile_Kos_Spikes_KPLC_LZ
-		dbug	Map_MBlockLZ,	MovingBlock,	type_mblock_1+type_mblock_rightdrop,	0,	tile_Kos_LzHalfBlock+tile_pal3
-		dbug	Map_LBlock,	LabyrinthBlock, type_lblock_sink,	id_frame_lblock_sinkblock,	tile_Kos_LzDoorH+tile_pal3
-		dbug	Map_LPlat,	LabyrinthPlatform, 0,	0,	tile_Kos_LzPlatform+tile_pal3
-		dbug	Map_Gar,	Gargoyle,	0,	0,	tile_Kos_Gargoyle+tile_pal3
-		dbug	Map_Cork,	Cork, 		0,	0,	tile_Kos_Cork+tile_pal3
-		dbug	Map_LBlock,	LabyrinthBlock, type_lblock_solid,	id_frame_lblock_block,	tile_Kos_LzBlock+tile_pal3
-		dbug	Map_LConv,	Wheel,		0,	0,	tile_Kos_LzWheel
-		dbug	Map_Orb,	Orbinaut,	0,	0,	tile_Kos_Orbinaut
-		dbug	Map_Bub,	Bubble,		$84,	id_frame_bubble_bubmaker1,	tile_Kos_Bubbles+tile_hi
-		dbug	Map_WFall,	Waterfall,	type_wfall_cornermedium,	id_frame_wfall_cornermedium,	tile_Kos_Splash+tile_pal3+tile_hi
-		dbug	Map_WFall,	Waterfall,	type_wfall_splash,	id_frame_wfall_splash1,	tile_Kos_Splash+tile_pal3+tile_hi
-		dbug	Map_Pole,	Pole,		0,	0,	tile_Kos_LzPole+tile_pal3
-		dbug	Map_Flap,	FlapDoor,	2,	0,	tile_Kos_FlapDoor+tile_pal3
-		dbug	Map_Lamp,	Lamppost,	1,	0,	tile_Kos_Lamp_KPLC_LZ
-
-;			mappings	object		subtype	frame	VRAM setting
-		dbug	Map_Ring,	Rings,		0,	0,	tile_Kos_Ring_KPLC_MZ+tile_pal2
-		dbug	Map_Monitor,	Monitor,	0,	0,	tile_Art_Monitors
-		dbug	Map_Buzz,	BuzzBomber,	0,	0,	tile_Kos_Buzz_KPLC_MZ
-		dbug	Map_Spike,	Spikes,		type_spike_3up+type_spike_still,	0,	tile_Kos_Spikes_KPLC_MZ
-		dbug	Map_Spring,	Springs,	type_spring_red+type_spring_up,	0,	tile_Kos_HSpring_KPLC_MZ
-		dbug	Map_Fire,	FireMaker,	0,	0,	tile_Kos_Fireball
-		dbug	Map_Brick,	MarbleBrick,	type_brick_still,	0,	0+tile_pal3
-		dbug	Map_Geyser,	GeyserMaker,	0,	0,	tile_Kos_Lava+tile_pal4
-		dbug	Map_LWall,	LavaWall,	0,	0,	tile_Kos_Lava+tile_pal4
-		dbug	Map_Push,	PushBlock,	type_pblock_single,	0,	tile_Kos_MzBlock+tile_pal3
-		dbug	Map_Smab,	SmashBlock,	0,	0,	tile_Kos_MzBlock+tile_pal3
-		dbug	Map_MBlock,	MovingBlock,	type_mblock_1+type_mblock_still,	0,	tile_Kos_MzBlock
-		dbug	Map_CFlo,	CollapseFloor,	0,	0,	tile_Kos_MzBlock+tile_pal4
-		dbug	Map_LTag,	LavaTag,	0,	0,	tile_Art_Monitors+tile_hi
-		dbug	Map_Bat,	Batbrain,	0,	0,	tile_Kos_Batbrain
-		dbug	Map_Cat,	Caterkiller,	0,	0,	tile_Kos_Cater+tile_pal2
-		dbug	Map_Lamp,	Lamppost,	1,	0,	tile_Kos_Lamp_KPLC_MZ
-
-;			mappings	object		subtype	frame	VRAM setting
-		dbug	Map_Ring,	Rings,		0,	0,	tile_Kos_Ring_KPLC_SLZ+tile_pal2
-		dbug	Map_Monitor,	Monitor,	0,	0,	tile_Art_Monitors
-		dbug	Map_Elev,	Elevator,	type_elev_up_short,	0,	0+tile_pal3
-		dbug	Map_CFlo,	CollapseFloor,	0,	id_frame_cfloor_slz,	tile_Kos_SlzBlock+tile_pal3
-		dbug	Map_Platform,	BasicPlatform,	type_plat_slz+type_plat_still,	0,	0+tile_pal3
-		dbug	Map_Circ,	CirclingPlatform, 0,	0,	0+tile_pal3
-		dbug	Map_Stair,	Staircase,	type_stair_above,	0,	0+tile_pal3
-		dbug	Map_Fan,	Fan,		type_fan_left_onoff,	0,	tile_Kos_Fan+tile_pal3
-		dbug	Map_Seesaw,	Seesaw,		0,	0,	tile_Kos_Seesaw
-		dbug	Map_Spring,	Springs,	type_spring_red+type_spring_up,	0,	tile_Kos_HSpring_KPLC_SLZ
-		dbug	Map_Fire,	FireMaker,	0,	0,	tile_Kos_Fireball_KPLC_SLZ
-		dbug	Map_Scen,	Scenery,	type_scen_cannon,	0,	tile_Kos_SlzCannon+tile_pal3
-		dbug	Map_Bomb,	Bomb,		0,	0,	tile_Kos_Bomb
-		dbug	Map_Orb,	Orbinaut,	0,	0,	tile_Kos_Orbinaut_KPLC_SLZ+tile_pal2
-		dbug	Map_Lamp,	Lamppost,	1,	0,	tile_Kos_Lamp_KPLC_SLZ
-
-;			mappings	object		subtype	frame	VRAM setting
-		dbug	Map_Ring,	Rings,		0,	0,	tile_Kos_Ring_KPLC_SYZ+tile_pal2
-		dbug	Map_Monitor,	Monitor,	0,	0,	tile_Art_Monitors
-		dbug	Map_Spike,	Spikes,		type_spike_3up+type_spike_still,	0,	tile_Kos_Spikes_KPLC_SYZ
-		dbug	Map_Spring,	Springs,	type_spring_red+type_spring_up,	0,	tile_Kos_HSpring_KPLC_SYZ
-		dbug	Map_Roll,	Roller,		0,	0,	tile_Kos_Roller
-		dbug	Map_Light,	SpinningLight,	0,	0,	0
-		dbug	Map_Bump,	Bumper,		0,	0,	tile_Kos_Bumper
-		dbug	Map_Crab,	Crabmeat,	0,	0,	tile_Kos_Crabmeat_KPLC_SYZ
-		dbug	Map_Buzz,	BuzzBomber,	0,	0,	tile_Kos_Buzz_KPLC_SYZ
-		dbug	Map_Yad,	Yadrin,		0,	0,	tile_Kos_Yadrin+tile_pal2
-		dbug	Map_Platform,	BasicPlatform,	type_plat_syz+type_plat_still,	0,	0+tile_pal3
-		dbug	Map_FBlock,	FloatingBlock,	type_fblock_syz1x1+type_fblock_still,	0,	0+tile_pal3
-		dbug	Map_But,	Button,		0,	0,	tile_Kos_Button
-		dbug	Map_Lamp,	Lamppost,	1,	0,	tile_Kos_Lamp_KPLC_SYZ
-
-;			mappings	object		subtype	frame	VRAM setting
-		dbug	Map_Ring,	Rings,		0,	0,	tile_Kos_Ring_KPLC_SBZ+tile_pal2
-		dbug	Map_Monitor,	Monitor,	0,	0,	tile_Art_Monitors
-		dbug	Map_Bomb,	Bomb,		0,	0,	tile_Kos_Bomb_KPLC_SBZ
-		dbug	Map_Cat,	Caterkiller,	0,	0,	tile_Kos_Cater_KPLC_SBZ+tile_pal2
-		dbug	Map_BBall,	SwingingPlatform, 7,	id_frame_bball_anchor,	tile_Kos_BigSpike_KPLC_SBZ+tile_pal3
-		dbug	Map_Disc,	RunningDisc,	$E0,	0,	tile_Kos_SbzDisc+tile_pal3+tile_hi
-		dbug	Map_MBlock,	MovingBlock,	type_mblock_sbz+type_mblock_updown,	id_frame_mblock_sbz,	tile_Kos_Stomper+tile_pal2
-		dbug	Map_But,	Button,		0,	0,	tile_Kos_Button_KPLC_SBZ
-		dbug	Map_Trap,	SpinPlatform,	3,	0,	tile_Kos_TrapDoor+tile_pal3
-		dbug	Map_Spin,	SpinPlatform,	$83,	0,	tile_Kos_SpinPlatform
-		dbug	Map_Saw,	Saws,		type_saw_pizza_updown,	0,	tile_Kos_Cutter+tile_pal3
-		dbug	Map_CFlo,	CollapseFloor,	0,	0,	tile_Kos_SbzFloor+tile_pal3
-		dbug	Map_MBlock,	MovingBlock,	type_mblock_sbzwide+type_mblock_slide,	id_frame_mblock_sbzwide,	tile_Kos_SlideFloor+tile_pal3
-		dbug	Map_Stomp,	ScrapDoorH,	0,	0,	tile_Kos_Stomper+tile_pal2
-		dbug	Map_ADoor,	AutoDoor,	0,	0,	tile_Kos_SbzDoorV+tile_pal3
-		dbug	Map_Stomp,	ScrapStomp,	type_stomp_slow,	0,	tile_Kos_Stomper+tile_pal2
-		dbug	Map_Saw,	Saws,		type_saw_pizza_sideways,	id_frame_saw_pizzacutter1,	tile_Kos_Cutter+tile_pal3
-		dbug	Map_Stomp,	ScrapStomp,	type_stomp_fast_short,	0,	tile_Kos_Stomper+tile_pal2
-		dbug	Map_Saw,	Saws,		type_saw_ground_left,	id_frame_saw_groundsaw1,	tile_Kos_Cutter+tile_pal3
-		dbug	Map_Stomp,	ScrapStomp,	type_stomp_fast_long,	0,	tile_Kos_Stomper+tile_pal2
-		dbug	Map_VanP,	VanishPlatform, 0,	0,	tile_Kos_SbzBlock+tile_pal3
-		dbug	Map_Flame,	Flamethrower,	$64,	id_frame_flame_pipe1,	tile_Kos_FlamePipe+tile_hi
-		dbug	Map_Flame,	Flamethrower,	$64,	id_frame_flame_valve1,	tile_Kos_FlamePipe+tile_hi
-		dbug	Map_Elec,	Electro,	4,	0,	tile_Kos_Electric
-		dbug	Map_Gird,	Girder,		0,	0,	tile_Kos_Girder+tile_pal3
-		dbug	Map_Invis,	Invisibarrier,	$11,	0,	tile_Art_Monitors+tile_hi
-		dbug	Map_Hog,	BallHog,	4,	0,	tile_Kos_BallHog+tile_pal2
-		dbug	Map_Lamp,	Lamppost,	1,	0,	tile_Kos_Lamp_KPLC_SBZ
-
-;			mappings	object		subtype	frame	VRAM setting
-		dbug	Map_Ring,	Rings,		0,	0,	tile_Kos_Ring+tile_pal2
-		dbug	Map_Ring,	Rings,		0,	id_frame_ring_blank,	tile_Kos_Ring+tile_pal2
