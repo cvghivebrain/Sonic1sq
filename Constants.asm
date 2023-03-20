@@ -242,6 +242,7 @@ ost_angle:		rs.w 1		; angle of floor or rotation - 0 = flat; $40 = vertical left
 ost_frame_hi:		rs.w 1		; current frame displayed
 ost_frame:		equ __rs-1
 ost_parent:		rs.w 1		; address of OST of parent object
+ost_linked:		rs.w 1		; address of OST of linked object
 ost_render:		rs.b 1		; bitfield for x/y flip, display mode
 	render_xflip:		equ 1	; xflip
 	render_yflip:		equ 2	; yflip

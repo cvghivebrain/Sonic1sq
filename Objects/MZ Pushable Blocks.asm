@@ -56,14 +56,14 @@ PushB_Main:	; Routine 0
 		bsr.w	PreventDupe				; flag object as loaded & prevent the same object loading again
 
 PushB_Action:	; Routine 2
-		tst.w	ost_parent(a0)
+		tst.w	ost_linked(a0)
 		bne.s	.stomper_skip				; branch if chain stomper was found
 		tst.b	ost_render(a0)
 		bpl.s	PushB_Display				; branch if block is off screen
 		tst.b	ost_pblock_stompchk(a0)
 		bne.s	.stomper_skip				; branch if chain stomper check was already done
 		move.l	#CStom_Block,d0
-		bsr.w	FindNearestObj				; find nearest chain stomper & save to ost_parent
+		bsr.w	FindNearestObj				; find nearest chain stomper & save to ost_linked
 		move.b	#1,ost_pblock_stompchk(a0)
 		
 	.stomper_skip:
@@ -157,18 +157,18 @@ PushB_Sink:	; Routine 8
 ; ===========================================================================
 
 PushB_WaitJump:	; Routine $A
-		tst.w	ost_parent(a0)
+		tst.w	ost_linked(a0)
 		bne.s	.geyser_found				; branch if geyser object exists
 		move.b	#id_PushB_Lava,ost_routine(a0)		; goto PushB_Lava next
 		bra.s	PushB_Lava
 		
 	.geyser_found:
-		bsr.w	GetParent				; a1 = OST of geyser
+		bsr.w	GetLinked				; a1 = OST of geyser
 		cmpi.b	#id_GMake_MakeLava,ost_routine(a1)
 		bne.s	PushB_Move				; branch if geyser is inactive
 		move.w	#-$580,ost_y_vel(a0)			; make block jump
 		addi.b	#2,ost_routine(a0)			; goto PushB_Jump next
-		clr.w	ost_parent(a0)
+		clr.w	ost_linked(a0)
 		bra.s	PushB_Move
 ; ===========================================================================
 
@@ -246,9 +246,9 @@ PushB_Pushing:
 ; ---------------------------------------------------------------------------
 
 PushB_ChkStomp:
-		tst.w	ost_parent(a0)
+		tst.w	ost_linked(a0)
 		beq.s	.use_gravity				; branch if no chain stomper was found
-		bsr.w	GetParent				; a1 = OST of chain stomper
+		bsr.w	GetLinked				; a1 = OST of chain stomper
 		move.w	ost_y_pos(a1),d0
 		sub.w	ost_y_pos(a0),d0
 		cmpi.w	#-screen_height,d0
@@ -301,7 +301,7 @@ PushB_ChkGeyser:
 		rts
 
 	.make_geyser:
-		clr.w	ost_parent(a0)
+		clr.w	ost_linked(a0)
 		bsr.w	FindFreeObj				; find free OST slot
 		bne.s	.fail					; branch if not found
 		move.l	#GeyserMaker,ost_id(a1)			; load lava geyser object
@@ -313,7 +313,7 @@ PushB_ChkGeyser:
 		add.w	d0,ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		addi.w	#$10,ost_y_pos(a1)			; make geyser appear below
-		move.w	a1,ost_parent(a0)			; save OST for geyser
+		move.w	a1,ost_linked(a0)			; save OST for geyser
 
 	.fail:
 		move.b	#id_PushB_WaitJump,ost_routine(a0)	; goto PushB_WaitJump next

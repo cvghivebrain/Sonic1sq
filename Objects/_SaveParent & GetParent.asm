@@ -30,3 +30,9 @@ GetParent_a2:
 		move.w	ost_parent(a0),d0			; d0 = $FFFFxxxx
 		movea.l	d0,a2					; set a2 as parent
 		rts
+
+GetLinked:
+		moveq	#-1,d0					; d0 = $FFFFFFFF
+		move.w	ost_linked(a0),d0			; d0 = $FFFFxxxx
+		movea.l	d0,a1					; set a1 as linked
+		rts

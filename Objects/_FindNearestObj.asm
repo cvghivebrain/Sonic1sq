@@ -44,7 +44,7 @@ FindNearestObj:
 
 		tst.w	d6
 		beq.s	.exit					; branch if no matching objects were found
-		move.w	d6,ost_parent(a0)			; save OST address of nearest
+		move.w	d6,ost_linked(a0)			; save OST address of nearest
 		
 	.exit:
 		rts

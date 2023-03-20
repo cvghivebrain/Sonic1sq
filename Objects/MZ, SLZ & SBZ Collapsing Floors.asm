@@ -35,7 +35,7 @@ CFlo_Main:	; Routine 0
 		move.b	d0,ost_frame(a0)			; set as frame
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#4,ost_priority(a0)
-		move.b	#7,ost_cfloor_wait_time(a0)
+		move.b	#14,ost_cfloor_wait_time(a0)
 		move.b	#$44,ost_displaywidth(a0)
 		move.b	#32,ost_width(a0)
 		move.b	#8,ost_height(a0)
