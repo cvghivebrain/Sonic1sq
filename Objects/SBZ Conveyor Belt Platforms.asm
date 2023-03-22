@@ -26,7 +26,7 @@ SpinC_Main:	; Routine 0
 		move.w	(a2)+,d1				; get object count
 
 	.loop:
-		bsr.w	FindNextFreeObj				; find free OST slot
+		jsr	FindNextFreeObj				; find free OST slot
 		bne.s	.fail					; branch if not found
 		move.l	#SpinConveyPlatform,ost_id(a1)		; load platform object
 		move.w	(a2)+,ost_x_pos(a1)
@@ -34,7 +34,7 @@ SpinC_Main:	; Routine 0
 		move.w	(a2)+,d0
 		move.b	d0,ost_subtype(a1)
 		move.w	ost_y_pos(a0),ost_spinc_parent_y_pos(a1)
-		bsr.w	SaveParent
+		jsr	SaveParent
 
 	.fail:
 		dbf	d1,.loop				; repeat for number of objects

@@ -37,6 +37,10 @@ Sonic_Main:	; Routine 0
 		move.w	#sonic_max_speed,(v_sonic_max_speed).w	; Sonic's top speed
 		move.w	#sonic_acceleration,(v_sonic_acceleration).w ; Sonic's acceleration
 		move.w	#sonic_deceleration,(v_sonic_deceleration).w ; Sonic's deceleration
+		move.b	#btnABC,ost_sonic_jumpmask(a0)		; A, B or C jumps
+		tst.w	(f_debug_enable).w
+		beq.s	Sonic_Control				; branch if debug mode is off
+		move.b	#btnC,ost_sonic_jumpmask(a0)		; only C jumps
 
 Sonic_Control:	; Routine 2
 		tst.w	(f_debug_enable).w			; is debug cheat enabled?
@@ -885,7 +889,7 @@ Sonic_ChkRoll:
 
 Sonic_Jump:
 		move.b	(v_joypad_press).w,d0
-		andi.b	#btnABC,d0				; is A, B or C pressed?
+		and.b	ost_sonic_jumpmask(a0),d0		; is A, B or C pressed?
 		beq.w	.no_jump				; if not, branch
 		moveq	#0,d0
 		move.b	ost_angle(a0),d0			; get floor angle
@@ -950,7 +954,7 @@ Sonic_JumpHeight:
 		cmp.w	ost_y_vel(a0),d1
 		ble.s	.keep_speed				; branch if jump power is less than post-A/B/C value
 		move.b	(v_joypad_hold).w,d0
-		andi.b	#btnABC,d0				; is A, B or C pressed?
+		and.b	ost_sonic_jumpmask(a0),d0		; is A, B or C pressed?
 		bne.s	.keep_speed				; if yes, branch
 		move.w	d1,ost_y_vel(a0)			; update y speed with smaller jump power
 

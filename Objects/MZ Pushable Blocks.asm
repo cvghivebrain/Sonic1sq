@@ -73,7 +73,7 @@ PushB_Action:	; Routine 2
 		bmi.s	PushB_Display				; branch if subtype is +$80 (no gravity)
 		bsr.w	PushB_ChkStomp
 		beq.s	PushB_Display				; branch if block is on stomper
-		bsr.w	FindFloorObj
+		jsr	FindFloorObj
 		tst.w	d1
 		beq.s	PushB_Display				; branch if block is touching the floor
 		addi.b	#2,ost_routine(a0)			; goto PushB_Drop next
@@ -103,7 +103,7 @@ PushB_Drop:	; Routine 4
 	.gravity:
 		bsr.w	SpeedToPos
 		addi.w	#$18,ost_y_vel(a0)			; apply gravity
-		bsr.w	FindFloorObj
+		jsr	FindFloorObj
 		tst.w	d1
 		bpl.s	PushB_Display				; branch if block hasn't reached floor
 		add.w	d1,ost_y_pos(a0)			; align to floor
@@ -130,11 +130,11 @@ PushB_Move:
 		bsr.w	SolidObject
 		tst.w	ost_x_vel(a0)
 		bmi.s	.moving_left				; branch if moving left
-		bsr.w	FindWallRightObj
+		jsr	FindWallRightObj
 		bra.s	.hit_wall
 		
 	.moving_left:
-		bsr.w	FindWallLeftObj
+		jsr	FindWallLeftObj
 		
 	.hit_wall:
 		tst.w	d1
@@ -169,7 +169,7 @@ PushB_WaitJump:	; Routine $A
 		move.w	#-$580,ost_y_vel(a0)			; make block jump
 		addi.b	#2,ost_routine(a0)			; goto PushB_Jump next
 		clr.w	ost_linked(a0)
-		bra.s	PushB_Move
+		bra.w	PushB_Move
 ; ===========================================================================
 
 PushB_Jump:	; Routine $C

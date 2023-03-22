@@ -20,9 +20,13 @@ HUD_Index:	index *,,2
 		ptr HUD_TimeCount
 		ptr HUD_ScoreCount
 		ptr HUD_Debug
+		ptr HUD_DebugSonic
+		ptr HUD_DebugNearest
 		
 		rsobj HUD
 ost_hud_sprites:	rs.b 1					; sprite counter from previous frame
+ost_hud_x_prev:		rs.w 1
+ost_hud_y_prev:		rs.w 1
 		rsobjend
 ; ===========================================================================
 
@@ -64,7 +68,7 @@ HUD_Main:	; Routine 0
 		move.b	#id_HUD_ScoreCount,ost_routine(a1)
 		
 		tst.w	(f_debug_enable).w
-		beq.s	HUD_Flash				; branch if debug mode is disabled
+		beq.w	HUD_Flash				; branch if debug mode is disabled
 		jsr	FindFreeInert
 		move.l	#HUD,ost_id(a1)				; load debug object
 		move.w	#screen_left+16,ost_x_pos(a1)
@@ -77,6 +81,25 @@ HUD_Main:	; Routine 0
 		move.b	#id_HUD_Debug,ost_routine(a1)
 		bsr.w	HUD_CameraX				; display camera x pos
 		bsr.w	HUD_CameraY				; display camera y pos
+		
+		jsr	FindFreeInert
+		move.l	#HUD,ost_id(a1)				; load debug object
+		move.l	#Map_HUD,ost_mappings(a1)
+		move.b	#id_frame_hud_debugsonic,ost_frame(a1)
+		move.w	#$B200/sizeof_cell,ost_tile(a1)
+		move.b	#render_rel,ost_render(a1)
+		move.b	#0,ost_priority(a1)
+		move.b	#id_HUD_DebugSonic,ost_routine(a1)
+		move.w	#v_ost_player&$FFFF,ost_linked(a1)
+		
+		jsr	FindFreeInert
+		move.l	#HUD,ost_id(a1)				; load debug object
+		move.l	#Map_HUD,ost_mappings(a1)
+		move.b	#id_frame_hud_debugsonic,ost_frame(a1)
+		move.w	#$B300/sizeof_cell,ost_tile(a1)
+		move.b	#render_rel,ost_render(a1)
+		move.b	#0,ost_priority(a1)
+		move.b	#id_HUD_DebugNearest,ost_routine(a1)
 
 HUD_Flash:	; Routine 2
 		moveq	#0,d0
@@ -358,7 +381,7 @@ HUD_CameraX:
 ;	d0.w = word value
 ;	d1.l = VRAM address (as DMA instruction)
 
-;	uses d1.l, d2.l, d3.l, a2
+;	uses d0.w, d1.l, d2.l, d3.l, a2
 ; ---------------------------------------------------------------------------
 
 HUD_ShowWord:
@@ -413,3 +436,72 @@ HUD_ByteGfxIndex:
 		set_dma_src	Art_LivesNums+(sizeof_cell*13),0
 		set_dma_src	Art_LivesNums+(sizeof_cell*14),0
 		set_dma_src	Art_LivesNums+(sizeof_cell*15),0
+; ===========================================================================
+
+HUD_DebugSonic:	; Routine $10
+		tst.b	(v_titlecard_loaded).w
+		bne.s	.hide					; branch if title cards are visible
+		bsr.w	GetLinked				; a1 = OST of Sonic
+		move.w	ost_x_pos(a1),d0
+		cmp.w	ost_hud_x_prev(a0),d0
+		beq.s	.skip_x					; branch if Sonic hasn't moved
+		move.w	d0,ost_hud_x_prev(a0)
+		move.w	d0,ost_x_pos(a0)
+		set_dma_dest	$B200,d1			; VRAM address
+		bsr.w	HUD_ShowWord				; show Sonic's x pos
+		
+	.skip_x:
+		move.w	ost_y_pos(a1),d0
+		cmp.w	ost_hud_y_prev(a0),d0
+		beq.w	HUD_Display				; branch if Sonic hasn't moved
+		move.w	d0,ost_hud_y_prev(a0)
+		move.w	d0,d4
+		addi.w	#32,d4
+		move.w	d4,ost_y_pos(a0)
+		set_dma_dest	$B280,d1			; VRAM address
+		bsr.w	HUD_ShowWord				; show Sonic's y pos
+		bra.w	HUD_Display
+		
+	.hide:
+		rts
+
+HUD_DebugNearest:
+		; Routine $12
+		tst.b	(v_titlecard_loaded).w
+		bne.s	.hide					; branch if title cards are visible
+		tst.w	ost_linked(a0)
+		bne.s	.linked					; branch if target object is specified
+		bsr.w	FindNearestSonic			; link to nearest object
+		
+	.linked:
+		bsr.w	GetLinked				; a1 = OST of nearest object
+		move.w	ost_x_pos(a1),d0
+		cmp.w	ost_hud_x_prev(a0),d0
+		beq.s	.skip_x					; branch if object hasn't moved
+		move.w	d0,ost_hud_x_prev(a0)
+		move.w	d0,ost_x_pos(a0)
+		set_dma_dest	$B300,d1			; VRAM address
+		bsr.w	HUD_ShowWord				; show object's x pos
+		
+	.skip_x:
+		move.w	ost_y_pos(a1),d0
+		cmp.w	ost_hud_y_prev(a0),d0
+		beq.s	.skip_y					; branch if object hasn't moved
+		move.w	d0,ost_hud_y_prev(a0)
+		move.w	d0,d4
+		addi.w	#32,d4
+		move.w	d4,ost_y_pos(a0)
+		set_dma_dest	$B380,d1			; VRAM address
+		bsr.w	HUD_ShowWord				; show object's y pos
+		
+	.skip_y:
+		btst	#bitA,(v_joypad_hold_actual).w		; is button A held?
+		beq.w	HUD_Display				; if not, branch
+		btst	#bitDn,(v_joypad_press_actual).w	; is down pressed?
+		beq.w	HUD_Display				; if not, branch
+		clr.w	ost_linked(a0)				; recalculate nearest object
+		bra.w	HUD_Display
+		
+	.hide:
+		rts
+		

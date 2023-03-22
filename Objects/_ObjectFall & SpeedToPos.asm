@@ -37,3 +37,19 @@ SpeedToPos:
 		
 	.skip_y:
 		rts
+
+; ---------------------------------------------------------------------------
+; As above, but ost_x_vel is ignored
+
+;	uses d0.l, d2.l
+; ---------------------------------------------------------------------------
+
+ObjectFallY:
+		move.w	ost_y_vel(a0),d0			; load vertical speed
+		move.l	ost_y_pos(a0),d2
+		ext.l	d0
+		asl.l	#8,d0					; multiply by $100
+		add.l	d0,d2					; add to y position
+		move.l	d2,ost_y_pos(a0)			; update y position
+		addi.w	#$38,ost_y_vel(a0)			; increase falling speed
+		rts
