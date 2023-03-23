@@ -387,9 +387,7 @@ HUD_CameraX:
 HUD_ShowWord:
 		ror.w	#8,d0					; move high byte into low d0
 		bsr.s	HUD_ShowByte				; load high byte
-		add.l	#$200000,d1				; next tile in VRAM
 		pushr.w	d0
-		moveq	#0,d0
 		popr.b	d0
 		;lsr.w	#8,d0					; move low byte back
 		
@@ -400,7 +398,10 @@ HUD_ShowWord:
 ;	d0.b = byte value
 ;	d1.l = VRAM address (as DMA instruction)
 
-;	uses d1.l, d2.l, d3.l, a2
+; output:
+;	d1.l = VRAM address after byte (as DMA instruction)
+
+;	uses d2.l, d3.l, a2
 ; ---------------------------------------------------------------------------
 
 HUD_ShowByte:
@@ -411,13 +412,15 @@ HUD_ShowByte:
 		lea	HUD_ByteGfxIndex(pc,d3.w),a2
 		set_dma_size	sizeof_cell,d2			; set size to 1 cell
 		jsr	AddDMA					; load high digit
-		
 		add.l	#$200000,d1				; next tile in VRAM
+		
 		move.b	d0,d3
 		andi.b	#$F,d3					; read low nybble of byte
 		lsl.b	#3,d3					; multiply by 8
 		lea	HUD_ByteGfxIndex(pc,d3.w),a2
-		jmp	AddDMA					; load low digit
+		jsr	AddDMA					; load low digit
+		add.l	#$200000,d1				; next tile in VRAM
+		rts
 		
 HUD_ByteGfxIndex:
 		set_dma_src	Art_LivesNums,0
@@ -441,28 +444,34 @@ HUD_ByteGfxIndex:
 HUD_DebugSonic:	; Routine $10
 		tst.b	(v_titlecard_loaded).w
 		bne.s	.hide					; branch if title cards are visible
+		set_dma_dest	$B200,d1			; VRAM address
+		set_dma_dest	$B280,d4			; VRAM address
+		bsr.s	HUD_Debug_ShowWords
+		bra.w	HUD_Display
+		
+	.hide:
+		rts
+		
+HUD_Debug_ShowWords:
 		bsr.w	GetLinked				; a1 = OST of Sonic
+		move.w	ost_x_pos(a1),ost_x_pos(a0)
 		move.w	ost_x_pos(a1),d0
 		cmp.w	ost_hud_x_prev(a0),d0
 		beq.s	.skip_x					; branch if Sonic hasn't moved
 		move.w	d0,ost_hud_x_prev(a0)
-		move.w	d0,ost_x_pos(a0)
-		set_dma_dest	$B200,d1			; VRAM address
 		bsr.w	HUD_ShowWord				; show Sonic's x pos
 		
 	.skip_x:
+		move.w	ost_y_pos(a1),ost_y_pos(a0)
+		addi.w	#32,ost_y_pos(a0)
 		move.w	ost_y_pos(a1),d0
 		cmp.w	ost_hud_y_prev(a0),d0
-		beq.w	HUD_Display				; branch if Sonic hasn't moved
+		beq.w	.exit					; branch if Sonic hasn't moved
 		move.w	d0,ost_hud_y_prev(a0)
-		move.w	d0,d4
-		addi.w	#32,d4
-		move.w	d4,ost_y_pos(a0)
-		set_dma_dest	$B280,d1			; VRAM address
-		bsr.w	HUD_ShowWord				; show Sonic's y pos
-		bra.w	HUD_Display
+		move.l	d4,d1					; VRAM address
+		bra.w	HUD_ShowWord				; show Sonic's y pos
 		
-	.hide:
+	.exit:
 		rts
 
 HUD_DebugNearest:
@@ -474,30 +483,11 @@ HUD_DebugNearest:
 		bsr.w	FindNearestSonic			; link to nearest object
 		
 	.linked:
-		bsr.w	GetLinked				; a1 = OST of nearest object
-		move.w	ost_x_pos(a1),d0
-		cmp.w	ost_hud_x_prev(a0),d0
-		beq.s	.skip_x					; branch if object hasn't moved
-		move.w	d0,ost_hud_x_prev(a0)
-		move.w	d0,ost_x_pos(a0)
 		set_dma_dest	$B300,d1			; VRAM address
-		bsr.w	HUD_ShowWord				; show object's x pos
+		set_dma_dest	$B380,d4			; VRAM address
+		bsr.s	HUD_Debug_ShowWords
 		
-	.skip_x:
-		move.w	ost_y_pos(a1),d0
-		cmp.w	ost_hud_y_prev(a0),d0
-		beq.s	.skip_y					; branch if object hasn't moved
-		move.w	d0,ost_hud_y_prev(a0)
-		move.w	d0,d4
-		addi.w	#32,d4
-		move.w	d4,ost_y_pos(a0)
-		set_dma_dest	$B380,d1			; VRAM address
-		bsr.w	HUD_ShowWord				; show object's y pos
-		
-	.skip_y:
-		btst	#bitA,(v_joypad_hold_actual).w		; is button A held?
-		beq.w	HUD_Display				; if not, branch
-		btst	#bitDn,(v_joypad_press_actual).w	; is down pressed?
+		btst	#bitX,(v_joypad_press_actual_xyz).w	; is X pressed?
 		beq.w	HUD_Display				; if not, branch
 		clr.w	ost_linked(a0)				; recalculate nearest object
 		bra.w	HUD_Display

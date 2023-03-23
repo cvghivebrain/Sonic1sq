@@ -37,8 +37,12 @@ v_joypad_hold:			rs.w 1 ; joypad input - held, can be overridden by demos
 v_joypad_press:			equ __rs-1 ; joypad input - pressed, can be overridden by demos
 v_joypad_hold_actual:		rs.w 1 ; joypad input - held, actual
 v_joypad_press_actual:		equ __rs-1 ; joypad input - pressed, actual
+v_joypad_hold_actual_xyz:	rs.w 1 ; joypad input - held, actual
+v_joypad_press_actual_xyz:	equ __rs-1 ; joypad input - pressed, actual
 v_joypad2_hold_actual:		rs.w 1 ; joypad 2 input - held, actual - unused
 v_joypad2_press_actual:		equ __rs-1 ; joypad 2 input - pressed, actual - unused
+v_joypad2_hold_actual_xyz:	rs.w 1 ; joypad 2 input - held, actual - unused
+v_joypad2_press_actual_xyz:	equ __rs-1 ; joypad 2 input - pressed, actual - unused
 v_vdp_mode_buffer:		rs.w 1 ; VDP register $81 buffer - contains $8134 which is sent to vdp_control_port
 v_countdown:			rs.w 1 ; decrements every time VBlank runs, used as a general purpose timer
 v_fg_y_pos_vsram:		rs.l 1 ; foreground y position, sent to VSRAM during VBlank

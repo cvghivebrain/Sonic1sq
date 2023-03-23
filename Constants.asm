@@ -117,16 +117,6 @@ cAqua:		equ cGreen+cBlue	; colour aqua
 cMagenta:	equ cBlue+cRed		; colour magenta
 
 ; Joypad input
-btnStart:	equ %10000000 ; Start button	($80)
-btnA:		equ %01000000 ; A		($40)
-btnC:		equ %00100000 ; C		($20)
-btnB:		equ %00010000 ; B		($10)
-btnR:		equ %00001000 ; Right		($08)
-btnL:		equ %00000100 ; Left		($04)
-btnDn:		equ %00000010 ; Down		($02)
-btnUp:		equ %00000001 ; Up		($01)
-btnDir:		equ %00001111 ; Any direction	($0F)
-btnABC:		equ %01110000 ; A, B or C	($70)
 bitStart:	equ 7
 bitA:		equ 6
 bitC:		equ 5
@@ -135,6 +125,25 @@ bitR:		equ 3
 bitL:		equ 2
 bitDn:		equ 1
 bitUp:		equ 0
+btnStart:	equ 1<<bitStart					; Start button	($80)
+btnA:		equ 1<<bitA					; A		($40)
+btnC:		equ 1<<bitC					; C		($20)
+btnB:		equ 1<<bitB					; B		($10)
+btnR:		equ 1<<bitR					; Right		($08)
+btnL:		equ 1<<bitL					; Left		($04)
+btnDn:		equ 1<<bitDn					; Down		($02)
+btnUp:		equ 1<<bitUp					; Up		($01)
+btnDir:		equ btnL+btnR+btnDn+btnUp			; Any direction	($0F)
+btnABC:		equ btnA+btnB+btnC				; A, B or C	($70)
+bitM:		equ 3
+bitX:		equ 2
+bitY:		equ 1
+bitZ:		equ 0
+btnM:		equ 1<<bitM
+btnX:		equ 1<<bitX
+btnY:		equ 1<<bitY
+btnZ:		equ 1<<bitZ
+btnXYZ:		equ btnX+btnY+btnZ
 
 ; Sonic physics
 sonic_max_speed:		equ $600

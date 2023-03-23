@@ -17,12 +17,7 @@ JoypadInit:
 ; ---------------------------------------------------------------------------
 ; Subroutine to	read joypad input, and send it to the RAM
 
-; output:
-;	d0.b = actual joypad input (SACBRLDU)
-;	d1.b = actual joypad input, new since last frame only (SACBRLDU)
-;	a1 = port_1_data ($A10003)
-
-;	uses a0
+;	uses d0.b, d1.b, d2.b, a0, a1
 ; ---------------------------------------------------------------------------
 
 ReadJoypads:
@@ -42,7 +37,22 @@ ReadJoypads:
 		nop	
 		nop	
 		move.b	(a1),d1					; d1 = 00CBRLDU
-		andi.b	#$3F,d1					; d1 = 00CBRLDU
+		
+		move.b	#0,(a1)
+		nop	
+		nop	
+		move.b	#$40,(a1)
+		nop	
+		nop	
+		move.b	#0,(a1)
+		nop	
+		nop	
+		move.b	#$40,(a1)				; set port to read 00CBMXYZ
+		nop	
+		nop	
+		move.b	(a1),d2					; d2 = 00CBMXYZ
+		
+		andi.b	#%00111111,d1				; d1 = 00CBRLDU
 		or.b	d1,d0					; d0 = SACBRLDU
 		not.b	d0					; invert bits, so that 1 = pressed
 		move.b	(a0),d1					; d1 = previous joypad state
@@ -50,4 +60,12 @@ ReadJoypads:
 		move.b	d0,(a0)+				; v_joypad_hold_actual = SACBRLDU
 		and.b	d0,d1					; d1 = new joypad inputs only
 		move.b	d1,(a0)+				; v_joypad_press_actual = SACBRLDU (new only)
+		
+		not.b	d2					; invert bits, so that 1 = pressed
+		andi.b	#%00001111,d2				; d2 = 0000MXYZ
+		move.b	(a0),d1					; d1 = previous joypad state
+		eor.b	d2,d1
+		move.b	d2,(a0)+				; v_joypad_hold_actual_xyz = 0000MXYZ
+		and.b	d2,d1					; d1 = new joypad inputs only
+		move.b	d1,(a0)+				; v_joypad_press_actual_xyz = 0000MXYZ (new only)
 		rts
