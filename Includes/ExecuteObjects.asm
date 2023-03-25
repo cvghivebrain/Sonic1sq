@@ -32,7 +32,7 @@ ExecuteObjects:
 		moveq	#countof_ost_ert-1,d7			; remaining $60 objects are display only
 
 .display_object:
-		move.l	(a0),d0					; load object number
+		move.l	ost_id(a0),d0				; load object pointer
 		beq.s	.no_object2				; branch if 0
 		tst.b	ost_render(a0)
 		bpl.s	.no_object2				; branch if off-screen

@@ -252,6 +252,9 @@ ost_frame_hi:		rs.w 1		; current frame displayed
 ost_frame:		equ __rs-1
 ost_parent:		rs.w 1		; address of OST of parent object
 ost_linked:		rs.w 1		; address of OST of linked object
+ost_routine:		rs.w 1		; routine number
+ost_routine2:		equ __rs-1	; secondary routine number
+ost_solid:		equ ost_routine2 ; solid status flag
 ost_render:		rs.b 1		; bitfield for x/y flip, display mode
 	render_xflip:		equ 1	; xflip
 	render_yflip:		equ 2	; yflip
@@ -300,9 +303,6 @@ ost_status:		rs.b 1		; orientation or mode
 	status_underwater_bit:	equ 6
 	status_broken_bit:	equ 7
 ost_respawn:		rs.b 1		; respawn list index number
-ost_routine:		rs.b 1		; routine number
-ost_routine2:		rs.b 1		; secondary routine number
-ost_solid:		equ ost_routine2 ; solid status flag
 ost_subtype:		rs.b 1		; object subtype
 ost_used:		equ __rs	; bytes used by regular OST, everything after this is scratch RAM
 		popo			; restore options

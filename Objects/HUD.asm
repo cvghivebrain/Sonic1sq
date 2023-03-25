@@ -444,6 +444,18 @@ HUD_ByteGfxIndex:
 HUD_DebugSonic:	; Routine $10
 		tst.b	(v_titlecard_loaded).w
 		bne.s	.hide					; branch if title cards are visible
+		btst	#bitY,(v_joypad_press_actual_xyz).w	; is Y pressed?
+		beq.s	.y_not_pressed				; if not, branch
+		move.w	(v_debug_ost_setting).w,d0
+		addq.w	#4,d0					; increment setting
+		cmpi.w	#HUD_Debug_OST_Settings_end-HUD_Debug_OST_Settings,d0
+		bls.s	.setting_ok				; branch if setting is valid
+		moveq	#0,d0					; wrap to 0
+		
+	.setting_ok:
+		move.w	d0,(v_debug_ost_setting).w		; update setting
+		
+	.y_not_pressed:
 		set_dma_dest	$B200,d1			; VRAM address
 		set_dma_dest	$B280,d4			; VRAM address
 		bsr.s	HUD_Debug_ShowWords
@@ -453,26 +465,50 @@ HUD_DebugSonic:	; Routine $10
 		rts
 		
 HUD_Debug_ShowWords:
-		bsr.w	GetLinked				; a1 = OST of Sonic
+		bsr.w	GetLinked				; a1 = OST of Sonic/linked object
+		move.w	(v_debug_ost_setting).w,d5
+		cmpi.w	#HUD_Debug_OST_Settings_end-HUD_Debug_OST_Settings,d5
+		beq.s	.dont_display				; branch if setting is $C
 		move.w	ost_x_pos(a1),ost_x_pos(a0)
-		move.w	ost_x_pos(a1),d0
+		
+		move.w	HUD_Debug_OST_Settings(pc,d5.w),d0	; get OST variable
+		move.w	(a1,d0.w),d0				; get value from OST
 		cmp.w	ost_hud_x_prev(a0),d0
-		beq.s	.skip_x					; branch if Sonic hasn't moved
+		beq.s	.skip_x					; branch if value hasn't changed
 		move.w	d0,ost_hud_x_prev(a0)
-		bsr.w	HUD_ShowWord				; show Sonic's x pos
+		bsr.w	HUD_ShowWord				; show object's x pos
 		
 	.skip_x:
-		move.w	ost_y_pos(a1),ost_y_pos(a0)
-		addi.w	#32,ost_y_pos(a0)
 		move.w	ost_y_pos(a1),d0
+		addi.w	#32,d0
+		move.w	(v_camera_y_pos).w,d1
+		addi.w	#screen_height-16,d1			; d1 = y pos of bottom of screen
+		cmp.w	d0,d1
+		bcc.s	.is_visible				; branch if numbers are fully visible
+		subi.w	#64+16,d0				; move numbers above linked object instead
+	.is_visible:
+		move.w	d0,ost_y_pos(a0)
+		
+		addq.w	#2,d5					; next variable in list
+		move.w	HUD_Debug_OST_Settings(pc,d5.w),d0	; get OST variable
+		move.w	(a1,d0.w),d0				; get value from OST
 		cmp.w	ost_hud_y_prev(a0),d0
-		beq.w	.exit					; branch if Sonic hasn't moved
+		beq.w	.exit					; branch if value hasn't changed
 		move.w	d0,ost_hud_y_prev(a0)
 		move.l	d4,d1					; VRAM address
-		bra.w	HUD_ShowWord				; show Sonic's y pos
+		bra.w	HUD_ShowWord				; show object's y pos
+		
+	.dont_display:
+		addq.l	#4,sp					; don't execute rest of the routine
 		
 	.exit:
 		rts
+		
+HUD_Debug_OST_Settings:
+		dc.w ost_x_pos, ost_y_pos
+		dc.w ost_x_vel, ost_y_vel
+		dc.w ost_angle, ost_routine
+	HUD_Debug_OST_Settings_end:
 
 HUD_DebugNearest:
 		; Routine $12
@@ -485,7 +521,7 @@ HUD_DebugNearest:
 	.linked:
 		set_dma_dest	$B300,d1			; VRAM address
 		set_dma_dest	$B380,d4			; VRAM address
-		bsr.s	HUD_Debug_ShowWords
+		bsr.w	HUD_Debug_ShowWords
 		
 		btst	#bitX,(v_joypad_press_actual_xyz).w	; is X pressed?
 		beq.w	HUD_Display				; if not, branch
