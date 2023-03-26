@@ -60,7 +60,7 @@ Mon_Solid:	; Routine 2
 		bsr.w	Mon_Solid_Detect
 		cmpi.b	#solid_bottom,d1
 		beq.s	.drop					; branch if hit from bottom
-		cmpi.b	#4,ost_solid(a0)
+		cmpi.b	#4,ost_mode(a0)
 		beq.s	.break					; branch if monitor was jumped on
 		andi.b	#solid_left+solid_right,d1
 		beq.w	Mon_Animate				; branch if no collision
@@ -155,7 +155,7 @@ Mon_Solid_Detect:
 		bpl.w	Sol_OffScreen				; branch if object isn't on screen
 		tst.w	(v_debug_active_hi).w
 		bne.w	Sol_None				; branch if debug mode is in use
-		tst.b	ost_solid(a0)
+		tst.b	ost_mode(a0)
 		bne.w	Sol_Stand				; branch if Sonic is already standing on object
 		bsr.w	RangePlusX				; get distances between Sonic (a1) and object (a0)
 		cmp.w	#0,d1
@@ -192,7 +192,7 @@ Mon_Solid_Detect:
 		tst.w	ost_y_vel(a1)
 		bmi.w	Sol_None				; branch if Sonic is moving up
 		add.w	d3,ost_y_pos(a1)			; snap to hitbox
-		move.b	#4,ost_solid(a0)
+		move.b	#4,ost_mode(a0)
 		moveq	#solid_top,d1				; set collision flag to top
 		rts
 		

@@ -37,7 +37,7 @@ Cork_Action:	; Routine 2
 
 Cork_Float:
 		move.w	(v_water_height_actual).w,d0
-		tst.b	ost_solid(a0)
+		tst.b	ost_mode(a0)
 		beq.s	.not_stood_on				; branch if block isn't being stood on
 		addq.w	#4,d0					; pretend water surface is 4px lower
 		

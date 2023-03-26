@@ -70,7 +70,7 @@ Face_Chk:	; Routine 2
 		beq.s	Face_Goto_Panic				; branch if ship is escaping
 		move.b	ost_face_defeat(a0),d0
 		beq.s	.exit					; branch if no defeat routine is specified
-		cmp.b	ost_routine2(a3),d0
+		cmp.b	ost_mode(a3),d0
 		bls.s	Face_Goto_Defeat			; branch if boss is on specified routine
 		cmp.b	#2,ost_subtype(a3)
 		beq.s	Face_Goto_Lift				; branch if boss is lifting a block (SYZ only)

@@ -33,7 +33,7 @@ Bat_Main:	; Routine 0
 
 Bat_Action:	; Routine 2
 		moveq	#0,d0
-		move.b	ost_routine2(a0),d0
+		move.b	ost_mode(a0),d0
 		move.w	Bat_Action_Index(pc,d0.w),d1
 		jsr	Bat_Action_Index(pc,d1.w)
 		lea	(Ani_Bat).l,a1
@@ -64,7 +64,7 @@ Bat_DropChk:
 		andi.b	#7,d0					; read only bits 0-2
 		bne.s	.nodrop					; branch if any are set
 		move.b	#id_ani_bat_drop,ost_anim(a0)
-		addq.b	#2,ost_routine2(a0)			; goto Bat_DropFly next
+		addq.b	#2,ost_mode(a0)			; goto Bat_DropFly next
 		bset	#status_xflip_bit,ost_status(a0)	; face right
 		tst.w	d0
 		bpl.s	.nodrop					; branch if Sonic is right
@@ -91,7 +91,7 @@ Bat_DropFly:
 		move.w	d1,ost_x_vel(a0)			; make batbrain fly horizontally
 		move.w	#0,ost_y_vel(a0)			; stop batbrain falling
 		move.b	#id_ani_bat_fly,ost_anim(a0)
-		addq.b	#2,ost_routine2(a0)			; goto Bat_FlapSound next
+		addq.b	#2,ost_mode(a0)			; goto Bat_FlapSound next
 
 	.dropmore:
 		rts	
@@ -117,7 +117,7 @@ Bat_FlapSound:
 		add.b	d7,d0					; add OST index number (so each batbrain updates on a different frame)
 		andi.b	#7,d0					; read only bits 0-2
 		bne.s	.dontflyup				; branch if any are set
-		addq.b	#2,ost_routine2(a0)			; goto Bat_FlyUp next
+		addq.b	#2,ost_mode(a0)			; goto Bat_FlyUp next
 
 	.dontflyup:
 		rts	
@@ -134,7 +134,7 @@ Bat_FlyUp:
 		clr.w	ost_x_vel(a0)				; stop batbrain moving
 		clr.w	ost_y_vel(a0)
 		clr.b	ost_anim(a0)
-		clr.b	ost_routine2(a0)			; goto Bat_DropChk next
+		clr.b	ost_mode(a0)			; goto Bat_DropChk next
 
 	.noceiling:
 		rts

@@ -23,10 +23,10 @@ obColProp:		equ ost_col_property
 obStatus:		equ ost_status
 obRespawnNo:		equ ost_respawn
 obRoutine:		equ ost_routine
-ob2ndRout:		equ ost_routine2
+ob2ndRout:		equ ost_mode
 obAngle:		equ ost_angle
 obSubtype:		equ ost_subtype
-obSolid:		equ ost_solid
+obSolid:		equ ost_mode
 v_256x256:		equ v_256x256_tiles
 v_lvllayout:		equ v_level_layout
 ;v_ngfx_buffer:		equ v_nem_gfx_buffer
@@ -327,6 +327,8 @@ Sonic_ChgJumpDir:	equ Sonic_JumpDirection
 
 ; Sonic 1 2021
 ost_actwidth:		equ ost_displaywidth
+ost_routine2:		equ ost_mode
+ost_solid:		equ ost_mode
 
 ; Sonic 2 Github
 id:			equ ost_id
@@ -350,7 +352,7 @@ prev_anim:		equ ost_anim_restart
 anim_frame_duration:	equ ost_anim_time
 status:			equ ost_status
 routine:		equ ost_routine
-routine_secondary:	equ ost_routine2
+routine_secondary:	equ ost_mode
 angle:			equ ost_angle
 collision_flags:	equ ost_col_type
 collision_property:	equ ost_col_property

@@ -120,7 +120,7 @@ Spring_Bounce:
 		move.b	#id_Spring,ost_anim(a1)			; use "bouncing" animation
 		move.b	#id_Sonic_Control,ost_routine(a1)
 		bclr	#status_platform_bit,ost_status(a0)
-		clr.b	ost_solid(a0)
+		clr.b	ost_mode(a0)
 		play.w	1, jsr, sfx_Spring			; play spring sound
 
 Spring_Animate:	; Routine 4

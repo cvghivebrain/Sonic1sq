@@ -72,7 +72,7 @@ Weapon_Done:	; Routine 2
 		rts
 		
 Weapon_Spike:	; Routine 4
-		cmpi.b	#id_BSYZ_Attack,ost_routine2(a3)
+		cmpi.b	#id_BSYZ_Attack,ost_mode(a3)
 		bne.s	.exit					; branch if boss isn't attacking
 		cmpi.b	#id_BSYZ_BreakBlock,ost_subtype(a3)
 		beq.s	.retract				; branch if boss is breaking block

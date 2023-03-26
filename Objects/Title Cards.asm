@@ -192,10 +192,10 @@ Card_Load:
 ; ===========================================================================
 		
 Card_WaitEnter:	; Routine 2
-		tst.b	ost_routine2(a0)
+		tst.b	ost_mode(a0)
 		bne.s	.flag_set				; branch if loaded flag is set
 		addq.b	#1,(v_titlecard_loaded).w		; add to object count
-		move.b	#1,ost_routine2(a0)			; set flag
+		move.b	#1,ost_mode(a0)			; set flag
 		
 	.flag_set:
 		subq.w	#1,ost_card_time(a0)			; decrement timer

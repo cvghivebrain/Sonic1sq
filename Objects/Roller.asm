@@ -43,7 +43,7 @@ Roll_Main:	; Routine 0
 
 Roll_Action:	; Routine 2
 		moveq	#0,d0
-		move.b	ost_routine2(a0),d0
+		move.b	ost_mode(a0),d0
 		move.w	Roll_Index2(pc,d0.w),d1
 		jsr	Roll_Index2(pc,d1.w)
 		lea	(Ani_Roll).l,a1
@@ -82,7 +82,7 @@ Roll_RollChk:
 		bcs.s	.exit					; branch if Sonic is < 256px from left edge of level
 		sub.w	ost_x_pos(a0),d0			; is Sonic > 256px left of the roller?
 		bcs.s	.exit					; if not, branch
-		addq.b	#id_Roll_ChkJump,ost_routine2(a0)	; goto Roll_ChkJump next
+		addq.b	#id_Roll_ChkJump,ost_mode(a0)	; goto Roll_ChkJump next
 		move.b	#id_ani_roll_roll,d0			; use roller's rolling animation
 		bsr.w	NewAnim
 		move.w	#$700,ost_x_vel(a0)			; move roller to the right
@@ -108,7 +108,7 @@ Roll_Stopped:
 ; ===========================================================================
 
 .is_rolling:
-		addq.b	#2,ost_routine2(a0)			; goto Roll_ChkJump next
+		addq.b	#2,ost_mode(a0)			; goto Roll_ChkJump next
 		rts	
 ; ===========================================================================
 
@@ -125,7 +125,7 @@ Roll_ChkJump:
 ; ===========================================================================
 
 Roll_Jump:
-		addq.b	#2,ost_routine2(a0)			; goto Roll_JumpLand next
+		addq.b	#2,ost_mode(a0)			; goto Roll_JumpLand next
 		bset	#0,ost_roller_mode(a0)			; set jump flag
 		beq.s	.dont_jump				; branch if previously 0 (jumps on next frame instead)
 		move.w	#-$600,ost_y_vel(a0)			; move roller upwards
@@ -142,7 +142,7 @@ Roll_JumpLand:
 		tst.w	d1					; has roller hit the floor?
 		bpl.s	.exit					; if not, branch
 		add.w	d1,ost_y_pos(a0)			; align to floor
-		subq.b	#2,ost_routine2(a0)			; goto Roll_ChkJump next
+		subq.b	#2,ost_mode(a0)			; goto Roll_ChkJump next
 		move.w	#0,ost_y_vel(a0)			; stop falling
 
 .exit:
@@ -164,7 +164,7 @@ Roll_Stop:
 		move.b	#id_col_14x14,ost_col_type(a0)
 		clr.w	ost_x_vel(a0)				; stop roller moving
 		move.w	#120,ost_roller_open_time(a0)		; set waiting time to 2 seconds
-		move.b	#id_Roll_Stopped,ost_routine2(a0)	; goto Roll_Stopped next
+		move.b	#id_Roll_Stopped,ost_mode(a0)	; goto Roll_Stopped next
 		bset	#7,ost_roller_mode(a0)			; set flag for roller stopped
 
 	.exit:

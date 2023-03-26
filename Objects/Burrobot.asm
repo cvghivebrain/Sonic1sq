@@ -31,12 +31,12 @@ Burro_Main:	; Routine 0
 		move.b	#4,ost_priority(a0)
 		move.b	#id_col_12x18,ost_col_type(a0)
 		move.b	#$C,ost_displaywidth(a0)
-		addq.b	#id_Burro_ChkSonic,ost_routine2(a0)	; goto Burro_ChkSonic after Burro_Action
+		addq.b	#id_Burro_ChkSonic,ost_mode(a0)	; goto Burro_ChkSonic after Burro_Action
 		move.b	#id_ani_burro_digging,ost_anim(a0)
 
 Burro_Action:	; Routine 2
 		moveq	#0,d0
-		move.b	ost_routine2(a0),d0
+		move.b	ost_mode(a0),d0
 		move.w	Burro_Action_Index(pc,d0.w),d1
 		jsr	Burro_Action_Index(pc,d1.w)
 		lea	(Ani_Burro).l,a1
@@ -54,7 +54,7 @@ Burro_Action_Index:
 Burro_ChangeDir:
 		subq.w	#1,ost_burro_turn_time(a0)		; decrement timer
 		bpl.s	.nochg					; branch if time remains
-		addq.b	#2,ost_routine2(a0)			; goto Burro_Move next
+		addq.b	#2,ost_mode(a0)			; goto Burro_Move next
 		move.w	#255,ost_burro_turn_time(a0)		; time until turn (4.2ish seconds)
 		move.w	#$80,ost_x_vel(a0)
 		move.b	#id_ani_burro_walk2,ost_anim(a0)
@@ -95,7 +95,7 @@ Burro_Move:
 Burro_Move_Turn:
 		btst	#2,(v_vblank_counter_byte).w		; test bit that changes every 4 frames
 		beq.s	.jump_instead				; branch if 0
-		subq.b	#2,ost_routine2(a0)			; goto Burro_ChangeDir next
+		subq.b	#2,ost_mode(a0)			; goto Burro_ChangeDir next
 		move.w	#59,ost_burro_turn_time(a0)		; set timer to 1 second
 		move.w	#0,ost_x_vel(a0)			; stop moving
 		move.b	#id_ani_burro_walk1,ost_anim(a0)
@@ -103,7 +103,7 @@ Burro_Move_Turn:
 ; ===========================================================================
 
 .jump_instead:
-		addq.b	#2,ost_routine2(a0)			; goto Burro_Jump next
+		addq.b	#2,ost_mode(a0)			; goto Burro_Jump next
 		move.w	#-$400,ost_y_vel(a0)			; jump upwards
 		move.b	#id_ani_burro_digging,ost_anim(a0)
 		rts	
@@ -122,7 +122,7 @@ Burro_Jump:
 		move.w	#0,ost_y_vel(a0)			; stop falling
 		move.b	#id_ani_burro_walk2,ost_anim(a0)
 		move.w	#255,ost_burro_turn_time(a0)		; time until turn (4.2ish seconds)
-		subq.b	#2,ost_routine2(a0)			; goto Burro_Move next
+		subq.b	#2,ost_mode(a0)			; goto Burro_Move next
 		bset	#status_xflip_bit,ost_status(a0)
 		bsr.w	Range
 		tst.w	d0
@@ -144,7 +144,7 @@ Burro_ChkSonic:
 		tst.w	(v_debug_active).w
 		bne.s	.exit					; branch if debug mode is on
 		
-		subq.b	#2,ost_routine2(a0)			; goto Burro_Jump next
+		subq.b	#2,ost_mode(a0)			; goto Burro_Jump next
 		move.w	#-$400,ost_y_vel(a0)			; burrobot jumps
 		bset	#status_xflip_bit,ost_status(a0)
 		move.w	#$80,ost_x_vel(a0)

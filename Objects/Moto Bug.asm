@@ -55,7 +55,7 @@ Moto_Main:	; Routine 0
 
 Moto_Action:	; Routine 2
 		moveq	#0,d0
-		move.b	ost_routine2(a0),d0
+		move.b	ost_mode(a0),d0
 		move.w	Moto_ActIndex(pc,d0.w),d1
 		jsr	Moto_ActIndex(pc,d1.w)
 		lea	(Ani_Moto).l,a1
@@ -71,7 +71,7 @@ Moto_ActIndex:	index *
 Moto_Move:
 		subq.w	#1,ost_moto_wait_time(a0)		; decrement wait timer
 		bpl.s	.wait					; if time remains, branch
-		addq.b	#2,ost_routine2(a0)			; goto Moto_FindFloor next
+		addq.b	#2,ost_mode(a0)			; goto Moto_FindFloor next
 		move.w	#-$100,ost_x_vel(a0)			; move object to the left
 		move.b	#id_ani_moto_walk,ost_anim(a0)
 		bchg	#status_xflip_bit,ost_status(a0)
@@ -106,7 +106,7 @@ Moto_FindFloor:
 		rts	
 
 .pause:
-		subq.b	#2,ost_routine2(a0)			; goto Moto_Move next
+		subq.b	#2,ost_mode(a0)			; goto Moto_Move next
 		move.w	#59,ost_moto_wait_time(a0)		; set pause time to 1 second
 		move.w	#0,ost_x_vel(a0)			; stop the object moving
 		move.b	#id_ani_moto_stand,ost_anim(a0)

@@ -113,7 +113,7 @@ MBlock_LeftRight:
 MBlock_Right:
 MBlock_RightDrop:
 MBlock_Slide:
-		tst.b	ost_solid(a0)				; is Sonic standing on the platform?
+		tst.b	ost_mode(a0)				; is Sonic standing on the platform?
 		beq.s	.wait
 		addq.b	#1,ost_subtype(a0)			; if yes, add 1 to type
 

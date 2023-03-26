@@ -98,7 +98,7 @@ Cat_Head:	; Routine 2
 		tst.b	ost_status(a0)				; has caterkiller been broken?
 		bmi.w	Cat_Head_Break				; if yes, branch
 		moveq	#0,d0
-		move.b	ost_routine2(a0),d0
+		move.b	ost_mode(a0),d0
 		move.w	Cat_Head_Index(pc,d0.w),d1
 		jsr	Cat_Head_Index(pc,d1.w)
 		move.b	ost_cat_mode(a0),d1			; is animation flag set?
@@ -150,7 +150,7 @@ Cat_Undulate:
 ; ===========================================================================
 
 	.move:
-		addq.b	#2,ost_routine2(a0)			; goto Cat_Floor next
+		addq.b	#2,ost_mode(a0)			; goto Cat_Floor next
 		move.b	#$10,ost_cat_wait_time(a0)		; set timer for movement
 		move.w	#-$C0,ost_x_vel(a0)			; move head to the left
 		move.w	#$40,ost_inertia(a0)
@@ -199,7 +199,7 @@ Cat_Floor:
 ; ===========================================================================
 
 .undulate_next:
-		subq.b	#2,ost_routine2(a0)			; goto Cat_Undulate next
+		subq.b	#2,ost_mode(a0)			; goto Cat_Undulate next
 		move.b	#7,ost_cat_wait_time(a0)		; set timer for delay
 		clr.w	ost_x_vel(a0)				; stop moving
 		clr.w	ost_inertia(a0)
@@ -250,7 +250,7 @@ Cat_BodySeg1:	; Routine 4, 8
 		tst.b	ost_status(a0)
 		bmi.w	Cat_Body_Break				; branch if caterkiller is broken
 		move.b	ost_cat_mode(a1),ost_cat_mode(a0)	; copy animation mode flags
-		move.b	ost_routine2(a1),ost_routine2(a0)
+		move.b	ost_mode(a1),ost_mode(a0)
 		beq.w	.chk_broken
 		move.w	ost_inertia(a1),ost_inertia(a0)
 		move.w	ost_x_vel(a1),d0

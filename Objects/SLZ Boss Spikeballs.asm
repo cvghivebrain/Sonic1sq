@@ -289,7 +289,7 @@ BSpike_Update:
 		bclr	#status_platform_bit,ost_status(a1)
 		beq.s	.no_change				; branch if Sonic wasn't on the seesaw
 
-		clr.b	ost_routine2(a1)
+		clr.b	ost_mode(a1)
 		move.b	#id_See_Slope,ost_routine(a1)		; reset seesaw routine
 		lea	(v_ost_player).w,a2
 		move.w	ost_y_vel(a0),ost_y_vel(a2)

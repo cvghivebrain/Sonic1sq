@@ -28,7 +28,7 @@ BSYZ_Main:	; Routine 0
 		move.b	#id_col_24x24,ost_col_type(a0)
 		move.b	#hitcount_syz,ost_col_property(a0)	; set number of hits to 8
 		bclr	#status_xflip_bit,ost_status(a0)
-		clr.b	ost_routine2(a0)
+		clr.b	ost_mode(a0)
 		move.b	#id_BSYZ_ShipMain,ost_routine(a0)	; goto BSYZ_ShipMain next
 		move.b	#id_ani_boss_ship,ost_anim(a0)
 		move.b	#5,ost_priority(a0)
@@ -61,7 +61,7 @@ BSYZ_Main:	; Routine 0
 
 BSYZ_ShipMain:	; Routine 2
 		moveq	#0,d0
-		move.b	ost_routine2(a0),d0
+		move.b	ost_mode(a0),d0
 		move.w	BSYZ_ShipIndex(pc,d0.w),d1
 		jsr	BSYZ_ShipIndex(pc,d1.w)
 		lea	(Ani_Bosses).l,a1
@@ -85,7 +85,7 @@ BSYZ_ShipStart:
 		move.w	#-$100,ost_x_vel(a0)			; move ship left
 		cmpi.w	#$2D38,ost_boss_parent_x_pos(a0)	; has ship appeared from the right yet?
 		bcc.s	BSYZ_Update				; if not, branch
-		addq.b	#2,ost_routine2(a0)			; goto BSYZ_ShipMove next
+		addq.b	#2,ost_mode(a0)			; goto BSYZ_ShipMove next
 
 BSYZ_Update:
 		move.b	ost_boss_wobble(a0),d0			; get wobble byte
@@ -104,7 +104,7 @@ BSYZ_Update_SkipPos:
 		subi.w	#$2C00,d0				; subtract x pos of first block
 		lsr.w	#5,d0					; divide by 32
 		move.b	d0,ost_boss_block_num(a0)		; id of block the ship is above
-		cmpi.b	#id_BSYZ_Explode,ost_routine2(a0)
+		cmpi.b	#id_BSYZ_Explode,ost_mode(a0)
 		bcc.s	.exit
 		tst.b	ost_status(a0)				; has boss been beaten?
 		bmi.s	.beaten					; if yes, branch
@@ -135,7 +135,7 @@ BSYZ_Update_SkipPos:
 .beaten:
 		moveq	#100,d0
 		bsr.w	AddPoints				; give Sonic 1000 points
-		move.b	#id_BSYZ_Explode,ost_routine2(a0)
+		move.b	#id_BSYZ_Explode,ost_mode(a0)
 		move.w	#180,ost_boss_wait_time(a0)		; set timer to 3 seconds
 		clr.w	ost_x_vel(a0)				; stop boss moving
 		rts	
@@ -184,7 +184,7 @@ BSYZ_ShipMove:
 		addi.w	#$2C10,d0				; get x pos of block below ship
 		move.w	d0,ost_boss_parent_x_pos(a0)		; align ship to block
 		bsr.w	BSYZ_FindBlock				; save address of OST of block to ost_boss_block
-		addq.b	#2,ost_routine2(a0)			; goto BSYZ_Attack next
+		addq.b	#2,ost_mode(a0)			; goto BSYZ_Attack next
 		clr.b	ost_subtype(a0)				; goto BSYZ_Descend next
 		clr.b	ost_boss_mode(a0)
 		clr.w	ost_x_vel(a0)				; stop moving horizontally
@@ -309,7 +309,7 @@ BSYZ_BreakBlock:
 		cmpi.w	#-$1E,ost_boss_wait_time(a0)
 		bne.s	.shake
 		clr.b	ost_boss_mode(a0)
-		subq.b	#2,ost_routine2(a0)			; goto BSYZ_ShipMove next
+		subq.b	#2,ost_mode(a0)			; goto BSYZ_ShipMove next
 		move.b	#-1,ost_boss_wait_time+1(a0)
 		bra.s	.update
 ; ===========================================================================
@@ -387,7 +387,7 @@ BSYZ_Explode:
 ; ===========================================================================
 
 .stop_exploding:
-		addq.b	#2,ost_routine2(a0)			; goto BSYZ_Recover next
+		addq.b	#2,ost_mode(a0)			; goto BSYZ_Recover next
 		clr.w	ost_y_vel(a0)				; stop moving
 		bset	#status_xflip_bit,ost_status(a0)	; ship face right
 		bclr	#status_broken_bit,ost_status(a0)
@@ -420,7 +420,7 @@ BSYZ_Recover:
 		beq.s	.stop_rising				; if exactly 32, branch
 		cmpi.w	#$2A,ost_boss_wait_time(a0)		; have 42 frames passed since ship stopped falling?
 		bcs.s	.update					; if not, branch
-		addq.b	#2,ost_routine2(a0)			; goto BSYZ_Escape next
+		addq.b	#2,ost_mode(a0)			; goto BSYZ_Escape next
 		bra.s	.update
 ; ===========================================================================
 

@@ -110,11 +110,11 @@ Anim_Flag_Routine:
 
 Anim_Flag_Restart2:						; unused
 		move.b	#0,ost_anim_frame(a0)			; reset animation
-		clr.b	ost_routine2(a0)			; reset 2nd routine counter
+		clr.b	ost_mode(a0)				; reset 2nd routine counter
 		rts
 
 Anim_Flag_Routine2:						; only used by EndSonic
-		addq.b	#2,ost_routine2(a0)			; jump to next routine
+		addq.b	#2,ost_mode(a0)				; jump to next routine
 		rts
 
 Anim_Flag_WalkRun:

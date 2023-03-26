@@ -44,7 +44,7 @@ Bom_Main:	; Routine 0
 
 Bom_Action:	; Routine 2
 		moveq	#0,d0
-		move.b	ost_routine2(a0),d0
+		move.b	ost_mode(a0),d0
 		move.w	Bom_Action_Index(pc,d0.w),d1
 		jsr	Bom_Action_Index(pc,d1.w)
 		lea	(Ani_Bomb).l,a1
@@ -62,7 +62,7 @@ Bom_Action_Walk:
 		bsr.w	Bom_ChkDist
 		subq.w	#1,ost_bomb_fuse_time(a0)		; subtract 1 from time delay
 		bpl.s	.noflip					; if time remains, branch
-		addq.b	#2,ost_routine2(a0)			; goto Bom_Action_Wait next
+		addq.b	#2,ost_mode(a0)			; goto Bom_Action_Wait next
 		move.w	#1535,ost_bomb_fuse_time(a0)		; set time delay to 25.5 seconds
 		move.w	#$10,ost_x_vel(a0)
 		move.b	#id_ani_bomb_walk,ost_anim(a0)		; use walking animation
@@ -82,7 +82,7 @@ Bom_Action_Wait:
 		rts
 
 	.stopwalking:
-		subq.b	#2,ost_routine2(a0)			; goto Bom_Action_Walk next
+		subq.b	#2,ost_mode(a0)			; goto Bom_Action_Walk next
 		move.w	#179,ost_bomb_fuse_time(a0)		; set time delay to 3 seconds
 		clr.w	ost_x_vel(a0)				; stop walking
 		move.b	#id_ani_bomb_stand,ost_anim(a0)		; use waiting animation
@@ -111,7 +111,7 @@ Bom_ChkDist:
 		tst.w	(v_debug_active).w
 		bne.s	.outofrange
 
-		move.b	#id_Bom_Action_Explode,ost_routine2(a0)
+		move.b	#id_Bom_Action_Explode,ost_mode(a0)
 		move.w	#143,ost_bomb_fuse_time(a0)		; set fuse time
 		clr.w	ost_x_vel(a0)
 		move.b	#id_ani_bomb_active,ost_anim(a0)	; use activated animation

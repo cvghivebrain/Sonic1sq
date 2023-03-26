@@ -499,7 +499,7 @@ HUD_Debug_ShowWords:
 		bra.w	HUD_ShowWord				; show object's y pos
 		
 	.dont_display:
-		addq.l	#4,sp					; don't execute rest of the routine
+		addq.l	#4,sp					; don't execute rest of the routine (i.e. object isn't displayed)
 		
 	.exit:
 		rts

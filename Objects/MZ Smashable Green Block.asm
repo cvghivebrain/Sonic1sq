@@ -33,7 +33,7 @@ Smab_Solid:	; Routine 2
 		popr.w	(v_enemy_combo).w			; don't reset combo counter on collision
 		andi.b	#solid_top,d1
 		beq.w	.dont_break				; branch if no collision with top
-		cmpi.b	#4,ost_solid(a0)
+		cmpi.b	#4,ost_mode(a0)
 		bne.w	.dont_break				; branch if Sonic wasn't rolling/jumping
 		bset	#status_jump_bit,ost_status(a1)
 		move.b	(v_player1_height_roll).w,ost_height(a1)
@@ -44,7 +44,7 @@ Smab_Solid:	; Routine 2
 		bclr	#status_platform_bit,ost_status(a1)
 		move.b	#id_Sonic_Control,ost_routine(a1)
 		bclr	#status_platform_bit,ost_status(a0)
-		clr.b	ost_solid(a0)
+		clr.b	ost_mode(a0)
 		bsr.s	Smab_Points				; load points object
 		move.b	#id_frame_smash_four,ost_frame(a0)	; use sprite consisting of four pieces
 		lea	Smab_Speeds(pc),a4

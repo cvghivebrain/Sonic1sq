@@ -77,7 +77,7 @@ Spin_Spinner:	; Routine 2
 		lea	(v_ost_player).w,a1
 		bclr	#status_platform_bit,ost_status(a1)
 		bclr	#status_platform_bit,ost_status(a0)
-		clr.b	ost_solid(a0)
+		clr.b	ost_mode(a0)
 
 	.display:
 		bra.w	DespawnQuick

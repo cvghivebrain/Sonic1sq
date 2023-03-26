@@ -33,7 +33,7 @@ Newt_Main:	; Routine 0
 
 Newt_Action:	; Routine 2
 		moveq	#0,d0
-		move.b	ost_routine2(a0),d0
+		move.b	ost_mode(a0),d0
 		move.w	Newt_Action_Index(pc,d0.w),d1
 		jsr	Newt_Action_Index(pc,d1.w)
 		lea	(Ani_Newt).l,a1
@@ -59,13 +59,13 @@ Newt_ChkDist:
 	.sonicisright:
 		cmpi.w	#128,d1
 		bcc.s	.outofrange				; branch if Sonic is > 128px away
-		addq.b	#id_Newt_Type0,ost_routine2(a0)		; goto Newt_Type0 next
+		addq.b	#id_Newt_Type0,ost_mode(a0)		; goto Newt_Type0 next
 		move.b	#id_ani_newt_drop,ost_anim(a0)
 		tst.b	ost_subtype(a0)				; check	object type
 		beq.s	.istype00				; if type is 00, branch
 
 		add.w	#tile_pal2,ost_tile(a0)
-		move.b	#id_Newt_Type1,ost_routine2(a0)		; goto Newt_Type1 next
+		move.b	#id_Newt_Type1,ost_mode(a0)		; goto Newt_Type1 next
 		move.b	#id_ani_newt_firing,ost_anim(a0)	; use different animation
 
 	.outofrange:
@@ -99,7 +99,7 @@ Newt_Type0:
 
 		add.w	d1,ost_y_pos(a0)			; align to floor
 		move.w	#0,ost_y_vel(a0)			; stop newtron falling
-		addq.b	#2,ost_routine2(a0)			; goto Newt_Type0_Floor next
+		addq.b	#2,ost_mode(a0)			; goto Newt_Type0_Floor next
 		move.b	#id_ani_newt_fly1,ost_anim(a0)
 		btst	#tile_pal12_bit,ost_tile(a0)		; is newtron blue?
 		beq.s	.is_blue				; if yes, branch
@@ -129,7 +129,7 @@ Newt_Type0_Floor:
 ; ===========================================================================
 
 	.nextroutine:
-		addq.b	#2,ost_routine2(a0)			; goto Newt_Type0_Fly next
+		addq.b	#2,ost_mode(a0)			; goto Newt_Type0_Fly next
 		rts	
 ; ===========================================================================
 

@@ -36,7 +36,7 @@ SEgg_Main:	; Routine 0
 		move.b	#id_col_24x24,ost_col_type(a0)
 		move.b	#$10,ost_col_property(a0)
 		bclr	#status_xflip_bit,ost_status(a0)
-		clr.b	ost_routine2(a0)
+		clr.b	ost_mode(a0)
 		move.b	(a2)+,ost_routine(a0)			; goto SEgg_Eggman next
 		move.b	(a2)+,ost_anim(a0)
 		move.b	(a2)+,ost_priority(a0)
@@ -52,7 +52,7 @@ SEgg_Main:	; Routine 0
 		move.l	#ScrapEggman,ost_id(a1)			; load button object
 		move.w	#$2130,ost_x_pos(a1)
 		move.w	#$5BC,ost_y_pos(a1)
-		clr.b	ost_routine2(a0)
+		clr.b	ost_mode(a0)
 		move.b	(a2)+,ost_routine(a1)			; goto SEgg_Button next
 		move.b	(a2)+,ost_anim(a1)
 		move.b	(a2)+,ost_priority(a1)
@@ -65,7 +65,7 @@ SEgg_Main:	; Routine 0
 
 SEgg_Eggman:	; Routine 2
 		moveq	#0,d0
-		move.b	ost_routine2(a0),d0
+		move.b	ost_mode(a0),d0
 		move.w	SEgg_EggIndex(pc,d0.w),d1
 		jsr	SEgg_EggIndex(pc,d1.w)
 		lea	Ani_SEgg(pc),a1
@@ -84,7 +84,7 @@ SEgg_ChkSonic:
 		sub.w	(v_ost_player+ost_x_pos).w,d0
 		cmpi.w	#128,d0					; is Sonic within 128 pixels of	Eggman?
 		bcc.s	SEgg_Move				; if not, branch
-		addq.b	#2,ost_routine2(a0)			; goto SEgg_PreLeap next
+		addq.b	#2,ost_mode(a0)			; goto SEgg_PreLeap next
 		move.w	#180,ost_eggman_wait_time(a0)		; set delay to 3 seconds
 		move.b	#id_ani_eggman_laugh,ost_anim(a0)
 
@@ -95,7 +95,7 @@ SEgg_Move:
 SEgg_PreLeap:
 		subq.w	#1,ost_eggman_wait_time(a0)		; decrement timer
 		bne.s	.wait					; if time remains, branch
-		addq.b	#2,ost_routine2(a0)			; goto SEgg_Leap next
+		addq.b	#2,ost_mode(a0)			; goto SEgg_Leap next
 		move.b	#id_ani_eggman_jump1,ost_anim(a0)
 		addq.w	#4,ost_y_pos(a0)
 		move.w	#15,ost_eggman_wait_time(a0)		; wait quarter of a second before jumping
@@ -143,7 +143,7 @@ SEgg_Leap:
 
 		bne.s	.update_pos
 		move.b	#$47,ost_subtype(a1)			; set block to disintegrate
-		addq.b	#2,ost_routine2(a0)			; goto SEgg_Move next
+		addq.b	#2,ost_mode(a0)			; goto SEgg_Move next
 		move.b	#id_ani_eggman_laugh,ost_anim(a0)
 
 .update_pos:
@@ -152,7 +152,7 @@ SEgg_Leap:
 
 SEgg_Button:	; Routine 4
 		moveq	#0,d0
-		move.b	ost_routine2(a0),d0
+		move.b	ost_mode(a0),d0
 		move.w	SEgg_BtnIndex(pc,d0.w),d0
 		jmp	SEgg_BtnIndex(pc,d0.w)
 ; ===========================================================================
@@ -166,7 +166,7 @@ SEgg_BtnChk:
 		cmpi.b	#$53,ost_subtype(a1)			; has subtype been changed?
 		bne.s	SEgg_BtnDisplay				; if not, branch
 		move.b	#id_frame_button_down,ost_frame(a0)	; use pressed frame
-		addq.b	#2,ost_routine2(a0)			; goto SEgg_BtnDisplay next
+		addq.b	#2,ost_mode(a0)			; goto SEgg_BtnDisplay next
 
 SEgg_BtnDisplay:
 		jmp	(DisplaySprite).l

@@ -67,9 +67,9 @@ Pri_Body:	; Routine 2
 ; ===========================================================================
 
 .is_open:
-		tst.b	ost_solid(a0)				; is Sonic on top of the prison?
+		tst.b	ost_mode(a0)				; is Sonic on top of the prison?
 		beq.s	.not_on_top				; if not, branch
-		clr.b	ost_solid(a0)
+		clr.b	ost_mode(a0)
 		bclr	#status_platform_bit,(v_ost_player+ost_status).w
 		bset	#status_air_bit,(v_ost_player+ost_status).w
 
@@ -88,7 +88,7 @@ Pri_Switch:	; Routine 4
 		lea	(Ani_Pri).l,a1
 		jsr	(AnimateSprite).l
 		move.w	ost_prison_y_start(a0),ost_y_pos(a0)
-		tst.b	ost_solid(a0)				; is Sonic on top of the switch?
+		tst.b	ost_mode(a0)				; is Sonic on top of the switch?
 		beq.s	.not_on_top				; if not, branch
 
 		addq.w	#8,ost_y_pos(a0)			; move switch down 8px
@@ -98,7 +98,7 @@ Pri_Switch:	; Routine 4
 		clr.b	(f_boss_boundary).w			; lock screen position
 		move.b	#1,(f_lock_controls).w			; lock controls
 		move.w	#(btnR<<8),(v_joypad_hold).w		; make Sonic run to the right
-		clr.b	ost_solid(a0)
+		clr.b	ost_mode(a0)
 		bclr	#status_platform_bit,(v_ost_player+ost_status).w
 		bset	#status_air_bit,(v_ost_player+ost_status).w
 

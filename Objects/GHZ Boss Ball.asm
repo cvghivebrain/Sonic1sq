@@ -109,7 +109,7 @@ GBall_Base:	; Routine 2
 		cmp.b	ost_ball_radius(a1),d0			; has final object (ball) reached target?
 		bne.s	.not_finished				; if not, branch
 		jsr	GetParent
-		cmpi.b	#id_BGHZ_ChgDir,ost_routine2(a1)	; is boss in back-and-forth phase?
+		cmpi.b	#id_BGHZ_ChgDir,ost_mode(a1)	; is boss in back-and-forth phase?
 		bne.s	.not_finished				; if not, branch
 		addq.b	#2,ost_routine(a0)			; goto GBall_Base2 next
 

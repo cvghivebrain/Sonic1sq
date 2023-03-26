@@ -265,7 +265,7 @@ See_SpikeFall:	; Routine $A
 		bclr	#status_platform_bit,ost_status(a1)	; clear flag for Sonic standing on seesaw
 		beq.s	.skip_spring				; branch if already clear
 
-		clr.b	ost_routine2(a1)
+		clr.b	ost_mode(a1)
 		move.b	#id_See_Slope,ost_routine(a1)
 		lea	(v_ost_player).w,a2
 		move.w	ost_y_vel(a0),ost_y_vel(a2)		; bounce Sonic with same speed the spikeball fell

@@ -45,7 +45,7 @@ Yad_Main:	; Routine 0
 
 Yad_Action:	; Routine 2
 		moveq	#0,d0
-		move.b	ost_routine2(a0),d0
+		move.b	ost_mode(a0),d0
 		move.w	Yad_Index2(pc,d0.w),d1
 		jsr	Yad_Index2(pc,d1.w)
 		lea	(Ani_Yad).l,a1
@@ -60,7 +60,7 @@ Yad_Index2:	index *,,2
 Yad_Move:
 		subq.w	#1,ost_yadrin_wait_time(a0)		; decrement timer
 		bpl.s	.wait					; if time remains, branch
-		addq.b	#2,ost_routine2(a0)			; goto Yad_FixToFloor next
+		addq.b	#2,ost_mode(a0)			; goto Yad_FixToFloor next
 		move.w	#-$100,ost_x_vel(a0)			; move object left
 		move.b	#id_ani_yadrin_walk,ost_anim(a0)	; use walking animation
 		bchg	#status_xflip_bit,ost_status(a0)
@@ -86,7 +86,7 @@ Yad_FixToFloor:
 ; ===========================================================================
 
 Yad_Pause:
-		subq.b	#2,ost_routine2(a0)			; goto Yad_Move next
+		subq.b	#2,ost_mode(a0)			; goto Yad_Move next
 		move.w	#59,ost_yadrin_wait_time(a0)		; set pause time to 1 second
 		move.w	#0,ost_x_vel(a0)			; stop moving
 		move.b	#id_ani_yadrin_stand,ost_anim(a0)	; use standing animation

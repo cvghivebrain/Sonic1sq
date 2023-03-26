@@ -51,7 +51,7 @@ BFire_First:
 
 BFire_Action:	; Routine 2
 		moveq	#0,d0
-		move.b	ost_routine2(a0),d0
+		move.b	ost_mode(a0),d0
 		move.w	BFire_Index2(pc,d0.w),d0
 		jsr	BFire_Index2(pc,d0.w)
 		jsr	(SpeedToPos).l				; update position
@@ -84,7 +84,7 @@ BFire_Drop:
 		bsr.w	FindFloorObj
 		tst.w	d1					; has fireball hit the floor?
 		bpl.s	.exit					; if not, branch
-		addq.b	#2,ost_routine2(a0)			; goto BFire_Duplicate when it hits the floor
+		addq.b	#2,ost_mode(a0)			; goto BFire_Duplicate when it hits the floor
 
 	.exit:
 		rts	
@@ -112,10 +112,10 @@ BFire_Duplicate:
 		dbf	d0,.loop
 
 		neg.w	ost_x_vel(a1)				; make duplicate move left
-		addq.b	#2,ost_routine2(a1)			; goto BFire_FireSpread next
+		addq.b	#2,ost_mode(a1)			; goto BFire_FireSpread next
 
 	.fail:
-		addq.b	#2,ost_routine2(a0)			; goto BFire_FireSpread next
+		addq.b	#2,ost_mode(a0)			; goto BFire_FireSpread next
 		rts	
 
 ; ---------------------------------------------------------------------------
@@ -158,7 +158,7 @@ BFire_FireSpread:
 ; ===========================================================================
 
 .not_on_floor:
-		addq.b	#2,ost_routine2(a0)			; goto BFire_FallEdge next
+		addq.b	#2,ost_mode(a0)			; goto BFire_FallEdge next
 		rts	
 ; ===========================================================================
 
@@ -190,7 +190,7 @@ BFire_FallEdge:
 		move.w	ost_bfire_x_prev(a0),ost_x_pos(a0)	; return to previous position
 		move.w	ost_bfire_y_start(a0),ost_y_pos(a0)
 		bset	#tile_hi_bit,ost_tile(a0)
-		subq.b	#2,ost_routine2(a0)			; goto BFire_FireSpread next
+		subq.b	#2,ost_mode(a0)			; goto BFire_FireSpread next
 
 	.not_on_floor:
 		rts	

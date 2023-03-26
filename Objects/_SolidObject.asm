@@ -24,7 +24,7 @@ SolidObject:
 SolidObject_SkipRender:
 		tst.w	(v_debug_active_hi).w
 		bne.s	Sol_None				; branch if debug mode is in use
-		tst.b	ost_solid(a0)
+		tst.b	ost_mode(a0)
 		bne.w	Sol_Stand				; branch if Sonic is already standing on object
 		bsr.w	RangePlusX				; get distances between Sonic (a1) and object (a0)
 		cmp.w	#0,d1
@@ -69,10 +69,10 @@ Sol_Above:
 		move.w	#0,ost_y_vel(a1)			; stop Sonic falling
 		move.w	ost_x_vel(a1),ost_inertia(a1)
 		move.b	#0,ost_angle(a1)			; clear Sonic's angle
-		move.b	#2,ost_solid(a0)			; set flag - Sonic is on the object
+		move.b	#2,ost_mode(a0)			; set flag - Sonic is on the object
 		cmpi.b	#id_Roll,ost_anim(a1)
 		bne.s	.not_rolling				; branch if Sonic wasn't rolling/jumping
-		addi.b	#2,ost_solid(a0)			; set flag - Sonic hit the object rolling/jumping
+		addi.b	#2,ost_mode(a0)			; set flag - Sonic hit the object rolling/jumping
 		
 	.not_rolling:
 		bset	#status_platform_bit,ost_status(a0)	; set object's platform flag
@@ -153,7 +153,7 @@ Sol_Stand_SkipRange:
 	.leave:
 		bclr	#status_platform_bit,ost_status(a1)	; clear Sonic's standing flag
 		bclr	#status_platform_bit,ost_status(a0)	; clear object's standing flag
-		clr.b	ost_solid(a0)
+		clr.b	ost_mode(a0)
 		moveq	#solid_none,d1
 		rts
 		
@@ -208,7 +208,7 @@ SolidObject_TopOnly_SkipRender:
 		bne.w	Sol_None				; branch if debug mode is in use
 		bsr.w	RangePlusX_NoPlayerWidth		; get distances between Sonic (a1) and object (a0)
 		bsr.w	RangePlusY2
-		tst.b	ost_solid(a0)
+		tst.b	ost_mode(a0)
 		bne.w	Sol_Stand_SkipRange			; branch if Sonic is already standing on object
 		cmp.w	#0,d1
 		bgt.s	.exit					; branch if outside x hitbox
@@ -255,7 +255,7 @@ SolidObject_Heightmap:
 		tst.w	(v_debug_active_hi).w
 		bne.w	Sol_None				; branch if debug mode is in use
 		bsr.w	RangePlus_Heightmap			; get distances between Sonic (a1) and object (a0)
-		tst.b	ost_solid(a0)
+		tst.b	ost_mode(a0)
 		bne.w	Sol_Stand_SkipRange			; branch if Sonic is already standing on object
 		tst.w	d3
 		bpl.w	Sol_None				; branch if outside y hitbox
@@ -288,7 +288,7 @@ SolidObject_TopOnly_Heightmap:
 		tst.w	(v_debug_active_hi).w
 		bne.w	Sol_None				; branch if debug mode is in use
 		bsr.w	RangePlus_Heightmap_NoPlayerWidth	; get distances between Sonic (a1) and object (a0)
-		tst.b	ost_solid(a0)
+		tst.b	ost_mode(a0)
 		bne.w	Sol_Stand_SkipRange			; branch if Sonic is already standing on object
 		tst.w	d3
 		bpl.s	.exit					; branch if outside y hitbox
@@ -316,7 +316,7 @@ UnSolid:
 		beq.w	Sol_None				; branch if Sonic isn't standing on the object
 		bclr	#status_platform_bit,ost_status(a1)	; remove platform effect
 		bclr	#status_platform_bit,ost_status(a0)
-		clr.b	ost_solid(a0)
+		clr.b	ost_mode(a0)
 		bra.w	Sol_None				; stop pushing
 		
 UnSolid_TopOnly:
@@ -327,7 +327,7 @@ UnSolid_TopOnly:
 		bclr	#status_platform_bit,ost_status(a1)	; remove platform effect
 		bclr	#status_platform_bit,ost_status(a0)
 		move.b	#id_Sonic_Control,ost_routine(a1)
-		clr.b	ost_solid(a0)
+		clr.b	ost_mode(a0)
 		moveq	#solid_none,d1
 		
 	.exit:

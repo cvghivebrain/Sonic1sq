@@ -35,7 +35,7 @@ Buzz_Main:	; Routine 0
 
 Buzz_Action:	; Routine 2
 		moveq	#0,d0
-		move.b	ost_routine2(a0),d0
+		move.b	ost_mode(a0),d0
 		move.w	.index(pc,d0.w),d1
 		jsr	.index(pc,d1.w)
 		lea	(Ani_Buzz).l,a1
@@ -52,7 +52,7 @@ Buzz_Move:
 		bpl.s	.wait					; if time remains, branch
 		btst	#1,ost_buzz_mode(a0)			; is Buzz Bomber near Sonic?
 		bne.s	.fire					; if yes, branch
-		addq.b	#2,ost_routine2(a0)			; goto Buzz_ChkDist next
+		addq.b	#2,ost_mode(a0)			; goto Buzz_ChkDist next
 		move.w	#127,ost_buzz_wait_time(a0)		; set time delay to just over 2 seconds
 		move.w	#$400,ost_x_vel(a0)			; move Buzz Bomber to the right
 		move.b	#id_ani_buzz_fly2,ost_anim(a0)		; use "flying" animation
@@ -114,7 +114,7 @@ Buzz_ChkDist:
 		move.w	#59,ost_buzz_wait_time(a0)
 
 	.stop:
-		subq.b	#2,ost_routine2(a0)
+		subq.b	#2,ost_mode(a0)
 		move.w	#0,ost_x_vel(a0)			; stop Buzz Bomber moving
 		move.b	#id_ani_buzz_fly1,ost_anim(a0)		; use "hovering" animation
 

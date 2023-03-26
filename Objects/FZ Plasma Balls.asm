@@ -138,7 +138,7 @@ loc_1A97E:
 
 Plasma_Balls:	; Routine 8
 		moveq	#0,d0
-		move.b	ost_routine2(a0),d0
+		move.b	ost_mode(a0),d0
 		move.w	Plasma_Balls_Index(pc,d0.w),d0
 		jsr	Plasma_Balls_Index(pc,d0.w)
 		lea	Ani_Plasma(pc),a1
@@ -158,7 +158,7 @@ Plasma_Spread:
 		asl.w	#4,d0
 		move.w	d0,ost_x_vel(a0)			; set speed so balls all arrive in position at the same time
 		move.w	#180,ost_plasma_time(a0)		; set timer to 3 seconds
-		addq.b	#2,ost_routine2(a0)			; goto Plasma_Drop next
+		addq.b	#2,ost_mode(a0)			; goto Plasma_Drop next
 		rts	
 ; ===========================================================================
 
@@ -179,7 +179,7 @@ Plasma_Drop:
 		jsr	NewAnim
 		subq.w	#1,ost_plasma_time(a0)			; decrement timer
 		bne.s	.wait					; branch if not 0
-		addq.b	#2,ost_routine2(a0)			; goto Plasma_Move next
+		addq.b	#2,ost_mode(a0)			; goto Plasma_Move next
 		moveq	#id_ani_plasma_short,d0
 		jsr	NewAnim
 		move.b	#id_col_12x12+id_col_hurt,ost_col_type(a0) ; make plasma ball harmful

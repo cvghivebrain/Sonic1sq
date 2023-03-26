@@ -45,7 +45,7 @@ Flash_Collect:
 		bsr.w	AnimateSprite
 		set_dma_dest vram_giantring,d1			; set VRAM address to write gfx
 		jsr	DPLCSprite				; write gfx if frame has changed
-		tst.b	ost_routine2(a0)			; has animation finished?
+		tst.b	ost_mode(a0)			; has animation finished?
 		bne.s	.finish					; if yes, branch
 
 		cmpi.b	#id_frame_flash_full,ost_frame(a0)	; is 3rd frame displayed?

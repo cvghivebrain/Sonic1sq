@@ -87,7 +87,7 @@ Elev_Up:
 Elev_Down:
 Elev_UpRight:
 Elev_DownLeft:
-		tst.b	ost_solid(a0)				; check if Sonic is standing on the object
+		tst.b	ost_mode(a0)				; check if Sonic is standing on the object
 		beq.s	.notstanding
 		addq.b	#1,ost_subtype(a0)			; if yes, add 1 to type (goes to 2, 4, 6 or 8)
 

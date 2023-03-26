@@ -24,7 +24,7 @@ BMZ_Main:	; Routine 0
 		move.b	#id_col_24x24,ost_col_type(a0)
 		move.b	#hitcount_mz,ost_col_property(a0)	; set number of hits to 8
 		bclr	#status_xflip_bit,ost_status(a0)
-		clr.b	ost_routine2(a0)
+		clr.b	ost_mode(a0)
 		move.b	#id_BMZ_ShipMain,ost_routine(a0)	; goto BMZ_ShipMain
 		move.b	#id_ani_boss_ship,ost_anim(a0)
 		move.b	#4,ost_priority(a0)
@@ -57,7 +57,7 @@ BMZ_Main:	; Routine 0
 
 BMZ_ShipMain:	; Routine 2
 		moveq	#0,d0
-		move.b	ost_routine2(a0),d0
+		move.b	ost_mode(a0),d0
 		move.w	BMZ_ShipIndex(pc,d0.w),d1
 		jsr	BMZ_ShipIndex(pc,d1.w)
 		lea	(Ani_Bosses).l,a1
@@ -86,7 +86,7 @@ BMZ_ShipStart:
 		bsr.w	BossMove				; update parent position
 		cmpi.w	#$1910,ost_boss_parent_x_pos(a0)	; has boss reached target position?
 		bne.s	.not_at_pos				; if not, branch
-		addq.b	#2,ost_routine2(a0)			; goto BMZ_ShipMove next
+		addq.b	#2,ost_mode(a0)			; goto BMZ_ShipMove next
 		clr.b	ost_subtype(a0)
 		clr.l	ost_x_vel(a0)				; stop moving
 
@@ -97,7 +97,7 @@ BMZ_ShipStart:
 BMZ_Update:
 		move.w	ost_boss_parent_y_pos(a0),ost_y_pos(a0)	; update actual position
 		move.w	ost_boss_parent_x_pos(a0),ost_x_pos(a0)
-		cmpi.b	#id_BMZ_Explode,ost_routine2(a0)
+		cmpi.b	#id_BMZ_Explode,ost_mode(a0)
 		bcc.s	.exit
 		tst.b	ost_status(a0)				; has boss been beaten?
 		bmi.s	.beaten					; if yes, branch
@@ -128,7 +128,7 @@ BMZ_Update:
 .beaten:
 		moveq	#100,d0
 		bsr.w	AddPoints				; give Sonic 1000 points
-		move.b	#id_BMZ_Explode,ost_routine2(a0)
+		move.b	#id_BMZ_Explode,ost_mode(a0)
 		move.w	#180,ost_boss_wait_time(a0)		; set timer to 3 seconds
 		clr.w	ost_x_vel(a0)				; stop boss moving
 		rts	
@@ -267,7 +267,7 @@ BMZ_Explode:
 		bset	#status_xflip_bit,ost_status(a0)	; ship face right
 		bclr	#status_broken_bit,ost_status(a0)
 		clr.w	ost_x_vel(a0)				; stop moving
-		addq.b	#2,ost_routine2(a0)			; goto BMZ_Recover next
+		addq.b	#2,ost_mode(a0)			; goto BMZ_Recover next
 		move.w	#-$26,ost_boss_wait_time(a0)		; set timer (counts up)
 		tst.b	(v_boss_status).w
 		bne.s	.exit
@@ -300,7 +300,7 @@ BMZ_Recover:
 		beq.s	.stop_rising				; if exactly 48, branch
 		cmpi.w	#$38,ost_boss_wait_time(a0)		; have 56 frames passed since ship stopped rising?
 		bcs.s	.update					; if not, branch
-		addq.b	#2,ost_routine2(a0)			; if yes, goto BMZ_Escape next
+		addq.b	#2,ost_mode(a0)			; if yes, goto BMZ_Escape next
 		bra.s	.update
 ; ===========================================================================
 

@@ -65,7 +65,7 @@ Plat_NoCheck:							; jump here to skip all checks
 		move.w	ost_sonic_on_obj(a1),d0			; get OST address for that platform
 		movea.l	d0,a2					; point a2 to that address
 		bclr	#status_platform_bit,ost_status(a2)	; clear platform bit for the other platform
-		clr.b	ost_routine2(a2)
+		clr.b	ost_mode(a2)
 		cmpi.b	#4,ost_routine(a2)			; does its rountine counter suggest it's being stood on? (platforms all use similar rountines)
 		bne.s	.no					; if not, branch
 		subq.b	#2,ost_routine(a2)			; decrement counter to "detect mode"
