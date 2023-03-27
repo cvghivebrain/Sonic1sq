@@ -445,6 +445,7 @@ Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 
 		include "Objects\HUD.asm"			; HUD
 		include "Objects\_HexToDec.asm"
+		include "Objects\HUD Debug Overlay.asm"		; DebugOverlay
 
 		include "Objects\SLZ Fans.asm"			; Fan
 

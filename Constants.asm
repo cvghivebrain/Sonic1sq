@@ -49,6 +49,8 @@ vram_shield:		equ $A800	; shield graphics (up to $AC80)
 vram_exhaust:		equ $AC80	; boss exhaust flame graphics
 vram_face:		equ $AE40	; boss face graphics
 vram_weapon:		equ $B0A0	; boss weapon graphics
+vram_overlay:		equ $B200	; debug overlay
+vram_overlay2:		equ $B300
 vram_credits:		equ $B400	; credits font graphics
 vram_monitors:		equ $D000	; monitor graphics
 vram_signpost:		equ $D000	; signpost graphics
