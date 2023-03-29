@@ -4,32 +4,41 @@ _Sonic 1-squared_ is an enhanced version of the original _Sonic the Hedgehog_ ga
 
 # Features
 * The player's Chaos Emerald count is stored as a bitfield instead of a list. It's a longword, so there can be up to 32 Emeralds.
-* LoadPerZone subroutine consolidates all pointers and parameters for zones and acts. This simplifies the process of adding levels. (incomplete)
-* LoadPerCharacter subroutine does the same for the Sonic object, palette and life icon, allowing for extra characters.
-* LoadPerDemo loads the level number, demo data, character and start position for all demos, including those during the credits.
+* `LoadPerZone` subroutine consolidates all pointers and parameters for zones and acts. This simplifies the process of adding levels. (incomplete)
+* `LoadPerCharacter` subroutine does the same for the Sonic object, palette and life icon, allowing for extra characters.
+* `LoadPerDemo` loads the level number, demo data, character and start position for all demos, including those during the credits.
 * Rewritten level select routine to be more customisable. It now uses standard ASCII, and supports multiple columns (which are automatically generated based on the lines-per-column setting).
 * The hidden Japanese credits, "try again" and "end" screens have been given their own gamemodes, which are accessible through the level select.
 * The HUD has new debug features, including a CPU cycle usage counter (displayed as a decimal percentage) and sprite counter ($4F is max).
+* 6 button support. `v_joypad_hold_actual_xyz` contains the status of the X/Y/Z/Mode buttons.
 
 ## Graphics
-* KosPLC subroutine loads Kosinski-compressed graphics at the beginning of a level.
-* UncPLC subroutine load uncompressed graphics at any time. This complements KosPLC by loading graphics during a level. Both this and KosPLC use the DMA queue.
+* `KosPLC` subroutine loads Kosinski-compressed graphics at the beginning of a level.
+* `UncPLC` subroutine load uncompressed graphics at any time. This complements `KosPLC` by loading graphics during a level. Both this and `KosPLC` use the DMA queue.
 * DMA queue system for loading uncompressed graphics.
 * Animated level graphics use a script instead of being hard-coded. The exception is Marble Zone's magma, which works somewhat differently to other animations.
 * Palette cycling uses a script.
-* Water palettes are generated in-game by the WaterFilter subroutine, instead of being hardcoded.
+* Water palettes are generated in-game by the `WaterFilter` subroutine, instead of being hardcoded.
 * Fading to black/white is controlled by a brightness variable, and no longer requires a "next" palette. This simplifies loading new palettes.
 
 ## Objects
-* Modified the way animation works to save 2 bytes in RAM per object. The high bit of ost_anim now serves as an update flag instead of ost_anim_restart.
-* Object scratch RAM is assigned automatically with __rsobj__ macro. If you attempt to use more RAM than is available ($40 bytes), assembly will fail.
-* ost_id is now a longword pointer instead of a single byte (as is the case in _Sonic 3 & Knuckles_). This allows for unlimited object types, and slightly improves performance.
-* ost_frame extended to a word (ost_frame_hi), allowing objects to have up to 8,192 distinct frames of animation.
+* Modified the way animation works to save 2 bytes in RAM per object. The high bit of `ost_anim` now serves as an update flag instead of `ost_anim_restart`.
+* Object scratch RAM is assigned automatically with `rsobj` macro. If you attempt to use more RAM than is available ($40 bytes), assembly will fail.
+* `ost_id` is now a longword pointer instead of a single byte (as is the case in _Sonic 3 & Knuckles_). This allows for unlimited object types, and slightly improves performance.
+* `ost_frame` extended to a word (`ost_frame_hi`), allowing objects to have up to 8,192 distinct frames of animation.
 * Sprite mappings use 6 bytes per piece instead of 5, and the piece count is a word instead of a byte. This ensures the data is always aligned to even.
-* ost_parent contains the parent object's OST address (shortened to a word), if GetParent was called when the child object was created.
+* `ost_parent` contains the parent object's OST address (shortened to a word), if `SaveParent` was called when the child object was created. `GetParent` will set the parent object as `a1`. Calling `DeleteFamily` will delete an object as well as any objects which have it set as their parent.
+* `ost_linked` is similar to `ost_parent`. `GetLinked` will set the linked object as `a1`. `DeleteFamily` won't delete linked objects.
 * Monitor icons load only as needed, allowing for up to 256 unique monitor types (with a maximum of 8 loaded at any one time).
-* Each title card has its own PLC, so only letters that are used need to be loaded. Title cards are automatically centered by the __autocard__ macro. Title card mappings are also automated, and can use sprite mappings more efficiently by joining two letters together as a single sprite.
+* Each title card has its own PLC, so only letters that are used need to be loaded. Title cards are automatically centered by the `autocard` macro. Title card mappings are also automated, and can use sprite mappings more efficiently by joining two letters together as a single sprite.
 * GHZ loops use an object instead of being hard-coded. The object reads Sonic's position within the loop and updates the level layout accordingly.
+* Debug mode has been rewritten with more features, including info overlays for Sonic and the nearest object (similar to those in the [Sonic Physics Guide](http://info.sonicretro.org/Sonic_Physics_Guide)). The controls are as follows:
+  * B - Toggle between Sonic and object.
+  * C (as object) - Place an object.
+  * Hold A (as object) - Select an object with left/right. The previous and next objects are now visible.
+  * X - Target overlay to current nearest object. This is not automatically updated until the targeted object despawns.
+  * Y - Toggle between displaying x/y position, x/y speed, angle/routine numbers and nothing.
+  * Z - Toggle between displaying actual width/height, hitbox width/height and nothing.
 
 ## Bugfixes
 * Spikes no longer kill Sonic immediately after losing rings. Add $80 to the subtype to restore the original lethal behaviour.

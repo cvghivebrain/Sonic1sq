@@ -18,6 +18,9 @@ Overlay_Index:	index *,,2
 		ptr Overlay_Centre
 		ptr Overlay_BoxLeft
 		ptr Overlay_BoxRight
+		ptr Overlay_CentreObj
+		ptr Overlay_BoxLeftObj
+		ptr Overlay_BoxRightObj
 		
 		rsobj DebugOverlay
 ost_overlay_x_prev:	rs.w 1
@@ -49,12 +52,27 @@ Overlay_Settings:
 		dc.b id_frame_overlay_4, id_Overlay_BoxRight
 		dc.w vram_overlay3/sizeof_cell
 		dc.w v_ost_player&$FFFF
+		
+		dc.l Map_Overlay
+		dc.b id_frame_overlay_centre, id_Overlay_CentreObj
+		dc.w vram_overlay3/sizeof_cell
+		dc.w 0
+		
+		dc.l Map_Overlay
+		dc.b id_frame_overlay_4, id_Overlay_BoxLeftObj
+		dc.w vram_overlay3/sizeof_cell
+		dc.w 0
+		
+		dc.l Map_Overlay
+		dc.b id_frame_overlay_4, id_Overlay_BoxRightObj
+		dc.w vram_overlay3/sizeof_cell
+		dc.w 0
 ; ===========================================================================
 
 Overlay_Main:	; Routine 0
 		movea.l	a0,a1					; write current object first
 		lea	Overlay_Settings(pc),a2
-		moveq	#5-1,d1
+		moveq	#8-1,d1
 		bra.s	.first_obj
 
 	.loop:
@@ -190,7 +208,7 @@ Overlay_Words:
 
 Overlay_Centre:	; Routine 6
 		btst	#bitZ,(v_joypad_press_actual_xyz).w	; is Z pressed?
-		beq.s	.z_not_pressed				; if not, branch
+		beq.s	Overlay_Centre_Display			; if not, branch
 		move.w	(v_debug_hitbox_setting).w,d0
 		addi.w	#1,d0
 		cmpi.w	#3,d0
@@ -200,7 +218,7 @@ Overlay_Centre:	; Routine 6
 	.value_valid:
 		move.w	d0,(v_debug_hitbox_setting).w		; update setting
 		
-	.z_not_pressed:
+Overlay_Centre_Display:
 		cmpi.w	#2,(v_debug_hitbox_setting).w
 		beq.s	Overlay_Hide				; don't display on setting #2
 		bsr.w	GetLinked				; a1 = OST of Sonic/linked object
@@ -212,16 +230,23 @@ Overlay_Hide:
 		rts
 ; ===========================================================================
 
+Overlay_CentreObj:
+		; Routine $C
+		move.w	(v_nearest_obj).w,ost_linked(a0)	; link to object nearest Sonic
+		bra.s	Overlay_Centre_Display
+; ===========================================================================
+
 Overlay_BoxRight:
 		; Routine $A
 		bset	#render_xflip_bit,ost_render(a0)
+		move.b	#id_Overlay_BoxLeft,ost_routine(a0)
 		
 Overlay_BoxLeft:
 		; Routine 8
 		moveq	#0,d2
 		move.w	(v_debug_hitbox_setting).w,d0
 		bne.s	.hitbox_or_none				; branch on settings 1-2
-		bsr.w	GetLinked				; a1 = OST of Sonic/linked object
+		bsr.w	GetLinked				; a1 = OST of Sonic object
 		moveq	#0,d0
 		move.b	ost_width(a1),d0
 		moveq	#0,d1
@@ -232,7 +257,7 @@ Overlay_BoxLeft:
 	.hitbox_or_none:
 		cmpi.w	#2,d0
 		beq.s	Overlay_Hide				; don't display on setting #2
-		bsr.w	GetLinked				; a1 = OST of Sonic/linked object
+		bsr.w	GetLinked				; a1 = OST of Sonic object
 		moveq	#0,d0
 		moveq	#0,d1
 		move.b	(v_player1_hitbox_width).w,d0
@@ -245,15 +270,15 @@ Overlay_BoxLeft:
 	.not_rolling:
 		cmpi.b	#id_Duck,ost_anim(a1)
 		bne.s	.not_ducking				; branch if Sonic isn't ducking
-		moveq	#6,d2
+		moveq	#6,d2					; hitbox is 6px lower
 		subi.b	#6,d1					; smaller hitbox when ducking
 		
 	.not_ducking:
 		bset	#tile_pal12_bit,ost_tile(a0)
 		
 Overlay_SetBox:
-		cmpi.b	#id_Overlay_BoxLeft,ost_routine(a0)
-		bne.s	.not_left
+		btst	#render_xflip_bit,ost_render(a0)
+		bne.s	.not_left				; branch if not the left side
 		neg.w	d0
 		
 	.not_left:
@@ -263,4 +288,44 @@ Overlay_SetBox:
 		add.w	d2,ost_y_pos(a0)
 		move.w	d1,ost_frame_hi(a0)			; use frame according to height
 		bra.w	Overlay_Display
+; ===========================================================================
+
+Overlay_BoxRightObj:
+		; Routine $10
+		bset	#render_xflip_bit,ost_render(a0)
+		move.b	#id_Overlay_BoxLeftObj,ost_routine(a0)
+		
+Overlay_BoxLeftObj:
+		; Routine $E
+		moveq	#0,d2
+		move.w	(v_debug_hitbox_setting).w,d0
+		bne.s	.hitbox_or_none				; branch on settings 1-2
+		move.w	(v_nearest_obj).w,ost_linked(a0)	; link to object nearest Sonic
+		bsr.w	GetLinked				; a1 = OST of linked object
+		moveq	#0,d0
+		move.b	ost_width(a1),d0
+		beq.w	Overlay_Hide				; don't display if width is 0
+		moveq	#0,d1
+		move.b	ost_height(a1),d1
+		beq.w	Overlay_Hide				; don't display if height is 0
+		bclr	#tile_pal12_bit,ost_tile(a0)
+		bra.s	Overlay_SetBox
+		
+	.hitbox_or_none:
+		cmpi.w	#2,d0
+		beq.w	Overlay_Hide				; don't display on setting #2
+		move.w	(v_nearest_obj).w,ost_linked(a0)	; link to object nearest Sonic
+		bsr.w	GetLinked				; a1 = OST of linked object
+		moveq	#0,d3
+		move.b	ost_col_type(a1),d3			; get hitbox id
+		beq.w	Overlay_Hide				; don't display if object has no hitbox
+		andi.w	#$3F,d3
+		add.w	d3,d3
+		add.w	d3,d3					; multiply by 4
+		lea	React_Sizes,a2
+		adda.l	d3,a2					; jump to hitbox dimensions
+		move.w	(a2)+,d0				; get width
+		move.w	(a2),d1					; get height
+		bset	#tile_pal12_bit,ost_tile(a0)
+		bra.w	Overlay_SetBox
 		

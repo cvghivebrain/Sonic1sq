@@ -85,16 +85,15 @@ ProcessDMA:
 		tst.b	(a1)					; is DMA slot empty?
 		beq.s	.empty					; if yes, branch
 		move.l	(a1),(a6)				; write source address
-		move.w	4(a1),(a6)				; write source address
-		move.l	6(a1),(a6)				; write length
-		move.l	10(a1),d1
+		move.l	#0,(a1)+				; delete from queue
+		move.w	(a1),(a6)				; write source address
+		move.w	#0,(a1)+
+		move.l	(a1),(a6)				; write length
+		move.l	#0,(a1)+
+		move.l	(a1),d1
 		move.l	d1,(a6)					; write destination address
-		move.l	#0,(a1)
-		move.w	#0,4(a1)
-		move.l	#0,6(a1)
-		move.l	#0,10(a1)				; delete from queue
+		move.l	#0,(a1)+
+		dbf	d0,.loop				; repeat for all DMA slots
 	
 	.empty:
-		lea	sizeof_dma(a1),a1			; goto next DMA slot
-		dbf	d0,.loop				; repeat for all DMA slots
 		rts
