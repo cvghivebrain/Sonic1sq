@@ -15,6 +15,9 @@ Overlay_Index:	index *,,2
 		ptr Overlay_Main
 		ptr Overlay_Sonic
 		ptr Overlay_Nearest
+		ptr Overlay_Centre
+		ptr Overlay_BoxLeft
+		ptr Overlay_BoxRight
 		
 		rsobj DebugOverlay
 ost_overlay_x_prev:	rs.w 1
@@ -22,19 +25,36 @@ ost_overlay_y_prev:	rs.w 1
 		rsobjend
 		
 Overlay_Settings:
+		dc.l Map_HUD
 		dc.b id_frame_hud_debugsonic, id_Overlay_Sonic
 		dc.w vram_overlay/sizeof_cell
 		dc.w v_ost_player&$FFFF
 		
+		dc.l Map_HUD
 		dc.b id_frame_hud_debugsonic, id_Overlay_Nearest
 		dc.w vram_overlay2/sizeof_cell
 		dc.w 0
+		
+		dc.l Map_Overlay
+		dc.b id_frame_overlay_centre, id_Overlay_Centre
+		dc.w vram_overlay3/sizeof_cell
+		dc.w v_ost_player&$FFFF
+		
+		dc.l Map_Overlay
+		dc.b id_frame_overlay_4, id_Overlay_BoxLeft
+		dc.w vram_overlay3/sizeof_cell
+		dc.w v_ost_player&$FFFF
+		
+		dc.l Map_Overlay
+		dc.b id_frame_overlay_4, id_Overlay_BoxRight
+		dc.w vram_overlay3/sizeof_cell
+		dc.w v_ost_player&$FFFF
 ; ===========================================================================
 
 Overlay_Main:	; Routine 0
 		movea.l	a0,a1					; write current object first
 		lea	Overlay_Settings(pc),a2
-		moveq	#2-1,d1
+		moveq	#5-1,d1
 		bra.s	.first_obj
 
 	.loop:
@@ -43,7 +63,7 @@ Overlay_Main:	; Routine 0
 		move.l	#DebugOverlay,ost_id(a1)
 		
 	.first_obj:
-		move.l	#Map_HUD,ost_mappings(a1)
+		move.l	(a2)+,ost_mappings(a1)
 		move.b	(a2)+,ost_frame(a1)
 		move.b	(a2)+,ost_routine(a1)
 		move.w	(a2)+,ost_tile(a1)
@@ -52,6 +72,9 @@ Overlay_Main:	; Routine 0
 		move.b	#0,ost_priority(a1)
 		move.b	#16,ost_displaywidth(a1)
 		dbf	d1,.loop
+		
+		moveq	#id_UPLC_Overlay,d0
+		jsr	UncPLC
 		
 	.fail:
 		rts
@@ -134,12 +157,12 @@ Overlay_ShowWords:
 		
 	.skip_x:
 		move.w	ost_y_pos(a1),d0
-		addi.w	#32,d0
+		addi.w	#24,d0
 		move.w	(v_camera_y_pos).w,d1
 		addi.w	#screen_height-16,d1			; d1 = y pos of bottom of screen
 		cmp.w	d0,d1
 		bcc.s	.is_visible				; branch if numbers are fully visible
-		subi.w	#64+16,d0				; move numbers above linked object instead
+		subi.w	#48+16,d0				; move numbers above linked object instead
 	.is_visible:
 		move.w	d0,ost_y_pos(a0)
 		
@@ -163,4 +186,81 @@ Overlay_Words:
 		dc.w ost_x_vel, ost_y_vel
 		dc.w ost_angle, ost_routine
 	Overlay_Words_end:
+; ===========================================================================
+
+Overlay_Centre:	; Routine 6
+		btst	#bitZ,(v_joypad_press_actual_xyz).w	; is Z pressed?
+		beq.s	.z_not_pressed				; if not, branch
+		move.w	(v_debug_hitbox_setting).w,d0
+		addi.w	#1,d0
+		cmpi.w	#3,d0
+		bne.s	.value_valid				; branch if 0-2
+		moveq	#0,d0					; wrap to 0
+		
+	.value_valid:
+		move.w	d0,(v_debug_hitbox_setting).w		; update setting
+		
+	.z_not_pressed:
+		cmpi.w	#2,(v_debug_hitbox_setting).w
+		beq.s	Overlay_Hide				; don't display on setting #2
+		bsr.w	GetLinked				; a1 = OST of Sonic/linked object
+		move.w	ost_x_pos(a1),ost_x_pos(a0)
+		move.w	ost_y_pos(a1),ost_y_pos(a0)
+		bra.w	Overlay_Display
+		
+Overlay_Hide:
+		rts
+; ===========================================================================
+
+Overlay_BoxRight:
+		; Routine $A
+		bset	#render_xflip_bit,ost_render(a0)
+		
+Overlay_BoxLeft:
+		; Routine 8
+		moveq	#0,d2
+		move.w	(v_debug_hitbox_setting).w,d0
+		bne.s	.hitbox_or_none				; branch on settings 1-2
+		bsr.w	GetLinked				; a1 = OST of Sonic/linked object
+		moveq	#0,d0
+		move.b	ost_width(a1),d0
+		moveq	#0,d1
+		move.b	ost_height(a1),d1
+		bclr	#tile_pal12_bit,ost_tile(a0)
+		bra.s	Overlay_SetBox
+		
+	.hitbox_or_none:
+		cmpi.w	#2,d0
+		beq.s	Overlay_Hide				; don't display on setting #2
+		bsr.w	GetLinked				; a1 = OST of Sonic/linked object
+		moveq	#0,d0
+		moveq	#0,d1
+		move.b	(v_player1_hitbox_width).w,d0
+		move.b	(v_player1_hitbox_height).w,d1
+		cmpi.b	#id_Roll,ost_anim(a1)
+		bne.s	.not_rolling				; branch if Sonic isn't rolling/jumping
+		move.b	(v_player1_hitbox_width_roll).w,d0
+		move.b	(v_player1_hitbox_height_roll).w,d1
+		
+	.not_rolling:
+		cmpi.b	#id_Duck,ost_anim(a1)
+		bne.s	.not_ducking				; branch if Sonic isn't ducking
+		moveq	#6,d2
+		subi.b	#6,d1					; smaller hitbox when ducking
+		
+	.not_ducking:
+		bset	#tile_pal12_bit,ost_tile(a0)
+		
+Overlay_SetBox:
+		cmpi.b	#id_Overlay_BoxLeft,ost_routine(a0)
+		bne.s	.not_left
+		neg.w	d0
+		
+	.not_left:
+		add.w	ost_x_pos(a1),d0
+		move.w	d0,ost_x_pos(a0)			; adjust x pos according to width
+		move.w	ost_y_pos(a1),ost_y_pos(a0)
+		add.w	d2,ost_y_pos(a0)
+		move.w	d1,ost_frame_hi(a0)			; use frame according to height
+		bra.w	Overlay_Display
 		

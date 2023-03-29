@@ -449,6 +449,7 @@ UncLoadCues:
 		ptr UPLC_EggmanSBZ
 		ptr UPLC_EggmanFZ
 		ptr UPLC_EndStH
+		ptr UPLC_Overlay
 
 UPLC_HUD:	uplcheader $D900
 		uplc Art_HUDMain,v_tile_hud
@@ -691,5 +692,9 @@ UPLC_EggmanFZ:	uplcheader $8E00
 	
 UPLC_EndStH:	uplcheader $A480
 		uplc Art_EndStH
+	.end:
+	
+UPLC_Overlay:	uplcheader vram_overlay3
+		uplc Art_Overlay
 	.end:
 	

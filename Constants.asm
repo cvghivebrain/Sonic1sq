@@ -57,6 +57,7 @@ vram_signpost:		equ $D000	; signpost graphics
 vram_giantring:		equ $D340	; giant ring graphics
 vram_animals:		equ $F400	; animal graphics
 vram_lifeicon:		equ $FA80	; life icon graphics
+vram_overlay3:		equ $FF80
 
 sizeof_cell:		equ $20			; single 8x8 tile
 sizeof_vram_fg:		equ sizeof_vram_row*32	; fg nametable, assuming 64x32 ($1000 bytes)

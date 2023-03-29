@@ -733,6 +733,7 @@ Art_Sonic:	incbin	"Graphics\Sonic.bin"			; Sonic
 		incfile	Art_HUDNums,"Graphics\HUD Numbers",bin,dma_safe
 		incfile	Art_LivesNums,"Graphics\Lives Counter Numbers",bin,dma_safe
 		incfile	Art_Red99,"Graphics\Red 99",bin,dma_safe
+		incfile	Art_Overlay,"Graphics\Debug Overlay",bin,dma_safe
 		incfile Kos_Ring,"Graphics Kosinski\Rings",kos
 		incfile Art_Shield,"Graphics\Shield",bin,dma_safe
 		incfile Art_Stars,"Graphics\Invincibility",bin,dma_safe
@@ -1190,6 +1191,7 @@ Level_End_unused:	dc.b 0,	0, 0, 0
 		include "Objects\Bosses [Mappings].asm"		; Map_Bosses, Map_BossItems
 		include "Objects\Explosions [Mappings].asm"	; Map_ExplodeItem & Map_ExplodeBomb
 		include "Objects\HUD Score, Time & Rings [Mappings].asm" ; Map_HUD
+		include "Objects\HUD Debug Overlay [Mappings].asm" ; Map_Overlay
 		include "Objects\Title Screen Press Start & TM [Mappings].asm" ; Map_PSB
 		include "Objects\Title Screen Sonic [Mappings].asm" ; Map_TSon
 		include "Objects\Game Over & Time Over [Mappings].asm" ; Map_Over

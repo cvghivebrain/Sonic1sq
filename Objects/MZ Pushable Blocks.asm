@@ -177,7 +177,7 @@ PushB_Jump:	; Routine $C
 		move.w	ost_x_pos(a0),ost_x_prev(a0)
 		bsr.w	SpeedToPos
 		bsr.w	SolidObject
-		bsr.w	FindFloorObj
+		jsr	FindFloorObj
 		tst.w	d1
 		bpl.w	PushB_Display				; branch if block hasn't reached floor
 		add.w	d1,ost_y_pos(a0)			; align to floor
@@ -208,7 +208,7 @@ PushB_Pushing:
 		beq.s	.push_left				; branch if pushing left side
 		
 	.push_right:
-		bsr.w	FindWallLeftObj
+		jsr	FindWallLeftObj
 		tst.w	d1
 		beq.s	.exit					; branch if block is against wall
 		subq.w	#1,ost_x_pos(a1)			; Sonic moves left
@@ -219,7 +219,7 @@ PushB_Pushing:
 		bra.s	.push_reset
 		
 	.push_left:
-		bsr.w	FindWallRightObj
+		jsr	FindWallRightObj
 		tst.w	d1
 		beq.s	.exit					; branch if block is against wall
 		addq.w	#1,ost_x_pos(a1)			; Sonic moves right
