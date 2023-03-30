@@ -188,7 +188,7 @@ BGHZ_MakeBall:
 		move.l	#BossBall,ost_id(a1)			; load swinging ball object
 		move.w	ost_boss_parent_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_boss_parent_y_pos(a0),ost_y_pos(a1)
-		jsr	SaveParent
+		saveparent
 
 	.fail:
 		move.w	#119,ost_boss_wait_time(a0)		; set wait time to 2 seconds

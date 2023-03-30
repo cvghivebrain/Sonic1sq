@@ -59,7 +59,7 @@ ESon_MakeEmeralds:
 		jsr	FindFreeInert
 		bne.s	.wait
 		move.l	#EndChaos,ost_id(a1)			; load chaos emeralds objects
-		jsr	SaveParent
+		saveparent
 
 	.wait:
 		rts	

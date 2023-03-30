@@ -35,7 +35,7 @@ LCon_Main:	; Routine 0
 		move.w	(a2)+,ost_y_pos(a1)
 		move.w	(a2)+,d0
 		move.b	d0,ost_subtype(a1)
-		bsr.w	SaveParent
+		saveparent
 
 	.fail:
 		dbf	d1,.loop				; repeat for number of objects

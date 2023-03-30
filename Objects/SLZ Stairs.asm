@@ -68,7 +68,7 @@ Stair_Main:	; Routine 0
 		move.w	ost_y_pos(a1),ost_stair_y_start(a1)
 		addi.w	#$20,d2					; next stair is 32px to the right of previous
 		move.b	d3,ost_stair_child_id(a1)		; values $38-$3B (or $3B-$38 if flipped)
-		bsr.w	SaveParent
+		saveparent
 		add.b	d4,d3					; next child id
 		dbf	d1,.loop				; repeat sequence 3 times
 
@@ -83,7 +83,7 @@ Stair_Move:	; Routine 2
 		jsr	Stair_TypeIndex(pc,d1.w)
 
 Stair_Solid:	; Routine 4
-		bsr.w	GetParent_a2				; get address of OST of parent object
+		getparent a2					; get address of OST of parent object
 		moveq	#0,d0
 		move.b	ost_stair_child_id(a0),d0		; get current stair id ($38-$3B)
 		move.b	(a2,d0.w),d0				; get y distance moved for current stair

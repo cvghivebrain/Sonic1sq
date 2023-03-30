@@ -228,7 +228,7 @@ Cat_Floor:
 ; ===========================================================================
 
 Cat_BodySeg2:	; Routine 6
-		jsr	GetParent				; a1 = OST of 1st body segment
+		getparent					; a1 = OST of 1st body segment
 		move.b	ost_cat_mode(a1),ost_cat_mode(a0)	; copy animation mode flags
 		bpl.s	Cat_BodySeg1				; branch if not updating
 
@@ -246,7 +246,7 @@ Cat_BodySeg2:	; Routine 6
 		move.b	d0,ost_frame(a0)			; update frame
 
 Cat_BodySeg1:	; Routine 4, 8
-		jsr	GetParent				; a1 = OST of head or previous body segment
+		getparent					; a1 = OST of head or previous body segment
 		tst.b	ost_status(a0)
 		bmi.w	Cat_Body_Break				; branch if caterkiller is broken
 		move.b	ost_cat_mode(a1),ost_cat_mode(a0)	; copy animation mode flags

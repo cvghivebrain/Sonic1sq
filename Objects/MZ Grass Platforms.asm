@@ -149,7 +149,7 @@ LGrass_Type05:
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		subi.w	#$40,ost_x_pos(a1)			; start at left side of platform
 		move.l	ost_grass_coll_ptr(a0),ost_burn_coll_ptr(a1)
-		bsr.w	SaveParent
+		saveparent
 		
 	.exit:
 		rts

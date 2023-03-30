@@ -163,7 +163,7 @@ PushB_WaitJump:	; Routine $A
 		bra.s	PushB_Lava
 		
 	.geyser_found:
-		bsr.w	GetLinked				; a1 = OST of geyser
+		getlinked					; a1 = OST of geyser
 		cmpi.b	#id_GMake_MakeLava,ost_routine(a1)
 		bne.s	PushB_Move				; branch if geyser is inactive
 		move.w	#-$580,ost_y_vel(a0)			; make block jump
@@ -248,7 +248,7 @@ PushB_Pushing:
 PushB_ChkStomp:
 		tst.w	ost_linked(a0)
 		beq.s	.use_gravity				; branch if no chain stomper was found
-		bsr.w	GetLinked				; a1 = OST of chain stomper
+		getlinked					; a1 = OST of chain stomper
 		move.w	ost_y_pos(a1),d0
 		sub.w	ost_y_pos(a0),d0
 		cmpi.w	#-screen_height,d0

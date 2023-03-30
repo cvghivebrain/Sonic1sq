@@ -81,7 +81,7 @@ CStom_Main:	; Routine 0
 		move.b	#render_rel,ost_render(a1)
 		move.b	#4,ost_priority(a1)
 		move.b	#16,ost_displaywidth(a1)
-		bsr.w	SaveParent
+		saveparent
 		
 		bsr.w	FindNextFreeObj				; find free OST slot
 		bne.w	CStom_Block
@@ -97,7 +97,7 @@ CStom_Main:	; Routine 0
 		move.b	#4,ost_priority(a1)
 		move.b	#16,ost_displaywidth(a1)
 		move.b	#$80,ost_height(a1)
-		bsr.w	SaveParent
+		saveparent
 		
 		tst.b	d2
 		bne.w	CStom_Block				; branch if omit spikes flag is set
@@ -115,7 +115,7 @@ CStom_Main:	; Routine 0
 		move.b	#4,ost_priority(a1)
 		move.b	#48,ost_displaywidth(a1)
 		move.b	#id_col_40x16+id_col_hurt,ost_col_type(a1) ; make spikes harmful
-		bsr.w	SaveParent
+		saveparent
 
 CStom_Block:	; Routine 2
 		bsr.w	CStom_Types				; update speed & position
@@ -131,7 +131,7 @@ CStom_Ceiling:	; Routine 6
 ; ===========================================================================
 
 CStom_Chain:	; Routine 8
-		bsr.w	GetParent				; a1 = address of parent OST
+		getparent					; a1 = address of parent OST
 		move.b	ost_cstomp_chain_length(a1),d0		; get current chain length
 		lsr.b	#5,d0					; divide by $20
 		addq.b	#id_frame_cstomp_chain1,d0		; convert to frame number
@@ -141,7 +141,7 @@ CStom_Chain:	; Routine 8
 		bra.w	DespawnQuick
 
 CStom_Spikes:	; Routine 4
-		bsr.w	GetParent				; a1 = address of parent OST
+		getparent					; a1 = address of parent OST
 		move.w	ost_y_pos(a1),ost_y_pos(a0)
 		addi.w	#$1C,ost_y_pos(a0)
 		bra.w	DespawnQuick

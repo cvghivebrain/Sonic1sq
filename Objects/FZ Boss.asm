@@ -85,7 +85,7 @@ BFZ_Main:	; Routine 0
 		move.b	(a3)+,ost_height(a1)
 		move.b	#render_rel,ost_render(a1)
 		bset	#render_onscreen_bit,ost_render(a0)
-		jsr	SaveParent				; save address of OST of parent
+		saveparent					; save address of OST of parent
 		dbf	d1,.loop				; repeat 5 more times
 
 	.fail:
@@ -474,12 +474,12 @@ BFZ_Eggman_Escape:
 ; ===========================================================================
 
 BFZ_Update:
-		jsr	GetParent				; get address of OST of parent object
+		getparent					; get address of OST of parent object
 		move.w	ost_x_pos(a1),ost_x_pos(a0)		; match position with parent
 		move.w	ost_y_pos(a1),ost_y_pos(a0)
 
 BFZ_Update_SkipPos:
-		jsr	GetParent				; get address of OST of parent object
+		getparent					; get address of OST of parent object
 		move.b	ost_status(a1),ost_status(a0)
 		moveq	#status_xflip+status_yflip,d0
 		and.b	ost_status(a0),d0
@@ -489,7 +489,7 @@ BFZ_Update_SkipPos:
 ; ===========================================================================
 
 BFZ_Cockpit:	; Routine 8
-		jsr	GetParent				; get address of OST of parent object
+		getparent					; get address of OST of parent object
 		move.l	(a1),d0
 		cmp.l	(a0),d0					; has parent been deleted?
 		bne.w	BFZ_Delete				; if yes, branch
@@ -526,7 +526,7 @@ BFZ_Cockpit:	; Routine 8
 
 BFZ_Legs:	; Routine 6
 		bset	#status_xflip_bit,ost_status(a0)
-		jsr	GetParent				; get address of OST of parent object
+		getparent					; get address of OST of parent object
 		cmpi.l	#Map_Bosses,ost_mappings(a1)		; is Eggman in his ship?
 		beq.s	.animate				; if yes, branch
 		bra.w	BFZ_Update_SkipPos
@@ -565,7 +565,7 @@ BFZ_Panel:	; Routine 4
 BFZ_EmptyShip:	; Routine $A
 		move.b	#id_frame_boss_ship,ost_frame(a0)
 		bset	#status_xflip_bit,ost_status(a0)	; face right
-		jsr	GetParent				; get address of OST of parent object
+		getparent					; get address of OST of parent object
 		cmpi.b	#id_BFZ_Eggman_Ship,ost_fz_mode(a1)	; is Eggman in his ship? (pre-escaping)
 		bne.s	.update					; if not, branch
 		cmpi.l	#Map_Bosses,ost_mappings(a1)		; is Eggman in his ship at all?

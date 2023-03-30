@@ -59,7 +59,7 @@ Bri_Main:	; Routine 0
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		move.b	d3,ost_subtype(a1)			; save log id
 		addq.b	#1,d3
-		bsr.w	SaveParent
+		saveparent
 		dbf	d2,.loop				; repeat for number of logs
 
 Bri_Solid:	; Routine 2
@@ -127,7 +127,7 @@ Bri_Sink_Data:
 ; ---------------------------------------------------------------------------
 
 BridgeLog:
-		bsr.w	GetParent				; a1 = OST of parent object
+		getparent					; a1 = OST of parent object
 		moveq	#0,d2
 		move.b	ost_bridge_bend(a1),d2
 		beq.s	.align_to_parent			; branch if bridge is in default state

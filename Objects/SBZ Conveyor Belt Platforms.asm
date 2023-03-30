@@ -34,7 +34,7 @@ SpinC_Main:	; Routine 0
 		move.w	(a2)+,d0
 		move.b	d0,ost_subtype(a1)
 		move.w	ost_y_pos(a0),ost_spinc_parent_y_pos(a1)
-		jsr	SaveParent
+		saveparent
 
 	.fail:
 		dbf	d1,.loop				; repeat for number of objects

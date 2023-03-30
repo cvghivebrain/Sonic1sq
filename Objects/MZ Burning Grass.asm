@@ -39,7 +39,7 @@ GFire_Main:	; Routine 0
 
 GFire_Spread:	; Routine 2
 		addq.w	#1,ost_x_pos(a0)			; move 1px right
-		bsr.w	GetParent				; a1 = OST of platform object
+		getparent					; a1 = OST of platform object
 		movea.l	ost_burn_coll_ptr(a0),a2		; a2 = pointer to platform heightmap
 		move.w	ost_x_pos(a0),d1
 		sub.w	ost_burn_x_start(a0),d1			; d0 = relative x position on platform
@@ -76,7 +76,7 @@ GFire_Spread:	; Routine 2
 ; ===========================================================================
 
 GFire_Hover:	; Routine 4
-		bsr.w	GetParent				; a1 = OST of platform object
+		getparent					; a1 = OST of platform object
 		move.w	ost_y_pos(a1),ost_y_pos(a0)
 		move.w	ost_burn_y_diff(a0),d0			; get value from heightmap
 		sub.w	d0,ost_y_pos(a0)			; update position

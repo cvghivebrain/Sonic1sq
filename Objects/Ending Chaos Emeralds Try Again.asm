@@ -68,7 +68,7 @@ TCha_Main:	; Routine 0
 		dbf	d1,.makeemerald				; repeat for remaining emeralds
 
 TCha_Move:	; Routine 2
-		jsr	GetParent				; a1 = OST of Eggman
+		getparent					; a1 = OST of Eggman
 		cmpi.b	#id_frame_eegg_juggle2,ost_frame(a1)
 		bne.s	.not_right				; branch if Eggman isn't throwing right
 		move.b	#$90,ost_angle(a0)			; match angle to Eggman's hand
@@ -127,7 +127,7 @@ TCha_Update:
 		rts
 		
 TCha_Stop:	; Routine 8
-		jsr	GetParent				; a1 = OST of Eggman
+		getparent					; a1 = OST of Eggman
 		cmpi.b	#id_frame_eegg_juggle1,ost_frame(a1)
 		beq.s	.goto_move				; branch if Eggman is preparing to throw
 		cmpi.b	#id_frame_eegg_juggle3,ost_frame(a1)

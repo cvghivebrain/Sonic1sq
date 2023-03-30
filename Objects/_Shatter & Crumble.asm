@@ -48,7 +48,7 @@ Shatter:
 ; ---------------------------------------------------------------------------
 
 Fragment:
-		bsr.w	SpeedToPos				; update position
+		update_xy_pos_nochk				; update position
 		move.w	ost_inertia(a0),d0			; get gravity
 		add.w	d0,ost_y_vel(a0)			; make fragment fall faster
 		tst.b	ost_render(a0)				; is fragment on-screen?
@@ -112,7 +112,7 @@ CrumbWait:
 		bra.w	DisplaySprite
 
 CrumbFall:
-		bsr.w	ObjectFallY				; apply gravity & update position
+		update_y_fall					; apply gravity & update position
 		tst.b	ost_render(a0)				; is fragment on-screen?
 		bpl.w	DeleteObject				; if not, branch
 		bra.w	DisplaySprite

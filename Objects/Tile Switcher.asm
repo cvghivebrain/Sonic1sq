@@ -80,7 +80,7 @@ TSwi_Main:	; Routine 0
 		move.b	(a2)+,ost_width(a1)
 		move.b	(a2)+,ost_height(a1)
 		move.b	(a2)+,ost_subtype(a1)
-		bsr.w	SaveParent
+		saveparent
 		dbf	d1,.loop				; repeat for all hotspots
 
 TSwi_Detect:	; Routine 2
@@ -106,7 +106,7 @@ TileSwitchHotspot:
 		
 		bset	#0,ost_tswi_flag(a0)
 		bne.s	.already_done				; branch if hotspot has already been hit
-		bsr.w	GetParent_a2				; a2 = OST of parent object
+		getparent a2					; a2 = OST of parent object
 		move.w	ost_tswi_tile_ptr(a2),d0
 		movea.l	d0,a3					; a3 = RAM address in layout
 		moveq	#0,d0

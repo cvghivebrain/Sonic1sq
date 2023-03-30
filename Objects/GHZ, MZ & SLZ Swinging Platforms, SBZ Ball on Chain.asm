@@ -135,7 +135,7 @@ Swing_Main:	; Routine 0
 		lsl.w	#4,d3					; d3 = chain length in pixels
 		addq.b	#8,d3
 		move.b	d3,ost_swing_radius(a1)			; position relative to anchor
-		bsr.w	SaveParent
+		saveparent
 		
 		subi.b	#1,d1					; subtract 1 for loops
 		moveq	#16,d2					; start position for first chain link
@@ -152,7 +152,7 @@ Swing_Main:	; Routine 0
 		move.b	#4,ost_priority(a1)
 		move.b	d2,ost_swing_radius(a1)			; position relative to anchor
 		addi.b	#16,d2
-		bsr.w	SaveParent
+		saveparent
 		dbf	d1,.loop				; repeat for all chain links
 
 Swing_Anchor:	; Routine 2
@@ -186,7 +186,7 @@ Swing_Chain:	; Routine 6
 ; ---------------------------------------------------------------------------
 
 Swing_Update:
-		bsr.w	GetParent				; a1 = parent object
+		getparent					; a1 = parent object
 		move.w	ost_swing_sine(a1),d0
 		move.w	ost_swing_cosine(a1),d1
 		move.w	ost_y_pos(a1),d2

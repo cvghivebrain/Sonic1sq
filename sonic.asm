@@ -11,6 +11,7 @@
 		include "Mega Drive.asm"
 		include "Macros - More CPUs.asm"
 		include "Macros.asm"
+		include "Macros - Objects.asm"
 		include "sound\Sounds.asm"
 		include "sound\Sound Equates.asm"
 		include "Constants.asm"
@@ -379,7 +380,6 @@ Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 
 		include "Includes\ObjPosLoad.asm"
 		include "Objects\_FindFreeObj & FindNextFreeObj.asm"
-		include "Objects\_SaveParent & GetParent.asm"
 		include "Objects\_FindNearestObj.asm"
 
 		include "Objects\Springs.asm"			; Springs

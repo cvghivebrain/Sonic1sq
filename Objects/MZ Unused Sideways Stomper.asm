@@ -75,7 +75,7 @@ SStom_Main:	; Routine 0
 		move.b	#render_rel,ost_render(a1)
 		move.b	(a2)+,ost_priority(a1)
 		move.b	#16,ost_displaywidth(a1)
-		bsr.w	SaveParent
+		saveparent
 		dbf	d1,.loop
 		
 		move.b	#id_col_16x24+id_col_hurt,ost_col_type(a1) ; last object is spikes
@@ -92,7 +92,7 @@ SStom_Display:	; Routine 6
 ; ===========================================================================
 
 SStom_Pole:	; Routine 8
-		bsr.w	GetParent				; a1 = address of parent OST
+		getparent					; a1 = address of parent OST
 		move.b	ost_mash_length(a1),d0			; get current pole length
 		addi.b	#$10,d0
 		lsr.b	#5,d0					; divide by $20
@@ -104,7 +104,7 @@ SStom_Pole:	; Routine 8
 		bra.s	SStom_Display
 
 SStom_Spikes:	; Routine 4
-		bsr.w	GetParent				; a1 = address of parent OST
+		getparent					; a1 = address of parent OST
 		move.w	ost_x_pos(a1),ost_x_pos(a0)
 		move.w	ost_mash_x_diff(a0),d0
 		add.w	d0,ost_x_pos(a0)

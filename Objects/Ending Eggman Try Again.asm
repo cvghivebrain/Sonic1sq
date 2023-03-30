@@ -34,7 +34,7 @@ EEgg_Main:	; Routine 0
 		move.w	#id_frame_cred_tryagain,(v_credits_num).w ; use "TRY AGAIN" text
 		jsr	FindFreeInert
 		move.l	#TryChaos,ost_id(a1)			; load emeralds object on "TRY AGAIN" screen
-		jsr	SaveParent
+		saveparent
 		move.b	#id_ani_eegg_juggle1,ost_anim(a0)	; use "TRY AGAIN" animation
 
 EEgg_Animate:	; Routine 2

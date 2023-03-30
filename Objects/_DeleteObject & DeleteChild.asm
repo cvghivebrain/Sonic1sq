@@ -11,7 +11,7 @@
 ;	uses d0.l
 
 ; usage (DeleteParent):
-;		bsr.w	GetParent				; a1 = OST of parent, assuming ost_parent is set
+;		getparent					; a1 = OST of parent, assuming ost_parent is set
 ;		bsr.w	DeleteParent
 ; ---------------------------------------------------------------------------
 

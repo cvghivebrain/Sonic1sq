@@ -95,7 +95,7 @@ ECha_End:
 		rts	
 
 ECha_Stop:
-		jsr	GetParent				; get OST of Sonic object
+		getparent					; get OST of Sonic object
 		move.b	#1,ost_esonic_flag(a1)
 		cmpi.b	#id_ani_esonic_confused,ost_anim(a1)
 		bne.s	.wait					; branch until Sonic looks confused

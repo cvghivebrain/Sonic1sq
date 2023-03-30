@@ -157,7 +157,7 @@ Overlay_Nearest:
 ; ---------------------------------------------------------------------------
 
 Overlay_ShowWords:
-		bsr.w	GetLinked				; a1 = OST of Sonic/linked object
+		getlinked					; a1 = OST of Sonic/linked object
 		move.w	(v_debug_ost_setting).w,d5
 		cmpi.w	#Overlay_Words_end-Overlay_Words,d5
 		beq.s	.dont_display				; branch if setting is $C
@@ -219,7 +219,7 @@ Overlay_Centre:	; Routine 6
 Overlay_Centre_Display:
 		cmpi.w	#2,(v_debug_hitbox_setting).w
 		beq.s	Overlay_Hide				; don't display on setting #2
-		bsr.w	GetLinked				; a1 = OST of Sonic/linked object
+		getlinked					; a1 = OST of Sonic/linked object
 		move.w	ost_x_pos(a1),ost_x_pos(a0)
 		move.w	ost_y_pos(a1),ost_y_pos(a0)
 		jmp	DisplaySprite
