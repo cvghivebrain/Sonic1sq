@@ -20,7 +20,7 @@ Shatter:
 		bset	#render_rawmap_bit,d3
 		
 	.loop:
-		bsr.w	FindNextFreeObj
+		bsr.w	FindFreeObj
 		bne.s	.fail
 		move.l	#Fragment,ost_id(a1)			; load fragment object
 		move.l	a2,ost_mappings(a1)			; raw mappings
@@ -76,7 +76,7 @@ Crumble:
 		bset	#render_rawmap_bit,d3
 		
 	.loop:
-		bsr.w	FindNextFreeObj
+		bsr.w	FindFreeObj
 		bne.s	.fail
 		move.l	#CrumbWait,ost_id(a1)			; load fragment object
 		move.l	a2,ost_mappings(a1)			; raw mappings
@@ -86,7 +86,7 @@ Crumble:
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		move.w	ost_tile(a0),ost_tile(a1)
 		move.b	ost_priority(a0),ost_priority(a1)
-		move.b	#8,ost_displaywidth(a1)
+		move.b	ost_displaywidth(a0),ost_displaywidth(a1)
 		move.b	(a4)+,ost_anim_time(a1)
 		dbf	d1,.loop				; repeat for all sprite pieces
 		

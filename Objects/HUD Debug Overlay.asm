@@ -76,7 +76,7 @@ Overlay_Main:	; Routine 0
 		bra.s	.first_obj
 
 	.loop:
-		jsr	FindFreeInert
+		jsr	FindFreeFinal
 		bne.s	.fail
 		move.l	#DebugOverlay,ost_id(a1)
 		
@@ -99,8 +99,6 @@ Overlay_Main:	; Routine 0
 ; ===========================================================================
 		
 Overlay_Display:
-		tst.b	(f_hide_hud).w
-		bne.s	.dont_display				; branch if HUD is set to not display
 		tst.b	ost_subtype(a0)
 		bne.s	.dont_display				; branch if overlay is set to invisible
 		jmp	DisplaySprite
@@ -224,7 +222,7 @@ Overlay_Centre_Display:
 		bsr.w	GetLinked				; a1 = OST of Sonic/linked object
 		move.w	ost_x_pos(a1),ost_x_pos(a0)
 		move.w	ost_y_pos(a1),ost_y_pos(a0)
-		bra.w	Overlay_Display
+		jmp	DisplaySprite
 		
 Overlay_Hide:
 		rts
@@ -246,8 +244,7 @@ Overlay_BoxLeft:
 		moveq	#0,d2
 		move.w	(v_debug_hitbox_setting).w,d0
 		bne.s	.hitbox_or_none				; branch on settings 1-2
-		bsr.w	GetLinked				; a1 = OST of Sonic object
-		moveq	#0,d0
+		lea	(v_ost_player).w,a1			; a1 = OST of Sonic object
 		move.b	ost_width(a1),d0
 		moveq	#0,d1
 		move.b	ost_height(a1),d1
@@ -257,8 +254,7 @@ Overlay_BoxLeft:
 	.hitbox_or_none:
 		cmpi.w	#2,d0
 		beq.s	Overlay_Hide				; don't display on setting #2
-		bsr.w	GetLinked				; a1 = OST of Sonic object
-		moveq	#0,d0
+		lea	(v_ost_player).w,a1			; a1 = OST of Sonic object
 		moveq	#0,d1
 		move.b	(v_player1_hitbox_width).w,d0
 		move.b	(v_player1_hitbox_height).w,d1
@@ -287,7 +283,7 @@ Overlay_SetBox:
 		move.w	ost_y_pos(a1),ost_y_pos(a0)
 		add.w	d2,ost_y_pos(a0)
 		move.w	d1,ost_frame_hi(a0)			; use frame according to height
-		bra.w	Overlay_Display
+		jmp	DisplaySprite
 ; ===========================================================================
 
 Overlay_BoxRightObj:
@@ -300,9 +296,9 @@ Overlay_BoxLeftObj:
 		moveq	#0,d2
 		move.w	(v_debug_hitbox_setting).w,d0
 		bne.s	.hitbox_or_none				; branch on settings 1-2
-		move.w	(v_nearest_obj).w,ost_linked(a0)	; link to object nearest Sonic
-		bsr.w	GetLinked				; a1 = OST of linked object
-		moveq	#0,d0
+		moveq	#-1,d3
+		move.w	(v_nearest_obj).w,d3
+		movea.l	d3,a1					; a1 = OST of linked object
 		move.b	ost_width(a1),d0
 		beq.w	Overlay_Hide				; don't display if width is 0
 		moveq	#0,d1
@@ -314,8 +310,9 @@ Overlay_BoxLeftObj:
 	.hitbox_or_none:
 		cmpi.w	#2,d0
 		beq.w	Overlay_Hide				; don't display on setting #2
-		move.w	(v_nearest_obj).w,ost_linked(a0)	; link to object nearest Sonic
-		bsr.w	GetLinked				; a1 = OST of linked object
+		moveq	#-1,d3
+		move.w	(v_nearest_obj).w,d3
+		movea.l	d3,a1					; a1 = OST of linked object
 		moveq	#0,d3
 		move.b	ost_col_type(a1),d3			; get hitbox id
 		beq.w	Overlay_Hide				; don't display if object has no hitbox

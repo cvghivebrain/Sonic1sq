@@ -41,6 +41,20 @@ FindFreeInert:
 		bra.s	FindFreeObj2
 		
 ; ---------------------------------------------------------------------------
+; Subroutine to find a free OST after regular OSTs
+
+; output:
+;	a1 = address of free OST slot
+
+;	uses d0.w
+; ---------------------------------------------------------------------------
+
+FindFreeFinal:
+		lea	(v_ost_final).w,a1
+		move.w	#countof_ost_final-1,d0
+		bra.s	FindFreeObj2
+		
+; ---------------------------------------------------------------------------
 ; Subroutine to find a free OST AFTER the current one
 
 ; input:

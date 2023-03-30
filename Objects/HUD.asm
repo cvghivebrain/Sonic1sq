@@ -78,7 +78,7 @@ HUD_Main:	; Routine 0
 		bsr.w	HUD_CameraX				; display camera x pos
 		bsr.w	HUD_CameraY				; display camera y pos
 		
-		jsr	FindFreeInert
+		jsr	FindFreeFinal
 		move.l	#DebugOverlay,ost_id(a1)		; load overlay object
 
 HUD_Flash:	; Routine 2

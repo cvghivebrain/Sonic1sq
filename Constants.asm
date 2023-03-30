@@ -9,9 +9,10 @@ sizeof_16x16:		equ 8					; size of one 16x16 tile
 countof_16x16:		equ $300				; max number of 16x16 tiles
 sizeof_16x16_all:	equ sizeof_16x16*countof_16x16		; size of all 16x16 tiles ($1800 bytes)
 sizeof_ost:		equ $40					; size of one OST in bytes
-countof_ost:		equ $80					; number of OSTs in RAM
-countof_ost_inert:	equ $20					; number of OSTs that don't interact with Sonic (including Sonic himself)
-countof_ost_ert:	equ countof_ost-countof_ost_inert	; number of OSTs that do interact with Sonic ($60)
+countof_ost_inert:	equ $18					; number of OSTs that don't interact with Sonic (including Sonic himself)
+countof_ost_ert:	equ $5F					; number of OSTs that do interact with Sonic
+countof_ost_final:	equ 9					; number of extra OSTs that run after all the others
+countof_ost:		equ countof_ost_inert+countof_ost_ert	; number of OSTs in RAM
 sizeof_priority:	equ $80					; size of one priority section in sprite queue
 sizeof_dma:		equ 14					; size of one DMA command
 countof_dma:		equ 28					; number of DMA slots in queue
