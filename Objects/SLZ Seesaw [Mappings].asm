@@ -26,4 +26,3 @@ frame_seesaw_flat:
 		piece	0, -$1A, 3x3, $23, xflip
 		piece	$18, -$1A, 3x3, $1D, xflip
 		endsprite
-		even

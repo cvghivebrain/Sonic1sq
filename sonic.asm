@@ -450,10 +450,8 @@ Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 		include "Objects\SLZ Fans.asm"			; Fan
 
 		include "Objects\SLZ Seesaw.asm"		; Seesaw
-See_DataSlope:	incbin	"Collision\SLZ Seesaw Heightmap (Sloped).bin" ; used by Seesaw
-		even
-See_DataFlat:	incbin	"Collision\SLZ Seesaw Heightmap (Flat).bin" ; used by Seesaw
-		even
+		incfile	See_DataSlope,"Collision\SLZ Seesaw Heightmap",bin
+		incfile	See_DataFlip,"Collision\SLZ Seesaw Heightmap (Flipped)",bin
 
 		include "Objects\Bomb Enemy.asm"		; Bomb
 

@@ -10,20 +10,11 @@ Seesaw:
 		moveq	#0,d0
 		move.b	ost_routine(a0),d0
 		move.w	See_Index(pc,d0.w),d1
-		jsr	See_Index(pc,d1.w)
-		move.w	ost_seesaw_x_start(a0),d0
-		andi.w	#$FF80,d0
-		move.w	(v_camera_x_pos).w,d1
-		subi.w	#$80,d1
-		andi.w	#$FF80,d1
-		sub.w	d1,d0
-		bmi.w	DeleteObject
-		cmpi.w	#$280,d0
-		bhi.w	DeleteObject
-		bra.w	DisplaySprite
+		jmp	See_Index(pc,d1.w)
 ; ===========================================================================
 See_Index:	index *,,2
 		ptr See_Main
+		ptr See_Action
 		ptr See_Slope
 		ptr See_StoodOn
 		ptr See_Spikeball
@@ -36,17 +27,60 @@ ost_seesaw_y_start:	rs.w 1 ; $34				; original y-axis position (2 bytes)
 ost_seesaw_impact:	rs.w 1 ; $38				; speed Sonic hits the seesaw (2 bytes)
 ost_seesaw_state:	rs.b 1 ; $3A				; seesaw: 0 = left raised; 2 = right raised; 1 = flat
 								; spikeball: 0 = on/launched from right side; 2 = on/launched from left side
+ost_seesaw_side:	rs.b 1					; Sonic's position on seesaw (0 = none; 1 = left; 2 = right; 5 = middle left; 6 = middle right)
 ost_seesaw_parent:	rs.l 1 ; $3C				; address of OST of parent object (4 bytes)
 		rsobjend
 ; ===========================================================================
 
 See_Main:	; Routine 0
-		addq.b	#2,ost_routine(a0)			; goto See_Slope next
+		addq.b	#2,ost_routine(a0)			; goto See_Action next
 		move.l	#Map_Seesaw,ost_mappings(a0)
 		move.w	#tile_Kos_Seesaw,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#4,ost_priority(a0)
 		move.b	#$30,ost_displaywidth(a0)
+		move.b	#$30,ost_width(a0)
+		move.b	#$15,ost_height(a0)
+
+See_Action:	; Routine 2
+		bsr.s	See_Solid
+		moveq	#0,d0
+		tst.b	d1
+		beq.s	.no_collision				; branch if Sonic isn't on the seesaw
+		move.w	ost_sonic_impact(a1),ost_seesaw_impact(a0)
+		move.b	#id_frame_seesaw_sloping_leftup,ost_frame(a0)
+		moveq	#1,d0					; collision flag
+		bset	#render_xflip_bit,ost_render(a0)	; right side up, left side down
+		cmpi.w	#$38,d4
+		blt.s	.not_right				; branch if Sonic isn't on right side
+		bclr	#render_xflip_bit,ost_render(a0)	; left side up, right side down
+		addq.b	#1,d0
+		bra.s	.no_collision
+	.not_right:
+		cmpi.w	#$28,d4
+		ble.s	.no_collision				; branch if Sonic isn't in the middle
+		move.b	#id_frame_seesaw_flat,ost_frame(a0)
+		addq.b	#4,d0
+		
+	.no_collision:
+		move.b	d0,ost_seesaw_side(a0)			; remember which side Sonic is on
+		bra.w	DespawnQuick
+		
+; ---------------------------------------------------------------------------
+; Subroutine to make seesaw solid
+; ---------------------------------------------------------------------------
+
+See_Solid:
+		cmpi.b	#id_frame_seesaw_flat,ost_frame(a0)
+		beq.w	SolidObject_TopOnly			; branch if seesaw is flat
+		moveq	#1,d6					; 1 byte in heightmap = 2px
+		lea	See_DataSlope,a2
+		btst	#render_xflip_bit,ost_render(a0)
+		beq.w	SolidObject_TopOnly_Heightmap		; branch if not xflipped
+		lea	See_DataFlip,a2
+		bra.w	SolidObject_TopOnly_Heightmap
+; ===========================================================================
+		
 		move.w	ost_x_pos(a0),ost_seesaw_x_start(a0)
 		tst.b	ost_subtype(a0)				; is object type 0?
 		bne.s	.noball					; if not, branch
@@ -73,8 +107,8 @@ See_Slope:	; Routine 2
 		bsr.w	See_ChgFrame				; update frame if needed
 		lea	(See_DataSlope).l,a2			; heightmap for sloped seesaw
 		btst	#0,ost_frame(a0)			; is seesaw flat?
-		beq.s	.notflat				; if not, branch
-		lea	(See_DataFlat).l,a2			; heightmap for flat seesaw
+		;beq.s	.notflat				; if not, branch
+		;lea	(See_DataFlat).l,a2			; heightmap for flat seesaw
 
 	.notflat:
 		lea	(v_ost_player).w,a1
@@ -88,8 +122,8 @@ See_StoodOn:	; Routine 4
 		bsr.w	See_ChkSide				; check where Sonic is on seesaw and update frame
 		lea	(See_DataSlope).l,a2
 		btst	#0,ost_frame(a0)			; is seesaw flat?
-		beq.s	.notflat				; if not, branch
-		lea	(See_DataFlat).l,a2
+		;beq.s	.notflat				; if not, branch
+		;lea	(See_DataFlat).l,a2
 
 	.notflat:
 		move.w	#$30,d1

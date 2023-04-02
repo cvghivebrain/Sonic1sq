@@ -193,9 +193,9 @@ v_levselsound:		equ v_levelselect_sound
 v_scorecopy:		equ v_highscore
 v_scorelife:		equ v_score_next_life
 f_levselcheat:		equ f_levelselect_cheat
-f_slomocheat:		equ f_slowmotion_cheat
+;f_slomocheat:		equ f_slowmotion_cheat
 f_debugcheat:		equ f_debug_cheat
-f_creditscheat:		equ f_credits_cheat
+;f_creditscheat:	equ f_credits_cheat
 v_title_dcount:		equ v_title_d_count
 v_title_ccount:		equ v_title_c_count
 f_demo:			equ v_demo_mode
@@ -594,9 +594,9 @@ Next_Extra_life_score:	equ v_score_next_life
 Camera_Min_Y_pos_Debug_Copy:	equ v_boundary_top_debugcopy
 Camera_Max_Y_pos_Debug_Copy:	equ v_boundary_bottom_debugcopy
 Level_select_flag:	equ f_levelselect_cheat
-Slow_motion_flag:	equ f_slowmotion_cheat
+;Slow_motion_flag:	equ f_slowmotion_cheat
 Debug_options_flag:	equ f_debug_cheat
-S1_hidden_credits_flag:	equ f_credits_cheat
+;S1_hidden_credits_flag:	equ f_credits_cheat
 Correct_cheat_entries:	equ v_title_d_count
 Correct_cheat_entries_2:	equ v_title_c_count
 Demo_mode_flag:		equ v_demo_mode

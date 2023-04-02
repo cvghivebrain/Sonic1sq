@@ -290,8 +290,8 @@ ost_displaywidth:	rs.b 1		; display width/2
 ost_anim_frame:		rs.b 1		; current frame in animation script
 ost_anim:		rs.b 1		; current animation
 ost_anim_time:		rs.b 1		; time to next frame (1 byte) / general timer
-ost_col_type:		rs.b 1		; collision response type - 0 = none; 1-$3F = enemy; $41-$7F = items; $81-BF = hurts; $C1-$FF = custom
-ost_col_property:	rs.b 1		; collision extra property
+ost_col_type:		rs.w 1		; collision response type - 0 = none; 1-$3F = enemy; $41-$7F = items; $81-BF = hurts; $C1-$FF = custom
+ost_col_property:	equ __rs-1	; collision extra property
 ost_sink:		equ ost_col_property ; amount platform has sunk when stood on - 0 is none, $1E is max
 ost_status:		rs.b 1		; orientation or mode
 	status_xflip:		equ 1	; xflip
@@ -331,8 +331,9 @@ ost_sonic_angle_right:	rs.b 1					; angle of floor on Sonic's right side
 ost_sonic_angle_left:	rs.b 1					; angle of floor on Sonic's left side
 ost_sonic_sbz_disc:	rs.b 1					; 1 if Sonic is stuck to SBZ disc
 ost_sonic_anim_next:	rs.b 1					; next animation
-ost_sonic_jumpmask:	rs.b 1					; bitmask for buttons with trigger jump
+ost_sonic_jumpmask:	rs.b 1					; bitmask for buttons which trigger jump
 ost_sonic_on_obj:	equ ost_parent				; OST index of object Sonic stands on (2 bytes)
+ost_sonic_impact:	equ ost_col_type			; copy of ost_y_vel when Sonic lands on a solid object (2 bytes)
 		rsobjend
 
 ; Object variables used by bosses

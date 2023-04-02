@@ -18,7 +18,7 @@ PauseGame:
 Pause_Loop:
 		move.b	#id_VBlank_Pause,(v_vblank_routine).w
 		bsr.w	WaitForVBlank				; wait for next frame
-		tst.b	(f_slowmotion_cheat).w			; is slow-motion cheat on?
+		tst.b	(f_debug_cheat).w			; is debug cheat on?
 		beq.s	.chk_start				; if not, branch
 		btst	#bitA,(v_joypad_press_actual).w		; is button A pressed?
 		beq.s	.chk_bc					; if not, branch

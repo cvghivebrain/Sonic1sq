@@ -393,10 +393,8 @@ v_levelselect_item:		rs.w 1 ; level select - item selected
 v_levelselect_sound:		rs.w 1 ; level select - sound selected
 v_highscore:			rs.l 1 ; highest score so far (REV00 only)
 v_score_next_life:		equ v_highscore	; points required for next extra life (REV01 only)
-f_levelselect_cheat:		rs.l 1 ; flag set when level select cheat has been entered
-f_slowmotion_cheat:		equ __rs-3 ; flag set when slow motion & frame advance cheat has been entered
-f_debug_cheat:			equ __rs-2 ; flag set when debug mode cheat has been entered
-f_credits_cheat:		equ __rs-1 ; flag set when hidden credits & press start cheat has been entered
+f_levelselect_cheat:		rs.b 1 ; flag set when level select cheat has been entered
+f_debug_cheat:			rs.b 1 ; flag set when debug mode cheat has been entered
 v_title_d_count:		rs.w 1 ; number of times the d-pad is pressed on title screen, but only in the order UDLR
 v_demo_mode:			rs.w 1 ; demo mode flag - 0 = no; 1 = yes; $8001 = ending
 v_demo_num:			rs.w 1 ; demo level number (not the same as the level number)
