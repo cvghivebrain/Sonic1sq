@@ -4,11 +4,8 @@
 Map_Seesaw:	index *
 		ptr frame_seesaw_sloping_leftup
 		ptr frame_seesaw_flat
-		ptr frame_seesaw_sloping_rightup
-		ptr frame_seesaw_flat
 
-frame_seesaw_sloping_leftup:					; left side raised
-frame_seesaw_sloping_rightup:					; right side raised, actually the same but xflipped
+frame_seesaw_sloping_leftup:
 		spritemap
 		piece	-$2D, -$2C, 2x3, 0
 		piece	-$1D, -$24, 2x3, 6

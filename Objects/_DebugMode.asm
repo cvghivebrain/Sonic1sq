@@ -35,6 +35,10 @@ Debug_Main:	; Routine 0
 		
 Debug_GetFrame:
 		move.l	4(a2,d0.w),ost_mappings(a3)		; load mappings for item
+		move.b	9(a2,d0.w),d1
+		andi.b	#status_xflip+status_yflip,d1
+		andi.b	#$FF-render_xflip-render_yflip,ost_render(a3)
+		or.b	d1,ost_render(a3)			; load x/yflip for item
 		move.w	10(a2,d0.w),ost_frame_hi(a3)		; load frame number for item
 		move.l	12(a2,d0.w),d1				; load VRAM setting
 		bpl.s	.not_ram				; branch if not a RAM address
@@ -360,6 +364,7 @@ DebugList_SLZ:
 		dbitem	Springs, Map_Spring, type_spring_red, 0, id_frame_spring_up, v_tile_hspring, 0
 		dbitem	Springs, Map_Spring, type_spring_yellow, 0, id_frame_spring_up, v_tile_hspring, tile_pal2
 		dbitem	Seesaw, Map_Seesaw, 0, 0, id_frame_seesaw_sloping_leftup, tile_Kos_Seesaw, 0
+		dbitem	Seesaw, Map_Seesaw, 0, status_xflip, id_frame_seesaw_sloping_leftup, tile_Kos_Seesaw, 0
 		dbitem	Fan, Map_Fan, type_fan_left_onoff, 0, id_frame_fan_0, tile_Kos_Fan, tile_pal3
 		dbitem	BasicPlatform, Map_Platform, type_plat_slz+type_plat_still, 0, id_frame_plat_slz, 0, tile_pal3
 		dbitem	CollapseFloor, Map_CFlo, type_cfloor_slz+type_cfloor_sided+1, 0, id_frame_cfloor_slz, tile_Kos_SlzBlock, tile_pal3

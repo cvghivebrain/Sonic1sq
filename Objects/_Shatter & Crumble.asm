@@ -48,7 +48,7 @@ Shatter:
 ; ---------------------------------------------------------------------------
 
 Fragment:
-		update_xy_pos_nochk				; update position
+		update_xy_pos					; update position
 		move.w	ost_inertia(a0),d0			; get gravity
 		add.w	d0,ost_y_vel(a0)			; make fragment fall faster
 		tst.b	ost_render(a0)				; is fragment on-screen?

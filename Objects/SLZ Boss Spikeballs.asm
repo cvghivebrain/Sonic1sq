@@ -98,7 +98,7 @@ BSpike_Bounce:	; Routine 4
 		movea.l	ost_bspike_seesaw(a0),a1		; get address of OST of seesaw
 		moveq	#0,d0
 		move.b	ost_bspike_state(a0),d0
-		sub.b	ost_seesaw_state(a1),d0
+		;sub.b	ost_seesaw_state(a1),d0
 		beq.s	.no_change				; branch if seesaw and spikeball have same state
 		bcc.s	.on_left				; branch if spikeball lands on left side
 		neg.b	d0					; make d0 +ve
@@ -282,7 +282,7 @@ BSpike_HitBoss:	; Routine 6
 		move.w	#0,ost_bspike_time(a0)
 
 BSpike_Update:
-		move.b	d1,ost_seesaw_state(a1)			; set new state for seesaw (0 or 2)
+		;move.b	d1,ost_seesaw_state(a1)			; set new state for seesaw (0 or 2)
 		move.b	d1,ost_bspike_state(a0)
 		cmp.b	ost_frame(a1),d1			; was seesaw in a different state previously?
 		beq.s	.no_change				; if not, branch
@@ -290,7 +290,7 @@ BSpike_Update:
 		beq.s	.no_change				; branch if Sonic wasn't on the seesaw
 
 		clr.b	ost_mode(a1)
-		move.b	#id_See_Slope,ost_routine(a1)		; reset seesaw routine
+		;move.b	#id_See_Slope,ost_routine(a1)		; reset seesaw routine
 		lea	(v_ost_player).w,a2
 		move.w	ost_y_vel(a0),ost_y_vel(a2)
 		neg.w	ost_y_vel(a2)				; launch Sonic into air
