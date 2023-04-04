@@ -284,20 +284,10 @@ Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 		include "Includes\DynamicLevelEvents.asm"
 
 		include "Objects\GHZ Bridge.asm"		; Bridge
-
-		include "Objects\_DetectPlatform.asm"
-		include "Objects\_SlopeObject.asm"
-
 		include "Objects\GHZ, MZ & SLZ Swinging Platforms, SBZ Ball on Chain.asm" ; SwingingPlatform
-		
-		include "Objects\_ExitPlatform.asm"
-
 		include "Objects\GHZ Boss Ball.asm"		; BossBall
-
 		include "Objects\GHZ Spiked Helix Pole.asm"	; Helix
-
 		include "Objects\Platforms.asm"			; BasicPlatform
-
 		include "Objects\GHZ Collapsing Ledge.asm"	; CollapseLedge
 		include "Objects\MZ, SLZ & SBZ Collapsing Floors.asm" ; CollapseFloor
 		incfile	Ledge_SlopeData,"Collision\GHZ Collapsing Ledge Heightmap",bin
