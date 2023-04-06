@@ -433,7 +433,7 @@ UncLoadCues:
 		ptr UPLC_Prison
 		ptr UPLC_Prison2
 		ptr UPLC_RabbitFlicky
-		ptr UPLC_BirdSeal
+		ptr UPLC_PenguinSeal
 		ptr UPLC_SquirrelSeal
 		ptr UPLC_PigFlicky
 		ptr UPLC_PigChicken
@@ -616,8 +616,8 @@ UPLC_RabbitFlicky:	uplcheader vram_animals
 		uplc Art_Flicky,v_tile_animal2
 	.end:
 	
-UPLC_BirdSeal:	uplcheader vram_animals
-		uplc Art_BlackBird,v_tile_animal1
+UPLC_PenguinSeal:	uplcheader vram_animals
+		uplc Art_Penguin,v_tile_animal1
 		uplc Art_Seal,v_tile_animal2
 	.end:
 	
@@ -644,7 +644,7 @@ UPLC_RabbitChicken:	uplcheader vram_animals
 UPLC_Animals:	uplcheader $AC00
 		uplc Art_Rabbit
 		uplc Art_Chicken
-		uplc Art_BlackBird
+		uplc Art_Penguin
 		uplc Art_Seal
 		uplc Art_Pig
 		uplc Art_Flicky

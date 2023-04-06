@@ -61,6 +61,7 @@ See_Main:	; Routine 0
 		move.b	#1,ost_subtype(a1)
 
 See_Action:	; Routine 2
+		shortcut
 		bsr.s	See_Solid
 		moveq	#0,d0
 		tst.b	d1

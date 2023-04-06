@@ -15,14 +15,14 @@ Animals:
 ; ===========================================================================
 Anml_Index:	index *,,2
 		ptr Anml_Main
-		ptr Anml_ChkFloor
-		ptr Anml_Type0
-		ptr Anml_Type1
-		ptr Anml_Type0
-		ptr Anml_Type0
-		ptr Anml_Type0
+		ptr Anml_Drop
+		ptr Anml_TypeNormal
+		ptr Anml_TypeBird
+		ptr Anml_TypeNormal
+		ptr Anml_TypeNormal
+		ptr Anml_TypeNormal
 		ptr Anml_Type5
-		ptr Anml_Type0
+		ptr Anml_TypeNormal
 		ptr Anml_FromPrison
 		ptr Anml_End_0A
 		ptr Anml_End_0A
@@ -36,27 +36,56 @@ Anml_Index:	index *,,2
 		ptr Anml_End_13
 		ptr Anml_End_14
 
-Anml_VarIndex:	dc.b 0,	5					; GHZ
-		dc.b 2, 3					; LZ
-		dc.b 6, 3					; MZ
-		dc.b 4, 5					; SLZ
-		dc.b 4,	1					; SYZ
-		dc.b 0, 1					; SBZ
+id_Rabbit:	equ 0
+id_Chicken:	equ 1
+id_Penguin:	equ 2
+id_Seal:	equ 3
+id_Pig:		equ 4
+id_Flicky:	equ 5
+id_Squirrel:	equ 6
 
-Anml_Variables:	dc.w -$200, -$400				; type 0 - GHZ/SBZ
+Anml_Settings:	dc.w -$200, -$400				; type 0 - rabbit, GHZ/SBZ
 		dc.l Map_Animal1
-		dc.w -$200, -$300				; type 1 - SYZ/SBZ
+		dc.l v_tile_animal1
+		dc.b id_Anml_TypeNormal
+		even
+	Anml_Settings_size:
+	
+		dc.w -$200, -$300				; type 1 - chicken, SYZ/SBZ
 		dc.l Map_Animal2
-		dc.w -$180, -$300				; type 2 - LZ
+		dc.l v_tile_animal2
+		dc.b id_Anml_TypeBird
+		even
+		
+		dc.w -$180, -$300				; type 2 - penguin, LZ
 		dc.l Map_Animal1
-		dc.w -$140, -$180				; type 3 - MZ/LZ
+		dc.l v_tile_animal1
+		dc.b id_Anml_TypeNormal
+		even
+		
+		dc.w -$140, -$180				; type 3 - seal, MZ/LZ
 		dc.l Map_Animal2
-		dc.w -$1C0, -$300				; type 4 - SYZ/SLZ
+		dc.l v_tile_animal2
+		dc.b id_Anml_TypeNormal
+		even
+		
+		dc.w -$1C0, -$300				; type 4 - pig, SYZ/SLZ
 		dc.l Map_Animal3
-		dc.w -$300, -$400				; type 5 - GHZ/SLZ
+		dc.l v_tile_animal1
+		dc.b id_Anml_TypeNormal
+		even
+		
+		dc.w -$300, -$400				; type 5 - flicky, GHZ/SLZ
 		dc.l Map_Animal2
-		dc.w -$280, -$380				; type 6 - MZ
+		dc.l v_tile_animal2
+		dc.b id_Anml_TypeBird
+		even
+		
+		dc.w -$280, -$380				; type 6 - squirrel, MZ
 		dc.l Map_Animal3
+		dc.l v_tile_animal1
+		dc.b id_Anml_TypeNormal
+		even
 
 Anml_EndSpeed:	dc.w -$440, -$400				; $A
 		dc.w -$440, -$400				; $B
@@ -87,19 +116,19 @@ Anml_EndVram:	dc.w tile_Art_Flicky_UPLC_Animals		; $A
 		dc.w tile_Art_Flicky_UPLC_Animals		; $C
 		dc.w tile_Art_Rabbit_UPLC_Animals		; $D
 		dc.w tile_Art_Rabbit_UPLC_Animals		; $E
-		dc.w tile_Art_BlackBird_UPLC_Animals		; $F
-		dc.w tile_Art_BlackBird_UPLC_Animals		; $10
+		dc.w tile_Art_Penguin_UPLC_Animals		; $F
+		dc.w tile_Art_Penguin_UPLC_Animals		; $10
 		dc.w tile_Art_Seal_UPLC_Animals			; $11
 		dc.w tile_Art_Pig_UPLC_Animals			; $12
 		dc.w tile_Art_Chicken_UPLC_Animals		; $13
 		dc.w tile_Art_Squirrel_UPLC_Animals		; $14
 
 		rsobj Animals
-ost_animal_direction:	rs.b 1 ; $29				; animal goes left/right
-ost_animal_type:	rs.b 1 ; $30				; type of animal (0-$B)
-ost_animal_x_vel:	rs.w 1 ; $32				; horizontal speed (2 bytes)
-ost_animal_y_vel:	rs.w 1 ; $34				; vertical speed (2 bytes)
-ost_animal_prison_num:	rs.w 1 ; $36				; id num for animals in prison capsule, lets them jump out 1 at a time (2 bytes)
+ost_animal_direction:	rs.b 1					; animal goes left/right
+ost_animal_type:	rs.b 1					; routine to use after animal first hits the floor
+ost_animal_x_vel:	rs.w 1					; horizontal speed (2 bytes)
+ost_animal_y_vel:	rs.w 1					; vertical speed (2 bytes)
+ost_animal_delay:	rs.w 1					; time to wait before 
 		rsobjend
 ; ===========================================================================
 
@@ -130,88 +159,84 @@ Anml_Main:	; Routine 0
 ; ===========================================================================
 
 Anml_FromEnemy:
-		addq.b	#2,ost_routine(a0)			; goto Anml_ChkFloor next
-		jsr	RandomNumber
-		andi.w	#1,d0					; d0 = random 0 or 1
-		moveq	#0,d1
-		move.b	(v_zone).w,d1				; get zone number
-		add.w	d1,d1
-		add.w	d0,d1					; d1 = (v_zone*2) + 0 or 1
-		lea	Anml_VarIndex(pc),a1
-		move.b	(a1,d1.w),d0				; get type from index based on zone + random 0 or 1
-		move.b	d0,ost_animal_type(a0)
-		lsl.w	#3,d0					; multiply by 8
-		lea	Anml_Variables(pc),a1
-		adda.w	d0,a1					; jump to actual variables
+		addq.b	#2,ost_routine(a0)			; goto Anml_Drop next
+		lea	(v_animal_type).w,a1
+		moveq	#1,d0
+		and.b	(v_frame_counter_low).w,d0		; d0 = 0 or 1 (basically random)
+		move.b	(a1,d0.w),d0				; get one of two types
+		mulu.w	#Anml_Settings_size-Anml_Settings,d0
+		lea	Anml_Settings,a1
+		adda.l	d0,a1					; jump to settings for specified animal
 		move.w	(a1)+,ost_animal_x_vel(a0)		; load horizontal speed
 		move.w	(a1)+,ost_animal_y_vel(a0)		; load vertical speed
 		move.l	(a1)+,ost_mappings(a0)			; load mappings
-		move.w	(v_tile_animal1).w,ost_tile(a0)		; VRAM setting for 1st animal
-		btst	#0,ost_animal_type(a0)			; was the random bit 0?
-		beq.s	.type_0					; if yes, branch
-		move.w	(v_tile_animal2).w,ost_tile(a0)		; VRAM setting for 2nd animal
-
-	.type_0:
-		move.b	#$C,ost_height(a0)
-		move.b	#render_rel,ost_render(a0)
-		bset	#render_xflip_bit,ost_render(a0)
+		movea.l	(a1)+,a2
+		move.w	(a2),ost_tile(a0)			; load VRAM setting
+		move.b	(a1)+,ost_animal_type(a0)		; load routine id
+		move.b	#render_rel+render_xflip,ost_render(a0)
 		move.b	#6,ost_priority(a0)
 		move.b	#8,ost_displaywidth(a0)
+		move.b	#$C,ost_height(a0)
 		move.b	#7,ost_anim_time(a0)
 		move.b	#id_frame_animal1_drop,ost_frame(a0)	; use "dropping" frame
 		move.w	#-$400,ost_y_vel(a0)
-		tst.b	(v_boss_status).w			; has boss been beaten?
-		bne.s	.after_boss				; if yes, branch
+		tst.w	ost_animal_delay(a0)
+		bne.s	.from_prison				; branch if animal came from prison capsule
 		bsr.w	FindFreeObj
-		bne.s	.display
+		bne.w	DisplaySprite
 		move.l	#Points,ost_id(a1)			; load points object
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		move.w	ost_enemy_combo(a0),d0
 		lsr.w	#1,d0
 		move.b	d0,ost_frame(a1)
-
-	.display:
 		bra.w	DisplaySprite
-; ===========================================================================
 
-.after_boss:
+	.from_prison:
 		move.b	#id_Anml_FromPrison,ost_routine(a0)	; goto Anml_FromPrison next
-		clr.w	ost_x_vel(a0)
 		bra.w	DisplaySprite
 ; ===========================================================================
 
-Anml_ChkFloor:	; Routine 2
+Anml_Drop:	; Routine 2
 		tst.b	ost_render(a0)				; is object on-screen?
 		bpl.w	DeleteObject				; if not, branch
-		bsr.w	ObjectFall				; make object fall and update its position
-		tst.w	ost_y_vel(a0)				; is object currently moving upwards?
-		bmi.s	.display				; if yes, branch
+		
+		update_y_fall					; make object fall and update its position
+		bmi.w	DisplaySprite				; branch if still moving upwards
+		tst.b	ost_mode(a0)
+		beq.s	.keep_priority				; branch if animal didn't come from a prison capsule
+		move.b	#3,ost_priority(a0)			; make animal appear in front of prison
+		clr.b	ost_mode(a0)				; don't do this again
 
+	.keep_priority:
 		jsr	(FindFloorObj).l
 		tst.w	d1					; has object hit the floor?
-		bpl.s	.display				; if not, branch
+		bpl.w	DisplaySprite				; if not, branch
 
 		add.w	d1,ost_y_pos(a0)			; align to floor
 		move.w	ost_animal_x_vel(a0),ost_x_vel(a0)	; reset speed
 		move.w	ost_animal_y_vel(a0),ost_y_vel(a0)
 		move.b	#id_frame_animal1_flap2,ost_frame(a0)	; use flapping frame
-		move.b	ost_animal_type(a0),d0			; get type
-		add.b	d0,d0
-		addq.b	#4,d0					; d0 = (type*2) + 4
-		move.b	d0,ost_routine(a0)			; goto relevant routine next
+		move.b	ost_animal_type(a0),ost_routine(a0)	; goto relevant routine next
 		tst.b	(v_boss_status).w			; has boss been beaten?
-		beq.s	.display				; if not, branch
+		beq.w	DisplaySprite				; if not, branch
 		btst	#4,(v_vblank_counter_byte).w		; check bit that changes every 16 frames
-		beq.s	.display				; branch if 0
+		beq.w	DisplaySprite				; branch if 0
 		neg.w	ost_x_vel(a0)				; reverse direction
 		bchg	#render_xflip_bit,ost_render(a0)
-
-	.display:
 		bra.w	DisplaySprite
 ; ===========================================================================
 
-Anml_Type0:	; Routine 6, $A, $C, $E, $12
+Anml_FromPrison:
+		; Routine $14
+		subq.w	#1,ost_animal_delay(a0)			; decrement timer
+		bne.w	DisplaySprite				; branch if not 0
+		move.b	#id_Anml_Drop,ost_routine(a0)		; goto Anml_Drop next
+		move.b	#1,ost_mode(a0)
+		bra.w	DisplaySprite
+; ===========================================================================
+
+Anml_TypeNormal:	; Routine 6, $A, $C, $E, $12
 		bsr.w	ObjectFall				; make object fall and update its position
 		move.b	#id_frame_animal1_flap2,ost_frame(a0)
 		tst.w	ost_y_vel(a0)				; is object currently moving upwards?
@@ -232,7 +257,7 @@ Anml_Type0:	; Routine 6, $A, $C, $E, $12
 		bra.w	DisplaySprite
 ; ===========================================================================
 
-Anml_Type1:	; Routine 8
+Anml_TypeBird:	; Routine 8
 Anml_Type5:	; Routine $10
 		bsr.w	SpeedToPos				; update object position
 		addi.w	#$18,ost_y_vel(a0)			; make object fall downwards
@@ -280,26 +305,14 @@ Anml_End_ChkDel:
 		bra.w	DisplaySprite
 ; ===========================================================================
 
-Anml_FromPrison:						; Routine $14
-		tst.b	ost_render(a0)				; is object on-screen?
-		bpl.w	DeleteObject				; if not, branch
-		subq.w	#1,ost_animal_prison_num(a0)		; decrement prison queue ticket
-		bne.w	.display				; branch if not 0
-		move.b	#id_Anml_ChkFloor,ost_routine(a0)	; goto Anml_ChkFloor next
-		move.b	#3,ost_priority(a0)
-
-	.display:
-		bra.w	DisplaySprite
-; ===========================================================================
-
 Anml_End_0A:	; Routine $16, $18
 		bsr.w	Anml_End_ChkDist
 		bcc.s	.far_away				; branch if Sonic is to the left, or > 184px right
 
 		move.w	ost_animal_x_vel(a0),ost_x_vel(a0)	; reset speed
 		move.w	ost_animal_y_vel(a0),ost_y_vel(a0)
-		move.b	#id_Anml_Type5,ost_routine(a0)		; goto Anml_Type1 next
-		bra.w	Anml_Type1
+		move.b	#id_Anml_Type5,ost_routine(a0)		; goto Anml_TypeBird next
+		bra.w	Anml_TypeBird
 
 	.far_away:
 		bra.w	Anml_End_ChkDel
@@ -329,8 +342,8 @@ Anml_End_0D:	; Routine $1C
 		bpl.s	Anml_End_ChkDel_			; branch if Sonic is > 184px to the right
 		move.w	ost_animal_x_vel(a0),ost_x_vel(a0)	; reset speed
 		move.w	ost_animal_y_vel(a0),ost_y_vel(a0)
-		move.b	#id_Anml_Type0,ost_routine(a0)		; goto Anml_Type0 next
-		bra.w	Anml_Type0
+		move.b	#id_Anml_TypeNormal,ost_routine(a0)		; goto Anml_TypeNormal next
+		bra.w	Anml_TypeNormal
 ; ===========================================================================
 
 Anml_End_14:	; Routine $2A

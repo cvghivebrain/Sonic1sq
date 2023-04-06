@@ -150,7 +150,7 @@ Pri_Explosion:	; Routine 6, 8, $A
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		add.w	d4,ost_x_pos(a1)
 		addq.w	#7,d4					; next animal loads 7px right
-		move.w	d5,ost_animal_prison_num(a1)		; give each animal a num so it jumps at a different time
+		move.w	d5,ost_animal_delay(a1)			; give each animal a num so it jumps at a different time
 		subq.w	#8,d5					; decrement queue number
 		dbf	d6,.loop				; repeat 7 more	times
 
@@ -177,7 +177,7 @@ Pri_Animals:	; Routine $C
 
 	.ispositive:
 		add.w	d0,ost_x_pos(a1)			; pseudorandom position
-		move.w	#$C,ost_animal_prison_num(a1)		; set time for animal to jump out
+		move.w	#$C,ost_animal_delay(a1)		; set time for animal to jump out
 
 	.noanimal:
 		subq.w	#1,ost_prison_time(a0)			; decrement timer

@@ -101,6 +101,7 @@ LoadPerZone:
 		pushr	d1-d2
 		jsr	UncPLC					; load animal graphics
 		popr	d1-d2
+		move.w	(a4)+,(v_animal_type).w			; get ids for animal types
 		rts
 		
 ; ---------------------------------------------------------------------------
@@ -129,6 +130,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Next_GHZ				; next level list (act specific)
 		dc.l Zone_Deform_GHZ				; bg deformation routine list (act specific)
 		dc.w id_UPLC_RabbitFlicky			; UPLC id for animal graphics
+		dc.b id_Rabbit, id_Flicky			; animal types
 		even
 	ZoneDefs_size:
 
@@ -153,7 +155,8 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_DLE_LZ
 		dc.l Zone_Next_LZ
 		dc.l Zone_Deform_LZ
-		dc.w id_UPLC_BirdSeal
+		dc.w id_UPLC_PenguinSeal
+		dc.b id_Penguin, id_Seal
 		even
 		
 		; Marble Zone
@@ -178,6 +181,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Next_MZ
 		dc.l Zone_Deform_MZ
 		dc.w id_UPLC_SquirrelSeal
+		dc.b id_Squirrel, id_Seal
 		even
 		
 		; Star Light Zone
@@ -202,6 +206,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Next_SLZ
 		dc.l Zone_Deform_SLZ
 		dc.w id_UPLC_PigFlicky
+		dc.b id_Pig, id_Flicky
 		even
 		
 		; Spring Yard Zone
@@ -226,6 +231,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Next_SYZ
 		dc.l Zone_Deform_SYZ
 		dc.w id_UPLC_PigChicken
+		dc.b id_Pig, id_Chicken
 		even
 		
 		; Scrap Brain Zone
@@ -250,6 +256,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Next_SBZ
 		dc.l Zone_Deform_SBZ
 		dc.w id_UPLC_RabbitChicken
+		dc.b id_Rabbit, id_Chicken
 		even
 		
 		; Ending
@@ -274,6 +281,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Next_End
 		dc.l Zone_Deform_End
 		dc.w id_UPLC_Animals
+		dc.b id_Rabbit, id_Flicky
 		even
 
 ; ---------------------------------------------------------------------------

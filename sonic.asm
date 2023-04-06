@@ -752,7 +752,7 @@ Art_Sonic:	incbin	"Graphics\Sonic.bin"			; Sonic
 ; ---------------------------------------------------------------------------
 		incfile	Art_Rabbit,"Graphics\Animal Rabbit",bin,dma_safe
 		incfile	Art_Chicken,"Graphics\Animal Chicken",bin,dma_safe
-		incfile	Art_BlackBird,"Graphics\Animal Blackbird",bin,dma_safe
+		incfile	Art_Penguin,"Graphics\Animal Penguin",bin,dma_safe
 		incfile	Art_Seal,"Graphics\Animal Seal",bin,dma_safe
 		incfile	Art_Pig,"Graphics\Animal Pig",bin,dma_safe
 		incfile	Art_Flicky,"Graphics\Animal Flicky",bin,dma_safe

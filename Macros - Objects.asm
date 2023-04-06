@@ -4,7 +4,7 @@
 ; ---------------------------------------------------------------------------
 
 shortcut:	macro
-		move.l	.shortcut_here,ost_id(a0)
+		move.l	#.shortcut_here,ost_id(a0)
 	.shortcut_here:
 		endm
 		

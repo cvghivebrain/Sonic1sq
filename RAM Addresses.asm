@@ -148,6 +148,7 @@ v_titlecard_loaded:		rs.b 1 ; count of title card objects (+1 for each object)
 v_titlecard_state:		rs.b 1 ; state of title card objects (+1 for each object when it stops on screen)
 v_haspassed_state:		rs.b 1 ; state of "Sonic Has Passed" title card (1 = loaded; 2 = move off screen on SBZ2)
 f_hide_hud:			rs.b 1 ; flag set to hide the HUD
+v_animal_type:			rs.w 1 ; ids for animal types in current zone (1 byte per animal)
 v_tile_hud:			rs.w 1
 v_tile_swing:			rs.w 1
 v_tile_wall:			rs.w 1
