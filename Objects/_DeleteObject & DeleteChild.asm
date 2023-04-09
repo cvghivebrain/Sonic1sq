@@ -17,6 +17,11 @@
 
 DeleteObject:
 		movea.l	a0,a1					; move current OST address to a1
+		moveq	#0,d0
+		rept sizeof_ost/4
+		move.l	d0,(a1)+
+		endr
+		rts
 
 DeleteChild:							; child objects are already in (a1)
 DeleteParent:
@@ -28,7 +33,7 @@ DeleteParent:
 		endr
 		
 	.exit:
-		rts	
+		rts
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	delete an object and all its children
@@ -42,7 +47,6 @@ DeleteParent:
 DeleteFamily:
 		movea.l	a0,a1					; move current OST address to a1
 		move.w	a1,d1
-		beq.s	.exit					; branch if no OST was defined
 		moveq	#0,d0
 		rept sizeof_ost/4
 		move.l	d0,(a1)+				; delete parent
@@ -54,14 +58,12 @@ DeleteFamily:
 		rept sizeof_ost/4
 		move.l	d0,(a1)+				; delete child object
 		endr
-		bra.s	.chk_end
+		cmpa.w	#v_ost_end&$FFFF,a1
+		bne.s	.loop					; repeat if not at end of OSTs
+		rts
 		
 	.next:
 		lea	sizeof_ost(a1),a1			; goto next OST slot
-		
-	.chk_end:
 		cmpa.w	#v_ost_end&$FFFF,a1
 		bne.s	.loop					; repeat if not at end of OSTs
-		
-	.exit:
-		rts	
+		rts
