@@ -108,6 +108,7 @@ Overlay_Display:
 ; ===========================================================================
 
 Overlay_Sonic:	; Routine 2
+		shortcut
 		tst.b	(v_titlecard_loaded).w
 		bne.s	.hide					; branch if title cards are visible
 		btst	#bitY,(v_joypad_press_actual_xyz).w	; is Y pressed?
@@ -133,6 +134,7 @@ Overlay_Sonic:	; Routine 2
 
 Overlay_Nearest:
 		; Routine 4
+		shortcut
 		tst.b	(v_titlecard_loaded).w
 		bne.s	.hide					; branch if title cards are visible
 		tst.w	ost_linked(a0)
@@ -205,6 +207,7 @@ Overlay_Words:
 ; ===========================================================================
 
 Overlay_Centre:	; Routine 6
+		shortcut
 		btst	#bitZ,(v_joypad_press_actual_xyz).w	; is Z pressed?
 		beq.s	Overlay_Centre_Display			; if not, branch
 		move.w	(v_debug_hitbox_setting).w,d0
@@ -241,6 +244,7 @@ Overlay_BoxRight:
 		
 Overlay_BoxLeft:
 		; Routine 8
+		shortcut
 		moveq	#0,d2
 		move.w	(v_debug_hitbox_setting).w,d0
 		bne.s	.hitbox_or_none				; branch on settings 1-2
@@ -293,6 +297,7 @@ Overlay_BoxRightObj:
 		
 Overlay_BoxLeftObj:
 		; Routine $E
+		shortcut
 		moveq	#0,d2
 		move.w	(v_debug_hitbox_setting).w,d0
 		bne.s	.hitbox_or_none				; branch on settings 1-2
