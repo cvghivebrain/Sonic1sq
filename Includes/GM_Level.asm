@@ -181,6 +181,7 @@ Level_MainLoop:
 		bsr.w	MoveSonicInDemo
 		bsr.w	LZWaterFeatures
 		jsr	(ExecuteObjects).l
+		jsr	ProcessSlowPLC
 		tst.w	(f_restart).w				; is level restart flag set?
 		bne.w	GM_Level				; if yes, branch
 		tst.w	(v_debug_active).w			; is debug mode being used?

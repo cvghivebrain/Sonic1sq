@@ -18,7 +18,6 @@ GM_HiddenCredits:
 		
 		moveq	#id_KPLC_HiddenCredits,d0
 		jsr	KosPLC					; load gfx
-		jsr	ProcessDMA
 		lea	($FF0000).l,a1				; RAM buffer
 		lea	(KosMap_JapNames).l,a0			; tile mappings
 		locVRAM	vram_fg,d0				; foreground, x=0, y=0

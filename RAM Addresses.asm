@@ -256,6 +256,8 @@ v_pal_dry_final:		rs.w countof_color*countof_pal ; main palette after brightness
 v_pal_water_final:		rs.w countof_color*countof_pal ; underwater palette after brightness change
 				rsalign 2
 v_respawn_list:			rs.b $100 ; object state list (2 bytes for counter; 1 byte each for up to $FE objects)
+v_slowplc_ptr:			rs.l 1 ; pointer to current SlowPLC (0 if not running)
+v_slowplc_buffer:		rs.b $1000 ; buffer for SlowPLC decompression
 
 				rsalign 4
 v_stack:			rs.l $40 ; stack ($100 bytes)

@@ -170,7 +170,7 @@ id_TryAgain:	equ id_GM_TryAgain
 		include	"Includes\PauseGame.asm"
 		include	"Includes\LoadTilemap.asm"
 
-		include "Includes\DMA.asm"
+		include "DMA & PLCs\DMA.asm"
 
 		include "Includes\Kosinski Decompression.asm"
 
@@ -1061,7 +1061,9 @@ Level_End_unused:	dc.b 0,	0, 0, 0
 
 		incfile	Art_BigRing,"Graphics\Giant Ring",bin,dma_safe
 
-		include "KosPLC & UncPLC.asm"
+		include "DMA & PLCs\KosPLC.asm"
+		include "DMA & PLCs\UncPLC.asm"
+		include "DMA & PLCs\SlowPLC.asm"
 		include "Objects\GHZ Giant Ball [Mappings].asm"	; Map_GBall
 		include "Objects\GHZ Bridge [Mappings].asm"	; Map_Bri
 		include "Objects\GHZ & MZ Swinging Platforms [Mappings].asm" ; Map_Swing_GHZ

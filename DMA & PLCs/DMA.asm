@@ -73,26 +73,27 @@ AddDMA2:
 ; output:
 ;	a6 = vdp_control_port
 
-;	uses d0.w, d1.l, a1
+;	uses d0.l, d1.l, d2.l, a1
 ; ---------------------------------------------------------------------------
 
 ProcessDMA:
 		lea	(v_dma_queue).w,a1			; start address for DMA queue
 		lea	(vdp_control_port).l,a6			; control port
-		move.w	#countof_dma-1,d0			; number of DMA slots in total
+		moveq	#countof_dma-1,d0			; number of DMA slots in total
+		moveq	#0,d1
 
 	.loop:
 		tst.b	(a1)					; is DMA slot empty?
 		beq.s	.empty					; if yes, branch
 		move.l	(a1),(a6)				; write source address
-		move.l	#0,(a1)+				; delete from queue
+		move.l	d1,(a1)+				; delete from queue
 		move.w	(a1),(a6)				; write source address
-		move.w	#0,(a1)+
+		move.w	d1,(a1)+
 		move.l	(a1),(a6)				; write length
-		move.l	#0,(a1)+
-		move.l	(a1),d1
-		move.l	d1,(a6)					; write destination address
-		move.l	#0,(a1)+
+		move.l	d1,(a1)+
+		move.l	(a1),d2
+		move.l	d2,(a6)					; write destination address
+		move.l	d1,(a1)+
 		dbf	d0,.loop				; repeat for all DMA slots
 	
 	.empty:
