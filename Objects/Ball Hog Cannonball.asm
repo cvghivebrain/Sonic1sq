@@ -16,7 +16,7 @@ Cbal_Index:	index *,,2
 		ptr Cbal_Bounce
 
 		rsobj Cannonball
-ost_ball_time:	rs.w 1 ; $30					; time until the cannonball explodes (2 bytes)
+ost_ball_time:	rs.w 1						; time until the cannonball explodes (2 bytes)
 		rsobjend
 ; ===========================================================================
 
@@ -37,8 +37,8 @@ Cbal_Main:	; Routine 0
 		move.b	#id_frame_hog_ball1,ost_frame(a0)
 
 Cbal_Bounce:	; Routine 2
-		jsr	(ObjectFall).l
-		tst.w	ost_y_vel(a0)
+		shortcut
+		update_xy_fall
 		bmi.s	Cbal_ChkExplode
 		jsr	(FindFloorObj).l
 		tst.w	d1					; has ball hit the floor?
@@ -64,8 +64,6 @@ Cbal_Bounce:	; Routine 2
 Cbal_ChkExplode:
 		subq.w	#1,ost_ball_time(a0)			; subtract 1 from explosion time
 		bpl.s	Cbal_Animate				; if time is > 0, branch
-
-	Cbal_Explode:
 		move.l	#ExplosionBomb,ost_id(a0)		; change object	to an explosion
 		move.b	#id_ExBom_Main,ost_routine(a0)		; reset routine counter
 		bra.w	ExplosionBomb				; jump to explosion code
@@ -79,7 +77,7 @@ Cbal_Animate:
 
 Cbal_Display:
 		move.w	(v_boundary_bottom).w,d0
-		addi.w	#224,d0
+		addi.w	#screen_height,d0
 		cmp.w	ost_y_pos(a0),d0			; has object fallen off the level?
 		bcs.w	DeleteObject				; if yes, branch
 		bra.w	DisplaySprite

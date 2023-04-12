@@ -14,10 +14,6 @@ Batbrain:
 Bat_Index:	index *,,2
 		ptr Bat_Main
 		ptr Bat_Action
-
-		rsobj Batbrain
-ost_bat_sonic_y_pos:	rs.w 1 ; $36				; Sonic's y position (2 bytes)
-		rsobjend
 ; ===========================================================================
 
 Bat_Main:	; Routine 0
@@ -32,6 +28,7 @@ Bat_Main:	; Routine 0
 		move.b	#$10,ost_displaywidth(a0)
 
 Bat_Action:	; Routine 2
+		shortcut
 		moveq	#0,d0
 		move.b	ost_mode(a0),d0
 		move.w	Bat_Action_Index(pc,d0.w),d1
@@ -64,7 +61,7 @@ Bat_DropChk:
 		andi.b	#7,d0					; read only bits 0-2
 		bne.s	.nodrop					; branch if any are set
 		move.b	#id_ani_bat_drop,ost_anim(a0)
-		addq.b	#2,ost_mode(a0)			; goto Bat_DropFly next
+		addq.b	#2,ost_mode(a0)				; goto Bat_DropFly next
 		bset	#status_xflip_bit,ost_status(a0)	; face right
 		tst.w	d0
 		bpl.s	.nodrop					; branch if Sonic is right
@@ -75,8 +72,7 @@ Bat_DropChk:
 ; ===========================================================================
 
 Bat_DropFly:
-		bsr.w	SpeedToPos				; update position
-		addi.w	#$18,ost_y_vel(a0)			; make batbrain fall
+		update_xy_fall	$18				; make batbrain fall
 		bsr.w	Range
 		tst.w	d2
 		bmi.s	.chkdel					; branch if Sonic is above
@@ -91,7 +87,7 @@ Bat_DropFly:
 		move.w	d1,ost_x_vel(a0)			; make batbrain fly horizontally
 		move.w	#0,ost_y_vel(a0)			; stop batbrain falling
 		move.b	#id_ani_bat_fly,ost_anim(a0)
-		addq.b	#2,ost_mode(a0)			; goto Bat_FlapSound next
+		addq.b	#2,ost_mode(a0)				; goto Bat_FlapSound next
 
 	.dropmore:
 		rts	
@@ -109,7 +105,7 @@ Bat_FlapSound:
 		play.w	1, jsr, sfx_basaran			; play flapping sound every 16th frame
 
 	.nosound:
-		bsr.w	SpeedToPos				; update position
+		update_x_pos					; update position
 		bsr.w	Range
 		cmp.w	#128,d1
 		blt.s	.dontflyup				; branch if < 128px away
@@ -117,15 +113,14 @@ Bat_FlapSound:
 		add.b	d7,d0					; add OST index number (so each batbrain updates on a different frame)
 		andi.b	#7,d0					; read only bits 0-2
 		bne.s	.dontflyup				; branch if any are set
-		addq.b	#2,ost_mode(a0)			; goto Bat_FlyUp next
+		addq.b	#2,ost_mode(a0)				; goto Bat_FlyUp next
 
 	.dontflyup:
 		rts	
 ; ===========================================================================
 
 Bat_FlyUp:
-		bsr.w	SpeedToPos				; update position
-		subi.w	#$18,ost_y_vel(a0)			; make batbrain fly upwards
+		update_xy_fall	-$18				; make batbrain fly upwards
 		bsr.w	FindCeilingObj
 		tst.w	d1					; has batbrain hit the ceiling?
 		bpl.s	.noceiling				; if not, branch
@@ -134,7 +129,7 @@ Bat_FlyUp:
 		clr.w	ost_x_vel(a0)				; stop batbrain moving
 		clr.w	ost_y_vel(a0)
 		clr.b	ost_anim(a0)
-		clr.b	ost_mode(a0)			; goto Bat_DropChk next
+		clr.b	ost_mode(a0)				; goto Bat_DropChk next
 
 	.noceiling:
 		rts

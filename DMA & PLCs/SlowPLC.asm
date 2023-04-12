@@ -4,29 +4,31 @@
 ; input:
 ;	d0.w = SPLC index id
 
-;	uses d0.w, a2
+;	uses d0.w, d1.l
 ; ---------------------------------------------------------------------------
 
 SlowPLC:
 		add.w	d0,d0
-		move.w	SlowLoadCues(pc,d0.w),d0
-		lea	SlowLoadCues(pc,d0.w),a2		; jump to relevant SPLC
-		move.l	a2,(v_slowplc_ptr).w			; save address
+		moveq	#0,d1
+		move.w	SlowLoadCues(pc,d0.w),d1
+		addi.l	#SlowLoadCues,d1
+		move.l	d1,(v_slowplc_ptr).w			; save address
 		rts
 		
 ; ---------------------------------------------------------------------------
 ; Subroutine to	do the actual decompression
 
-;	uses d0.l, d1.l, d2.l, a0, a1, a2, a3
+;	uses d0.l, d1.l, d2.l, a0, a1, a2, a3, a4
 ; ---------------------------------------------------------------------------
 
 ProcessSlowPLC:
-		move.l	(v_slowplc_ptr).w,d0
+		lea	(v_slowplc_ptr).w,a4
+		move.l	(a4),d0
 		beq.s	.exit					; branch if SlowPLC isn't active
 		movea.l	d0,a3
-		tst.w	(a3)
+		move.l	(a3)+,d0
 		bmi.s	.end_of_splc				; branch if SlowPLC is finished
-		movea.l	(a3)+,a0				; get gfx source address
+		movea.l	d0,a0					; get gfx source address
 		lea	(v_slowplc_buffer).w,a1			; gfx buffer address in RAM
 		jsr	KosDec					; decompress to RAM
 		
@@ -41,14 +43,15 @@ ProcessSlowPLC:
 		move.w	d1,(a3)					; save tile setting to RAM
 		
 	.no_tile:
-		addi.l	#16,(v_slowplc_ptr).w			; next SlowPLC on next frame
+		moveq	#16,d0
+		add.l	d0,(a4)					; next SlowPLC on next frame
 		
 	.exit:
 		rts
 		
 	.end_of_splc:
 		moveq	#0,d0
-		move.l	d0,(v_slowplc_ptr).w			; clear pointer
+		move.l	d0,(a4)					; clear pointer
 		rts
 
 SPLC_Src:	set_dma_src v_slowplc_buffer

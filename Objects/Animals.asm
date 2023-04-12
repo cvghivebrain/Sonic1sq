@@ -236,11 +236,11 @@ Anml_FromPrison:
 		bra.w	DisplaySprite
 ; ===========================================================================
 
-Anml_TypeNormal:	; Routine 6, $A, $C, $E, $12
-		bsr.w	ObjectFall				; make object fall and update its position
+Anml_TypeNormal:
+		; Routine 6, $A, $C, $E, $12
 		move.b	#id_frame_animal1_flap2,ost_frame(a0)
-		tst.w	ost_y_vel(a0)				; is object currently moving upwards?
-		bmi.s	.chkdel					; if yes, branch
+		update_xy_fall					; make object fall and update its position
+		bmi.s	.chkdel					; branch if moving upwards
 
 		move.b	#id_frame_animal1_flap1,ost_frame(a0)
 		jsr	(FindFloorObj).l
@@ -259,20 +259,18 @@ Anml_TypeNormal:	; Routine 6, $A, $C, $E, $12
 
 Anml_TypeBird:	; Routine 8
 Anml_Type5:	; Routine $10
-		bsr.w	SpeedToPos				; update object position
-		addi.w	#$18,ost_y_vel(a0)			; make object fall downwards
-		tst.w	ost_y_vel(a0)				; is object currently moving upwards?
-		bmi.s	.animate				; if yes, branch
+		update_xy_fall	$18				; update object position & apply gravity
+		bmi.s	.animate				; branch if moving upwards
 
 		jsr	(FindFloorObj).l
 		tst.w	d1					; has object hit the floor?
 		bpl.s	.animate				; if not, branch
 		add.w	d1,ost_y_pos(a0)			; align to floor
 		move.w	ost_animal_y_vel(a0),ost_y_vel(a0)	; reset y speed
-		tst.b	ost_subtype(a0)				; is this an animal from the ending?
-		beq.s	.animate				; if not, branch
+		move.b	ost_subtype(a0),d0
+		beq.s	.animate				; branch if not an ending animal
 
-		cmpi.b	#$A,ost_subtype(a0)
+		cmpi.b	#$A,d0
 		beq.s	.animate
 		neg.w	ost_x_vel(a0)
 		bchg	#render_xflip_bit,ost_render(a0)
@@ -281,8 +279,7 @@ Anml_Type5:	; Routine $10
 		subq.b	#1,ost_anim_time(a0)			; decrement timer
 		bpl.s	.chkdel					; branch if time remains
 		move.b	#1,ost_anim_time(a0)			; set timer to 1 frame
-		addq.b	#1,ost_frame(a0)			; change frame
-		andi.b	#1,ost_frame(a0)			; limit to 2 frames
+		bchg	#0,ost_frame(a0)			; change frame
 
 	.chkdel:
 		tst.b	ost_subtype(a0)
@@ -295,51 +292,43 @@ Anml_Type5:	; Routine $10
 Anml_End_ChkDel:
 		move.w	ost_x_pos(a0),d0
 		sub.w	(v_ost_player+ost_x_pos).w,d0		; d0 = distance between Sonic & object (+ve if Sonic is to the left)
-		bcs.s	.display				; branch if Sonic is to the right
+		bcs.w	DisplaySprite				; branch if Sonic is to the right
 		subi.w	#384,d0
-		bpl.s	.display				; branch if Sonic is > 384px to the left
+		bpl.w	DisplaySprite				; branch if Sonic is > 384px to the left
 		tst.b	ost_render(a0)				; is object on-screen?
 		bpl.w	DeleteObject				; if not, branch
-
-	.display:
 		bra.w	DisplaySprite
 ; ===========================================================================
 
 Anml_End_0A:	; Routine $16, $18
 		bsr.w	Anml_End_ChkDist
-		bcc.s	.far_away				; branch if Sonic is to the left, or > 184px right
+		bcc.s	Anml_End_ChkDel				; branch if Sonic is to the left, or > 184px right
 
 		move.w	ost_animal_x_vel(a0),ost_x_vel(a0)	; reset speed
 		move.w	ost_animal_y_vel(a0),ost_y_vel(a0)
 		move.b	#id_Anml_Type5,ost_routine(a0)		; goto Anml_TypeBird next
 		bra.w	Anml_TypeBird
-
-	.far_away:
-		bra.w	Anml_End_ChkDel
 ; ===========================================================================
 
 Anml_End_0C:	; Routine $1A
 		bsr.w	Anml_End_ChkDist
-		bpl.s	.far_away				; branch if Sonic is > 184px to the right
+		bpl.s	Anml_End_ChkDel				; branch if Sonic is > 184px to the right
 		clr.w	ost_x_vel(a0)
 		clr.w	ost_animal_x_vel(a0)
-		bsr.w	SpeedToPos
-		addi.w	#$18,ost_y_vel(a0)
+		update_xy_fall	$18
 		bsr.w	Anml_End_Update
 		bsr.w	Anml_End_ChkDirection
 		subq.b	#1,ost_anim_time(a0)			; decrement timer
-		bpl.s	.far_away				; branch if time remains
+		bpl.s	Anml_End_ChkDel				; branch if time remains
 		move.b	#1,ost_anim_time(a0)			; set timer to 1 frame
 		addq.b	#1,ost_frame(a0)			; change frame
 		andi.b	#1,ost_frame(a0)			; limit to 2 frames
-
-	.far_away:
 		bra.w	Anml_End_ChkDel
 ; ===========================================================================
 
 Anml_End_0D:	; Routine $1C
 		bsr.w	Anml_End_ChkDist
-		bpl.s	Anml_End_ChkDel_			; branch if Sonic is > 184px to the right
+		bpl.w	Anml_End_ChkDel				; branch if Sonic is > 184px to the right
 		move.w	ost_animal_x_vel(a0),ost_x_vel(a0)	; reset speed
 		move.w	ost_animal_y_vel(a0),ost_y_vel(a0)
 		move.b	#id_Anml_TypeNormal,ost_routine(a0)		; goto Anml_TypeNormal next
@@ -347,14 +336,13 @@ Anml_End_0D:	; Routine $1C
 ; ===========================================================================
 
 Anml_End_14:	; Routine $2A
-		bsr.w	ObjectFall				; make object fall and update position
 		move.b	#id_frame_animal1_flap2,ost_frame(a0)
-		tst.w	ost_y_vel(a0)				; is object currently moving upwards?
-		bmi.s	Anml_End_ChkDel_			; if yes, branch
+		update_xy_fall					; make object fall and update position
+		bmi.w	Anml_End_ChkDel				; branch if moving upwards
 		move.b	#id_frame_animal1_flap1,ost_frame(a0)
 		jsr	(FindFloorObj).l
 		tst.w	d1					; has object hit the floor?
-		bpl.s	Anml_End_ChkDel_			; if not, branch
+		bpl.w	Anml_End_ChkDel				; if not, branch
 		not.b	ost_animal_direction(a0)		; change direction flag
 		bne.s	.no_flip				; branch if 1
 		neg.w	ost_x_vel(a0)				; reverse direction
@@ -363,51 +351,42 @@ Anml_End_14:	; Routine $2A
 	.no_flip:
 		add.w	d1,ost_y_pos(a0)			; align to floor
 		move.w	ost_animal_y_vel(a0),ost_y_vel(a0)	; reset y speed
-
-Anml_End_ChkDel_:
 		bra.w	Anml_End_ChkDel
 ; ===========================================================================
 
 Anml_End_0E:	; Routine $1E, $22, $26
 		bsr.w	Anml_End_ChkDist
-		bpl.s	.far_away				; branch if Sonic is > 184px to the right
+		bpl.w	Anml_End_ChkDel				; branch if Sonic is > 184px to the right
 		clr.w	ost_x_vel(a0)
 		clr.w	ost_animal_x_vel(a0)
-		bsr.w	ObjectFall				; make object fall and update position
+		update_y_fall					; make object fall and update position
 		bsr.w	Anml_End_Update
 		bsr.w	Anml_End_ChkDirection
-
-	.far_away:
 		bra.w	Anml_End_ChkDel
 ; ===========================================================================
 
 Anml_End_0F:	; Routine $20, $24
 		bsr.w	Anml_End_ChkDist
-		bpl.s	.chkdel					; branch if Sonic is > 184px to the right
-		bsr.w	ObjectFall				; make object fall and update position
+		bpl.w	Anml_End_ChkDel				; branch if Sonic is > 184px to the right
 		move.b	#id_frame_animal1_flap2,ost_frame(a0)
-		tst.w	ost_y_vel(a0)				; is object currently moving upwards?
-		bmi.s	.chkdel					; if yes, branch
+		update_xy_fall					; make object fall and update position
+		bmi.w	Anml_End_ChkDel				; branch if moving upwards
 		move.b	#id_frame_animal1_flap1,ost_frame(a0)
 		jsr	(FindFloorObj).l
 		tst.w	d1					; has object hit the floor?
-		bpl.s	.chkdel					; if not, branch
+		bpl.w	Anml_End_ChkDel				; if not, branch
 		neg.w	ost_x_vel(a0)				; reverse direction
 		bchg	#render_xflip_bit,ost_render(a0)
 		add.w	d1,ost_y_pos(a0)			; align to floor
 		move.w	ost_animal_y_vel(a0),ost_y_vel(a0)	; reset y speed
-
-	.chkdel:
 		bra.w	Anml_End_ChkDel
 ; ===========================================================================
 
 Anml_End_13:	; Routine $28
 		bsr.w	Anml_End_ChkDist
-		bpl.s	.chkdel					; branch if Sonic is > 184px to the right
-		bsr.w	SpeedToPos				; update position
-		addi.w	#$18,ost_y_vel(a0)			; fall
-		tst.w	ost_y_vel(a0)				; is object currently moving upwards?
-		bmi.s	.chk_anim				; if yes, branch
+		bpl.w	Anml_End_ChkDel				; branch if Sonic is > 184px to the right
+		update_xy_fall	$18				; update position
+		bmi.s	.chk_anim				; branch if moving upwards
 		jsr	(FindFloorObj).l
 		tst.w	d1					; has object hit the floor?
 		bpl.s	.chk_anim				; if not, branch
@@ -422,12 +401,9 @@ Anml_End_13:	; Routine $28
 
 	.chk_anim:
 		subq.b	#1,ost_anim_time(a0)			; decrement timer
-		bpl.s	.chkdel					; branch if time remains
+		bpl.w	Anml_End_ChkDel				; branch if time remains
 		move.b	#1,ost_anim_time(a0)			; set timer to 1 frame
-		addq.b	#1,ost_frame(a0)			; change frame
-		andi.b	#1,ost_frame(a0)			; limit to 2 frames
-
-	.chkdel:
+		bchg	#0,ost_frame(a0)			; change frame
 		bra.w	Anml_End_ChkDel
 
 ; ---------------------------------------------------------------------------

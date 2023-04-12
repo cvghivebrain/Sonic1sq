@@ -14,10 +14,6 @@ BallHog:
 Hog_Index:	index *,,2
 		ptr Hog_Main
 		ptr Hog_Action
-
-		rsobj BallHog
-ost_hog_flag:	rs.b 1 ; $32					; 0 to launch a cannonball
-		rsobjend
 ; ===========================================================================
 
 Hog_Main:	; Routine 0
@@ -30,7 +26,7 @@ Hog_Main:	; Routine 0
 		move.b	#4,ost_priority(a0)
 		move.b	#id_col_12x18,ost_col_type(a0)
 		move.b	#$C,ost_displaywidth(a0)
-		bsr.w	ObjectFall
+		update_y_fall
 		jsr	(FindFloorObj).l			; find floor
 		tst.w	d1
 		bpl.s	.floornotfound
@@ -43,26 +39,16 @@ Hog_Main:	; Routine 0
 ; ===========================================================================
 
 Hog_Action:	; Routine 2
-		lea	(Ani_Hog).l,a1
+		shortcut
+		lea	Ani_Hog(pc),a1
 		bsr.w	AnimateSprite
-		cmpi.b	#id_frame_hog_open,ost_frame(a0)	; is final frame (01) displayed?
-		bne.s	.setlaunchflag				; if not, branch
-		tst.b	ost_hog_flag(a0)			; is it set to launch cannonball?
-		beq.s	.makeball				; if yes, branch
-		bra.s	.remember
-; ===========================================================================
-
-.setlaunchflag:
-		clr.b	ost_hog_flag(a0)			; set to launch cannonball
-
-.remember:
-		bra.w	DespawnObject
-; ===========================================================================
-
-.makeball:
-		move.b	#1,ost_hog_flag(a0)
+		cmpi.b	#id_frame_hog_open,ost_frame(a0)
+		bne.w	DespawnObject				; branch if not on last frame
+		cmpi.b	#9,ost_anim_time(a0)
+		bne.w	DespawnObject				; branch if not only just on last frame
+		
 		bsr.w	FindFreeObj
-		bne.s	.fail
+		bne.w	DespawnObject
 		move.l	#Cannonball,ost_id(a1)			; load cannonball object ($20)
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
@@ -78,9 +64,7 @@ Hog_Action:	; Routine 2
 		add.w	d0,ost_x_pos(a1)
 		addi.w	#$C,ost_y_pos(a1)
 		move.b	ost_subtype(a0),ost_subtype(a1)		; copy object type from Ball Hog
-
-	.fail:
-		bra.s	.remember
+		bra.w	DespawnObject
 
 ; ---------------------------------------------------------------------------
 ; Animation script
@@ -112,4 +96,3 @@ ani_hog_0:	dc.w 9
 		dc.w id_frame_hog_standing
 		dc.w id_frame_hog_open
 		dc.w id_Anim_Flag_Restart
-		even
