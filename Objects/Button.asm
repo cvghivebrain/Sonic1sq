@@ -37,6 +37,7 @@ But_Main:	; Routine 0
 		move.b	#5,ost_height(a0)
 
 But_Action:	; Routine 2
+		shortcut
 		move.b	ost_subtype(a0),d0
 		andi.w	#$F,d0					; get low nybble of subtype
 		lea	(v_button_state).w,a3
@@ -57,19 +58,17 @@ But_Action:	; Routine 2
 	.already_pressed:
 		bset	d6,(a3)					; set button status
 		bset	#0,ost_frame(a0)			; use "pressed" frame
-		bra.s	But_Display
+		bra.w	DespawnQuick
 		
 	.unpressed:
 		bclr	d6,(a3)					; clear button status
 		bclr	#0,ost_frame(a0)			; use "unpressed" frame
 		btst	#5,ost_subtype(a0)			; is subtype +$20?
-		beq.s	But_Display				; if not, branch
+		beq.w	DespawnQuick				; if not, branch
 		move.b	(v_frame_counter_low).w,d0
 		andi.b	#7,d0
-		bne.s	But_Display				; branch if 3 lowest bits of counter <> 0
+		bne.w	DespawnQuick				; branch if 3 lowest bits of counter <> 0
 		bchg	#1,ost_frame(a0)			; change frame every 8 frames
-
-But_Display:
 		bsr.w	DespawnQuick
 
 ; ---------------------------------------------------------------------------

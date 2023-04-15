@@ -46,13 +46,15 @@ Bat_Action_Index:
 ; ===========================================================================
 
 Bat_DropChk:
-		bsr.w	Range
+		getsonic
+		range_y
 		tst.w	d2
 		bmi.s	.nodrop					; branch if Sonic is above
-		cmp.w	#128,d1
-		bge.s	.nodrop					; branch if > 128px away
 		cmp.w	#128,d3
 		bge.s	.nodrop					; branch if > 128px below
+		range_x
+		cmp.w	#128,d1
+		bge.s	.nodrop					; branch if > 128px away
 		tst.w	(v_debug_active).w
 		bne.s	.nodrop					; branch if debug mode is in use
 
@@ -73,7 +75,8 @@ Bat_DropChk:
 
 Bat_DropFly:
 		update_xy_fall	$18				; make batbrain fall
-		bsr.w	Range
+		getsonic
+		range_y
 		tst.w	d2
 		bmi.s	.chkdel					; branch if Sonic is above
 		cmp.w	#16,d2
@@ -106,7 +109,8 @@ Bat_FlapSound:
 
 	.nosound:
 		update_x_pos					; update position
-		bsr.w	Range
+		getsonic
+		range_x
 		cmp.w	#128,d1
 		blt.s	.dontflyup				; branch if < 128px away
 		move.b	(v_vblank_counter_byte).w,d0		; get byte that increments every frame
