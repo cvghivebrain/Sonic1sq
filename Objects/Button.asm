@@ -38,6 +38,11 @@ But_Main:	; Routine 0
 
 But_Action:	; Routine 2
 		shortcut
+		tst.b	ost_render(a0)
+		bpl.w	DespawnQuick				; branch if button is off screen
+		move.l	#PushBlock,d0
+		bsr.w	FindNearestObj				; find nearest pushable block & save to ost_linked
+		shortcut
 		move.b	ost_subtype(a0),d0
 		andi.w	#$F,d0					; get low nybble of subtype
 		lea	(v_button_state).w,a3
@@ -48,14 +53,24 @@ But_Action:	; Routine 2
 		moveq	#7,d6					; d6 = bit to set/clear in button status
 	.not_secondary:
 		
+		tst.w	ost_linked(a0)
+		beq.s	.no_block				; branch if there is no pushable block nearby
+		getlinked					; a1 = OST of pushable block
+		range_x_exact
+		bpl.s	.no_block				; branch if block isn't touching button
+		range_y_exact
+		bmi.s	.block_contact				; branch if block is touching
+		
+	.no_block:
 		bsr.w	SolidObject
 		btst	#solid_top_bit,d1
 		beq.s	.unpressed				; branch if Sonic isn't on top of the button
 		
+	.pressed:
 		tst.b	(a3)
-		bne.s	.already_pressed			; branch if button is already pressed
+		bne.s	.skip_sound				; branch if button is already pressed
 		play.w	1, jsr, sfx_Switch			; play "blip" sound
-	.already_pressed:
+	.skip_sound:
 		bset	d6,(a3)					; set button status
 		bset	#0,ost_frame(a0)			; use "pressed" frame
 		bra.w	DespawnQuick
@@ -69,82 +84,8 @@ But_Action:	; Routine 2
 		andi.b	#7,d0
 		bne.w	DespawnQuick				; branch if 3 lowest bits of counter <> 0
 		bchg	#1,ost_frame(a0)			; change frame every 8 frames
-		bsr.w	DespawnQuick
-
-; ---------------------------------------------------------------------------
-; Subroutine to detect collision with MZ pushable green block
-
-; output:
-;	d0 = 0 if not found; 1 if found
-; ---------------------------------------------------------------------------
-
-But_PBlock_Chk:
-		move.w	d3,-(sp)
-		move.w	ost_x_pos(a0),d2
-		move.w	ost_y_pos(a0),d3
-		subi.w	#$10,d2					; d2 = x pos. of button left edge
-		subq.w	#8,d3					; d3 = y pos. of button top edge
-		move.w	#$20,d4					; d4 = x detection range
-		move.w	#$10,d5					; d5 = y detection range
-		lea	(v_ost_level_obj).w,a1			; begin checking object RAM
-		move.w	#countof_ost_ert-1,d6
-
-.loop:
-		tst.b	ost_render(a1)				; is object on screen?
-		bpl.s	.next					; if not, branch
-		cmpi.l	#PushBlock,ost_id(a1)			; is the object a green MZ block?
-		beq.s	.is_pblock				; if yes, branch
-
-	.next:
-		lea	sizeof_ost(a1),a1			; check next object
-		dbf	d6,.loop				; repeat $5F times
-
-		move.w	(sp)+,d3
-		moveq	#0,d0
-		rts	
-; ===========================================================================
-.xy_radius:	dc.b $10, $10					; x and y radius of pushable block
-; ===========================================================================
-
-.is_pblock:
-		moveq	#1,d0
-		andi.w	#$3F,d0
-		add.w	d0,d0					; d0 = 2
-		lea	.xy_radius-2(pc,d0.w),a2
-		move.b	(a2)+,d1
-		ext.w	d1					; d1 = $10
-		move.w	ost_x_pos(a1),d0			; d0 = x pos. of pblock
-		sub.w	d1,d0
-		sub.w	d2,d0					; d0 = pblock-button
-		bcc.s	.pblock_right				; branch if pblock is right of button
-		add.w	d1,d1
-		add.w	d1,d0
-		bcs.s	.pblock_x_ok				; branch if pblock is within $20 pixels of button
-		bra.s	.next
-; ===========================================================================
-
-.pblock_right:
-		cmp.w	d4,d0					; are pblock and button within $20 pixels?
-		bhi.s	.next					; if not, branch
-
-.pblock_x_ok:
-		move.b	(a2)+,d1
-		ext.w	d1					; d1 = $10
-		move.w	ost_y_pos(a1),d0
-		sub.w	d1,d0
-		sub.w	d3,d0
-		bcc.s	.pblock_above
-		add.w	d1,d1
-		add.w	d1,d0
-		bcs.s	.pblock_y_ok
-		bra.s	.next
-; ===========================================================================
-
-.pblock_above:
-		cmp.w	d5,d0
-		bhi.s	.next
-
-.pblock_y_ok:
-		move.w	(sp)+,d3
-		moveq	#1,d0
-		rts
+		bra.w	DespawnQuick
+		
+	.block_contact:
+		bsr.w	SolidObject
+		bra.s	.pressed

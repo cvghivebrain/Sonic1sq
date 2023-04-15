@@ -4,8 +4,8 @@
 ; ---------------------------------------------------------------------------
 
 shortcut:	macro
-		move.l	#.shortcut_here,ost_id(a0)
-	.shortcut_here:
+		move.l	#.shortcut_here\@,ost_id(a0)
+	.shortcut_here\@:
 		endm
 		
 ; ---------------------------------------------------------------------------
@@ -161,7 +161,6 @@ range_x_exact:	macro
 		sub.w	d4,d1
 		move.b	ost_width(a0),d4
 		sub.w	d4,d1					; d1 = x dist between hitbox edges (-ve if overlapping)
-		add.w	d0,d4					; d4 = Sonic's x pos relative to left edge
 		endm
 		
 range_x_sonic:	macro
