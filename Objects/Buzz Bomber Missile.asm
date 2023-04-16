@@ -16,12 +16,10 @@ Msl_Index:	index *,,2
 		ptr Msl_Main
 		ptr Msl_Animate
 		ptr Msl_FromBuzz
-		ptr Msl_Delete
 		ptr Msl_FromNewt
 
 		rsobj Missile
-ost_missile_wait_time:	rs.w 1 ; $32				; time delay (2 bytes)
-ost_missile_parent:	rs.l 1 ; $3C				; address of OST of parent object (4 bytes)
+ost_missile_wait_time:	rs.w 1					; time delay (2 bytes)
 		rsobjend
 ; ===========================================================================
 
@@ -43,61 +41,45 @@ Msl_Main:	; Routine 0
 		move.b	#id_col_6x6+id_col_hurt,ost_col_type(a0)
 		move.b	#id_ani_buzz_missile,ost_anim(a0)
 		bra.w	Msl_Animate2
+		
+Msl_ChkCancel:
+		getparent
+		cmpi.l	#ExplosionItem,ost_id(a1)		; has Buzz Bomber been destroyed?
+		beq.w	DeleteObject				; if yes, branch
+		rts
 ; ===========================================================================
 
 Msl_Animate:	; Routine 2
-		movea.l	ost_missile_parent(a0),a1
+		getparent
 		cmpi.l	#ExplosionItem,ost_id(a1)		; has Buzz Bomber been destroyed?
-		beq.s	Msl_Delete				; if yes, branch
-		lea	(Ani_Missile).l,a1
+		beq.w	DeleteObject				; if yes, branch
+		lea	Ani_Missile(pc),a1
 		bsr.w	AnimateSprite				; goto Msl_FromBuzz after animation is finished
 		bra.w	DisplaySprite
-
-; ---------------------------------------------------------------------------
-; Subroutine to check if the Buzz Bomber which fired the missile has been
-; destroyed, and if it has, then cancel the missile
-; ---------------------------------------------------------------------------
-
-Msl_ChkCancel:
-		movea.l	ost_missile_parent(a0),a1
-		cmpi.l	#ExplosionItem,ost_id(a1)		; has Buzz Bomber been destroyed?
-		beq.s	Msl_Delete				; if yes, branch
-		rts
-
 ; ===========================================================================
 
 Msl_FromBuzz:	; Routine 4
-		btst	#status_broken_bit,ost_status(a0)	; is high bit of status set? (it never is)
-		bne.s	.explode				; if yes, branch
 		move.b	#id_col_6x6+id_col_hurt,ost_col_type(a0)
 		move.b	#id_ani_buzz_missile,ost_anim(a0)
-		bsr.w	SpeedToPos
-		lea	(Ani_Missile).l,a1
+		shortcut
+		update_xy_pos
+		lea	Ani_Missile(pc),a1
 		bsr.w	AnimateSprite
 		move.w	(v_boundary_bottom).w,d0
 		addi.w	#224,d0
 		cmp.w	ost_y_pos(a0),d0			; has object moved below the level boundary?
-		bcs.s	Msl_Delete				; if yes, branch
+		bcs.w	DeleteObject				; if yes, branch
 		bra.w	DisplaySprite
 ; ===========================================================================
 
-	.explode:
-		move.l	#MissileDissolve,ost_id(a0)		; change object to an explosion (Obj24)
-		move.b	#id_MDis_Main,ost_routine(a0)
-		bra.w	MissileDissolve
-; ===========================================================================
-
-Msl_Delete:	; Routine 6
-		bra.w	DeleteObject	
-; ===========================================================================
-
 Msl_FromNewt:	; Routine 8
+		shortcut
 		tst.b	ost_render(a0)				; is object on-screen?
-		bpl.s	Msl_Delete				; if not, branch
-		bsr.w	SpeedToPos				; update position
+		bpl.w	DeleteObject				; if not, branch
+		update_x_pos					; update position
 
 Msl_Animate2:
-		lea	(Ani_Missile).l,a1
+		lea	Ani_Missile(pc),a1
 		bsr.w	AnimateSprite
 		bra.w	DisplaySprite	
 

@@ -29,12 +29,11 @@ MDis_Main:	; Routine 0
 		play.w	1, jsr, sfx_BuzzExplode			; play missile explosion sound
 
 MDis_Animate:	; Routine 2
+		shortcut
 		subq.b	#1,ost_anim_time(a0)			; subtract 1 from frame duration
-		bpl.s	.display
+		bpl.w	DisplaySprite
 		move.b	#9,ost_anim_time(a0)			; set frame duration to 9 frames
 		addq.b	#1,ost_frame(a0)			; next frame
 		cmpi.b	#4,ost_frame(a0)			; has animation completed?
 		beq.w	DeleteObject				; if yes, branch
-
-	.display:
 		bra.w	DisplaySprite
