@@ -25,7 +25,9 @@ Cat_Index:	index *,,2
 		rsobj Caterkiller
 ost_cat_wait_time:	equ ost_anim_time				; time to wait between actions
 ost_cat_mode:		equ ost_anim					; bit 4 (+$10) = mouth is open/segment moving up; bit 7 (+$80) = update animation
-ost_cat_floormap:	rs.b 16						; height map of floor beneath caterkiller (16 bytes)
+ost_cat_floormap:	rs.b 1						; height map of floor beneath caterkiller (16 bytes)
+ost_cat_counter:	rs.b 1						; 
+ost_cat_y_start:	rs.w 1						; y position of object when aligned to floor
 ost_cat_segment_pos:	equ ost_anim_frame				; segment position - starts as 0/4/8/$A, increments as it moves
 		rsobjend
 ; ===========================================================================
@@ -37,11 +39,12 @@ Cat_Fall:
 Cat_Main:	; Routine 0
 		move.b	#7,ost_height(a0)
 		move.b	#8,ost_width(a0)
-		jsr	(ObjectFall).l				; apply gravity and update position
+		update_y_fall					; apply gravity and update position
 		jsr	(FindFloorObj).l
 		tst.w	d1					; has caterkiller hit floor?
 		bpl.s	Cat_Fall				; if not, branch
 		add.w	d1,ost_y_pos(a0)			; align to floor
+		move.w	ost_y_pos(a0),ost_cat_y_start(a0)
 		clr.w	ost_y_vel(a0)
 		addq.b	#2,ost_routine(a0)			; goto Cat_Head next
 		move.l	#Map_Cat,ost_mappings(a0)
@@ -53,6 +56,9 @@ Cat_Main:	; Routine 0
 		move.b	#4,ost_priority(a0)
 		move.b	#8,ost_displaywidth(a0)
 		move.b	#id_col_8x8,ost_col_type(a0)
+		move.w	#-$C0,ost_x_vel(a0)
+		bra.w	Cat_Head
+		
 		move.w	ost_x_pos(a0),d2			; head x position
 		moveq	#12,d5					; distance between segments (12px)
 		btst	#status_xflip_bit,ost_status(a0)
@@ -95,6 +101,56 @@ Cat_Loop:
 		clr.b	ost_cat_segment_pos(a0)
 
 Cat_Head:	; Routine 2
+		moveq	#0,d0
+		move.b	ost_cat_counter(a0),d0
+		move.b	Cat_Heights(pc,d0.w),ost_height(a0)	; update height
+		move.w	d0,d1					; copy counter
+		lsr.w	#3,d1					; divide by 8
+		add.w	d1,d1
+		move.w	Cat_Frames(pc,d1.w),ost_frame_hi(a0)
+		
+		addq.b	#1,d0					; increment counter
+		cmpi.b	#Cat_Heights_size-Cat_Heights,d0
+		bne.s	.counter_ok				; branch if counter is valid
+		moveq	#0,d0					; reset to 0
+	.counter_ok:
+		move.b	d0,ost_cat_counter(a0)			; update counter
+		
+		move.w	Cat_MoveX(pc,d1.w),d0
+		beq.s	.skip_x					; branch if caterkiller isn't set to move
+		update_x_pos
+	.skip_x:
+		move.w	Cat_MoveY(pc,d1.w),d0
+		beq.w	DespawnFamily
+		bsr.w	FindFloorObj
+		cmpi.w	#-8,d1
+		blt.s	.turn_around				; branch if > 8px below floor
+		cmpi.w	#$C,d1
+		bge.s	.turn_around				; branch if > 11px above floor (also detects a ledge)
+		add.w	d1,ost_y_pos(a0)			; align to floor
+		bra.w	DespawnFamily
+		
+	.turn_around:
+		neg.w	ost_x_vel(a0)				; reverse direction
+		bchg	#render_xflip_bit,ost_render(a0)	; xflip sprite
+		bra.w	DespawnFamily
+		
+Cat_Frames:	dc.w id_frame_cat_mouth1, id_frame_cat_mouth1, id_frame_cat_mouth1
+		dc.w id_frame_cat_head1, id_frame_cat_head1, id_frame_cat_head1
+		
+Cat_Heights:	dc.b 7+0, 7+0, 7+0, 7+0, 7+1, 7+1, 7+2, 7+3, 7+4, 7+4, 7+5, 7+6, 7+6, 7+7, 7+7, 7+7
+		dc.b 7+7, 7+7, 7+7, 7+7, 7+7, 7+7, 7+7, 7+7
+		dc.b 7+7, 7+7, 7+7, 7+6, 7+6, 7+5, 7+4, 7+4, 7+3, 7+2, 7+1, 7+1, 7+0, 7+0, 7+0, 7+0
+		dc.b 7+0, 7+0, 7+0, 7+0, 7+0, 7+0, 7+0, 7+0
+	Cat_Heights_size:
+		even
+		
+Cat_MoveX:	dc.w 0, 0, 0
+		dc.w 1, 1, 0
+Cat_MoveY:	dc.w 1, 1, 0
+		dc.w 1, 1, 0
+		
+		
 		tst.b	ost_status(a0)				; has caterkiller been broken?
 		bmi.w	Cat_Head_Break				; if yes, branch
 		moveq	#0,d0

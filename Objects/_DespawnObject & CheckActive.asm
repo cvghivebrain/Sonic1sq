@@ -16,6 +16,7 @@ DespawnObject:
 
 		move.b	ost_respawn(a0),d0			; get respawn id
 		beq.w	DeleteObject				; branch if not set
+		andi.w	#$FF,d0
 		lea	(v_respawn_list).w,a2
 		bclr	#7,2(a2,d0.w)				; clear high bit of respawn entry (i.e. object was despawned not broken)
 		bra.w	DeleteObject				; delete the object
@@ -54,12 +55,12 @@ DespawnQuick_NoDisplay:
 		rts						; don't display
 
 ; ---------------------------------------------------------------------------
-; As DespawnQuick, but also deletes child objects
+; As DespawnObject, but also deletes child objects
 
 ; input:
 ;	d0.w = x position (DespawnFamily_AltX only)
 
-;	uses d0.l, d1.w, a1
+;	uses d0.l, d1.w, a1, a2
 ; ---------------------------------------------------------------------------
 
 DespawnFamily:
@@ -72,8 +73,15 @@ DespawnFamily_AltX:
 		andi.w	#$FF80,d1
 		sub.w	d1,d0					; d0 = approx distance between object and screen (negative if object is left of screen)
 		cmpi.w	#128+screen_width+192,d0
-		bhi.w	DeleteFamily				; delete if object moves off screen
-		bra.w	DisplaySprite				; display instead of despawn
+		bls.w	DisplaySprite				; display instead of despawn
+
+	DespawnFamily_Delete:
+		move.b	ost_respawn(a0),d0			; get respawn id
+		beq.w	DeleteFamily				; branch if not set
+		andi.w	#$FF,d0
+		lea	(v_respawn_list).w,a2
+		bclr	#7,2(a2,d0.w)				; clear high bit of respawn entry (i.e. object was despawned not broken)
+		bra.w	DeleteFamily				; delete the object
 
 DespawnFamily_NoDisplay:
 		move.w	ost_x_pos(a0),d0
@@ -83,7 +91,7 @@ DespawnFamily_NoDisplay:
 		andi.w	#$FF80,d1
 		sub.w	d1,d0					; d0 = approx distance between object and screen (negative if object is left of screen)
 		cmpi.w	#128+screen_width+192,d0
-		bhi.w	DeleteFamily				; delete if object moves off screen
+		bhi.s	DespawnFamily_Delete			; delete if object moves off screen
 		rts						; don't display
 
 ; ---------------------------------------------------------------------------
