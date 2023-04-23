@@ -120,7 +120,7 @@ col_72x8:	colid  $48,   8					; $24 - SBZ electric
 
 React_Item:	; ost_col_type is $40-$7F (monitor, ring, giant ring)
 		cmpi.w	#sonic_flash_time-ring_delay,ost_sonic_flash_time(a0) ; has Sonic been hit recently?
-		bcc.w	.no_collide				; if yes, branch
+		bcc.s	.no_collide				; if yes, branch
 		addq.b	#2,ost_routine(a1)			; goto Ring_Collect (if ring), RLoss_Collect (if bouncing ring), GRing_Collect (if giant ring) next
 
 	.no_collide:
@@ -135,7 +135,7 @@ React_Enemy:
 
 	.donthurtsonic:
 		tst.b	ost_col_property(a1)
-		beq.s	.breakenemy				; branch if it's not a boss
+		beq.s	React_Enemy_Break			; branch if it's not a boss
 
 		neg.w	ost_x_vel(a0)				; repel Sonic
 		neg.w	ost_y_vel(a0)
@@ -150,9 +150,7 @@ React_Enemy:
 		rts	
 ; ===========================================================================
 
-.breakenemy:
-		bset	#status_broken_bit,ost_status(a1)	; flag enemy as broken
-		moveq	#0,d0
+React_Enemy_Break:
 		move.w	(v_enemy_combo).w,d0
 		addq.w	#2,(v_enemy_combo).w			; add 2 to item bonus counter
 		cmpi.w	#Enemy_Points_end-Enemy_Points-2,d0
@@ -173,8 +171,7 @@ React_Enemy:
 		move.b	#id_ExItem_Animal,ost_routine(a1)	; explosion also spawns an animal
 		tst.w	ost_y_vel(a0)
 		bmi.s	.bouncedown				; branch if Sonic is moving upwards
-		move.w	ost_y_pos(a0),d0
-		cmp.w	ost_y_pos(a1),d0
+		cmp.w	ost_y_pos(a1),d3			; d3 = Sonic's y pos
 		bcc.s	.bounceup				; branch if Sonic is below enemy
 		neg.w	ost_y_vel(a0)
 		rts	
@@ -197,21 +194,33 @@ Enemy_Points:	dc.w 100/10
 ; ===========================================================================
 
 React_Caterkiller:
-		bset	#status_broken_bit,ost_status(a1)
+		tst.b	(v_invincibility).w
+		bne.s	.break_caterkiller			; branch if Sonic is invincible
+		cmpi.b	#id_Roll,ost_anim(a0)
+		beq.s	.break_caterkiller			; branch if Sonic is rolling/jumping
+		move.b	#id_Cat_Split,ost_mode(a1)		; caterkiller splits apart
+		bra.s	React_Hurt
+		
+	.break_caterkiller:
+		pushr	a0-a1
+		movea.l	a1,a0					; a0 = OST of caterkiller
+		bsr.w	DeleteChildren				; delete caterkiller segments
+		popr	a0-a1
+		bra.w	React_Enemy_Break
+; ===========================================================================
 
 React_ChkHurt:
 		tst.b	(v_invincibility).w			; is Sonic invincible?
-		beq.s	.notinvincible				; if not, branch
+		beq.s	React_Hurt				; if not, branch
 
-	.isflashing:
-		moveq	#-1,d0
+	React_Exit:
 		rts	
 ; ===========================================================================
 
-	.notinvincible:
+React_Hurt:
 		nop	
 		tst.w	ost_sonic_flash_time(a0)		; is Sonic flashing?
-		bne.s	.isflashing				; if yes, branch
+		bne.s	React_Exit				; if yes, branch
 		movea.l	a1,a2
 
 ; continue straight to HurtSonic
@@ -272,7 +281,6 @@ HurtSonic:
 
 	.sound:
 		jsr	(PlaySound1).l
-		moveq	#-1,d0
 		rts	
 ; ===========================================================================
 
@@ -315,7 +323,6 @@ KillSonic:
 		jsr	(PlaySound1).l
 
 	.dontdie:
-		moveq	#-1,d0
 		rts
 
 ; ---------------------------------------------------------------------------

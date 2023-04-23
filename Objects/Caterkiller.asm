@@ -47,19 +47,19 @@ Cat_Main:	; Routine 0
 		move.l	#Map_Cat,ost_mappings(a0)
 		move.w	(v_tile_caterkiller).w,ost_tile(a0)
 		add.w	#tile_pal2,ost_tile(a0)
+		move.b	ost_status(a0),ost_render(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#4,ost_priority(a0)
 		move.b	#8,ost_displaywidth(a0)
-		move.b	#id_col_8x8+id_col_hurt,ost_col_type(a0)
+		move.b	#id_col_8x8+id_col_custom,ost_col_type(a0)
 		move.w	#-$C0,ost_x_vel(a0)
 		move.b	#id_frame_cat_mouth1,ost_frame(a0)
 		
 		move.w	ost_x_pos(a0),d2			; head x position
 		moveq	#12,d4					; distance between segments (12px)
-		btst	#status_xflip_bit,ost_status(a0)
+		btst	#status_xflip_bit,ost_render(a0)
 		beq.s	.noflip
 		neg.w	d4					; negative if xflipped
-		bset	#render_xflip_bit,ost_render(a0)
 
 	.noflip:
 		moveq	#3-1,d1					; 3 body segments
@@ -100,6 +100,7 @@ Cat_Head_Index:	index *,,2
 		ptr Cat_Wait
 		ptr Cat_Drop
 		ptr Cat_Wait2
+		ptr Cat_Split
 ; ===========================================================================
 
 Cat_Rise:
@@ -177,6 +178,20 @@ Cat_Wait2:
 		bra.w	DespawnFamily
 ; ===========================================================================
 
+Cat_Split:
+		move.l	#Cat_Fragment,ost_id(a0)		; change object to bouncing fragment
+		move.w	#-$200,d0
+		btst	#status_xflip_bit,ost_render(a0)
+		beq.s	.no_xflip
+		neg.w	d0					; reverse if xflipped
+
+	.no_xflip:
+		move.w	d0,ost_x_vel(a0)			; set x speed
+		move.w	#-$400,ost_y_vel(a0)
+		move.b	#id_col_8x8+id_col_hurt,ost_col_type(a0)
+		jmp	DisplaySprite
+; ===========================================================================
+
 Cat_Segment:	; Routine 4
 		shortcut
 		getparent					; a1 = OST of parent caterkiller
@@ -190,6 +205,7 @@ Cat_Seg_Index:	index *,,2
 		ptr Cat_Seg_Wait
 		ptr Cat_Seg_Move
 		ptr Cat_Seg_Wait2
+		ptr Cat_Seg_Split
 ; ===========================================================================
 
 Cat_Seg_Move:
@@ -233,6 +249,7 @@ Cat_Seg_Move:
 		
 Cat_Speeds:	dc.w -$40, -$80, -$C0, 0
 		dc.w -$80, -$40, 0
+; ===========================================================================
 		
 Cat_Seg_Wait2:
 		cmpi.b	#6,ost_cat_wait_time(a1)
@@ -261,36 +278,28 @@ Cat_Seg_Wait2:
 Cat_Seg_Wait:
 		clr.b	ost_cat_turned(a0)
 		jmp	DisplaySprite
-
-; ===========================================================================
-Cat_FragSpeed:	dc.w -$200					; head x speed
-		dc.w -$180					; body x speed
-		dc.w $180					; body x speed
-		dc.w $200					; body x speed
 ; ===========================================================================
 
-Cat_Body_Break:
-		bset	#render_onscreen_bit,ost_status(a1)	; stop parent despawning
-
-Cat_Head_Break:
-		moveq	#0,d0
-		move.b	ost_routine(a0),d0			; get routine number (2/4/6/8)
-		move.w	Cat_FragSpeed-2(pc,d0.w),d0		; get speed of specified segment
-		btst	#status_xflip_bit,ost_status(a0)
+Cat_Seg_Split:
+		move.l	#Cat_Fragment,ost_id(a0)		; change object to bouncing fragment
+		move.b	ost_subtype(a0),d0
+		move.w	Cat_FragSpeed(pc,d0.w),d0		; get x speed from list
+		btst	#status_xflip_bit,ost_render(a1)
 		beq.s	.no_xflip
 		neg.w	d0					; reverse if xflipped
 
 	.no_xflip:
 		move.w	d0,ost_x_vel(a0)			; set x speed
 		move.w	#-$400,ost_y_vel(a0)
-		;move.b	#id_Cat_Fragment,ost_routine(a0)	; goto Cat_Fragment next
-		andi.b	#$F8,ost_frame(a0)			; use first head/body frame
+		jmp	DisplaySprite
 
-Cat_Fragment:	; Routine $C
-		jsr	(ObjectFall).l				; apply gravity & update positioin
-		tst.w	ost_y_vel(a0)
+Cat_FragSpeed:	dc.w -$180, $180, $200				; segment x speed
+; ===========================================================================
+
+Cat_Fragment:
+		update_xy_fall					; apply gravity & update position
 		bmi.s	.nocollide				; branch if moving upwards
-		jsr	(FindFloorObj).l
+		bsr.w	FindFloorObj
 		tst.w	d1					; has object hit floor?
 		bpl.s	.nocollide				; if not, branch
 		add.w	d1,ost_y_pos(a0)			; align to floor
@@ -298,5 +307,5 @@ Cat_Fragment:	; Routine $C
 
 	.nocollide:
 		tst.b	ost_render(a0)				; is object on-screen?
-		;bpl.w	Cat_Despawn				; if not, branch
+		jpl	DeleteObject				; if not, branch
 		jmp	(DisplaySprite).l
