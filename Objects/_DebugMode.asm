@@ -304,6 +304,7 @@ DebugList_MZ:
 		dbitem	BuzzBomber, Map_Buzz, 0, 0, id_frame_buzz_fly1, v_tile_buzzbomber, 0
 		dbitem	Batbrain, Map_Bat, 0, 0, id_frame_bat_hanging, v_tile_batbrain, 0
 		dbitem	Caterkiller, Map_Cat, 0, 0, id_frame_cat_head1, v_tile_caterkiller, tile_pal2
+		dbitem	Caterkiller, Map_Cat, 0, status_xflip, id_frame_cat_head1, v_tile_caterkiller, tile_pal2
 		dbitem	Splats, Map_Splats, 0, 0, id_frame_splats_fall, v_tile_splats, tile_pal2
 		dbitem	Spikes, Map_Spike, type_spike_3up, 0, id_frame_spike_3up, v_tile_spikes, 0
 		dbitem	Lamppost, Map_Lamp, 1, 0, id_frame_lamp_blue, v_tile_lamppost, 0

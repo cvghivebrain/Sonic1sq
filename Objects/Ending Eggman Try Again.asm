@@ -38,7 +38,8 @@ EEgg_Main:	; Routine 0
 		move.b	#id_ani_eegg_juggle1,ost_anim(a0)	; use "TRY AGAIN" animation
 
 EEgg_Animate:	; Routine 2
-		lea	(Ani_EEgg).l,a1
+		shortcut
+		lea	Ani_EEgg(pc),a1
 		jmp	(AnimateSprite).l
 
 ; ---------------------------------------------------------------------------

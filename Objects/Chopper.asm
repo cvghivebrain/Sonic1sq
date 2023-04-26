@@ -9,15 +9,14 @@ Chopper:
 		moveq	#0,d0
 		move.b	ost_routine(a0),d0
 		move.w	Chop_Index(pc,d0.w),d1
-		jsr	Chop_Index(pc,d1.w)
-		bra.w	DespawnObject
+		jmp	Chop_Index(pc,d1.w)
 ; ===========================================================================
 Chop_Index:	index *,,2
 		ptr Chop_Main
 		ptr Chop_ChgSpeed
 
 		rsobj Chopper
-ost_chopper_y_start:	rs.w 1 ; $30				; original y position (2 bytes)
+ost_chopper_y_start:	rs.w 1					; original y position (2 bytes)
 		rsobjend
 ; ===========================================================================
 
@@ -33,10 +32,10 @@ Chop_Main:	; Routine 0
 		move.w	ost_y_pos(a0),ost_chopper_y_start(a0)	; save original position
 
 Chop_ChgSpeed:	; Routine 2
-		lea	(Ani_Chop).l,a1
+		shortcut
+		lea	Ani_Chop(pc),a1
 		bsr.w	AnimateSprite
-		bsr.w	SpeedToPos
-		addi.w	#$18,ost_y_vel(a0)			; reduce speed
+		update_y_fall	$18				; update position & apply gravity
 		move.w	ost_chopper_y_start(a0),d1
 		cmp.w	ost_y_pos(a0),d1			; has Chopper returned to its original position?
 		bcc.s	.chganimation				; if not, branch
@@ -44,18 +43,20 @@ Chop_ChgSpeed:	; Routine 2
 		move.w	#-$700,ost_y_vel(a0)			; set vertical speed
 
 	.chganimation:
-		moveq	#0,d0
-		move.b	#id_ani_chopper_fast,d0			; use fast animation
+		moveq	#id_ani_chopper_fast,d0
 		subi.w	#$C0,d1
 		cmp.w	ost_y_pos(a0),d1
-		bcc.s	.chkanim
-		move.b	#id_ani_chopper_slow,d0			; use slow animation
-		tst.w	ost_y_vel(a0)				; is Chopper at	its highest point?
-		bmi.s	.chkanim				; if not, branch
-		move.b	#id_ani_chopper_still,d0		; use stationary animation
+		bcc.s	.chkanim				; fast animation when chopper is above 192px of y start
+		
+		moveq	#id_ani_chopper_slow,d0
+		tst.w	ost_y_vel(a0)
+		bmi.s	.chkanim				; slow animation when below 192px and moving up
+		
+		moveq	#id_ani_chopper_still,d0		; stop animation when below 192px and moving down
 
 	.chkanim:
-		bra.w	NewAnim					; check if animation has changed
+		set_anim					; set new animation if different
+		bra.w	DespawnObject
 
 ; ---------------------------------------------------------------------------
 ; Animation script

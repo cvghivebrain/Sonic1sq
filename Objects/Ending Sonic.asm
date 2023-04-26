@@ -39,7 +39,7 @@ ESon_Main:	; Routine 0
 ; ===========================================================================
 
 ESon_Main2:
-		addq.b	#2,ost_mode(a0)			; goto ESon_MakeEmeralds next
+		addq.b	#2,ost_mode(a0)				; goto ESon_MakeEmeralds next
 		move.l	#Map_ESon,ost_mappings(a0)
 		move.w	#tile_Kos_EndSonic,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
@@ -52,7 +52,7 @@ ESon_MakeEmeralds:
 		; Routine 2
 		subq.w	#1,ost_esonic_wait_time(a0)		; decrement timer
 		bne.s	.wait					; branch if time remains
-		addq.b	#2,ost_mode(a0)			; goto ESon_Animate next
+		addq.b	#2,ost_mode(a0)				; goto ESon_Animate next
 		move.b	#id_ani_esonic_hold,ost_anim(a0)
 		move.b	#0,ost_anim_frame(a0)			; reset animation
 		move.b	#0,ost_anim_time(a0)
@@ -70,7 +70,7 @@ ESon_LookUp:	; Routine 6
 		beq.s	.wait					; if not, branch
 		move.w	#1,(f_restart).w			; set level to restart (causes flash)
 		move.w	#90,ost_esonic_wait_time(a0)		; set delay to 1.5 seconds
-		addq.b	#2,ost_mode(a0)			; goto ESon_ClrEmeralds next
+		addq.b	#2,ost_mode(a0)				; goto ESon_ClrEmeralds next
 
 	.wait:
 		rts	
@@ -82,7 +82,7 @@ ESon_ClrEmeralds:
 		bne.s	.wait
 
 		move.w	#1,(f_restart).w
-		addq.b	#2,ost_mode(a0)			; goto ESon_Animate next
+		addq.b	#2,ost_mode(a0)				; goto ESon_Animate next
 		move.b	#id_ani_esonic_confused,ost_anim(a0)
 		move.w	#60,ost_esonic_wait_time(a0)		; set delay to 1 second
 
@@ -93,7 +93,7 @@ ESon_ClrEmeralds:
 ESon_MakeLogo:	; Routine $C
 		subq.w	#1,ost_esonic_wait_time(a0)		; decrement timer
 		bne.s	.wait
-		addq.b	#2,ost_mode(a0)			; goto ESon_Animate next
+		addq.b	#2,ost_mode(a0)				; goto ESon_Animate next
 		move.w	#180,ost_esonic_wait_time(a0)		; set delay to 3 seconds
 		move.b	#id_ani_esonic_leap,ost_anim(a0)
 		jsr	FindFreeInert
@@ -105,14 +105,14 @@ ESon_MakeLogo:	; Routine $C
 ; ===========================================================================
 
 ESon_Animate:	; Rountine 4, $A, $E, $12
-		lea	(Ani_ESon).l,a1
+		lea	Ani_ESon(pc),a1
 		jmp	(AnimateSprite).l			; increments ost_mode after each animation
 ; ===========================================================================
 
 ESon_Leap:	; Routine $10
 		subq.w	#1,ost_esonic_wait_time(a0)		; decrement timer
 		bne.s	.wait
-		addq.b	#2,ost_mode(a0)			; goto ESon_Animate next
+		addq.b	#2,ost_mode(a0)				; goto ESon_Animate next
 		move.l	#Map_ESon,ost_mappings(a0)
 		move.w	#tile_Kos_EndSonic,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)

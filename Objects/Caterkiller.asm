@@ -24,8 +24,6 @@ ost_cat_counter:	rs.b 1						; frame counter when rising or falling
 ost_cat_turned:		equ ost_cat_counter				; flag set when segment has recently changed direction
 ost_cat_y_start:	rs.w 1						; y position of object when aligned to floor
 ost_cat_x_edge:		rs.w 1						; x position of ledge/wall recently encountered by head
-ost_cat_segment_pos:	equ ost_anim_frame				; segment position - starts as 0/4/8/$A, increments as it moves
-ost_cat_floormap:	rs.b 1						; height map of floor beneath caterkiller (16 bytes)
 		rsobjend
 ; ===========================================================================
 
@@ -60,6 +58,7 @@ Cat_Main:	; Routine 0
 		btst	#status_xflip_bit,ost_render(a0)
 		beq.s	.noflip
 		neg.w	d4					; negative if xflipped
+		neg.w	ost_x_vel(a0)
 
 	.noflip:
 		moveq	#3-1,d1					; 3 body segments

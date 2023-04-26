@@ -17,23 +17,24 @@ ECha_Index:	index *,,2
 		ptr ECha_Move
 
 		rsobj EndChaos
-ost_echaos_x_start:	rs.w 1 ; $38					; x-axis centre of emerald circle (2 bytes)
-ost_echaos_y_start:	rs.w 1 ; $3A					; y-axis centre of emerald circle (2 bytes)
-ost_echaos_radius:	rs.w 1 ; $3C					; radius (2 bytes)
-ost_echaos_angle:	rs.w 1 ; $3E					; angle for rotation (2 bytes)
+ost_echaos_x_start:	rs.w 1						; x-axis centre of emerald circle (2 bytes)
+ost_echaos_y_start:	rs.w 1						; y-axis centre of emerald circle (2 bytes)
+ost_echaos_radius:	rs.w 1						; radius (2 bytes)
+ost_echaos_angle:	rs.w 1						; angle for rotation (2 bytes)
 		rsobjend
 ; ===========================================================================
 
 ECha_Main:	; Routine 0
-		cmpi.b	#id_frame_esonic_up,(v_ost_player+ost_frame).w ; is Sonic looking up?
+		getsonic					; a1 = OST of Sonic
+		cmpi.b	#id_frame_esonic_up,ost_frame(a1)	; is Sonic looking up?
 		beq.s	ECha_CreateEms				; if yes, branch
-		addq.l	#4,sp
+		addq.l	#4,sp					; stop object and don't display
 		rts	
 ; ===========================================================================
 
 ECha_CreateEms:
-		move.w	(v_ost_player+ost_x_pos).w,ost_x_pos(a0) ; match x position with Sonic
-		move.w	(v_ost_player+ost_y_pos).w,ost_y_pos(a0) ; match y position with Sonic
+		move.w	ost_x_pos(a1),ost_x_pos(a0)		; match x position with Sonic
+		move.w	ost_y_pos(a1),ost_y_pos(a0)		; match y position with Sonic
 		movea.l	a0,a1
 		moveq	#0,d3
 		moveq	#id_frame_echaos_blue,d2
@@ -42,6 +43,7 @@ ECha_CreateEms:
 
 	.loop:
 		jsr	FindFreeInert
+		bne.s	ECha_Move
 		move.l	#EndChaos,ost_id(a1)			; load chaos emerald object
 		
 	.skip_findost:

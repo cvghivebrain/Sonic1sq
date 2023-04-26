@@ -16,13 +16,12 @@ Crabmeat:
 Crab_Index:	index *,,2
 		ptr Crab_Main
 		ptr Crab_Action
-		ptr Crab_Delete
 		ptr Crab_BallMain
 		ptr Crab_BallMove
 
 		rsobj Crabmeat
-ost_crab_wait_time:	rs.w 1 ; $30				; time until crabmeat fires (2 bytes)
-ost_crab_mode:		rs.b 1 ; $32				; current action - 0/1 = not firing; 2/3 = firing
+ost_crab_wait_time:	rs.w 1					; time until crabmeat fires (2 bytes)
+ost_crab_mode:		rs.b 1					; current action - 0/1 = not firing; 2/3 = firing
 		rsobjend
 ; ===========================================================================
 
@@ -35,7 +34,7 @@ Crab_Main:	; Routine 0
 		move.b	#3,ost_priority(a0)
 		move.b	#id_col_16x16,ost_col_type(a0)
 		move.b	#$15,ost_displaywidth(a0)
-		bsr.w	ObjectFall				; make crabmeat fall
+		update_y_fall					; make crabmeat fall
 		jsr	(FindFloorObj).l			; find floor
 		tst.w	d1					; has crabmeat hit floor?
 		bpl.s	.floornotfound				; if not, branch
@@ -72,12 +71,12 @@ Crab_WaitFire:
 		bne.s	.fire					; branch if previously set
 
 	.movecrab:
-		addq.b	#2,ost_mode(a0)			; goto Crab_Walk next
+		addq.b	#2,ost_mode(a0)				; goto Crab_Walk next
 		move.w	#127,ost_crab_wait_time(a0)		; set time delay to approx 2 seconds
 		move.w	#$80,ost_x_vel(a0)			; move Crabmeat to the right
 		bsr.w	Crab_SetAni				; select animation based on floor angle
 		addq.b	#id_ani_crab_walk,d0			; use walking animation
-		bsr.w	NewAnim
+		set_anim
 		bchg	#status_xflip_bit,ost_status(a0)
 		bne.s	.noflip
 		neg.w	ost_x_vel(a0)				; change direction
@@ -91,7 +90,7 @@ Crab_WaitFire:
 		move.w	#59,ost_crab_wait_time(a0)
 		move.b	#id_ani_crab_firing,ost_anim(a0)	; use firing animation
 		bsr.w	FindFreeObj
-		bne.s	.failleft
+		bne.s	.fail
 		move.l	#Crabmeat,ost_id(a1)			; load left fireball
 		move.b	#id_Crab_BallMain,ost_routine(a1)
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
@@ -99,9 +98,8 @@ Crab_WaitFire:
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		move.w	#-$100,ost_x_vel(a1)
 
-	.failleft:
 		bsr.w	FindFreeObj
-		bne.s	.failright
+		bne.s	.fail
 		move.l	#Crabmeat,ost_id(a1)			; load right fireball
 		move.b	#id_Crab_BallMain,ost_routine(a1)
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
@@ -109,14 +107,14 @@ Crab_WaitFire:
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		move.w	#$100,ost_x_vel(a1)
 
-	.failright:
+	.fail:
 		rts	
 ; ===========================================================================
 
 Crab_Walk:
 		subq.w	#1,ost_crab_wait_time(a0)		; decrement timer
 		bmi.s	.stop					; branch if -1
-		bsr.w	SpeedToPos				; update position
+		update_x_pos					; update position
 		bchg	#0,ost_crab_mode(a0)			; change flag for floor check
 		bne.s	.findfloor_here				; branch if previously set
 		move.w	ost_x_pos(a0),d3
@@ -140,15 +138,17 @@ Crab_Walk:
 		move.b	d3,ost_angle(a0)			; update angle
 		bsr.w	Crab_SetAni				; set animation based on angle
 		addq.b	#id_ani_crab_walk,d0			; use walking animation
-		bra.w	NewAnim
+		set_anim
+		rts
 ; ===========================================================================
 
 .stop:
-		subq.b	#2,ost_mode(a0)			; goto Crab_WaitFire next
+		subq.b	#2,ost_mode(a0)				; goto Crab_WaitFire next
 		move.w	#59,ost_crab_wait_time(a0)
 		move.w	#0,ost_x_vel(a0)
 		bsr.w	Crab_SetAni				; set animation based on angle
-		bra.w	NewAnim
+		set_anim
+		rts
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	set the	correct	animation for a	Crabmeat
@@ -183,11 +183,6 @@ Crab_SetAni:
 	.nearly_flat2:
 		rts
 
-; ===========================================================================
-
-Crab_Delete:	; Routine 4
-		bra.w	DeleteObject
-
 ; ---------------------------------------------------------------------------
 ; Sub-object - missile that the	Crabmeat throws
 ; ---------------------------------------------------------------------------
@@ -204,11 +199,12 @@ Crab_BallMain:	; Routine 6
 		move.b	#id_ani_crab_ball,ost_anim(a0)
 
 Crab_BallMove:	; Routine 8
-		lea	(Ani_Crab).l,a1
+		shortcut
+		lea	Ani_Crab(pc),a1
 		bsr.w	AnimateSprite
-		bsr.w	ObjectFall
+		update_xy_fall
 		move.w	(v_boundary_bottom).w,d0
-		addi.w	#224,d0
+		addi.w	#screen_height,d0
 		cmp.w	ost_y_pos(a0),d0			; has object moved below the level boundary?
 		bcs.w	DeleteObject				; if yes, branch
 		bra.w	DisplaySprite

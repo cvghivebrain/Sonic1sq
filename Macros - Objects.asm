@@ -182,3 +182,25 @@ range_y_exact:	macro
 		sub.w	d5,d3					; d3 = y dist between hitbox edges (-ve if overlapping)
 		endm
 		
+; ---------------------------------------------------------------------------
+; Set the animation id of an object to d0 (do nothing if it's the same as d0)
+
+; input:
+;	d0.b = new animation id
+
+; output:
+;	d1.b = previous animation id
+
+; usage:
+;		moveq	#id_ani_roll_roll,d0
+;		set_anim
+; ---------------------------------------------------------------------------
+
+set_anim:	macro
+		move.b	ost_anim(a0),d1				; get previous animation id
+		andi.b	#$7F,d1					; ignore high bit (the no-restart flag)
+		cmp.b	d0,d1					; compare with new id
+		beq.s	.keepanim\@				; branch if same
+		move.b	d0,ost_anim(a0)				; update animation id (and clear high bit)
+	.keepanim\@:
+		endm

@@ -39,9 +39,9 @@ Cred_Main:	; Routine 0
 		bne.s	Cred_Display				; if not, branch
 
 		move.b	#id_frame_cred_sonicteam,ost_frame(a0)	; display "SONIC TEAM PRESENTS"
-; ===========================================================================
 
 Cred_Display:	; Routine 2
+		shortcut
 		cmpi.b	#id_Title,(v_gamemode).w
 		bne.s	.not_title
 		tst.w	(v_countdown).w

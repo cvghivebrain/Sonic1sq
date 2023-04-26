@@ -43,6 +43,7 @@ CSI_Main:	; Routine 0
 		move.b	#id_CSI_Counter,ost_routine(a1)
 
 CSI_Display:	; Routine 2
+		shortcut
 		jmp	(DisplaySprite).l
 ; ===========================================================================
 
@@ -81,18 +82,22 @@ CSI_MakeMiniSonic:
 		dbf	d1,.loop				; repeat for number of continues
 		
 		move.b	#1,ost_subtype(a1)			; flag last mini Sonic as rightmost
+		
+CSI_Delete:
 		jmp	(DeleteObject).l			; delete current spawner object
 
 CSI_AniMiniSonic:
 		; Routine 6
+		shortcut
 		tst.b	ost_subtype(a0)				; is this the rightmost mini Sonic?
 		beq.s	CSI_Animate				; if not, branch
-		cmpi.b	#id_CSon_Run,(v_ost_player+ost_routine).w ; is Sonic running?
+		getsonic					; a1 = OST of Sonic
+		cmpi.b	#id_CSon_Run,ost_routine(a1)		; is Sonic running?
 		bcs.s	CSI_Animate				; if not, branch
 		move.b	(v_vblank_counter_byte).w,d0
 		andi.b	#1,d0					; read bit that changes every frame
 		bne.s	CSI_Animate				; branch if 1
-		tst.w	(v_ost_player+ost_x_vel).w		; is Sonic running?
+		tst.w	ost_x_vel(a1)				; is Sonic running?
 		bne.s	CSI_Delete				; if yes, branch
 		rts	
 
@@ -106,10 +111,8 @@ CSI_Animate:
 		jmp	(DisplaySprite).l
 ; ===========================================================================
 
-CSI_Delete:
-		jmp	(DeleteObject).l
-
 CSI_Counter:	; Routine 8
+		shortcut
 		cmpi.b	#id_CSon_Run,(v_ost_player+ost_routine).w
 		bhs.s	.sonic_running				; branch if Sonic is running
 		move.w	(v_countdown).w,d0			; get counter

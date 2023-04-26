@@ -20,7 +20,7 @@ CSon_Index:	index *,,2
 ; ===========================================================================
 
 CSon_Main:	; Routine 0
-		addq.b	#2,ost_routine(a0)
+		addq.b	#2,ost_routine(a0)			; goto CSon_ChkLand next
 		move.w	#$A0,ost_x_pos(a0)
 		move.w	#$C0,ost_y_pos(a0)
 		move.l	#Map_Sonic,ost_mappings(a0)
@@ -42,7 +42,7 @@ CSon_ChkLand:	; Routine 2
 		bra.s	CSon_Animate
 
 	.keep_falling:
-		jsr	(SpeedToPos).l
+		update_y_pos
 		jsr	(Sonic_Animate).l
 		jmp	(Sonic_LoadGfx).l
 ; ===========================================================================
@@ -50,7 +50,7 @@ CSon_ChkLand:	; Routine 2
 CSon_Animate:	; Routine 4
 		tst.b	(v_joypad_press_actual).w		; is Start button pressed?
 		bmi.s	.start_pressed				; if yes, branch
-		lea	(Ani_CSon).l,a1
+		lea	Ani_CSon(pc),a1
 		jmp	(AnimateSprite).l
 
 	.start_pressed:
@@ -72,7 +72,7 @@ CSon_Run:	; Routine 6
 		addi.w	#$20,ost_inertia(a0)			; increase inertia
 
 	.display:
-		jsr	(SpeedToPos).l
+		update_x_pos
 		jsr	(Sonic_Animate).l
 		jmp	(Sonic_LoadGfx).l
 
