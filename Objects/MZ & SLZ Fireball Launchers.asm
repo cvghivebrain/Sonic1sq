@@ -19,26 +19,20 @@ FireM_Index:	index *,,2
 		rsobj FireMaker
 ost_firem_time_master:	rs.b 1
 		rsobjend
-
-; Delay between launching fireballs
-FireM_Rates:	dc.b 30						; 0x - 0.5 seconds (unused)
-		dc.b 60						; 1x - 1 seconds (SLZ2)
-		dc.b 90						; 2x - 1.5 seconds (MZ3)
-		dc.b 120					; 3x - 2 seconds (MZ1/2/3, SLZ1/3)
-		dc.b 150					; 4x - 2.5 seconds (MZ1/2/3)
-		dc.b 180					; 5x - 3 seconds (MZ3)
 ; ===========================================================================
 
 FireM_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto FireM_MakeFire next
 		move.b	ost_subtype(a0),d0
-		lsr.w	#4,d0
-		andi.w	#$F,d0					; get high nybble of subtype (rate)
-		move.b	FireM_Rates(pc,d0.w),ost_firem_time_master(a0)
+		andi.b	#%00111000,d0				; read bits for firing rate
+		beq.w	DeleteObject				; delete if 0
+		lsr.b	#3,d0
+		mulu.w	#30,d0					; multiply by 0.5 seconds
+		move.b	d0,ost_firem_time_master(a0)
 		move.b	ost_firem_time_master(a0),ost_anim_time(a0) ; set time delay for fireballs
-		andi.b	#$F,ost_subtype(a0)			; get low nybble of subtype (speed/direction)
 
 FireM_MakeFire:	; Routine 2
+		shortcut
 		subq.b	#1,ost_anim_time(a0)			; decrement timer
 		bne.s	.wait					; if time remains, branch
 		move.b	ost_firem_time_master(a0),ost_anim_time(a0) ; reset time delay
@@ -51,6 +45,7 @@ FireM_MakeFire:	; Routine 2
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		move.b	ost_subtype(a0),ost_subtype(a1)		; subtype = speed/direction
+		move.b	ost_status(a0),ost_status(a1)
 
 	.wait:
 		move.w	ost_x_pos(a0),d0

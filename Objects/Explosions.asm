@@ -42,13 +42,11 @@ ExItem_Main:	; Routine 2
 ExItem_Animate:	; Routine 4 (2 for ExplosionBomb)
 ExBom_Animate:
 		subq.b	#1,ost_anim_time(a0)			; subtract 1 from frame duration
-		bpl.s	.display
+		bpl.w	DisplaySprite
 		move.b	#7,ost_anim_time(a0)			; set frame duration to 7 frames
 		addq.b	#1,ost_frame(a0)			; next frame
-		cmpi.b	#5,ost_frame(a0)			; is the final frame (05) displayed?
-		beq.w	DeleteObject				; if yes, branch
-
-	.display:
+		cmpi.b	#id_frame_ex_4+1,ost_frame(a0)
+		beq.w	DeleteObject				; branch when animation has finished
 		bra.w	DisplaySprite
 
 ; ---------------------------------------------------------------------------
@@ -79,4 +77,5 @@ ExBom_Main:	; Routine 0
 		move.b	#$C,ost_displaywidth(a0)
 		move.b	#7,ost_anim_time(a0)
 		move.b	#id_frame_ex_0_0,ost_frame(a0)
-		play.w	1, jmp, sfx_Bomb			; play exploding bomb sound
+		play.w	1, jsr, sfx_Bomb			; play exploding bomb sound
+		bra.s	ExBom_Animate

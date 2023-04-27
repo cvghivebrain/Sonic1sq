@@ -55,7 +55,7 @@ BFire_Action:	; Routine 2
 		move.w	BFire_Index2(pc,d0.w),d0
 		jsr	BFire_Index2(pc,d0.w)
 		jsr	(SpeedToPos).l				; update position
-		lea	(Ani_Fire).l,a1
+		lea	(Ani_GFire).l,a1
 		jsr	(AnimateSprite).l
 		cmpi.w	#$2E8,ost_y_pos(a0)			; has fireball fallen into the lava in the middle?
 		bhi.s	BFire_Delete				; if yes, branch
@@ -84,7 +84,7 @@ BFire_Drop:
 		bsr.w	FindFloorObj
 		tst.w	d1					; has fireball hit the floor?
 		bpl.s	.exit					; if not, branch
-		addq.b	#2,ost_mode(a0)			; goto BFire_Duplicate when it hits the floor
+		addq.b	#2,ost_mode(a0)				; goto BFire_Duplicate when it hits the floor
 
 	.exit:
 		rts	
@@ -112,10 +112,10 @@ BFire_Duplicate:
 		dbf	d0,.loop
 
 		neg.w	ost_x_vel(a1)				; make duplicate move left
-		addq.b	#2,ost_mode(a1)			; goto BFire_FireSpread next
+		addq.b	#2,ost_mode(a1)				; goto BFire_FireSpread next
 
 	.fail:
-		addq.b	#2,ost_mode(a0)			; goto BFire_FireSpread next
+		addq.b	#2,ost_mode(a0)				; goto BFire_FireSpread next
 		rts	
 
 ; ---------------------------------------------------------------------------
@@ -158,7 +158,7 @@ BFire_FireSpread:
 ; ===========================================================================
 
 .not_on_floor:
-		addq.b	#2,ost_mode(a0)			; goto BFire_FallEdge next
+		addq.b	#2,ost_mode(a0)				; goto BFire_FallEdge next
 		rts	
 ; ===========================================================================
 
@@ -190,7 +190,7 @@ BFire_FallEdge:
 		move.w	ost_bfire_x_prev(a0),ost_x_pos(a0)	; return to previous position
 		move.w	ost_bfire_y_start(a0),ost_y_pos(a0)
 		bset	#tile_hi_bit,ost_tile(a0)
-		subq.b	#2,ost_mode(a0)			; goto BFire_FireSpread next
+		subq.b	#2,ost_mode(a0)				; goto BFire_FireSpread next
 
 	.not_on_floor:
 		rts	
@@ -205,12 +205,12 @@ BFire_TempFire:	; Routine 4
 		bset	#tile_hi_bit,ost_tile(a0)
 		subq.b	#1,ost_bfire_wait_time(a0)		; decrement timer
 		bne.s	.wait					; branch if time remains
-		move.b	#id_ani_fire_vertcollide,ost_anim(a0)	; use animation for vertical fireball disappearing
+		move.b	#id_ani_gfire_collide,ost_anim(a0)	; use animation for vertical fireball disappearing
 		subq.w	#4,ost_y_pos(a0)
 		clr.b	ost_col_type(a0)			; make fireball harmless
 
 	.wait:
-		lea	(Ani_Fire).l,a1
+		lea	(Ani_GFire).l,a1
 		jmp	(AnimateSprite).l			; animate and goto BFire_TempFireDel if 2nd animation ran
 ; ===========================================================================
 

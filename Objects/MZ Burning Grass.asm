@@ -92,6 +92,7 @@ GFire_Animate:
 
 Ani_GFire:	index *
 		ptr ani_gfire_0
+		ptr ani_gfire_collide
 		
 ani_gfire_0:	dc.w 5
 		dc.w id_frame_fire_vertical1
@@ -99,4 +100,8 @@ ani_gfire_0:	dc.w 5
 		dc.w id_frame_fire_vertical2
 		dc.w id_frame_fire_vertical2+afxflip
 		dc.w id_Anim_Flag_Restart
-		even
+
+ani_gfire_collide:
+		dc.w 5
+		dc.w id_frame_fire_vertcollide
+		dc.w id_Anim_Flag_Routine

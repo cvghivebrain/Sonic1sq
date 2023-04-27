@@ -86,7 +86,7 @@ BMZ_ShipStart:
 		bsr.w	BossMove				; update parent position
 		cmpi.w	#$1910,ost_boss_parent_x_pos(a0)	; has boss reached target position?
 		bne.s	.not_at_pos				; if not, branch
-		addq.b	#2,ost_mode(a0)			; goto BMZ_ShipMove next
+		addq.b	#2,ost_mode(a0)				; goto BMZ_ShipMove next
 		clr.b	ost_subtype(a0)
 		clr.l	ost_x_vel(a0)				; stop moving
 
@@ -186,6 +186,7 @@ BMZ_ChgDir:
 		bne.s	.fail					; branch if not found
 		move.l	#FireBall,ost_id(a1)			; load fireball object that comes from lava
 		move.w	#$2E8,ost_y_pos(a1)			; set y position as beneath lava
+		move.b	#type_fire_gravity+4,ost_subtype(a1)
 		jsr	(RandomNumber).l
 		andi.l	#$FFFF,d0
 		divu.w	#$50,d0
@@ -267,7 +268,7 @@ BMZ_Explode:
 		bset	#status_xflip_bit,ost_status(a0)	; ship face right
 		bclr	#status_broken_bit,ost_status(a0)
 		clr.w	ost_x_vel(a0)				; stop moving
-		addq.b	#2,ost_mode(a0)			; goto BMZ_Recover next
+		addq.b	#2,ost_mode(a0)				; goto BMZ_Recover next
 		move.w	#-$26,ost_boss_wait_time(a0)		; set timer (counts up)
 		tst.b	(v_boss_status).w
 		bne.s	.exit
@@ -300,7 +301,7 @@ BMZ_Recover:
 		beq.s	.stop_rising				; if exactly 48, branch
 		cmpi.w	#$38,ost_boss_wait_time(a0)		; have 56 frames passed since ship stopped rising?
 		bcs.s	.update					; if not, branch
-		addq.b	#2,ost_mode(a0)			; if yes, goto BMZ_Escape next
+		addq.b	#2,ost_mode(a0)				; if yes, goto BMZ_Escape next
 		bra.s	.update
 ; ===========================================================================
 

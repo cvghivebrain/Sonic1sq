@@ -68,19 +68,13 @@ type_plat_syz:		equ id_frame_plat_syz<<4		; +$20
 type_plat_slz:		equ id_frame_plat_slz<<4		; +$30
 
 ; FireMaker
-type_fire_updown_low:	equ id_FBall_Type_UpDown		; $x0 - flies up, falls down
-type_fire_updown_mid:	equ id_FBall_Type_UpDown_1		; $x1 - flies up, falls down
-type_fire_updown_high:	equ id_FBall_Type_UpDown_2		; $x2 - flies up, falls down
-type_fire_updown_highest: equ id_FBall_Type_UpDown_3		; $x3 - flies up, falls down
-type_fire_up:		equ id_FBall_Type_Up			; $x4 - up until it hits ceiling
-type_fire_down:		equ id_FBall_Type_Down			; $x5 - down until it hits floor
-type_fire_left:		equ id_FBall_Type_Left			; $x6 - left until it hits wall
-type_fire_right:	equ id_FBall_Type_Right			; $x7 - right until it hits wall
-type_fire_fastest:	equ $10					; $1x - every 1 second
-type_fire_fast:		equ $20					; $2x - every 1.5 seconds
-type_fire_medium:	equ $30					; $3x - every 2 seconds
-type_fire_slow:		equ $40					; $4x - every 2.5 seconds
-type_fire_slowest:	equ $50					; $5x - every 3 seconds
+type_fire_fastest:	equ (60/30)<<3				; every 1 second
+type_fire_fast:		equ (90/30)<<3				; every 1.5 seconds
+type_fire_medium:	equ (120/30)<<3				; every 2 seconds
+type_fire_slow:		equ (150/30)<<3				; every 2.5 seconds
+type_fire_slowest:	equ (180/30)<<3				; every 3 seconds
+type_fire_horizontal:	equ $40
+type_fire_gravity:	equ $80
 
 ; LargeGrass
 type_grass_wide:	equ 0							; $0x - wide platform
