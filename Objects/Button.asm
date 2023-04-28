@@ -6,6 +6,14 @@
 ;	ObjPos_SYZ1, ObjPos_SYZ3
 ;	ObjPos_LZ1, ObjPos_LZ2, ObjPos_LZ3
 ;	ObjPos_SBZ1, ObjPos_SBZ2, ObjPos_SBZ3
+
+; subtypes:
+;	%BHFPIIII
+;	B - 1 if button can be activated by a block
+;	H - 1 to set high bit in button status instead of lowest bit
+;	F - 1 to flash red
+;	P - 1 to use palette line 3
+;	IIII - button id
 ; ---------------------------------------------------------------------------
 
 Button:
@@ -38,10 +46,14 @@ But_Main:	; Routine 0
 
 But_Action:	; Routine 2
 		shortcut
+		tst.b	ost_subtype(a0)
+		bpl.s	.ignore_block				; branch if button is unaffected by pushable block
 		tst.b	ost_render(a0)
 		bpl.w	DespawnQuick				; branch if button is off screen
 		move.l	#PushBlock,d0
 		bsr.w	FindNearestObj				; find nearest pushable block & save to ost_linked
+		
+	.ignore_block:
 		shortcut
 		move.b	ost_subtype(a0),d0
 		andi.w	#$F,d0					; get low nybble of subtype
@@ -51,10 +63,20 @@ But_Action:	; Routine 2
 		btst	#6,ost_subtype(a0)			; is subtype $4x or $Cx? (unused)
 		beq.s	.not_secondary				; if not, branch
 		moveq	#7,d6					; d6 = bit to set/clear in button status
-	.not_secondary:
 		
+	.not_secondary:
+		tst.b	ost_subtype(a0)
+		bpl.s	.no_block				; branch if unaffected by pushable block
 		tst.w	ost_linked(a0)
+		bne.s	.block_found				; branch if block is nearby
+		move.b	(v_frame_counter_low).w,d0
+		andi.b	#$F,d0
+		bne.s	.no_block				; branch except every 16th frame
+		move.l	#PushBlock,d0
+		bsr.w	FindNearestObj				; find nearest pushable block
 		beq.s	.no_block				; branch if there is no pushable block nearby
+		
+	.block_found:
 		getlinked					; a1 = OST of pushable block
 		range_x_exact
 		bpl.s	.no_block				; branch if block isn't touching button

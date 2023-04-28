@@ -68,11 +68,13 @@ type_plat_syz:		equ id_frame_plat_syz<<4		; +$20
 type_plat_slz:		equ id_frame_plat_slz<<4		; +$30
 
 ; FireMaker
-type_fire_fastest:	equ (60/30)<<3				; every 1 second
-type_fire_fast:		equ (90/30)<<3				; every 1.5 seconds
-type_fire_medium:	equ (120/30)<<3				; every 2 seconds
-type_fire_slow:		equ (150/30)<<3				; every 2.5 seconds
-type_fire_slowest:	equ (180/30)<<3				; every 3 seconds
+type_fire_rate30:	equ (30/30)<<3				; every 0.5 seconds
+type_fire_rate60:	equ (60/30)<<3				; every 1 second
+type_fire_rate90:	equ (90/30)<<3				; every 1.5 seconds
+type_fire_rate120:	equ (120/30)<<3				; every 2 seconds
+type_fire_rate150:	equ (150/30)<<3				; every 2.5 seconds
+type_fire_rate180:	equ (180/30)<<3				; every 3 seconds
+type_fire_vertical:	equ 0
 type_fire_horizontal:	equ $40
 type_fire_gravity:	equ $80
 

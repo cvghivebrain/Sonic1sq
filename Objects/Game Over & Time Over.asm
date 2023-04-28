@@ -17,7 +17,7 @@ Over_Index:	index *,,2
 		ptr Over_Wait
 
 		rsobj GameOverCard
-ost_over_time:	rs.w 1 ; $3E
+ost_over_time:	rs.w 1
 		rsobjend
 ; ===========================================================================
 
@@ -55,6 +55,7 @@ Over_Move:	; Routine 2
 ; ===========================================================================
 
 Over_Wait:	; Routine 4
+		shortcut
 		move.b	(v_joypad_press_actual).w,d0
 		andi.b	#btnABC,d0				; is button A, B or C pressed?
 		bne.s	Over_ChgMode				; if yes, branch

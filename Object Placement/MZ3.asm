@@ -7,16 +7,16 @@ ObjPos_MZ3:
 		objpos $0010,$0450,MarbleBrick,type_brick_still
 		objpos $0010,$04D0,MarbleBrick,type_brick_still
 		objpos $0010,$04F0,MarbleBrick,type_brick_still
-		objpos $0020,$03B0,FireMaker,type_fire_medium+type_fire_horizontal+2,xflip
+		objpos $0020,$03B0,FireMaker,type_fire_rate120+type_fire_horizontal+2,xflip
 		objpos $0030,$0470,SmashBlock,$00
 		objpos $0030,$0490,SmashBlock,$00
 		objpos $0030,$04B0,SmashBlock,$00
 		objpos $0050,$0470,SmashBlock,$00
 		objpos $0050,$0490,SmashBlock,$00
 		objpos $0050,$04B0,SmashBlock,$00
-		objpos $0080,$0370,FireMaker,type_fire_medium+type_fire_horizontal+2,xflip
+		objpos $0080,$0370,FireMaker,type_fire_rate120+type_fire_horizontal+2,xflip
 		objpos $00A0,$05F4,Spikes,type_spike_3up+type_spike_updown
-		objpos $00D0,$0320,FireMaker,type_fire_fast+2,yflip
+		objpos $00D0,$0320,FireMaker,type_fire_rate90+2,yflip
 		objpos $0110,$04F0,Monitor,type_monitor_shield,rem
 		objpos $0110,$06D0,Monitor,type_monitor_rings,rem
 		objpos $0120,$01CC,LargeGrass,type_grass_narrow+type_grass_1
@@ -84,16 +84,16 @@ ObjPos_MZ3:
 		objpos $05F4,$0253,Rings,$10,rem
 		objpos $0618,$0454,Rings,$12,rem
 		objpos $0620,$02E8,LargeGrass,type_grass_narrow+type_grass_3
-		objpos $0620,$03B0,FireMaker,type_fire_slow+type_fire_horizontal+2,xflip
+		objpos $0620,$03B0,FireMaker,type_fire_rate150+type_fire_horizontal+2,xflip
 		objpos $0640,$06E8,LavaTag,$01
 		objpos $0670,$0414,Rings,$10,rem
-		objpos $0680,$0370,FireMaker,type_fire_slow+type_fire_horizontal+2,xflip
+		objpos $0680,$0370,FireMaker,type_fire_rate150+type_fire_horizontal+2,xflip
 		objpos $0690,$03D4,Rings,$10,rem
 		objpos $0698,$06C0,Spikes,type_spike_3left+type_spike_still
 		objpos $06A0,$02CC,LargeGrass,type_grass_narrow+type_grass_1
 		objpos $06B0,$03B4,Rings,$10,rem
 		objpos $06C0,$05A8,Splats,$00,rem
-		objpos $06D0,$0320,FireMaker,type_fire_slow+2,yflip
+		objpos $06D0,$0320,FireMaker,type_fire_rate150+2,yflip
 		objpos $06D4,$0394,Rings,$11,rem
 		objpos $0710,$0360,MarbleBrick,type_brick_still
 		objpos $0720,$05F4,Spikes,type_spike_3up+type_spike_updown
@@ -105,37 +105,37 @@ ObjPos_MZ3:
 		objpos $07E8,$05D4,Rings,$12,rem
 		objpos $07F0,$02B0,Monitor,type_monitor_rings,rem
 		objpos $07F0,$0550,MarbleBrick,type_brick_still
-		objpos $0820,$06B0,FireMaker,type_fire_medium+type_fire_horizontal+2,xflip
+		objpos $0820,$06B0,FireMaker,type_fire_rate120+type_fire_horizontal+2,xflip
 		objpos $0848,$0750,Spikes,type_spike_1left+type_spike_leftright,xflip
 		objpos $0850,$05E0,MarbleBrick,type_brick_still
-		objpos $0880,$0670,FireMaker,type_fire_medium+type_fire_horizontal+2,xflip
+		objpos $0880,$0670,FireMaker,type_fire_rate120+type_fire_horizontal+2,xflip
 		objpos $0888,$0790,Spikes,type_spike_1left+type_spike_leftright,xflip
 		objpos $08A0,$05D4,Spikes,type_spike_3up+type_spike_updown
-		objpos $08D0,$0620,FireMaker,type_fire_medium+2,yflip
+		objpos $08D0,$0620,FireMaker,type_fire_rate120+2,yflip
 		objpos $0930,$053C,ChainStomp,type_cstomp_medium+type_cstomp_1
 		objpos $0940,$07C0,Splats,$00,xflip,rem
 		objpos $09B8,$07D0,Springs,type_spring_red+type_spring_right,xflip
 		objpos $09D0,$053C,ChainStomp,type_cstomp_medium+type_cstomp_1
 		objpos $0AC0,$07E8,LavaTag,$01
 		objpos $0B20,$0768,SwingingPlatform,$04
-		objpos $0B80,$07D0,FireMaker,type_fire_slowest+type_fire_gravity+4
+		objpos $0B80,$07D0,FireMaker,type_fire_rate180+type_fire_vertical+type_fire_gravity+4
 		objpos $0B80,$07E8,LavaTag,$02
 		objpos $0B90,$05B0,Monitor,type_monitor_1up,rem
 		objpos $0BE0,$0768,SwingingPlatform,$04,xflip
-		objpos $0C40,$07D0,FireMaker,type_fire_slowest+type_fire_gravity+4
+		objpos $0C40,$07D0,FireMaker,type_fire_rate180+type_fire_vertical+type_fire_gravity+4
 		objpos $0C80,$07E8,LavaTag,$02
 		objpos $0CA0,$0768,SwingingPlatform,$04
 		objpos $0D10,$06F1,Monitor,type_monitor_shield,rem
 		objpos $0DA0,$06EC,Lamppost,$01,rem
 		objpos $0DEC,$0710,Spikes,type_spike_1left+type_spike_leftright,xflip
 		objpos $0E00,$0748,Splats,$10,rem
-		objpos $0E28,$03B0,FireMaker,type_fire_slow+type_fire_horizontal+2,xflip
+		objpos $0E28,$03B0,FireMaker,type_fire_rate150+type_fire_horizontal+2,xflip
 		objpos $0E30,$0431,Monitor,type_monitor_rings
 		objpos $0E48,$0450,Spikes,type_spike_1left+type_spike_leftright,xflip
-		objpos $0E88,$0370,FireMaker,type_fire_slow+type_fire_horizontal+2,xflip
+		objpos $0E88,$0370,FireMaker,type_fire_rate150+type_fire_horizontal+2,xflip
 		objpos $0E88,$0490,Spikes,type_spike_1left+type_spike_leftright,xflip
 		objpos $0EC8,$04D0,Spikes,type_spike_1left+type_spike_leftright,xflip
-		objpos $0ED0,$0328,FireMaker,type_fire_slow+2,yflip
+		objpos $0ED0,$0328,FireMaker,type_fire_rate150+2,yflip
 		objpos $0EE0,$06F4,Spikes,type_spike_3up+type_spike_updown
 		objpos $0F30,$049C,ChainStomp,type_cstomp_medium+type_cstomp_1
 		objpos $0F60,$0698,GlassBlock,type_glass_updown
@@ -213,19 +213,19 @@ ObjPos_MZ3:
 		objpos $1488,$0590,Spikes,type_spike_1left+type_spike_leftright,xflip
 		objpos $1498,$063C,Batbrain,$00,rem
 		objpos $14A0,$048C,Batbrain,$00,rem
-		objpos $14A8,$02D8,FireMaker,type_fire_slow+type_fire_gravity+4
+		objpos $14A8,$02D8,FireMaker,type_fire_rate150+type_fire_vertical+type_fire_gravity+4
 		objpos $14B8,$04F4,Rings,$12,rem
 		objpos $14B8,$063C,Batbrain,$00,rem
 		objpos $14C0,$02FC,LavaTag,$01
 		objpos $14C8,$05D0,Spikes,type_spike_1left+type_spike_leftright,xflip
-		objpos $14D8,$02D8,FireMaker,type_fire_slowest+type_fire_gravity+5
+		objpos $14D8,$02D8,FireMaker,type_fire_rate180+type_fire_vertical+type_fire_gravity+5
 		objpos $1518,$0752,Rings,$12,rem
 		objpos $1530,$063C,ChainStomp,type_cstomp_medium+type_cstomp_1
-		objpos $1550,$02A0,FireMaker,type_fire_slow+type_fire_gravity+5
+		objpos $1550,$02A0,FireMaker,type_fire_rate150+type_fire_vertical+type_fire_gravity+5
 		objpos $1580,$02A8,LargeGrass,type_grass_narrow+type_grass_2+type_grass_rev
 		objpos $1580,$02B8,LavaTag,$01
 		objpos $1590,$0590,MarbleBrick,type_brick_still
-		objpos $15B0,$02A0,FireMaker,type_fire_slow+type_fire_gravity+5
+		objpos $15B0,$02A0,FireMaker,type_fire_rate150+type_fire_vertical+type_fire_gravity+5
 		objpos $15B0,$0590,MarbleBrick,type_brick_still
 		objpos $15B0,$05BC,ChainStomp,type_cstomp_medium+type_cstomp_1
 		objpos $15D0,$0590,MarbleBrick,type_brick_still

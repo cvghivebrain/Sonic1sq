@@ -2,8 +2,13 @@
 ; Object 14 - fireballs (MZ, SLZ)
 
 ; spawned by:
-;	FireMaker - subtypes 0/1/2/5/6/7
-;	BossMarble - subtype 0
+;	FireMaker, BossMarble
+
+; subtypes:
+;	%GH000SSS
+;	G - 1 if affected by gravity
+;	H - 1 if horizontal, 0 if vertical
+;	SSS - initial speed (1 = $100)
 ; ---------------------------------------------------------------------------
 
 FireBall:

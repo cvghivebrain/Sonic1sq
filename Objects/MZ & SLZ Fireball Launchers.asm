@@ -2,8 +2,15 @@
 ; Object 13 - fireball maker (MZ, SLZ)
 
 ; spawned by:
-;	ObjPos_MZ1, ObjPos_MZ2, ObjPos_MZ3 - subtypes x0/x1/x2/x5/x7
-;	ObjPos_SLZ1, ObjPos_SLZ2, ObjPos_SLZ3 - subtypes x6/x7
+;	ObjPos_MZ1, ObjPos_MZ2, ObjPos_MZ3
+;	ObjPos_SLZ1, ObjPos_SLZ2, ObjPos_SLZ3
+
+; subtypes:
+;	%GHRRRSSS
+;	G - 1 if affected by gravity
+;	H - 1 if horizontal, 0 if vertical
+;	RRR - firing rate (1 = 0.5 seconds)
+;	SSS - initial speed (1 = $100)
 ; ---------------------------------------------------------------------------
 
 FireMaker:
