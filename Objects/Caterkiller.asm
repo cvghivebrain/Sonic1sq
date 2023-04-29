@@ -4,7 +4,7 @@
 ; spawned by:
 ;	ObjPos_MZ1, ObjPos_MZ2, ObjPos_MZ3
 ;	ObjPos_SBZ1, ObjPos_SBZ2
-;	Caterkiller - routines 4/6 (body segments)
+;	Caterkiller - routine 4 (body segments)
 ; ---------------------------------------------------------------------------
 
 Caterkiller:
@@ -293,7 +293,13 @@ Cat_Seg_Split:
 		jmp	DisplaySprite
 
 Cat_FragSpeed:	dc.w -$180, $180, $200				; segment x speed
-; ===========================================================================
+
+; ---------------------------------------------------------------------------
+; Bouncing Caterkiller fragment
+
+; spawned by:
+;	Caterkiller
+; ---------------------------------------------------------------------------
 
 Cat_Fragment:
 		update_xy_fall					; apply gravity & update position

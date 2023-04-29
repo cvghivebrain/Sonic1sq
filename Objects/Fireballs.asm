@@ -79,10 +79,7 @@ FBall_Action:	; Routine 2
 	.skip_type:
 		lea	(Ani_Fire).l,a1
 		bsr.w	AnimateSprite
-		move.w	ost_x_pos(a0),d0
-		bsr.w	CheckActive
-		bne.w	DeleteObject
-		bra.w	DisplaySprite
+		bra.w	DespawnQuick
 ; ===========================================================================
 FBall_TypeIndex:index *
 		ptr FBall_Type_Vert

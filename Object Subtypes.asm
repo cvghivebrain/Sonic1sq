@@ -41,8 +41,8 @@ type_bonus_1k:		equ (Bonus_Points_2-Bonus_Points)/2	; 2 - 1000 points
 type_bonus_100:		equ (Bonus_Points_3-Bonus_Points)/2	; 3 - 10 points (should be 100)
 
 ; Scenery
-type_scen_cannon:	equ (Scen_Values_0-Scen_Values)/sizeof_scen_values	; 0 - SLZ cannon
-type_scen_stump:	equ (Scen_Values_3-Scen_Values)/sizeof_scen_values	; 3 - GHZ bridge stump
+type_scen_cannon:	equ (Scen_Values_0-Scen_Values)/(Scen_Values_1-Scen_Values_0)	; 0 - SLZ cannon
+type_scen_stump:	equ (Scen_Values_3-Scen_Values)/(Scen_Values_1-Scen_Values_0)	; 3 - GHZ bridge stump
 
 ; EdgeWalls
 type_edge_shadow:	equ id_frame_edge_shadow	; 0

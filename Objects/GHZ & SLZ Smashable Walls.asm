@@ -30,14 +30,15 @@ Smash_Main:	; Routine 0
 		move.b	#32,ost_height(a0)
 
 Smash_Solid:	; Routine 2
+		shortcut
 		bsr.w	SolidObject
 		andi.b	#solid_left+solid_right,d1
-		beq.s	.dont_break				; branch if no collision with left/right
+		beq.w	DespawnObject				; branch if no collision with left/right
 		cmpi.b	#id_Roll,ost_anim(a1)
-		bne.s	.dont_break				; branch if Sonic isn't rolling
+		bne.w	DespawnObject				; branch if Sonic isn't rolling
 		mvabs.w	ost_x_vel(a1),d0			; get Sonic's speed (and make it +ve)
 		cmpi.w	#$480,d0
-		bcs.s	.dont_break				; branch if speed is too low
+		bcs.w	DespawnObject				; branch if speed is too low
 		bclr	#status_pushing_bit,ost_status(a1)
 		lea	Smash_FragRight(pc),a4			; use fragments that move right
 		andi.b	#solid_right,d1
@@ -47,9 +48,6 @@ Smash_Solid:	; Routine 2
 	.right:
 		move.w	#$70,d2					; gravity
 		bra.s	Shatter
-		
-	.dont_break:
-		bra.w	DespawnObject
 		
 Smash_FragRight:
 		dc.w $400, -$500				; x speed, y speed

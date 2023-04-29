@@ -45,6 +45,7 @@ Bri_Main:	; Routine 0
 		subq.b	#1,d2
 		move.b	d2,ost_bridge_last_log(a0)		; save id of rightmost log
 		moveq	#0,d3
+		
 	.loop:
 		bsr.w	FindNextFreeObj
 		bne.s	Bri_Solid
@@ -63,6 +64,7 @@ Bri_Main:	; Routine 0
 		dbf	d2,.loop				; repeat for number of logs
 
 Bri_Solid:	; Routine 2
+		shortcut
 		move.w	ost_bridge_y_start(a0),d0
 		bsr.s	Bri_Sink
 		bsr.w	SolidObject_TopOnly_SkipRender
