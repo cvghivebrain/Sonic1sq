@@ -21,13 +21,11 @@ WSnd_Main:	; Routine 0
 		move.b	#render_rel,ost_render(a0)
 
 WSnd_PlaySnd:	; Routine 2
+		shortcut
 		move.b	(v_vblank_counter_byte).w,d0		; get low byte of VBlank counter
 		andi.b	#$3F,d0					; read bits 0-5
 		bne.s	.skip_sfx				; branch if not 0
 		play.w	1, jsr, sfx_Waterfall			; play waterfall sound (every 64 frames)
 
 	.skip_sfx:
-		move.w	ost_x_pos(a0),d0
-		bsr.w	CheckActive
-		bne.w	DeleteObject
-		rts	
+		bra.w	DespawnQuick_NoDisplay

@@ -69,7 +69,7 @@ But_Action:	; Routine 2
 		bpl.s	.no_block				; branch if unaffected by pushable block
 		tst.w	ost_linked(a0)
 		bne.s	.block_found				; branch if block is nearby
-		move.b	(v_frame_counter_low).w,d0
+		move.b	(v_vblank_counter_byte).w,d0
 		andi.b	#$F,d0
 		bne.s	.no_block				; branch except every 16th frame
 		move.l	#PushBlock,d0

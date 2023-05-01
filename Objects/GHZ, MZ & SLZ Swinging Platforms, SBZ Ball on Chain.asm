@@ -7,6 +7,11 @@
 ;	ObjPosMZ2, ObjPosMZ3 - subtypes 4/5
 ;	ObjPosSLZ3 - subtype $27
 ;	ObjPosSBZ2 - subtypes $36/$37
+
+; subtypes:
+;	%IIIINNNN
+;	IIII - settings to use from list (only 0-3 are currently defined)
+;	NNNN - number of chain links (max $F)
 ; ---------------------------------------------------------------------------
 
 SwingingPlatform:
@@ -156,6 +161,7 @@ Swing_Main:	; Routine 0
 		dbf	d1,.loop				; repeat for all chain links
 
 Swing_Anchor:	; Routine 2
+		shortcut
 		moveq	#0,d0
 		move.b	(v_oscillating_0_to_80_fast).w,d0	; get value 0-$80
 		btst	#status_xflip_bit,ost_status(a0)
@@ -171,6 +177,7 @@ Swing_Anchor:	; Routine 2
 ; ===========================================================================
 
 Swing_Platform:	; Routine 4
+		shortcut
 		move.w	ost_x_pos(a0),ost_x_prev(a0)
 		bsr.s	Swing_Update
 		bsr.w	SolidObject_TopOnly
@@ -178,6 +185,7 @@ Swing_Platform:	; Routine 4
 ; ===========================================================================
 
 Swing_Chain:	; Routine 6
+		shortcut
 		bsr.s	Swing_Update
 		bra.w	DisplaySprite
 		

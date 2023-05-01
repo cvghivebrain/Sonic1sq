@@ -320,7 +320,6 @@ Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 		include "Objects\_CollectRing.asm"
 		include "Objects\Ring Loss.asm"			; RingLoss
 		include "Objects\Giant Ring.asm"		; GiantRing
-		include "Objects\Giant Ring Flash.asm"		; RingFlash
 
 		include "Objects\Monitors.asm"			; Monitor
 		include "Objects\Monitor Contents.asm"		; PowerUp

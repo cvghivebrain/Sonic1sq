@@ -3,6 +3,11 @@
 
 ; spawned by:
 ;	ObjPos_GHZ1, ObjPos_GHZ2, ObjPos_GHZ3 - subtypes 0/1/2/$10/$11/$12
+
+; subtypes:
+;	%000SFFFF
+;	S - 1 if wall isn't solid
+;	FFFF - frame id
 ; ---------------------------------------------------------------------------
 
 EdgeWalls:
@@ -35,10 +40,11 @@ Edge_Main:	; Routine 0
 ; ===========================================================================
 
 Edge_Solid:	; Routine 2
+		shortcut
 		bsr.w	SolidObject_SidesOnly
+		bra.w	DespawnQuick
+; ===========================================================================
 
 Edge_Display:	; Routine 4
-		move.w	ost_x_pos(a0),d0
-		bsr.w	CheckActive
-		bne.w	DeleteObject
-		bra.w	DisplaySprite
+		shortcut
+		bra.w	DespawnQuick
