@@ -6,6 +6,11 @@
 ;	ObjPos_SYZ2, ObjPos_SYZ3 - subtypes $11/$13/$31
 ;	ObjPos_LZ1, ObjPos_LZ3 - subtypes $11/$31
 ;	ObjPos_SBZ1, ObjPos_SBZ2, ObjPos_FZ - subtypes $11/$12/$13/$15/$17/$31/$51/$61/$70/$71/$E1
+
+; subtypes:
+;	%WWWWHHHH
+;	WWWW - width (+1, *8 for ost_width)
+;	HHHH - height (+1, *8 for ost_height)
 ; ---------------------------------------------------------------------------
 
 Invisibarrier:
@@ -37,20 +42,12 @@ Invis_Main:	; Routine 0
 		move.b	d1,ost_height(a0)			; set object height
 
 Invis_Solid:	; Routine 2
+		shortcut
 		bsr.w	CheckOffScreen				; is object off screen?
 		bne.s	.chkdel					; if yes, branch
 		bsr.w	SolidObject_SkipRender
 
 	.chkdel:
-		move.w	ost_x_pos(a0),d0
-		bsr.w	CheckActive
-		bne.s	.delete
-		tst.w	(v_debug_active).w			; are you using	debug mode?
-		beq.s	.nodisplay				; if not, branch
-		jmp	(DisplaySprite).l			; if yes, display the object
-
-	.nodisplay:
-		rts	
-
-	.delete:
-		jmp	(DeleteObject).l
+		tst.w	(v_debug_active).w
+		beq.w	DespawnQuick_NoDisplay			; branch if debug mode isn't being used
+		bra.w	DespawnQuick				; visible with debug mode

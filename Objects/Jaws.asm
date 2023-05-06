@@ -16,8 +16,8 @@ Jaws_Index:	index *,,2
 		ptr Jaws_Turn
 
 		rsobj Jaws
-ost_jaws_turn_time:	rs.w 1 ; $30				; time until jaws turns (2 bytes)
-ost_jaws_turn_master:	rs.w 1 ; $32				; time between turns, copied to ost_jaws_turn_time every turn (2 bytes)
+ost_jaws_turn_time:	rs.w 1					; time until jaws turns (2 bytes)
+ost_jaws_turn_master:	rs.w 1					; time between turns, copied to ost_jaws_turn_time every turn (2 bytes)
 		rsobjend
 ; ===========================================================================
 
@@ -42,6 +42,7 @@ Jaws_Main:	; Routine 0
 		neg.w	ost_x_vel(a0)				; move Jaws to the right
 
 Jaws_Turn:	; Routine 2
+		shortcut
 		subq.w	#1,ost_jaws_turn_time(a0)		; subtract 1 from turn delay time
 		bpl.s	.animate				; if time remains, branch
 
@@ -52,9 +53,9 @@ Jaws_Turn:	; Routine 2
 		move.b	#0,ost_anim_time(a0)
 
 	.animate:
-		lea	(Ani_Jaws).l,a1
+		lea	Ani_Jaws(pc),a1
 		bsr.w	AnimateSprite
-		bsr.w	SpeedToPos
+		update_x_pos
 		bra.w	DespawnObject
 
 ; ---------------------------------------------------------------------------

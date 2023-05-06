@@ -14,19 +14,18 @@ Lamppost:
 		moveq	#0,d0
 		move.b	ost_routine(a0),d0
 		move.w	Lamp_Index(pc,d0.w),d1
-		jsr	Lamp_Index(pc,d1.w)
-		jmp	(DespawnObject).l
+		jmp	Lamp_Index(pc,d1.w)
 ; ===========================================================================
 Lamp_Index:	index *,,2
 		ptr Lamp_Main
 		ptr Lamp_Blue
-		ptr Lamp_Finish
+		ptr Lamp_Red
 		ptr Lamp_Twirl
 
 		rsobj Lamppost
-ost_lamp_x_start:	rs.w 1 ; $30				; original x-axis position (2 bytes)
-ost_lamp_y_start:	rs.w 1 ; $32				; original y-axis position (2 bytes)
-ost_lamp_twirl_time:	rs.w 1 ; $36				; length of time to twirl the lamp (2 bytes)
+ost_lamp_x_start:	rs.w 1					; original x-axis position (2 bytes)
+ost_lamp_y_start:	rs.w 1					; original y-axis position (2 bytes)
+ost_lamp_twirl_count:	rs.w 1					; length of time lamp has been twirled (2 bytes)
 		rsobjend
 ; ===========================================================================
 
@@ -37,12 +36,8 @@ Lamp_Main:	; Routine 0
 		move.b	#render_rel,ost_render(a0)
 		move.b	#8,ost_displaywidth(a0)
 		move.b	#5,ost_priority(a0)
-		lea	(v_respawn_list).w,a2
-		moveq	#0,d0
-		move.b	ost_respawn(a0),d0
-		bclr	#7,2(a2,d0.w)
-		btst	#0,2(a2,d0.w)				; has lamppost been hit?
-		bne.s	.red					; if yes, branch
+		bsr.w	GetState
+		bne.s	.red					; branch if lamppost has been hit
 
 		move.b	(v_last_lamppost).w,d1			; get number of last lamppost hit
 		andi.b	#$7F,d1
@@ -53,16 +48,16 @@ Lamp_Main:	; Routine 0
 
 	.red:
 		bset	#0,2(a2,d0.w)				; remember lamppost as red
-		move.b	#id_Lamp_Finish,ost_routine(a0)		; goto Lamp_Finish next
+		move.b	#id_Lamp_Red,ost_routine(a0)		; goto Lamp_Red next
 		move.b	#id_frame_lamp_red,ost_frame(a0)	; use red lamppost frame
-		rts	
+		bra.w	DespawnObject
 ; ===========================================================================
 
 Lamp_Blue:	; Routine 2
 		tst.w	(v_debug_active).w			; is debug mode	being used?
-		bne.w	.donothing				; if yes, branch
+		bne.w	DespawnObject				; if yes, branch
 		tst.b	(v_lock_multi).w			; is object collision enabled?
-		bmi.w	.donothing				; if not, branch
+		bmi.w	DespawnObject				; if not, branch
 		move.b	(v_last_lamppost).w,d1
 		andi.b	#$7F,d1
 		move.b	ost_subtype(a0),d2
@@ -70,25 +65,26 @@ Lamp_Blue:	; Routine 2
 		cmp.b	d2,d1					; is this a "new" lamppost?
 		bcs.s	.chkhit					; if yes, branch
 
-		lea	(v_respawn_list).w,a2
-		moveq	#0,d0
-		move.b	ost_respawn(a0),d0
-		bset	#0,2(a2,d0.w)				; remember lamppost as red
-		move.b	#id_Lamp_Finish,ost_routine(a0)		; goto Lamp_Finish next
+		bsr.w	SaveState
+		beq.w	DespawnObject				; branch if not in respawn table
+		bset	#0,(a2)					; remember lamppost as red
+		move.b	#id_Lamp_Red,ost_routine(a0)		; goto Lamp_Red next
 		move.b	#id_frame_lamp_red,ost_frame(a0)	; use red lamppost frame
-		bra.w	.donothing
+		bra.w	DespawnObject
 ; ===========================================================================
 
 .chkhit:
-		bsr.w	Range
+		getsonic					; a1 = OST of Sonic
+		range_x
 		cmp.w	#8,d1
-		bcc.w	.donothing
+		bcc.w	DespawnObject
+		range_y
 		cmp.w	#$28,d3
-		bcc.w	.donothing
+		bcc.w	DespawnObject
 
 		play.w	1, jsr, sfx_Lamppost			; play lamppost sound
-		addq.b	#2,ost_routine(a0)			; goto Lamp_Finish next
-		jsr	(FindFreeObj).l				; find free OST slot
+		addq.b	#2,ost_routine(a0)			; goto Lamp_Red next
+		jsr	(FindNextFreeObj).l			; find free OST slot
 		bne.s	.fail					; branch if not found
 		move.l	#Lamppost,ost_id(a1)			; load twirling lamp object
 		move.b	#id_Lamp_Twirl,ost_routine(a1)		; child object goto Lamp_Twirl next
@@ -96,49 +92,65 @@ Lamp_Blue:	; Routine 2
 		move.w	ost_y_pos(a0),ost_lamp_y_start(a1)
 		subi.w	#$18,ost_lamp_y_start(a1)
 		move.l	#Map_Lamp,ost_mappings(a1)
-		move.w	(v_tile_lamppost).w,ost_tile(a1)
+		move.w	ost_tile(a0),ost_tile(a1)
 		move.b	#render_rel,ost_render(a1)
 		move.b	#8,ost_displaywidth(a1)
 		move.b	#4,ost_priority(a1)
 		move.b	#id_frame_lamp_redballonly,ost_frame(a1) ; use "ball only" frame
-		move.w	#32,ost_lamp_twirl_time(a1)
+		saveparent
 
 	.fail:
 		move.b	#id_frame_lamp_poleonly,ost_frame(a0)	; use "post only" frame
 		bsr.w	Lamp_StoreInfo				; store Sonic's position, rings, lives etc.
-		lea	(v_respawn_list).w,a2
-		moveq	#0,d0
-		move.b	ost_respawn(a0),d0
-		bset	#0,2(a2,d0.w)				; remember lamppost as red
-
-	.donothing:
-		rts	
+		bsr.w	SaveState
+		beq.w	DespawnObject				; branch if not in respawn table
+		bset	#0,(a2)					; remember lamppost as red
 ; ===========================================================================
 
-Lamp_Finish:	; Routine 4
-		rts	
+Lamp_Red:	; Routine 4
+		shortcut
+		bra.w	DespawnObject
 ; ===========================================================================
 
 Lamp_Twirl:	; Routine 6
-		subq.w	#1,ost_lamp_twirl_time(a0)		; decrement timer
-		bpl.s	.continue				; if time remains, keep twirling
-		move.b	#id_Lamp_Finish,ost_routine(a0)		; goto Lamp_Finish next
+		shortcut
+		move.w	ost_lamp_twirl_count(a0),d0
+		add.w	#4,d0					; increment counter
+		cmpi.w	#32*4,d0
+		bne.s	.keep_twirling				; keep twirling until finished
+		getparent					; a1 = OST of actual lamppost
+		move.b	#id_frame_lamp_red,ost_frame(a1)	; use red lamppost frame
+		jmp	DeleteObject
 
-	.continue:
-		move.b	ost_angle(a0),d0
-		subi.b	#$10,ost_angle(a0)
-		subi.b	#$40,d0
-		jsr	(CalcSine).l
-		muls.w	#$C00,d1
-		swap	d1
+	.keep_twirling:
+		move.w	d0,ost_lamp_twirl_count(a0)		; update counter
+		andi.w	#$3F,d0					; limit to 16 positions
+		lea	Lamp_Twirl_Pos(pc,d0.w),a1		; get relative position
+		move.w	(a1)+,d1
 		add.w	ost_lamp_x_start(a0),d1
 		move.w	d1,ost_x_pos(a0)
-		muls.w	#$C00,d0
-		swap	d0
-		add.w	ost_lamp_y_start(a0),d0
-		move.w	d0,ost_y_pos(a0)
-		rts
+		move.w	(a1),d1
+		add.w	ost_lamp_y_start(a0),d1
+		move.w	d1,ost_y_pos(a0)
+		jmp	DisplaySprite
 
+Lamp_Twirl_Pos:	; x pos, y pos
+		dc.w 0,-12					; default position
+		dc.w -5,-12
+		dc.w -9,-9
+		dc.w -12,-5
+		dc.w -12,0					; left position
+		dc.w -12,4
+		dc.w -9,8
+		dc.w -5,11
+		dc.w 0,12					; down position
+		dc.w 4,11
+		dc.w 8,8
+		dc.w 11,4
+		dc.w 12,0					; right position
+		dc.w 11,-5
+		dc.w 8,-9
+		dc.w 4,-12
 ; ---------------------------------------------------------------------------
 ; Subroutine to	store information when you hit a lamppost
 ; ---------------------------------------------------------------------------

@@ -18,21 +18,23 @@ Bonus_Index:	index *,,2
 		ptr Bonus_Display
 
 		rsobj HiddenBonus
-ost_bonus_wait_time:	rs.w 1 ; $30				; length of time to display bonus sprites (2 bytes)
+ost_bonus_wait_time:	rs.w 1					; length of time to display bonus sprites (2 bytes)
 		rsobjend
 ; ===========================================================================
 
 Bonus_Main:	; Routine 0
-		bsr.w	Range
+		getsonic
+		range_x
 		cmp.w	#16,d1
-		bcc.s	.chkdel					; branch if Sonic is > 16px away
+		bcc.w	DespawnQuick_NoDisplay			; branch if Sonic is > 16px away
+		range_y
 		cmp.w	#16,d3
-		bcc.s	.chkdel
+		bcc.w	DespawnQuick_NoDisplay
 
-		tst.w	(v_debug_active).w			; is debug in use?
-		bne.s	.chkdel					; if yes, branch
-		tst.b	(f_giantring_collected).w		; has giant ring been collected?
-		bne.s	.chkdel					; if yes, branch
+		tst.w	(v_debug_active).w
+		bne.w	DespawnQuick_NoDisplay			; branch if using debug mode
+		tst.b	(f_giantring_collected).w
+		bne.s	Bonus_Delete				; branch if giant ring has been collected
 
 		addq.b	#2,ost_routine(a0)			; goto Bonus_Display next
 		move.l	#Map_Bonus,ost_mappings(a0)
@@ -40,39 +42,29 @@ Bonus_Main:	; Routine 0
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#0,ost_priority(a0)
 		move.b	#$10,ost_displaywidth(a0)
-		move.b	ost_subtype(a0),ost_frame(a0)
-		move.w	#119,ost_bonus_wait_time(a0)		; set display time to 2 seconds
-		play.w	1, jsr, sfx_Bonus			; play bonus sound
 		moveq	#0,d0
 		move.b	ost_subtype(a0),d0
+		move.b	ost_subtype(a0),ost_frame(a0)
 		add.w	d0,d0
 		move.w	Bonus_Points(pc,d0.w),d0		; load bonus points from array
 		jsr	(AddPoints).l				; add points and update HUD
-
-	.chkdel:
-		move.w	ost_x_pos(a0),d0
-		jsr	CheckActive
-		bne.s	.delete
-		rts	
-
-	.delete:
-		jmp	(DeleteObject).l
+		move.w	#119,ost_bonus_wait_time(a0)		; set display time to 2 seconds
+		play.w	1, jsr, sfx_Bonus			; play bonus sound
+		bra.w	DespawnQuick_NoDisplay
 
 ; ===========================================================================
 Bonus_Points:	; Bonus	points array
 Bonus_Points_0:	dc.w 0						; subtype 0 - 0 points (unused)
 Bonus_Points_1:	dc.w 1000					; subtype 1 - 10000 points
 Bonus_Points_2:	dc.w 100					; subtype 2 - 1000 points
-Bonus_Points_3:	dc.w 1						; subtype 3 - 10 points (should be 100)
+Bonus_Points_3:	dc.w 10						; subtype 3 - 100 points
 ; ===========================================================================
 
 Bonus_Display:	; Routine 2
+		shortcut
 		subq.w	#1,ost_bonus_wait_time(a0)		; decrement display time
-		bmi.s	.delete					; if time is zero, branch
-		move.w	ost_x_pos(a0),d0
-		jsr	CheckActive
-		bne.s	.delete
-		jmp	(DisplaySprite).l
+		bmi.s	Bonus_Delete				; if time is zero, branch
+		bra.w	DespawnQuick
 
-	.delete:	
-		jmp	(DeleteObject).l
+Bonus_Delete:
+		jmp	DeleteObject

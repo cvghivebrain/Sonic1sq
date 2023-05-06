@@ -62,7 +62,7 @@ Vectors:	dc.l v_stack_pointer&$FFFFFF			; Initial stack pointer value
 		dc.b "GM 00004049-SQ"				; Serial/version number
 
 Checksum: 	dc.w $0
-		dc.b "J               "				; I/O support
+		dc.b "J6              "				; I/O support
 ROM_Start_Ptr:	dc.l ROM_Start					; Start address of ROM
 ROM_End_Ptr:	dc.l ROM_End-1					; End address of ROM
 		dc.l $FF0000					; Start address of RAM
