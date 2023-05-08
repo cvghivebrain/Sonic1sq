@@ -324,7 +324,6 @@ v_last_lamppost:		rs.b 1 ; id of the last lamppost you hit
 v_last_lamppost_lampcopy:	rs.b 1 ; lamppost copy of v_last_lamppost
 v_sonic_x_pos_lampcopy:		rs.w 1 ; lamppost copy of Sonic's x position
 v_sonic_y_pos_lampcopy:		rs.w 1 ; lamppost copy of Sonic's y position
-v_rings_lampcopy:		rs.w 1 ; lamppost copy of v_rings
 v_time_lampcopy:		rs.l 1 ; lamppost copy of v_time
 v_dle_routine_lampcopy:		rs.w 1 ; lamppost copy of v_dle_routine
 v_boundary_bottom_lampcopy:	rs.w 1 ; lamppost copy of v_boundary_bottom
@@ -340,7 +339,6 @@ v_water_height_normal_lampcopy:	rs.w 1 ; lamppost copy of v_water_height_normal
 v_water_routine_lampcopy:	rs.b 1 ; lamppost copy of v_water_routine
 f_water_pal_full_lampcopy:	rs.b 1 ; lamppost copy of f_water_pal_full
 				rsblockend lamppost
-v_ring_reward_lampcopy:		rs.b 1 ; lamppost copy of v_ring_reward
 
 v_emeralds:			rs.l 1 ; number of chaos emeralds
 v_oscillating_direction:	rs.w 1 ; bitfield for the direction values in the table below are moving - 0 = up; 1 = down

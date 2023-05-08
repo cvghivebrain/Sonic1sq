@@ -160,8 +160,6 @@ Lamp_StoreInfo:
 		move.b	(v_last_lamppost).w,(v_last_lamppost_lampcopy).w
 		move.w	ost_x_pos(a0),(v_sonic_x_pos_lampcopy).w ; x-position
 		move.w	ost_y_pos(a0),(v_sonic_y_pos_lampcopy).w ; y-position
-		move.w	(v_rings).w,(v_rings_lampcopy).w	; rings
-		move.b	(v_ring_reward).w,(v_ring_reward_lampcopy).w ; lives
 		move.l	(v_time).w,(v_time_lampcopy).w		; time
 		move.b	(v_dle_routine).w,(v_dle_routine_lampcopy).w ; routine counter for dynamic level mod
 		move.w	(v_boundary_bottom).w,(v_boundary_bottom_lampcopy).w ; lower y-boundary of level
@@ -174,7 +172,7 @@ Lamp_StoreInfo:
 		move.w	(v_bg3_x_pos).w,(v_bg3_x_pos_lampcopy).w ; bg position
 		move.w	(v_bg3_y_pos).w,(v_bg3_y_pos_lampcopy).w ; bg position
 		move.w	(v_water_height_normal).w,(v_water_height_normal_lampcopy).w ; water height
-		move.b	(v_water_routine).w,(v_water_routine_lampcopy).w ; rountine counter for water
+		move.b	(v_water_routine).w,(v_water_routine_lampcopy).w ; routine counter for water
 		move.b	(f_water_pal_full).w,(f_water_pal_full_lampcopy).w ; water direction
 		rts	
 
@@ -186,15 +184,12 @@ Lamp_LoadInfo:
 		move.b	(v_last_lamppost_lampcopy).w,(v_last_lamppost).w
 		move.w	(v_sonic_x_pos_lampcopy).w,(v_ost_player+ost_x_pos).w
 		move.w	(v_sonic_y_pos_lampcopy).w,(v_ost_player+ost_y_pos).w
-		move.w	(v_rings_lampcopy).w,(v_rings).w
-		move.b	(v_ring_reward_lampcopy).w,(v_ring_reward).w
 		clr.w	(v_rings).w
 		clr.b	(v_ring_reward).w
 		move.l	(v_time_lampcopy).w,(v_time).w
 		move.b	#59,(v_time_frames).w			; second counter ticks at next frame
 		subq.b	#1,(v_time_sec).w
 		move.b	(v_dle_routine_lampcopy).w,(v_dle_routine).w
-		move.b	(v_water_routine_lampcopy).w,(v_water_routine).w
 		move.w	(v_boundary_bottom_lampcopy).w,(v_boundary_bottom).w
 		move.w	(v_boundary_bottom_lampcopy).w,(v_boundary_bottom_next).w
 		move.w	(v_camera_x_pos_lampcopy).w,(v_camera_x_pos).w
@@ -213,11 +208,7 @@ Lamp_LoadInfo:
 		move.b	(f_water_pal_full_lampcopy).w,(f_water_pal_full).w
 
 	.notwater:
-		tst.b	(v_last_lamppost).w			; is last lamppost negative? (it never is)
-		bpl.s	.exit					; if not, branch
 		move.w	(v_sonic_x_pos_lampcopy).w,d0
-		subi.w	#160,d0
+		subi.w	#screen_width/2,d0
 		move.w	d0,(v_boundary_left).w			; set left boundary to half a screen to Sonic's left
-
-	.exit:
 		rts	

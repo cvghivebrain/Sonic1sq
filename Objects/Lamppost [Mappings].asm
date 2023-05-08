@@ -40,4 +40,3 @@ frame_lamp_red:
 		piece	-8, -$2C, 1x2, 8
 		piece	0, -$2C, 1x2, 8, xflip
 		endsprite
-		even

@@ -32,14 +32,14 @@ LBlk_Main:	; Routine 0
 		move.b	#16,ost_displaywidth(a0)
 		move.b	#16,ost_width(a0)
 		move.b	#16,ost_height(a0)
-		move.w	ost_y_pos(a0),ost_lplat_y_pos(a0)
+		move.w	ost_y_pos(a0),ost_lblock_y_pos(a0)
 		move.b	ost_subtype(a0),ost_frame(a0)
-		bne.s	.not_0					; branch if not type 0
+		bne.s	LBlk_Action				; branch if not type 0
+		
 		move.w	#tile_Kos_LzBlock+tile_pal3,ost_tile(a0)
 		move.b	#id_LBlk_Stop,ost_routine(a0)		; goto LBlk_Stop next
-		bra.w	LBlk_Stop
-		
-	.not_0:
+		bra.s	LBlk_Stop
+; ===========================================================================
 
 LBlk_Action:	; Routine 2
 		tst.w	ost_lblock_wait_time(a0)
@@ -60,20 +60,17 @@ LBlk_Update:
 		
 LBlk_Stop:	; Routine 6
 		bsr.w	SolidObject
-		move.w	ost_x_pos(a0),d0
-		bsr.w	CheckActive
-		bne.w	DeleteObject
-		bra.w	DisplaySprite
+		bra.w	DespawnQuick
 ; ===========================================================================
 
 LBlk_Fall:	; Routine 4
-		bsr.w	SpeedToPos				; update position
-		addq.w	#8,ost_y_vel(a0)			; make block fall
+		update_y_fall	8				; update position & apply gravity
 		bsr.w	FindFloorObj
 		tst.w	d1					; has block hit the floor?
-		bpl.w	LBlk_Stop				; if not, branch
+		bpl.s	LBlk_Stop				; if not, branch
 		addq.w	#1,d1
 		add.w	d1,ost_y_pos(a0)			; align to floor
 		clr.w	ost_y_vel(a0)				; stop when it touches the floor
 		addq.b	#2,ost_routine(a0)			; goto LBlk_Stop next
-		bra.w	LBlk_Stop
+		bsr.w	SolidObject
+		bra.w	DespawnQuick
