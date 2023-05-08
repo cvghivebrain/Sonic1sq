@@ -50,9 +50,7 @@ DoorH_Main:	; Routine 0
 DoorH_Solid:	; Routine 2
 		bsr.w	SolidObject
 		move.w	ost_doorh_x_start(a0),d0
-		bsr.w	CheckActive
-		bne.w	DeleteObject
-		bra.w	DisplaySprite
+		bra.w	DespawnQuick_AltX
 ; ===========================================================================
 
 DoorH_ChkBtn:	; Routine 4

@@ -27,12 +27,10 @@ Cork_Main:	; Routine 0
 		move.b	#16,ost_height(a0)
 		
 Cork_Action:	; Routine 2
+		shortcut
 		bsr.s	Cork_Float
 		bsr.w	SolidObject
-		move.w	ost_x_pos(a0),d0
-		bsr.w	CheckActive
-		bne.w	DeleteObject
-		bra.w	DisplaySprite
+		bra.w	DespawnQuick
 ; ===========================================================================
 
 Cork_Float:

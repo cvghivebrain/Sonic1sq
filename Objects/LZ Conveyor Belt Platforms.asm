@@ -43,16 +43,16 @@ LCon_Main:	; Routine 0
 ; ===========================================================================
 
 LCon_ChkDist:	; Routine 2
-		bsr.w	RangeX
+		shortcut
+		getsonic
+		range_x
 		cmpi.w	#512,d1
 		bcs.s	.exit					; branch if Sonic is < 512px away
 		moveq	#0,d0
 		move.b	ost_respawn(a0),d0			; get respawn id
-		beq.s	.delete					; branch if not set
+		beq.w	DeleteFamily				; branch if not set
 		lea	(v_respawn_list).w,a2
 		bclr	#7,2(a2,d0.w)				; allow object to respawn later
-
-	.delete:
 		bra.w	DeleteFamily				; delete the object and all platforms
 		
 	.exit:
@@ -136,6 +136,7 @@ LConP_Main:	; Routine 0
 		move.l	#LConP_Platform,ost_id(a0)		; skip routine check in future
 
 LConP_Platform:	; Routine 2
+		shortcut
 		move.w	ost_x_pos(a0),ost_x_prev(a0)
 		bsr.s	LCon_Platform_Update
 		bsr.w	SolidObject_TopOnly

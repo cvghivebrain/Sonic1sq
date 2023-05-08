@@ -56,7 +56,6 @@ Bub_Wait:	; Routine 2
 
 	.rand_0_to_5:
 		jsr	(RandomNumber).l
-		move.w	d0,d1
 		andi.w	#7,d0					; d0 = random 0-7
 		cmpi.w	#6,d0
 		bcc.s	.rand_0_to_5				; branch if 6 or 7
@@ -80,18 +79,16 @@ Bub_Active:	; Routine 4
 		subq.w	#1,ost_bubble_wait_time(a0)		; decrement timer
 		bpl.w	.animate				; branch if time remains
 		jsr	(RandomNumber).l
-		move.w	d0,d1
 		andi.w	#$1F,d0
 		move.w	d0,ost_bubble_wait_time(a0)		; set next time (0-31 frames)
 		bsr.w	FindFreeObj				; find free OST slot
 		bne.w	.fail					; branch if not found
 		move.l	#Bubble,ost_id(a1)			; load mini bubble object
 		move.b	#id_Bub_Mini,ost_routine(a1)
-		andi.w	#%111100000,d1
-		lsr.w	#5,d1
-		subq.w	#8,d1
+		andi.w	#$F,d1
+		subq.w	#8,d1					; d1 = random number between -8 and 8
 		add.w	ost_x_pos(a0),d1
-		move.w	d1,ost_x_pos(a1)			; x pos is within 8px left or 8px right
+		move.w	d1,ost_x_pos(a1)			; x pos is within 8px either side of start
 		move.w	ost_x_pos(a0),ost_bubble_x_start(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		move.l	ost_mappings(a0),ost_mappings(a1)
