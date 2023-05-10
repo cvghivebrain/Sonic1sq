@@ -125,7 +125,7 @@ Pow_Invincible:
 		jsr	UncPLC					; load stars gfx
 		tst.b	(f_boss_boundary).w			; is boss mode on?
 		bne.s	.skip_music				; if yes, branch
-		cmpi.w	#air_alert,(v_air).w
+		cmpi.b	#air_alert,(v_air).w
 		bls.s	.skip_music
 		play.w	0, jmp, mus_Invincible			; play invincibility music
 

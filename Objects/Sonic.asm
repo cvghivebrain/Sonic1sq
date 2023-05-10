@@ -119,7 +119,7 @@ Sonic_Display:
 		bne.s	.chkshoes				; if not 0, branch
 		tst.b	(f_boss_boundary).w
 		bne.s	.removeinvincible			; branch if at a boss
-		cmpi.w	#air_alert,(v_air).w			; is air < $C?
+		cmpi.b	#air_alert,(v_air).w			; is air < $C?
 		bcs.s	.removeinvincible			; if yes, branch
 		move.b	(v_bgm).w,d0
 		jsr	(PlaySound0).l				; play normal music
@@ -176,10 +176,6 @@ Sonic_Water:
 		bne.s	.exit					; branch if already set
 
 		bsr.w	ResumeMusic
-		;bsr.w	FindFreeInert
-		;bne.s	.fail
-		;move.l	#DrownCount,ost_id(a1)			; load bubbles object from Sonic's mouth
-		;move.b	#$81,ost_subtype(a1)
 		
 	.fail:
 		move.w	#sonic_max_speed_water,(v_sonic_max_speed).w ; change Sonic's top speed

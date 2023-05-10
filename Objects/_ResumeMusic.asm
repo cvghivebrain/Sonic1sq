@@ -6,7 +6,7 @@
 ; ---------------------------------------------------------------------------
 
 ResumeMusic:
-		cmpi.w	#air_alert,(v_air).w			; more than 12 seconds of air left?
+		cmpi.b	#air_alert,(v_air).w			; more than 12 seconds of air left?
 		bhi.s	.over12					; if yes, branch
 		move.b	(v_bgm).w,d0
 		tst.b	(v_invincibility).w			; is Sonic invincible?
@@ -22,5 +22,5 @@ ResumeMusic:
 		jsr	(PlaySound0).l
 
 	.over12:
-		move.w	#air_full,(v_air).w			; reset air to 30 seconds
+		move.w	#air_full<<8,(v_air).w			; reset air to 30 seconds
 		rts

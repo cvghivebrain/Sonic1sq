@@ -46,7 +46,7 @@ GM_Demo:
 		move.w	#vdp_hint_counter+223,(v_vdp_hint_counter).w ; set palette change position (for water)
 		move.w	(v_vdp_hint_counter).w,(a6)
 		bsr.w	LoadPerZone
-		move.w	#air_full,(v_air).w
+		move.b	#air_full,(v_air).w
 		tst.b	(f_water_enable).w			; is water enabled?
 		beq.s	.skip_water				; if not, branch
 
@@ -114,6 +114,9 @@ Level_Skip_TtlCard:
 		bne.s	.skip_water_surface
 		move.l	#WaterSurface,ost_id(a1)
 		move.w	#$120,ost_x_pos(a1)
+		jsr	FindFreeInert
+		bne.s	.skip_water_surface
+		move.l	#DrownCount,ost_id(a1)			; load object that tracks air and spawns bubbles
 
 	.skip_water_surface:
 		moveq	#0,d0

@@ -1104,7 +1104,6 @@ Level_End_unused:	dc.b 0,	0, 0, 0
 		include "Objects\LZ Conveyor Belt Platforms [Mappings].asm" ; Map_LConv
 		include "Objects\LZ Bubbles [Mappings].asm"	; Map_Bub
 		include "Objects\LZ Waterfall [Mappings].asm"	; Map_WFall
-		include "Objects\LZ Sonic's Drowning Face [Mappings].asm" ; Map_Drown
 		include "Objects\LZ Water Splash [Mappings].asm" ; Map_Splash
 		include "Objects\LZ Door Vertical [Mappings].asm" ; Map_DoorV
 		include "Objects\LZ Door Horizontal [Mappings].asm" ; Map_DoorH

@@ -1,10 +1,9 @@
 ; ---------------------------------------------------------------------------
-; Object 0A - drowning countdown numbers and small bubbles that float out of
-; Sonic's mouth (LZ)
+; Object that depletes Sonic's air, causes drowning and spawns mini bubbles
+;  and countdown numbers
 
 ; spawned by:
-;	SonicPlayer - subtype $81
-;	DrownCount - subtypes 6 (small), $E (medium), 0-5 (numbers)
+;	GM_Level
 ; ---------------------------------------------------------------------------
 
 DrownCount:
@@ -15,14 +14,11 @@ DrownCount:
 ; ===========================================================================
 Drown_Index:	index *,,2
 		ptr Drown_Main
-		ptr Drown_Animate
-		ptr Drown_ChkWater
-		ptr Drown_Display
-		ptr Drown_Delete
-		ptr Drown_Countdown
-		ptr Drown_AirLeft
-		ptr Drown_Display_Num
-		ptr Drown_Delete
+		ptr Drown_NumWait
+		ptr Drown_NumBub
+		ptr Drown_NumSet
+		ptr Drown_NumAnim
+		ptr Drown_NumDel
 
 		rsobj DrownCount
 ost_drown_restart_time:	rs.w 1 ; $2C				; time to restart after Sonic drowns (2 bytes)
@@ -37,125 +33,189 @@ ost_drown_delay_time	rs.w 1 ; $3A				; delay between bubbles (2 bytes)
 ; ===========================================================================
 
 Drown_Main:	; Routine 0
-		addq.b	#2,ost_routine(a0)			; goto Drown_Animate next
-		move.l	#Map_Bub,ost_mappings(a0)
-		move.w	#tile_Kos_Bubbles+tile_hi,ost_tile(a0)
-		move.b	#render_onscreen+render_rel,ost_render(a0)
-		move.b	#$10,ost_displaywidth(a0)
-		move.b	#1,ost_priority(a0)
-		move.b	ost_subtype(a0),d0			; get bubble type (first bubble is $81)
-		bpl.s	.bubble_or_num				; branch if $00-$7F
-
-		addq.b	#8,ost_routine(a0)			; goto Drown_Countdown next
-		move.l	#Map_Drown,ost_mappings(a0)
-		move.w	#0,ost_tile(a0)				; Sonic's face holding his breath (REV00 only)
-		andi.w	#$7F,d0					; ignore high bit of type
-		move.b	d0,ost_drown_type(a0)			; type should be 1
-		bra.w	Drown_Countdown
+		shortcut
+		tst.w	(v_debug_active).w
+		bne.s	.exit					; branch if debug mode is in use
+		getsonic
+		cmpi.b	#id_Sonic_Death,ost_routine(a1)
+		bcc.s	.exit					; branch if Sonic is dead
+		btst	#status_underwater_bit,ost_status(a1)
+		beq.s	.exit					; branch if not underwater
+		subq.b	#1,(v_air_frames).w			; decrement timer
+		bpl.s	.exit					; branch if time remains
+		
+		move.w	ost_x_pos(a1),ost_x_pos(a0)
+		move.w	ost_y_pos(a1),ost_y_pos(a0)
+		move.b	#59,(v_air_frames).w			; reset timer to 1 second
+		moveq	#0,d0
+		move.b	(v_air).w,d0
+		move.b	Drown_Air_List(pc,d0.w),d0		; get routine for this second
+		move.w	Drown_Air_Index(pc,d0.w),d1
+		jsr	Drown_Air_Index(pc,d1.w)
+		subq.b	#1,(v_air).w				; decrement air
+		
+	.exit:
+		rts
+; ===========================================================================
+		
+Drown_Air_List:	dc.b id_Drown_Death				; 0 - Sonic dies
+		dc.b id_Drown_Bubble				; 1 - mini bubble appears
+		dc.b id_Drown_Number				; 2 - number appears
+		dc.b id_Drown_Bubble				; 3
+		dc.b id_Drown_Number				; 4
+		dc.b id_Drown_Bubble				; 5
+		dc.b id_Drown_Number				; 6
+		dc.b id_Drown_Bubble				; 7
+		dc.b id_Drown_Number				; 8
+		dc.b id_Drown_Bubble				; 9
+		dc.b id_Drown_Number				; 10
+		dc.b id_Drown_Bubble				; 11
+		dc.b id_Drown_Music				; 12 - drowning music starts
+		dc.b id_Drown_Bubble				; 13
+		dc.b id_Drown_Bubble				; 14
+		dc.b id_Drown_Ding				; 15 - ding alert
+		dc.b id_Drown_Bubble				; 16
+		dc.b id_Drown_Bubble				; 17
+		dc.b id_Drown_Bubble				; 18
+		dc.b id_Drown_Bubble				; 19
+		dc.b id_Drown_Ding				; 20
+		dc.b id_Drown_Bubble				; 21
+		dc.b id_Drown_Bubble				; 22
+		dc.b id_Drown_Bubble				; 23
+		dc.b id_Drown_Bubble				; 24
+		dc.b id_Drown_Ding				; 25
+		dc.b id_Drown_Bubble				; 26
+		dc.b id_Drown_Bubble				; 27
+		dc.b id_Drown_Bubble				; 28
+		dc.b id_Drown_Bubble				; 29
+		dc.b id_Drown_Bubble				; 30
+		even
+; ===========================================================================
+Drown_Air_Index:	index *,,2
+		ptr Drown_Bubble
+		ptr Drown_Ding
+		ptr Drown_Music
+		ptr Drown_Number
+		ptr Drown_Death
 ; ===========================================================================
 
-.bubble_or_num:
-		move.b	d0,ost_anim(a0)				; use animation from subtype (0-5 = nums; 6 = small bubble; $E = medium)
-		move.w	ost_x_pos(a0),ost_drown_x_start(a0)
-		move.w	#-$88,ost_y_vel(a0)
+Drown_Ding:
+		play.w	1, jsr, sfx_Ding			; play "ding-ding" warning sound
 
-Drown_Animate:	; Routine 2
+Drown_Bubble:
+		bsr.w	FindFreeObj				; find free OST slot
+		bne.s	.fail					; branch if not found
+		move.l	#DelayedBubble,ost_id(a1)		; load mini bubble object
+		jsr	(RandomNumber).l
+		andi.b	#1,d0
+		beq.s	.fail					; branch if random bit is 0
+		movea.l	a1,a2					; copy OST address of first bubble
+		bsr.w	FindFreeObj
+		bne.s	.fail
+		move.l	#DelayedBubble,ost_id(a1)		; load 2nd mini bubble object
+		andi.b	#$F,d1
+		addq.b	#1,d1
+		move.b	d1,ost_anim_time(a1)			; set random delay (1-16) for 2nd bubble
+		
+	.fail:
+		rts
+		
+Drown_Music:
+		play.w	0, jsr, mus_Drowning			; play countdown music
+		
+Drown_Number:
+		bsr.s	Drown_Bubble				; spawn 1 or 2 bubbles
+		move.l	#DrownCount,ost_id(a1)
+		move.b	#id_Drown_NumWait,ost_routine(a1)	; one bubble becomes a number instead
+		rts
+		
+Drown_Death:
+		rts
+; ===========================================================================
+
+Drown_NumWait:	; Routine 2
+		subq.b	#1,ost_anim_time(a0)			; decrement timer
+		bpl.s	.wait					; branch if time remains
+		addq.b	#2,ost_routine(a0)			; goto Drown_NumBub next
+		move.b	#id_ani_drown_smallbubble,ost_anim(a0)
+		bra.w	DelayBub_Setup
+		
+	.wait:
+		rts
+; ===========================================================================
+
+Drown_NumBub:	; Routine 4
 		lea	(Ani_Drown).l,a1
-		jsr	(AnimateSprite).l			; run animation and goto Drown_ChkWater next
-
-Drown_ChkWater:	; Routine 4
+		jsr	(AnimateSprite).l			; animate and goto Drown_NumSet when finished
+		bsr.w	Bub_Move				; move bubble up & sideways
 		move.w	(v_water_height_actual).w,d0
-		cmp.w	ost_y_pos(a0),d0			; has bubble reached the water surface?
-		bcs.s	.wobble					; if not, branch
-
-		move.b	#id_Drown_Display,ost_routine(a0)	; goto Drown_Display next
-		addq.b	#7,ost_anim(a0)
-		cmpi.b	#id_ani_drown_blank,ost_anim(a0)
-		beq.s	Drown_Display
-		bra.s	Drown_Display
+		cmp.w	ost_y_pos(a0),d0
+		bcs.w	DisplaySprite				; branch if bubble is below water
+		rts
 ; ===========================================================================
 
-.wobble:
-		tst.b	(f_water_tunnel_now).w			; is Sonic in a water tunnel?
-		beq.s	.notunnel				; if not, branch
-		addq.w	#4,ost_drown_x_start(a0)
-
-	.notunnel:
-		move.b	ost_angle(a0),d0
-		addq.b	#1,ost_angle(a0)
-		andi.w	#$7F,d0
-		lea	(Drown_WobbleData).l,a1
-		move.b	(a1,d0.w),d0				; get byte from wobble data array based on angle value
-		ext.w	d0
-		add.w	ost_drown_x_start(a0),d0
-		move.w	d0,ost_x_pos(a0)			; update position
-		bsr.s	Drown_ShowNumber
-		jsr	(SpeedToPos).l
-		tst.b	ost_render(a0)				; is object on-screen?
-		bpl.s	.delete					; if not, branch
-		jmp	(DisplaySprite).l
-
-	.delete:
-		jmp	(DeleteObject).l
-; ===========================================================================
-
-Drown_Display:	; Routine 6, Routine $E
-Drown_Display_Num:
-		bsr.s	Drown_ShowNumber
-		lea	(Ani_Drown).l,a1
-		jsr	(AnimateSprite).l
-		jmp	(DisplaySprite).l
-; ===========================================================================
-
-Drown_Delete:	; Routine 8, Routine $10
-		jmp	(DeleteObject).l
-; ===========================================================================
-
-Drown_AirLeft:	; Routine $C
-		cmpi.w	#air_alert,(v_air).w			; check air remaining
-		bhi.s	.delete					; if higher than $C, branch
-		subq.w	#1,ost_drown_num_time(a0)
-		bne.s	.display
-		move.b	#id_Drown_Display_Num,ost_routine(a0)	; goto Drown_Display next
-		addq.b	#7,ost_anim(a0)				; use flashing number animation
-		bra.s	Drown_Display
-; ===========================================================================
-
-	.display:
-		lea	(Ani_Drown).l,a1
-		jsr	(AnimateSprite).l
-		tst.b	ost_render(a0)
-		bpl.s	.delete
-		jmp	(DisplaySprite).l
-
-	.delete:	
-		jmp	(DeleteObject).l
-; ===========================================================================
-
-Drown_ShowNumber:
-		tst.w	ost_drown_num_time(a0)
-		beq.s	.nonumber
-		subq.w	#1,ost_drown_num_time(a0)		; decrement timer
-		bne.s	.nonumber				; if time remains, branch
-		cmpi.b	#id_ani_drown_zeroflash,ost_anim(a0)
-		bcc.s	.nonumber
-
-		move.w	#15,ost_drown_num_time(a0)
-		clr.w	ost_y_vel(a0)
+Drown_NumSet:	; Routine 6
+		move.b	(v_air).w,d0
+		subq.b	#2,d0
+		lsr.b	#1,d0					; convert air to animation id
+		move.b	d0,ost_anim(a0)
+		addq.b	#2,ost_routine(a0)			; goto Drown_NumAnim next
 		move.b	#render_onscreen+render_abs,ost_render(a0)
 		move.w	ost_x_pos(a0),d0
 		sub.w	(v_camera_x_pos).w,d0
-		addi.w	#$80,d0
+		addi.w	#screen_left,d0
 		move.w	d0,ost_x_pos(a0)
 		move.w	ost_y_pos(a0),d0
 		sub.w	(v_camera_y_pos).w,d0
-		addi.w	#$80,d0
-		move.w	d0,ost_y_screen(a0)
-		move.b	#id_Drown_AirLeft,ost_routine(a0)	; goto Drown_AirLeft next
+		addi.w	#screen_top,d0
+		move.w	d0,ost_y_screen(a0)			; fix position to screen
 
-	.nonumber:
-		rts	
+Drown_NumAnim:	; Routine 8
+		lea	(Ani_Drown).l,a1
+		jsr	(AnimateSprite).l			; animate and goto Drown_NumDel when finished
+		bra.w	DisplaySprite
 ; ===========================================================================
+
+Drown_NumDel:	; Routine $A
+		bra.w	DeleteObject
+		
+; ---------------------------------------------------------------------------
+; Mini bubbles that float out of Sonic's mouth
+
+; spawned by:
+;	DrownCount
+; ---------------------------------------------------------------------------
+
+DelayedBubble:
+		subq.b	#1,ost_anim_time(a0)			; decrement timer
+		bpl.s	DelayBub_Wait				; branch if time remains
+		move.l	#Bubble,ost_id(a0)			; convert to mini bubble object
+		move.b	#id_Bub_Mini,ost_routine(a0)
+		move.b	#id_ani_bubble_small,ost_anim(a0)
+		
+DelayBub_Setup:
+		move.l	#Map_Bub,ost_mappings(a0)
+		move.w	#tile_Kos_Bubbles+tile_hi,ost_tile(a0)
+		move.b	#render_rel+render_onscreen,ost_render(a0)
+		move.b	#4,ost_displaywidth(a0)
+		move.b	#1,ost_priority(a0)
+		move.w	#-$88,ost_y_vel(a0)
+		moveq	#6,d0					; 6 pixels to right
+		getsonic
+		btst	#status_xflip_bit,ost_status(a1)
+		beq.s	.noflip					; branch if Sonic is facing right
+		neg.w	d0					; 6 pixels to left
+		move.b	#$40,ost_angle(a0)			; start moving left
+
+	.noflip:
+		add.w	ost_x_pos(a1),d0
+		move.w	d0,ost_x_pos(a0)
+		move.w	ost_x_pos(a0),ost_bubble_x_start(a0)
+		move.w	ost_y_pos(a1),ost_y_pos(a0)
+		
+DelayBub_Wait:
+		rts
+		
 ; ---------------------------------------------------------------------------
 ; Data for a bubble's side-to-side wobble (also used by REV01's underwater
 ; background ripple effect)
@@ -338,95 +398,60 @@ Ani_Drown:	index *
 		ptr ani_drown_threeappear
 		ptr ani_drown_fourappear
 		ptr ani_drown_fiveappear
-		ptr ani_drown_smallbubble			; 6
-		ptr ani_drown_zeroflash				; 7
-		ptr ani_drown_oneflash				; 8
-		ptr ani_drown_twoflash				; 9
-		ptr ani_drown_threeflash			; $A
-		ptr ani_drown_fourflash				; $B
-		ptr ani_drown_fiveflash				; $C
-		ptr ani_drown_blank				; $D
-		ptr ani_drown_mediumbubble			; $E
+		ptr ani_drown_smallbubble
+		ptr ani_drown_zeroflash
+		ptr ani_drown_oneflash
+		ptr ani_drown_twoflash
+		ptr ani_drown_threeflash
+		ptr ani_drown_fourflash
+		ptr ani_drown_fiveflash
+		ptr ani_drown_blank
+		ptr ani_drown_mediumbubble
 		
 ani_drown_zeroappear:
 		dc.w 5
-		dc.w id_frame_bubble_0
-		dc.w id_frame_bubble_1
-		dc.w id_frame_bubble_2
-		dc.w id_frame_bubble_3
-		dc.w id_frame_bubble_4
 		dc.w id_frame_bubble_zero_small
 		dc.w id_frame_bubble_zero
-		dc.w id_Anim_Flag_Routine
-		even
+		dc.w id_Anim_Flag_Change, id_ani_drown_zeroflash
 
 ani_drown_oneappear:
 		dc.w 5
-		dc.w id_frame_bubble_0
-		dc.w id_frame_bubble_1
-		dc.w id_frame_bubble_2
-		dc.w id_frame_bubble_3
-		dc.w id_frame_bubble_4
 		dc.w id_frame_bubble_one_small
 		dc.w id_frame_bubble_one
-		dc.w id_Anim_Flag_Routine
-		even
+		dc.w id_Anim_Flag_Change, id_ani_drown_oneflash
 
 ani_drown_twoappear:
 		dc.w 5
-		dc.w id_frame_bubble_0
-		dc.w id_frame_bubble_1
-		dc.w id_frame_bubble_2
-		dc.w id_frame_bubble_3
-		dc.w id_frame_bubble_4
 		dc.w id_frame_bubble_one_small
 		dc.w id_frame_bubble_two
-		dc.w id_Anim_Flag_Routine
-		even
+		dc.w id_Anim_Flag_Change, id_ani_drown_twoflash
 
 ani_drown_threeappear:
 		dc.w 5
-		dc.w id_frame_bubble_0
-		dc.w id_frame_bubble_1
-		dc.w id_frame_bubble_2
-		dc.w id_frame_bubble_3
-		dc.w id_frame_bubble_4
 		dc.w id_frame_bubble_three_small
 		dc.w id_frame_bubble_three
-		dc.w id_Anim_Flag_Routine
-		even
+		dc.w id_Anim_Flag_Change, id_ani_drown_threeflash
 
 ani_drown_fourappear:
 		dc.w 5
-		dc.w id_frame_bubble_0
-		dc.w id_frame_bubble_1
-		dc.w id_frame_bubble_2
-		dc.w id_frame_bubble_3
-		dc.w id_frame_bubble_4
 		dc.w id_frame_bubble_zero_small
 		dc.w id_frame_bubble_four
-		dc.w id_Anim_Flag_Routine
-		even
+		dc.w id_Anim_Flag_Change, id_ani_drown_fourflash
 
 ani_drown_fiveappear:
+		dc.w 5
+		dc.w id_frame_bubble_five_small
+		dc.w id_frame_bubble_five
+		dc.w id_Anim_Flag_Change, id_ani_drown_fiveflash
+
+ani_drown_smallbubble:
 		dc.w 5
 		dc.w id_frame_bubble_0
 		dc.w id_frame_bubble_1
 		dc.w id_frame_bubble_2
 		dc.w id_frame_bubble_3
 		dc.w id_frame_bubble_4
-		dc.w id_frame_bubble_five_small
-		dc.w id_frame_bubble_five
 		dc.w id_Anim_Flag_Routine
-		even
-
-ani_drown_smallbubble:
-		dc.w $E
-		dc.w id_frame_bubble_0
-		dc.w id_frame_bubble_1
-		dc.w id_frame_bubble_2
-		dc.w id_Anim_Flag_Routine
-		even
 
 ani_drown_zeroflash:
 		dc.w 7
@@ -499,4 +524,3 @@ ani_drown_mediumbubble:
 		dc.w id_frame_bubble_3
 		dc.w id_frame_bubble_4
 		dc.w id_Anim_Flag_Routine
-		even

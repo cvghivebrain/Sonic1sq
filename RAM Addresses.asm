@@ -297,7 +297,8 @@ v_act:				equ __rs-1 ; current act number
 v_zone_next:			rs.w 1 ; next zone number
 v_act_next:			equ __rs-1 ; next act number
 v_lives:			rs.b 1 ; number of lives
-v_air:				rs.w 1 ; air remaining while underwater (2 bytes)
+v_air:				rs.w 1 ; air remaining while underwater in seconds
+v_air_frames:			equ __rs-1
 v_last_ss_levelid:		rs.b 1 ; level id of most recent special stage played
 v_continues:			rs.b 1 ; number of continues
 f_time_over:			rs.b 1 ; time over flag

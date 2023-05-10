@@ -3,7 +3,11 @@
 
 ; spawned by:
 ;	ObjPos_LZ1, ObjPos_LZ2, ObjPos_LZ3, ObjPos_SBZ3 - subtypes $80/$81/$82
-;	Bubble
+;	Bubble - routines 6/$A
+
+; subtypes:
+;	%0000NNNN
+;	NNNN - number of bubble cycles that don't have a large bubble
 ; ---------------------------------------------------------------------------
 
 Bubble:
