@@ -21,14 +21,7 @@ Drown_Index:	index *,,2
 		ptr Drown_NumDel
 
 		rsobj DrownCount
-ost_drown_restart_time:	rs.w 1 ; $2C				; time to restart after Sonic drowns (2 bytes)
-ost_drown_x_start:	rs.w 1 ; $30				; original x-axis position (2 bytes)
-ost_drown_disp_time:	rs.b 1 ; $32				; time to display each number
-ost_drown_type:		rs.b 1 ; $33				; bubble type
-ost_drown_extra_bub:	rs.b 1 ; $34				; number of extra bubbles to create
-ost_drown_extra_flag:	rs.w 1 ; $36				; flags for extra bubbles (2 bytes)
-ost_drown_num_time:	rs.w 1 ; $38				; time between each number changes (2 bytes)
-ost_drown_delay_time	rs.w 1 ; $3A				; delay between bubbles (2 bytes)
+ost_drown_restart_time:	rs.w 1					; time to restart after Sonic drowns (2 bytes)
 		rsobjend
 ; ===========================================================================
 
@@ -125,12 +118,89 @@ Drown_Music:
 		
 Drown_Number:
 		bsr.s	Drown_Bubble				; spawn 1 or 2 bubbles
+		tst.b	ost_anim_time(a1)
+		beq.s	.convert_bubble				; branch if only 1 bubble was spawned
+		jsr	(RandomNumber).l
+		andi.b	#1,d0
+		beq.s	.convert_bubble				; branch if random bit is 0
+		movea.l	a2,a1					; select first bubble
+		
+	.convert_bubble:
 		move.l	#DrownCount,ost_id(a1)
-		move.b	#id_Drown_NumWait,ost_routine(a1)	; one bubble becomes a number instead
+		move.b	#id_Drown_NumWait,ost_routine(a1)	; one bubble becomes a number
+		move.b	(v_air).w,ost_subtype(a1)		; copy air at time of spawning
 		rts
 		
 Drown_Death:
+		bsr.w	ResumeMusic
+		move.b	#$81,(v_lock_multi).w			; lock controls
+		play.w	1, jsr, sfx_Drown			; play drowning sound
+		move.b	#11,ost_subtype(a0)			; create 11 bubbles
+		move.w	#120,ost_drown_restart_time(a0)		; restart after 2 seconds
+		jsr	(RandomNumber).l
+		andi.b	#$F,d0					; d0 = 0-15
+		move.b	d0,ost_anim_time(a0)			; time until first bubble
+		getsonic					; a1 = OST of Sonic
+		exg	a0,a1					; use Sonic's OST temporarily
+		bsr.w	Sonic_ResetOnFloor			; clear Sonic's status flags
+		move.b	#id_Drown,ost_anim(a0)			; use Sonic's drowning animation
+		bset	#status_air_bit,ost_status(a0)
+		bset	#tile_hi_bit,ost_tile(a0)		; Sonic appears in front of foreground
+		move.w	#0,ost_y_vel(a0)
+		move.w	#0,ost_x_vel(a0)
+		move.w	#0,ost_inertia(a0)
+		move.b	#1,(f_disable_scrolling).w
+		exg	a0,a1					; restore OST
+		
+		shortcut
+		getsonic a2					; a2 = OST of Sonic
+		subq.w	#1,ost_drown_restart_time(a0)		; decrement timer
+		bne.s	.delay_death				; branch if time remains
+		move.b	#id_Sonic_Death,ost_routine(a2)		; kill Sonic
 		rts
+		
+	.delay_death:
+		exg	a0,a2					; use Sonic's OST temporarily
+		update_y_fall	$10				; update Sonic's position & apply gravity
+		exg	a0,a2					; restore OST
+		tst.b	ost_subtype(a0)
+		beq.w	.fail					; branch if bubble counter hits 0
+		subq.b	#1,ost_anim_time(a0)			; decrement bubble timer
+		bmi.s	.spawn_bubble				; branch if time runs out
+		rts
+		
+	.spawn_bubble:
+		subq.b	#1,ost_subtype(a0)			; decrement bubble counter
+		jsr	(RandomNumber).l
+		andi.b	#7,d0					; d0 = 0-7
+		addq.b	#1,d0					; d0 = 1-8
+		move.b	d0,ost_anim_time(a0)			; time until next bubble
+		bsr.w	FindFreeObj				; find free OST slot
+		bne.s	.fail					; branch if not found
+		
+		move.l	#Bubble,ost_id(a1)			; load mini bubble object
+		move.b	#id_Bub_Mini,ost_routine(a1)
+		move.b	#id_ani_bubble_small,ost_anim(a1)
+		move.l	#Map_Bub,ost_mappings(a1)
+		move.w	#tile_Kos_Bubbles+tile_hi,ost_tile(a1)
+		move.b	#render_rel+render_onscreen,ost_render(a1)
+		move.b	#8,ost_displaywidth(a1)
+		move.b	#1,ost_priority(a1)
+		move.w	#-$88,ost_y_vel(a1)
+		move.b	d1,ost_angle(a1)			; random movement
+		move.w	ost_x_pos(a2),ost_x_pos(a1)
+		move.w	ost_x_pos(a1),ost_bubble_x_start(a1)
+		move.w	ost_y_pos(a2),d0
+		subi.w	#$C,d0
+		move.w	d0,ost_y_pos(a1)
+		move.b	(v_frame_counter_low).w,d0
+		andi.b	#3,d0
+		bne.s	.fail
+		move.b	#id_ani_bubble_medium,ost_anim(a1)	; 25% chance of medium bubble
+		
+	.fail:
+		rts
+		
 ; ===========================================================================
 
 Drown_NumWait:	; Routine 2
@@ -155,7 +225,7 @@ Drown_NumBub:	; Routine 4
 ; ===========================================================================
 
 Drown_NumSet:	; Routine 6
-		move.b	(v_air).w,d0
+		move.b	ost_subtype(a0),d0			; get air value from time of spawning
 		subq.b	#2,d0
 		lsr.b	#1,d0					; convert air to animation id
 		move.b	d0,ost_anim(a0)
@@ -232,160 +302,6 @@ LZ_BG_Ripple_Data:
 		dc.b -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -3
 		dc.b -3, -3, -3, -3, -3, -3, -2, -2, -2, -2, -2, -1, -1, -1, -1, -1
 		endr
-; ===========================================================================
-
-Drown_Countdown:; Routine $A
-		tst.w	ost_drown_restart_time(a0)		; has Sonic drowned?
-		bne.w	.kill_sonic				; if yes, branch
-		cmpi.b	#id_Sonic_Death,(v_ost_player+ost_routine).w ; is Sonic dead?
-		bcc.w	.nocountdown				; if yes, branch
-		btst	#status_underwater_bit,(v_ost_player+ost_status).w ; is Sonic underwater?
-		beq.w	.nocountdown				; if not, branch
-
-		subq.w	#1,ost_drown_num_time(a0)		; decrement timer between countdown number changes
-		bpl.w	.create_bubble				; branch if time remains
-		move.w	#59,ost_drown_num_time(a0)		; set timer to 1 second
-		move.w	#1,ost_drown_extra_flag(a0)
-		jsr	(RandomNumber).l
-		andi.w	#1,d0					; random number 0 or 1
-		move.b	d0,ost_drown_extra_bub(a0)
-		move.w	(v_air).w,d0				; check air remaining
-		cmpi.w	#air_ding1,d0
-		beq.s	.warnsound				; play sound if	air is 25
-		cmpi.w	#air_ding2,d0
-		beq.s	.warnsound				; play sound if	air is 20
-		cmpi.w	#air_ding3,d0
-		beq.s	.warnsound				; play sound if	air is 15
-		cmpi.w	#air_alert,d0
-		bhi.s	.reduceair				; if air is above 12, branch
-
-		bne.s	.skipmusic				; if air is less than 12, branch
-		play.w	0, jsr, mus_Drowning			; play countdown music
-
-	.skipmusic:
-		subq.b	#1,ost_drown_disp_time(a0)		; decrement display timer
-		bpl.s	.reduceair				; branch if time remains
-		move.b	ost_drown_type(a0),ost_drown_disp_time(a0) ; reset timer (1)
-		bset	#7,ost_drown_extra_flag(a0)
-		bra.s	.reduceair
-; ===========================================================================
-
-.warnsound:
-		play.w	1, jsr, sfx_Ding			; play "ding-ding" warning sound
-
-.reduceair:
-		subq.w	#1,(v_air).w				; decrement air remaining
-		bcc.w	.gotomakenum				; if air is above 0, branch
-
-		; Sonic drowns here
-		bsr.w	ResumeMusic
-		move.b	#$81,(v_lock_multi).w			; lock controls
-		play.w	1, jsr, sfx_Drown			; play drowning sound
-		move.b	#$A,ost_drown_extra_bub(a0)
-		move.w	#1,ost_drown_extra_flag(a0)
-		move.w	#120,ost_drown_restart_time(a0)		; restart after 2 seconds
-		move.l	a0,-(sp)				; save OST address to stack
-		lea	(v_ost_player).w,a0			; use Sonic's OST temporarily
-		bsr.w	Sonic_ResetOnFloor			; clear Sonic's status flags
-		move.b	#id_Drown,ost_anim(a0)			; use Sonic's drowning animation
-		bset	#status_air_bit,ost_status(a0)
-		bset	#tile_hi_bit,ost_tile(a0)
-		move.w	#0,ost_y_vel(a0)
-		move.w	#0,ost_x_vel(a0)
-		move.w	#0,ost_inertia(a0)
-		move.b	#1,(f_disable_scrolling).w
-		movea.l	(sp)+,a0				; restore OST from stack
-		rts	
-; ===========================================================================
-
-.kill_sonic:
-		subq.w	#1,ost_drown_restart_time(a0)		; decrement delay timer after drowning
-		bne.s	.delay_death				; branch if time remains
-		move.b	#id_Sonic_Death,(v_ost_player+ost_routine).w ; kill Sonic
-		rts	
-; ===========================================================================
-
-	.delay_death:
-		move.l	a0,-(sp)				; save OST address to stack
-		lea	(v_ost_player).w,a0			; use Sonic's OST temporarily
-		jsr	(SpeedToPos).l				; update Sonic's position
-		addi.w	#$10,ost_y_vel(a0)			; make Sonic fall
-		movea.l	(sp)+,a0				; restore OST
-		bra.s	.create_bubble
-; ===========================================================================
-
-.gotomakenum:
-		bra.s	.makenum
-; ===========================================================================
-
-.create_bubble:
-		tst.w	ost_drown_extra_flag(a0)		; should bubbles/numbers be spawned?
-		beq.w	.nocountdown				; if not, branch
-		subq.w	#1,ost_drown_delay_time(a0)		; decrement timer between bubble spawning
-		bpl.w	.nocountdown				; branch if time remains
-
-.makenum:
-		jsr	(RandomNumber).l
-		andi.w	#$F,d0
-		move.w	d0,ost_drown_delay_time(a0)		; set timer as random 0-15 frames
-		jsr	(FindFreeObj).l				; find free OST slot
-		bne.w	.nocountdown				; branch if not found
-		move.l	#DrownCount,ost_id(a1)			; load object
-		move.w	(v_ost_player+ost_x_pos).w,ost_x_pos(a1)
-		moveq	#6,d0					; 6 pixels to right
-		btst	#status_xflip_bit,(v_ost_player+ost_status).w ; is Sonic facing left?
-		beq.s	.noflip					; if not, branch
-		neg.w	d0					; 6 pixels to left
-		move.b	#$40,ost_angle(a1)
-
-	.noflip:
-		add.w	d0,ost_x_pos(a1)
-		move.w	(v_ost_player+ost_y_pos).w,ost_y_pos(a1)
-		move.b	#id_ani_drown_smallbubble,ost_subtype(a1) ; object is small bubble (6)
-		tst.w	ost_drown_restart_time(a0)		; has Sonic drowned?
-		beq.w	.not_dead				; if not, branch
-		andi.w	#7,ost_drown_delay_time(a0)		; cut time between bubbles to 7 frames or less
-		addi.w	#0,ost_drown_delay_time(a0)
-		move.w	(v_ost_player+ost_y_pos).w,d0
-		subi.w	#$C,d0
-		move.w	d0,ost_y_pos(a1)
-		jsr	(RandomNumber).l
-		move.b	d0,ost_angle(a1)
-		move.w	(v_frame_counter).w,d0
-		andi.b	#3,d0
-		bne.s	.loc_14082
-		move.b	#id_ani_drown_mediumbubble,ost_subtype(a1) ; object is medium bubble ($E)
-		bra.s	.loc_14082
-; ===========================================================================
-
-.not_dead:
-		btst	#7,ost_drown_extra_flag(a0)
-		beq.s	.loc_14082
-		move.w	(v_air).w,d2				; get air remaining
-		lsr.w	#1,d2					; divide by 2
-		jsr	(RandomNumber).l
-		andi.w	#3,d0
-		bne.s	.loc_1406A
-		bset	#6,ost_drown_extra_flag(a0)
-		bne.s	.loc_14082
-		move.b	d2,ost_subtype(a1)			; object is a number (0-5)
-		move.w	#28,ost_drown_num_time(a1)
-
-	.loc_1406A:
-		tst.b	ost_drown_extra_bub(a0)
-		bne.s	.loc_14082
-		bset	#6,ost_drown_extra_flag(a0)
-		bne.s	.loc_14082
-		move.b	d2,ost_subtype(a1)
-		move.w	#28,ost_drown_num_time(a1)
-
-.loc_14082:
-		subq.b	#1,ost_drown_extra_bub(a0)
-		bpl.s	.nocountdown
-		clr.w	ost_drown_extra_flag(a0)
-
-.nocountdown:
-		rts	
 
 ; ---------------------------------------------------------------------------
 ; Animation script
@@ -405,8 +321,6 @@ Ani_Drown:	index *
 		ptr ani_drown_threeflash
 		ptr ani_drown_fourflash
 		ptr ani_drown_fiveflash
-		ptr ani_drown_blank
-		ptr ani_drown_mediumbubble
 		
 ani_drown_zeroappear:
 		dc.w 5
@@ -511,16 +425,4 @@ ani_drown_fiveflash:
 		dc.w id_frame_bubble_five
 		dc.w id_frame_bubble_blank
 		dc.w id_frame_bubble_five
-		dc.w id_Anim_Flag_Routine
-
-ani_drown_blank:
-		dc.w $E
-		dc.w id_Anim_Flag_Routine
-
-ani_drown_mediumbubble:
-		dc.w $E
-		dc.w id_frame_bubble_1
-		dc.w id_frame_bubble_2
-		dc.w id_frame_bubble_3
-		dc.w id_frame_bubble_4
 		dc.w id_Anim_Flag_Routine
