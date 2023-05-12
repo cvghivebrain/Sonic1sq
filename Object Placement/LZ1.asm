@@ -15,10 +15,10 @@ ObjPos_LZ1:
 		objpos $05F0,$00F0,Monitor,type_monitor_shield,rem
 		objpos $05F0,$01F8,Button,$00
 		objpos $0608,$01A0,LabyrinthDoorV,0,rem
-		objpos $0640,$01F8,Bubble,$80
+		objpos $0640,$01F8,BubbleMaker,0
 		objpos $0710,$0190,Rings,$41,rem
 		objpos $0720,$0130,LabyrinthDoorH,1,rem
-		objpos $0720,$01F8,Bubble,$80
+		objpos $0720,$01F8,BubbleMaker,0
 		objpos $0728,$0190,Rings,$10,rem
 		objpos $0730,$0210,Burrobot,$00,rem
 		objpos $0750,$00F1,Monitor,type_monitor_rings,rem
@@ -29,9 +29,9 @@ ObjPos_LZ1:
 		objpos $08D0,$0110,Burrobot,$00,rem
 		objpos $0910,$02F1,Monitor,type_monitor_rings,rem
 		objpos $0920,$0110,Burrobot,$00,rem
-		objpos $0940,$02F8,Bubble,$80
+		objpos $0940,$02F8,BubbleMaker,0
 		objpos $09B0,$0170,Jaws,$0C,xflip,rem
-		objpos $09B0,$0198,Bubble,$81
+		objpos $09B0,$0198,BubbleMaker,1
 		objpos $09B0,$0280,Jaws,$06,rem
 		objpos $09C0,$0108,HalfBlock,2
 		objpos $09F8,$02A0,LabyrinthDoorV,2,rem
@@ -39,12 +39,12 @@ ObjPos_LZ1:
 		objpos $0A20,$0230,Spikes,type_spike_3upwide+type_spike_still,yflip
 		objpos $0A20,$0298,Jaws,$06,xflip,rem
 		objpos $0A20,$030C,LabyrinthPlatform
-		objpos $0A50,$0318,Bubble,$80
+		objpos $0A50,$0318,BubbleMaker,0
 		objpos $0A5C,$0250,Rings,$44,rem
 		objpos $0AA0,$0270,Spikes,type_spike_3upwide+type_spike_still,yflip
 		objpos $0AA0,$0348,LabyrinthPlatform
-		objpos $0AA8,$0238,Bubble,$80
-		objpos $0AC0,$0338,Bubble,$81
+		objpos $0AA8,$0238,BubbleMaker,0
+		objpos $0AC0,$0338,BubbleMaker,1
 		objpos $0AE0,$0210,Jaws,$06,rem
 		objpos $0AF0,$02D8,Button,$03
 		objpos $0AF0,$02F0,LabyrinthBlock,type_lblock_solid
@@ -53,8 +53,8 @@ ObjPos_LZ1:
 		objpos $0BE4,$01F0,Spikes,type_spike_6upwide+type_spike_still
 		objpos $0C20,$0330,Spikes,type_spike_3upwide+type_spike_still,yflip
 		objpos $0C20,$0450,LabyrinthPlatform
-		objpos $0C20,$04F8,Bubble,$81
-		objpos $0C40,$0458,Bubble,$80
+		objpos $0C20,$04F8,BubbleMaker,1
+		objpos $0C40,$0458,BubbleMaker,0
 		objpos $0C4C,$0310,Spikes,type_spike_3up+type_spike_still,yflip
 		objpos $0C60,$00B0,Spikes,type_spike_3upwide+type_spike_still
 		objpos $0C7C,$0310,Spikes,type_spike_3up+type_spike_still,yflip
@@ -65,10 +65,10 @@ ObjPos_LZ1:
 		objpos $0CDC,$0310,Spikes,type_spike_3up+type_spike_still,yflip
 		objpos $0CE0,$0090,Burrobot,$00,rem
 		objpos $0D30,$0470,Jaws,$0A,xflip,rem
-		objpos $0D40,$04F8,Bubble,$81
+		objpos $0D40,$04F8,BubbleMaker,1
 		objpos $0D5C,$044C,Rings,$13,rem
 		objpos $0DD0,$0488,Jaws,$0A,rem
-		objpos $0DE0,$04F8,Bubble,$81
+		objpos $0DE0,$04F8,BubbleMaker,1
 		objpos $0E60,$0440,SpikeBall,$B5
 		objpos $0E90,$0054,Rings,$10,rem
 		objpos $0EC8,$03F0,Rings,$12,rem
@@ -80,7 +80,7 @@ ObjPos_LZ1:
 		objpos $0F88,$0140,Waterfall,type_wfall_diagonal,xflip
 		objpos $0FA0,$0510,Burrobot,$00,xflip,rem
 		objpos $0FA8,$0150,Waterfall,type_wfall_diagonal,xflip
-		objpos $0FB0,$04F8,Bubble,$80
+		objpos $0FB0,$04F8,BubbleMaker,0
 		objpos $0FB8,$02B0,Rings,$12,rem
 		objpos $0FC0,$0410,LabyrinthDoorH,4,rem
 		objpos $0FC8,$0160,Waterfall,type_wfall_diagonal,xflip
@@ -92,7 +92,7 @@ ObjPos_LZ1:
 		objpos $1020,$0210,Spikes,type_spike_3up+type_spike_still,yflip
 		objpos $102F,$024C,Wheel,0
 		objpos $102F,$0387,Wheel,0
-		objpos $1030,$04F8,Bubble,$81
+		objpos $1030,$04F8,BubbleMaker,1
 		objpos $1050,$0330,LabyrinthBlock,type_lblock_solid
 		objpos $1050,$05D8,Harpoon,type_harp_v,rem
 		objpos $1058,$0350,Rings,$12,rem
@@ -102,10 +102,10 @@ ObjPos_LZ1:
 		objpos $1076,$022C,Wheel,0
 		objpos $108B,$03B2,Wheel,0
 		objpos $1090,$0330,LabyrinthBlock,type_lblock_solid
-		objpos $10A0,$05E8,Bubble,$80
+		objpos $10A0,$05E8,BubbleMaker,0
 		objpos $10B1,$0266,Wheel,0
 		objpos $10B1,$038D,Wheel,0
-		objpos $10C0,$03F8,Bubble,$81
+		objpos $10C0,$03F8,BubbleMaker,1
 		objpos $10D0,$05F8,Button,$85
 		objpos $10E0,$0210,Spikes,type_spike_3up+type_spike_still,yflip
 		objpos $10F0,$0268,Button,$04
@@ -178,7 +178,7 @@ ObjPos_LZ1:
 		objpos $1700,$0110,Burrobot,$00,rem
 		objpos $1730,$0110,Burrobot,$00,rem
 		objpos $1750,$0130,LabyrinthBlock,type_lblock_solid
-		objpos $1750,$0278,Bubble,$81
+		objpos $1750,$0278,BubbleMaker,1
 		objpos $1788,$01F8,Harpoon,type_harp_h,rem
 		objpos $1798,$0198,Harpoon,type_harp_h,xflip,rem
 		objpos $17A0,$0130,LabyrinthDoorH,$A,xflip,rem

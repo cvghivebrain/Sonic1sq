@@ -6,15 +6,15 @@ ObjPos_LZ2:
 		objpos $0090,$0451,Monitor,type_monitor_rings,rem
 		objpos $00B0,$0460,Jaws,$0C,xflip,rem
 		objpos $00B8,$00B8,Rings,$12,rem
-		objpos $00E0,$0478,Bubble,$81
+		objpos $00E0,$0478,BubbleMaker,1
 		objpos $0130,$0430,Jaws,$0A,rem
 		objpos $0160,$0370,Spikes,type_spike_3up+type_spike_still,yflip
 		objpos $0160,$03E0,Orbinaut,$00,xflip,rem
 		objpos $01A0,$0370,Spikes,type_spike_3up+type_spike_still,yflip
-		objpos $01C0,$03F8,Bubble,$81
+		objpos $01C0,$03F8,BubbleMaker,1
 		objpos $0210,$04C0,SpikeBall,$C4
 		objpos $0230,$0390,Jaws,$0A,xflip,rem
-		objpos $0240,$03F8,Bubble,$80
+		objpos $0240,$03F8,BubbleMaker,0
 		objpos $0250,$0110,Burrobot,$00,rem
 		objpos $0250,$0350,Rings,$14,rem
 		objpos $0260,$0450,Rings,$13,rem
@@ -30,10 +30,10 @@ ObjPos_LZ2:
 		objpos $0358,$0120,Waterfall,type_wfall_splash
 		objpos $0368,$0130,Waterfall,type_wfall_diagonal,xflip
 		objpos $0388,$0140,Waterfall,type_wfall_diagonal,xflip
-		objpos $0390,$03F8,Bubble,$82
+		objpos $0390,$03F8,BubbleMaker,2
 		objpos $03A8,$0150,Waterfall,type_wfall_diagonal,xflip
 		objpos $03B4,$00F0,Spikes,type_spike_3upwide+type_spike_still,yflip
-		objpos $03C0,$04F8,Bubble,$81
+		objpos $03C0,$04F8,BubbleMaker,1
 		objpos $03C8,$0160,Waterfall,type_wfall_diagonal,xflip
 		objpos $03D0,$02B0,Spikes,type_spike_3upwide+type_spike_still,yflip
 		objpos $03E8,$0170,Waterfall,type_wfall_diagonal,xflip
@@ -43,7 +43,7 @@ ObjPos_LZ2:
 		objpos $03FC,$0328,Waterfall,type_wfall_splash_match
 		objpos $0408,$0180,Waterfall,type_wfall_diagonal,xflip
 		objpos $0430,$0510,Burrobot,$00,rem
-		objpos $0490,$04A8,Bubble,$81
+		objpos $0490,$04A8,BubbleMaker,1
 		objpos $0490,$04C0,Burrobot,$00,rem
 		objpos $04C8,$0420,FlapDoor,$02,rem
 		objpos $04E0,$0230,Spikes,type_spike_3upwide+type_spike_still,yflip
@@ -64,7 +64,7 @@ ObjPos_LZ2:
 		objpos $0770,$0190,Rings,$46,rem
 		objpos $0770,$04F8,Springs,type_spring_red+type_spring_up
 		objpos $0788,$0330,Rings,$12,rem
-		objpos $07A0,$04F8,Bubble,$80
+		objpos $07A0,$04F8,BubbleMaker,0
 		objpos $07D0,$029C,Button,$02
 		objpos $07D0,$02A1,Monitor,type_monitor_rings,rem
 		objpos $07D0,$0441,Monitor,type_monitor_shield,rem
@@ -73,9 +73,9 @@ ObjPos_LZ2:
 		objpos $07F0,$0458,Jaws,$06,xflip,rem
 		objpos $0808,$01F0,Rings,$12,rem
 		objpos $0810,$0610,LabyrinthBlock,type_lblock_sink
-		objpos $0820,$0678,Bubble,$80
+		objpos $0820,$0678,BubbleMaker,0
 		objpos $0828,$0350,Rings,$12,rem
-		objpos $0830,$04F8,Bubble,$80
+		objpos $0830,$04F8,BubbleMaker,0
 		objpos $0830,$0610,LabyrinthBlock,type_lblock_sink
 		objpos $0840,$0390,Spikes,type_spike_3upwide+type_spike_still,yflip
 		objpos $0860,$05E4,Orbinaut,$00,xflip,rem
@@ -86,7 +86,7 @@ ObjPos_LZ2:
 		objpos $08F0,$0391,Monitor,type_monitor_rings,rem
 		objpos $0910,$06C8,Harpoon,type_harp_v,yflip,rem
 		objpos $0930,$0670,Jaws,$09,xflip,rem
-		objpos $0940,$06F8,Bubble,$80
+		objpos $0940,$06F8,BubbleMaker,0
 		objpos $0948,$01A0,LabyrinthDoorV,2,rem
 		objpos $0970,$05C0,SpikeBall,$54
 		objpos $09C0,$0310,LabyrinthDoorH,0,rem
@@ -96,9 +96,9 @@ ObjPos_LZ2:
 		objpos $09E0,$05B0,Spikes,type_spike_3upwide+type_spike_still,yflip
 		objpos $09F0,$06C8,Harpoon,type_harp_v,yflip,rem
 		objpos $0A10,$03F8,Rings,$42,rem
-		objpos $0A10,$0438,Bubble,$81
+		objpos $0A10,$0438,BubbleMaker,1
 		objpos $0A20,$0510,Spikes,type_spike_3upwide+type_spike_still,yflip
-		objpos $0A20,$05F8,Bubble,$81
+		objpos $0A20,$05F8,BubbleMaker,1
 		objpos $0A40,$0498,Rings,$41,rem
 		objpos $0A58,$0210,Harpoon,type_harp_h,xflip,rem
 		objpos $0A68,$0250,Harpoon,type_harp_h,xflip,rem
@@ -106,12 +106,12 @@ ObjPos_LZ2:
 		objpos $0A90,$02F8,Button,$00
 		objpos $0A90,$04F8,Button,$01
 		objpos $0A98,$04B0,Harpoon,type_harp_h,xflip,rem
-		objpos $0AC0,$06F8,Bubble,$80
+		objpos $0AC0,$06F8,BubbleMaker,0
 		objpos $0AE0,$06E4,Orbinaut,$00,rem
 		objpos $0AF0,$01F1,Monitor,type_monitor_invincible,rem
 		objpos $0B00,$0200,SpikeBall,$D5
 		objpos $0B50,$0680,SpikeBall,$C5
-		objpos $0BC0,$05F8,Bubble,$80
+		objpos $0BC0,$05F8,BubbleMaker,0
 		objpos $0C40,$05D0,Orbinaut,$00,rem
 		objpos $0C50,$0570,Rings,$14,rem
 		objpos $0C68,$0558,Rings,$12,rem
@@ -124,7 +124,7 @@ ObjPos_LZ2:
 		objpos $0D6D,$03AB,Wheel,0
 		objpos $0D6D,$04D4,Wheel,0
 		objpos $0D78,$0384,Rings,$14,rem
-		objpos $0D80,$05F8,Bubble,$81
+		objpos $0D80,$05F8,BubbleMaker,1
 		objpos $0DA0,$0380,LabyrinthConvey,3,rem
 		objpos $0DA0,$0430,Spikes,type_spike_3upwide+type_spike_still
 		objpos $0DA0,$0470,Spikes,type_spike_3upwide+type_spike_still,yflip

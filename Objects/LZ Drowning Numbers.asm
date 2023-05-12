@@ -98,14 +98,16 @@ Drown_Ding:
 Drown_Bubble:
 		bsr.w	FindFreeObj				; find free OST slot
 		bne.s	.fail					; branch if not found
-		move.l	#DelayedBubble,ost_id(a1)		; load mini bubble object
+		move.l	#Bubble,ost_id(a1)			; load mini bubble object
+		move.b	#$10,ost_subtype(a1)
 		jsr	(RandomNumber).l
 		andi.b	#1,d0
 		beq.s	.fail					; branch if random bit is 0
 		movea.l	a1,a2					; copy OST address of first bubble
 		bsr.w	FindFreeObj
 		bne.s	.fail
-		move.l	#DelayedBubble,ost_id(a1)		; load 2nd mini bubble object
+		move.l	#Bubble,ost_id(a1)			; load 2nd mini bubble object
+		move.b	#$10,ost_subtype(a1)
 		andi.b	#$F,d1
 		addq.b	#1,d1
 		move.b	d1,ost_anim_time(a1)			; set random delay (1-16) for 2nd bubble
@@ -179,24 +181,15 @@ Drown_Death:
 		bne.s	.fail					; branch if not found
 		
 		move.l	#Bubble,ost_id(a1)			; load mini bubble object
-		move.b	#id_Bub_Mini,ost_routine(a1)
-		move.b	#id_ani_bubble_small,ost_anim(a1)
-		move.l	#Map_Bub,ost_mappings(a1)
-		move.w	#tile_Kos_Bubbles+tile_hi,ost_tile(a1)
-		move.b	#render_rel+render_onscreen,ost_render(a1)
-		move.b	#8,ost_displaywidth(a1)
-		move.b	#1,ost_priority(a1)
-		move.w	#-$88,ost_y_vel(a1)
 		move.b	d1,ost_angle(a1)			; random movement
 		move.w	ost_x_pos(a2),ost_x_pos(a1)
-		move.w	ost_x_pos(a1),ost_bubble_x_start(a1)
 		move.w	ost_y_pos(a2),d0
 		subi.w	#$C,d0
 		move.w	d0,ost_y_pos(a1)
 		move.b	(v_frame_counter_low).w,d0
 		andi.b	#3,d0
 		bne.s	.fail
-		move.b	#id_ani_bubble_medium,ost_anim(a1)	; 25% chance of medium bubble
+		move.b	#1,ost_subtype(a1)			; 25% chance of medium bubble
 		
 	.fail:
 		rts
@@ -208,62 +201,6 @@ Drown_NumWait:	; Routine 2
 		bpl.s	.wait					; branch if time remains
 		addq.b	#2,ost_routine(a0)			; goto Drown_NumBub next
 		move.b	#id_ani_drown_smallbubble,ost_anim(a0)
-		bra.w	DelayBub_Setup
-		
-	.wait:
-		rts
-; ===========================================================================
-
-Drown_NumBub:	; Routine 4
-		lea	(Ani_Drown).l,a1
-		jsr	(AnimateSprite).l			; animate and goto Drown_NumSet when finished
-		bsr.w	Bub_Move				; move bubble up & sideways
-		move.w	(v_water_height_actual).w,d0
-		cmp.w	ost_y_pos(a0),d0
-		bcs.w	DisplaySprite				; branch if bubble is below water
-		rts
-; ===========================================================================
-
-Drown_NumSet:	; Routine 6
-		move.b	ost_subtype(a0),d0			; get air value from time of spawning
-		subq.b	#2,d0
-		lsr.b	#1,d0					; convert air to animation id
-		move.b	d0,ost_anim(a0)
-		addq.b	#2,ost_routine(a0)			; goto Drown_NumAnim next
-		move.b	#render_onscreen+render_abs,ost_render(a0)
-		move.w	ost_x_pos(a0),d0
-		sub.w	(v_camera_x_pos).w,d0
-		addi.w	#screen_left,d0
-		move.w	d0,ost_x_pos(a0)
-		move.w	ost_y_pos(a0),d0
-		sub.w	(v_camera_y_pos).w,d0
-		addi.w	#screen_top,d0
-		move.w	d0,ost_y_screen(a0)			; fix position to screen
-
-Drown_NumAnim:	; Routine 8
-		lea	(Ani_Drown).l,a1
-		jsr	(AnimateSprite).l			; animate and goto Drown_NumDel when finished
-		bra.w	DisplaySprite
-; ===========================================================================
-
-Drown_NumDel:	; Routine $A
-		bra.w	DeleteObject
-		
-; ---------------------------------------------------------------------------
-; Mini bubbles that float out of Sonic's mouth
-
-; spawned by:
-;	DrownCount
-; ---------------------------------------------------------------------------
-
-DelayedBubble:
-		subq.b	#1,ost_anim_time(a0)			; decrement timer
-		bpl.s	DelayBub_Wait				; branch if time remains
-		move.l	#Bubble,ost_id(a0)			; convert to mini bubble object
-		move.b	#id_Bub_Mini,ost_routine(a0)
-		move.b	#id_ani_bubble_small,ost_anim(a0)
-		
-DelayBub_Setup:
 		move.l	#Map_Bub,ost_mappings(a0)
 		move.w	#tile_Kos_Bubbles+tile_hi,ost_tile(a0)
 		move.b	#render_rel+render_onscreen,ost_render(a0)
@@ -283,26 +220,55 @@ DelayBub_Setup:
 		move.w	ost_x_pos(a0),ost_bubble_x_start(a0)
 		move.w	ost_y_pos(a1),ost_y_pos(a0)
 		
-DelayBub_Wait:
+	.wait:
 		rts
-		
-; ---------------------------------------------------------------------------
-; Data for a bubble's side-to-side wobble (also used by REV01's underwater
-; background ripple effect)
-; ---------------------------------------------------------------------------
-Drown_WobbleData:
-LZ_BG_Ripple_Data:
-		rept 2
-		dc.b 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2
-		dc.b 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3
-		dc.b 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2
-		dc.b 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0
-		dc.b 0, -1, -1, -1, -1, -1, -2, -2, -2, -2, -2, -3, -3, -3, -3, -3
-		dc.b -3, -3, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4
-		dc.b -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -3
-		dc.b -3, -3, -3, -3, -3, -3, -2, -2, -2, -2, -2, -1, -1, -1, -1, -1
-		endr
+; ===========================================================================
 
+Drown_NumBub:	; Routine 4
+		lea	Ani_Drown(pc),a1
+		jsr	(AnimateSprite).l			; animate and goto Drown_NumSet when finished
+		bsr.w	Bub_Move				; move bubble up & sideways
+		move.w	(v_water_height_actual).w,d0
+		cmp.w	ost_y_pos(a0),d0
+		bcs.w	DisplaySprite				; branch if bubble is below water
+		rts
+; ===========================================================================
+
+Drown_Num_List:	dc.b id_ani_drown_zeroappear			; 0 - unused
+		dc.b id_ani_drown_zeroappear			; 2
+		dc.b id_ani_drown_oneappear			; 4
+		dc.b id_ani_drown_twoappear			; 6
+		dc.b id_ani_drown_threeappear			; 8
+		dc.b id_ani_drown_fourappear			; 10
+		dc.b id_ani_drown_fiveappear			; 12
+		dc.b id_ani_drown_fiveappear			; 14 - unused
+		even
+		
+Drown_NumSet:	; Routine 6
+		moveq	#0,d0
+		move.b	ost_subtype(a0),d0			; get air value from time of spawning
+		lsr.b	#1,d0
+		move.b	Drown_Num_List(pc,d0.w),ost_anim(a0)	; convert air to animation id
+		addq.b	#2,ost_routine(a0)			; goto Drown_NumAnim next
+		move.b	#render_onscreen+render_abs,ost_render(a0)
+		move.w	ost_x_pos(a0),d0
+		sub.w	(v_camera_x_pos).w,d0
+		addi.w	#screen_left,d0
+		move.w	d0,ost_x_pos(a0)
+		move.w	ost_y_pos(a0),d0
+		sub.w	(v_camera_y_pos).w,d0
+		addi.w	#screen_top,d0
+		move.w	d0,ost_y_screen(a0)			; fix position to screen
+
+Drown_NumAnim:	; Routine 8
+		lea	Ani_Drown(pc),a1
+		jsr	(AnimateSprite).l			; animate and goto Drown_NumDel when finished
+		bra.w	DisplaySprite
+; ===========================================================================
+
+Drown_NumDel:	; Routine $A
+		bra.w	DeleteObject
+		
 ; ---------------------------------------------------------------------------
 ; Animation script
 ; ---------------------------------------------------------------------------

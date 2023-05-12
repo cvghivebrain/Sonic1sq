@@ -454,6 +454,7 @@ Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 		include "Objects\LZ Gargoyle Head.asm"		; Gargoyle
 		include "Objects\LZ Conveyor Belt Platforms.asm" ; LabyrinthConvey
 		include "Objects\LZ Wheel.asm"			; Wheel
+		include "Objects\LZ Bubble Maker.asm"		; BubbleMaker
 		include "Objects\LZ Bubbles.asm"		; Bubble
 		include "Objects\LZ Waterfall.asm"		; Waterfall
 		include "Objects\LZ Drowning Numbers.asm"	; DrownCount
