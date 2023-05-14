@@ -19,7 +19,7 @@ AnimateSprite:
 		moveq	#0,d0
 		moveq	#status_xflip+status_yflip,d2		; use x/yflip from status and flags
 		move.b	ost_anim(a0),d0				; get animation number
-		bmi.s	Anim_Run				; branch if animation is set to restart
+		bmi.s	Anim_Run				; branch if animation isn't set to restart
 
 		bset	#7,ost_anim(a0)				; set to "no restart"
 		move.b	#0,ost_anim_frame(a0)			; reset animation
@@ -65,6 +65,7 @@ Anim_Flag_Index:
 		ptr Anim_Flag_0
 		ptr Anim_Flag_Restart
 		ptr Anim_Flag_Back
+		ptr Anim_Flag_Stop
 		ptr Anim_Flag_Change
 		ptr Anim_Flag_Routine
 		ptr Anim_Flag_Restart2
@@ -93,10 +94,14 @@ Anim_Flag_Restart_Sonic:
 Anim_Flag_Back:
 		move.w	4(a1,d1.w),d0				; read the next	word in	the script
 		add.w	d0,d0
-		sub.b	d0,ost_anim_frame(a0)			; jump back d0 bytes in the script
 		sub.b	d0,d1
+		move.b	d1,ost_anim_frame(a0)			; jump back d0 bytes in the script
 		move.w	2(a1,d1.w),d0				; read sprite number
 		bra.s	Anim_Next
+; ===========================================================================
+
+Anim_Flag_Stop:
+		rts
 ; ===========================================================================
 
 Anim_Flag_Change:

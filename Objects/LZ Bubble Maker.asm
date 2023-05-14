@@ -32,7 +32,8 @@ ost_bubble_mini_index:	rs.b 1					; position within bubble type list
 BubM_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto BubM_Wait next
 		move.l	#Map_Bub,ost_mappings(a0)
-		move.w	#tile_Kos_Bubbles+tile_hi,ost_tile(a0)
+		move.w	(v_tile_bubbles).w,ost_tile(a0)
+		ori.w	#tile_hi,ost_tile(a0)
 		move.b	#render_onscreen+render_rel,ost_render(a0)
 		move.b	#$10,ost_displaywidth(a0)
 		move.b	#1,ost_priority(a0)

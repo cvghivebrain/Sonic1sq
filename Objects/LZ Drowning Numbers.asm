@@ -202,7 +202,8 @@ Drown_NumWait:	; Routine 2
 		addq.b	#2,ost_routine(a0)			; goto Drown_NumBub next
 		move.b	#id_ani_drown_smallbubble,ost_anim(a0)
 		move.l	#Map_Bub,ost_mappings(a0)
-		move.w	#tile_Kos_Bubbles+tile_hi,ost_tile(a0)
+		move.w	(v_tile_bubbles).w,ost_tile(a0)
+		ori.w	#tile_hi,ost_tile(a0)
 		move.b	#render_rel+render_onscreen,ost_render(a0)
 		move.b	#4,ost_displaywidth(a0)
 		move.b	#1,ost_priority(a0)

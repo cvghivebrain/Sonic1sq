@@ -165,7 +165,7 @@ KPLC_LZ:	kplcheader
 		kplc Kos_Gargoyle
 		kplc Kos_LzSpikeBall,v_tile_spikechain
 		kplc Kos_FlapDoor
-		kplc Kos_Bubbles
+		kplc Kos_Bubbles,v_tile_bubbles
 		kplc Kos_LzHalfBlock
 		kplc Kos_LzDoorV
 		kplc Kos_Harpoon

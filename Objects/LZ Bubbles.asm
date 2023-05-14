@@ -43,7 +43,8 @@ Bub_Main:	; Routine 0
 		subq.b	#1,ost_anim_time(a0)			; decrement timer
 		bpl.s	Bub_Wait				; branch if time remains
 		move.l	#Map_Bub,ost_mappings(a0)
-		move.w	#tile_Kos_Bubbles+tile_hi,ost_tile(a0)
+		move.w	(v_tile_bubbles).w,ost_tile(a0)
+		ori.w	#tile_hi,ost_tile(a0)
 		move.b	#render_onscreen+render_rel,ost_render(a0)
 		move.b	#1,ost_priority(a0)
 		move.w	#-$88,ost_y_vel(a0)

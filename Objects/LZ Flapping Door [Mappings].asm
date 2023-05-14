@@ -23,4 +23,3 @@ frame_flap_open:
 		piece	0, -$28, 4x2, $18
 		piece	0, $18, 4x2, $18, yflip
 		endsprite
-		even

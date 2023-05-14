@@ -16,8 +16,8 @@ Flap_Index:	index *,,2
 		ptr Flap_OpenClose
 
 		rsobj FlapDoor
-ost_flap_wait:	rs.w 1 ; $30					; time until change (2 bytes)
-ost_flap_time:	rs.w 1 ; $32					; time between opening/closing (2 bytes)
+ost_flap_time:		rs.w 1					; time until change (2 bytes)
+ost_flap_time_master:	rs.w 1					; time between opening/closing (2 bytes)
 		rsobjend
 ; ===========================================================================
 
@@ -32,33 +32,39 @@ Flap_Main:	; Routine 0
 		moveq	#0,d0
 		move.b	ost_subtype(a0),d0			; get object type
 		mulu.w	#60,d0					; multiply by 60 (1 second)
-		move.w	d0,ost_flap_time(a0)			; set flap delay time
+		move.w	d0,ost_flap_time_master(a0)		; set flap delay time
 
 Flap_OpenClose:	; Routine 2
-		subq.w	#1,ost_flap_wait(a0)			; decrement time delay
+		shortcut
+		subq.w	#1,ost_flap_time(a0)			; decrement time delay
 		bpl.s	.wait					; if time remains, branch
-		move.w	ost_flap_time(a0),ost_flap_wait(a0)	; reset time delay
+		move.w	ost_flap_time_master(a0),ost_flap_time(a0) ; reset time delay
 		bchg	#0,ost_anim(a0)				; open/close door
-		bclr	#7,ost_anim(a0)
+		bclr	#7,ost_anim(a0)				; restart animation
 		tst.b	ost_render(a0)
-		bpl.s	.nosound
+		bpl.s	.wait					; branch if not on screen
 		play.w	1, jsr, sfx_Door			; play door sound
 
 	.wait:
-	.nosound:
-		lea	(Ani_Flap).l,a1
+		lea	Ani_Flap(pc),a1
 		jsr	AnimateSprite
 		clr.b	(f_water_tunnel_disable).w		; enable wind tunnel
-		tst.b	ost_frame(a0)				; is the door open?
-		bne.s	.display				; if yes, branch
-		move.w	(v_ost_player+ost_x_pos).w,d0
-		cmp.w	ost_x_pos(a0),d0			; has Sonic passed through the door?
-		bcc.s	.display				; if yes, branch
-		move.b	#1,(f_water_tunnel_disable).w		; disable wind tunnel
+		cmpi.b	#id_frame_flap_open,ost_frame(a0)
+		beq.w	DespawnQuick				; branch if fully open
+		
+	.closed:
 		bsr.w	SolidObject				; make the door	solid
-
-	.display:
-		bra.w	DespawnObject
+		move.w	ost_x_pos(a1),d0
+		move.w	ost_x_pos(a0),d1
+		btst	#status_xflip_bit,ost_status(a0)
+		beq.s	.noflip					; branch if door isn't xflipped
+		exg	d0,d1
+		
+	.noflip:
+		cmp.w	d1,d0
+		bcc.w	DespawnQuick				; branch if Sonic is on open side of the door
+		move.b	#1,(f_water_tunnel_disable).w		; disable wind tunnel
+		bra.w	DespawnQuick
 
 ; ---------------------------------------------------------------------------
 ; Animation script
@@ -73,12 +79,11 @@ ani_flap_opening:
 		dc.w id_frame_flap_closed
 		dc.w id_frame_flap_halfway
 		dc.w id_frame_flap_open
-		dc.w id_Anim_Flag_Back, 1
+		dc.w id_Anim_Flag_Stop
 
 ani_flap_closing:
 		dc.w 3
 		dc.w id_frame_flap_open
 		dc.w id_frame_flap_halfway
 		dc.w id_frame_flap_closed
-		dc.w id_Anim_Flag_Back, 1
-		even
+		dc.w id_Anim_Flag_Stop

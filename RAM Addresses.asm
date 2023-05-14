@@ -161,6 +161,7 @@ v_tile_motobug			rs.w 1
 v_tile_spikes			rs.w 1
 v_tile_hspring			rs.w 1
 v_tile_vspring			rs.w 1
+v_tile_bubbles			rs.w 1
 v_tile_fireball			rs.w 1
 v_tile_batbrain			rs.w 1
 v_tile_caterkiller		rs.w 1
