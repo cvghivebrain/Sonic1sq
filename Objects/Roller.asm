@@ -184,7 +184,7 @@ ani_roll_unfold:
 		dc.w id_frame_roll_roll1
 		dc.w id_frame_roll_fold
 		dc.w id_frame_roll_stand
-		dc.w id_Anim_Flag_Back, 1
+		dc.w id_Anim_Flag_Stop
 ani_roll_fold:	dc.w $F
 		dc.w id_frame_roll_fold
 		dc.w id_frame_roll_roll1

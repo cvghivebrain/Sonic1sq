@@ -202,5 +202,5 @@ ani_orb_normal:	dc.w $F
 ani_orb_angry:	dc.w $F
 		dc.w id_frame_orb_medium
 		dc.w id_frame_orb_angry
-		dc.w id_Anim_Flag_Back, 1
+		dc.w id_Anim_Flag_Stop
 		even

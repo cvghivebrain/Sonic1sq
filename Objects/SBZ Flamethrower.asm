@@ -106,7 +106,7 @@ ani_flame_pipe_off:
 		dc.w id_frame_flame_pipe4
 		dc.w id_frame_flame_pipe2
 		dc.w id_frame_flame_pipe1
-		dc.w id_Anim_Flag_Back, 1
+		dc.w id_Anim_Flag_Stop
 		even
 
 ani_flame_valve_on:
@@ -132,5 +132,5 @@ ani_flame_valve_off:
 		dc.w id_frame_flame_valve5
 		dc.w id_frame_flame_valve3
 		dc.w id_frame_flame_valve1
-		dc.w id_Anim_Flag_Back, 1
+		dc.w id_Anim_Flag_Stop
 		even

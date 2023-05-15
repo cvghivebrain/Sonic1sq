@@ -103,11 +103,11 @@ ani_trap_open:
 		dc.w id_frame_trap_closed
 		dc.w id_frame_trap_half
 		dc.w id_frame_trap_open
-		dc.w id_Anim_Flag_Back, 1
+		dc.w id_Anim_Flag_Stop
 
 ani_trap_close:
 		dc.w 3
 		dc.w id_frame_trap_open
 		dc.w id_frame_trap_half
 		dc.w id_frame_trap_closed
-		dc.w id_Anim_Flag_Back, 1
+		dc.w id_Anim_Flag_Stop

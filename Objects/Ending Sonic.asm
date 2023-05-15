@@ -172,5 +172,5 @@ ani_esonic_leap:
 		dc.w id_frame_esonic_leap1
 		dc.w id_frame_esonic_leap2
 		dc.w id_frame_esonic_leap3
-		dc.w id_Anim_Flag_Back, 1
+		dc.w id_Anim_Flag_Stop
 		even

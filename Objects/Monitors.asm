@@ -435,5 +435,5 @@ ani_monitor_breaking:
 		dc.w id_frame_monitor_static1
 		dc.w id_frame_monitor_static2
 		dc.w id_frame_monitor_broken
-		dc.w id_Anim_Flag_Back, 1
+		dc.w id_Anim_Flag_Stop
 		even

@@ -81,7 +81,7 @@ ani_autodoor_close:
 		dc.w id_frame_autodoor_02
 		dc.w id_frame_autodoor_01
 		dc.w id_frame_autodoor_closed
-		dc.w id_Anim_Flag_Back, 1
+		dc.w id_Anim_Flag_Stop
 
 ani_autodoor_open:
 		dc.w 0
@@ -94,5 +94,5 @@ ani_autodoor_open:
 		dc.w id_frame_autodoor_06
 		dc.w id_frame_autodoor_07
 		dc.w id_frame_autodoor_open
-		dc.w id_Anim_Flag_Back, 1
+		dc.w id_Anim_Flag_Stop
 		even

@@ -196,7 +196,7 @@ ani_newt_drop:		dc.w $13
 			dc.w id_frame_newt_drop1
 			dc.w id_frame_newt_drop2
 			dc.w id_frame_newt_drop3
-			dc.w id_Anim_Flag_Back, 1
+			dc.w id_Anim_Flag_Stop
 ani_newt_fly1:		dc.w 2
 			dc.w id_frame_newt_fly1a
 			dc.w id_frame_newt_fly1b

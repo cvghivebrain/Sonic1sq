@@ -3,6 +3,10 @@
 
 ; spawned by:
 ;	ObjPos_LZ2, ObjPos_LZ3, ObjPos_SBZ3 - subtype 2
+
+; subtypes:
+;	%0000RRRR
+;	RRRR - open/close rate (*60 for ost_flap_time_master)
 ; ---------------------------------------------------------------------------
 
 FlapDoor:

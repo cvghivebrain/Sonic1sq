@@ -109,7 +109,7 @@ ani_spin_1:
 		dc.w id_frame_spin_2+afxflip
 		dc.w id_frame_spin_1+afxflip
 		dc.w id_frame_spin_flat
-		dc.w id_Anim_Flag_Back, 1
+		dc.w id_Anim_Flag_Stop
 
 ani_spin_2:
 		dc.w 1
@@ -130,5 +130,5 @@ ani_spin_2:
 		dc.w id_frame_spin_2+afxflip
 		dc.w id_frame_spin_1+afxflip
 		dc.w id_frame_spin_flat
-		dc.w id_Anim_Flag_Back, 1
+		dc.w id_Anim_Flag_Stop
 		even

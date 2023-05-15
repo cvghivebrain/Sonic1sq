@@ -245,13 +245,13 @@ Leap1:		dc.w $F
 		dc.w id_frame_leap1
 		dc.w id_frame_leap1
 		dc.w id_frame_leap1
-		dc.w id_Anim_Flag_Back, 1
+		dc.w id_Anim_Flag_Stop
 		even
 
 Leap2:		dc.w $F
 		dc.w id_frame_leap1
 		dc.w id_frame_leap2
-		dc.w id_Anim_Flag_Back, 1
+		dc.w id_Anim_Flag_Stop
 		even
 
 Surf:		dc.w $3F
@@ -289,7 +289,7 @@ Shrink:		dc.w 3
 		dc.w id_frame_shrink4
 		dc.w id_frame_shrink5
 		dc.w id_frame_blank
-		dc.w id_Anim_Flag_Back, 1
+		dc.w id_Anim_Flag_Stop
 		even
 
 Hurt:		dc.w 3
