@@ -49,16 +49,16 @@ ObjPos_LZ3:
 		objpos $0810,$0391,Monitor,type_monitor_rings,rem
 		objpos $0820,$0678,Jaws,$0C,xflip,rem
 		objpos $0820,$06E0,Jaws,$0C,xflip,rem
-		objpos $0830,$05F8,Harpoon,type_harp_v,rem
+		objpos $0830,$05F8,Harpoon,type_harp_v+$10,rem
 		objpos $0850,$0610,LabyrinthBlock,type_lblock_solid
-		objpos $0870,$05F8,Harpoon,type_harp_v,rem
+		objpos $0870,$05F8,Harpoon,type_harp_v+$10,rem
 		objpos $0870,$06F8,BubbleMaker,1
 		objpos $0890,$0610,LabyrinthBlock,type_lblock_sink
-		objpos $08B0,$05F8,Harpoon,type_harp_v,rem
+		objpos $08B0,$05F8,Harpoon,type_harp_v+$10,rem
 		objpos $08D0,$0610,LabyrinthBlock,type_lblock_solid
 		objpos $08D0,$06F8,BubbleMaker,1
 		objpos $08E0,$03F4,Spikes,type_spike_3up+type_spike_updown
-		objpos $08F0,$05F8,Harpoon,type_harp_v,rem
+		objpos $08F0,$05F8,Harpoon,type_harp_v+$10,rem
 		objpos $08F0,$06A0,Jaws,$0C,rem
 		objpos $0910,$02F0,Spikes,type_spike_3up+type_spike_still
 		objpos $0920,$05F8,BubbleMaker,0
@@ -77,7 +77,7 @@ ObjPos_LZ3:
 		objpos $0A50,$0510,Burrobot,$00,rem
 		objpos $0AA0,$0300,SpikeBall,$65
 		objpos $0AA0,$04F8,BubbleMaker,1
-		objpos $0AA8,$0450,Harpoon,type_harp_h,rem
+		objpos $0AA8,$0450,Harpoon,type_harp_h+$10,rem
 		objpos $0B08,$0660,FlapDoor,$02
 		objpos $0B20,$02D0,Spikes,type_spike_3upwide+type_spike_still
 		objpos $0B50,$03B1,Monitor,type_monitor_1up,rem
@@ -233,17 +233,17 @@ ObjPos_LZ3:
 		objpos $1E30,$01D0,Gargoyle,$03,xflip,rem
 		objpos $1E30,$02D0,LabyrinthBlock,type_lblock_solid
 		objpos $1E30,$04E0,Gargoyle,$03,xflip,rem
-		objpos $1E48,$0180,Harpoon,type_harp_h,rem
-		objpos $1E48,$0380,Harpoon,type_harp_h,rem
-		objpos $1E48,$0480,Harpoon,type_harp_h,rem
+		objpos $1E48,$0180,Harpoon,type_harp_h+$10,rem
+		objpos $1E48,$0380,Harpoon,type_harp_h+$10,rem
+		objpos $1E48,$0480,Harpoon,type_harp_h+$10,rem
 		objpos $1E50,$02D0,Gargoyle,$03,xflip,rem
-		objpos $1E58,$0130,Harpoon,type_harp_h,xflip,rem
-		objpos $1E58,$0330,Harpoon,type_harp_h,xflip,rem
-		objpos $1E58,$0430,Harpoon,type_harp_h,xflip,rem
-		objpos $1E98,$02B0,Harpoon,type_harp_h,rem
+		objpos $1E58,$0130,Harpoon,type_harp_h+$10,xflip,rem
+		objpos $1E58,$0330,Harpoon,type_harp_h+$10,xflip,rem
+		objpos $1E58,$0430,Harpoon,type_harp_h+$10,xflip,rem
+		objpos $1E98,$02B0,Harpoon,type_harp_h+$10,rem
 		objpos $1EB0,$0250,Gargoyle,$03,rem
-		objpos $1ED8,$0180,Harpoon,type_harp_h,xflip,rem
-		objpos $1ED8,$0380,Harpoon,type_harp_h,xflip,rem
+		objpos $1ED8,$0180,Harpoon,type_harp_h+$10,xflip,rem
+		objpos $1ED8,$0380,Harpoon,type_harp_h+$10,xflip,rem
 		objpos $20D0,$00BB,Prison,$01
 		objpos $20D0,$00E0,Prison,$00
 		endobj

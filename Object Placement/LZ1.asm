@@ -84,7 +84,7 @@ ObjPos_LZ1:
 		objpos $0FB8,$02B0,Rings,$12,rem
 		objpos $0FC0,$0410,LabyrinthDoorH,4,rem
 		objpos $0FC8,$0160,Waterfall,type_wfall_diagonal,xflip
-		objpos $0FD0,$05A8,Harpoon,type_harp_v,rem
+		objpos $0FD0,$05A8,Harpoon,type_harp_v+$10,rem
 		objpos $0FD8,$0570,Rings,$11,rem
 		objpos $0FE8,$0170,Waterfall,type_wfall_diagonal,xflip
 		objpos $1008,$0180,Waterfall,type_wfall_diagonal,xflip
@@ -94,7 +94,7 @@ ObjPos_LZ1:
 		objpos $102F,$0387,Wheel,0
 		objpos $1030,$04F8,BubbleMaker,1
 		objpos $1050,$0330,LabyrinthBlock,type_lblock_solid
-		objpos $1050,$05D8,Harpoon,type_harp_v,rem
+		objpos $1050,$05D8,Harpoon,type_harp_v+$10,rem
 		objpos $1058,$0350,Rings,$12,rem
 		objpos $1060,$0430,LabyrinthBlock,type_lblock_solid
 		objpos $1070,$0280,LabyrinthConvey,0,rem
@@ -119,13 +119,13 @@ ObjPos_LZ1:
 		objpos $1220,$0460,Orbinaut,$00,xflip,rem
 		objpos $123E,$0417,Wheel,0
 		objpos $123F,$02D3,Wheel,0
-		objpos $1270,$05C8,Harpoon,type_harp_v,yflip,rem
+		objpos $1270,$05C8,Harpoon,type_harp_v+$10,yflip,rem
 		objpos $127F,$0290,Wheel,0
 		objpos $1280,$0300,LabyrinthConvey,1,rem
 		objpos $12C1,$02D5,Wheel,0
 		objpos $12C8,$0460,Wheel,0
 		objpos $12CC,$06D0,Spikes,type_spike_6upwide+type_spike_still
-		objpos $12D0,$05F8,Harpoon,type_harp_v,rem
+		objpos $12D0,$05F8,Harpoon,type_harp_v+$10,rem
 		objpos $12F0,$0280,Gargoyle,$01,rem
 		objpos $1310,$03D0,Spikes,type_spike_1up+type_spike_still,yflip
 		objpos $1320,$04F4,Spikes,type_spike_3up+type_spike_updown
@@ -134,11 +134,11 @@ ObjPos_LZ1:
 		objpos $1344,$0498,Rings,$41,rem
 		objpos $1350,$0230,Gargoyle,$01,rem
 		objpos $1350,$03A0,Spikes,type_spike_1up+type_spike_still,yflip
-		objpos $1350,$05C8,Harpoon,type_harp_v,yflip,rem
+		objpos $1350,$05C8,Harpoon,type_harp_v+$10,yflip,rem
 		objpos $1354,$0458,Rings,$41,rem
 		objpos $13C0,$0350,Rings,$12,rem
 		objpos $13F0,$03B0,LabyrinthBlock,type_lblock_solid
-		objpos $13F0,$05F8,Harpoon,type_harp_v,rem
+		objpos $13F0,$05F8,Harpoon,type_harp_v+$10,rem
 		objpos $1410,$0330,Rings,$14,rem
 		objpos $1420,$0390,Burrobot,$00,xflip,rem
 		objpos $1430,$0230,Invisibarrier,$31
@@ -179,8 +179,8 @@ ObjPos_LZ1:
 		objpos $1730,$0110,Burrobot,$00,rem
 		objpos $1750,$0130,LabyrinthBlock,type_lblock_solid
 		objpos $1750,$0278,BubbleMaker,1
-		objpos $1788,$01F8,Harpoon,type_harp_h,rem
-		objpos $1798,$0198,Harpoon,type_harp_h,xflip,rem
+		objpos $1788,$01F8,Harpoon,type_harp_h+$10,rem
+		objpos $1798,$0198,Harpoon,type_harp_h+$10,xflip,rem
 		objpos $17A0,$0130,LabyrinthDoorH,$A,xflip,rem
 		objpos $17B0,$016C,Button,$0A
 		objpos $17F0,$01F1,Monitor,type_monitor_rings,rem

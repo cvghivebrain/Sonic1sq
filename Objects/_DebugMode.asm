@@ -353,6 +353,7 @@ DebugList_LZ:
 		dbitem	LabyrinthBlock, Map_LBlock, type_lblock_sink, 0, id_frame_lblock_sinkblock, tile_Kos_LzDoorH, tile_pal3
 		dbitem	LabyrinthBlock, Map_LBlock, type_lblock_solid, 0, id_frame_lblock_block, tile_Kos_LzBlock, tile_pal3
 		dbitem	LabyrinthPlatform, Map_LPlat, 0, 0, id_frame_lplat_0, tile_Kos_LzPlatform, tile_pal3
+		dbitem	HalfBlock, Map_MBlockLZ, $10, 0, id_frame_mblocklz_0, tile_Kos_LzHalfBlock, tile_pal3
 		dbitem	Wheel, Map_LConv, 0, 0, id_frame_lcon_wheel1, tile_Kos_LzWheel, 0
 		dbitem	Pole, Map_Pole, 0, 0, id_frame_pole_normal, tile_Kos_LzPole, tile_pal3
 		dbitem	FlapDoor, Map_Flap, 2, 0, id_frame_flap_closed, tile_Kos_FlapDoor, tile_pal3

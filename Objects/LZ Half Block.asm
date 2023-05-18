@@ -4,6 +4,11 @@
 ; spawned by:
 ;	ObjPos_LZ1 - subtype 2
 ;	ObjPos_SBZ3 - subtype $10
+
+; subtypes:
+;	%000VBBBB
+;	V - 1 if visible from start (buttons have no effect)
+;	BBBB - id of linked button
 ; ---------------------------------------------------------------------------
 
 HalfBlock:
@@ -30,10 +35,8 @@ HBlock_Main:	; Routine 0
 		move.b	#8,ost_height(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#4,ost_priority(a0)
-		moveq	#0,d0
-		move.b	ost_subtype(a0),d0
-		andi.b	#$F0,d0					; read high nybble of subtype
-		beq.s	HBlock_ChkBtn				; branch if 0
+		btst	#4,ost_subtype(a0)
+		beq.s	HBlock_ChkBtn				; branch if subtype isn't +$10
 		addq.b	#2,ost_routine(a0)			; goto HBlock_Solid next
 		rts
 ; ===========================================================================
@@ -44,14 +47,9 @@ HBlock_ChkBtn:	; Routine 2
 		move.b	ost_subtype(a0),d0
 		andi.b	#$F,d0					; read low nybble of subtype
 		tst.b	(a2,d0.w)				; read button status
-		beq.s	.exit					; branch if button isn't pressed
+		beq.w	DespawnQuick_NoDisplay			; branch if button isn't pressed
 		addq.b	#2,ost_routine(a0)			; goto HBlock_Solid next
-		
-	.exit:
-		move.w	ost_x_pos(a0),d0
-		bsr.w	CheckActive
-		bne.w	DeleteObject
-		rts
+		bra.w	DespawnQuick_NoDisplay
 ; ===========================================================================
 
 HBlock_Solid:	; Routine 4
@@ -87,9 +85,8 @@ HBlock_Move:	; Routine 6
 ; ===========================================================================
 
 HBlock_Drop:	; Routine 8
-		bsr.w	SpeedToPos
+		update_y_fall	$18				; update position & apply gravity
 		bsr.w	SolidObject_TopOnly
-		addi.w	#$18,ost_y_vel(a0)			; make the platform fall
 		bsr.w	FindFloorObj
 		tst.w	d1					; has platform hit the floor?
 		bpl.w	DespawnQuick				; if not, branch
@@ -100,6 +97,7 @@ HBlock_Drop:	; Routine 8
 ; ===========================================================================
 
 HBlock_Stop:	; Routine $A
+		shortcut
 		bsr.w	SolidObject_TopOnly
 		bra.w	DespawnQuick
 		
