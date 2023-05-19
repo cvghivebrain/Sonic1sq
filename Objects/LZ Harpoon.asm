@@ -5,8 +5,9 @@
 ;	ObjPos_LZ1, ObjPos_LZ2, ObjPos_LZ3, ObjPos_SBZ3 - subtypes 0/2
 
 ; subtypes:
-;	%RRRR00AA
+;	%RRRRS0AA
 ;	RRRR - time between animations (+1, *30 for ost_harp_time_master)
+;	S - 1 for forced synchronisation (ignores RRRR, changes every 64 frames instead)
 ;	AA - starting animation (0/1 = horizontal; 2/3 = vertical)
 ; ---------------------------------------------------------------------------
 
@@ -20,6 +21,8 @@ Harp_Index:	index *,,2
 		ptr Harp_Main
 		ptr Harp_Move
 		ptr Harp_Wait
+		ptr Harp_Move2
+		ptr Harp_Wait2
 
 		rsobj Harpoon
 ost_harp_time:		rs.w 1					; time between stabbing/retracting (2 bytes)
@@ -38,13 +41,20 @@ Harp_Main:	; Routine 0
 		andi.b	#%11,d0					; read bits 0-1 of subtype
 		move.b	d0,ost_anim(a0)				; get type (vert/horiz)
 		move.b	#$14,ost_displaywidth(a0)
+		;btst	#3,d1
+		;beq.s	.no_sync				; branch if not synchronised
+		addq.b	#4,ost_routine(a0)			; goto Harp_Move2 next
+		bra.s	Harp_Move2
+		
+	.no_sync:
 		lsr.b	#4,d1					; read high nybble of subtype
 		addq.b	#1,d1
 		mulu.w	#30,d1
-		move.w	d1,ost_harp_time(a0)			; set timer
-		move.w	d1,ost_harp_time_master(a0)
+		move.w	d1,ost_harp_time_master(a0)		; set timer
+		move.w	d1,ost_harp_time(a0)			; set timer with delay
 
 Harp_Move:	; Routine 2
+Harp_Move2:	; Routine 6
 		lea	Ani_Harp(pc),a1
 		bsr.w	AnimateSprite				; animate and goto Harp_Wait next
 		cmpi.b	#3,ost_anim_time(a0)
@@ -70,6 +80,26 @@ Harp_Wait:	; Routine 4
 		subq.b	#2,ost_routine(a0)			; goto Harp_Move next
 		bchg	#0,ost_anim(a0)				; reverse animation
 		bclr	#7,ost_anim(a0)
+		bra.w	DespawnQuick
+; ===========================================================================
+
+Harp_Wait2:	; Routine 8
+		move.b	(v_frame_counter_low).w,d0
+		move.b	d0,d2
+		andi.b	#%00111111,d0
+		bne.w	DespawnQuick				; branch if not on 64th frame
+		subq.b	#2,ost_routine(a0)			; goto Harp_Move2 next
+		btst	#0,ost_subtype(a0)
+		beq.s	.not_inverted
+		not.b	d2					; stab/retract are reversed
+		
+	.not_inverted:
+		andi.b	#%01000000,d2
+		lsr.b	#6,d2					; get bit 6 from frame counter
+		move.b	ost_anim(a0),d0
+		andi.b	#%01111110,d0				; clear bits 0 and 7 of anim id
+		or.b	d2,d0					; combine with bit from frame counter
+		move.b	d0,ost_anim(a0)				; next animation
 		bra.w	DespawnQuick
 
 ; ---------------------------------------------------------------------------

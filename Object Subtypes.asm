@@ -174,6 +174,7 @@ type_bball_circle:	equ id_BBall_Circle		; 3 - moves in a circle
 ; Harpoon
 type_harp_h:		equ id_ani_harp_h_extending	; 0 - horizontal
 type_harp_v:		equ id_ani_harp_v_extending	; 2 - vertical
+type_harp_sync:		equ 8				; synchronised animation
 
 ; LabyrinthBlock
 type_lblock_solid:	equ 0				; doesn't move

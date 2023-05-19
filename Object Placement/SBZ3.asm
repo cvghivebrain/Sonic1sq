@@ -79,11 +79,11 @@ ObjPos_SBZ3:
 		objpos $0740,$0250,LabyrinthDoorH,8,rem
 		objpos $0770,$06A8,SpikeBall,$D5
 		objpos $0780,$0230,Rings,$14,rem
-		objpos $0798,$0270,Harpoon,type_harp_h+$10,rem
+		objpos $0798,$0270,Harpoon,type_harp_h+$10
 		objpos $07F0,$006C,Gargoyle,$03,rem
 		objpos $0800,$06F8,BubbleMaker,1
 		objpos $0818,$0190,Rings,$12,rem
-		objpos $0818,$0290,Harpoon,type_harp_h+$10,xflip,rem
+		objpos $0818,$0290,Harpoon,type_harp_h+$10,xflip
 		objpos $0820,$0308,BubbleMaker,1
 		objpos $0870,$06A8,SpikeBall,$D5
 		objpos $0880,$02C0,SpikeBall,$D4
