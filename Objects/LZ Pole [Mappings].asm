@@ -18,4 +18,3 @@ frame_pole_broken:
 		piece	-4, 0, 2x2, 4, yflip
 		piece	-4, $10, 1x2, 0, yflip
 		endsprite
-		even

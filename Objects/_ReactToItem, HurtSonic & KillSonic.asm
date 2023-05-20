@@ -355,14 +355,14 @@ React_Special:
 		cmpi.b	#id_col_8x8_2,d1
 		beq.s	.D7orE1					; branch if $D7 (SYZ bumper)
 		cmpi.b	#id_col_4x32,d1
-		beq.s	.D7orE1					; branch if $E1 (LZ pole)
+		beq.s	React_NextRoutine			; branch if $E1 (LZ pole)
 		rts	
 ; ===========================================================================
 
 .yadrin:
 		sub.w	d0,d5					; d5 = Sonic's height, minus y dist between Sonic & yadrin
 		cmpi.w	#8,d5
-		bcc.s	.normalenemy				; branch if Sonic is below spike level
+		bcc.w	React_Enemy				; branch if Sonic is below spike level
 		move.w	ost_x_pos(a1),d0
 		subq.w	#4,d0
 		btst	#status_xflip_bit,ost_status(a1)
@@ -373,22 +373,20 @@ React_Special:
 		sub.w	d2,d0					; d0 = x pos of yadrin's face, minus x pos of Sonic's left edge
 		bcc.s	.sonic_left				; branch if Sonic is left of the yadrin
 		addi.w	#$18,d0
-		bcs.s	.within_x				; branch if Sonic is inside the yadrin
-		bra.s	.normalenemy
+		bcs.w	React_ChkHurt				; branch if Sonic is inside the yadrin
+		bra.w	React_Enemy
 ; ===========================================================================
 
 .sonic_left:
 		cmp.w	d4,d0
-		bhi.s	.normalenemy				; branch if Sonic is outside the yadrin
-
-.within_x:
+		bhi.w	React_Enemy				; branch if Sonic is outside the yadrin
 		bra.w	React_ChkHurt				; check for invincibility, then hurt Sonic
-; ===========================================================================
-
-	.normalenemy:
-		bra.w	React_Enemy				; treat like a normal enemy
 ; ===========================================================================
 
 .D7orE1:
 		addq.b	#1,ost_col_property(a1)			; set flag for Sonic touching bumper/pole
+		rts
+		
+React_NextRoutine:
+		addq.b	#2,ost_routine(a1)			; increment routine counter
 		rts

@@ -109,11 +109,6 @@ Level_Skip_TtlCard:
 		jsr	FindFreeInert
 		bne.s	.skip_water_surface
 		move.l	#WaterSurface,ost_id(a1)		; load water surface object
-		move.w	#$60,ost_x_pos(a1)
-		jsr	FindFreeInert
-		bne.s	.skip_water_surface
-		move.l	#WaterSurface,ost_id(a1)
-		move.w	#$120,ost_x_pos(a1)
 		jsr	FindFreeInert
 		bne.s	.skip_water_surface
 		move.l	#DrownCount,ost_id(a1)			; load object that tracks air and spawns bubbles

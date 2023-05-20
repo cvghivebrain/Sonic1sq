@@ -41,8 +41,8 @@ Harp_Main:	; Routine 0
 		andi.b	#%11,d0					; read bits 0-1 of subtype
 		move.b	d0,ost_anim(a0)				; get type (vert/horiz)
 		move.b	#$14,ost_displaywidth(a0)
-		;btst	#3,d1
-		;beq.s	.no_sync				; branch if not synchronised
+		btst	#3,d1
+		beq.s	.no_sync				; branch if not synchronised
 		addq.b	#4,ost_routine(a0)			; goto Harp_Move2 next
 		bra.s	Harp_Move2
 		

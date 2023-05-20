@@ -53,32 +53,20 @@ LPlat_Update:
 		
 LPlat_Stop:	; Routine 6
 		bsr.w	SolidObject
-		move.w	ost_x_pos(a0),d0
-		bsr.w	CheckActive
-		bne.w	DeleteObject
-		bra.w	DisplaySprite
+		bra.w	DespawnQuick
 ; ===========================================================================
 
 LPlat_Rise:	; Routine 4
-		;bsr.w	SpeedToPos				; update position
-		move.l	ost_x_pos(a0),d2
-		move.l	ost_lplat_y_pos(a0),d3
-		move.w	ost_x_vel(a0),d0			; load horizontal speed
-		ext.l	d0
-		asl.l	#8,d0					; multiply speed by $100
-		add.l	d0,d2					; add to x position
 		move.w	ost_y_vel(a0),d0			; load vertical speed
 		ext.l	d0
-		asl.l	#8,d0					; multiply by $100
-		add.l	d0,d3					; add to y position
-		move.l	d2,ost_x_pos(a0)			; update x position
-		move.l	d3,ost_lplat_y_pos(a0)			; update y position
+		asl.l	#8,d0					; multiply speed by $100
+		add.l	d0,ost_lplat_y_pos(a0)			; update y position
 		
 		subq.w	#8,ost_y_vel(a0)			; make block rise
 		bsr.w	FindCeilingObj
 		tst.w	d1					; has block hit the ceiling?
-		bpl.w	LPlat_Update				; if not, branch
+		bpl.s	LPlat_Update				; if not, branch
 		sub.w	d1,ost_lplat_y_pos(a0)			; align to ceiling
 		clr.w	ost_y_vel(a0)				; stop when it touches the ceiling
 		addq.b	#2,ost_routine(a0)			; goto LPlat_Stop next
-		bra.w	LPlat_Update
+		bra.s	LPlat_Update
