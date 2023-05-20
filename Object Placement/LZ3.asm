@@ -8,7 +8,7 @@ ObjPos_LZ3:
 		objpos $01B0,$0310,Burrobot,$00,rem
 		objpos $01F0,$0310,Burrobot,$00,rem
 		objpos $0258,$0310,Waterfall,type_wfall_vertwide
-		objpos $0258,$0320,Waterfall,type_wfall_splash
+		objpos $0258,$0320,WaterfallSplash
 		objpos $0268,$0330,Waterfall,type_wfall_diagonal,xflip
 		objpos $0288,$0340,Waterfall,type_wfall_diagonal,xflip
 		objpos $02A8,$0350,Waterfall,type_wfall_diagonal,xflip
@@ -23,13 +23,13 @@ ObjPos_LZ3:
 		objpos $0578,$0530,Waterfall,type_wfall_vert
 		objpos $0578,$0550,Waterfall,type_wfall_vert
 		objpos $0578,$0570,Waterfall,type_wfall_vert
-		objpos $0580,$0570,Waterfall,type_wfall_splash
+		objpos $0580,$0570,WaterfallSplash
 		objpos $05F8,$02F8,Waterfall,type_wfall_cornernarrow
 		objpos $0608,$05F8,Waterfall,type_wfall_cornermedium2,xflip
 		objpos $0630,$01C1,Monitor,type_monitor_shield,rem
 		objpos $0648,$0470,Rings,$15,rem
 		objpos $0648,$0488,Rings,$15,rem
-		objpos $0658,$02F0,Waterfall,type_wfall_splash_low+type_wfall_hi
+		objpos $0658,$02F0,WaterfallSplash,type_wfallsp_hide+type_wfall_hi
 		objpos $0660,$0458,Rings,$13,rem
 		objpos $0660,$04A0,Rings,$13,rem
 		objpos $06C0,$0570,LabyrinthDoorH,0,rem
@@ -43,7 +43,7 @@ ObjPos_LZ3:
 		objpos $07C0,$0480,SpikeBall,$C4
 		objpos $07D0,$05F8,BubbleMaker,1
 		objpos $07F0,$04F8,Button,$00
-		objpos $0800,$00F8,Waterfall,type_wfall_splash
+		objpos $0800,$00F8,WaterfallSplash
 		objpos $0808,$00F0,Waterfall,type_wfall_vert,xflip
 		objpos $0808,$07F8,Waterfall,type_wfall_cornernarrow2,xflip
 		objpos $0810,$0391,Monitor,type_monitor_rings,rem
@@ -164,7 +164,7 @@ ObjPos_LZ3:
 		objpos $14F0,$05F1,Monitor,type_monitor_rings,rem
 		objpos $1510,$0680,Pole,$04
 		objpos $1558,$0210,Waterfall,type_wfall_vertwide
-		objpos $1558,$0220,Waterfall,type_wfall_splash
+		objpos $1558,$0220,WaterfallSplash
 		objpos $1568,$0230,Waterfall,type_wfall_diagonal,xflip
 		objpos $1570,$05D1,Monitor,type_monitor_rings,rem
 		objpos $1570,$0668,Spikes,type_spike_3left+type_spike_still
@@ -196,7 +196,7 @@ ObjPos_LZ3:
 		objpos $17C0,$06F8,BubbleMaker,0
 		objpos $1808,$03F8,Waterfall,type_wfall_cornernarrow,xflip
 		objpos $1808,$04F0,Waterfall,type_wfall_vert,xflip
-		objpos $1808,$04F0,Waterfall,type_wfall_splash
+		objpos $1808,$04F0,WaterfallSplash
 		objpos $1810,$0370,Spikes,type_spike_3upwide+type_spike_still,yflip
 		objpos $1810,$0670,Burrobot,$00,xflip,rem
 		objpos $1830,$0690,Burrobot,$00,xflip,rem

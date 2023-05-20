@@ -27,7 +27,7 @@ ObjPos_LZ2:
 		objpos $0340,$0390,Spikes,type_spike_3upwide+type_spike_still,yflip
 		objpos $0340,$0408,LabyrinthPlatform
 		objpos $0358,$0110,Waterfall,type_wfall_vertwide
-		objpos $0358,$0120,Waterfall,type_wfall_splash
+		objpos $0358,$0120,WaterfallSplash
 		objpos $0368,$0130,Waterfall,type_wfall_diagonal,xflip
 		objpos $0388,$0140,Waterfall,type_wfall_diagonal,xflip
 		objpos $0390,$03F8,BubbleMaker,2
@@ -40,7 +40,7 @@ ObjPos_LZ2:
 		objpos $03F0,$0391,Monitor,type_monitor_invincible,rem
 		objpos $03F8,$02F8,Waterfall,type_wfall_cornernarrow3
 		objpos $03F8,$0310,Waterfall,type_wfall_vert
-		objpos $03FC,$0328,Waterfall,type_wfall_splash_match
+		objpos $03FC,$0328,WaterfallSplash,type_wfallsp_float
 		objpos $0408,$0180,Waterfall,type_wfall_diagonal,xflip
 		objpos $0430,$0510,Burrobot,$00,rem
 		objpos $0490,$04A8,BubbleMaker,1
@@ -48,7 +48,7 @@ ObjPos_LZ2:
 		objpos $04C8,$0420,FlapDoor,$02,rem
 		objpos $04E0,$0230,Spikes,type_spike_3upwide+type_spike_still,yflip
 		objpos $04E4,$0190,Spikes,type_spike_3upwide+type_spike_still,yflip
-		objpos $0504,$0274,Waterfall,type_wfall_splash
+		objpos $0504,$0274,WaterfallSplash
 		objpos $0508,$01F8,Waterfall,type_wfall_cornernarrow3,xflip
 		objpos $0508,$0210,Waterfall,type_wfall_vert,xflip
 		objpos $0508,$0230,Waterfall,type_wfall_vert,xflip

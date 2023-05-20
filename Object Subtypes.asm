@@ -189,10 +189,11 @@ type_wfall_cornernarrow2: equ id_frame_wfall_cornernarrow2	; 5 - corner narrow
 type_wfall_cornernarrow3: equ id_frame_wfall_cornernarrow3	; 6 - corner narrow
 type_wfall_vertwide:	equ id_frame_wfall_vertwide		; 7 - vertical wide
 type_wfall_diagonal:	equ id_frame_wfall_diagonal		; 8 - diagonal
-type_wfall_splash:	equ id_frame_wfall_splash1		; 9 - splash
-type_wfall_splash_match: equ id_frame_wfall_splash1+$40		; $49 - splash, matches y position to water surface
-type_wfall_splash_low:	equ id_frame_wfall_splash1+$20		; $29 - splash, low priority sprite on specific level tile
 type_wfall_hi:		equ $80					; +$80 - high priority sprite
+
+; WaterfallSplash
+type_wfallsp_float:	equ 1					; matches y position to water surface
+type_wfallsp_hide:	equ 2					; hide until level is updated by button
 
 ; Staircase
 type_stair_above:	equ id_Stair_Type00		; 0 - forms a staircase when stood on

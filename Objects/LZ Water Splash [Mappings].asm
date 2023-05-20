@@ -22,4 +22,3 @@ frame_splash_2:
 		spritemap
 		piece	-$10, -$1E, 4x4, $80
 		endsprite
-		even

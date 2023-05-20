@@ -81,4 +81,3 @@ frame_wfall_splash3:
 		piece	-$18, -$10, 3x4, $55
 		piece	0, -$10, 3x4, $61
 		endsprite
-		even

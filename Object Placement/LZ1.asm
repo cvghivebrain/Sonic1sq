@@ -75,7 +75,7 @@ ObjPos_LZ1:
 		objpos $0F38,$056C,Lamppost,$01,rem
 		objpos $0F50,$0380,SpikeBall,$B5
 		objpos $0F58,$0110,Waterfall,type_wfall_vertwide
-		objpos $0F58,$0120,Waterfall,type_wfall_splash
+		objpos $0F58,$0120,WaterfallSplash
 		objpos $0F68,$0130,Waterfall,type_wfall_diagonal,xflip
 		objpos $0F88,$0140,Waterfall,type_wfall_diagonal,xflip
 		objpos $0FA0,$0510,Burrobot,$00,xflip,rem
