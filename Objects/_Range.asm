@@ -119,7 +119,8 @@ RangePlusX_NoPlayerWidth:
 ; ---------------------------------------------------------------------------
 
 RangePlus_Heightmap:
-		bsr.s	RangePlusX
+		getsonic
+		range_x_sonic
 		cmp.w	#0,d1
 		bgt.s	.outside_x				; branch if outside x hitbox
 		
@@ -155,7 +156,8 @@ RangePlus_Heightmap:
 		rts
 
 RangePlus_Heightmap_NoPlayerWidth:
-		bsr.s	RangePlusX_NoPlayerWidth
+		getsonic
+		range_x_sonic0
 		cmp.w	#0,d1
 		bgt.s	.outside_x				; branch if outside x hitbox
 		

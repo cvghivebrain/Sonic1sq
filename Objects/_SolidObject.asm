@@ -19,17 +19,18 @@
 
 SolidObject:
 		tst.b	ost_render(a0)
-		bpl.s	Sol_OffScreen				; branch if object isn't on screen
+		bpl.w	Sol_OffScreen				; branch if object isn't on screen
 		
 SolidObject_SkipRender:
 		tst.w	(v_debug_active_hi).w
 		bne.s	Sol_None				; branch if debug mode is in use
 		tst.b	ost_mode(a0)
 		bne.w	Sol_Stand				; branch if Sonic is already standing on object
-		bsr.w	RangePlusX				; get distances between Sonic (a1) and object (a0)
+		getsonic
+		range_x_sonic					; get distances between Sonic (a1) and object (a0)
 		cmp.w	#0,d1
 		bgt.s	Sol_None				; branch if outside x hitbox
-		bsr.w	RangePlusY2
+		range_y_exact
 		bpl.s	Sol_None				; branch if outside y hitbox
 		
 		cmp.w	d1,d3
@@ -48,17 +49,14 @@ Sol_Below:
 		btst	#status_air_bit,ost_status(a1)
 		beq.w	Sol_Kill				; branch if Sonic is on the ground
 		rts
-		
-Sol_OffScreen:
-		lea	(v_ost_player).w,a1
 
 Sol_None:
 		btst	#status_pushing_bit,ost_status(a0)
-		beq.s	.no_push				; branch if object isn't being pushed
+		beq.s	Sol_OffScreen				; branch if object isn't being pushed
 		bclr	#status_pushing_bit,ost_status(a1)	; stop pushing
 		bclr	#status_pushing_bit,ost_status(a0)
 		
-	.no_push:
+Sol_OffScreen:
 		moveq	#solid_none,d1				; set collision flag to none
 		rts
 		
@@ -130,20 +128,19 @@ Sol_Side:
 		rts
 		
 Sol_Stand:
-		bsr.w	RangePlusX				; get distances between Sonic (a1) and object (a0)
-		bsr.w	RangePlusY2
-		
-Sol_Stand_SkipRange:
+		getsonic
 		btst	#status_air_bit,ost_status(a1)
-		bne.s	.leave					; branch if Sonic jumps
+		bne.s	Sol_Stand_Leave				; branch if Sonic jumps
+		range_x_sonic
 		tst	d1
-		bpl.s	.leave					; branch if Sonic is outside left/right edges
+		bpl.s	Sol_Stand_Leave				; branch if Sonic is outside left/right edges
 		
+		range_y_exact
 		add.w	d3,ost_y_pos(a1)			; align Sonic with top of object
-		tst.w	ost_x_prev(a0)
+		move.w	ost_x_prev(a0),d2
 		beq.s	.skip_x					; branch if previous x pos is unused
-		move.w	ost_x_pos(a0),d2
-		sub.w	ost_x_prev(a0),d2			; subtract previous x pos for distance in pixels moved (+ve if moved right)
+		neg.w	d2
+		add.w	ost_x_pos(a0),d2			; subtract previous x pos for distance in pixels moved (+ve if moved right)
 		clr.w	ost_x_prev(a0)
 		add.w	d2,ost_x_pos(a1)			; update Sonic's x position
 		
@@ -151,11 +148,50 @@ Sol_Stand_SkipRange:
 		moveq	#solid_top,d1				; set collision flag to top
 		rts
 
-	.leave:
+Sol_Stand_Leave:
 		bclr	#status_platform_bit,ost_status(a1)	; clear Sonic's standing flag
 		bclr	#status_platform_bit,ost_status(a0)	; clear object's standing flag
 		clr.b	ost_mode(a0)
 		moveq	#solid_none,d1
+		rts
+		
+Sol_Stand_TopOnly:
+		getsonic
+		btst	#status_air_bit,ost_status(a1)
+		bne.s	Sol_Stand_Leave				; branch if Sonic jumps
+		range_x_sonic0
+		tst	d1
+		bpl.s	Sol_Stand_Leave				; branch if Sonic is outside left/right edges
+		
+		range_y_exact
+		add.w	d3,ost_y_pos(a1)			; align Sonic with top of object
+		move.w	ost_x_prev(a0),d2
+		beq.s	.skip_x					; branch if previous x pos is unused
+		neg.w	d2
+		add.w	ost_x_pos(a0),d2			; subtract previous x pos for distance in pixels moved (+ve if moved right)
+		clr.w	ost_x_prev(a0)
+		add.w	d2,ost_x_pos(a1)			; update Sonic's x position
+		
+	.skip_x:
+		moveq	#solid_top,d1				; set collision flag to top
+		rts
+		
+Sol_Stand_SkipRange:
+		btst	#status_air_bit,ost_status(a1)
+		bne.s	Sol_Stand_Leave				; branch if Sonic jumps
+		tst	d1
+		bpl.s	Sol_Stand_Leave				; branch if Sonic is outside left/right edges
+		
+		add.w	d3,ost_y_pos(a1)			; align Sonic with top of object
+		move.w	ost_x_prev(a0),d2
+		beq.s	.skip_x					; branch if previous x pos is unused
+		neg.w	d2
+		add.w	ost_x_pos(a0),d2			; subtract previous x pos for distance in pixels moved (+ve if moved right)
+		clr.w	ost_x_prev(a0)
+		add.w	d2,ost_x_pos(a1)			; update Sonic's x position
+		
+	.skip_x:
+		moveq	#solid_top,d1				; set collision flag to top
 		rts
 		
 Sol_Kill:
@@ -176,10 +212,11 @@ SolidObject_SidesOnly:
 		bpl.w	Sol_OffScreen				; branch if object isn't on screen
 		tst.w	(v_debug_active_hi).w
 		bne.w	Sol_None				; branch if debug mode is in use
-		bsr.w	RangePlusX				; get distances between Sonic (a1) and object (a0)
+		getsonic
+		range_x_sonic					; get distances between Sonic (a1) and object (a0)
 		cmp.w	#0,d1
 		bgt.s	.exit					; branch if outside x hitbox
-		bsr.w	RangePlusY2
+		range_y_exact
 		bpl.s	.exit					; branch if outside y hitbox
 		
 		cmp.w	d1,d3
@@ -207,12 +244,13 @@ SolidObject_TopOnly:
 SolidObject_TopOnly_SkipRender:
 		tst.w	(v_debug_active_hi).w
 		bne.w	Sol_None				; branch if debug mode is in use
-		bsr.w	RangePlusX_NoPlayerWidth		; get distances between Sonic (a1) and object (a0)
-		bsr.w	RangePlusY2
 		tst.b	ost_mode(a0)
-		bne.w	Sol_Stand_SkipRange			; branch if Sonic is already standing on object
+		bne.w	Sol_Stand_TopOnly			; branch if Sonic is already standing on object
+		getsonic
+		range_x_sonic0					; get distances between Sonic (a1) and object (a0)
 		cmp.w	#0,d1
 		bgt.s	.exit					; branch if outside x hitbox
+		range_y_exact
 		tst.w	d3
 		bpl.s	.exit					; branch if outside y hitbox
 		

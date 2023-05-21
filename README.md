@@ -31,7 +31,7 @@ _Sonic 1-squared_ is an enhanced version of the original _Sonic the Hedgehog_ ga
 * `ost_linked` is similar to `ost_parent`. `GetLinked` will set the linked object as `a1`. `DeleteFamily` won't delete linked objects.
 * Monitor icons load only as needed, allowing for up to 256 unique monitor types (with a maximum of 8 loaded at any one time).
 * Each title card has its own PLC, so only letters that are used need to be loaded. Title cards are automatically centered by the `autocard` macro. Title card mappings are also automated, and can use sprite mappings more efficiently by joining two letters together as a single sprite.
-* GHZ loops use an object instead of being hard-coded. The object reads Sonic's position within the loop and updates the level layout accordingly.
+* GHZ/SLZ loops use an object instead of being hard-coded. The object reads Sonic's position within the loop and updates the level layout accordingly.
 * Debug mode has been rewritten with more features, including info overlays for Sonic and the nearest object (similar to those in the [Sonic Physics Guide](http://info.sonicretro.org/Sonic_Physics_Guide)). The controls are as follows:
   * B - Toggle between Sonic and object.
   * C (as object) - Place an object.

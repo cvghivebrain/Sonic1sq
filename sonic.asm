@@ -397,7 +397,6 @@ Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 
 		include "Objects\Moto Bug.asm"			; MotoBug
 		include "Objects\_DespawnObject & CheckActive.asm"
-		include "Objects\_FreezeObject.asm"
 
 		include "Objects\Yadrin.asm"			; Yadrin
 

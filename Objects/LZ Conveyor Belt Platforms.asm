@@ -35,6 +35,7 @@ LCon_Main:	; Routine 0
 		move.w	(a2)+,ost_y_pos(a1)
 		move.w	(a2)+,d0
 		move.b	d0,ost_subtype(a1)
+		move.w	ost_y_pos(a0),ost_lcon_parent_y_pos(a1)
 		saveparent
 
 	.fail:
@@ -79,6 +80,7 @@ LConP_Index:	index *,,2
 ost_lcon_corner_ptr:	rs.l 1					; address of corner position data (4 bytes)
 ost_lcon_corner_x_pos:	rs.w 1					; x position of next corner (2 bytes)
 ost_lcon_corner_y_pos:	rs.w 1					; y position of next corner (2 bytes)
+ost_lcon_parent_y_pos:	rs.w 1					; y position of parent object
 ost_lcon_corner_next:	rs.w 1					; index of next corner
 ost_lcon_corner_count:	equ __rs-1				; total number of corners +1, times 4
 ost_lcon_corner_inc:	rs.b 1					; amount to add to corner index (4 or -4)
@@ -133,10 +135,11 @@ LConP_Main:	; Routine 0
 		move.w	(a2,d1.w),ost_lcon_corner_x_pos(a0)	; get corner position data
 		move.w	2(a2,d1.w),ost_lcon_corner_y_pos(a0)
 		bsr.w	LCon_Platform_Move			; begin platform moving
-		move.l	#LConP_Platform,ost_id(a0)		; skip routine check in future
 
 LConP_Platform:	; Routine 2
 		shortcut
+		move.w	ost_lcon_parent_y_pos(a0),d0
+		waitvisible	360,120				; don't run if not near screen
 		move.w	ost_x_pos(a0),ost_x_prev(a0)
 		bsr.s	LCon_Platform_Update
 		bsr.w	SolidObject_TopOnly
@@ -160,10 +163,10 @@ LCon_Platform_Update:
 .no_reverse:
 		move.w	ost_x_pos(a0),d0
 		cmp.w	ost_lcon_corner_x_pos(a0),d0		; is platform at corner?
-		bne.s	.not_at_corner				; if not, branch
+		bne.w	LCon_Update_Pos				; if not, branch
 		move.w	ost_y_pos(a0),d0
 		cmp.w	ost_lcon_corner_y_pos(a0),d0
-		bne.s	.not_at_corner
+		bne.w	LCon_Update_Pos
 
 .next_corner:
 		moveq	#0,d1
@@ -183,10 +186,6 @@ LCon_Platform_Update:
 		movea.l	ost_lcon_corner_ptr(a0),a1
 		move.w	(a1,d1.w),ost_lcon_corner_x_pos(a0)
 		move.w	2(a1,d1.w),ost_lcon_corner_y_pos(a0)
-		bsr.s	LCon_Platform_Move
-
-	.not_at_corner:
-		bra.w	SpeedToPos
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to set direction and speed of platform
@@ -227,6 +226,7 @@ LCon_Platform_Move:
 		swap	d0
 		move.w	d0,ost_x_sub(a0)
 		clr.w	ost_y_sub(a0)
+		update_xy_pos
 		rts	
 ; ===========================================================================
 
@@ -245,6 +245,9 @@ LCon_Platform_Move:
 		swap	d1
 		move.w	d1,ost_y_sub(a0)
 		clr.w	ost_x_sub(a0)
+		
+LCon_Update_Pos:
+		update_xy_pos
 		rts
 
 ; ===========================================================================

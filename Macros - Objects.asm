@@ -177,6 +177,14 @@ range_x_sonic:	macro
 		add.w	d0,d4					; d4 = Sonic's x pos relative to left edge
 		endm
 		
+range_x_sonic0:	macro						; as above, but ignoring Sonic's width
+		range_x
+		moveq	#0,d4
+		move.b	ost_width(a0),d4
+		sub.w	d4,d1					; d1 = x dist between Sonic's x pos and object hitbox edge (-ve if overlapping)
+		add.w	d0,d4					; d4 = Sonic's x pos relative to left edge
+		endm
+		
 range_y_exact:	macro
 		range_y
 		moveq	#0,d5
@@ -208,3 +216,35 @@ set_anim:	macro
 		move.b	d0,ost_anim(a0)				; update animation id (and clear high bit)
 	.keepanim\@:
 		endm
+
+; ---------------------------------------------------------------------------
+; Halt object execution if it's above or below the screen
+
+; input:
+;	d0.w = y position
+
+; usage:
+;		move.w	ost_y_pos(a0),d0
+;		waitvisible	120,240				; halt if object is 120px above or 240px below screen
+; ---------------------------------------------------------------------------
+
+waitvisible:	macro
+		sub.w	(v_camera_y_pos).w,d0			; d0 = dist between object and top of screen (-ve if object is above)
+		ifarg	\1
+		cmpi.w	#-\1,d0
+		else
+		cmpi.w	#-256,d0
+		endc
+		bgt.s	.inrangetop\@				; branch if below upper limit
+		rts						; object is above
+	.inrangetop\@:
+		ifarg	\2
+		cmpi.w	#\2+screen_height,d0
+		else
+		cmpi.w	#256+screen_height,d0
+		endc
+		blt.s	.inrangebtm\@				; branch if above lower limit
+		rts						; object is below
+	.inrangebtm\@:
+		endm
+		
