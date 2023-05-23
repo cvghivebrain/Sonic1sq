@@ -137,7 +137,7 @@ ObjPos_LZ3:
 		objpos $12F0,$01B8,Button,$0E
 		objpos $12F0,$01D0,LabyrinthBlock,type_lblock_solid
 		objpos $12F0,$01F0,LabyrinthBlock,type_lblock_solid
-		objpos $1300,$0280,LabyrinthConvey,5,rem
+		objpos $1300,$0280,LabyrinthConvey,$E5,rem
 		objpos $1320,$02F0,Spikes,type_spike_3upwide+type_spike_still
 		objpos $1330,$0580,Jaws,$0C,xflip,rem
 		objpos $1350,$0188,Spikes,type_spike_3left+type_spike_still,xflip

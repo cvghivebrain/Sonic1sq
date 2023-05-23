@@ -4,7 +4,12 @@
 ; spawned by:
 ;	ObjPos_LZ1 - subtypes 0/1
 ;	ObjPos_LZ2 - subtypes 2/3
-;	ObjPos_LZ3 - subtypes 4/5
+;	ObjPos_LZ3 - subtypes 4/$E5
+
+; subtypes:
+;	%BBBBCCCC
+;	BBBB - button id that reverses the conveyor (0 does nothing)
+;	CCCC - corner data id
 ; ---------------------------------------------------------------------------
 
 LabyrinthConvey:
@@ -15,12 +20,16 @@ LabyrinthConvey:
 ; ===========================================================================
 LCon_Index:	index *,,2
 		ptr LCon_Main
-		ptr LCon_ChkDist
+		ptr LCon_Action
 ; ===========================================================================
 
 LCon_Main:	; Routine 0
-		addq.b	#2,ost_routine(a0)			; goto LCon_ChkDist next
+		addq.b	#2,ost_routine(a0)			; goto LCon_Action next
 		move.b	ost_subtype(a0),d0
+		move.b	d0,d1
+		andi.b	#$F,d0					; read low nybble of subtype
+		lsr.b	#4,d1
+		move.b	d1,ost_subtype(a0)			; move high to low nybble in subtype (this is the button id)
 		add.w	d0,d0
 		add.w	d0,d0
 		lea	(ObjPosLZPlatform_Index).l,a2
@@ -42,8 +51,18 @@ LCon_Main:	; Routine 0
 		rts
 ; ===========================================================================
 
-LCon_ChkDist:	; Routine 2
+LCon_Action:	; Routine 2
 		shortcut
+		moveq	#0,d0
+		move.b	ost_subtype(a0),d0
+		beq.s	.no_button				; branch if subtype is 0
+		lea	(v_button_state).w,a2
+		tst.b	(a2,d0.w)				; check state of linked button
+		beq.s	.no_button				; branch if button isn't pressed
+		move.b	#1,(f_convey_reverse).w			; set global reverse flag
+		move.b	#2,ost_mode(a0)				; set local reverse flag
+		
+	.no_button:
 		getsonic
 		range_x
 		cmpi.w	#512,d1
@@ -81,6 +100,7 @@ ost_lcon_corner_x_pos:	rs.w 1					; x position of next corner (2 bytes)
 ost_lcon_corner_y_pos:	rs.w 1					; y position of next corner (2 bytes)
 ost_lcon_corner_next:	rs.b 1					; index of next corner
 ost_lcon_corner_count:	rs.b 1					; total number of corners *8
+ost_lcon_rev_flag:	rs.b 1					; flag set when platform has reversed
 		rsobjend
 ; ===========================================================================
 
@@ -112,10 +132,22 @@ LConP_Main:	; Routine 0
 		move.w	(a2)+,ost_lcon_corner_y_pos(a0)
 		move.w	(a2)+,ost_x_vel(a0)			; set initial speed
 		move.w	(a2)+,ost_y_vel(a0)
+		getparent
 		bra.s	LConP_ChkCorner				; don't start moving until corners are checked
 
 LConP_Platform:	; Routine 2
 		shortcut
+		getparent					; a1 = OST of parent
+		tst.b	ost_lcon_rev_flag(a0)
+		bne.s	.skip_reverse				; branch if already reversed
+		tst.b	ost_mode(a1)
+		beq.s	.skip_reverse				; branch if button hasn't been pressed
+		move.b	#1,ost_lcon_rev_flag(a0)		; set reverse "done" flag
+		neg.w	ost_x_vel(a0)				; go backwards
+		neg.w	ost_y_vel(a0)
+		bra.w	LConP_RevCorner
+		
+	.skip_reverse:
 		move.w	ost_x_pos(a0),ost_x_prev(a0)
 		update_xy_pos
 		
@@ -139,6 +171,8 @@ LConP_ChkCorner:
 ; ===========================================================================
 		
 LConP_NextCorner:
+		tst.b	ost_mode(a1)
+		bne.s	LConP_RevCorner				; branch if reverse flag is set
 		moveq	#0,d0
 		move.b	ost_lcon_corner_next(a0),d0
 		addq.b	#8,d0
@@ -154,6 +188,30 @@ LConP_NextCorner:
 		move.w	(a2)+,ost_lcon_corner_y_pos(a0)
 		move.w	(a2)+,ost_x_vel(a0)			; set speed
 		move.w	(a2)+,ost_y_vel(a0)
+		bsr.w	SolidObject_TopOnly
+		bra.w	DisplaySprite
+; ===========================================================================
+
+LConP_RevCorner:
+		moveq	#0,d0
+		move.b	ost_lcon_corner_next(a0),d0
+		move.w	d0,d1
+		addq.b	#4,d1					; d1 = offset for x/y vel of previous corner
+		subq.b	#8,d0
+		bpl.s	.corner_valid				; branch if corner exists
+		add.b	ost_lcon_corner_count(a0),d0		; reset to final corner
+		
+	.corner_valid:
+		move.b	d0,ost_lcon_corner_next(a0)
+		movea.l	ost_lcon_corner_ptr(a0),a2		; get pointer to corner data
+		lea	(a2,d0.w),a3				; jump to relevant corner
+		move.w	(a3)+,ost_lcon_corner_x_pos(a0)		; get corner position data
+		move.w	(a3)+,ost_lcon_corner_y_pos(a0)
+		lea	(a2,d1.w),a3				; jump to previous corner
+		move.w	(a3)+,ost_x_vel(a0)			; set speed
+		move.w	(a3)+,ost_y_vel(a0)
+		neg.w	ost_x_vel(a0)				; go backwards
+		neg.w	ost_y_vel(a0)
 		bsr.w	SolidObject_TopOnly
 		bra.w	DisplaySprite
 ; ===========================================================================
