@@ -32,4 +32,3 @@ frame_lcon_platform:
 		spritemap
 		piece	-$10, -8, 4x2, $40
 		endsprite
-		even
