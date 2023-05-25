@@ -21,6 +21,16 @@ LabyrinthConvey:
 LCon_Index:	index *,,2
 		ptr LCon_Main
 		ptr LCon_Action
+
+		rsobj LabyrinthConvey
+ost_lcon_platform_ptr:	rs.l 1					; pointer to platform list data
+ost_lcon_visible_left:	rs.w 1					; visible left limit of camera x pos
+ost_lcon_visible_right:	rs.w 1					; visible right limit of camera x pos
+ost_lcon_visible_top:	rs.w 1					; visible upper limit of camera y pos
+ost_lcon_visible_btm:	rs.w 1					; visible lower limit of camera y pos
+ost_lcon_visible_flag:	rs.b 1					; flag set when conveyor is visible
+ost_lcon_button:	rs.b 1					; button id that controls reverse direction
+		rsobjend
 ; ===========================================================================
 
 LCon_Main:	; Routine 0
@@ -29,32 +39,26 @@ LCon_Main:	; Routine 0
 		move.b	d0,d1
 		andi.b	#$F,d0					; read low nybble of subtype
 		lsr.b	#4,d1
-		move.b	d1,ost_subtype(a0)			; move high to low nybble in subtype (this is the button id)
+		move.b	d1,ost_lcon_button(a0)			; save high nybble as button id
 		add.w	d0,d0
 		add.w	d0,d0
 		lea	(ObjPosLZPlatform_Index).l,a2
 		movea.l	(a2,d0.w),a2				; get address of platform position data
-		move.w	(a2)+,d1				; get object count
-
-	.loop:
-		bsr.w	FindNextFreeObj				; find free OST slot
-		bne.s	.fail					; branch if not found
-		move.l	#LabyrinthConveyPlatform,ost_id(a1)	; load platform object
-		move.w	(a2)+,ost_x_pos(a1)
-		move.w	(a2)+,ost_y_pos(a1)
-		move.w	(a2)+,d0
-		move.b	d0,ost_subtype(a1)
-		saveparent
-		dbf	d1,.loop				; repeat for number of objects
-
-	.fail:
+		move.l	a2,ost_lcon_platform_ptr(a0)
+		add.w	d0,d0
+		lea	(LCon_Edge_Data).l,a2			; get edge data
+		lea	(a2,d0.w),a2
+		move.w	(a2)+,ost_lcon_visible_left(a0)		; set limits of visibility
+		move.w	(a2)+,ost_lcon_visible_right(a0)
+		move.w	(a2)+,ost_lcon_visible_top(a0)
+		move.w	(a2)+,ost_lcon_visible_btm(a0)
 		rts
 ; ===========================================================================
 
 LCon_Action:	; Routine 2
 		shortcut
 		moveq	#0,d0
-		move.b	ost_subtype(a0),d0
+		move.b	ost_lcon_button(a0),d0
 		beq.s	.no_button				; branch if subtype is 0
 		lea	(v_button_state).w,a2
 		tst.b	(a2,d0.w)				; check state of linked button
@@ -63,19 +67,42 @@ LCon_Action:	; Routine 2
 		move.b	#2,ost_mode(a0)				; set local reverse flag
 		
 	.no_button:
-		getsonic
-		range_x
-		cmpi.w	#512,d1
-		bcs.s	.exit					; branch if Sonic is < 512px away
-		moveq	#0,d0
-		move.b	ost_respawn(a0),d0			; get respawn id
-		beq.w	DeleteFamily				; branch if not set
-		lea	(v_respawn_list).w,a2
-		bclr	#7,2(a2,d0.w)				; allow object to respawn later
-		bra.w	DeleteFamily				; delete the object and all platforms
+		move.w	(v_camera_x_pos).w,d0
+		cmp.w	ost_lcon_visible_left(a0),d0
+		bcs.s	.not_visible				; branch if camera is too far left
+		cmp.w	ost_lcon_visible_right(a0),d0
+		bhi.s	.not_visible				; branch if camera is too far right
+		move.w	(v_camera_y_pos).w,d0
+		cmp.w	ost_lcon_visible_top(a0),d0
+		bcs.s	.not_visible				; branch if camera is above
+		cmp.w	ost_lcon_visible_btm(a0),d0
+		bhi.s	.not_visible				; branch if camera is below
+		tst.b	ost_lcon_visible_flag(a0)
+		bne.s	.exit					; branch if already visible
+		
+		move.b	#1,ost_lcon_visible_flag(a0)		; set flag
+		movea.l	ost_lcon_platform_ptr(a0),a2		; get pointer to platform position data
+		move.w	(a2)+,d1				; get object count
+
+	.loop:
+		bsr.w	FindNextFreeObj				; find free OST slot
+		bne.s	.exit					; branch if not found
+		move.l	#LabyrinthConveyPlatform,ost_id(a1)	; load platform object
+		move.w	(a2)+,ost_x_pos(a1)
+		move.w	(a2)+,ost_y_pos(a1)
+		move.w	(a2)+,d0
+		move.b	d0,ost_subtype(a1)
+		saveparent
+		dbf	d1,.loop				; repeat for number of objects
 		
 	.exit:
 		rts
+		
+	.not_visible:
+		tst.b	ost_lcon_visible_flag(a0)
+		beq.s	.exit					; branch if already not visible
+		clr.b	ost_lcon_visible_flag(a0)		; clear flag
+		bra.w	DeleteChildren				; delete platforms
 
 ; ---------------------------------------------------------------------------
 ; Object 63 - platforms on a conveyor belt (LZ)
@@ -215,6 +242,14 @@ LConP_RevCorner:
 		bsr.w	SolidObject_TopOnly
 		bra.w	DisplaySprite
 ; ===========================================================================
+
+LCon_Edge_Data:	; left, right, top, bottom (includes width/height of screen and platforms)
+		dc.w $1022-16-screen_width, $10BE+16, $21A-8-screen_height, $3C5+8
+		dc.w $1232-16-screen_width, $12CE+16, $280-8-screen_height, $46E+8
+		dc.w $D22-16-screen_width, $DAE+16, $482-8-screen_height, $5DE+8
+		dc.w $D62-16-screen_width, $DEE+16, $3A2-8-screen_height, $4DE+8
+		dc.w $C52-16-screen_width, $DDE+16, $242-8-screen_height, $3DE+8
+		dc.w $1252-16-screen_width, $13DE+16, $20A-8-screen_height, $2BE+8
 
 LCon_Corner_Data:
 		index *
