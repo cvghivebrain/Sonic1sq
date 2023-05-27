@@ -91,4 +91,3 @@ frame_monitor_broken:
 		spritemap					; broken monitor
 		piece	-$10, -1, 4x2, $18
 		endsprite
-		even

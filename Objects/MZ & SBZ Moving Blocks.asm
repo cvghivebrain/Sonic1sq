@@ -4,6 +4,11 @@
 ; spawned by:
 ;	ObjPos_MZ1, ObjPos_MZ2, ObjPos_MZ3 - subtypes 1/2/$41
 ;	ObjPos_SBZ1, ObjPos_SBZ2 - subtypes $28/$39
+
+; subtypes:
+;	%TTTTMMMM
+;	TTTT - type (0-4, each with its own width, frame & tile setting)
+;	MMMM - movement pattern (0-$A)
 ; ---------------------------------------------------------------------------
 
 MovingBlock:
@@ -58,6 +63,7 @@ MBlock_Main:	; Routine 0
 		andi.b	#$F,ost_subtype(a0)			; clear high nybble of subtype
 
 MBlock_Solid:	; Routine 2
+		shortcut
 		move.w	ost_x_pos(a0),ost_x_prev(a0)
 		bsr.s	MBlock_Move				; move & update position
 		bsr.w	SolidObject_TopOnly
@@ -151,11 +157,10 @@ MBlock_RightDrop_Now:
 
 ; Type 6
 MBlock_Drop_Now:
-		bsr.w	SpeedToPos
-		addi.w	#$18,ost_y_vel(a0)			; make the platform fall
+		update_y_fall	$18				; make the platform fall
 		bsr.w	FindFloorObj
 		tst.w	d1					; has platform hit the floor?
-		bpl.w	.keep_falling				; if not, branch
+		bpl.s	.keep_falling				; if not, branch
 		add.w	d1,ost_y_pos(a0)			; align to floor
 		clr.w	ost_y_vel(a0)				; stop platform	falling
 		clr.b	ost_subtype(a0)				; change to type 00 (non-moving)

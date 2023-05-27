@@ -39,7 +39,7 @@ Pow_Main:	; Routine 0
 Pow_Move:	; Routine 2
 		tst.w	ost_y_vel(a0)
 		bpl.s	Pow_Checks				; branch if object has stopped rising
-		bsr.w	SpeedToPos				; update position
+		update_y_pos					; update position
 		addi.w	#$18,ost_y_vel(a0)			; reduce object speed
 		bra.w	DisplaySprite
 ; ===========================================================================
@@ -155,11 +155,10 @@ Pow_Goggles:
 ; ===========================================================================
 
 Pow_Delete:	; Routine 4
-		subq.b	#1,ost_anim_time(a0)
-		bmi.s	.clear_slot				; delete after half a second
-		bra.w	DisplaySprite
+		shortcut
+		subq.b	#1,ost_anim_time(a0)			; delete after half a second
+		bpl.w	DisplaySprite
 		
-	.clear_slot:
 		moveq	#0,d0
 		move.b	ost_pow_slot(a0),d0
 		bmi.w	DeleteObject				; branch if slot isn't used

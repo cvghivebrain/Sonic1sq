@@ -53,4 +53,3 @@ frame_moto_smoke3:
 frame_moto_blank:
 		spritemap
 		endsprite
-		even

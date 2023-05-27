@@ -41,21 +41,15 @@ FireM_Main:	; Routine 0
 FireM_MakeFire:	; Routine 2
 		shortcut
 		subq.b	#1,ost_anim_time(a0)			; decrement timer
-		bne.s	.wait					; if time remains, branch
+		bne.w	DespawnQuick_NoDisplay			; if time remains, branch
 		move.b	ost_firem_time_master(a0),ost_anim_time(a0) ; reset time delay
 		bsr.w	CheckOffScreen				; is object on-screen?
-		bne.s	.wait					; if not, branch
+		bne.w	DespawnQuick_NoDisplay			; if not, branch
 		bsr.w	FindFreeObj				; find free OST slot
-		bne.s	.wait					; branch if not found
-
+		bne.w	DespawnQuick_NoDisplay			; branch if not found
 		move.l	#FireBall,ost_id(a1)			; load fireball object
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		move.b	ost_subtype(a0),ost_subtype(a1)		; subtype = speed/direction
 		move.b	ost_status(a0),ost_status(a1)
-
-	.wait:
-		move.w	ost_x_pos(a0),d0
-		bsr.w	CheckActive
-		bne.w	DeleteObject
-		rts
+		bra.w	DespawnQuick_NoDisplay

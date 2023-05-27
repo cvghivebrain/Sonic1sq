@@ -123,10 +123,8 @@ Mon_Animate:	; Routine 6
 Mon_Display:	; Routine 8
 		move.w	ost_x_pos(a0),d0
 		bsr.w	CheckActive
-		bne.s	.clear_slot
-		bra.w	DisplaySprite
+		beq.w	DisplaySprite				; branch if on screen
 		
-	.clear_slot:
 		moveq	#0,d0
 		move.b	ost_monitor_slot(a0),d0
 		bmi.w	DeleteObject				; branch if slot isn't used
@@ -137,7 +135,7 @@ Mon_Display:	; Routine 8
 ; ===========================================================================
 
 Mon_Drop:	; Routine $A
-		bsr.w	ObjectFall				; apply gravity and update position
+		update_y_fall					; apply gravity and update position
 		jsr	(FindFloorObj).l
 		tst.w	d1					; has monitor hit the floor?
 		bpl.s	Mon_Animate				; if not, branch
@@ -157,17 +155,18 @@ Mon_Solid_Detect:
 		bne.w	Sol_None				; branch if debug mode is in use
 		tst.b	ost_mode(a0)
 		bne.w	Sol_Stand				; branch if Sonic is already standing on object
-		bsr.w	RangePlusX				; get distances between Sonic (a1) and object (a0)
+		getsonic
+		range_x_sonic					; get distances between Sonic (a1) and object (a0)
 		cmp.w	#0,d1
 		bgt.w	Sol_None				; branch if outside x hitbox
-		bsr.w	RangePlusY2
+		range_y_exact
 		bpl.w	Sol_None				; branch if outside y hitbox
 		
 		cmp.w	d1,d3
-		blt.w	.side					; branch if Sonic is to the side
+		blt.s	.side					; branch if Sonic is to the side
 		
 		tst.w	d2
-		bmi.w	.above					; branch if Sonic is above
+		bmi.s	.above					; branch if Sonic is above
 		
 		sub.w	d3,ost_y_pos(a1)			; snap to hitbox
 		neg.w	ost_y_vel(a1)				; stop Sonic moving up
@@ -301,7 +300,6 @@ ani_monitor_static:
 		dc.w id_frame_monitor_static1
 		dc.w id_frame_monitor_static2
 		dc.w id_Anim_Flag_Restart
-		even
 
 ani_monitor_sonic:
 		dc.w 1
@@ -315,7 +313,6 @@ ani_monitor_sonic:
 		dc.w id_frame_monitor_sonic
 		dc.w id_frame_monitor_sonic
 		dc.w id_Anim_Flag_Restart
-		even
 
 ani_monitor_0:
 		dc.w 1
@@ -329,7 +326,6 @@ ani_monitor_0:
 		dc.w id_frame_monitor_0
 		dc.w id_frame_monitor_0
 		dc.w id_Anim_Flag_Restart
-		even
 
 ani_monitor_1:
 		dc.w 1
@@ -343,7 +339,6 @@ ani_monitor_1:
 		dc.w id_frame_monitor_1
 		dc.w id_frame_monitor_1
 		dc.w id_Anim_Flag_Restart
-		even
 
 ani_monitor_2:
 		dc.w 1
@@ -357,7 +352,6 @@ ani_monitor_2:
 		dc.w id_frame_monitor_2
 		dc.w id_frame_monitor_2
 		dc.w id_Anim_Flag_Restart
-		even
 
 ani_monitor_3:
 		dc.w 1
@@ -371,7 +365,6 @@ ani_monitor_3:
 		dc.w id_frame_monitor_3
 		dc.w id_frame_monitor_3
 		dc.w id_Anim_Flag_Restart
-		even
 
 ani_monitor_4:
 		dc.w 1
@@ -385,7 +378,6 @@ ani_monitor_4:
 		dc.w id_frame_monitor_4
 		dc.w id_frame_monitor_4
 		dc.w id_Anim_Flag_Restart
-		even
 
 ani_monitor_5:
 		dc.w 1
@@ -399,7 +391,6 @@ ani_monitor_5:
 		dc.w id_frame_monitor_5
 		dc.w id_frame_monitor_5
 		dc.w id_Anim_Flag_Restart
-		even
 
 ani_monitor_6:
 		dc.w 1
@@ -413,7 +404,6 @@ ani_monitor_6:
 		dc.w id_frame_monitor_6
 		dc.w id_frame_monitor_6
 		dc.w id_Anim_Flag_Restart
-		even
 
 ani_monitor_7:
 		dc.w 1
@@ -427,7 +417,6 @@ ani_monitor_7:
 		dc.w id_frame_monitor_7
 		dc.w id_frame_monitor_7
 		dc.w id_Anim_Flag_Restart
-		even
 
 ani_monitor_breaking:
 		dc.w 2
@@ -436,4 +425,3 @@ ani_monitor_breaking:
 		dc.w id_frame_monitor_static2
 		dc.w id_frame_monitor_broken
 		dc.w id_Anim_Flag_Stop
-		even
