@@ -4,6 +4,13 @@
 ; spawned by:
 ;	ObjPos_MZ1, ObjPos_MZ2, ObjPos_MZ3 - subtypes 2/$11/$12/$23/$80
 ;	ChainStomp
+
+; subtypes:
+;	%BPSSLLLL
+;	B - 1 if controlled by button (this overrides P)
+;	P - 1 if activated by proximity | button id if B is set
+;	SS - size of stomper (0 = large; 1 = medium; 2 = small)
+;	LLLL - chain length (from list)
 ; ---------------------------------------------------------------------------
 
 ChainStomp:
@@ -24,7 +31,6 @@ ost_cstomp_y_start:		rs.w 1				; original y position
 ost_cstomp_chain_length:	rs.w 1				; current chain length
 ost_cstomp_chain_max:		rs.w 1				; maximum chain length
 ost_cstomp_delay_time:		rs.w 1				; time delay between fully extended and rising again
-ost_cstomp_btn_id:		rs.b 1				; button number for the current stomper
 ost_cstomp_rise_flag:		rs.b 1				; 0 = falling; 1 = rising
 		rsobjend
 		
@@ -45,7 +51,7 @@ CStom_Main:	; Routine 0
 		moveq	#0,d0
 		move.b	ost_subtype(a0),d0			; get subtype
 		move.l	d0,d1
-		andi.b	#$30,d0					; read bits 5/4
+		andi.b	#%00110000,d0				; read bits 5/4
 		lsr.b	#2,d0
 		lea	CStom_Sizes(pc,d0.w),a2
 		move.b	(a2),ost_displaywidth(a0)
@@ -121,16 +127,20 @@ CStom_Block:	; Routine 2
 		bsr.w	CStom_Types				; update speed & position
 		bsr.w	SolidObject
 		andi.b	#1,d1
-		beq.s	CStom_Ceiling				; branch if Sonic isn't on top
+		beq.w	DespawnQuick				; branch if Sonic isn't on top
 		cmpi.b	#$10,ost_cstomp_chain_length(a0)
-		bcc.s	CStom_Ceiling				; branch if chain is longer than 16px
+		bcc.w	DespawnQuick				; branch if chain is longer than 16px
 		bsr.w	ObjectKillSonic				; Sonic is crushed against ceiling
+		bra.w	DespawnQuick
+; ===========================================================================
 		
 CStom_Ceiling:	; Routine 6
+		shortcut
 		bra.w	DespawnQuick
 ; ===========================================================================
 
 CStom_Chain:	; Routine 8
+		shortcut
 		getparent					; a1 = address of parent OST
 		move.b	ost_cstomp_chain_length(a1),d0		; get current chain length
 		lsr.b	#5,d0					; divide by $20
@@ -139,8 +149,10 @@ CStom_Chain:	; Routine 8
 		move.w	ost_y_pos(a1),ost_y_pos(a0)
 		subi.w	#$34,ost_y_pos(a0)
 		bra.w	DespawnQuick
+; ===========================================================================
 
 CStom_Spikes:	; Routine 4
+		shortcut
 		getparent					; a1 = address of parent OST
 		move.w	ost_y_pos(a1),ost_y_pos(a0)
 		addi.w	#$1C,ost_y_pos(a0)
@@ -148,8 +160,8 @@ CStom_Spikes:	; Routine 4
 ; ===========================================================================
 
 CStom_Types:
-		move.b	ost_subtype(a0),d0			; get subtype (for button-controlled stompers this will have changed to 0)
-		andi.w	#$C0,d0					; read bits 7/6
+		move.b	ost_subtype(a0),d0			; get subtype
+		andi.w	#%11000000,d0				; read bits 7/6
 		lsr.w	#5,d0
 		move.w	CStom_TypeIndex(pc,d0.w),d1
 		jmp	CStom_TypeIndex(pc,d1.w)
@@ -157,15 +169,16 @@ CStom_Types:
 CStom_TypeIndex:index *
 		ptr CStom_TypeNormal				; 0
 		ptr CStom_TypeProx				; $40
-		ptr CStom_TypeBtn				; $80
-		ptr CStom_TypeBtn				; $C0
+		ptr CStom_TypeBtn0				; $80
+		ptr CStom_TypeBtn1				; $C0
 ; ===========================================================================
 
 ; Type $80 - rises when button is pressed
-CStom_TypeBtn:
+CStom_TypeBtn0:
+CStom_TypeBtn1:
 		lea	(v_button_state).w,a2			; load button statuses
-		moveq	#0,d0
-		move.b	ost_cstomp_btn_id(a0),d0		; move number 0 or 1 to d0
+		lsr.w	#1,d0
+		andi.w	#1,d0					; d0 = 0 or 1
 		tst.b	(a2,d0.w)				; has button (d0) been pressed?
 		beq.s	CStom_TypeBtn_Fall			; if not, branch
 		cmpi.b	#$10,ost_cstomp_chain_length(a0)	; is chain at its shortest?
@@ -220,7 +233,7 @@ CStom_TypeNormal:
 		tst.w	ost_cstomp_delay_time(a0)
 		beq.s	CStom_TypeNormal_Rise			; branch if timer = 0
 		subq.w	#1,ost_cstomp_delay_time(a0)		; decrement timer
-		bra.s	CStom_TypeNormal_SetPos
+		bra.s	CStom_SetPos
 ; ===========================================================================
 
 CStom_TypeNormal_Rise:
@@ -233,40 +246,37 @@ CStom_TypeNormal_Rise:
 
 	.skip_sound:
 		subi.w	#$80,ost_cstomp_chain_length(a0)
-		bcc.s	CStom_TypeNormal_SetPos
+		bcc.s	CStom_SetPos
 		move.w	#0,ost_cstomp_chain_length(a0)
 		move.w	#0,ost_y_vel(a0)
 		move.b	#0,ost_cstomp_rise_flag(a0)
-		bra.s	CStom_TypeNormal_SetPos
+		bra.s	CStom_SetPos
 ; ===========================================================================
 
 CStom_TypeNormal_Fall:
 		move.w	ost_cstomp_chain_max(a0),d1
 		cmp.w	ost_cstomp_chain_length(a0),d1
-		beq.s	CStom_TypeNormal_SetPos
+		beq.s	CStom_SetPos
 		move.w	ost_y_vel(a0),d0
 		addi.w	#$70,ost_y_vel(a0)			; make object fall
 		add.w	d0,ost_cstomp_chain_length(a0)
 		cmp.w	ost_cstomp_chain_length(a0),d1
-		bhi.s	CStom_TypeNormal_SetPos
+		bhi.s	CStom_SetPos
 		move.w	d1,ost_cstomp_chain_length(a0)
 		move.w	#0,ost_y_vel(a0)			; stop object falling
 		move.b	#1,ost_cstomp_rise_flag(a0)
 		move.w	#60,ost_cstomp_delay_time(a0)
 		tst.b	ost_render(a0)
-		bpl.s	CStom_TypeNormal_SetPos
+		bpl.w	CStom_SetPos
 		play.w	1, jsr, sfx_ChainStomp			; play stomping sound
-
-CStom_TypeNormal_SetPos:
 		bra.w	CStom_SetPos
 ; ===========================================================================
 
 ; Type $40 - drops when Sonic is nearby
 CStom_TypeProx:
-		bsr.w	RangeX
+		getsonic
+		range_x
 		cmpi.w	#144,d1					; is Sonic within 144px?
-		bcc.s	.over_144				; if not, branch
-		andi.b	#$3F,ost_subtype(a0)			; allow stomper to drop by changing subtype
-
-	.over_144:
+		bcc.w	CStom_SetPos				; if not, branch
+		andi.b	#%00111111,ost_subtype(a0)		; allow stomper to drop by changing subtype
 		bra.w	CStom_SetPos

@@ -111,11 +111,11 @@ type_brick_falls:	equ id_Brick_Falls		; 2 - falls when Sonic is near
 type_brick_rev:		equ 8				; +8 - reverse wobble direction
 
 ; GlassBlock
-type_glass_still:	equ id_Glass_Still		; 0 - doesn't move
-type_glass_updown:	equ id_Glass_UpDown		; 1 - moves up and down
-type_glass_updown_rev:	equ id_Glass_UpDown_Rev		; 2 - moves up and down, reversed
-type_glass_drop_jump:	equ id_Glass_Drop_Jump		; 3 - drops each time it's jumped on
-type_glass_drop_button:	equ id_Glass_Drop_Button	; 4 - drops when button is pressed
+type_glass_still:	equ 0				; 0 - doesn't move
+type_glass_updown:	equ 1				; 1 - moves up and down
+type_glass_updown_rev:	equ 2				; 2 - moves up and down, reversed
+type_glass_drop_jump:	equ 3				; 3 - drops each time it's jumped on
+type_glass_drop_button:	equ 4				; 4 - drops when button is pressed, stops on floor
 type_glass_button_0:	equ 0				; $0x - button 0
 type_glass_button_1:	equ $10				; $1x - button 1
 

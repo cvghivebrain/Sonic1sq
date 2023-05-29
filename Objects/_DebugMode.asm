@@ -315,6 +315,7 @@ DebugList_MZ:
 		dbitem	PushBlock, Map_Push, type_pblock_single, 0, id_frame_pblock_single, tile_Kos_MzBlock, tile_pal3
 		dbitem	SmashBlock, Map_Smab, 0, 0, id_frame_smash_two, tile_Kos_MzBlock, tile_pal3
 		dbitem	CollapseFloor, Map_CFlo, 0, 0, id_frame_cfloor_mz, tile_Kos_MzBlock, tile_pal3
+		dbitem	GlassBlock, Map_Glass, 3, 0, id_frame_glass_short, tile_Kos_MzGlass, tile_pal3
 	.end:
 DebugList_SYZ:
 		dbheader

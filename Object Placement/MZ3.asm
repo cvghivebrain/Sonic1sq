@@ -30,7 +30,7 @@ ObjPos_MZ3:
 		objpos $0190,$0548,Button,1+type_button_pal3
 		objpos $0190,$0560,MarbleBrick,type_brick_still
 		objpos $01A0,$01CC,LargeGrass,type_grass_narrow+type_grass_1+type_grass_rev
-		objpos $01A0,$0668,GlassBlock,type_glass_drop_button+type_glass_button_1
+		objpos $01A0,$05D7,GlassBlock,type_glass_drop_button+type_glass_button_1
 		objpos $01E0,$0499,GlassBlock,type_glass_updown_rev
 		objpos $0220,$03A8,CollapseFloor,$01
 		objpos $0240,$0420,LavaTag,$01

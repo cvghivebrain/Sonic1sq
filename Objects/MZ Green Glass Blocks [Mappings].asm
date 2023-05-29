@@ -24,8 +24,8 @@ frame_glass_tall:
 		
 frame_glass_shine:
 		spritemap					; reflected shine on block
-		piece	-$10, 8, 2x3, $14
-		piece	0, 0, 2x3, $14
+		piece	-$10, -8, 2x3, $14
+		piece	0, -16, 2x3, $14
 		endsprite
 		
 frame_glass_short:
@@ -41,4 +41,3 @@ frame_glass_short:
 		piece	-$20, $30, 4x1, 0, yflip
 		piece	0, $30, 4x1, 0, xflip, yflip
 		endsprite
-		even

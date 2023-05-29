@@ -69,20 +69,21 @@ GFire_Spread:	; Routine 2
 		
 	.skip_fire:
 		cmpi.w	#$78/2,d1
-		bne.w	GFire_Animate				; branch if fire hasn't reached right edge
+		bne.s	GFire_Animate				; branch if fire hasn't reached right edge
 		addq.b	#2,ost_routine(a0)			; goto GFire_Hover next
 		move.w	d2,ost_burn_y_diff(a0)			; save heightmap value
-		bra.w	GFire_Animate
+		bra.s	GFire_Animate
 ; ===========================================================================
 
 GFire_Hover:	; Routine 4
+		shortcut
 		getparent					; a1 = OST of platform object
 		move.w	ost_y_pos(a1),ost_y_pos(a0)
 		move.w	ost_burn_y_diff(a0),d0			; get value from heightmap
 		sub.w	d0,ost_y_pos(a0)			; update position
 
 GFire_Animate:
-		lea	(Ani_GFire).l,a1
+		lea	Ani_GFire(pc),a1
 		bsr.w	AnimateSprite
 		bra.w	DisplaySprite
 

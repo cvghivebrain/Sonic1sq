@@ -49,7 +49,7 @@ ObjPos_MZ2:
 		objpos $0618,$0590,Rings,$12,rem
 		objpos $0630,$05D0,MarbleBrick,type_brick_still
 		objpos $0634,$0354,Rings,$11,rem
-		objpos $0640,$0428,GlassBlock,type_glass_drop_button+type_glass_button_1
+		objpos $0640,$0397,GlassBlock,type_glass_drop_button+type_glass_button_1
 		objpos $0670,$0310,MarbleBrick,type_brick_still
 		objpos $0710,$02B1,Monitor,type_monitor_rings,rem
 		objpos $0728,$0510,Spikes,type_spike_1left+type_spike_leftright,xflip
@@ -128,7 +128,7 @@ ObjPos_MZ2:
 		objpos $0ED0,$0550,MarbleBrick,type_brick_still
 		objpos $0ED0,$0570,MarbleBrick,type_brick_still
 		objpos $0ED0,$0590,MarbleBrick,type_brick_still
-		objpos $0EE0,$0548,GlassBlock,type_glass_drop_button
+		objpos $0EE0,$04B8,GlassBlock,type_glass_drop_button
 		objpos $0EF0,$0410,Monitor,type_monitor_shield,rem
 		objpos $0EF0,$0430,MarbleBrick,type_brick_still
 		objpos $0EF0,$04F0,MarbleBrick,type_brick_still

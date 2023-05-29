@@ -3,6 +3,12 @@
 
 ; spawned by:
 ;	ObjPos_MZ1, ObjPos_MZ2, ObjPos_MZ3 - subtypes 1/$15/$20/$21/$22/$23/$29/$2A/$2B
+
+; subtypes:
+;	%0SSSRMMM
+;	SSS - size settings from list (0 = wide; 1 = wide sloped; 2 = narrow)
+;	R - 1 for reverse direction (when MMM is 1-4)
+;	MMM - movement type (0 = doesn't move; 1-4 = up & down; 5 = sinks & catches fire)
 ; ---------------------------------------------------------------------------
 
 LargeGrass:
@@ -42,7 +48,7 @@ LGrass_Main:	; Routine 0
 		move.w	ost_y_pos(a0),ost_grass_y_start(a0)
 		moveq	#0,d0
 		move.b	ost_subtype(a0),d0
-		andi.w	#$70,d0
+		andi.w	#%01110000,d0				; read bits 4-6 of subtype
 		lsr.w	#1,d0
 		lea	LGrass_Sizes(pc,d0.w),a2
 		move.l	(a2)+,ost_grass_coll_ptr(a0)
@@ -52,11 +58,12 @@ LGrass_Main:	; Routine 0
 		move.b	(a2),ost_height(a0)
 
 LGrass_Action:	; Routine 2
-		bsr.w	LGrass_Types
-		tst.l	ost_grass_coll_ptr(a0)
+		shortcut
+		bsr.s	LGrass_Types
+		move.l	ost_grass_coll_ptr(a0),d0
 		beq.s	.no_heightmap				; branch if there is no heightmap
 		moveq	#1,d6					; 1 byte in heightmap = 2px
-		movea.l	ost_grass_coll_ptr(a0),a2
+		movea.l	d0,a2
 		bsr.w	SolidObject_Heightmap
 		cmpi.b	#id_frame_grass_sloped,ost_frame(a0)
 		beq.w	DespawnFamily				; branch if object is the sloped burning kind
@@ -72,8 +79,8 @@ LGrass_Action:	; Routine 2
 
 LGrass_Types:
 		moveq	#0,d0
-		move.b	ost_subtype(a0),d0			; get subtype (high nybble was removed earlier)
-		andi.w	#7,d0					; read only bits 0-2
+		move.b	ost_subtype(a0),d0			; get subtype
+		andi.w	#%00000111,d0				; read only bits 0-2
 		add.w	d0,d0
 		move.w	LGrass_TypeIndex(pc,d0.w),d1
 		jmp	LGrass_TypeIndex(pc,d1.w)
