@@ -12,13 +12,10 @@ Map_Geyser:	index *
 		ptr frame_geyser_end2				; 7
 		ptr frame_geyser_medcolumn1			; 8
 		ptr frame_geyser_medcolumn2			; 9
-		ptr frame_geyser_medcolumn3			; $A
 		ptr frame_geyser_shortcolumn1			; $B
 		ptr frame_geyser_shortcolumn2			; $C
-		ptr frame_geyser_shortcolumn3			; $D
 		ptr frame_geyser_longcolumn1			; $E
 		ptr frame_geyser_longcolumn2			; $F
-		ptr frame_geyser_longcolumn3			; $10
 		ptr frame_geyser_bubble7			; $11
 		ptr frame_geyser_bubble8			; $12
 		ptr frame_geyser_blank				; $13
@@ -111,20 +108,6 @@ frame_geyser_medcolumn2:
 		piece	0, $10, 4x4, $50, xflip
 		endsprite
 		
-frame_geyser_medcolumn3:
-		spritemap
-		piece	-$20, -$70, 4x4, $60
-		piece	0, -$70, 4x4, $60, xflip
-		piece	-$20, -$50, 4x4, $60
-		piece	0, -$50, 4x4, $60, xflip
-		piece	-$20, -$30, 4x4, $60
-		piece	0, -$30, 4x4, $60, xflip
-		piece	-$20, -$10, 4x4, $60
-		piece	0, -$10, 4x4, $60, xflip
-		piece	-$20, $10, 4x4, $60
-		piece	0, $10, 4x4, $60, xflip
-		endsprite
-		
 frame_geyser_shortcolumn1:
 		spritemap
 		piece	-$20, -$70, 4x4, $40
@@ -143,16 +126,6 @@ frame_geyser_shortcolumn2:
 		piece	0, -$50, 4x4, $50, xflip
 		piece	-$20, -$30, 4x4, $50
 		piece	0, -$30, 4x4, $50, xflip
-		endsprite
-		
-frame_geyser_shortcolumn3:
-		spritemap
-		piece	-$20, -$70, 4x4, $60
-		piece	0, -$70, 4x4, $60, xflip
-		piece	-$20, -$50, 4x4, $60
-		piece	0, -$50, 4x4, $60, xflip
-		piece	-$20, -$30, 4x4, $60
-		piece	0, -$30, 4x4, $60, xflip
 		endsprite
 		
 frame_geyser_longcolumn1:
@@ -195,26 +168,6 @@ frame_geyser_longcolumn2:
 		piece	0, $70, 4x4, $50, xflip
 		endsprite
 		
-frame_geyser_longcolumn3:
-		spritemap
-		piece	-$20, -$70, 4x4, $60
-		piece	0, -$70, 4x4, $60, xflip
-		piece	-$20, -$50, 4x4, $60
-		piece	0, -$50, 4x4, $60, xflip
-		piece	-$20, -$30, 4x4, $60
-		piece	0, -$30, 4x4, $60, xflip
-		piece	-$20, -$10, 4x4, $60
-		piece	0, -$10, 4x4, $60, xflip
-		piece	-$20, $10, 4x4, $60
-		piece	0, $10, 4x4, $60, xflip
-		piece	-$20, $30, 4x4, $60
-		piece	0, $30, 4x4, $60, xflip
-		piece	-$20, $50, 4x4, $60
-		piece	0, $50, 4x4, $60, xflip
-		piece	-$20, $70, 4x4, $60
-		piece	0, $70, 4x4, $60, xflip
-		endsprite
-		
 frame_geyser_bubble7:
 		spritemap
 		piece	-$38, -$20, 3x4, 0
@@ -238,4 +191,3 @@ frame_geyser_bubble8:
 frame_geyser_blank:
 		spritemap
 		endsprite
-		even

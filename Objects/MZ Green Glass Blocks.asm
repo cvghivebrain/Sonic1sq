@@ -82,6 +82,7 @@ Glass_Main:	; Routine 0
 ; ===========================================================================
 
 Glass_UpDown:	; Routine 2
+		shortcut
 		moveq	#0,d0
 		move.b	(v_oscillating_0_to_40_fast).w,d0
 		move.w	ost_glass_y_start(a0),d1		; get initial y position
@@ -93,6 +94,7 @@ Glass_UpDown:	; Routine 2
 
 Glass_UpDownRev:
 		; Routine 4
+		shortcut
 		moveq	#0,d0
 		move.b	(v_oscillating_0_to_40_fast).w,d0
 		neg.w	d0

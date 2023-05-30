@@ -164,7 +164,7 @@ PushB_WaitJump:	; Routine $A
 		
 	.geyser_found:
 		getlinked					; a1 = OST of geyser
-		cmpi.b	#id_GMake_MakeLava,ost_routine(a1)
+		cmpi.b	#id_Fount_Make,ost_routine(a1)
 		bne.s	PushB_Move				; branch if geyser is inactive
 		move.w	#-$580,ost_y_vel(a0)			; make block jump
 		addi.b	#2,ost_routine(a0)			; goto PushB_Jump next
@@ -304,7 +304,7 @@ PushB_ChkGeyser:
 		clr.w	ost_linked(a0)
 		bsr.w	FindFreeObj				; find free OST slot
 		bne.s	.fail					; branch if not found
-		move.l	#GeyserMaker,ost_id(a1)			; load lava geyser object
+		move.l	#LavaFountain,ost_id(a1)		; load lava fountain object
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		moveq	#0,d0
 		move.b	ost_pblock_pushed(a0),d0

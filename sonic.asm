@@ -392,6 +392,7 @@ Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 
 		include "Objects\MZ Lava Geyser Maker.asm"	; GeyserMaker
 		include "Objects\MZ Lava Geyser.asm"		; LavaGeyser
+		include "Objects\MZ Lava Fountain.asm"		; LavaFountain
 		include "Objects\MZ Lava Wall.asm"		; LavaWall
 		include "Objects\MZ Invisible Lava Tag.asm"	; LavaTag
 
