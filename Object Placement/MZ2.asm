@@ -22,7 +22,7 @@ ObjPos_MZ2:
 		objpos $0370,$0260,BuzzBomber,$00,rem
 		objpos $0380,$02E8,LargeGrass,type_grass_sloped+type_grass_sinks
 		objpos $0380,$02F8,LavaTag,$02
-		objpos $0380,$04D0,GeyserMaker,$01
+		objpos $0380,$04D0,LavaFall,$01
 		objpos $0380,$04E8,LavaTag,$02
 		objpos $0388,$05D4,Rings,$12,rem
 		objpos $0390,$0470,MarbleBrick,type_brick_still
@@ -147,10 +147,10 @@ ObjPos_MZ2:
 		objpos $1020,$02E8,LargeGrass,type_grass_narrow+type_grass_3
 		objpos $1030,$0590,MarbleBrick,type_brick_still
 		objpos $1050,$0530,MarbleBrick,type_brick_still
-		objpos $1050,$05D0,GeyserMaker,$01
+		objpos $1050,$05D0,LavaFall,$01
 		objpos $1080,$05E8,LavaTag,$02
 		objpos $10A0,$02D8,LargeGrass,type_grass_narrow+type_grass_2
-		objpos $10C0,$05D0,GeyserMaker,$01
+		objpos $10C0,$05D0,LavaFall,$01
 		objpos $10D0,$05B8,MovingBlock,type_mblock_1+type_mblock_right
 		objpos $1108,$0490,Rings,$13,rem
 		objpos $1110,$02B4,Rings,$10,rem

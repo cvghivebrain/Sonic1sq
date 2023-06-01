@@ -30,13 +30,5 @@ LTag_Main:	; Routine 0
 		move.b	#render_onscreen+render_rel,ost_render(a0)
 
 LTag_ChkDel:	; Routine 2
-		move.w	ost_x_pos(a0),d0
-		andi.w	#$FF80,d0
-		move.w	(v_camera_x_pos).w,d1
-		subi.w	#$80,d1
-		andi.w	#$FF80,d1
-		sub.w	d1,d0
-		bmi.w	DeleteObject
-		cmpi.w	#$280,d0
-		bhi.w	DeleteObject
-		rts	
+		shortcut
+		bra.w	DespawnQuick_NoDisplay

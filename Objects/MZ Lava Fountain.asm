@@ -21,7 +21,6 @@ Fount_Index:	index *,,2
 		ptr Fount_Column
 
 		rsobj LavaFountain
-ost_fount_time:		rs.w 1					; general timer
 ost_fount_y_start:	rs.w 1					; original y pos
 		rsobjend
 ; ===========================================================================
@@ -43,7 +42,6 @@ Fount_Wait:	; Routine 6
 
 Fount_Make:	; Routine 4
 		move.b	#id_ani_fount_wait,ost_anim(a0)
-		move.w	#120,ost_fount_time(a0)			; set timer to 2 seconds
 		addq.b	#2,ost_routine(a0)			; goto Fount_Wait next
 		bsr.w	FindNextFreeObj				; find free OST slot
 		bne.s	Fount_Wait				; branch if not found
@@ -52,7 +50,7 @@ Fount_Make:	; Routine 4
 		move.w	ost_tile(a0),ost_tile(a1)
 		move.b	ost_render(a0),ost_render(a1)
 		move.b	ost_priority(a0),ost_priority(a1)
-		move.b	#$20,ost_displaywidth(a0)
+		move.b	#$20,ost_displaywidth(a1)
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		move.w	ost_y_pos(a0),ost_fount_y_start(a1)
@@ -113,7 +111,6 @@ Fount_Column:	; Routine $C
 		lea	Ani_Fount(pc),a1
 		bsr.w	AnimateSprite
 		bra.w	DisplaySprite
-		
 
 ; ---------------------------------------------------------------------------
 ; Animation script

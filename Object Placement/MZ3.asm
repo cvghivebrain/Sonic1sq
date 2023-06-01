@@ -189,7 +189,7 @@ ObjPos_MZ3:
 		objpos $1250,$031C,ChainStomp,type_cstomp_small+type_cstomp_proximity+type_cstomp_3
 		objpos $1280,$0598,LavaTag,$02
 		objpos $1280,$0620,LavaTag,$02
-		objpos $1280,$07D0,GeyserMaker,$01
+		objpos $1280,$07D0,LavaFall,$01
 		objpos $1280,$07E8,LavaTag,$02
 		objpos $12B0,$031C,ChainStomp,type_cstomp_small+type_cstomp_proximity+type_cstomp_3
 		objpos $12D0,$0768,MovingBlock,type_mblock_1+type_mblock_right

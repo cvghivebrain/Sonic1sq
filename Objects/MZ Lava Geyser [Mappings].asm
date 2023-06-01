@@ -18,7 +18,6 @@ Map_Geyser:	index *
 		ptr frame_geyser_longcolumn2			; $F
 		ptr frame_geyser_bubble7			; $11
 		ptr frame_geyser_bubble8			; $12
-		ptr frame_geyser_blank				; $13
 		
 frame_geyser_bubble1:
 		spritemap
@@ -186,8 +185,4 @@ frame_geyser_bubble8:
 		piece	$20, -$20, 3x4, $18, xflip
 		piece	-$20, -$28, 4x3, $90, xflip
 		piece	0, -$28, 4x3, $90
-		endsprite
-		
-frame_geyser_blank:
-		spritemap
 		endsprite
