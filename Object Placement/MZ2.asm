@@ -7,7 +7,7 @@ ObjPos_MZ2:
 		objpos $01A0,$02F0,LargeGrass,type_grass_narrow+type_grass_3+type_grass_rev
 		objpos $0200,$02A8,Caterkiller,$00,rem
 		objpos $0220,$04B0,FireMaker,type_fire_rate120+type_fire_horizontal+2,xflip
-		objpos $0250,$05C0,LavaWall,$00,rem
+		objpos $0250,$05C0,LavaWall,$00
 		objpos $0280,$0470,FireMaker,type_fire_rate120+type_fire_horizontal+2,xflip
 		objpos $02D0,$0240,BuzzBomber,$00,rem
 		objpos $02D0,$0420,FireMaker,type_fire_rate120+2,yflip

@@ -53,16 +53,17 @@ LFall_Action:	; Routine 2
 		getsonic					; a1 = OST of Sonic
 		move.w	ost_y_pos(a0),d0
 		sub.w	ost_y_pos(a1),d0			; d0 = y dist between Sonic & object (-ve if Sonic is below)
+		bmi.w	DespawnQuick_NoDisplay			; branch if Sonic is below
 		move.w	ost_lfall_y_dist(a0),d1
 		cmp.w	d1,d0
-		bgt.w	.wait					; branch if Sonic is > 360px above
+		bgt.w	DespawnQuick_NoDisplay			; branch if Sonic is > 360px above
 		subq.w	#1,ost_lfall_time(a0)			; decrement timer
-		bpl.w	.wait					; branch if time remains
+		bpl.w	DespawnQuick_NoDisplay			; branch if time remains
 		move.w	ost_lfall_time_master(a0),ost_lfall_time(a0) ; reset timer
 		play.w	1, jsr, sfx_Burning			; play flame sound
 		
 		bsr.w	FindNextFreeObj				; find free OST slot
-		bne.w	.wait
+		bne.w	DespawnQuick_NoDisplay
 		move.l	#LavaFall,ost_id(a1)			; load front of lava fall object
 		move.l	#Map_Geyser,ost_mappings(a1)
 		move.w	#tile_Kos_Lava+tile_pal4,ost_tile(a1)
@@ -79,7 +80,7 @@ LFall_Action:	; Routine 2
 		movea.l	a1,a2					; save OST of front
 		
 		bsr.w	FindNextFreeObj				; find free OST slot
-		bne.w	.wait
+		bne.w	DespawnQuick_NoDisplay
 		move.l	#LavaFall,ost_id(a1)			; load lava column object
 		move.l	ost_mappings(a2),ost_mappings(a1)
 		move.w	ost_tile(a2),ost_tile(a1)
@@ -96,7 +97,7 @@ LFall_Action:	; Routine 2
 		move.w	a2,ost_parent(a1)			; set front of lava as parent
 		
 		bsr.w	FindNextFreeObj				; find free OST slot
-		bne.s	.wait
+		bne.w	DespawnQuick_NoDisplay
 		move.l	#LavaFall,ost_id(a1)			; load lava tail object
 		move.l	ost_mappings(a2),ost_mappings(a1)
 		move.w	ost_tile(a2),ost_tile(a1)
@@ -111,7 +112,7 @@ LFall_Action:	; Routine 2
 		move.w	a2,ost_parent(a1)			; set front of lava as parent
 		
 	.wait:
-		rts
+		bra.w	DespawnQuick_NoDisplay
 ; ===========================================================================
 
 LFall_Front:	; Routine 4

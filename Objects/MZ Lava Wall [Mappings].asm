@@ -73,4 +73,3 @@ frame_lavawall_back:
 		piece	-$40, -$20, 4x4, tile_magma_diff
 		piece	-$40, 0, 4x4, tile_magma_diff
 		endsprite
-		even
