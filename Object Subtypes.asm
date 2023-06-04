@@ -105,9 +105,9 @@ type_cstomp_5:		equ 5							; $x5 - chain length $58
 type_cstomp_6:		equ 6							; $x6 - chain length $B8
 
 ; MarbleBrick
-type_brick_still:	equ id_Brick_Still		; 0 - doesn't move
-type_brick_wobbles:	equ id_Brick_Wobbles		; 1 - wobbles but doesn't fall
-type_brick_falls:	equ id_Brick_Falls		; 2 - falls when Sonic is near
+type_brick_still:	equ id_Brick_Still/2		; 0 - doesn't move
+type_brick_wobbles:	equ id_Brick_Wobbles/2		; 1 - wobbles but doesn't fall
+type_brick_falls:	equ id_Brick_Falls/2		; 2 - falls when Sonic is near
 type_brick_rev:		equ 8				; +8 - reverse wobble direction
 
 ; GlassBlock

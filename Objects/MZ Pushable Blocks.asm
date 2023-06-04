@@ -101,8 +101,7 @@ PushB_Drop:	; Routine 4
 		bra.s	PushB_Display
 		
 	.gravity:
-		bsr.w	SpeedToPos
-		addi.w	#$18,ost_y_vel(a0)			; apply gravity
+		update_xy_fall	$18				; update position & apply gravity
 		jsr	FindFloorObj
 		tst.w	d1
 		bpl.s	PushB_Display				; branch if block hasn't reached floor
@@ -126,7 +125,7 @@ PushB_Lava:	; Routine 6
 		
 PushB_Move:
 		move.w	ost_x_pos(a0),ost_x_prev(a0)
-		bsr.w	SpeedToPos
+		update_xy_pos
 		bsr.w	SolidObject
 		tst.w	ost_x_vel(a0)
 		bmi.s	.moving_left				; branch if moving left
@@ -165,7 +164,7 @@ PushB_WaitJump:	; Routine $A
 	.geyser_found:
 		getlinked					; a1 = OST of geyser
 		cmpi.b	#id_Fount_Make,ost_routine(a1)
-		bne.s	PushB_Move				; branch if geyser is inactive
+		bne.w	PushB_Move				; branch if geyser is inactive
 		move.w	#-$580,ost_y_vel(a0)			; make block jump
 		addi.b	#2,ost_routine(a0)			; goto PushB_Jump next
 		clr.w	ost_linked(a0)
@@ -175,7 +174,7 @@ PushB_WaitJump:	; Routine $A
 PushB_Jump:	; Routine $C
 		addi.w	#$18,ost_y_vel(a0)			; apply gravity
 		move.w	ost_x_pos(a0),ost_x_prev(a0)
-		bsr.w	SpeedToPos
+		update_xy_pos
 		bsr.w	SolidObject
 		jsr	FindFloorObj
 		tst.w	d1

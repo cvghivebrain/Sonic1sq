@@ -87,6 +87,7 @@ LWall_Wait:	; Routine 2
 ; ===========================================================================
 
 LWall_Move:	; Routine 4
+		shortcut
 		lea	Ani_LWall(pc),a1
 		bsr.w	AnimateSprite
 		cmpi.b	#id_Sonic_Hurt,(v_ost_player+ost_routine).w ; is Sonic hurt or dead?
@@ -106,6 +107,7 @@ LWall_Move:	; Routine 4
 ; ===========================================================================
 
 LWall_BackHalf:	; Routine 6
+		shortcut
 		getparent
 		move.w	#-$80,d0
 		btst	#status_xflip_bit,ost_status(a1)

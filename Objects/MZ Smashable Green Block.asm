@@ -28,13 +28,14 @@ Smab_Main:	; Routine 0
 		move.b	ost_subtype(a0),ost_frame(a0)
 
 Smab_Solid:	; Routine 2
+		shortcut
 		pushr.w	(v_enemy_combo).w
 		bsr.w	SolidObject
 		popr.w	(v_enemy_combo).w			; don't reset combo counter on collision
 		andi.b	#solid_top,d1
-		beq.w	.dont_break				; branch if no collision with top
+		beq.w	DespawnQuick				; branch if no collision with top
 		cmpi.b	#4,ost_mode(a0)
-		bne.w	.dont_break				; branch if Sonic wasn't rolling/jumping
+		bne.w	DespawnQuick				; branch if Sonic wasn't rolling/jumping
 		bset	#status_jump_bit,ost_status(a1)
 		move.b	(v_player1_height_roll).w,ost_height(a1)
 		move.b	(v_player1_width_roll).w,ost_width(a1)
@@ -48,11 +49,8 @@ Smab_Solid:	; Routine 2
 		bsr.s	Smab_Points				; load points object
 		move.b	#id_frame_smash_four,ost_frame(a0)	; use sprite consisting of four pieces
 		lea	Smab_Speeds(pc),a4
-		move.w	#$38,d2
+		move.w	#$38,d2					; gravity for fragments
 		bra.w	Shatter
-
-	.dont_break:
-		bra.w	DespawnObject
 		
 Smab_Speeds:	dc.w -$200, -$200				; x speed, y speed
 		dc.w -$100, -$100
@@ -68,27 +66,33 @@ Smab_Points:
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		move.w	(v_enemy_combo).w,d2
 		addq.w	#2,(v_enemy_combo).w			; increment bonus counter
-		cmpi.w	#30,d2
-		bcs.s	.not_16					; branch if 0-15
-		moveq	#10,d2					; 10k points
-		bra.s	.bonus_ok
-	.not_16:
-		cmpi.w	#6,d2
-		bls.s	.bonus_ok				; branch if bonus is at or below max
-		moveq	#6,d2					; max bonus
+		cmpi.w	#15*2,d2
+		bcs.s	.bonus_ok				; branch if 0-15
+		moveq	#15*2,d2				; 10k points
+		
 	.bonus_ok:
-		moveq	#0,d0
-		move.w	Smab_PointList(pc,d2.w),d0		; get points amount from list
+		add.w	d2,d2
+		lea	Smab_PointList(pc,d2.w),a2
+		move.w	(a2)+,d0				; get points amount from list
 		jsr	(AddPoints).l				; give points
-		lsr.w	#1,d2
-		move.b	d2,ost_frame(a1)
+		move.w	(a2),ost_frame_hi(a1)
 		
 	.fail:
 		rts
 
-Smab_PointList:	dc.w 100/10					; 100 (block 1)
-		dc.w 200/10					; 200 (block 2)
-		dc.w 500/10					; 500 (block 3)
-		dc.w 1000/10					; 1000 (blocks 4-15)
-		dc.w 1000/10					; 1000
-		dc.w 10000/10					; 10000 (blocks 16+)
+Smab_PointList:	dc.w 100/10, id_frame_points_100		; 100 (block 1)
+		dc.w 200/10, id_frame_points_200		; 200 (block 2)
+		dc.w 500/10, id_frame_points_500		; 500 (block 3)
+		dc.w 1000/10, id_frame_points_1k		; 1000 (block 4-15)
+		dc.w 1000/10, id_frame_points_1k
+		dc.w 1000/10, id_frame_points_1k
+		dc.w 1000/10, id_frame_points_1k
+		dc.w 1000/10, id_frame_points_1k
+		dc.w 1000/10, id_frame_points_1k
+		dc.w 1000/10, id_frame_points_1k
+		dc.w 1000/10, id_frame_points_1k
+		dc.w 1000/10, id_frame_points_1k
+		dc.w 1000/10, id_frame_points_1k
+		dc.w 1000/10, id_frame_points_1k
+		dc.w 1000/10, id_frame_points_1k
+		dc.w 10000/10, id_frame_points_10k		; 10000 (blocks 16+)

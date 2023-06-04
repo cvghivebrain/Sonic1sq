@@ -7,4 +7,3 @@ Map_Brick:	index *
 frame_brick_0:	spritemap
 		piece	-$10, -$10, 4x4, 1
 		endsprite
-		even
