@@ -7,7 +7,7 @@
 ; subtypes:
 ;	%0000RTTT
 ;	R - 1 for reverse wobble direction
-;	TTT - type id
+;	TTT - type id (0 = still; 1 = wobbles; 2 = wobbles & falls)
 ; ---------------------------------------------------------------------------
 
 MarbleBrick:
