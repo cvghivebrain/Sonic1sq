@@ -139,7 +139,7 @@ type_pblock_four:	equ (PushB_Var_1-PushB_Var)/sizeof_PushB_Var		; 1 - four block
 type_pblock_nograv:	equ $80							; +$80 - no gravity
 
 ; CollapseFloor
-type_cfloor_slz:	equ id_frame_cfloor_slz<<3				; +$10 - SLZ mappings
+type_cfloor_slz:	equ id_frame_cfloor_slz<<4				; +$20 - SLZ mappings
 type_cfloor_sided:	equ $80							; +$80 - collapse pattern depends on which side was touched
 
 ; FloatingBlock

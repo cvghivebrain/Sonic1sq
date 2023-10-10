@@ -17,7 +17,7 @@ Newt_Index:	index *,,2
 		ptr Newt_Delete
 
 		rsobj Newtron
-ost_newtron_fire_flag:	rs.b 1 ; $32				; set to 1 after newtron fires a missile
+ost_newtron_fire_flag:	rs.b 1					; set to 1 after newtron fires a missile
 		rsobjend
 ; ===========================================================================
 
@@ -99,7 +99,7 @@ Newt_Type0:
 
 		add.w	d1,ost_y_pos(a0)			; align to floor
 		move.w	#0,ost_y_vel(a0)			; stop newtron falling
-		addq.b	#2,ost_mode(a0)			; goto Newt_Type0_Floor next
+		addq.b	#2,ost_mode(a0)				; goto Newt_Type0_Floor next
 		move.b	#id_ani_newt_fly1,ost_anim(a0)
 		btst	#tile_pal12_bit,ost_tile(a0)		; is newtron blue?
 		beq.s	.is_blue				; if yes, branch
@@ -129,7 +129,7 @@ Newt_Type0_Floor:
 ; ===========================================================================
 
 	.nextroutine:
-		addq.b	#2,ost_mode(a0)			; goto Newt_Type0_Fly next
+		addq.b	#2,ost_mode(a0)				; goto Newt_Type0_Fly next
 		rts	
 ; ===========================================================================
 

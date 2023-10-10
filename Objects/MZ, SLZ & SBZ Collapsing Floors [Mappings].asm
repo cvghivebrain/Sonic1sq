@@ -1,5 +1,5 @@
 ; ---------------------------------------------------------------------------
-; Sprite mappings - collapsing floors	(MZ, SLZ, SBZ)
+; Sprite mappings - collapsing floors (MZ, SLZ, SBZ)
 ; ---------------------------------------------------------------------------
 
 Map_CFlo:	index *

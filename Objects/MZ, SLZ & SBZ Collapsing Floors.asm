@@ -3,8 +3,15 @@
 
 ; spawned by:
 ;	ObjPos_MZ3 - subtype 1
-;	ObjPos_SLZ1, ObjPos_SLZ2, ObjPos_SLZ3 - subtypes 1/$81
+;	ObjPos_SLZ1, ObjPos_SLZ2, ObjPos_SLZ3 - subtypes $21/$A1
 ;	ObjPos_SBZ1, ObjPos_SBZ2 - subtype 1
+
+; subtypes:
+;	%SFFFKDDD
+;	S - 1 to xflip platform (and fragment pattern) if Sonic is on right side
+;	FFF - frame id
+;	K - 1 to keep frame id when collapsing
+;	DDD - delay fragment pattern id
 ; ---------------------------------------------------------------------------
 
 CollapseFloor:
@@ -31,7 +38,7 @@ CFlo_Main:	; Routine 0
 		addi.w	#tile_pal3,ost_tile(a0)
 		move.b	ost_subtype(a0),d0
 		andi.b	#%01110000,d0				; read bits 4-6 of subtype
-		lsr.b	#3,d0
+		lsr.b	#4,d0
 		move.b	d0,ost_frame(a0)			; set as frame
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#4,ost_priority(a0)
@@ -60,8 +67,12 @@ CFlo_Wait:	; Routine 4
 
 CFlo_Collapse:	; Routine 6
 		bsr.w	UnSolid_TopOnly
+		move.b	ost_subtype(a0),d1
+		btst	#3,d1
+		bne.s	.keep_frame				; branch if bit 3 is set
 		addq.b	#1,ost_frame(a0)			; use frame consisting of smaller pieces
-		tst.b	ost_subtype(a0)
+		
+	.keep_frame:
 		bpl.s	.no_sidedness				; branch if high bit of subtype is 0
 		bclr	#render_xflip_bit,ost_render(a0)
 		move.w	ost_x_pos(a1),d0
@@ -70,12 +81,15 @@ CFlo_Collapse:	; Routine 6
 		bset	#render_xflip_bit,ost_render(a0)
 		
 	.no_sidedness:
-		moveq	#0,d0
-		move.b	ost_subtype(a0),d0
-		andi.b	#$F,d0					; read low nybble of subtype
-		lsl.b	#3,d0					; multiply by 8
-		lea	CFlo_FragTiming_0(pc,d0.w),a4
+		andi.b	#%00000111,d1				; read bits 0-2 of subtype
+		add.b	d1,d1
+		move.w	CFlo_FragTiming_Index(pc,d1.w),d1
+		lea	CFlo_FragTiming_Index(pc,d1.w),a4
 		bra.w	Crumble					; spawn fragments and delete original
+
+CFlo_FragTiming_Index:	index *,,2
+		ptr CFlo_FragTiming_0
+		ptr CFlo_FragTiming_1
 
 CFlo_FragTiming_0:
 		dc.b $1E, $16, $E, 6, $1A, $12,	$A, 2		; unused
