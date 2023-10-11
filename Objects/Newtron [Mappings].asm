@@ -11,9 +11,6 @@ Map_Newt:	index *
 		ptr frame_newt_drop3
 		ptr frame_newt_fly1a
 		ptr frame_newt_fly1b
-		ptr frame_newt_fly2a
-		ptr frame_newt_fly2b
-		ptr frame_newt_blank
 		
 frame_newt_trans:
 		spritemap					; partially visible
@@ -70,22 +67,3 @@ frame_newt_fly1b:
 		piece	$C, -8, 1x2, $50
 		piece	$14, -2, 2x1, $53
 		endsprite
-		
-frame_newt_fly2a:
-		spritemap
-		piece	-$14, -8, 4x2, $48
-		piece	$C, -8, 1x2, $50
-		piece	$14, -2, 1x1, $52, pal4, hi
-		endsprite
-		
-frame_newt_fly2b:
-		spritemap
-		piece	-$14, -8, 4x2, $48
-		piece	$C, -8, 1x2, $50
-		piece	$14, -2, 2x1, $53, pal4, hi
-		endsprite
-		
-frame_newt_blank:
-		spritemap
-		endsprite
-		even

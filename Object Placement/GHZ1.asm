@@ -86,7 +86,7 @@ ObjPos_GHZ1:
 		objpos $12C3,$0269,Rings,$10,rem
 		objpos $12E0,$0330,Monitor,type_monitor_rings,rem
 		objpos $12EA,$0271,Rings,$10,rem
-		objpos $12F8,$0238,Newtron,$00,rem
+		objpos $12F8,$0238,Newtron,type_newt_blue+$20,rem
 		objpos $1300,$0330,Monitor,type_monitor_rings,rem
 		objpos $1308,$0170,Monitor,type_monitor_rings,rem
 		objpos $1320,$0330,Monitor,type_monitor_invincible,rem
@@ -124,18 +124,18 @@ ObjPos_GHZ1:
 		objpos $1820,$0074,Rings,$16,rem
 		objpos $183C,$0176,Rings,$10,rem
 		objpos $186C,$0178,Rings,$10,rem
-		objpos $1880,$0138,Newtron,$00,xflip,rem
+		objpos $1880,$0138,Newtron,type_newt_blue+$20,xflip,rem
 		objpos $189C,$017A,Rings,$10,rem
 		objpos $18C8,$0074,Rings,$16,rem
 		objpos $18CC,$0174,Rings,$10,rem
 		objpos $18FC,$0174,Rings,$10,rem
-		objpos $1900,$0140,Newtron,$00,xflip,rem
+		objpos $1900,$0140,Newtron,type_newt_blue+$20,xflip,rem
 		objpos $192C,$0175,Rings,$10,rem
-		objpos $1940,$0138,Newtron,$00,xflip,rem
+		objpos $1940,$0138,Newtron,type_newt_blue+$20,xflip,rem
 		objpos $1950,$0370,Rings,$14,rem
 		objpos $195C,$017A,Rings,$10,rem
 		objpos $1970,$0074,Rings,$15,rem
-		objpos $1980,$0160,Newtron,$00,xflip,rem
+		objpos $1980,$0160,Newtron,type_newt_blue+$20,xflip,rem
 		objpos $1980,$0373,Lamppost,$02,rem
 		objpos $198C,$017B,Rings,$10,rem
 		objpos $19BC,$0176,Rings,$10,rem
@@ -165,12 +165,12 @@ ObjPos_GHZ1:
 		objpos $1DF8,$04B0,EdgeWalls,type_edge_dark
 		objpos $1E00,$0268,Rings,$10,rem
 		objpos $1E08,$0370,EdgeWalls,type_edge_shadow
-		objpos $1E18,$0368,Newtron,$01,xflip,rem
+		objpos $1E18,$0368,Newtron,type_newt_green+$20,xflip,rem
 		objpos $1E20,$04B4,Spikes,type_spike_3up+type_spike_still
-		objpos $1E40,$0450,Newtron,$01,xflip,rem
+		objpos $1E40,$0450,Newtron,type_newt_green+$20,xflip,rem
 		objpos $1E48,$0340,EdgeWalls,type_edge_shadow
-		objpos $1E60,$0330,Newtron,$01,xflip,rem
-		objpos $1E60,$0430,Newtron,$01,xflip,rem
+		objpos $1E60,$0330,Newtron,type_newt_green+$20,xflip,rem
+		objpos $1E60,$0430,Newtron,type_newt_green+$20,xflip,rem
 		objpos $1EA0,$02A0,BuzzBomber,$00,rem
 		objpos $1ED8,$02FF,PurpleRock,$00
 		objpos $1F30,$0308,Scenery,type_scen_stump,xflip
@@ -186,7 +186,7 @@ ObjPos_GHZ1:
 		objpos $2058,$038E,Spikes,type_spike_1up+type_spike_still
 		objpos $2068,$038B,Spikes,type_spike_1up+type_spike_still
 		objpos $2078,$0386,Spikes,type_spike_1up+type_spike_still
-		objpos $2080,$0350,Newtron,$00,rem
+		objpos $2080,$0350,Newtron,type_newt_blue+$20,rem
 		objpos $2088,$0382,Spikes,type_spike_1up+type_spike_still
 		objpos $20D0,$0370,PurpleRock,$00
 		objpos $2135,$0374,Rings,$10,rem

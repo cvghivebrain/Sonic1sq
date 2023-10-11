@@ -288,8 +288,8 @@ DebugList_GHZ:
 		dbitem	BuzzBomber, Map_Buzz, 0, 0, id_frame_buzz_fly1, v_tile_buzzbomber, 0
 		dbitem	Chopper, Map_Chop, 0, 0, id_frame_chopper_shut, v_tile_chopper, 0
 		dbitem	MotoBug, Map_Moto, 0, 0, id_frame_moto_0, v_tile_motobug, 0
-		dbitem	Newtron, Map_Newt, 0, 0, id_frame_newt_norm, v_tile_newtron, 0
-		dbitem	Newtron, Map_Newt, 1, 0, id_frame_newt_norm, v_tile_newtron, tile_pal2
+		dbitem	Newtron, Map_Newt, type_newt_blue+$20, 0, id_frame_newt_norm, v_tile_newtron, 0
+		dbitem	Newtron, Map_Newt, type_newt_green+$20, 0, id_frame_newt_norm, v_tile_newtron, tile_pal2
 		dbitem	Spikes, Map_Spike, type_spike_3up, 0, id_frame_spike_3up, v_tile_spikes, 0
 		dbitem	Lamppost, Map_Lamp, 1, 0, id_frame_lamp_blue, v_tile_lamppost, 0
 		dbitem	Springs, Map_Spring, type_spring_red, 0, id_frame_spring_up, v_tile_hspring, 0

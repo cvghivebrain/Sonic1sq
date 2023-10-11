@@ -67,6 +67,10 @@ type_plat_updown_slow_rev: equ id_Plat_Type_UpDown_Slow_Rev	; $C - moves up and 
 type_plat_syz:		equ id_frame_plat_syz<<4		; +$20
 type_plat_slz:		equ id_frame_plat_slz<<4		; +$30
 
+; Newtron
+type_newt_blue:		equ 0
+type_newt_green:	equ 3
+
 ; FireMaker
 type_fire_rate30:	equ (30/30)<<3				; every 0.5 seconds
 type_fire_rate60:	equ (60/30)<<3				; every 1 second
