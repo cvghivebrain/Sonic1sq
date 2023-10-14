@@ -324,11 +324,11 @@ Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 
 		include "Objects\Monitors.asm"			; Monitor
 		include "Objects\Monitor Contents.asm"		; PowerUp
-
-		include "Objects\_AnimateSprite.asm"
 		
 		include "Objects\Title Screen Sonic.asm"	; TitleSonic
 		include "Objects\Title Screen Press Start & TM.asm" ; PSBTM
+
+		include "Objects\_AnimateSprite.asm"
 
 		include "Objects\Chopper.asm"			; Chopper
 
@@ -397,9 +397,9 @@ Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 		include "Objects\MZ Invisible Lava Tag.asm"	; LavaTag
 
 		include "Objects\Moto Bug.asm"			; MotoBug
-		include "Objects\_DespawnObject & CheckActive.asm"
 
 		include "Objects\Yadrin.asm"			; Yadrin
+		include "Objects\_DespawnObject & CheckActive.asm"
 
 		include "Objects\_SolidObject.asm"
 		include "Objects\_SkipMappings.asm"

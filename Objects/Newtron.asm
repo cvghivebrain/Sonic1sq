@@ -66,7 +66,7 @@ Newt_Range2:	; Routine $C
 		bra.w	DespawnObject
 ; ===========================================================================
 
-Newt_Appear:	; Routine 4
+Newt_Appear:	; Routine 4/$E
 		lea	Ani_Newt(pc),a1
 		bsr.w	AnimateSprite				; animate & goto Newt_Fire next
 		bra.w	DespawnObject
