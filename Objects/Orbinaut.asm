@@ -7,7 +7,8 @@
 ;	ObjPos_SBZ3
 
 ; subtypes:
-;	%000000TP
+;	%SSSS00TP
+;	SSSS - settings (see Orb_Settings)
 ;	T - 1 for passive type
 ;	P - 1 to use palette line 2
 ; ---------------------------------------------------------------------------
@@ -23,8 +24,16 @@ Orb_Index:	index *,,2
 		ptr Orb_Move
 		ptr Orb_Angry
 		ptr Orb_Angry2
+
+		rsobj Orbinaut
+ost_orb_count:	rs.b 1						; number of spikeballs
+ost_orb_speed:	rs.b 1						; spikeball speed when launched
+		rsobjend
 		
-Orb_SpinRates:	dc.b 1,-1
+Orb_Settings:	dc.w $40					; movement speed
+		dc.b -1, 4, $40, 2				; spikeball spin rate, count, spacing, speed/$100
+		dc.w $60					; orbinaut type $1x moves faster and has 2 spikeballs
+		dc.b -1, 2, $80, 2
 		even
 ; ===========================================================================
 
@@ -32,7 +41,8 @@ Orb_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Orb_Move next
 		move.l	#Map_Orb,ost_mappings(a0)
 		move.w	(v_tile_orbinaut).w,ost_tile(a0)
-		btst.b	#0,ost_subtype(a0)			; check if low bit of subtype is set
+		move.b	ost_subtype(a0),d4
+		btst	#0,d4					; check if low bit of subtype is set
 		beq.s	.use_pal1				; if not, branch
 		add.w	#tile_pal2,ost_tile(a0)			; use palette 2
 
@@ -41,18 +51,24 @@ Orb_Main:	; Routine 0
 		move.b	#4,ost_priority(a0)
 		move.b	#id_col_8x8,ost_col_type(a0)
 		move.b	#$C,ost_displaywidth(a0)
+		andi.w	#$F0,d4					; read high nybble of subtype
+		lsr.w	#4,d4
+		mulu.w	#6,d4
+		lea	Orb_Settings(pc,d4.w),a2
 		
 		moveq	#0,d2					; start angle
-		move.w	#-$40,ost_x_vel(a0)			; move orbinaut to the left
-		move.b	ost_status(a0),d3
-		andi.w	#status_xflip,d3
-		beq.s	.noflip					; branch if facing left
-		neg.w	ost_x_vel(a0)				; move orbinaut	to the right
+		move.w	(a2)+,ost_x_vel(a0)			; move orbinaut to the right
+		move.b	(a2)+,d3				; get spin rate
+		move.b	(a2)+,d1				; get spikeball count
+		move.b	d1,ost_orb_count(a0)
+		subq.b	#1,d1					; subtract 1 for loops
+		move.b	(a2)+,d4				; get spikeball spacing
+		move.b	(a2)+,ost_orb_speed(a0)			; get spikeball speed
+		btst.b	#status_xflip_bit,ost_status(a0)
+		bne.s	.orb_loop				; branch if facing right
+		neg.w	ost_x_vel(a0)				; move orbinaut	to the left
+		neg.b	d3					; reverse rotation
 		
-	.noflip:
-		move.b	Orb_SpinRates(pc,d3.w),d3		; get spin rate based on direction orbinaut is facing (1 or -1)
-		
-		moveq	#4-1,d1					; 4 spiked orbs
 	.orb_loop:
 		bsr.w	FindNextFreeObj				; find free OST slot
 		bne.s	Orb_Move				; branch if not found
@@ -65,7 +81,7 @@ Orb_Main:	; Routine 0
 		move.b	#id_frame_orb_spikeball,ost_frame(a1)
 		move.b	#id_col_4x4+id_col_hurt,ost_col_type(a1)
 		move.b	d2,ost_angle(a1)			; set position around orbinaut
-		addi.b	#$40,d2					; next orb is a quarter circle ahead
+		add.b	d4,d2					; next orb is a quarter circle ahead
 		move.b	d3,ost_subtype(a1)			; set spin rate/direction
 		saveparent
 		dbf	d1,.orb_loop				; repeat sequence 3 more times
@@ -86,7 +102,7 @@ Orb_Move:	; Routine 2
 		bra.w	DespawnObject
 		
 	.angry:
-		move.b	#4,ost_mode(a0)				; set flag for firing spikeballs
+		move.b	ost_orb_count(a0),ost_mode(a0)		; set flag for firing spikeballs
 		addq.b	#2,ost_routine(a0)			; goto Orb_Angry next
 		move.b	#id_ani_orb_angry,ost_anim(a0)
 		bra.w	DespawnObject
@@ -149,10 +165,12 @@ Orb_X_Table:	hex 100F0F0F0F0F0F0F0F0F0F0F0F0F0F0E0E0E0E0E0E0D0D0D0D0D0C0C0C0C0B0
 		
 OrbSpikeAttack:
 		subq.b	#1,ost_mode(a1)				; decrement spikeball counter
-		move.w	#-$200,ost_x_vel(a0)			; fire spikeball left
+		move.b	ost_orb_speed(a1),d0			; get spikeball speed
+		lsl.w	#8,d0					; multiply by $100
+		move.w	d0,ost_x_vel(a0)			; fire spikeball right
 		btst	#status_xflip_bit,ost_status(a1)
-		beq.s	.noflip
-		neg.w	ost_x_vel(a0)				; fire spikeball right
+		bne.s	.noflip
+		neg.w	ost_x_vel(a0)				; fire spikeball left
 
 	.noflip:
 		shortcut
