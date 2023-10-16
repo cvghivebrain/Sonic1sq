@@ -350,7 +350,7 @@ SolidObject_TopOnly_Heightmap:
 ; ---------------------------------------------------------------------------
 
 UnSolid:
-		lea	(v_ost_player).w,a1
+		getsonic
 		btst	#status_platform_bit,ost_status(a0)
 		beq.w	Sol_None				; branch if Sonic isn't standing on the object
 		bclr	#status_platform_bit,ost_status(a1)	; remove platform effect
@@ -359,7 +359,7 @@ UnSolid:
 		bra.w	Sol_None				; stop pushing
 		
 UnSolid_TopOnly:
-		lea	(v_ost_player).w,a1
+		getsonic
 		btst	#status_platform_bit,ost_status(a0)
 		beq.s	.exit					; branch if Sonic isn't standing on the object
 		bset	#status_air_bit,ost_status(a1)

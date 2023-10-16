@@ -2,9 +2,14 @@
 ; Object 18 - platforms	(GHZ, SYZ, SLZ)
 
 ; spawned by:
-;	ObjPos_GHZ1, ObjPos_GHZ2, ObjPos_GHZ3 - subtypes 0/1/2/3/5/6/$A
-;	ObjPos_SYZ1, ObjPos_SYZ2, ObjPos_SYZ3 - subtypes 0/1/2/5/7/$B/$C
-;	ObjPos_SLZ2, ObjPos_SLZ3 - subtype 3
+;	ObjPos_GHZ1, ObjPos_GHZ2, ObjPos_GHZ3 
+;	ObjPos_SYZ1, ObjPos_SYZ2, ObjPos_SYZ3
+;	ObjPos_SLZ2, ObjPos_SLZ3
+
+; subtypes:
+;	%FFFFTTTT
+;	FFFF - frame id
+;	TTTT - type (see Plat_Move)
 ; ---------------------------------------------------------------------------
 
 BasicPlatform:
@@ -19,10 +24,10 @@ Plat_Index:	index *,,2
 		ptr Plat_Drop
 
 		rsobj BasicPlatform
-ost_plat_y_pos:		rs.w 1					; y position ignoring dip when Sonic is on the platform (2 bytes)
-ost_plat_x_start:	rs.w 1					; original x position (2 bytes)
-ost_plat_y_start:	rs.w 1					; original y position (2 bytes)
-ost_plat_wait_time:	rs.w 1					; time delay for platform moving when stood on (2 bytes)
+ost_plat_y_pos:		rs.w 1					; y position ignoring dip when Sonic is on the platform
+ost_plat_x_start:	rs.w 1					; original x position
+ost_plat_y_start:	rs.w 1					; original y position
+ost_plat_wait_time:	rs.w 1					; time delay for platform moving when stood on
 		rsobjend
 ; ===========================================================================
 
@@ -42,6 +47,7 @@ Plat_Main:	; Routine 0
 		move.b	ost_subtype(a0),d0
 		lsr.b	#4,d0					; read high nybble
 		move.b	d0,ost_frame(a0)
+		andi.b	#$F,ost_subtype(a0)
 
 Plat_Solid:	; Routine 2
 		move.w	ost_x_pos(a0),ost_x_prev(a0)
@@ -55,7 +61,8 @@ Plat_Solid:	; Routine 2
 
 Plat_Drop:	; Routine 4
 		bsr.w	UnSolid_TopOnly
-		bsr.w	ObjectFall
+		shortcut
+		update_y_fall					; update position & apply gravity
 		move.w	ost_y_vel(a0),ost_y_vel(a1)		; pull Sonic down with platform
 		move.w	(v_boundary_bottom).w,d0
 		addi.w	#screen_height,d0
@@ -70,7 +77,6 @@ Plat_Drop:	; Routine 4
 Plat_Move:
 		moveq	#0,d0
 		move.b	ost_subtype(a0),d0
-		andi.w	#$F,d0					; read low nybble of subtype
 		add.w	d0,d0
 		move.w	.index(pc,d0.w),d1
 		jmp	.index(pc,d1.w)
@@ -101,7 +107,7 @@ Plat_Type_Still:
 ; Type 5
 Plat_Type_Sideways_Rev:
 		move.w	ost_plat_x_start(a0),d0
-		move.b	ost_angle(a0),d1			; load platform-motion variable
+		move.b	(v_oscillating_0_to_80_fast).w,d1	; load platform-motion variable
 		neg.b	d1					; reverse platform-motion
 		addi.b	#$40,d1
 		bra.s	Plat_Type_Sideways_Move
@@ -110,14 +116,14 @@ Plat_Type_Sideways_Rev:
 ; Type 1
 Plat_Type_Sideways:
 		move.w	ost_plat_x_start(a0),d0
-		move.b	ost_angle(a0),d1			; load platform-motion variable
+		move.b	(v_oscillating_0_to_80_fast).w,d1	; load platform-motion variable
 		subi.b	#$40,d1
 
 	Plat_Type_Sideways_Move:
 		ext.w	d1
 		add.w	d1,d0
 		move.w	d0,ost_x_pos(a0)			; change position on x-axis
-		bra.w	Plat_Type_Update_Angle
+		rts
 ; ===========================================================================
 
 ; Type $C
@@ -140,7 +146,7 @@ Plat_Type_UpDown_Slow:
 ; Type 6
 Plat_Type_UpDown_Rev:
 		move.w	ost_plat_y_start(a0),d0
-		move.b	ost_angle(a0),d1			; load platform-motion variable
+		move.b	(v_oscillating_0_to_80_fast).w,d1	; load platform-motion variable
 		neg.b	d1					; reverse platform-motion
 		addi.b	#$40,d1
 		bra.s	Plat_Type_UpDown_Move
@@ -149,14 +155,14 @@ Plat_Type_UpDown_Rev:
 ; Type 2
 Plat_Type_UpDown:
 		move.w	ost_plat_y_start(a0),d0
-		move.b	ost_angle(a0),d1			; load platform-motion variable
+		move.b	(v_oscillating_0_to_80_fast).w,d1	; load platform-motion variable
 		subi.b	#$40,d1
 
 	Plat_Type_UpDown_Move:
 		ext.w	d1
 		add.w	d1,d0
 		move.w	d0,ost_plat_y_pos(a0)			; change position on y-axis
-		bra.w	Plat_Type_Update_Angle
+		rts
 ; ===========================================================================
 
 ; Type 3
@@ -213,7 +219,7 @@ Plat_Type_Rises_Now:
 		subi.w	#$200,d0
 		cmp.w	ost_plat_y_pos(a0),d0			; has platform moved $200 pixels?
 		bne.s	.type08_nostop				; if not, branch
-		andi.b	#$F0,ost_subtype(a0)			; change to type 00 (stop moving)
+		clr.b	ost_subtype(a0)				; change to type 00 (stop moving)
 
 	.type08_nostop:
 		rts	
@@ -222,13 +228,10 @@ Plat_Type_Rises_Now:
 ; Type $A
 Plat_Type_UpDown_Large:
 		move.w	ost_plat_y_start(a0),d0
-		move.b	ost_angle(a0),d1			; load platform-motion variable
+		move.b	(v_oscillating_0_to_80_fast).w,d1	; load platform-motion variable
 		subi.b	#$40,d1
 		ext.w	d1
 		asr.w	#1,d1
 		add.w	d1,d0
 		move.w	d0,ost_plat_y_pos(a0)			; change position on y-axis
-
-Plat_Type_Update_Angle:
-		move.b	(v_oscillating_0_to_80_fast).w,ost_angle(a0) ; update platform-movement variable
 		rts
