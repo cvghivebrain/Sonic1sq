@@ -47,4 +47,3 @@ frame_points_100k:
 		piece	-$C, -4, 3x1, 6
 		piece	6, -4, 2x1, 7
 		endsprite
-		even

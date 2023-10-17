@@ -2,21 +2,15 @@
 ; Object 3E - prison capsule
 
 ; spawned by:
-;	ObjPos_GHZ3, ObjPos_MZ3, ObjPos_SYZ3, ObjPos_LZ3, ObjPos_SLZ3 - subtypes 0/1
+;	ObjPos_GHZ3, ObjPos_MZ3, ObjPos_SYZ3, ObjPos_LZ3, ObjPos_SLZ3
+;	Prison
 ; ---------------------------------------------------------------------------
 
 Prison:
 		moveq	#0,d0
 		move.b	ost_routine(a0),d0
 		move.w	Pri_Index(pc,d0.w),d1
-		jsr	Pri_Index(pc,d1.w)
-		move.w	ost_x_pos(a0),d0
-		jsr	CheckActive
-		bne.s	.delete
-		jmp	(DisplaySprite).l
-
-	.delete:
-		jmp	(DeleteObject).l
+		jmp	Pri_Index(pc,d1.w)
 ; ===========================================================================
 Pri_Index:	index *,,2
 		ptr Pri_Main
@@ -25,11 +19,9 @@ Pri_Index:	index *,,2
 		ptr Pri_Explosion
 		ptr Pri_Animals
 		ptr Pri_EndAct
-		ptr Pri_Display
 
 		rsobj Prison
-ost_prison_y_start:	rs.w 1 ; $30				; original y position (2 bytes)
-ost_prison_time:	rs.w 1 ; $3E
+ost_prison_time:	rs.w 1
 		rsobjend
 ; ===========================================================================
 
@@ -37,19 +29,6 @@ Pri_Main:	; Routine 0
 		move.l	#Map_Pri,ost_mappings(a0)
 		move.w	#tile_Art_Prison,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
-		move.w	ost_y_pos(a0),ost_prison_y_start(a0)
-		moveq	#0,d0
-		move.b	ost_subtype(a0),d0			; get subtype (0 or 1)
-		beq.s	.main					; branch if 0
-		move.b	#id_Pri_Switch,ost_routine(a0)		; goto Pri_Switch next
-		move.b	#$C,ost_displaywidth(a0)
-		move.b	#$C,ost_width(a0)
-		move.b	#8,ost_height(a0)
-		move.b	#5,ost_priority(a0)
-		move.b	#id_frame_prison_switch1,ost_frame(a0)
-		rts
-		
-	.main:
 		move.b	#id_Pri_Body,ost_routine(a0)		; goto Pri_Body next
 		move.b	#$20,ost_displaywidth(a0)
 		move.b	#$20,ost_width(a0)
@@ -57,40 +36,57 @@ Pri_Main:	; Routine 0
 		move.b	#4,ost_priority(a0)
 		move.b	#id_frame_prison_capsule,ost_frame(a0)
 		moveq	#id_UPLC_Prison,d0
-		jmp	UncPLC					; load prison gfx
+		jsr	UncPLC					; load prison gfx
+		
+		jsr	FindFreeObj				; find free OST slot
+		bne.s	.fail
+		move.l	#Prison,ost_id(a1)			; load switch object
+		move.w	ost_x_pos(a0),ost_x_pos(a1)
+		move.w	ost_y_pos(a0),ost_y_pos(a1)
+		subi.w	#37,ost_y_pos(a1)			; switch is 37px above prison
+		move.b	#id_Pri_Switch,ost_routine(a1)		; goto Pri_Switch next
+		move.b	ost_render(a0),ost_render(a1)
+		move.l	ost_mappings(a0),ost_mappings(a1)
+		move.w	ost_tile(a0),ost_tile(a1)
+		move.b	#$C,ost_displaywidth(a1)
+		move.b	#$C,ost_width(a1)
+		move.b	#8,ost_height(a1)
+		move.b	#5,ost_priority(a1)
+		move.b	#id_frame_prison_switch1,ost_frame(a1)
+		
+	.fail:
+		jmp	DespawnQuick
 ; ===========================================================================
 
 Pri_Body:	; Routine 2
 		cmpi.b	#2,(v_boss_status).w			; has prison been opened?
 		beq.s	.is_open				; if yes, branch
-		jmp	(SolidObject).l
+		jsr	SolidObject
+		jmp	DespawnQuick
 ; ===========================================================================
 
 .is_open:
 		tst.b	ost_mode(a0)				; is Sonic on top of the prison?
 		beq.s	.not_on_top				; if not, branch
-		clr.b	ost_mode(a0)
-		bclr	#status_platform_bit,(v_ost_player+ost_status).w
-		bset	#status_air_bit,(v_ost_player+ost_status).w
+		jsr	UnSolid
 
 	.not_on_top:
 		move.b	#id_frame_prison_broken,ost_frame(a0)	; use use broken prison frame (2)
 		moveq	#id_UPLC_Prison2,d0
 		jsr	UncPLC					; load new gfx
-		move.b	#id_Pri_Display,ost_routine(a0)		; goto Pri_Display next
-
-Pri_Display:	; Routine $C
-		rts	
+		shortcut
+		jmp	DespawnQuick
 ; ===========================================================================
 
 Pri_Switch:	; Routine 4
-		jsr	(SolidObject).l
 		lea	(Ani_Pri).l,a1
-		jsr	(AnimateSprite).l
-		move.w	ost_prison_y_start(a0),ost_y_pos(a0)
-		tst.b	ost_mode(a0)				; is Sonic on top of the switch?
-		beq.s	.not_on_top				; if not, branch
+		jsr	AnimateSprite
+		jsr	SolidObject
+		andi.b	#solid_top,d1
+		bne.s	.on_top					; branch if Sonic is on top of switch
+		jmp	DespawnQuick
 
+	.on_top:
 		addq.w	#8,ost_y_pos(a0)			; move switch down 8px
 		move.b	#id_Pri_Explosion,ost_routine(a0)	; goto Pri_Explosion next
 		move.w	#60,ost_prison_time(a0)			; set time for explosions to 1 sec
@@ -98,20 +94,16 @@ Pri_Switch:	; Routine 4
 		clr.b	(f_boss_boundary).w			; lock screen position
 		move.b	#1,(f_lock_controls).w			; lock controls
 		move.w	#(btnR<<8),(v_joypad_hold).w		; make Sonic run to the right
-		clr.b	ost_mode(a0)
-		bclr	#status_platform_bit,(v_ost_player+ost_status).w
-		bset	#status_air_bit,(v_ost_player+ost_status).w
-
-	.not_on_top:
-		rts	
+		jsr	UnSolid
+		jmp	DespawnQuick
 ; ===========================================================================
 
-Pri_Explosion:	; Routine 6, 8, $A
+Pri_Explosion:	; Routine 6
 		moveq	#7,d0
 		and.b	(v_vblank_counter_byte).w,d0		; byte that increments every frame
 		bne.s	.noexplosion				; branch if any of bits 0-2 are set
 
-		jsr	(FindFreeObj).l				; find free OST slot
+		jsr	FindFreeObj				; find free OST slot
 		bne.s	.noexplosion				; branch if not found
 		move.l	#ExplosionBomb,ost_id(a1)		; load explosion object every 8 frames
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
@@ -129,13 +121,12 @@ Pri_Explosion:	; Routine 6, 8, $A
 	.noexplosion:
 		subq.w	#1,ost_prison_time(a0)			; decrement timer
 		beq.s	.makeanimal				; branch if 0
-		rts	
+		jmp	DespawnQuick
 ; ===========================================================================
 
 .makeanimal:
 		move.b	#2,(v_boss_status).w			; set flag for prison open
 		move.b	#id_Pri_Animals,ost_routine(a0)		; goto Pri_Animals next
-		move.b	#id_frame_prison_blank,ost_frame(a0)	; make switch invisible
 		move.w	#150,ost_prison_time(a0)		; set time for additional animals to load to 2.5 secs
 		addi.w	#$20,ost_y_pos(a0)
 		moveq	#8-1,d6					; number of animals to load
@@ -143,7 +134,7 @@ Pri_Explosion:	; Routine 6, 8, $A
 		moveq	#-$1C,d4				; relative x position
 
 	.loop:
-		jsr	(FindFreeObj).l				; find free OST slot
+		jsr	FindFreeObj				; find free OST slot
 		bne.s	.fail					; branch if not found
 		move.l	#Animals,ost_id(a1)			; load animal object
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
@@ -155,10 +146,10 @@ Pri_Explosion:	; Routine 6, 8, $A
 		dbf	d6,.loop				; repeat 7 more	times
 
 	.fail:
-		rts	
+		jmp	DespawnQuick_NoDisplay
 ; ===========================================================================
 
-Pri_Animals:	; Routine $C
+Pri_Animals:	; Routine 8
 		moveq	#7,d0
 		and.b	(v_vblank_counter_byte).w,d0		; byte that increments every frame
 		bne.s	.noanimal				; branch if any of bits 0-2 are set
@@ -185,10 +176,10 @@ Pri_Animals:	; Routine $C
 		addq.b	#2,ost_routine(a0)			; goto Pri_EndAct next
 
 	.wait:
-		rts	
+		jmp	DespawnQuick_NoDisplay
 ; ===========================================================================
 
-Pri_EndAct:	; Routine $E
+Pri_EndAct:	; Routine $A
 		moveq	#$40-2,d0
 		move.l	#Animals,d1
 		moveq	#sizeof_ost,d2				; d2 = $40
@@ -205,7 +196,7 @@ Pri_EndAct:	; Routine $E
 		jmp	(DeleteObject).l
 
 	.found:
-		rts	
+		jmp	DespawnQuick_NoDisplay
 
 ; ---------------------------------------------------------------------------
 ; Animation script
@@ -213,11 +204,9 @@ Pri_EndAct:	; Routine $E
 
 Ani_Pri:	index *
 		ptr ani_prison_switchflash
-		ptr ani_prison_switchflash
 		
 ani_prison_switchflash:
 		dc.w 2
 		dc.w id_frame_prison_switch1
 		dc.w id_frame_prison_switch2
 		dc.w id_Anim_Flag_Restart
-		even

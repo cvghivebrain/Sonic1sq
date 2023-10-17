@@ -288,6 +288,5 @@ ObjPos_GHZ3:
 		
 		objpos $2980,$0380,BasicPlatform,type_plat_still
 		objpos $2A80,$0380,BasicPlatform,type_plat_still
-		objpos $2B60,$037D,Prison,$01
 		objpos $2B60,$03A2,Prison,$00
 		endobj

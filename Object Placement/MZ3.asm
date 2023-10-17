@@ -233,6 +233,5 @@ ObjPos_MZ3:
 		
 		objpos $17C0,$02F8,LavaTag,$01
 		objpos $18A0,$02F8,LavaTag,$01
-		objpos $1A00,$027C,Prison,$01
 		objpos $1A00,$02A1,Prison,$00
 		endobj

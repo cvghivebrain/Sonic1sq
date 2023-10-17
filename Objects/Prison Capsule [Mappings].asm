@@ -6,7 +6,6 @@ Map_Pri:	index *
 		ptr frame_prison_switch1
 		ptr frame_prison_broken
 		ptr frame_prison_switch2
-		ptr frame_prison_blank
 		
 frame_prison_capsule:
 		spritemap
@@ -38,8 +37,3 @@ frame_prison_switch2:
 		spritemap
 		piece	-$C, -8, 3x2, $42
 		endsprite
-		
-frame_prison_blank:
-		spritemap
-		endsprite
-		even

@@ -244,6 +244,5 @@ ObjPos_LZ3:
 		objpos $1EB0,$0250,Gargoyle,$03,rem
 		objpos $1ED8,$0180,Harpoon,type_harp_h+$10,xflip
 		objpos $1ED8,$0380,Harpoon,type_harp_h+$10,xflip
-		objpos $20D0,$00BB,Prison,$01
 		objpos $20D0,$00E0,Prison,$00
 		endobj

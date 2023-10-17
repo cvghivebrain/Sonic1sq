@@ -27,8 +27,8 @@ Poi_Main:	; Routine 0
 		move.w	#-$300,ost_y_vel(a0)			; move object upwards
 
 Poi_Slower:	; Routine 2
-		tst.w	ost_y_vel(a0)				; is object moving?
-		bpl.w	DeleteObject				; if not, delete
-		bsr.w	SpeedToPos				; update position
-		addi.w	#$18,ost_y_vel(a0)			; reduce object speed
+		shortcut
+		tst.w	ost_y_vel(a0)
+		bpl.w	DeleteObject				; branch if stopped
+		update_y_fall	$18				; update position & slow ascent
 		bra.w	DisplaySprite	
