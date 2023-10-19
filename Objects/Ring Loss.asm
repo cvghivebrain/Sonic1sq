@@ -18,11 +18,20 @@ RLoss_Index:	index *,,2
 		ptr RLoss_Collect
 		ptr RLoss_Sparkle
 		ptr RLoss_Delete
+		
+RLoss_VelTable:	dc.w   -$C4,  -$3EC,    $C4,  -$3EC,  -$238,  -$350,   $238,  -$350
+		dc.w  -$350,  -$238,   $350,  -$238,  -$3EC,   -$C4,   $3EC,   -$C4
+		dc.w  -$3EC,    $C4,   $3EC,    $C4,  -$350,   $238,   $350,   $238
+		dc.w  -$238,   $350,   $238,   $350,   -$C4,   $3EC,    $C4,   $3EC
+		dc.w   -$62,  -$1F6,    $62,  -$1F6,  -$11C,  -$1A8,   $11C,  -$1A8
+		dc.w  -$1A8,  -$11C,   $1A8,  -$11C,  -$1F6,   -$62,   $1F6,   -$62
+		dc.w  -$1F6,    $62,   $1F6,    $62,  -$1A8,   $11C,   $1A8,   $11C
+		dc.w  -$11C,   $1A8,   $11C,   $1A8,   -$62,   $1F6,    $62,   $1F6
 ; ===========================================================================
 
 RLoss_Count:	; Routine 0
 		movea.l	a0,a1					; replace current object with first ring
-		moveq	#0,d5
+		lea	RLoss_VelTable(pc),a2
 		move.w	(v_rings).w,d5				; check number of rings you have
 		moveq	#32,d0
 		cmp.w	d0,d5					; do you have 32 or more?
@@ -31,7 +40,6 @@ RLoss_Count:	; Routine 0
 
 	.belowmax:
 		subq.w	#1,d5					; loops = rings-1
-		move.w	#$288,d4				; initial angle value
 		bra.s	.makerings
 ; ===========================================================================
 
@@ -54,28 +62,8 @@ RLoss_Count:	; Routine 0
 		move.b	#id_col_6x6+id_col_item,ost_col_type(a1) ; goto RLoss_Collect when touched
 		move.b	#8,ost_displaywidth(a1)
 		move.b	#255,(v_syncani_3_time).w		; reset deletion/animation timer
-		tst.w	d4
-		bmi.s	.skip_calcsine
-		move.w	d4,d0
-		jsr	CalcSine
-		move.w	d4,d2
-		lsr.w	#8,d2
-		asl.w	d2,d0
-		asl.w	d2,d1
-		move.w	d0,d2
-		move.w	d1,d3
-		addi.b	#$10,d4
-		bcc.s	.angle_ok
-		subi.w	#$80,d4
-		bcc.s	.angle_ok
-		move.w	#$288,d4
-
-	.skip_calcsine:
-	.angle_ok:
-		move.w	d2,ost_x_vel(a1)
-		move.w	d3,ost_y_vel(a1)
-		neg.w	d2
-		neg.w	d4
+		move.w	(a2)+,ost_x_vel(a1)
+		move.w	(a2)+,ost_y_vel(a1)
 		dbf	d5,.loop				; repeat for number of rings (max 31)
 
 	.fail:
@@ -86,8 +74,7 @@ RLoss_Count:	; Routine 0
 
 RLoss_Bounce:	; Routine 2
 		move.b	(v_syncani_3_frame).w,ost_frame(a0)	; set synchronised frame
-		bsr.w	SpeedToPos				; update position
-		addi.w	#$18,ost_y_vel(a0)			; apply gravity
+		update_xy_fall	$18				; update position & apply gravity
 		bmi.s	.chkdel					; branch if moving upwards
 
 		move.b	(v_vblank_counter_byte).w,d0		; get byte that increments every frame
@@ -106,11 +93,11 @@ RLoss_Bounce:	; Routine 2
 
 	.chkdel:
 		tst.b	(v_syncani_3_time).w			; has animation finished?
-		beq.s	RLoss_Delete				; if yes, branch
+		beq.w	DeleteObject				; if yes, branch
 		move.w	(v_boundary_bottom).w,d0
-		addi.w	#224,d0
+		addi.w	#screen_height,d0
 		cmp.w	ost_y_pos(a0),d0			; has object moved below level boundary?
-		bcs.s	RLoss_Delete				; if yes, branch
+		bcs.w	DeleteObject				; if yes, branch
 		bra.w	DisplaySprite
 ; ===========================================================================
 

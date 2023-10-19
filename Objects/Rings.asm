@@ -9,7 +9,12 @@
 ;	ObjPos_SLZ1, ObjPos_SLZ2, ObjPos_SLZ3
 ;	ObjPos_SBZ1, ObjPos_SBZ2, ObjPos_SBZ3
 ;	Signpost - routine 6
-;	Rings - routine 
+;	Rings - routine 2
+
+; subtypes:
+;	%SSSS0QQQ
+;	SSSS - spacing (see Ring_Spacing)
+;	QQQ - ring quantity (minus 1)
 ; ---------------------------------------------------------------------------
 
 Rings:
@@ -44,8 +49,8 @@ Ring_Spacing:	dc.b $10, 0					; $0x - horizontal tight
 		dc.b -$18, $10					; $Fx - unused
 
 		rsobj Rings
-ost_ring_x_main:	rs.w 1 ; $32				; x position of primary ring (2 bytes)
-ost_ring_num:		rs.b 1 ; $34				; which ring in the group of 1-7 rings it is
+ost_ring_x_main:	rs.w 1					; x position of primary ring (2 bytes)
+ost_ring_num:		rs.b 1					; which ring in the group of 1-7 rings it is
 		rsobjend
 ; ===========================================================================
 
@@ -118,9 +123,7 @@ Ring_Main:	; Routine 0
 Ring_Animate:	; Routine 2
 		move.b	(v_syncani_1_frame).w,ost_frame(a0)	; set synchronised frame
 		move.w	ost_ring_x_main(a0),d0
-		bsr.w	CheckActive
-		bne.s	Ring_Delete
-		bra.w	DisplaySprite
+		bra.w	DespawnQuick_AltX
 ; ===========================================================================
 
 Ring_Collect:	; Routine 4
@@ -135,7 +138,7 @@ Ring_Collect:	; Routine 4
 		bset	d1,2(a2,d0.w)				; set bit in respawn memory
 
 Ring_Sparkle:	; Routine 6
-		lea	(Ani_Ring).l,a1
+		lea	Ani_Ring(pc),a1
 		bsr.w	AnimateSprite				; animate and goto Ring_Delete when finished
 		bra.w	DisplaySprite
 ; ===========================================================================
@@ -157,4 +160,3 @@ ani_ring_sparkle:
 		dc.w id_frame_ring_sparkle3
 		dc.w id_frame_ring_sparkle4
 		dc.w id_Anim_Flag_Routine
-		even
