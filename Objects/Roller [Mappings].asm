@@ -34,4 +34,3 @@ frame_roll_roll3:
 		spritemap					; rolling
 		piece	-$10, -$10, 4x4, $40
 		endsprite
-		even

@@ -42,7 +42,8 @@ SpinC_Main:	; Routine 0
 ; ===========================================================================
 
 SpinC_ChkDist:	; Routine 2
-		bsr.w	RangeX
+		getsonic					; a1 = OST of Sonic
+		range_x
 		cmpi.w	#256+160,d1
 		bcs.s	.exit					; branch if Sonic is nearby
 		moveq	#0,d0
@@ -66,7 +67,7 @@ SpinC_ChkDist:	; Routine 2
 
 SpinConveyPlatform:
 		move.w	ost_spinc_parent_y_pos(a0),d0
-		waitvisible					; don't run if not near screen
+		waitvisible 100,200				; don't run if not near screen
 		moveq	#0,d0
 		move.b	ost_routine(a0),d0
 		move.w	SpinCP_Index(pc,d0.w),d1
@@ -111,10 +112,8 @@ SpinCP_Main:	; Routine 0
 		move.w	(a2,d1.w),ost_spinc_corner_x_pos(a0)	; get corner position data
 		move.w	2(a2,d1.w),ost_spinc_corner_y_pos(a0)
 		cmpi.w	#8,d1
-		bcs.s	.not_spinning				; branch if on top or left side of conveyor
+		bcs.w	SpinCP_Platform_Move			; branch if on top or left side of conveyor
 		addi.b	#2,ost_routine(a0)			; goto SpinCP_Spin next
-
-	.not_spinning:
 		bra.w	SpinCP_Platform_Move			; begin platform moving
 ; ===========================================================================
 
@@ -165,7 +164,8 @@ SpinCP_Update:
 		move.b	#id_SpinCP_Spin,ost_routine(a0)		; use spinning animation
 		bsr.w	UnSolid
 		bsr.s	SpinCP_Platform_Move			; set direction and speed
-		jmp	SpeedToPos				; update position
+		update_xy_pos					; update position
+		rts
 		
 	.not_spinning:
 		move.b	#id_SpinCP_Solid,ost_routine(a0)	; use still animation
@@ -173,7 +173,8 @@ SpinCP_Update:
 		bsr.s	SpinCP_Platform_Move			; set direction and speed
 
 	.not_at_corner:
-		jmp	SpeedToPos				; update position
+		update_xy_pos					; update position
+		rts
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to set direction and speed of platform
@@ -261,6 +262,10 @@ ani_spinc_spin:
 		dc.w id_frame_spin_1+afxflip
 		dc.w id_frame_spin_flat
 		dc.w id_Anim_Flag_Restart
+
+; ---------------------------------------------------------------------------
+; Corner data
+; ---------------------------------------------------------------------------
 
 SpinC_Corner_Data:
 		index *
