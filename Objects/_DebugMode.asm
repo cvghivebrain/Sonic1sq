@@ -396,6 +396,7 @@ DebugList_SBZ:
 		dbitem	Springs, Map_Spring, type_spring_yellow, 0, id_frame_spring_up, v_tile_hspring, tile_pal2
 		dbitem	Button, Map_But, 0, 0, id_frame_button_up, v_tile_button, 0
 		dbitem	AutoDoor, Map_ADoor, 0, 0, id_frame_autodoor_closed, tile_Kos_SbzDoorV, tile_pal3
+		dbitem	AutoDoor, Map_ADoor, 0, status_xflip, id_frame_autodoor_closed, tile_Kos_SbzDoorV, tile_pal3
 		dbitem	ScrapDoorH, Map_SDoorH, 0, 0, id_frame_sdoorh_0, tile_Kos_SbzDoorH, tile_pal3
 		dbitem	Trapdoor, Map_Trap, 3, 0, id_frame_trap_closed, tile_Kos_TrapDoor, tile_pal3
 		dbitem	Girder, Map_Gird, 0, 0, id_frame_girder_0, tile_Kos_Girder, tile_pal3

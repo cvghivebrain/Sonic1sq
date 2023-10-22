@@ -65,4 +65,3 @@ frame_autodoor_open:
 		piece	-8, -$40, 2x4, 0, xflip
 		piece	-8, $20, 2x4, 0, xflip
 		endsprite
-		even

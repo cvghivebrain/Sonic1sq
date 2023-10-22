@@ -113,7 +113,7 @@ SpinCP_Main:	; Routine 0
 		move.w	2(a2,d1.w),ost_spinc_corner_y_pos(a0)
 		cmpi.w	#8,d1
 		bcs.w	SpinCP_Platform_Move			; branch if on top or left side of conveyor
-		addi.b	#2,ost_routine(a0)			; goto SpinCP_Spin next
+		addq.b	#2,ost_routine(a0)			; goto SpinCP_Spin next
 		bra.w	SpinCP_Platform_Move			; begin platform moving
 ; ===========================================================================
 
