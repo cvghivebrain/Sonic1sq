@@ -11,7 +11,7 @@
 ;	uses d0.l, d1.l, d2.l, a2
 
 ; usage:
-;		lea	(Ani_Hog).l,a1
+;		lea	Ani_Hog(pc),a1
 ;		bsr.w	AnimateSprite
 ; ---------------------------------------------------------------------------
 

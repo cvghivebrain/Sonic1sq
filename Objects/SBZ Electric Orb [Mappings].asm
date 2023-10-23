@@ -56,4 +56,3 @@ frame_electro_zap5:
 		piece	$24, -$A, 4x2, $C, yflip
 		piece	-$40, -$A, 4x2, $C, xflip, yflip
 		endsprite
-		even

@@ -193,4 +193,3 @@ frame_flame_valve11:
 		piece	-7, $28, 2x2, $18, pal3
 		piece	-4, $20, 1x2, 0, xflip
 		endsprite
-		even

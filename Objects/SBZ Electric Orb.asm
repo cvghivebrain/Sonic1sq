@@ -13,15 +13,17 @@ Electro:
 ; ===========================================================================
 Elec_Index:	index *,,2
 		ptr Elec_Main
-		ptr Elec_Shock
+		ptr Elec_Wait
+		ptr Elec_Zap
+		ptr Elec_Reset
 
 		rsobj Electro
-ost_electric_rate:	rs.w 1 ; $34				; zap rate - applies bitmask to frame counter (2 bytes)
+ost_electro_mask:	rs.w 1					; zap rate - applies bitmask to frame counter (2 bytes)
 		rsobjend
 ; ===========================================================================
 
 Elec_Main:	; Routine 0
-		addq.b	#2,ost_routine(a0)			; goto Elec_Shock next
+		addq.b	#2,ost_routine(a0)			; goto Elec_Wait next
 		move.l	#Map_Elec,ost_mappings(a0)
 		move.w	#tile_Kos_Electric,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
@@ -30,42 +32,41 @@ Elec_Main:	; Routine 0
 		move.b	ost_subtype(a0),d0			; read object type (2/4/8)
 		lsl.w	#4,d0					; multiply by $10
 		subq.w	#1,d0					; d0 = $1F or $3F or $7F
-		move.w	d0,ost_electric_rate(a0)
+		move.w	d0,ost_electro_mask(a0)
 
-Elec_Shock:	; Routine 2
+Elec_Wait:	; Routine 2
 		move.w	(v_frame_counter).w,d0			; get byte that increments every frame
-		and.w	ost_electric_rate(a0),d0		; and with rate bitmask
-		bne.s	.animate				; branch if any bits are set
+		and.w	ost_electro_mask(a0),d0			; and with rate bitmask
+		bne.w	DespawnQuick				; branch if any bits are set
 
-		move.b	#id_ani_electro_zap,ost_anim(a0)	; run "zap" animation every $20, $40 or $80 frames
-		tst.b	ost_render(a0)				; is object on-screen?
-		bpl.s	.animate				; if not, branch
+		tst.b	ost_render(a0)
+		bpl.w	DespawnQuick				; branch if off screen
 		play.w	1, jsr, sfx_Electricity			; play electricity sound
+		addq.b	#2,ost_routine(a0)			; goto Elec_Zap next
+		move.b	#id_ani_electro_zap,ost_anim(a0)
 
-	.animate:
-		lea	(Ani_Elec).l,a1
+Elec_Zap:	; Routine 4
+		lea	Ani_Elec(pc),a1
 		jsr	(AnimateSprite).l
-		move.b	#0,ost_col_type(a0)
-		cmpi.b	#id_frame_electro_zap4,ost_frame(a0)	; is 4th frame displayed?
-		bne.s	.display				; if not, branch
-		move.b	#id_col_72x8+id_col_hurt,ost_col_type(a0) ; if yes, make object hurt Sonic
+		move.w	ost_frame_hi(a0),d0
+		move.b	Elec_Hurt(pc,d0.w),ost_col_type(a0)	; convert frame id to collision type
+		bra.w	DespawnQuick
+		
+Elec_Hurt:	dc.b 0, 0, 0, 0, id_col_72x8+id_col_hurt, 0
+		even
+; ===========================================================================
 
-	.display:
-		bra.w	DespawnObject
+Elec_Reset:	; Routine 6
+		move.b	#id_Elec_Wait,ost_routine(a0)		; goto Elec_Wait next
+		move.b	#0,ost_col_type(a0)
+		bra.s	Elec_Wait
 
 ; ---------------------------------------------------------------------------
 ; Animation script
 ; ---------------------------------------------------------------------------
 
 Ani_Elec:	index *
-		ptr ani_electro_normal
 		ptr ani_electro_zap
-		
-ani_electro_normal:
-		dc.w 7
-		dc.w id_frame_electro_normal
-		dc.w id_Anim_Flag_Restart
-		even
 
 ani_electro_zap:
 		dc.w 0
@@ -82,5 +83,4 @@ ani_electro_zap:
 		dc.w id_frame_electro_zap5
 		dc.w id_frame_electro_zap5
 		dc.w id_frame_electro_normal
-		dc.w id_Anim_Flag_Change, id_ani_electro_normal
-		even
+		dc.w id_Anim_Flag_Routine
