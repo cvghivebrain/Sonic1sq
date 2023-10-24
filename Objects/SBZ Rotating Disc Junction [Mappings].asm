@@ -195,4 +195,3 @@ frame_junc_circle:
 		piece	$18, $18, 3x3, $11, xflip, yflip
 		piece	$28, 0, 2x4, $1A, xflip, yflip
 		endsprite
-		even

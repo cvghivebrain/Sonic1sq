@@ -18,4 +18,3 @@ frame_girder_0:	spritemap
 		piece	$40, -$18, 4x3, 6
 		piece	$40, 0, 4x3, 6, yflip
 		endsprite
-		even
