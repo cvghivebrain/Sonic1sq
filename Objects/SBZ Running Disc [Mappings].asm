@@ -10,4 +10,3 @@ frame_disc_spot:
 		spritemap
 		piece	-8, -8, 2x2, 0
 		endsprite
-		even

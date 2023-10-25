@@ -221,11 +221,11 @@ type_spin_platform:	equ $80				; $8x - small spinning platform
 type_spin_platform_alt:	equ $90				; $9x - small spinning platform, longer delay between spins
 
 ; Saws
-type_saw_pizza_still:	equ id_Saw_Pizza_Still	 	; 0 - pizza cutter, doesn't move
-type_saw_pizza_sideways: equ id_Saw_Pizza_Sideways 	; 1 - pizza cutter, moves side-to-side
-type_saw_pizza_updown:	equ id_Saw_Pizza_UpDown	 	; 2 - pizza cutter, moves up and down
-type_saw_ground_right:	equ id_Saw_Ground_Right	 	; 3 - ground saw, moves right
-type_saw_ground_left:	equ id_Saw_Ground_Left	 	; 4 - ground saw, moves left
+type_saw_pizza_still:	equ 0			 	; 0 - pizza cutter, doesn't move
+type_saw_pizza_sideways: equ 1			 	; 1 - pizza cutter, moves side-to-side
+type_saw_pizza_updown:	equ 2			 	; 2 - pizza cutter, moves up and down
+type_saw_ground_right:	equ 3			 	; 3 - ground saw, moves right
+type_saw_ground_left:	equ 4			 	; 4 - ground saw, moves left
 
 ; ScrapStomp
 type_stomp_slow:	equ 0				; stomper, drops quickly and rises slowly

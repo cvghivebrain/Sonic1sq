@@ -44,4 +44,3 @@ frame_saw_groundsaw2:
 		piece	-$20, 0, 4x4, $10, yflip
 		piece	0, 0, 4x4, $10, xflip, yflip
 		endsprite
-		even
