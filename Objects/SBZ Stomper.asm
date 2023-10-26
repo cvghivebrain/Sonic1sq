@@ -9,9 +9,7 @@ ScrapStomp:
 		moveq	#0,d0
 		move.b	ost_routine(a0),d0
 		move.w	Sto_Index(pc,d0.w),d1
-		jsr	Sto_Index(pc,d1.w)
-		bsr.w	SolidObject
-		bra.w	DespawnQuick
+		jmp	Sto_Index(pc,d1.w)
 ; ===========================================================================
 Sto_Index:	index *,,2
 		ptr Sto_Main
@@ -39,8 +37,8 @@ Sto_Settings:	dc.w $38					; distance to move
 		dc.b 8
 
 		rsobj ScrapStomp
-ost_stomp_moved:	rs.w 1					; distance moved (2 bytes)
-ost_stomp_distance:	rs.w 1					; distance to move (2 bytes)
+ost_stomp_moved:	rs.w 1					; distance moved
+ost_stomp_distance:	rs.w 1					; distance to move
 ost_stomp_wait_time:	rs.w 1					; time until next action
 ost_stomp_drop_master:	rs.w 1					; time to wait until drop
 ost_stomp_rise_master:	rs.w 1					; time to wait until rising
@@ -76,7 +74,8 @@ Sto_Wait2:	; Routine 6
 		addq.b	#2,ost_routine(a0)			; goto Sto_Drop/Sto_Rise next
 		
 	.exit:
-		rts
+		bsr.w	SolidObject
+		bra.w	DespawnQuick
 ; ===========================================================================
 
 Sto_Drop:	; Routine 4
@@ -91,7 +90,8 @@ Sto_Drop:	; Routine 4
 		addq.b	#2,ost_routine(a0)			; goto Sto_Wait2 next
 		
 	.exit:
-		rts
+		bsr.w	SolidObject
+		bra.w	DespawnQuick
 ; ===========================================================================
 
 Sto_Rise:	; Routine 8
@@ -104,5 +104,6 @@ Sto_Rise:	; Routine 8
 		move.b	#id_Sto_Wait,ost_routine(a0)		; goto Sto_Wait next
 		
 	.exit:
-		rts
+		bsr.w	SolidObject
+		bra.w	DespawnQuick
 		

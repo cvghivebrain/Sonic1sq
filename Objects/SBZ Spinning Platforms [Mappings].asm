@@ -38,4 +38,3 @@ frame_spin_4:
 		piece	-8, -$10, 2x2, $10
 		piece	-8, 0, 2x2, $10, yflip
 		endsprite
-		even

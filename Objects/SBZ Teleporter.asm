@@ -3,20 +3,18 @@
 
 ; spawned by:
 ;	ObjPos_SBZ2 - subtypes 0-7
+
+; subtypes:
+;	%R000TTTT
+;	R - 1 if teleport requires 50 rings to use
+;	TTTT - type (see Tele_Data)
 ; ---------------------------------------------------------------------------
 
 Teleport:
 		moveq	#0,d0
 		move.b	ost_routine(a0),d0
 		move.w	Tele_Index(pc,d0.w),d1
-		jsr	Tele_Index(pc,d1.w)
-		move.w	ost_x_pos(a0),d0
-		bsr.w	CheckActive
-		bne.s	.delete
-		rts	
-
-	.delete:
-		jmp	(DeleteObject).l
+		jmp	Tele_Index(pc,d1.w)
 ; ===========================================================================
 Tele_Index:	index *,,2
 		ptr Tele_Main
@@ -25,52 +23,55 @@ Tele_Index:	index *,,2
 		ptr Tele_Bend
 
 		rsobj Teleport
-ost_tele_time:		rs.w 1 ; $2E				; travel time between each bend (2 bytes; only high byte is read)
-ost_tele_bump:		rs.b 1 ; $32				; counter for initial "bump" when Sonic enters teleport, 0-$80
-ost_tele_x_target:	rs.w 1 ; $36				; next x position to teleport to (2 bytes)
-ost_tele_y_target:	rs.w 1 ; $38				; next y position to teleport to (2 bytes)
-ost_tele_bends:		rs.w 1 ; $3A				; number of bends Sonic has passed in pipe, increments by 4
-ost_tele_data_size:	equ ost_tele_bends+1 ; $3B		; size of coordinate data in bytes
-ost_tele_data_ptr:	rs.l 1 ; $3C				; address of coordinate data (4 bytes)
+ost_tele_time:		rs.w 1					; travel time between each bend (2 bytes; only high byte is read)
+ost_tele_x_target:	rs.w 1					; next x position to teleport to
+ost_tele_y_target:	rs.w 1					; next y position to teleport to
+ost_tele_data_ptr:	rs.l 1					; address of coordinate data
+ost_tele_bends:		rs.b 1					; number of bends Sonic has passed in pipe, increments by 4
+ost_tele_data_size:	rs.b 1					; size of coordinate data in bytes
+ost_tele_bump:		equ ost_angle				; counter for initial "bump" when Sonic enters teleport, 0-$80
 		rsobjend
 ; ===========================================================================
 
 Tele_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Tele_Action next
 		move.b	ost_subtype(a0),d0
+		andi.w	#$F,d0					; read only low nybble
 		add.w	d0,d0
-		andi.w	#$1E,d0					; read only low nybble
 		lea	Tele_Data(pc),a2
 		adda.w	(a2,d0.w),a2				; address of coordinate data
-		move.w	(a2)+,ost_tele_data_size-1(a0)		; get size of data
+		move.w	(a2)+,d0				; get size of data
+		move.b	d0,ost_tele_data_size(a0)
 		move.l	a2,ost_tele_data_ptr(a0)
 		move.w	(a2)+,ost_tele_x_target(a0)		; get 1st target
 		move.w	(a2)+,ost_tele_y_target(a0)
 
 Tele_Action:	; Routine 2
-		lea	(v_ost_player).w,a1
+		tst.w	(v_debug_active).w
+		bne.w	DespawnQuick_NoDisplay			; branch if debug mode is in use
+		tst.b	(v_lock_multi).w			; are controls locked?
+		bne.w	DespawnQuick_NoDisplay			; if yes, branch
+		getsonic					; a1 = OST of Sonic
 		move.w	ost_x_pos(a1),d0
-		sub.w	ost_x_pos(a0),d0
+		sub.w	ost_x_pos(a0),d0			; d0 = x dist (-ve if Sonic is to the left)
 		btst	#status_xflip_bit,ost_status(a0)
 		beq.s	.noflip
-		addi.w	#$F,d0
+		addi.w	#$F,d0					; enter teleport from right
 
 	.noflip:
-		cmpi.w	#$10,d0					; is Sonic within $10 pixels on x-axis?
-		bcc.s	.do_nothing				; if not, branch
+		cmpi.w	#$10,d0					; is Sonic within 16px on x-axis?
+		bcc.w	DespawnQuick_NoDisplay			; if not, branch
 		move.w	ost_y_pos(a1),d1
 		sub.w	ost_y_pos(a0),d1
 		addi.w	#$20,d1
-		cmpi.w	#$40,d1					; is Sonic within $20 pixels on y-axis?
-		bcc.s	.do_nothing				; if not, branch
-		tst.b	(v_lock_multi).w			; are controls locked?
-		bne.s	.do_nothing				; if yes, branch
-		cmpi.b	#7,ost_subtype(a0)			; is this teleport #7?
-		bne.s	.not7					; if not, branch
-		cmpi.w	#50,(v_rings).w				; teleport #7 requires 50 rings to work
-		bcs.s	.do_nothing				; does nothing without 50 rings
+		cmpi.w	#$40,d1					; is Sonic within 32px on y-axis?
+		bcc.w	DespawnQuick_NoDisplay			; if not, branch
+		tst.b	ost_subtype(a0)				; does teleport require 50 rings?
+		bpl.s	.rings_ok				; if not, branch
+		cmpi.w	#50,(v_rings).w	
+		bcs.w	DespawnQuick_NoDisplay			; does nothing without 50 rings
 
-	.not7:
+	.rings_ok:
 		addq.b	#2,ost_routine(a0)			; goto Tele_Bump next
 		move.b	#$81,(v_lock_multi).w			; lock controls and disable object collision
 		move.b	#id_Roll,ost_anim(a1)			; use Sonic's rolling animation
@@ -84,13 +85,11 @@ Tele_Action:	; Routine 2
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		clr.b	ost_tele_bump(a0)
 		play.w	1, jsr, sfx_Roll			; play Sonic rolling sound
-
-	.do_nothing:
-		rts	
+		bra.w	DespawnQuick_NoDisplay
 ; ===========================================================================
 
 Tele_Bump:	; Routine 4
-		lea	(v_ost_player).w,a1
+		getsonic					; a1 = OST of Sonic
 		move.b	ost_tele_bump(a0),d0			; get bump value
 		addq.b	#2,ost_tele_bump(a0)			; increment bump value
 		jsr	(CalcSine).l				; convert to sine
@@ -99,19 +98,16 @@ Tele_Bump:	; Routine 4
 		sub.w	d0,d2
 		move.w	d2,ost_y_pos(a1)			; make Sonic "bump" vertically
 		cmpi.b	#$80,ost_tele_bump(a0)			; has bump completed?
-		bne.s	.wait					; if not, branch
+		bne.w	DespawnQuick_NoDisplay			; if not, branch
 
 		bsr.w	Tele_Move				; set speed/direction
 		addq.b	#2,ost_routine(a0)			; goto Tele_Bend next
 		play.w	1, jsr, sfx_Dash			; play Sonic dashing sound
-
-	.wait:
-		rts	
+		bra.w	DespawnQuick_NoDisplay
 ; ===========================================================================
 
 Tele_Bend:	; Routine 6
-		addq.l	#4,sp
-		lea	(v_ost_player).w,a1
+		getsonic					; a1 = OST of Sonic
 		subq.b	#1,ost_tele_time(a0)			; decrement timer
 		bpl.s	.update_pos				; branch if time remains
 
@@ -152,11 +148,10 @@ Tele_Bend:	; Routine 6
 
 .destination:
 		andi.w	#$7FF,ost_y_pos(a1)			; wrap y position
-		clr.b	ost_routine(a0)				; goto Tele_Main next
 		clr.b	(v_lock_multi).w			; unlock controls & enable object collision
 		move.w	#0,ost_x_vel(a1)
 		move.w	#$200,ost_y_vel(a1)
-		rts	
+		jmp	DeleteObject	
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to set Sonic's speed & direction in a teleport pipe
@@ -230,8 +225,7 @@ Tele_Move_X:
 
 	.abs_time:
 		move.w	d0,ost_tele_time(a0)			; set travel time for current direction
-		rts	
-; End of function Tele_Move
+		rts
 
 ; ===========================================================================
 Tele_Data:	index *

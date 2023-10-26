@@ -101,7 +101,7 @@ ObjPos_SBZ2:
 		objpos $083B,$0446,Flamethrower,$43,xflip
 		objpos $0840,$0188,Electro,$04
 		objpos $0840,$0418,Electro,$04,yflip
-		objpos $0894,$0190,Teleport,$07,xflip
+		objpos $0894,$0190,Teleport,$87,xflip
 		objpos $0894,$0590,Teleport,$03,xflip
 		objpos $08A5,$0446,Flamethrower,$43
 		objpos $08B8,$0148,Rings,$12,rem
