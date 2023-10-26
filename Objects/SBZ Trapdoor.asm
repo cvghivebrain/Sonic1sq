@@ -9,8 +9,7 @@ Trapdoor:
 		moveq	#0,d0
 		move.b	ost_routine(a0),d0
 		move.w	Trap_Index(pc,d0.w),d1
-		jsr	Trap_Index(pc,d1.w)
-		bra.w	DespawnQuick
+		jmp	Trap_Index(pc,d1.w)
 ; ===========================================================================
 Trap_Index:	index *,,2
 		ptr Trap_Main
@@ -33,7 +32,6 @@ Trap_Main:	; Routine 0
 		move.b	#$80,ost_displaywidth(a0)
 		move.b	#64,ost_width(a0)
 		move.b	#12,ost_height(a0)
-		moveq	#0,d0
 		move.b	ost_subtype(a0),d0			; get subtype
 		andi.w	#$F,d0					; read only low nybble
 		mulu.w	#60,d0					; multiply by 60 (1 second)
@@ -42,8 +40,12 @@ Trap_Main:	; Routine 0
 		move.w	ost_trap_wait_master(a0),ost_trap_wait_time(a0)
 
 Trap_Wait:	; Routine 2
-		subq.w	#1,ost_trap_wait_time(a0)
-		bpl.w	SolidObject				; branch if time remains
+		subq.w	#1,ost_trap_wait_time(a0)		; decrement timer
+		bmi.s	.open					; branch if time hits -1
+		bsr.w	SolidObject
+		bra.w	DespawnQuick
+		
+	.open:
 		addq.b	#2,ost_routine(a0)			; goto Trap_Open next
 		bsr.w	UnSolid
 		tst.b	ost_render(a0)
@@ -57,18 +59,16 @@ Trap_Open:	; Routine 4
 		lea	Ani_Trap(pc),a1
 		jsr	AnimateSprite
 		cmpi.b	#id_frame_trap_open,ost_frame(a0)
-		bne.s	.exit					; branch if animation isn't finished
+		bne.w	DespawnQuick				; branch if animation isn't finished
 		addq.b	#2,ost_routine(a0)			; goto Trap_Wait2 next
 		move.w	ost_trap_wait_master(a0),ost_trap_wait_time(a0) ; reset timer
-		
-	.exit:
-		rts
+		bra.w	DespawnQuick
 ; ===========================================================================
 
 Trap_Wait2:	; Routine 6
 		subq.w	#1,ost_trap_wait_time(a0)
-		bmi.s	.close					; branch if time passes 0
-		rts
+		bmi.s	.close					; branch if time hits -1
+		bra.w	DespawnQuick
 		
 	.close:
 		addq.b	#2,ost_routine(a0)			; goto Trap_Close next
@@ -83,12 +83,10 @@ Trap_Close:	; Routine 8
 		lea	Ani_Trap(pc),a1
 		jsr	AnimateSprite
 		cmpi.b	#id_frame_trap_closed,ost_frame(a0)
-		bne.s	.exit					; branch if animation isn't finished
+		bne.w	DespawnQuick				; branch if animation isn't finished
 		move.b	#id_Trap_Wait,ost_routine(a0)		; goto Trap_Wait next
 		move.w	ost_trap_wait_master(a0),ost_trap_wait_time(a0) ; reset timer
-		
-	.exit:
-		rts
+		bra.w	DespawnQuick
 		
 ; ---------------------------------------------------------------------------
 ; Animation script

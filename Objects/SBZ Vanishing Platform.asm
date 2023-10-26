@@ -3,6 +3,11 @@
 
 ; spawned by:
 ;	ObjPos_SBZ1, ObjPos_SBZ2 - subtypes 0/$40/$80/$C0/$C6/$D6/$E6
+
+; subtypes:
+;	%SSSSTTTT
+;	SSSS - synchronisation value
+;	TTTT - time between vanishing/appearing (0 = approx 2 secs; 6 = approx 15 secs)
 ; ---------------------------------------------------------------------------
 
 VanishPlatform:
@@ -14,13 +19,17 @@ VanishPlatform:
 VanP_Index:	index *,,2
 		ptr VanP_Main
 		ptr VanP_Sync
+		ptr VanP_Wait
+		ptr VanP_Appear
 		ptr VanP_Solid
+		ptr VanP_Vanish
+		ptr VanP_Reset
 
 		rsobj VanishPlatform
-ost_vanish_wait_time:	rs.w 1					; time until change (2 bytes)
-ost_vanish_wait_master:	rs.w 1					; time between changes (2 bytes)
-ost_vanish_sync_sub:	rs.w 1					; value to subtract from framecount for synchronising (2 bytes)
-ost_vanish_sync_mask:	rs.w 1					; bitmask for synchronising (2 bytes)
+ost_vanish_wait_time:	rs.w 1					; time until change
+ost_vanish_wait_master:	rs.w 1					; time between changes
+ost_vanish_sync_sub:	rs.w 1					; value to subtract from framecount for synchronising
+ost_vanish_sync_mask:	rs.w 1					; bitmask for synchronising
 		rsobjend
 ; ===========================================================================
 
@@ -56,41 +65,55 @@ VanP_Sync:	; Routine 2
 		move.w	(v_frame_counter).w,d0			; get word that increments every frame
 		sub.w	ost_vanish_sync_sub(a0),d0
 		and.w	ost_vanish_sync_mask(a0),d0		; apply bitmask
-		bne.s	.animate				; branch if any bits are set
-		addq.b	#2,ost_routine(a0)			; goto VanP_Solid next (every $100 or $400 frames)
-		bra.s	VanP_Solid
-; ===========================================================================
+		bne.w	DespawnQuick_NoDisplay			; branch if not 0
+		addq.b	#2,ost_routine(a0)			; goto VanP_Wait next
 
-.animate:
-		lea	(Ani_Van).l,a1
-		jsr	(AnimateSprite).l
-		bra.w	DespawnObject
-; ===========================================================================
-
-VanP_Solid:	; Routine 4
+VanP_Wait:	; Routine 4
 		subq.w	#1,ost_vanish_wait_time(a0)		; decrement timer
-		bpl.s	.wait					; branch if time remains
-		move.w	#127,ost_vanish_wait_time(a0)		; reset timer to 2 seconds
-		tst.b	ost_anim(a0)				; is platform vanishing?
-		beq.s	.isvanishing				; if yes, branch
-		move.w	ost_vanish_wait_master(a0),ost_vanish_wait_time(a0) ; reset timer to $80 (type $x0) or $380 (type $x6)
+		bpl.w	DespawnQuick_NoDisplay			; branch if time remains
+		
+		move.w	ost_vanish_wait_master(a0),ost_vanish_wait_time(a0) ; reset timer
+		addq.b	#2,ost_routine(a0)			; goto VanP_Appear next
+		move.b	#id_ani_vanish_appear,ost_anim(a0)
 
-	.isvanishing:
-		bchg	#0,ost_anim(a0)				; switch between vanishing/appearing animations
-		bclr	#7,ost_anim(a0)
-
-	.wait:
-		lea	(Ani_Van).l,a1
-		jsr	(AnimateSprite).l
-		btst	#1,ost_frame(a0)			; has platform vanished?
-		bne.s	.notsolid				; if yes, branch
+VanP_Appear:	; Routine 6
+		lea	Ani_Van(pc),a1
+		jsr	(AnimateSprite).l			; animate & goto VAnP_Solid/VanP_Reset when done
+		cmpi.b	#id_frame_vanish_quarter,ost_frame(a0)
+		bcc.w	DespawnQuick				; branch if vanished or mostly vanished
 		bsr.w	SolidObject_TopOnly
 		bra.w	DespawnQuick
 ; ===========================================================================
 
-.notsolid:
+VanP_Solid:	; Routine 8
+		subq.w	#1,ost_vanish_wait_time(a0)		; decrement timer
+		bmi.s	.next					; branch if time hits -1
+		bsr.w	SolidObject_TopOnly
+		bra.w	DespawnQuick
+		
+	.next:
+		move.w	ost_vanish_wait_master(a0),ost_vanish_wait_time(a0) ; reset timer
+		addq.b	#2,ost_routine(a0)			; goto VanP_Vanish next
+		move.b	#id_ani_vanish_vanish,ost_anim(a0)
+		
+VanP_Vanish:	; Routine $A
+		lea	Ani_Van(pc),a1
+		jsr	(AnimateSprite).l			; animate & goto VanP_Reset when done
+		btst	#status_platform_bit,ost_status(a0)
+		beq.w	DespawnQuick				; branch if not being stood on
+		cmpi.b	#id_frame_vanish_quarter,ost_frame(a0)
+		beq.s	.unsolid				; branch if mostly vanished
+		bsr.w	SolidObject_TopOnly
+		bra.w	DespawnQuick
+		
+	.unsolid:
 		bsr.w	UnSolid_TopOnly
 		bra.w	DespawnQuick
+; ===========================================================================
+
+VanP_Reset:	; Routine $C
+		move.b	#id_VanP_Wait,ost_routine(a0)		; goto VanP_Wait next
+		bra.w	VanP_Wait
 
 ; ---------------------------------------------------------------------------
 ; Animation script
@@ -106,8 +129,7 @@ ani_vanish_vanish:
 		dc.w id_frame_vanish_half
 		dc.w id_frame_vanish_quarter
 		dc.w id_frame_vanish_gone
-		dc.w id_Anim_Flag_Stop
-		even
+		dc.w id_Anim_Flag_Routine
 
 ani_vanish_appear:
 		dc.w 7
@@ -115,5 +137,4 @@ ani_vanish_appear:
 		dc.w id_frame_vanish_quarter
 		dc.w id_frame_vanish_half
 		dc.w id_frame_vanish_whole
-		dc.w id_Anim_Flag_Stop
-		even
+		dc.w id_Anim_Flag_Routine
