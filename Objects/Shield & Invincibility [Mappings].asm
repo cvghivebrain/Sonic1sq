@@ -14,6 +14,7 @@ Map_Shield:	index *
 frame_shield_blank:
 		spritemap
 		endsprite
+		
 frame_shield_1:	spritemap
 		piece	-$18, -$18, 3x3, 0
 		piece	0, -$18, 3x3, 9
@@ -69,4 +70,3 @@ frame_stars4:	spritemap
 		piece	-$18, 0, 3x3, $12, yflip
 		piece	0, 0, 3x3, $1B, yflip
 		endsprite
-		even

@@ -11,15 +11,7 @@ Signpost:
 		moveq	#0,d0
 		move.b	ost_routine(a0),d0
 		move.w	Sign_Index(pc,d0.w),d1
-		jsr	Sign_Index(pc,d1.w)
-		lea	(Ani_Sign).l,a1
-		bsr.w	AnimateSprite
-		set_dma_dest vram_signpost,d1			; set VRAM address to write gfx
-		jsr	DPLCSprite				; write gfx if frame has changed
-		move.w	ost_x_pos(a0),d0
-		bsr.w	CheckActive
-		bne.w	DeleteObject
-		bra.w	DisplaySprite
+		jmp	Sign_Index(pc,d1.w)
 ; ===========================================================================
 Sign_Index:	index *,,2
 		ptr Sign_Main
@@ -29,9 +21,9 @@ Sign_Index:	index *,,2
 		ptr Sign_Exit
 
 		rsobj Signpost
-ost_sign_spin_time:	rs.w 1 ; $30				; time for signpost to spin (2 bytes)
-ost_sign_sparkle_time:	rs.w 1 ; $32				; time between sparkles (2 bytes)
-ost_sign_sparkle_id:	rs.b 1 ; $34				; counter to keep track of sparkles
+ost_sign_spin_time:	rs.w 1					; time for signpost to spin (2 bytes)
+ost_sign_sparkle_time:	rs.w 1					; time between sparkles (2 bytes)
+ost_sign_sparkle_id:	rs.b 1					; counter to keep track of sparkles
 		rsobjend
 ; ===========================================================================
 
@@ -44,21 +36,22 @@ Sign_Main:	; Routine 0
 		move.b	#4,ost_priority(a0)
 		moveq	#id_UPLC_Bonus,d0
 		jsr	UncPLC					; load hidden bonus gfx
+		lea	Ani_Sign(pc),a1
+		bsr.w	AnimateSprite
+		set_dma_dest vram_signpost,d1
+		jsr	DPLCSprite				; load first frame of gfx
 
 Sign_Touch:	; Routine 2
-		bsr.w	Range
-		tst.w	d0
-		bmi.s	.exit					; branch if Sonic is left of the signpost
-		cmpi.w	#32,d1					; is Sonic within 32px of right?
-		bcc.s	.exit					; if not, branch
+		getsonic					; a1 = OST of Sonic
+		range_x
+		cmpi.w	#32,d0					; is Sonic within 32px of right?
+		bcc.w	DespawnQuick				; if not, branch
 
 		play.w	0, jsr, sfx_Signpost			; play signpost sound
 		clr.b	(f_hud_time_update).w			; stop time counter
 		move.w	(v_boundary_right).w,(v_boundary_left).w ; lock screen position
 		addq.b	#2,ost_routine(a0)			; goto Sign_Spin next
-
-	.exit:
-		rts	
+		bra.w	DespawnQuick
 ; ===========================================================================
 
 Sign_Spin:	; Routine 4
@@ -74,7 +67,7 @@ Sign_Spin:	; Routine 4
 	.chksparkle:
 		subq.w	#1,ost_sign_sparkle_time(a0)		; decrement sparkle timer
 		bpl.s	.fail					; if time remains, branch
-		move.w	#$B,ost_sign_sparkle_time(a0)		; set time between sparkles to 12 frames
+		move.w	#11,ost_sign_sparkle_time(a0)		; set time between sparkles to 12 frames
 		moveq	#0,d0
 		move.b	ost_sign_sparkle_id(a0),d0		; get sparkle id
 		addq.b	#2,ost_sign_sparkle_id(a0)		; increment sparkle counter
@@ -100,7 +93,11 @@ Sign_Spin:	; Routine 4
 		move.b	#8,ost_displaywidth(a1)
 
 	.fail:
-		rts	
+		lea	Ani_Sign(pc),a1
+		bsr.w	AnimateSprite
+		set_dma_dest vram_signpost,d1			; set VRAM address to write gfx
+		jsr	DPLCSprite				; write gfx if frame has changed
+		bra.w	DespawnQuick
 ; ===========================================================================
 Sign_SparkPos:	; x pos, y pos
 		dc.b -$18,-$10
@@ -115,23 +112,31 @@ Sign_SparkPos:	; x pos, y pos
 
 Sign_SonicRun:	; Routine 6
 		tst.w	(v_debug_active).w			; is debug mode	on?
-		bne.w	Sign_SonicRun_Exit			; if yes, branch
-		btst	#status_air_bit,(v_ost_player+ost_status).w ; is Sonic in the air?
+		bne.w	DespawnQuick				; if yes, branch
+		getsonic					; a1 = OST of Sonic
+		btst	#status_air_bit,ost_status(a1)		; is Sonic in the air?
 		bne.s	.wait_to_land				; if yes, branch
 		move.b	#1,(f_lock_controls).w			; lock controls
 		move.w	#btnR<<8,(v_joypad_hold).w		; make Sonic run to the right
 
 	.wait_to_land:
-		tst.b	(v_ost_player).w			; is Sonic object still loaded?
+		tst.l	ost_id(a1)				; is Sonic object still loaded?
 		beq.s	.skip_boundary_chk			; if not, branch
-		move.w	(v_ost_player+ost_x_pos).w,d0
+		move.w	ost_x_pos(a1),d0
 		move.w	(v_boundary_right).w,d1
 		addi.w	#$128,d1
 		cmp.w	d1,d0					; has Sonic passed 296px outside right level boundary?
-		bcs.s	Sign_SonicRun_Exit			; if not, branch
+		bcs.w	DespawnQuick				; if not, branch
 
 	.skip_boundary_chk:
 		addq.b	#2,ost_routine(a0)			; goto Sign_Exit next
+		bsr.s	HasPassedAct
+		bra.w	DespawnQuick
+; ===========================================================================
+
+Sign_Exit:	; Routine 8
+		shortcut
+		bra.w	DespawnQuick
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	set up bonuses at the end of an	act
@@ -139,7 +144,7 @@ Sign_SonicRun:	; Routine 6
 
 HasPassedAct:
 		tst.b	(v_haspassed_state).w			; has "Sonic Has Passed" title card loaded?
-		bne.s	Sign_SonicRun_Exit			; if yes, branch
+		bne.w	DespawnQuick				; if yes, branch
 
 		move.w	(v_boundary_right).w,(v_boundary_left).w
 		clr.b	(v_invincibility).w			; disable invincibility
@@ -169,8 +174,6 @@ HasPassedAct:
 		mulu.w	#10,d0					; multiply by 10
 		move.w	d0,(v_ring_bonus).w			; set ring bonus
 		play.w	1, jsr, mus_HasPassed			; play "Sonic Has Passed" music
-
-Sign_SonicRun_Exit:
 		rts
 
 ; ===========================================================================
@@ -195,10 +198,6 @@ TimeBonuses:	dc.w   5000
 		dc.w     50
 		dc.w     50					; < 5:00 = 500
 WorstTime:	dc.w      0					; 5:00+ = 0
-; ===========================================================================
-
-Sign_Exit:	; Routine 8
-		rts	
 
 ; ---------------------------------------------------------------------------
 ; Animation script
@@ -214,7 +213,6 @@ ani_sign_eggman:
 		dc.w $F
 		dc.w id_frame_sign_eggman
 		dc.w id_Anim_Flag_Restart
-		even
 
 ani_sign_spin1:
 		dc.w 1
@@ -236,4 +234,3 @@ ani_sign_sonic:
 		dc.w $F
 		dc.w id_frame_sign_sonic
 		dc.w id_Anim_Flag_Restart
-		even
