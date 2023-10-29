@@ -585,3 +585,11 @@ evenr:		macro
 		exg	d0,\1
 		endm
 		
+; ---------------------------------------------------------------------------
+; Don't return to previous code from subroutine
+; ---------------------------------------------------------------------------
+
+noreturn:	macro
+		addq.l	#4,sp					; skip last location in stack
+		endm
+		

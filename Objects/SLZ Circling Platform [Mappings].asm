@@ -9,4 +9,3 @@ frame_circ_platform:
 		piece	-$18, -8, 3x2, $51
 		piece	0, -8, 3x2, $51, xflip
 		endsprite
-		even

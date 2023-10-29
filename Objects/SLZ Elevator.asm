@@ -2,8 +2,13 @@
 ; Object 59 - platforms	that move when you stand on them (SLZ)
 
 ; spawned by:
-;	ObjPos_SLZ1, ObjPos_SLZ2, ObjPos_SLZ3 - subtypes 0/1/3/$C
-;	ElevatorMaker - subtype $E
+;	ObjPos_SLZ1, ObjPos_SLZ2, ObjPos_SLZ3
+;	ElevatorMaker
+
+; subtypes:
+;	%DDDDTTTT
+;	DDDD - distance to move (*128px)
+;	TTTT - type of movement (see Elev_Type_Index)
 ; ---------------------------------------------------------------------------
 
 Elevator:
@@ -17,11 +22,10 @@ Elev_Index:	index *,,2
 		ptr Elev_Solid
 
 		rsobj Elevator
-ost_elev_y_start:	rs.w 1					; original y-axis position (2 bytes)
-ost_elev_x_start:	rs.w 1					; original x-axis position (2 bytes)
+ost_elev_y_start:	rs.w 1					; original y-axis position
+ost_elev_x_start:	rs.w 1					; original x-axis position
 ost_elev_moved:		rs.l 1					; distance moved
-ost_elev_acceleration:	rs.w 1					; acceleration - i.e. its movement is not linear (2 bytes)
-ost_elev_distance:	rs.w 1					; half distance to move (2 bytes)
+ost_elev_distance:	rs.w 1					; half distance to move
 ost_elev_dec_flag:	rs.b 1					; 1 = decelerate
 		rsobjend
 ; ===========================================================================
@@ -31,12 +35,14 @@ Elev_Main:	; Routine 0
 		move.b	#$28,ost_displaywidth(a0)
 		move.b	#$28,ost_width(a0)
 		move.b	#8,ost_height(a0)
-		moveq	#0,d0
 		move.b	ost_subtype(a0),d0			; get subtype
+		move.b	d0,d1
 		andi.w	#$F0,d0					; read only high nybble
 		lsl.w	#2,d0					; multiply by 4
 		move.w	d0,ost_elev_distance(a0)		; set distance to move
-		andi.b	#$F,ost_subtype(a0)			; clear high nybble
+		andi.b	#$F,d1
+		add.b	d1,d1
+		move.b	d1,ost_subtype(a0)			; clear high nybble & multiply by 2
 		move.l	#Map_Elev,ost_mappings(a0)
 		move.w	#0+tile_pal3,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
@@ -46,23 +52,13 @@ Elev_Main:	; Routine 0
 
 Elev_Solid:	; Routine 2
 		move.w	ost_x_pos(a0),ost_x_prev(a0)		; save x pos before moving
-		bsr.s	Elev_Types				; move object
-		tst.l	ost_id(a0)				; does object still exist?
-		beq.s	.deleted				; if not, branch
+		moveq	#0,d0
+		move.b	ost_subtype(a0),d0
+		move.w	Elev_Type_Index(pc,d0.w),d1
+		jsr	Elev_Type_Index(pc,d1.w)		; move object
 		bsr.w	SolidObject_TopOnly
 		move.w	ost_elev_x_start(a0),d0
 		bra.w	DespawnQuick_AltX
-
-	.deleted:
-		rts
-; ===========================================================================
-
-Elev_Types:
-		moveq	#0,d0
-		move.b	ost_subtype(a0),d0
-		add.w	d0,d0
-		move.w	Elev_Type_Index(pc,d0.w),d1
-		jmp	Elev_Type_Index(pc,d1.w)
 ; ===========================================================================
 Elev_Type_Index:
 		index *
@@ -89,7 +85,7 @@ Elev_UpRight:
 Elev_DownLeft:
 		tst.b	ost_mode(a0)				; check if Sonic is standing on the object
 		beq.s	.notstanding
-		addq.b	#1,ost_subtype(a0)			; if yes, add 1 to type (goes to 2, 4, 6 or 8)
+		addq.b	#2,ost_subtype(a0)			; if yes, add 1 to type (goes to 2, 4, 6 or 8)
 
 	.notstanding:
 		rts	
@@ -130,7 +126,7 @@ Elev_UpRight_Now:
 
 ; Type 8
 Elev_DownLeft_Now:
-		bsr.w	Elev_Move				; update distance moved
+		bsr.s	Elev_Move				; update distance moved
 		move.w	ost_elev_moved(a0),d0
 		asr.w	#1,d0
 		add.w	ost_elev_y_start(a0),d0
@@ -144,18 +140,19 @@ Elev_DownLeft_Now:
 
 ; Type 9
 Elev_UpVanish:
-		bsr.w	Elev_Move				; update distance moved
+		bsr.s	Elev_Move				; update distance moved
 		move.w	ost_elev_moved(a0),d0
 		neg.w	d0
 		add.w	ost_elev_y_start(a0),d0
 		move.w	d0,ost_y_pos(a0)
 		tst.b	ost_subtype(a0)				; has platform reached destination and stopped?
-		beq.w	.typereset				; if yes, branch
+		beq.s	.typereset				; if yes, branch
 		rts	
 ; ===========================================================================
 
 	.typereset:
 		bsr.w	UnSolid_TopOnly
+		noreturn					; don't display object
 		bra.w	DeleteObject
 
 ; ---------------------------------------------------------------------------
@@ -163,7 +160,7 @@ Elev_UpVanish:
 ; ---------------------------------------------------------------------------
 
 Elev_Move:
-		move.w	ost_elev_acceleration(a0),d0		; get current acceleration
+		move.w	ost_y_vel(a0),d0			; get current speed
 		tst.b	ost_elev_dec_flag(a0)			; is platform in deceleration phase?
 		bne.s	.decelerate				; if yes, branch
 		cmpi.w	#$800,d0				; is acceleration at or above max?
@@ -178,7 +175,7 @@ Elev_Move:
 		subi.w	#$10,d0					; decrease acceleration
 
 .update_acc:
-		move.w	d0,ost_elev_acceleration(a0)		; set new acceleration
+		move.w	d0,ost_y_vel(a0)			; set new speed
 		ext.l	d0
 		asl.l	#8,d0					; multiply by $100
 		add.l	ost_elev_moved(a0),d0			; add total previous movement
@@ -216,8 +213,8 @@ EMake_Index:	index *,,2
 		ptr EMake_Spawn
 
 		rsobj ElevatorMaker
-ost_emake_time:		rs.w 1					; time until next spawn (2 bytes)
-ost_emake_time_master:	rs.w 1					; master copy of ost_emake_time (2 bytes)
+ost_emake_time:		rs.w 1					; time until next spawn
+ost_emake_time_master:	rs.w 1					; time between spawns
 		rsobjend
 ; ===========================================================================
 
@@ -234,19 +231,15 @@ EMake_Main:	; Routine 0
 		move.w	d0,ost_emake_time_master(a0)
 
 EMake_Spawn:	; Routine 2
+		shortcut
 		subq.w	#1,ost_emake_time(a0)			; decrement timer
-		bne.s	.chkdel					; branch if time remains
+		bne.w	DespawnQuick_NoDisplay			; branch if time remains
 
 		move.w	ost_emake_time_master(a0),ost_emake_time(a0) ; reset timer
 		bsr.w	FindFreeObj				; find free OST slot
-		bne.s	.chkdel					; branch if not found
+		bne.w	DespawnQuick_NoDisplay			; branch if not found
 		move.l	#Elevator,ost_id(a1)			; create elevator object
 		move.w	ost_x_pos(a0),ost_x_pos(a1)		; match position
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		move.b	#type_elev_up_vanish,ost_subtype(a1)	; platform rises and vanishes
-		
-	.chkdel:
-		move.w	ost_x_pos(a0),d0
-		bsr.w	CheckActive
-		bne.w	DeleteObject
-		rts	
+		bra.w	DespawnQuick_NoDisplay

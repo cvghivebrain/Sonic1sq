@@ -16,8 +16,8 @@ Circ_Index:	index *,,2
 		ptr Circ_Action
 
 		rsobj CirclingPlatform
-ost_circ_y_start:	rs.w 1					; original y-axis position (2 bytes)
-ost_circ_x_start:	rs.w 1					; original x-axis position (2 bytes)
+ost_circ_y_start:	rs.w 1					; original y-axis position
+ost_circ_x_start:	rs.w 1					; original x-axis position
 		rsobjend
 ; ===========================================================================
 
@@ -32,77 +32,76 @@ Circ_Main:	; Routine 0
 		move.b	#8,ost_height(a0)
 		move.w	ost_x_pos(a0),ost_circ_x_start(a0)
 		move.w	ost_y_pos(a0),ost_circ_y_start(a0)
+		move.b	ost_subtype(a0),d0
+		add.b	d0,d0
+		move.b	d0,ost_subtype(a0)
 
 Circ_Action:	; Routine 2
 		move.w	ost_x_pos(a0),ost_x_prev(a0)		; save x pos before moving
-		bsr.s	Circ_Types				; move object
+		
+		move.b	(v_oscillating_0_to_A0).w,d1
+		subi.b	#$50,d1
+		ext.w	d1
+		move.b	(v_oscillating_0_to_A0_alt).w,d2
+		subi.b	#$50,d2
+		ext.w	d2
+		moveq	#0,d0
+		move.b	ost_subtype(a0),d0
+		move.w	Circ_Type_Index(pc,d0.w),d0
+		jsr	Circ_Type_Index(pc,d0.w)
+		add.w	ost_circ_x_start(a0),d1
+		move.w	d1,ost_x_pos(a0)
+		add.w	ost_circ_y_start(a0),d2
+		move.w	d2,ost_y_pos(a0)
+		
 		bsr.w	SolidObject_TopOnly
 		move.w	ost_circ_x_start(a0),d0
 		bra.w	DespawnQuick_AltX
 ; ===========================================================================
-
-Circ_Types:
-		moveq	#0,d0
-		move.b	ost_subtype(a0),d0
-		andi.w	#$C,d0					; read bits 2 & 3 of subtype (0, 4, 8 or $C)
-		lsr.w	#1,d0					; divide by 2
-		move.w	Circ_Type_Index(pc,d0.w),d1
-		jmp	Circ_Type_Index(pc,d1.w)
-; ===========================================================================
 Circ_Type_Index:
-		index *,,4
-		ptr Circ_Anticlockwise				; types 0-3
-		ptr Circ_Clockwise				; types 4-7
+		index *,,2
+		ptr Circ_Anticlockwise_0
+		ptr Circ_Anticlockwise_1
+		ptr Circ_Anticlockwise_2
+		ptr Circ_Anticlockwise_3
+		ptr Circ_Clockwise_4
+		ptr Circ_Clockwise_5
+		ptr Circ_Clockwise_6
+		ptr Circ_Clockwise_7
 ; ===========================================================================
 
-Circ_Anticlockwise:
-		move.b	(v_oscillating_0_to_A0).w,d1
-		subi.b	#$50,d1
-		ext.w	d1
-		move.b	(v_oscillating_0_to_A0_alt).w,d2
-		subi.b	#$50,d2
-		ext.w	d2
-		btst	#0,ost_subtype(a0)			; is type 1 or 3?
-		beq.s	.not_1_or_3				; if not, branch
+Circ_Anticlockwise_0:
+		rts
+		
+Circ_Anticlockwise_1:
 		neg.w	d1
 		neg.w	d2
+		rts
 
-	.not_1_or_3:
-		btst	#1,ost_subtype(a0)			; is type 2 or 3?
-		beq.s	.not_2_or_3				; if not, branch
+Circ_Anticlockwise_2:
 		neg.w	d1
 		exg	d1,d2
+		rts
 
-	.not_2_or_3:
-		add.w	ost_circ_x_start(a0),d1
-		move.w	d1,ost_x_pos(a0)
-		add.w	ost_circ_y_start(a0),d2
-		move.w	d2,ost_y_pos(a0)
-		rts	
-; ===========================================================================
-
-Circ_Clockwise:
-		move.b	(v_oscillating_0_to_A0).w,d1
-		subi.b	#$50,d1
-		ext.w	d1
-		move.b	(v_oscillating_0_to_A0_alt).w,d2
-		subi.b	#$50,d2
-		ext.w	d2
-		btst	#0,ost_subtype(a0)
-		beq.s	.not_1_or_3
-		neg.w	d1
+Circ_Anticlockwise_3:
 		neg.w	d2
+		exg	d1,d2
+		rts
 
-	.not_1_or_3:
-		btst	#1,ost_subtype(a0)
-		beq.s	.not_2_or_3
+Circ_Clockwise_4:
+		neg.w	d1
+		rts
+		
+Circ_Clockwise_5:
+		neg.w	d2
+		rts
+
+Circ_Clockwise_6:
 		neg.w	d1
 		exg	d1,d2
+		neg.w	d1
+		rts
 
-	.not_2_or_3:
-		neg.w	d1					; reverse x position delta
-		add.w	ost_circ_x_start(a0),d1
-		move.w	d1,ost_x_pos(a0)
-		add.w	ost_circ_y_start(a0),d2
-		move.w	d2,ost_y_pos(a0)
-		rts	
+Circ_Clockwise_7:
+		exg	d1,d2
+		rts
