@@ -142,7 +142,17 @@ range_x:	macro
 range_y:	macro
 		move.w	ost_y_pos(a1),d2
 		sub.w	ost_y_pos(a0),d2			; d2 = y dist (-ve if Sonic is above)
-		mvabs.w	d2,d3					; make d3 +ve		
+		mvabs.w	d2,d3					; make d3 +ve
+		endm
+
+range_x_quick:	macro
+		move.w	ost_x_pos(a1),d0
+		sub.w	ost_x_pos(a0),d0			; d0 = x dist (-ve if Sonic is to the left)
+		endm
+		
+range_y_quick:	macro
+		move.w	ost_y_pos(a1),d2
+		sub.w	ost_y_pos(a0),d2			; d2 = y dist (-ve if Sonic is above)
 		endm
 
 ; ---------------------------------------------------------------------------

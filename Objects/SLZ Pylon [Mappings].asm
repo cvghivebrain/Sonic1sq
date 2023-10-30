@@ -16,4 +16,3 @@ frame_pylon_0:
 		piece	-$10, $60, 4x4, 0, yflip
 		piece	-$10, $7F, 4x4, 0
 		endsprite
-		even

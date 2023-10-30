@@ -23,6 +23,7 @@ Pyl_Main:	; Routine 0
 		move.b	#$10,ost_displaywidth(a0)
 
 Pyl_Display:	; Routine 2
+		shortcut
 		move.l	(v_camera_x_pos).w,d1			; get camera x pos (in high word)
 		add.l	d1,d1					; double it
 		swap	d1					; move into low word

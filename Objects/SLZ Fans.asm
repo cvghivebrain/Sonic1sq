@@ -2,7 +2,7 @@
 ; Object 5D - fans (SLZ)
 
 ; spawned by:
-;	ObjPos_SLZ1, ObjPos_SLZ2, ObjPos_SLZ3 - subtypes 0/1/2
+;	ObjPos_SLZ1, ObjPos_SLZ2, ObjPos_SLZ3 - subtypes 0/1
 ; ---------------------------------------------------------------------------
 
 Fan:
@@ -13,94 +13,100 @@ Fan:
 ; ===========================================================================
 Fan_Index:	index *,,2
 		ptr Fan_Main
-		ptr Fan_Delay
+		ptr Fan_On
+		ptr Fan_Off
+		ptr Fan_AlwaysOn
 
 		rsobj Fan
-ost_fan_wait_time:	rs.w 1 ; $30				; time between switching on/off (2 bytes)
-ost_fan_flag:		rs.b 1 ; $32				; 0 = on; 1 = off
+ost_fan_wait_time:	rs.w 1					; time between switching on/off
+ost_fan_on_time:	rs.w 1					; time switched on
+ost_fan_off_time:	rs.w 1					; time switched off
 		rsobjend
+		
+Fan_Settings:	dc.w 180,120,id_Fan_On				; time on, time off, routine id
+		dc.w 0,0,id_Fan_AlwaysOn
 ; ===========================================================================
 
 Fan_Main:	; Routine 0
-		addq.b	#2,ost_routine(a0)			; goto Fan_Delay next
 		move.l	#Map_Fan,ost_mappings(a0)
 		move.w	#tile_Kos_Fan+tile_pal3,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#$10,ost_displaywidth(a0)
 		move.b	#4,ost_priority(a0)
-
-Fan_Delay:	; Routine 2
-		btst	#1,ost_subtype(a0)			; is object type 2 or 3? (always on)
-		bne.s	.skip_timer				; if yes, branch
-		subq.w	#1,ost_fan_wait_time(a0)		; decrement timer
-		bpl.s	.skip_timer				; if time remains, branch
-		move.w	#120,ost_fan_wait_time(a0)		; set timer to 2 seconds
-		bchg	#0,ost_fan_flag(a0)			; switch fan on/off
-		beq.s	.skip_timer				; if fan is on, branch
-		move.w	#180,ost_fan_wait_time(a0)		; set timer to 3 seconds
-
-.skip_timer:
-		tst.b	ost_fan_flag(a0)			; is fan switched on?
-		bne.w	.chkdel					; if not, branch
-		lea	(v_ost_player).w,a1
-		move.w	ost_x_pos(a1),d0
-		sub.w	ost_x_pos(a0),d0			; d0 = distance between fan and Sonic (-ve if Sonic is to the left)
-		btst	#status_xflip_bit,ost_status(a0)	; is fan facing right?
-		bne.s	.facing_right				; if yes, branch
-		neg.w	d0					; +ve: face left & Sonic left; face right & Sonic right
-								; -ve: face left & Sonic right; face right & Sonic left
-	.facing_right:
-		addi.w	#$50,d0
-		cmpi.w	#$F0,d0					; is Sonic within 160px in front or 80px behind fan?
-		bcc.s	.animate				; if not, branch
-		move.w	ost_y_pos(a1),d1
-		addi.w	#$60,d1
-		sub.w	ost_y_pos(a0),d1
-		bcs.s	.animate				; branch if Sonic is > 96px below fan
-		cmpi.w	#$70,d1
-		bcc.s	.animate				; branch if Sonic is > 112px above fan
-		subi.w	#$50,d0
-		bcc.s	.over_80px				; branch if Sonic is not within 80px in front/behind fan
-		not.w	d0
-		add.w	d0,d0
-
-	.over_80px:
-		addi.w	#$60,d0
-		btst	#status_xflip_bit,ost_status(a0)	; is fan facing right?
-		bne.s	.right					; if yes, branch
-		neg.w	d0
-
-	.right:
-		neg.b	d0
-		asr.w	#4,d0
-		btst	#0,ost_subtype(a0)			; is type 0/2? (blows left)
-		beq.s	.blows_left				; if yes, branch
-		neg.w	d0
-
-	.blows_left:
-		add.w	d0,ost_x_pos(a1)			; push Sonic left or right
-
-.animate:
-		subq.b	#1,ost_anim_time(a0)			; decrement animation timer
-		bpl.s	.chkdel					; branch if time remains
-		move.b	#0,ost_anim_time(a0)			; reset timer
-		addq.b	#1,ost_anim_frame(a0)			; next frame
-		cmpi.b	#3,ost_anim_frame(a0)
-		bcs.s	.is_valid				; branch if frame is valid
-		move.b	#0,ost_anim_frame(a0)			; reset frame counter
-
-	.is_valid:
 		moveq	#0,d0
-		btst	#0,ost_subtype(a0)			; is type 0/2? (blows left)
-		beq.s	.noflip					; if yes, branch
-		moveq	#id_frame_fan_2,d0			; start at frame 2 for opposite spin
+		move.b	ost_subtype(a0),d0
+		mulu.w	#6,d0
+		lea	Fan_Settings(pc,d0.w),a2
+		move.w	(a2)+,ost_fan_on_time(a0)
+		move.w	(a2)+,ost_fan_off_time(a0)
+		move.w	(a2)+,d0
+		move.b	d0,ost_routine(a0)
+		bra.w	DespawnQuick
+; ===========================================================================
 
-	.noflip:
-		add.b	ost_anim_frame(a0),d0			; add to frame counter
-		move.b	d0,ost_frame(a0)			; update frame
+Fan_On:		; Routine 2
+		subq.w	#1,ost_fan_wait_time(a0)		; decrement timer
+		bpl.s	Fan_AlwaysOn				; if time remains, branch
+		addq.b	#2,ost_routine(a0)			; goto Fan_Off next
+		move.w	ost_fan_off_time(a0),ost_fan_wait_time(a0) ; set timer to 2 seconds
 
-.chkdel:
-		move.w	ost_x_pos(a0),d0
-		bsr.w	CheckActive
-		bne.w	DeleteObject
-		bra.w	DisplaySprite
+Fan_AlwaysOn:	; Routine 6
+		tst.w	(v_debug_active).w
+		bne.s	.skip_effect				; branch if debug mode is in use
+		getsonic					; a1 = OST of Sonic
+		range_y_quick
+		bpl.s	.skip_effect				; branch if Sonic is below fan
+		cmpi.w	#-96,d2
+		ble.s	.skip_effect				; branch if Sonic is > 96px above fan
+		range_x_quick
+		move.b	ost_status(a0),d1
+		andi.b	#status_xflip,d1
+		bne.s	.facing_right				; branch if fan is facing right
+		neg.w	d0
+		
+	.facing_right:
+		cmpi.w	#160,d0
+		bge.s	.skip_effect				; branch if > 160px in front of fan
+		cmpi.w	#-80,d0
+		ble.s	.skip_effect				; branch if > 80px behind fan
+		tst.w	d0
+		bpl.s	.in_front				; branch if Sonic is in front of fan
+		not.w	d0
+		add.w	d0,d0					; double fan strength if Sonic is behind
+		
+	.in_front:
+		neg.w	d0
+		addi.w	#160,d0
+		asr.w	#4,d0
+		tst.b	d1
+		bne.s	.facing_right2				; branch if fan is facing right
+		neg.w	d0
+		
+	.facing_right2:
+		add.w	d0,ost_x_pos(a1)			; push Sonic
+		
+	.skip_effect:
+		lea	Ani_Fan(pc),a1
+		jsr	AnimateSprite
+		bra.w	DespawnQuick
+; ===========================================================================
+
+Fan_Off:	; Routine 4
+		subq.w	#1,ost_fan_wait_time(a0)		; decrement timer
+		bpl.w	DespawnQuick				; if time remains, branch
+		subq.b	#2,ost_routine(a0)			; goto Fan_On next
+		move.w	ost_fan_on_time(a0),ost_fan_wait_time(a0) ; set timer to 3 seconds
+		bra.w	DespawnQuick
+		
+; ---------------------------------------------------------------------------
+; Animation script
+; ---------------------------------------------------------------------------
+
+Ani_Fan		index *
+		ptr ani_fan_0
+		
+ani_fan_0:	dc.w 0
+		dc.w id_frame_fan_0
+		dc.w id_frame_fan_1
+		dc.w id_frame_fan_2
+		dc.w id_Anim_Flag_Restart

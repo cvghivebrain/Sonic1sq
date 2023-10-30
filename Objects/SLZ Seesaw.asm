@@ -74,7 +74,9 @@ See_Action:	; Routine 2
 		blt.s	.not_right				; branch if Sonic isn't on right side
 		bclr	#render_xflip_bit,ost_render(a0)	; left side up, right side down
 		addq.b	#1,d0
-		bra.s	.no_collision
+		move.b	d0,ost_seesaw_side(a0)			; remember which side Sonic is on
+		bra.w	DespawnQuick
+		
 	.not_right:
 		cmpi.w	#$28,d4
 		ble.s	.no_collision				; branch if Sonic isn't in the middle
@@ -90,8 +92,8 @@ See_Action:	; Routine 2
 ; ---------------------------------------------------------------------------
 
 See_Solid:
-		cmpi.b	#id_frame_seesaw_flat,ost_frame(a0)
-		beq.w	SolidObject_TopOnly			; branch if seesaw is flat
+		tst.b	ost_frame(a0)
+		bne.w	SolidObject_TopOnly			; branch if seesaw is flat
 		moveq	#1,d6					; 1 byte in heightmap = 2px
 		lea	See_DataSlope,a2
 		btst	#render_xflip_bit,ost_render(a0)
@@ -140,8 +142,7 @@ See_BallAir:	; Routine 6
 		andi.b	#render_xflip,d1
 		add.b	ost_subtype(a0),d1			; combine seesaw orientation with spikeball sidedness
 		andi.b	#1,d1
-		lea	See_HeightList,a2
-		move.b	(a2,d1.w),d1				; set height accordingly
+		move.b	.heightlist(pc,d1.w),d1			; set height accordingly
 		
 	.flat_seesaw:
 		move.w	ost_y_pos(a1),d0
@@ -160,6 +161,8 @@ See_BallAir:	; Routine 6
 		move.b	#1,ost_subtype(a0)
 		bset	#render_xflip_bit,ost_render(a1)
 		bra.s	.chk_sonic
+		
+.heightlist:	dc.b $2F, 8
 		
 	.from_left:
 		addi.w	#$28,ost_x_pos(a0)
@@ -182,5 +185,3 @@ See_BallAir:	; Routine 6
 		move.b	#id_Sonic_Control,ost_routine(a2)
 		play.w	1, jsr, sfx_Spring			; play spring sound
 		bra.w	DespawnQuick
-		
-See_HeightList:	dc.b $2F, 8

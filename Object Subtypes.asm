@@ -204,10 +204,10 @@ type_stair_above:	equ id_Stair_Type00		; 0 - forms a staircase when stood on
 type_stair_below:	equ id_Stair_Type02		; 2 - forms a staircase when hit from below
 
 ; Fan
-type_fan_left_onoff:	equ 0				; 0 - blows left, turns on/off every 3 seconds
-type_fan_right_onoff:	equ 1				; 1 - blows right, turns on/off every 3 seconds
-type_fan_left_on:	equ 2				; 2 - blows left, always on
-type_fan_right_on:	equ 3				; 3 - blows right, always on
+type_fan_left_onoff:	equ 0				; 0 - turns on/off every 3 seconds
+type_fan_right_onoff:	equ 0
+type_fan_left_on:	equ 1				; 1 - always on
+type_fan_right_on:	equ 1
 
 ; Elevator
 type_elev_up_short:	equ id_Elev_Up+$10		; rises 128px when stood on

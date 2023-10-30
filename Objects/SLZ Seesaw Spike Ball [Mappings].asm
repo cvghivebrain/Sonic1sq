@@ -14,4 +14,3 @@ frame_seesaw_silver:
 		spritemap
 		piece	-$C, -$C, 3x3, 9
 		endsprite
-		even
