@@ -200,8 +200,8 @@ type_wfallsp_float:	equ 1					; matches y position to water surface
 type_wfallsp_hide:	equ 2					; hide until level is updated by button
 
 ; Staircase
-type_stair_above:	equ id_Stair_Type00		; 0 - forms a staircase when stood on
-type_stair_below:	equ id_Stair_Type02		; 2 - forms a staircase when hit from below
+type_stair_above:	equ $10				; 0 - forms a staircase when stood on
+type_stair_below:	equ $21				; 1 - forms a staircase when hit from below
 
 ; Fan
 type_fan_left_onoff:	equ 0				; 0 - turns on/off every 3 seconds
