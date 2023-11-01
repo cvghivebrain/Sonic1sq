@@ -49,4 +49,3 @@ frame_spike_1left:
 		spritemap					; 1 spike facing sideways
 		piece	-$10, -4, 4x1, 0
 		endsprite
-		even

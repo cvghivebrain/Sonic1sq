@@ -538,7 +538,7 @@ Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 
 		include "Objects\Title Cards.asm"		; TitleCard
 		include "Objects\Game Over & Time Over.asm"	; GameOverCard
-		include "Objects\Sonic Has Passed Title Card.asm" ; HasPassedCard
+		include "Objects\Title Cards Sonic Has Passed.asm" ; HasPassedCard
 		include "Objects\Special Stage Results.asm"	; SSResult
 		include "Objects\Special Stage Results Chaos Emeralds.asm" ; SSRChaos
 

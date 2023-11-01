@@ -22,12 +22,12 @@ SSS_Index:	index *,,2
 		ptr SSS_ExitWait
 
 		rsobj SonicSpecial
-ost_ss_item:		rs.b 1 ; $30				; item id Sonic is touching
-ost_ss_item_address:	rs.l 1 ; $32				; RAM address of item in layout Sonic is touching (4 bytes)
-ost_ss_updown_time:	rs.b 1 ; $36				; time until UP/DOWN can be triggered again
-ost_ss_r_time:		rs.b 1 ; $37				; time until R can be triggered again
-ost_ss_restart_time:	rs.w 1 ; $38				; time until game mode changes after exiting SS (2 bytes; nonfunctional)
-ost_ss_ghost:		rs.b 1 ; $3A				; status of ghost blocks - 0 = ghost; 1 = passed; 2 = solid
+ost_ss_item_address:	rs.l 1					; RAM address of item in layout Sonic is touching
+ost_ss_restart_time:	rs.w 1					; time until game mode changes after exiting SS
+ost_ss_item:		rs.b 1					; item id Sonic is touching
+ost_ss_updown_time:	rs.b 1					; time until UP/DOWN can be triggered again
+ost_ss_r_time:		rs.b 1					; time until R can be triggered again
+ost_ss_ghost:		rs.b 1					; status of ghost blocks - 0 = ghost; 1 = passed; 2 = solid
 		rsobjend
 ; ===========================================================================
 
@@ -73,14 +73,13 @@ SSS_OnWall:
 ; ===========================================================================
 
 SSS_InAir:
-		bsr.w	nullsub_2
 		bsr.w	SSS_Move
 		bsr.w	SSS_Fall
 
 SSS_Display:
 		bsr.w	SSS_ChkItems
 		bsr.w	SSS_ChkItems2
-		jsr	(SpeedToPos).l				; update position
+		update_xy_pos					; update position
 		bsr.w	SS_FixCamera				; centre camera on Sonic
 		move.w	(v_ss_angle).w,d0
 		add.w	(v_ss_rotation_speed).w,d0		; add rotation speed to angle
@@ -93,25 +92,25 @@ SSS_Display:
 ; ---------------------------------------------------------------------------
 
 SSS_Move:
-		btst	#bitL,(v_joypad_hold).w			; is left being pressed?
+		move.b	(v_joypad_hold).w,d1
+		btst	#bitL,d1				; is left being pressed?
 		beq.s	.not_left				; if not, branch
 		bsr.w	SSS_MoveLeft
 
 	.not_left:
-		btst	#bitR,(v_joypad_hold).w			; is right being pressed?
+		btst	#bitR,d1				; is right being pressed?
 		beq.s	.not_right				; if not, branch
 		bsr.w	SSS_MoveRight
 
 	.not_right:
-		move.b	(v_joypad_hold).w,d0
-		andi.b	#btnL+btnR,d0				; is left or right being pressed?
+		andi.b	#btnL+btnR,d1				; is left or right being pressed?
 		bne.s	SSS_UpdatePos				; if yes, branch
 		move.w	ost_inertia(a0),d0			; get inertia
 		beq.s	SSS_UpdatePos				; branch if 0
 		bmi.s	.inertia_neg				; branch if negative
 		subi.w	#$C,d0					; subtract $C
 		bcc.s	.update_inertia				; branch if positive (after subtraction)
-		move.w	#0,d0					; set to 0 if negative (after subtraction)
+		moveq	#0,d0					; set to 0 if negative (after subtraction)
 
 	.update_inertia:
 		move.w	d0,ost_inertia(a0)			; set new inertia
@@ -121,7 +120,7 @@ SSS_Move:
 .inertia_neg:
 		addi.w	#$C,d0					; add $C to inertia
 		bcc.s	.update_inertia2			; branch if negative
-		move.w	#0,d0					; set to 0 if positive (after addition)
+		moveq	#0,d0					; set to 0 if positive (after addition)
 
 	.update_inertia2:
 		move.w	d0,ost_inertia(a0)			; set new inertia
@@ -136,20 +135,15 @@ SSS_UpdatePos:
 		add.l	d1,ost_x_pos(a0)			; add (inertia*cosine) to x pos
 		muls.w	ost_inertia(a0),d0
 		add.l	d0,ost_y_pos(a0)			; add (inertia*sine) to y pos
-		movem.l	d0-d1,-(sp)				; save values to stack
 		move.l	ost_y_pos(a0),d2
 		move.l	ost_x_pos(a0),d3
 		bsr.w	SSS_FindWall				; detect nearby walls
 		beq.s	.no_collide				; branch if none found
-		movem.l	(sp)+,d0-d1
 		sub.l	d1,ost_x_pos(a0)			; cancel position updates
 		sub.l	d0,ost_y_pos(a0)
 		move.w	#0,ost_inertia(a0)			; stop Sonic
-		rts	
-; ===========================================================================
-
-.no_collide:
-		movem.l	(sp)+,d0-d1
+		
+	.no_collide:
 		rts
 
 ; ===========================================================================
@@ -233,24 +227,6 @@ SSS_Jump:
 		rts
 
 ; ---------------------------------------------------------------------------
-; unused subroutine to limit Sonic's upward vertical speed
-; ---------------------------------------------------------------------------
-
-nullsub_2:
-		rts						; subroutine disabled
-		
-		move.w	#-$400,d1
-		cmp.w	ost_y_vel(a0),d1
-		ble.s	.exit					; branch if Sonic isn't moving up faster than -$400
-		move.b	(v_joypad_hold).w,d0
-		andi.b	#btnABC,d0
-		bne.s	.exit					; branch if A/B/C are pressed
-		move.w	d1,ost_y_vel(a0)			; fix speed to -$400
-
-	.exit:
-		rts
-
-; ---------------------------------------------------------------------------
 ; Subroutine to	fix the	camera on Sonic's position (special stage)
 ; ---------------------------------------------------------------------------
 
@@ -258,14 +234,14 @@ SS_FixCamera:
 		move.w	ost_y_pos(a0),d2
 		move.w	ost_x_pos(a0),d3
 		move.w	(v_camera_x_pos).w,d0
-		subi.w	#160,d3
+		subi.w	#screen_width/2,d3
 		bcs.s	.ignore_x				; branch if Sonic is within 160px of left edge
 		sub.w	d3,d0
 		sub.w	d0,(v_camera_x_pos).w			; fix camera 160px (half screen) left of Sonic
 
 	.ignore_x:
 		move.w	(v_camera_y_pos).w,d0
-		subi.w	#112,d2
+		subi.w	#screen_height/2,d2
 		bcs.s	.ignore_y				; branch if Sonic is within 112px of top edge
 		sub.w	d2,d0
 		sub.w	d0,(v_camera_y_pos).w			; fix camera 112px (half screen) above Sonic

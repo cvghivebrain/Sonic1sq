@@ -6,6 +6,12 @@
 ;	ObjPos_MZ1, ObjPos_MZ2, ObjPos_MZ3 - subtypes 1/$10/$12/$30/$52
 ;	ObjPos_LZ1, ObjPos_LZ2, ObjPos_LZ3 - subtypes 0/1/$10/$20/$30/$40
 ;	ObjPos_SBZ3 - subtypes 0/$30
+
+; subtypes:
+;	%KTTTMMM0
+;	K - 1 for classic double-kill behaviour
+;	TTT - size/direction type (see Spike_Var)
+;	MMM - movement type (see Spike_TypeIndex)
 ; ---------------------------------------------------------------------------
 
 Spikes:
@@ -27,10 +33,10 @@ Spike_Var_4:	dc.b id_frame_spike_6upwide, 64, 16, solid_top+solid_bottom ; $4x
 Spike_Var_5:	dc.b id_frame_spike_1left, 16, 4, solid_left+solid_right ; $5x
 
 		rsobj Spikes
-ost_spike_x_start:	rs.w 1					; original X position (2 bytes)
-ost_spike_y_start:	rs.w 1					; original Y position (2 bytes)
-ost_spike_move_dist:	rs.w 1					; pixel distance to move object * $100, either direction (2 bytes)
-ost_spike_move_time:	rs.w 1					; time until object moves again (2 bytes)
+ost_spike_x_start:	rs.w 1					; original X position
+ost_spike_y_start:	rs.w 1					; original Y position
+ost_spike_move_dist:	rs.w 1					; pixel distance to move object * $100, either direction
+ost_spike_move_time:	rs.w 1					; time until object moves again
 ost_spike_move_flag:	rs.b 1					; 0 = original position; 1 = moved position
 ost_spike_side:		rs.b 1					; sidedness bitmask
 		rsobjend
@@ -55,7 +61,11 @@ Spike_Main:	; Routine 0
 		move.w	ost_y_pos(a0),ost_spike_y_start(a0)
 
 Spike_Solid:	; Routine 2
-		bsr.w	Spike_Move				; update position
+		move.b	ost_subtype(a0),d0			; get subtype
+		andi.b	#$E,d0					; read only low nybble
+		move.w	Spike_TypeIndex(pc,d0.w),d1
+		jsr	Spike_TypeIndex(pc,d1.w)		; update position
+		
 		bsr.w	SolidObject
 		tst.b	(v_invincibility).w
 		bne.s	Spike_Display				; branch if Sonic is invincible
@@ -67,7 +77,6 @@ Spike_Solid:	; Routine 2
 		bne.s	Spike_Display				; branch if Sonic is flashing
 		
 	.skip_flashchk:
-		moveq	#0,d0
 		move.b	ost_spike_side(a0),d0			; get sidedness
 		and.b	d0,d1					; mask with collision
 		beq.s	Spike_Display				; branch if no collision
@@ -84,24 +93,13 @@ Spike_Solid:	; Routine 2
 
 Spike_Display:
 		move.w	ost_spike_x_start(a0),d0
-		bsr.w	CheckActive
-		bne.w	DeleteObject
-		bra.w	DisplaySprite
-; ===========================================================================
-
-Spike_Move:
-		moveq	#0,d0
-		move.b	ost_subtype(a0),d0			; get subtype
-		andi.b	#$F,d0					; read only low nybble
-		add.w	d0,d0
-		move.w	Spike_TypeIndex(pc,d0.w),d1
-		jmp	Spike_TypeIndex(pc,d1.w)
+		bra.w	DespawnQuick_AltX
 ; ===========================================================================
 Spike_TypeIndex:
-		index *
+		index *,,2
 		ptr Spike_Still					; $x0
-		ptr Spike_UpDown				; $x1
-		ptr Spike_LeftRight				; $x2
+		ptr Spike_UpDown				; $x2
+		ptr Spike_LeftRight				; $x4
 ; ===========================================================================
 
 ; Type 0 - doesn't move
@@ -130,14 +128,12 @@ Spike_LeftRight:
 ; ===========================================================================
 
 Spike_Wait:
-		tst.w	ost_spike_move_time(a0)			; has timer hit 0?
-		beq.s	.update					; if yes, branch
 		subq.w	#1,ost_spike_move_time(a0)		; decrement timer
-		bne.s	.exit					; branch if not 0
+		bmi.s	.update					; branch if time hits -1
 		tst.b	ost_render(a0)				; is spikes object on-screen?
 		bpl.s	.exit					; if not, branch
 		play.w	1, jsr, sfx_SpikeMove			; play "spikes moving" sound
-		bra.s	.exit
+		rts
 ; ===========================================================================
 
 .update:
@@ -148,7 +144,7 @@ Spike_Wait:
 		move.w	#0,ost_spike_move_dist(a0)		; set minimum distance
 		move.b	#0,ost_spike_move_flag(a0)		; set flag that spikes are in original position
 		move.w	#60,ost_spike_move_time(a0)		; set time delay to 1 second
-		bra.s	.exit
+		rts
 ; ===========================================================================
 
 .original_pos:

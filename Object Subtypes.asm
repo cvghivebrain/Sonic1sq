@@ -17,8 +17,8 @@ type_spike_3upwide:	equ ((Spike_Var_3-Spike_Var)/4)<<4	; $3x - 3 facing up (or d
 type_spike_6upwide:	equ ((Spike_Var_4-Spike_Var)/4)<<4	; $4x - 6 facing up (or down if yflipped), wide spacing
 type_spike_1left:	equ ((Spike_Var_5-Spike_Var)/4)<<4	; $5x - 1 facing left (or right if xflipped)
 type_spike_still:	equ id_Spike_Still			; x0 - doesn't move
-type_spike_updown:	equ id_Spike_UpDown			; x1 - moves up and down 32px
-type_spike_leftright:	equ id_Spike_LeftRight			; x2 - moves side-to-side 32px
+type_spike_updown:	equ id_Spike_UpDown			; x2 - moves up and down 32px
+type_spike_leftright:	equ id_Spike_LeftRight			; x4 - moves side-to-side 32px
 type_spike_doublekill:	equ $80					; classic pre-bugfix behaviour, kills Sonic after losing rings immediately
 
 ; Monitor
