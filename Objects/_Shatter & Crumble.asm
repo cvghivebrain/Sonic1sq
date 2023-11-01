@@ -15,7 +15,7 @@ Shatter:
 		movea.l	ost_mappings(a0),a2			; get mappings address
 		adda.w	(a2,d0.w),a2				; jump to frame
 		move.w	(a2)+,d1				; get number of sprites
-		subi.w	#1,d1					; -1 for loops
+		subq.w	#1,d1					; -1 for loops
 		move.b	ost_render(a0),d3
 		bset	#render_rawmap_bit,d3
 		
@@ -71,7 +71,7 @@ Crumble:
 		movea.l	ost_mappings(a0),a2			; get mappings address
 		adda.w	(a2,d0.w),a2				; jump to frame
 		move.w	(a2)+,d1				; get number of sprites
-		subi.w	#1,d1					; -1 for loops
+		subq.w	#1,d1					; -1 for loops
 		move.b	ost_render(a0),d3
 		bset	#render_rawmap_bit,d3
 		

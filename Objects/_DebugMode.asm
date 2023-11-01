@@ -331,6 +331,7 @@ DebugList_SYZ:
 		dbitem	Lamppost, Map_Lamp, 1, 0, id_frame_lamp_blue, v_tile_lamppost, 0
 		dbitem	Springs, Map_Spring, type_spring_red, 0, id_frame_spring_up, v_tile_hspring, 0
 		dbitem	Springs, Map_Spring, type_spring_yellow, 0, id_frame_spring_up, v_tile_hspring, tile_pal2
+		dbitem	Springs, Map_Spring, type_spring_yellow+type_spring_down, status_yflip, id_frame_spring_up, v_tile_hspring, tile_pal2
 		dbitem	SpinningLight, Map_Light, 0, 0, id_frame_light_0, 0, 0
 		dbitem	Bumper, Map_Bump, 0, 0, id_frame_bump_normal, v_tile_bumper, 0
 		dbitem	Button, Map_But, 0, 0, id_frame_button_up, v_tile_button, 0

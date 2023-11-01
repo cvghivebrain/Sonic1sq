@@ -84,7 +84,7 @@ Splats_ChkWalls:
 		bmi.s	.moving_left				; branch if Splats is moving left
 		bsr.w	FindWallRightObj
 		tst.w	d1
-		bpl.s	.no_wall				; branch if Splat hasn't hit wall
+		bpl.s	.no_wall				; branch if Splats hasn't hit wall
 
 .found_wall:
 		moveq	#1,d0
