@@ -128,8 +128,10 @@ Spike_LeftRight:
 ; ===========================================================================
 
 Spike_Wait:
+		tst.w	ost_spike_move_time(a0)			; has timer hit 0?
+		beq.s	.update					; if yes, branch
 		subq.w	#1,ost_spike_move_time(a0)		; decrement timer
-		bmi.s	.update					; branch if time hits -1
+		bne.s	.exit					; branch if not 0
 		tst.b	ost_render(a0)				; is spikes object on-screen?
 		bpl.s	.exit					; if not, branch
 		play.w	1, jsr, sfx_SpikeMove			; play "spikes moving" sound

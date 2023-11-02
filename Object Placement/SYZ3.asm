@@ -24,7 +24,7 @@ ObjPos_SYZ3:
 		objpos $0A30,$0450,BigSpikeBall,type_bball_updown
 		objpos $0A90,$02C3,Monitor,type_monitor_invincible,rem
 		objpos $0B58,$0468,Rings,$04,rem
-		objpos $0B78,$04A8,SpikeBall,$54,xflip
+		objpos $0B78,$04A8,SpikeBall,$5C,xflip
 		objpos $0B78,$04A9,FloatingBlock,type_fblock_syz1x1+type_fblock_still
 		objpos $0C00,$04E0,Invisibarrier,$13
 		objpos $0C10,$035A,Springs,type_spring_yellow+type_spring_up
@@ -186,7 +186,7 @@ ObjPos_SYZ3:
 		objpos $2178,$0308,BasicPlatform,type_plat_syz+type_plat_still
 		objpos $2178,$0308,BigSpikeBall,type_bball_circle+$E0
 		objpos $2178,$0308,BigSpikeBall,type_bball_circle+$E0,yflip
-		objpos $2178,$05A8,SpikeBall,$54,xflip
+		objpos $2178,$05A8,SpikeBall,$5C,xflip
 		objpos $2178,$05A9,FloatingBlock,type_fblock_syz1x1+type_fblock_still
 		objpos $2210,$0308,Rings,$41,rem
 		objpos $2260,$0360,Rings,$12,rem

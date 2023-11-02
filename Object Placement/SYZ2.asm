@@ -30,7 +30,7 @@ ObjPos_SYZ2:
 		objpos $0778,$030A,BasicPlatform,type_plat_syz+type_plat_still
 		objpos $0778,$030A,BigSpikeBall,type_bball_circle+$E0
 		objpos $0778,$030A,BigSpikeBall,type_bball_circle+$E0,yflip
-		objpos $0778,$05A8,SpikeBall,$54,xflip
+		objpos $0778,$05A8,SpikeBall,$5C,xflip
 		objpos $0778,$05A9,FloatingBlock,type_fblock_syz1x1+type_fblock_still
 		objpos $0780,$00D3,Monitor,type_monitor_invincible,rem
 		objpos $07B0,$00D4,Rings,$22,rem

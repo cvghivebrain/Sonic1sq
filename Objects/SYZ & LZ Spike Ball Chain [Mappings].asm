@@ -9,7 +9,6 @@ frame_sball_syz:
 		spritemap
 		piece	-8, -8, 2x2, 0
 		endsprite
-		even
 
 ; ---------------------------------------------------------------------------
 ; Sprite mappings - spiked ball	on a chain (LZ)
@@ -34,4 +33,3 @@ frame_sball_base:
 		spritemap					; wall attachment
 		piece	-8, -8, 2x2, $14
 		endsprite
-		even

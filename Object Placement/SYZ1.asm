@@ -83,7 +83,7 @@ ObjPos_SYZ1:
 		objpos $0FA5,$0492,Crabmeat,$00,xflip,rem
 		objpos $1058,$0460,Rings,$04,rem
 		objpos $1058,$0470,Rings,$04,rem
-		objpos $1078,$04A8,SpikeBall,$54,xflip
+		objpos $1078,$04A8,SpikeBall,$5C,xflip
 		objpos $1078,$04A9,FloatingBlock,type_fblock_syz1x1+type_fblock_still
 		objpos $10B0,$0238,Springs,type_spring_yellow+type_spring_up
 		objpos $10B0,$0250,SpinningLight,$00
@@ -101,7 +101,7 @@ ObjPos_SYZ1:
 		objpos $1430,$01BD,Lamppost,$01,rem
 		objpos $1458,$0460,Rings,$04,rem
 		objpos $1458,$0470,Rings,$04,rem
-		objpos $1478,$04A8,SpikeBall,$54,xflip
+		objpos $1478,$04A8,SpikeBall,$5C,xflip
 		objpos $1478,$04A9,FloatingBlock,type_fblock_syz1x1+type_fblock_still
 		objpos $14C0,$01C0,SpinningLight,$00
 		objpos $150E,$03CA,Springs,type_spring_red+type_spring_up
