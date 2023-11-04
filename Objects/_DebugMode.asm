@@ -378,6 +378,7 @@ DebugList_SLZ:
 		dbitem	BasicPlatform, Map_Platform, type_plat_slz+type_plat_still, 0, id_frame_plat_slz, 0, tile_pal3
 		dbitem	CollapseFloor, Map_CFlo, type_cfloor_slz+type_cfloor_sided+1, 0, id_frame_cfloor_slz, tile_Kos_SlzBlock, tile_pal3
 		dbitem	Elevator, Map_Elev, type_elev_up_short, 0, id_frame_elev_0, 0, tile_pal3
+		dbitem	SquareBlock, Map_SBlock, 4, 0, id_frame_sblock_slz, 0, tile_pal3
 	.end:
 DebugList_SBZ:
 		dbheader

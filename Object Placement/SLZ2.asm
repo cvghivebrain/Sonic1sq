@@ -146,14 +146,7 @@ ObjPos_SLZ2:
 		objpos $1940,$0520,Seesaw,$00
 		objpos $1958,$0350,Rings,$45,rem
 		objpos $1960,$00B0,Rings,$44,rem
-		objpos $1980,$0660,FloatingBlock,type_fblock_slz+type_fblock_squaresmall
-		objpos $1980,$0660,FloatingBlock,type_fblock_slz+type_fblock_squaresmall,yflip
-		objpos $1980,$0660,FloatingBlock,type_fblock_slz+type_fblock_squaremedium
-		objpos $1980,$0660,FloatingBlock,type_fblock_slz+type_fblock_squaremedium,yflip
-		objpos $1980,$0660,FloatingBlock,type_fblock_slz+type_fblock_squarebig
-		objpos $1980,$0660,FloatingBlock,type_fblock_slz+type_fblock_squarebig,yflip
-		objpos $1980,$0660,FloatingBlock,type_fblock_slz+type_fblock_squarebiggest
-		objpos $1980,$0660,FloatingBlock,type_fblock_slz+type_fblock_squarebiggest,yflip
+		objpos $1980,$0660,SquareBlock,4
 		objpos $19C0,$0200,Seesaw,$00
 		objpos $19E0,$0038,Rings,$44,rem
 		objpos $19F0,$0458,Springs,type_spring_yellow+type_spring_up

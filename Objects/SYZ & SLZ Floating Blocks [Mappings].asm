@@ -7,7 +7,6 @@ Map_FBlock:	index *
 		ptr frame_fblock_syz1x2
 		ptr frame_fblock_syzrect2x2
 		ptr frame_fblock_syzrect1x3
-		ptr frame_fblock_slz
 		
 frame_fblock_syz1x1:
 		spritemap					; SYZ - 1x1 square block
@@ -41,9 +40,4 @@ frame_fblock_syzrect1x3:
 		piece	-$10, -$27, 4x4, $81
 		piece	-$10, -$D, 4x4, $81
 		piece	-$10, $D, 4x4, $81
-		endsprite
-		
-frame_fblock_slz:
-		spritemap					; SLZ - 1x1 square block
-		piece	-$10, -$10, 4x4, $21
 		endsprite

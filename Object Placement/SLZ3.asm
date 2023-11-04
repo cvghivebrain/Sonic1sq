@@ -119,14 +119,7 @@ ObjPos_SLZ3:
 		objpos $1170,$00A0,Rings,$12,rem
 		objpos $1170,$0770,Bomb,$00,rem
 		objpos $117C,$0088,Rings,$11,rem
-		objpos $1180,$0420,FloatingBlock,type_fblock_slz+type_fblock_squaresmall
-		objpos $1180,$0420,FloatingBlock,type_fblock_slz+type_fblock_squaresmall,yflip
-		objpos $1180,$0420,FloatingBlock,type_fblock_slz+type_fblock_squaremedium
-		objpos $1180,$0420,FloatingBlock,type_fblock_slz+type_fblock_squaremedium,yflip
-		objpos $1180,$0420,FloatingBlock,type_fblock_slz+type_fblock_squarebig
-		objpos $1180,$0420,FloatingBlock,type_fblock_slz+type_fblock_squarebig,yflip
-		objpos $1180,$0420,FloatingBlock,type_fblock_slz+type_fblock_squarebiggest
-		objpos $1180,$0420,FloatingBlock,type_fblock_slz+type_fblock_squarebiggest,yflip
+		objpos $1180,$0420,SquareBlock,4
 		objpos $1184,$0750,Fan,type_fan_left_onoff
 		objpos $1188,$0070,Rings,$10,rem
 		objpos $1200,$00C0,SwingingPlatform,$27
@@ -165,14 +158,7 @@ ObjPos_SLZ3:
 		objpos $1560,$03E8,CollapseFloor,type_cfloor_slz+type_cfloor_sided+1
 		objpos $1560,$0550,Bomb,$00,rem
 		objpos $1570,$0550,Bomb,$00,xflip,rem
-		objpos $1580,$0670,FloatingBlock,type_fblock_slz+type_fblock_squaresmall
-		objpos $1580,$0670,FloatingBlock,type_fblock_slz+type_fblock_squaresmall,yflip
-		objpos $1580,$0670,FloatingBlock,type_fblock_slz+type_fblock_squaremedium
-		objpos $1580,$0670,FloatingBlock,type_fblock_slz+type_fblock_squaremedium,yflip
-		objpos $1580,$0670,FloatingBlock,type_fblock_slz+type_fblock_squarebig
-		objpos $1580,$0670,FloatingBlock,type_fblock_slz+type_fblock_squarebig,yflip
-		objpos $1580,$0670,FloatingBlock,type_fblock_slz+type_fblock_squarebiggest
-		objpos $1580,$0670,FloatingBlock,type_fblock_slz+type_fblock_squarebiggest,yflip
+		objpos $1580,$0670,SquareBlock,4
 		objpos $15C0,$04F0,Seesaw,$00
 		objpos $15F0,$0550,Bomb,$00,rem
 		objpos $1610,$0350,Fan,type_fan_left_on,xflip
