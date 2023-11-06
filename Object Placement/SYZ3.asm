@@ -53,7 +53,7 @@ ObjPos_SYZ3:
 		objpos $0E08,$0150,Rings,$22,rem
 		objpos $0E10,$0542,Invisibarrier,$13
 		objpos $0E70,$029A,Button,$00
-		objpos $0EF0,$0243,FloatingBlock,type_fblock_syz1x2+type_fblock_button+0,rem
+		objpos $0EF0,$0283,YardDoor,$20
 		objpos $0F80,$0290,SpinningLight,$00
 		objpos $0FF0,$00B8,Rings,$52,rem
 		objpos $0FF0,$0292,Crabmeat,$00,rem
@@ -155,7 +155,7 @@ ObjPos_SYZ3:
 		objpos $19C8,$03B2,Monitor,type_monitor_shoes,rem
 		objpos $1A30,$0550,BigSpikeBall,type_bball_updown
 		objpos $1B78,$055A,Button,$0F
-		objpos $1BB8,$0549,FloatingBlock,type_fblock_syzrect2x2+type_fblock_farrightbutton
+		objpos $1BB8,$0549,YardDoor,$3F			; block that moves right when button $F is pressed
 		objpos $1C38,$05D0,Rings,$16,rem
 		objpos $1CB0,$05C0,BigSpikeBall,type_bball_sideways
 		objpos $1D30,$0152,Crabmeat,$00,xflip,rem
@@ -170,7 +170,7 @@ ObjPos_SYZ3:
 		objpos $1EC7,$04FD,Invisibarrier,$13
 		objpos $1EE0,$0339,BasicPlatform,type_plat_syz+type_plat_updown_slow_rev
 		objpos $1F30,$02F1,Crabmeat,$00,xflip,rem
-		objpos $1F38,$0549,FloatingBlock,type_fblock_syzrect2x2+type_fblock_farrightbutton
+		objpos $1F38,$0549,YardDoor,$3F+$80		; final position of block that moves right
 		objpos $1FD0,$02F1,Crabmeat,$00,rem
 		objpos $2010,$0308,Rings,$41,rem
 		objpos $2011,$0593,Monitor,type_monitor_rings,rem

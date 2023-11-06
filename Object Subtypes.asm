@@ -157,12 +157,6 @@ type_fblock_leftright:	equ id_FBlock_LeftRight			; $x1 - moves side to side
 type_fblock_leftrightwide: equ id_FBlock_LeftRightWide		; $x2 - moves side to side, larger distance
 type_fblock_updown:	equ id_FBlock_UpDown			; $x3 - moves up and down
 type_fblock_updownwide:	equ id_FBlock_UpDownWide		; $x4 - moves up and down, larger distance
-type_fblock_upbutton:	equ id_FBlock_UpButton			; $x5 - moves up when button is pressed
-type_fblock_downbutton:	equ id_FBlock_DownButton		; $x6 - moves down when button is pressed
-type_fblock_farrightbutton: equ id_FBlock_FarRightButton	; $x7 - moves far right when button $F is pressed
-type_fblock_leftbutton:	equ id_FBlock_LeftButton		; $xC - moves left when button is pressed
-type_fblock_rightbutton: equ id_FBlock_RightButton		; $xD - moves right when button is pressed
-type_fblock_button:	equ $80					; +$80 - links block to button and forces it to be type_fblock_upbutton or type_fblock_leftbutton
 
 ; BigSpikeBall
 type_bball_still:	equ id_BBall_Still		; 0 - doesn't move

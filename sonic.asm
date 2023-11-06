@@ -412,6 +412,7 @@ Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 
 		include "Objects\Batbrain.asm"			; Batbrain
 
+		include "Objects\SYZ Doors.asm"			; YardDoor
 		include "Objects\SYZ & SLZ Floating Blocks.asm"	; FloatingBlock
 		include "Objects\SLZ Square Blocks.asm"		; SquareBlock
 

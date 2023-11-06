@@ -177,7 +177,7 @@ ObjPos_SYZ1:
 		objpos $2040,$02CA,Button,$00
 		objpos $2080,$00C0,Yadrin,$00,rem
 		objpos $20F0,$00C0,Yadrin,$00,rem
-		objpos $20F0,$0260,FloatingBlock,type_fblock_syz1x2+type_fblock_button+0,rem
+		objpos $20F0,$0260,YardDoor,$20
 		objpos $2120,$012F,FloatingBlock,type_fblock_syz2x2+type_fblock_updown
 		objpos $2120,$01EC,FloatingBlock,type_fblock_syz2x2+type_fblock_updown
 		objpos $2120,$026A,FloatingBlock,type_fblock_syz2x2+type_fblock_updown
