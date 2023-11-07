@@ -23,4 +23,3 @@ frame_bump_bumped2:
 		piece	-$10, -$10, 2x4, $E
 		piece	0, -$10, 2x4, $E, xflip
 		endsprite
-		even

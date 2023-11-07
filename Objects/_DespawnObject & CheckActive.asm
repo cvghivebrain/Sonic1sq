@@ -145,8 +145,8 @@ GetState:
 		beq.s	.exit					; branch if object isn't in the respawn table
 		lea	(v_respawn_list+2).w,a2
 		adda.w	d0,a2					; jump to relevant position in respawn table
-		bclr	#7,(a2)					; clear the already-loaded flag
 		move.b	(a2),d0					; get value
+		andi.b	#$7F,d0					; ignore the already-loaded flag
 		
 	.exit:
 		rts
