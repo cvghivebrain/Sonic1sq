@@ -1,8 +1,13 @@
 ; ---------------------------------------------------------------------------
-; Object 56 - floating blocks (SYZ/SLZ)
+; Object 56 - floating blocks (SYZ)
 
 ; spawned by:
-;	ObjPos_SYZ1, ObjPos_SYZ2, ObjPos_SYZ3 - subtypes 0/1/2/$13/$17/$20/$37/$A0
+;	ObjPos_SYZ1, ObjPos_SYZ2, ObjPos_SYZ3 - subtypes 0/1/2/$13/$20
+
+; subtypes:
+;	%TTTTMMMM
+;	TTTT - type (see FBlock_Var)
+;	MMMM - movement type (see FBlock_Types)
 ; ---------------------------------------------------------------------------
 
 FloatingBlock:
@@ -20,12 +25,15 @@ ost_fblock_y_start:	rs.w 1					; original y position (2 bytes)
 ost_fblock_x_start:	rs.w 1					; original x position (2 bytes)
 		rsobjend
 
-FBlock_Var:	dc.b  $10, $10, id_frame_fblock_syz1x1		; height, width, frame
-		dc.b  $20, $20, id_frame_fblock_syz2x2
-		dc.b  $10, $20, id_frame_fblock_syz1x2
-		dc.b  $20, $1A, id_frame_fblock_syzrect2x2
-		dc.b  $10, $27, id_frame_fblock_syzrect1x3
+FBlock_Var:
+FBlock_Var_0:	dc.b  $10, $10, id_frame_fblock_syz1x1		; height, width, frame
+FBlock_Var_1:	dc.b  $20, $20, id_frame_fblock_syz2x2
+FBlock_Var_2:	dc.b  $10, $20, id_frame_fblock_syz1x2
+FBlock_Var_3:	dc.b  $20, $1A, id_frame_fblock_syzrect2x2
+FBlock_Var_4:	dc.b  $10, $27, id_frame_fblock_syzrect1x3
 		even
+		
+sizeof_FBlock_Var:	equ FBlock_Var_1-FBlock_Var
 ; ===========================================================================
 
 FBlock_Main:	; Routine 0
@@ -34,7 +42,6 @@ FBlock_Main:	; Routine 0
 		move.w	#0+tile_pal3,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#3,ost_priority(a0)
-		moveq	#0,d0
 		move.b	ost_subtype(a0),d0			; get subtype
 		lsr.w	#4,d0
 		andi.w	#$F,d0					; read only high nybble
@@ -50,21 +57,14 @@ FBlock_Main:	; Routine 0
 		move.w	ost_y_pos(a0),ost_fblock_y_start(a0)
 		move.b	ost_subtype(a0),d0			; SYZ/SLZ specific code
 		andi.w	#$F,d0					; read low nybble of subtype
-		subq.w	#8,d0					; subtract 8
-		bcs.s	FBlock_Action				; branch if low nybble was > 8
-		lsl.w	#2,d0					; multiply by 4
-		lea	(v_oscillating_0_to_40_alt+2).w,a2
-		lea	(a2,d0.w),a2				; read oscillating value
-		tst.w	(a2)
-		bpl.s	FBlock_Action				; branch if not -ve
-		bchg	#status_xflip_bit,ost_status(a0)	; xflip object
+		add.w	d0,d0
+		move.b	d0,ost_subtype(a0)			; update subtype for FBlock_Types
 
 FBlock_Action:	; Routine 2
+		shortcut
 		move.w	ost_x_pos(a0),ost_x_prev(a0)
 		moveq	#0,d0
-		move.b	ost_subtype(a0),d0			; get object subtype (changed if original was $80+)
-		andi.w	#$F,d0					; read only the	low nybble
-		add.w	d0,d0
+		move.b	ost_subtype(a0),d0			; get object subtype
 		move.w	FBlock_Types(pc,d0.w),d1
 		jsr	FBlock_Types(pc,d1.w)			; update position
 		bsr.w	SolidObject				; detect collision

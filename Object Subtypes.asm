@@ -147,16 +147,16 @@ type_cfloor_slz:	equ id_frame_cfloor_slz<<4				; +$20 - SLZ mappings
 type_cfloor_sided:	equ $80							; +$80 - collapse pattern depends on which side was touched
 
 ; FloatingBlock
-type_fblock_syz1x1:	equ id_frame_fblock_syz1x1<<4		; $0x - single 32x32 square
-type_fblock_syz2x2:	equ id_frame_fblock_syz2x2<<4		; $1x - 2x2 32x32 squares
-type_fblock_syz1x2:	equ id_frame_fblock_syz1x2<<4		; $2x - 1x2 32x32 squares
-type_fblock_syzrect2x2:	equ id_frame_fblock_syzrect2x2<<4	; $3x - 2x2 32x26 squares
-type_fblock_syzrect1x3:	equ id_frame_fblock_syzrect1x3<<4	; $4x - 1x3 32x26 squares
-type_fblock_still:	equ id_FBlock_Still			; $x0 - doesn't move
-type_fblock_leftright:	equ id_FBlock_LeftRight			; $x1 - moves side to side
-type_fblock_leftrightwide: equ id_FBlock_LeftRightWide		; $x2 - moves side to side, larger distance
-type_fblock_updown:	equ id_FBlock_UpDown			; $x3 - moves up and down
-type_fblock_updownwide:	equ id_FBlock_UpDownWide		; $x4 - moves up and down, larger distance
+type_fblock_syz1x1:	equ ((FBlock_Var_0-FBlock_Var)/sizeof_FBlock_Var)<<4	; $0x - single 32x32 square
+type_fblock_syz2x2:	equ ((FBlock_Var_1-FBlock_Var)/sizeof_FBlock_Var)<<4	; $1x - 2x2 32x32 squares
+type_fblock_syz1x2:	equ ((FBlock_Var_2-FBlock_Var)/sizeof_FBlock_Var)<<4	; $2x - 1x2 32x32 squares
+type_fblock_syzrect2x2:	equ ((FBlock_Var_3-FBlock_Var)/sizeof_FBlock_Var)<<4	; $3x - 2x2 32x26 squares
+type_fblock_syzrect1x3:	equ ((FBlock_Var_4-FBlock_Var)/sizeof_FBlock_Var)<<4	; $4x - 1x3 32x26 squares
+type_fblock_still:	equ id_FBlock_Still					; $x0 - doesn't move
+type_fblock_leftright:	equ id_FBlock_LeftRight					; $x1 - moves side to side
+type_fblock_leftrightwide: equ id_FBlock_LeftRightWide				; $x2 - moves side to side, larger distance
+type_fblock_updown:	equ id_FBlock_UpDown					; $x3 - moves up and down
+type_fblock_updownwide:	equ id_FBlock_UpDownWide				; $x4 - moves up and down, larger distance
 
 ; BigSpikeBall
 type_bball_still:	equ id_BBall_Still		; 0 - doesn't move

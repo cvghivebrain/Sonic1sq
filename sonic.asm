@@ -413,7 +413,7 @@ Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 		include "Objects\Batbrain.asm"			; Batbrain
 
 		include "Objects\SYZ Doors.asm"			; YardDoor
-		include "Objects\SYZ & SLZ Floating Blocks.asm"	; FloatingBlock
+		include "Objects\SYZ Floating Blocks.asm"	; FloatingBlock
 		include "Objects\SLZ Square Blocks.asm"		; SquareBlock
 
 		include "Objects\SYZ & LZ Spike Ball Chain.asm"	; SpikeBall
@@ -1092,7 +1092,7 @@ Level_End_unused:	dc.b 0,	0, 0, 0
 		include "Objects\LZ Half Block [Mappings].asm"	; Map_MBlockLZ
 		include "Objects\SYZ Lamp [Mappings].asm"	; Map_Light
 		include "Objects\SYZ Bumper [Mappings].asm"	; Map_Bump
-		include "Objects\SYZ & SLZ Floating Blocks [Mappings].asm" ; Map_FBlock
+		include "Objects\SYZ Floating Blocks [Mappings].asm" ; Map_FBlock
 		include "Objects\SLZ Square Blocks [Mappings].asm" ; Map_SBlock
 		include "Objects\SYZ & LZ Spike Ball Chain [Mappings].asm" ; Map_SBall, Map_SBall2
 		include "Objects\SYZ & SBZ Large Spike Balls [Mappings].asm" ; Map_BBall

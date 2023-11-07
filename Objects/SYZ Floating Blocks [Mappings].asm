@@ -1,5 +1,5 @@
 ; ---------------------------------------------------------------------------
-; Sprite mappings - floating blocks (SYZ/SLZ/LZ)
+; Sprite mappings - floating blocks (SYZ)
 ; ---------------------------------------------------------------------------
 Map_FBlock:	index *
 		ptr frame_fblock_syz1x1
