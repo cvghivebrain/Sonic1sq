@@ -164,4 +164,3 @@ frame_tson_wag2:
 		piece	$28, $50, 4x1, $1A2
 		piece	$28, $58, 3x1, $1A6
 		endsprite
-		even

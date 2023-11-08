@@ -62,8 +62,8 @@ TSwi_Main:	; Routine 0
 		move.b	ost_subtype(a0),d0
 		mulu.w	#TSwi_Info_1-TSwi_Info_0,d0
 		lea	TSwi_Info_0(pc,d0.w),a2
-		move.b	(a2)+,ost_tswi_tile_default(a0)
-		move.b	(a2)+,ost_tswi_tile_alt(a0)
+		move.b	(a2)+,d4
+		move.b	(a2)+,d5
 		moveq	#3-1,d1
 		
 	.loop:
@@ -77,6 +77,9 @@ TSwi_Main:	; Routine 0
 		move.b	(a2)+,d0
 		move.w	d0,ost_y_pos(a1)
 		add.w	d3,ost_y_pos(a1)
+		move.b	d4,ost_tswi_tile_default(a1)
+		move.b	d5,ost_tswi_tile_alt(a1)
+		move.w	ost_tswi_tile_ptr(a0),ost_tswi_tile_ptr(a1)
 		move.b	(a2)+,ost_width(a1)
 		move.b	(a2)+,ost_height(a1)
 		move.b	(a2)+,ost_subtype(a1)
@@ -84,6 +87,7 @@ TSwi_Main:	; Routine 0
 		dbf	d1,.loop				; repeat for all hotspots
 
 TSwi_Detect:	; Routine 2
+		shortcut
 		bra.w	DespawnFamily_NoDisplay			; delete object and all hotspots if out of range
 
 ; ---------------------------------------------------------------------------
@@ -94,20 +98,21 @@ TSwi_Detect:	; Routine 2
 ; ---------------------------------------------------------------------------
 
 TileSwitchHotspot:
-		bsr.w	RangeX					; d1 = x dist
+		getsonic					; a1 = OST of Sonic
+		range_x						; d1 = x dist
 		moveq	#0,d0
 		move.b	ost_width(a0),d0
 		cmp.w	d0,d1
 		bhi.s	.outside				; branch if Sonic is outside x range
-		bsr.w	RangeY2					; d3 = x dist
+		range_y						; d3 = y dist
 		move.b	ost_height(a0),d0
 		cmp.w	d0,d3
 		bhi.s	.outside				; branch if Sonic is outside y range
 		
 		bset	#0,ost_tswi_flag(a0)
 		bne.s	.already_done				; branch if hotspot has already been hit
-		getparent a2					; a2 = OST of parent object
-		move.w	ost_tswi_tile_ptr(a2),d0
+		moveq	#-1,d0
+		move.w	ost_tswi_tile_ptr(a0),d0
 		movea.l	d0,a3					; a3 = RAM address in layout
 		moveq	#0,d0
 		move.b	ost_subtype(a0),d0
@@ -127,7 +132,7 @@ Hotspot_Index:	index *,,2
 		ptr Hotspot_Delete
 		
 Hotspot_Default:
-		move.b	ost_tswi_tile_default(a2),(a3)		; set tile to default value
+		move.b	ost_tswi_tile_default(a0),(a3)		; set tile to default value
 		rts
 		
 Hotspot_LR:
@@ -135,7 +140,7 @@ Hotspot_LR:
 		bpl.s	Hotspot_Default				; branch if Sonic is moving right
 		
 Hotspot_Replace:
-		move.b	ost_tswi_tile_alt(a2),(a3)		; set tile to replacement value
+		move.b	ost_tswi_tile_alt(a0),(a3)		; set tile to replacement value
 		rts
 		
 Hotspot_Delete:

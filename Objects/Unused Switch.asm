@@ -1,6 +1,10 @@
 ; ---------------------------------------------------------------------------
 ; Object 1D - switch that activates when Sonic touches it
 ; (this is not used anywhere in the game)
+
+; subtypes:
+;	%0000IIII
+;	IIII - button id
 ; ---------------------------------------------------------------------------
 
 MagicSwitch:
@@ -12,10 +16,10 @@ MagicSwitch:
 Swi_Index:	index *,,2
 		ptr Swi_Main
 		ptr Swi_Action
-		ptr Swi_Delete
 
 		rsobj MagicSwitch
-ost_switch_y_start:	rs.w 1 ; $30				; original y-axis position (2 bytes)
+ost_switch_y_start:	rs.w 1					; original y-axis position
+ost_switch_done:	rs.b 1					; flag set when switch has activated
 		rsobjend
 ; ===========================================================================
 
@@ -30,22 +34,21 @@ Swi_Main:	; Routine 0
 
 Swi_Action:	; Routine 2
 		move.w	ost_switch_y_start(a0),ost_y_pos(a0)	; restore position on y-axis
-		bsr.w	RangePlus
+		getsonic					; a1 = OST of Sonic
+		range_x
 		cmp.w	#16,d1
-		bge.s	.display
+		bge.w	DespawnQuick
+		range_y
 		cmp.w	#16,d3
-		bge.s	.display
+		bge.w	DespawnQuick
 
 		addq.w	#2,ost_y_pos(a0)			; move object down 2px
-		moveq	#1,d0
-		move.w	d0,(v_button_state).w			; set button 0 as "pressed"
-
-	.display:
-		move.w	ost_x_pos(a0),d0
-		bsr.w	CheckActive
-		bne.s	Swi_Delete
-		bra.w	DisplaySprite
-; ===========================================================================
-
-Swi_Delete:	; Routine 4
-		bra.w	DeleteObject
+		tst.b	ost_switch_done(a0)
+		bne.w	DespawnQuick				; branch if already touched
+		move.b	#1,ost_switch_done(a0)
+		move.b	ost_subtype(a0),d0
+		andi.w	#$F,d0					; get low nybble of subtype
+		lea	(v_button_state).w,a3
+		lea	(a3,d0.w),a3				; (a3) = button status
+		bset	#0,(a3)					; set as pressed
+		bra.w	DespawnQuick

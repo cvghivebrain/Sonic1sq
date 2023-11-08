@@ -10,6 +10,7 @@ Map_PSB:	index *
 frame_psb_blank:
 		spritemap
 		endsprite
+		
 frame_psb_psb:	spritemap					; "PRESS START BUTTON"
 		piece	0, 0, 4x1, $F0
 		piece	$20, 0, 1x1, $F3
@@ -55,4 +56,3 @@ frame_psb_mask:	spritemap					; sprite line limit mask
 frame_psb_tm:	spritemap					; "TM"
 		piece	-8, -4, 2x1, 0
 		endsprite
-		even

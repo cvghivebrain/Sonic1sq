@@ -14,7 +14,7 @@ Van_Index:	index *,,2
 		ptr Van_LoadSonic
 
 		rsobj VanishSonic
-ost_vanish_time:	rs.w 1 ; $30				; time for Sonic to disappear (2 bytes)
+ost_vanish_time:	rs.w 1					; time for Sonic to disappear
 		rsobjend
 ; ===========================================================================
 
@@ -30,17 +30,18 @@ Van_Main:	; Routine 0
 		move.w	#120,ost_vanish_time(a0)		; set time for Sonic's disappearance to 2 seconds
 
 Van_RmvSonic:	; Routine 2
-		move.w	(v_ost_player+ost_x_pos).w,ost_x_pos(a0)
-		move.w	(v_ost_player+ost_y_pos).w,ost_y_pos(a0)
-		move.b	(v_ost_player+ost_status).w,ost_status(a0)
-		lea	(Ani_Vanish).l,a1
+		getsonic a3					; a3 = OST of Sonic
+		move.w	ost_x_pos(a3),ost_x_pos(a0)
+		move.w	ost_y_pos(a3),ost_y_pos(a0)
+		move.b	ost_status(a3),ost_status(a0)
+		lea	Ani_Vanish(pc),a1
 		jsr	(AnimateSprite).l			; animate and goto Van_LoadSonic next
 		cmpi.b	#id_frame_vanish_flash3,ost_frame(a0)	; is final flash frame displayed?
 		bne.s	.display				; if not, branch
 
-		tst.b	(v_ost_player).w			; has Sonic already been removed?
+		tst.b	ost_id(a3)				; has Sonic already been removed?
 		beq.s	.display				; if yes, branch
-		move.l	#0,(v_ost_player).w			; remove Sonic
+		move.l	#0,ost_id(a3)				; remove Sonic
 		play.w	1, jsr, sfx_Goal			; play Special Stage "GOAL" sound
 
 	.display:
@@ -84,4 +85,3 @@ ani_vanish_0:	dc.w 5
 		dc.w id_frame_vanish_sparkle4
 		dc.w id_frame_vanish_blank
 		dc.w id_Anim_Flag_Routine
-		even

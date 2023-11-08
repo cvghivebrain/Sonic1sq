@@ -10,4 +10,3 @@ frame_switch_0:	spritemap
 		piece	0, -$18, 2x4, $54
 		piece	0, 8, 2x2, $5C
 		endsprite
-		even

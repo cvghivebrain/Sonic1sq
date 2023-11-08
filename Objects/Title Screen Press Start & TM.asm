@@ -20,8 +20,8 @@ PSB_Index:	index *,,2
 
 PSB_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto PSB_Animate next
-		move.w	#$D0,ost_x_pos(a0)
-		move.w	#$130,ost_y_screen(a0)
+		move.w	#screen_left+80,ost_x_pos(a0)
+		move.w	#screen_top+176,ost_y_screen(a0)
 		move.l	#Map_PSB,ost_mappings(a0)
 		move.w	#tile_Kos_TitleFg,ost_tile(a0)
 		cmpi.b	#id_frame_psb_mask,ost_frame(a0)	; is object the sprite mask or "TM"?
@@ -32,15 +32,15 @@ PSB_Main:	; Routine 0
 		bne.s	PSB_Exit				; if not, branch
 
 		move.w	#tile_Kos_TitleTM+tile_pal2,ost_tile(a0) ; "TM" specific code
-		move.w	#$170,ost_x_pos(a0)
-		move.w	#$F8,ost_y_screen(a0)
+		move.w	#screen_left+240,ost_x_pos(a0)
+		move.w	#screen_top+120,ost_y_screen(a0)
 
 PSB_Exit:	; Routine 4
 		rts	
 ; ===========================================================================
 
 PSB_Animate:	; Routine 2
-		lea	(Ani_PSB).l,a1
+		lea	Ani_PSB(pc),a1
 		bra.w	AnimateSprite				; "PRESS START" is animated
 
 ; ---------------------------------------------------------------------------
@@ -54,4 +54,3 @@ ani_psb_flash:	dc.w $1F
 		dc.w id_frame_psb_blank
 		dc.w id_frame_psb_psb
 		dc.w id_Anim_Flag_Restart
-		even
