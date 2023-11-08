@@ -44,4 +44,3 @@ frame_light_5:
 		piece	-$10, -8, 4x1, $45
 		piece	-$10, 0, 4x1, $45, yflip
 		endsprite
-		even

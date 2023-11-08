@@ -2,7 +2,12 @@
 ; Object 58 - giant spiked balls (SYZ)
 
 ; spawned by:
-;	ObjPos_SYZ1, ObjPos_SYZ2, ObjPos_SYZ3 - subtypes 1/2/$B3/$C3/$E3/$F3
+;	ObjPos_SYZ1, ObjPos_SYZ2, ObjPos_SYZ3
+
+;	subtypes:
+;	%SSSSTTTT
+;	SSSS - rotation speed (1-7 = clockwise; 8-$F = anticlockwise; BBall_Circle only)
+;	TTTT - type (set as ost_routine)
 ; ---------------------------------------------------------------------------
 
 BigSpikeBall:
@@ -13,18 +18,20 @@ BigSpikeBall:
 ; ===========================================================================
 BBall_Index:	index *,,2
 		ptr BBall_Main
-		ptr BBall_Move
+		ptr BBall_Still
+		ptr BBall_Sideways
+		ptr BBall_UpDown
+		ptr BBall_Circle
 
 		rsobj BigSpikeBall
-ost_bball_y_start:	rs.w 1 ; $38				; original y-axis position (2 bytes)
-ost_bball_x_start:	rs.w 1 ; $3A				; original x-axis position (2 bytes)
-ost_bball_radius:	rs.b 1 ; $3C				; radius of circle
-ost_bball_speed:	rs.w 1 ; $3E				; speed (2 bytes)
+ost_bball_y_start:	rs.w 1					; original y-axis position
+ost_bball_x_start:	rs.w 1					; original x-axis position
+ost_bball_speed:	rs.w 1					; speed
+ost_bball_radius:	rs.b 1					; radius of circle
 		rsobjend
 ; ===========================================================================
 
 BBall_Main:	; Routine 0
-		addq.b	#2,ost_routine(a0)			; goto BBall_Move next
 		move.l	#Map_BBall,ost_mappings(a0)
 		move.w	(v_tile_spikeball).w,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
@@ -34,60 +41,47 @@ BBall_Main:	; Routine 0
 		move.w	ost_y_pos(a0),ost_bball_y_start(a0)
 		move.b	#id_col_16x16+id_col_hurt,ost_col_type(a0)
 		move.b	ost_subtype(a0),d1			; get object type
+		move.b	d1,d2
 		andi.b	#$F0,d1					; read only the	high nybble
 		ext.w	d1
 		asl.w	#3,d1					; multiply by 8
 		move.w	d1,ost_bball_speed(a0)			; set object speed
 		move.b	ost_status(a0),d0
-		ror.b	#2,d0
-		andi.b	#$C0,d0					; move x/yflip bits into bits 6-7
+		andi.b	#status_xflip+status_yflip,d0
+		ror.b	#2,d0					; move x/yflip bits into bits 6-7
 		move.b	d0,ost_angle(a0)			; use as angle
 		move.b	#$50,ost_bball_radius(a0)		; set radius of circle motion
-
-BBall_Move:	; Routine 2
-		moveq	#0,d0
-		move.b	ost_subtype(a0),d0			; get object type
-		andi.w	#7,d0					; read only the	2nd digit
-		add.w	d0,d0
-		move.w	BBall_Types(pc,d0.w),d1
-		jsr	BBall_Types(pc,d1.w)
-		move.w	ost_bball_x_start(a0),d0
-		bsr.w	CheckActive
-		bne.w	DeleteObject
-		bra.w	DisplaySprite
-; ===========================================================================
-BBall_Types:	index *
-		ptr BBall_Still					; 0 - unused
-		ptr BBall_Sideways				; 1
-		ptr BBall_UpDown				; 2
-		ptr BBall_Circle				; $x3
+		andi.b	#$E,d2					; read low nybble of subtype
+		beq.w	DeleteObject				; delete if 0
+		move.b	d2,ost_routine(a0)			; goto specified routine next
+		bra.w	DespawnQuick
 ; ===========================================================================
 
-; Type 0 - doesn't move
-BBall_Still:
-		rts	
+BBall_Still:	; Routine 2
+		shortcut
+		bra.w	DespawnQuick
 ; ===========================================================================
 
-; Type 1
-BBall_Sideways:
-		move.w	#$60,d1
+BBall_Sideways:	; Routine 4
+		shortcut
 		moveq	#0,d0
 		move.b	(v_oscillating_0_to_60).w,d0		; get oscillating value
 		btst	#status_xflip_bit,ost_status(a0)
 		beq.s	.noflip
 		neg.w	d0					; invert if xflipped
-		add.w	d1,d0
+		addi.w	#$60,d0
 
 	.noflip:
 		move.w	ost_bball_x_start(a0),d1		; get initial x pos
+		move.w	d1,d2
 		sub.w	d0,d1					; subtract difference
 		move.w	d1,ost_x_pos(a0)			; update position
-		rts	
+		move.w	d2,d0
+		bra.w	DespawnQuick_AltX
 ; ===========================================================================
 
-; Type 2
-BBall_UpDown:
-		move.w	#$60,d1
+BBall_UpDown:	; Routine 6
+		shortcut
 		moveq	#0,d0
 		move.b	(v_oscillating_0_to_60).w,d0		; get oscillating value
 		btst	#status_xflip_bit,ost_status(a0)
@@ -99,11 +93,11 @@ BBall_UpDown:
 		move.w	ost_bball_y_start(a0),d1		; get initial y pos
 		sub.w	d0,d1					; subtract difference
 		move.w	d1,ost_y_pos(a0)			; update position
-		rts	
+		bra.w	DespawnQuick
 ; ===========================================================================
 
-; Type 3
-BBall_Circle:
+BBall_Circle:	; Routine 8
+		shortcut
 		move.w	ost_bball_speed(a0),d0			; get rotation speed
 		add.w	d0,ost_angle(a0)			; add to angle
 		move.b	ost_angle(a0),d0
@@ -121,4 +115,5 @@ BBall_Circle:
 		add.w	d3,d5
 		move.w	d4,ost_y_pos(a0)			; update position
 		move.w	d5,ost_x_pos(a0)
-		rts	
+		move.w	d3,d0
+		bra.w	DespawnQuick_AltX

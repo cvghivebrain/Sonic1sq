@@ -25,16 +25,12 @@ Light_Main:	; Routine 0
 		move.b	#6,ost_priority(a0)
 
 Light_Animate:	; Routine 2
+		shortcut
 		subq.b	#1,ost_anim_time(a0)			; decrement animation timer
-		bpl.s	.chkdel					; branch if time remains
+		bpl.w	DespawnQuick				; branch if time remains
 		move.b	#7,ost_anim_time(a0)			; reset timer
 		addq.b	#1,ost_frame(a0)			; next frame
 		cmpi.b	#id_frame_light_5+1,ost_frame(a0)	; is frame valid?
-		bcs.s	.chkdel					; if yes, branch
+		bcs.w	DespawnQuick				; if yes, branch
 		move.b	#id_frame_light_0,ost_frame(a0)		; reset to frame 0
-
-	.chkdel:
-		move.w	ost_x_pos(a0),d0
-		bsr.w	CheckActive
-		bne.w	DeleteObject
-		bra.w	DisplaySprite
+		bra.w	DespawnQuick
