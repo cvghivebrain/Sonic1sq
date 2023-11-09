@@ -63,4 +63,3 @@ frame_yadrin_walk5:
 		piece	$C, -$C, 1x3, $11
 		piece	-4, 4, 3x2, $37
 		endsprite
-		even
