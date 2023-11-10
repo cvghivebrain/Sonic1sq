@@ -449,10 +449,11 @@ SSS_ChkRing:
 		move.l	a1,ss_update_levelptr(a2)		; address within layout to be updated
 
 	.noslot:
+		moveq	#1,d0
 		jsr	(CollectRing).l				; get a ring
 		cmpi.w	#50,(v_rings).w				; check if you have 50 rings
 		bcs.s	.nocontinue				; if not, branch
-		bset	#0,(v_ring_reward).w			; set flag
+		bset	#7,(v_ring_reward).w			; set flag
 		bne.s	.nocontinue				; branch if flag was already set
 		addq.b	#1,(v_continues).w			; add 1 to number of continues
 		play.w	0, jsr, sfx_Continue			; play extra continue sound

@@ -105,6 +105,7 @@ RLoss_Collect:	; Routine 4
 		addq.b	#2,ost_routine(a0)			; goto RLoss_Sparkle next
 		move.b	#0,ost_col_type(a0)
 		move.b	#1,ost_priority(a0)
+		moveq	#1,d0
 		bsr.w	CollectRing				; add ring/extra life, play sound
 
 RLoss_Sparkle:	; Routine 6

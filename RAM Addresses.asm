@@ -303,7 +303,7 @@ v_air_frames:			equ __rs-1
 v_last_ss_levelid:		rs.b 1 ; level id of most recent special stage played
 v_continues:			rs.b 1 ; number of continues
 f_time_over:			rs.b 1 ; time over flag
-v_ring_reward:			rs.b 1 ; tracks which rewards have been given for rings - bit 0 = 50 rings (Special Stage); bit 1 = 100 rings; bit 2 = 200 rings
+v_ring_reward:			rs.b 1 ; bits 0-6: number of lives gained from rings; bit 7: set when continue is gained from rings in special stage
 f_hud_lives_update:		rs.b 1 ; lives counter update flag
 v_hud_rings_update:		rs.b 1 ; ring counter update flag - 1 = general update; $80 = reset to 0
 f_hud_time_update:		rs.b 1 ; time counter update flag

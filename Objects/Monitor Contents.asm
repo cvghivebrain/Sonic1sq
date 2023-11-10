@@ -134,19 +134,8 @@ Pow_Invincible:
 ; ===========================================================================
 
 Pow_Rings:
-		addi.w	#10,(v_rings).w				; add 10 rings to the number of rings you have
-		ori.b	#1,(v_hud_rings_update).w		; update the ring counter
-		cmpi.w	#100,(v_rings).w			; check if you have 100 rings
-		bcs.s	.ring_sound
-		bset	#1,(v_ring_reward).w
-		beq.w	ExtraLife
-		cmpi.w	#200,(v_rings).w			; check if you have 200 rings
-		bcs.s	.ring_sound
-		bset	#2,(v_ring_reward).w
-		beq.w	ExtraLife
-
-	.ring_sound:
-		play.w	0, jmp, sfx_Ring			; play ring sound
+		moveq	#10,d0
+		bra.w	CollectRing				; gain 10 rings
 ; ===========================================================================
 
 Pow_S:

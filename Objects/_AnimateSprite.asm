@@ -16,7 +16,6 @@
 ; ---------------------------------------------------------------------------
 
 AnimateSprite:
-		moveq	#0,d0
 		moveq	#status_xflip+status_yflip,d2		; use x/yflip from status and flags
 		move.b	ost_anim(a0),d0				; get animation number
 		bmi.s	Anim_Run				; branch if animation isn't set to restart
@@ -28,7 +27,7 @@ AnimateSprite:
 Anim_Run:
 		subq.b	#1,ost_anim_time(a0)			; subtract 1 from frame duration
 		bpl.s	Anim_Wait				; if time remains, branch
-		andi.b	#$7F,d0
+		andi.w	#$7F,d0
 		add.w	d0,d0
 		adda.w	(a1,d0.w),a1				; jump to appropriate animation	script
 		move.w	(a1),d0
@@ -290,7 +289,7 @@ NewAnim:
 ;	uses d0.w, d1.l, d2.w, a1, a2
 
 ; usage:
-;		lea	(Ani_BigRing).l,a1
+;		lea	Ani_BigRing(pc),a1
 ;		bsr.w	AnimateSprite				; update animation
 ;		set_dma_dest vram_giantring,d1			; set VRAM address to write gfx
 ;		jsr	DPLCSprite

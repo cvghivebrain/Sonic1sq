@@ -1,26 +1,29 @@
 ; ---------------------------------------------------------------------------
 ; Subroutine to	update ring counters and lives when a ring is collected
+;
+; input:
+;	d0.w = rings to add
 
 ;	uses d0.w
 ; ---------------------------------------------------------------------------
 
 CollectRing:
-		addq.w	#1,(v_rings).w				; add 1 to rings
+		add.w	d0,(v_rings).w				; add 1 to rings
 		ori.b	#1,(v_hud_rings_update).w		; update the rings counter
+		move.b	(v_ring_reward).w,d0
+		andi.w	#$7F,d0					; get number of lives gained from rings
+		add.w	d0,d0
+		move.w	Ring_NextLife(pc,d0.w),d0		; get ring target for next life
+		cmp.w	(v_rings).w,d0
+		bls.s	.got_life				; branch if ring count matches or exceeds target
 		move.w	#sfx_Ring,d0				; play ring sound
-		cmpi.w	#100,(v_rings).w			; do you have < 100 rings?
-		bcs.s	.playsnd				; if yes, branch
-		bset	#1,(v_ring_reward).w			; remember 100 rings have been collected
-		beq.s	.got100					; branch if 100 rings haven't been collected previously
-		cmpi.w	#200,(v_rings).w			; do you have < 200 rings?
-		bcs.s	.playsnd				; if yes, branch
-		bset	#2,(v_ring_reward).w			; remember 200 rings have been collected
-		bne.s	.playsnd				; branch if 200 rings have been collected previously
-
-	.got100:
+		jmp	PlaySound1
+		
+	.got_life:
+		addq.b	#1,(v_ring_reward).w			; increment to next target
 		addq.b	#1,(v_lives).w				; add 1 to the number of lives you have
 		addq.b	#1,(f_hud_lives_update).w		; update the lives counter
 		move.w	#mus_ExtraLife,d0			; play extra life music
-
-	.playsnd:
-		jmp	(PlaySound1).l
+		jmp	PlaySound1
+		
+Ring_NextLife:	dc.w 100, 200, 300, 400, 500, 600, 700, 800, 900, 9999
