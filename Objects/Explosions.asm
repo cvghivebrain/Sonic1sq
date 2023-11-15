@@ -25,7 +25,14 @@ ExItem_Animal:	; Routine 0
 		move.l	#Animals,ost_id(a1)			; load animal object
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
-		move.w	ost_enemy_combo(a0),ost_enemy_combo(a1)
+		bsr.w	FindFreeObj
+		bne.w	DisplaySprite
+		move.l	#Points,ost_id(a1)			; load points object
+		move.w	ost_x_pos(a0),ost_x_pos(a1)
+		move.w	ost_y_pos(a0),ost_y_pos(a1)
+		move.w	ost_enemy_combo(a0),d0
+		lsr.w	#1,d0
+		move.b	d0,ost_frame(a1)
 
 ExItem_Main:	; Routine 2
 		addq.b	#2,ost_routine(a0)			; goto ExItem_Animate next

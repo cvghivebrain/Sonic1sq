@@ -33,10 +33,7 @@ Scen_Main:	; Routine 0
 
 Scen_ChkDel:	; Routine 2
 		shortcut
-		move.w	ost_x_pos(a0),d0
-		bsr.w	CheckActive
-		bne.w	DeleteObject
-		bra.w	DisplaySprite
+		bra.w	DespawnQuick
 ; ===========================================================================
 		
 Scen_Values:

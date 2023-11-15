@@ -20,7 +20,6 @@ frame_animal1_flap2:
 		spritemap
 		piece	-8, -$C, 2x3, $C
 		endsprite
-		even
 
 Map_Animal2:	index *
 		ptr frame_animal2_flap1
@@ -36,7 +35,6 @@ frame_animal2_flap2:
 		spritemap
 		piece	-8, -4, 2x2, $A
 		endsprite
-		even
 
 Map_Animal3:	index *
 		ptr frame_animal3_flap1
@@ -52,4 +50,3 @@ frame_animal3_flap2:
 		spritemap
 		piece	-$C, -4, 3x2, $C
 		endsprite
-		even

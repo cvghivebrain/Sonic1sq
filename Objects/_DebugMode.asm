@@ -9,7 +9,7 @@ DebugMode:
 		jsr	Debug_Index(pc,d1.w)
 		jmp	DisplaySprite
 ; ===========================================================================
-Debug_Index:	index *
+Debug_Index:	index *,,2
 		ptr Debug_Main
 		ptr Debug_Action
 ; ===========================================================================
