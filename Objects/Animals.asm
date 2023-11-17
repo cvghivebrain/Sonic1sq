@@ -175,7 +175,7 @@ Anml_Bird:	; Routine 8
 ; Animals at ending
 
 ; spawned by:
-;	ObjPos_End - subtypes 0-$A
+;	ObjPos_End - subtypes 0-9
 ; ---------------------------------------------------------------------------
 
 AnimalsEnd:
@@ -200,12 +200,6 @@ AnmlE_Settings:	dc.w -$440, -$400
 		dc.b id_AnmlE_Flicky
 		even
 	AnmlE_Settings_size:
-		
-		dc.w -$440, -$400
-		dc.l Map_Animal2
-		dc.w tile_Art_Flicky_UPLC_Animals
-		dc.b id_AnmlE_Flicky
-		even
 		
 		dc.w -$440, -$400
 		dc.l Map_Animal2
@@ -290,15 +284,10 @@ AnmlE_Flicky:	; Routine 2
 		bpl.w	DisplaySprite				; wait until on screen before moving
 		shortcut
 		update_xy_fall	$18				; update object position & apply gravity
-		bmi.s	.animate				; branch if moving upwards
+		bmi.s	AnmlE_Flicky_Animate			; branch if moving upwards
+		bsr.w	AnmlE_ChkFloor
 
-		jsr	(FindFloorObj).l
-		tst.w	d1					; has object hit the floor?
-		bpl.s	.animate				; if not, branch
-		add.w	d1,ost_y_pos(a0)			; align to floor
-		move.w	ost_animal_y_vel(a0),ost_y_vel(a0)	; reset y speed
-
-	.animate:
+AnmlE_Flicky_Animate:
 		subq.b	#1,ost_anim_time(a0)			; decrement timer
 		bpl.w	DespawnQuick				; branch if time remains
 		move.b	#1,ost_anim_time(a0)			; set timer to 1 frame
@@ -310,20 +299,10 @@ AnmlE_Flicky2:	; Routine 4
 		shortcut
 		bsr.w	AnmlE_FaceSonic
 		update_y_fall	$18				; update object position & apply gravity
-		bmi.s	.animate				; branch if moving upwards
+		bmi.s	AnmlE_Flicky_Animate			; branch if moving upwards
 
-		jsr	(FindFloorObj).l
-		tst.w	d1					; has object hit the floor?
-		bpl.s	.animate				; if not, branch
-		add.w	d1,ost_y_pos(a0)			; align to floor
-		move.w	ost_animal_y_vel(a0),ost_y_vel(a0)	; reset y speed
-
-	.animate:
-		subq.b	#1,ost_anim_time(a0)			; decrement timer
-		bpl.w	DespawnQuick				; branch if time remains
-		move.b	#1,ost_anim_time(a0)			; set timer to 1 frame
-		bchg	#0,ost_frame(a0)			; change frame
-		bra.w	DespawnQuick
+		bsr.w	AnmlE_ChkFloor
+		bra.w	AnmlE_Flicky_Animate
 ; ===========================================================================
 
 AnmlE_Rabbit:	; Routine 6
@@ -336,11 +315,7 @@ AnmlE_Rabbit:	; Routine 6
 		bmi.w	DespawnQuick				; branch if moving upwards
 
 		move.b	#id_frame_animal1_flap1,ost_frame(a0)
-		jsr	(FindFloorObj).l
-		tst.w	d1					; has object hit the floor?
-		bpl.w	DespawnQuick				; if not, branch
-		add.w	d1,ost_y_pos(a0)			; align to floor
-		move.w	ost_animal_y_vel(a0),ost_y_vel(a0)	; reset y speed
+		bsr.w	AnmlE_ChkFloor
 		bra.w	DespawnQuick
 ; ===========================================================================
 
@@ -352,11 +327,7 @@ AnmlE_VertOnly:	; Routine 8
 		bmi.w	DespawnQuick				; branch if moving upwards
 
 		move.b	#id_frame_animal1_flap1,ost_frame(a0)
-		jsr	(FindFloorObj).l
-		tst.w	d1					; has object hit the floor?
-		bpl.w	DespawnQuick				; if not, branch
-		add.w	d1,ost_y_pos(a0)			; align to floor
-		move.w	ost_animal_y_vel(a0),ost_y_vel(a0)	; reset y speed
+		bsr.w	AnmlE_ChkFloor
 		bra.w	DespawnQuick
 ; ===========================================================================
 
@@ -383,11 +354,11 @@ AnmlE_Chicken:	; Routine $C
 		bpl.w	DisplaySprite				; wait until on screen before moving
 		shortcut
 		update_xy_fall	$18				; update object position & apply gravity
-		bmi.s	.animate				; branch if moving upwards
+		bmi.w	AnmlE_Flicky_Animate			; branch if moving upwards
 
 		jsr	(FindFloorObj).l
 		tst.w	d1					; has object hit the floor?
-		bpl.s	.animate				; if not, branch
+		bpl.w	AnmlE_Flicky_Animate			; if not, branch
 		not.b	ost_animal_direction(a0)		; change direction flag
 		bne.s	.no_flip				; branch if 1
 		neg.w	ost_x_vel(a0)				; reverse direction
@@ -396,13 +367,7 @@ AnmlE_Chicken:	; Routine $C
 	.no_flip:
 		add.w	d1,ost_y_pos(a0)			; align to floor
 		move.w	ost_animal_y_vel(a0),ost_y_vel(a0)	; reset y speed
-
-	.animate:
-		subq.b	#1,ost_anim_time(a0)			; decrement timer
-		bpl.w	DespawnQuick				; branch if time remains
-		move.b	#1,ost_anim_time(a0)			; set timer to 1 frame
-		bchg	#0,ost_frame(a0)			; change frame
-		bra.w	DespawnQuick
+		bra.w	AnmlE_Flicky_Animate
 ; ===========================================================================
 
 AnmlE_Squirrel:	; Routine $E
@@ -439,5 +404,19 @@ AnmlE_FaceSonic:
 		bmi.s	.exit					; branch if Sonic is to the left
 		bclr	#render_xflip_bit,ost_render(a0)	; clear bit
 
+	.exit:
+		rts
+
+; ---------------------------------------------------------------------------
+; Subroutine to detect collision with floor
+; ---------------------------------------------------------------------------
+
+AnmlE_ChkFloor:
+		jsr	(FindFloorObj).l
+		tst.w	d1					; has object hit the floor?
+		bpl.s	.exit					; if not, branch
+		add.w	d1,ost_y_pos(a0)			; align to floor
+		move.w	ost_animal_y_vel(a0),ost_y_vel(a0)	; reset y speed
+		
 	.exit:
 		rts

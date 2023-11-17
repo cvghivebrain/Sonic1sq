@@ -17,7 +17,6 @@
 		include "Constants.asm"
 		include "RAM Addresses.asm"
 		include	"Start Positions.asm"
-		include "Includes\Compatibility.asm"
 		include "Debugger.asm"
 
 		cpu	68000

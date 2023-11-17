@@ -220,3 +220,15 @@ type_saw_ground_left:	equ 4			 	; 4 - ground saw, moves left
 type_stomp_slow:	equ 0				; stomper, drops quickly and rises slowly
 type_stomp_fast_short:	equ 1				; stomper, drops quickly and rises quickly (64px)
 type_stomp_fast_long:	equ 2				; stomper, drops quickly and rises quickly (96px)
+
+; AnimalsEnd
+type_animal_end_flicky:		equ 0
+type_animal_end_flicky_onspot:	equ 1
+type_animal_end_rabbit:		equ 2
+type_animal_end_rabbit_onspot:	equ 3
+type_animal_end_penguin:	equ 4
+type_animal_end_penguin_onspot:	equ 5
+type_animal_end_seal:		equ 6
+type_animal_end_pig_onspot:	equ 7
+type_animal_end_chicken:	equ 8
+type_animal_end_squirrel:	equ 9
