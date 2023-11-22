@@ -16,7 +16,8 @@ Cbal_Index:	index *,,2
 		ptr Cbal_Bounce
 
 		rsobj Cannonball
-ost_ball_time:	rs.w 1						; time until the cannonball explodes (2 bytes)
+ost_ball_time:		rs.w 1					; time until the cannonball explodes
+ost_ball_bounce:	rs.w 1					; bounce y speed
 		rsobjend
 ; ===========================================================================
 
@@ -30,22 +31,27 @@ Cbal_Main:	; Routine 0
 		move.b	#3,ost_priority(a0)
 		move.b	#id_col_6x6+id_col_hurt,ost_col_type(a0)
 		move.b	#8,ost_displaywidth(a0)
-		moveq	#0,d0
 		move.b	ost_subtype(a0),d0			; move subtype to d0
+		move.w	d0,d1
+		andi.w	#$F,d0					; read low nybble only
 		mulu.w	#60,d0					; multiply by 60 frames	(1 second)
 		move.w	d0,ost_ball_time(a0)			; set explosion time
+		andi.w	#$F0,d1					; read high nybble only
+		lsl.w	#4,d1					; multiply by $10
+		neg.w	d1					; invert because it bounces up
+		move.w	d1,ost_ball_bounce(a0)			; set bounce speed
 		move.b	#id_frame_hog_ball1,ost_frame(a0)
 
 Cbal_Bounce:	; Routine 2
 		shortcut
-		update_xy_fall
-		bmi.s	Cbal_ChkExplode
+		update_xy_fall					; update position & apply gravity
+		bmi.s	Cbal_ChkExplode				; branch if moving up
 		jsr	(FindFloorObj).l
 		tst.w	d1					; has ball hit the floor?
 		bpl.s	Cbal_ChkExplode				; if not, branch
 
 		add.w	d1,ost_y_pos(a0)			; align to floor
-		move.w	#-$300,ost_y_vel(a0)			; bounce
+		move.w	ost_ball_bounce(a0),ost_y_vel(a0)	; bounce
 		tst.b	d3					; test floor angle
 		beq.s	Cbal_ChkExplode				; branch if perfectly flat
 		bmi.s	.down_left				; branch if sloping up-right or down-left
@@ -80,4 +86,4 @@ Cbal_Display:
 		addi.w	#screen_height,d0
 		cmp.w	ost_y_pos(a0),d0			; has object fallen off the level?
 		bcs.w	DeleteObject				; if yes, branch
-		bra.w	DisplaySprite
+		bra.w	DespawnQuick

@@ -24,7 +24,6 @@ ost_yadrin_wait_time:	rs.w 1					; time to wait before changing direction
 Yad_Main:	; Routine 0
 		move.b	#$11,ost_height(a0)
 		move.b	#$14,ost_width(a0)
-		bsr.w	SnapFloor				; align with floor
 		move.l	#Map_Yad,ost_mappings(a0)
 		move.w	(v_tile_yadrin).w,ost_tile(a0)
 		add.w	#tile_pal2,ost_tile(a0)
@@ -35,11 +34,9 @@ Yad_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Yad_Walk next
 		move.w	#-$100,ost_x_vel(a0)			; move yadrin left
 		btst	#status_xflip_bit,ost_status(a0)
-		beq.s	.noxflip
+		beq.w	SnapFloor
 		neg.w	ost_x_vel(a0)				; move right if xflipped
-
-	.noxflip:
-		rts	
+		bra.w	SnapFloor				; align with floor
 ; ===========================================================================
 
 Yad_Walk:	; Routine 2

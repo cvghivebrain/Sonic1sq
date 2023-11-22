@@ -42,15 +42,15 @@ SnapFloor:
 		bsr.s	FindFloorObj
 		tst.w	d1
 		bmi.s	.found					; branch if touching the floor
-		addi.w	#16,ost_y_pos(a0)			; try 16px lower
+		addi.w	#32,ost_y_pos(a0)			; try 32x lower
 		bsr.s	FindFloorObj
 		tst.w	d1
 		bmi.s	.found
-		addi.w	#16,ost_y_pos(a0)			; try 32px lower
+		addi.w	#32,ost_y_pos(a0)			; try 64px lower
 		bsr.s	FindFloorObj
 		tst.w	d1
 		bmi.s	.found
-		bra.w	DeleteObject				; delete object if floor not found within 48px
+		bra.w	DeleteObject				; delete object if floor not found
 		
 	.found:
 		add.w	d1,ost_y_pos(a0)			; align to floor

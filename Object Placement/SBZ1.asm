@@ -296,12 +296,12 @@ ObjPos_SBZ1:
 		objpos $1DE0,$0568,CollapseFloor,$01
 		objpos $1E18,$03A0,AutoDoor,$00,xflip
 		objpos $1E18,$04A0,AutoDoor,$00,xflip
-		objpos $1EF0,$04CC,BallHog,$06,xflip,rem
-		objpos $1F90,$030C,BallHog,$06,rem
+		objpos $1EF0,$04CC,BallHog,$36,xflip,rem
+		objpos $1F90,$030C,BallHog,$36,rem
 		objpos $1FB0,$0511,Monitor,type_monitor_rings,rem
 		objpos $1FD0,$0511,Monitor,type_monitor_rings,rem
-		objpos $1FF0,$030C,BallHog,$06,rem
-		objpos $1FF0,$040C,BallHog,$06,rem
+		objpos $1FF0,$030C,BallHog,$36,rem
+		objpos $1FF0,$040C,BallHog,$36,rem
 		objpos $1FF0,$0511,Monitor,type_monitor_rings,rem
 		objpos $2015,$02E8,Flamethrower,$43
 		

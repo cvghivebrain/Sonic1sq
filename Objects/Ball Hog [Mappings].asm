@@ -42,4 +42,3 @@ frame_hog_ball2:
 		spritemap					; Ball (red)
 		piece	-8, -8, 2x2, $2B
 		endsprite
-		even

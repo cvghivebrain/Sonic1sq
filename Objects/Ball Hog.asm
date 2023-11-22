@@ -3,6 +3,11 @@
 
 ; spawned by:
 ;	ObjPos_SBZ1, ObjPos_SBZ2
+
+; subtypes:
+;	%HHHHLLLL
+;	HHHH - cannonball bounce height (*$100 for ost_y_vel)
+;	LLLL - cannonball life span in seconds
 ; ---------------------------------------------------------------------------
 
 BallHog:
@@ -26,16 +31,8 @@ Hog_Main:	; Routine 0
 		move.b	#4,ost_priority(a0)
 		move.b	#id_col_12x18,ost_col_type(a0)
 		move.b	#$C,ost_displaywidth(a0)
-		update_y_fall
-		jsr	(FindFloorObj).l			; find floor
-		tst.w	d1
-		bpl.s	.floornotfound
-		add.w	d1,ost_y_pos(a0)			; align to floor
-		move.w	#0,ost_y_vel(a0)
 		addq.b	#2,ost_routine(a0)			; goto Hog_Action next
-
-	.floornotfound:
-		rts	
+		jmp	SnapFloor				; align to floor
 ; ===========================================================================
 
 Hog_Action:	; Routine 2

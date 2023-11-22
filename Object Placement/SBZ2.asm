@@ -253,8 +253,8 @@ ObjPos_SBZ2:
 		objpos $1490,$01D0,Invisibarrier,$15
 		objpos $14C1,$01FC,ScrapDoorH,3
 		objpos $14F8,$0480,AutoDoor,$00
-		objpos $1520,$028C,BallHog,$08,xflip,rem
-		objpos $1520,$038C,BallHog,$08,xflip,rem
+		objpos $1520,$028C,BallHog,$38,xflip,rem
+		objpos $1520,$038C,BallHog,$38,xflip,rem
 		objpos $1530,$0048,Rings,$12,rem
 		objpos $1570,$04F0,Bomb,$00,yflip,rem
 		objpos $1578,$0574,Rings,$12,rem
@@ -265,15 +265,15 @@ ObjPos_SBZ2:
 		objpos $15DC,$0554,Rings,$12,rem
 		objpos $15F0,$0108,SwingingPlatform,$36
 		objpos $1618,$01B4,Rings,$12,rem
-		objpos $16AC,$042C,BallHog,$08,rem
+		objpos $16AC,$042C,BallHog,$38,rem
 		objpos $16B0,$0530,Caterkiller,$00,rem
 		objpos $16F8,$0420,AutoDoor,$00,xflip
 		objpos $16F8,$0520,AutoDoor,$00
 		objpos $1770,$0368,SwingingPlatform,$36
-		objpos $1790,$010C,BallHog,$08,rem
-		objpos $1790,$030C,BallHog,$08,rem
+		objpos $1790,$010C,BallHog,$38,rem
+		objpos $1790,$030C,BallHog,$38,rem
 		objpos $1790,$0510,Rings,$14,rem
-		objpos $17E0,$020C,BallHog,$08,rem
+		objpos $17E0,$020C,BallHog,$38,rem
 		objpos $17F0,$0111,Monitor,type_monitor_invincible,rem
 		objpos $1850,$04F0,Caterkiller,$00,rem
 		objpos $1875,$0490,Flamethrower,$43,yflip
