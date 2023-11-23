@@ -224,4 +224,3 @@ ani_bomb_shrapnel:
 		dc.w id_frame_bomb_shrapnel1
 		dc.w id_frame_bomb_shrapnel2
 		dc.w id_Anim_Flag_Restart
-		even

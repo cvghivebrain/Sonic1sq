@@ -34,4 +34,3 @@ frame_bat_fly3:
 		piece	-$C, $E, 2x1, $25
 		piece	$C, -2, 1x1, $27
 		endsprite
-		even

@@ -88,4 +88,3 @@ frame_bomb_shrapnel2:
 		spritemap
 		piece	-4, -4, 1x1, $28
 		endsprite
-		even
