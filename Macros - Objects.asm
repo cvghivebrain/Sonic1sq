@@ -257,6 +257,25 @@ waitvisible:	macro
 		rts						; object is below
 	.inrangebtm\@:
 		endm
+
+; ---------------------------------------------------------------------------
+; Alternate between two frames of animation
+
+; input:
+;	\1 = delay in frames
+; ---------------------------------------------------------------------------
+
+toggleframe:	macro
+		ifarg \1
+		subq.b	#1,ost_anim_time(a0)			; decrement time
+		bpl.s	.wait\@					; branch if time remains
+		move.b	#\1,ost_anim_time(a0)			; reset time
+		bchg	#0,ost_frame(a0)			; toggle between frame 0 and 1
+	.wait\@:
+		else
+		bchg	#0,ost_frame(a0)			; toggle between frame 0 and 1
+		endc
+		endm
 		
 ; ---------------------------------------------------------------------------
 ; Multiply a number by 60

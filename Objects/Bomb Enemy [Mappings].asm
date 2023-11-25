@@ -4,16 +4,16 @@
 Map_Bomb:	index *
 		ptr frame_bomb_stand1
 		ptr frame_bomb_stand2
-		ptr frame_bomb_walk1
-		ptr frame_bomb_walk2
-		ptr frame_bomb_walk3
-		ptr frame_bomb_walk4
 		ptr frame_bomb_activate1
 		ptr frame_bomb_activate2
 		ptr frame_bomb_fuse1
 		ptr frame_bomb_fuse2
 		ptr frame_bomb_shrapnel1
 		ptr frame_bomb_shrapnel2
+		ptr frame_bomb_walk1
+		ptr frame_bomb_walk2
+		ptr frame_bomb_walk3
+		ptr frame_bomb_walk4
 		
 frame_bomb_stand1:
 		spritemap					; bomb standing still
