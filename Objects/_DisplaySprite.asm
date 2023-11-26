@@ -31,26 +31,3 @@ Disp_OffsetList:
 		dc.l v_sprite_queue+(sizeof_priority*5)
 		dc.l v_sprite_queue+(sizeof_priority*6)
 		dc.l v_sprite_queue+(sizeof_priority*7)
-; ---------------------------------------------------------------------------
-; Subroutine to	add a child object to the sprite queue
-;
-; input:
-;	a1 = address of OST for object
-
-;	uses d0.w, a2
-; ---------------------------------------------------------------------------
-
-DisplaySprite_a1:
-		moveq	#0,d0
-		move.b	ost_priority(a0),d0			; get sprite priority
-		add.b	d0,d0
-		add.b	d0,d0
-		movea.l	Disp_OffsetList(pc,d0.w),a2		; get RAM address for priority level
-		cmpi.w	#sizeof_priority-2,(a2)
-		bcc.s	.full
-		addq.w	#2,(a2)
-		adda.w	(a2),a2
-		move.w	a1,(a2)
-
-	.full:
-		rts

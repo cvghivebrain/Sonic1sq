@@ -51,4 +51,3 @@ frame_burro_walk3:
 		piece	-$10, -$14, 3x3, $F
 		piece	-$C, 4, 3x2, 9
 		endsprite
-		even
