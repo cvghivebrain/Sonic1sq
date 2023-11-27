@@ -248,7 +248,7 @@ Overlay_BoxLeft:
 		moveq	#0,d2
 		move.w	(v_debug_hitbox_setting).w,d0
 		bne.s	.hitbox_or_none				; branch on settings 1-2
-		lea	(v_ost_player).w,a1			; a1 = OST of Sonic object
+		getsonic					; a1 = OST of Sonic object
 		move.b	ost_width(a1),d0
 		moveq	#0,d1
 		move.b	ost_height(a1),d1
@@ -258,7 +258,7 @@ Overlay_BoxLeft:
 	.hitbox_or_none:
 		cmpi.w	#2,d0
 		beq.s	Overlay_Hide				; don't display on setting #2
-		lea	(v_ost_player).w,a1			; a1 = OST of Sonic object
+		getsonic					; a1 = OST of Sonic object
 		moveq	#0,d1
 		move.b	(v_player1_hitbox_width).w,d0
 		move.b	(v_player1_hitbox_height).w,d1

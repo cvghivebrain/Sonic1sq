@@ -75,8 +75,8 @@ HUD_Main:	; Routine 0
 		move.b	#render_abs,ost_render(a1)
 		move.b	#0,ost_priority(a1)
 		move.b	#id_HUD_Debug,ost_routine(a1)
-		bsr.w	HUD_CameraX				; display camera x pos
-		bsr.w	HUD_CameraY				; display camera y pos
+		move.b	#1,(v_camera_x_diff).w			; force camera x/y update
+		move.b	#1,(v_camera_y_diff).w
 		
 		jsr	FindFreeFinal
 		move.l	#DebugOverlay,ost_id(a1)		; load overlay object
@@ -335,24 +335,17 @@ HUD_Debug:	; Routine $E
 	.skip_sprite:
 		tst.b	(v_camera_x_diff).w
 		beq.s	.skip_x					; branch if camera hasn't moved
-		bsr.s	HUD_CameraX
+		move.w	(v_camera_x_pos).w,d0
+		set_dma_dest	$F300,d1			; VRAM address
+		bsr.s	HUD_ShowWord
 		
 	.skip_x:
 		tst.b	(v_camera_y_diff).w
-		beq.s	.skip_y					; branch if camera hasn't moved
-		bsr.s	HUD_CameraY
-		
-	.skip_y:
-		bra.w	HUD_Display
-		
-HUD_CameraY:
+		beq.w	HUD_Display				; branch if camera hasn't moved
 		move.w	(v_camera_y_pos).w,d0
 		set_dma_dest	$F380,d1			; VRAM address
-		bra.s	HUD_ShowWord
-		
-HUD_CameraX:
-		move.w	(v_camera_x_pos).w,d0
-		set_dma_dest	$F300,d1			; VRAM address
+		bsr.s	HUD_ShowWord
+		bra.w	HUD_Display
 		
 ; ---------------------------------------------------------------------------
 ; Subroutine to load a word into VRAM
@@ -385,9 +378,8 @@ HUD_ShowWord:
 ; ---------------------------------------------------------------------------
 
 HUD_ShowByte:
-		moveq	#0,d3
 		move.b	d0,d3
-		andi.b	#$F0,d3					; read high nybble of byte
+		andi.w	#$F0,d3					; read high nybble of byte
 		lsr.b	#1,d3					; multiply by 8
 		lea	HUD_ByteGfxIndex(pc,d3.w),a2
 		set_dma_size	sizeof_cell,d2			; set size to 1 cell
