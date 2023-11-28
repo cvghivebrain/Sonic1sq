@@ -24,4 +24,3 @@ frame_button_red:
 		piece	-$10, -$B, 2x2, 8
 		piece	0, -$B, 2x2, 8, xflip
 		endsprite
-		even

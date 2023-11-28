@@ -29,12 +29,6 @@ type_monitor_shield:	equ id_Pow_Shield			; shield
 type_monitor_invincible: equ id_Pow_Invincible			; invincibility
 type_monitor_rings:	equ id_Pow_Rings			; 10 rings
 
-; Button
-type_button_pal3:	equ $10					; use palette line 3
-type_button_flash:	equ $20					; flashing animation
-type_button_hi:		equ $40					; use high bit in button pressed status
-type_button_block:	equ $80					; can be activated by block
-
 ; HiddenBonus
 type_bonus_10k:		equ (Bonus_Points_1-Bonus_Points)/2	; 1 - 10000 points
 type_bonus_1k:		equ (Bonus_Points_2-Bonus_Points)/2	; 2 - 1000 points

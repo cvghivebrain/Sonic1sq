@@ -25,13 +25,22 @@ Button:
 But_Index:	index *,,2
 		ptr But_Main
 		ptr But_Action
+		
+type_button_pal3_bit:	equ 4
+type_button_flash_bit:	equ 5
+type_button_hi_bit:	equ 6
+type_button_block_bit:	equ 7
+type_button_pal3:	equ 1<<type_button_pal3_bit		; use palette line 3
+type_button_flash:	equ 1<<type_button_flash_bit		; flashing red
+type_button_hi:		equ 1<<type_button_hi_bit		; use high bit in button pressed status
+type_button_block:	equ 1<<type_button_block_bit		; can be activated by block
 ; ===========================================================================
 
 But_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto But_Action next
 		move.l	#Map_But,ost_mappings(a0)
 		move.w	(v_tile_button).w,ost_tile(a0)
-		btst	#4,ost_subtype(a0)			; is subtype +$10?
+		btst	#type_button_pal3_bit,ost_subtype(a0)	; is subtype +$10?
 		beq.s	.not_marble				; if not, branch
 
 		add.w	#tile_pal3,ost_tile(a0)			; use different palette line
@@ -46,68 +55,56 @@ But_Main:	; Routine 0
 
 But_Action:	; Routine 2
 		shortcut
-		tst.b	ost_subtype(a0)
-		bpl.s	.ignore_block				; branch if button is unaffected by pushable block
-		tst.b	ost_render(a0)
-		bpl.w	DespawnQuick				; branch if button is off screen
-		move.l	#PushBlock,d0
-		bsr.w	FindNearestObj				; find nearest pushable block & save to ost_linked
-		
-	.ignore_block:
-		shortcut
+		bsr.w	SolidObject
 		move.b	ost_subtype(a0),d0
+		move.b	d0,d6
+		move.b	d6,d2
 		andi.w	#$F,d0					; get low nybble of subtype
 		lea	(v_button_state).w,a3
-		lea	(a3,d0.w),a3				; (a3) = button status
-		moveq	#0,d6
-		btst	#6,ost_subtype(a0)			; is subtype $4x or $Cx? (unused)
-		beq.s	.not_secondary				; if not, branch
-		moveq	#7,d6					; d6 = bit to set/clear in button status
+		adda.w	d0,a3					; (a3) = button status
+		andi.b	#type_button_hi,d6			; d6 = 0 or $40
+		beq.s	.low_status				; branch if status bit is clear
+		moveq	#7,d6
 		
-	.not_secondary:
-		tst.b	ost_subtype(a0)
-		bpl.s	.no_block				; branch if unaffected by pushable block
+	.low_status:
+		btst	#solid_top_bit,d1			; check top collision
+		bne.s	But_Press				; branch if pressed
+		tst.b	d2
+		bpl.s	.ignore_block				; branch if button is unaffected by pushable block
 		tst.w	ost_linked(a0)
 		bne.s	.block_found				; branch if block is nearby
 		move.b	(v_vblank_counter_byte).w,d0
-		andi.b	#$F,d0
-		bne.s	.no_block				; branch except every 16th frame
+		andi.b	#$1F,d0
+		bne.s	.ignore_block				; branch except every 32nd frame
 		move.l	#PushBlock,d0
 		bsr.w	FindNearestObj				; find nearest pushable block
-		beq.s	.no_block				; branch if there is no pushable block nearby
+		beq.s	.ignore_block				; branch if there is no pushable block nearby
 		
 	.block_found:
 		getlinked					; a1 = OST of pushable block
 		range_x_exact
-		bpl.s	.no_block				; branch if block isn't touching button
+		bpl.s	.ignore_block				; branch if block isn't touching button
 		range_y_exact
-		bmi.s	.block_contact				; branch if block is touching
+		bmi.s	But_Press				; branch if block is touching
 		
-	.no_block:
-		bsr.w	SolidObject
-		btst	#solid_top_bit,d1
-		beq.s	.unpressed				; branch if Sonic isn't on top of the button
-		
-	.pressed:
-		tst.b	(a3)
-		bne.s	.skip_sound				; branch if button is already pressed
-		play.w	1, jsr, sfx_Switch			; play "blip" sound
-	.skip_sound:
-		bset	d6,(a3)					; set button status
-		bset	#0,ost_frame(a0)			; use "pressed" frame
-		bra.w	DespawnQuick
-		
-	.unpressed:
-		bclr	d6,(a3)					; clear button status
+	.ignore_block:
+		bclr	d6,(a3)					; clear button status (bit 0 or 7)
 		bclr	#0,ost_frame(a0)			; use "unpressed" frame
-		btst	#5,ost_subtype(a0)			; is subtype +$20?
+		bra.w	DespawnQuick
+; ===========================================================================
+		
+But_Press:
+		btst	d6,(a3)
+		bne.s	.skip_blip				; branch if button is already pressed
+		play.w	1, jsr, sfx_Switch			; play "blip" sound
+		
+	.skip_blip:
+		bset	d6,(a3)					; set button status (bit 0 or 7)
+		bset	#0,ost_frame(a0)			; use "pressed" frame
+		btst	#type_button_flash_bit,d2		; is subtype +$20?
 		beq.w	DespawnQuick				; if not, branch
 		move.b	(v_frame_counter_low).w,d0
 		andi.b	#7,d0
 		bne.w	DespawnQuick				; branch if 3 lowest bits of counter <> 0
 		bchg	#1,ost_frame(a0)			; change frame every 8 frames
 		bra.w	DespawnQuick
-		
-	.block_contact:
-		bsr.w	SolidObject
-		bra.s	.pressed
