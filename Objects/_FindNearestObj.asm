@@ -46,7 +46,7 @@ FindNearestObj:
 ; ---------------------------------------------------------------------------
 ; As above, but finds nearest to Sonic instead of local object
 
-;	uses d2.w, d3.w, d4.w, d5.l, d6.l, a1, a2
+;	uses d1.l, d2.w, d3.w, d4.w, d5.l, a1, a2
 ; ---------------------------------------------------------------------------
 
 FindNearestSonic:
@@ -54,7 +54,7 @@ FindNearestSonic:
 		lea	(v_ost_level_obj).w,a1			; start address for OSTs
 		move.w	#countof_ost_ert-1,d2
 		moveq	#-1,d5					; initial dist = $FFFF
-		moveq	#0,d6
+		moveq	#0,d1
 
 	.loop:
 		tst.l	ost_id(a1)
@@ -68,13 +68,13 @@ FindNearestSonic:
 		cmp.w	d3,d5
 		bls.s	.next					; branch if not nearer than previous
 		move.w	d3,d5					; d5 = new nearest dist
-		move.w	a1,d6					; save OST address for new nearest
+		move.w	a1,d1					; save OST address for new nearest
 		
 	.next:
 		lea	sizeof_ost(a1),a1			; goto next OST
 		dbf	d2,.loop				; repeat $5F times
 
-		move.w	d6,ost_linked(a0)			; save OST address of nearest (or 0 if not found)
-		move.w	d6,(v_nearest_obj).w
+		move.w	d1,ost_linked(a0)			; save OST address of nearest (or 0 if not found)
+		move.w	d1,(v_nearest_obj).w
 		rts
 		

@@ -68,6 +68,3 @@ frame_buzz_fire2:
 		piece	$C, 4, 1x1, $C
 		piece	-$C, $C, 2x1, $D
 		endsprite
-		piece	-$14, -$C, 3x1, $1F
-		piece	4, -$C, 2x1, $22
-		even

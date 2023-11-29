@@ -26,4 +26,3 @@ frame_buzz_ball2:
 		spritemap
 		piece	-8, -8, 2x2, $33
 		endsprite
-		even
