@@ -4,6 +4,10 @@
 ; spawned by:
 ;	BuzzBomber - subtype 0
 ;	Newtron - subtype 1
+
+; subtypes:
+;	%0000TTTT
+;	TTTT - type (see Msl_Types)
 ; ---------------------------------------------------------------------------
 
 Missile:

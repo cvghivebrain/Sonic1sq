@@ -23,4 +23,3 @@ byte_8EBA:	spritemap
 byte_8EC0:	spritemap
 		piece	-$C, -$C, 3x3, $1B
 		endsprite
-		even

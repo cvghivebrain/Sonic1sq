@@ -269,7 +269,12 @@ toggleframe:	macro
 		ifarg \1
 		subq.b	#1,ost_anim_time(a0)			; decrement time
 		bpl.s	.wait\@					; branch if time remains
-		move.b	#\1,ost_anim_time(a0)			; reset time
+		chr1:	substr ,1,"\1"				; get first character
+		if strcmp("d","\chr1")				; check if it's a register
+		move.b	\1,ost_anim_time(a0)			; reset time (dx)
+		else
+		move.b	#\1,ost_anim_time(a0)			; reset time (#n)
+		endc
 		bchg	#0,ost_frame(a0)			; toggle between frame 0 and 1
 	.wait\@:
 		else

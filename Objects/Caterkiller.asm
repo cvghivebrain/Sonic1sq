@@ -19,11 +19,11 @@ Cat_Index:	index *,,2
 		ptr Cat_Segment
 
 		rsobj Caterkiller
+ost_cat_y_start:	rs.w 1						; y position of object when aligned to floor
+ost_cat_x_edge:		rs.w 1						; x position of ledge/wall recently encountered by head
 ost_cat_wait_time:	rs.b 1						; time to wait between actions
 ost_cat_counter:	rs.b 1						; frame counter when rising or falling
 ost_cat_turned:		equ ost_cat_counter				; flag set when segment has recently changed direction
-ost_cat_y_start:	rs.w 1						; y position of object when aligned to floor
-ost_cat_x_edge:		rs.w 1						; x position of ledge/wall recently encountered by head
 		rsobjend
 ; ===========================================================================
 
