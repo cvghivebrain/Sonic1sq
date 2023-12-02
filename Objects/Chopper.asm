@@ -67,15 +67,13 @@ Chop_Jump:	; Routine 2
 ; ===========================================================================
 
 Chop_Fall:	; Routine 4
+		toggleframe	3				; animate
 		update_y_fall	$18				; update position & apply gravity
 		move.w	ost_chopper_y_start(a0),d0
 		sub.w	ost_y_pos(a0),d0
 		subi.w	#192,d0
-		bcs.s	.below_192				; branch if < 192px above start
-		toggleframe	3				; animate
-		bra.w	DespawnObject
+		bcc.w	DespawnObject				; branch if > 192px above start
 		
-	.below_192:
 		move.b	#id_frame_chopper_shut,ost_frame(a0)
 		addq.b	#2,ost_routine(a0)			; goto Chop_Fall2 next
 		bra.w	DespawnObject

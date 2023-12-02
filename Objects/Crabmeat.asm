@@ -2,9 +2,13 @@
 ; Object 1F - Crabmeat enemy (GHZ, SYZ)
 
 ; spawned by:
-;	ObjPos_GHZ1, ObjPos_GHZ2, ObjPos_GHZ3 - routine 0
-;	ObjPos_SYZ1, ObjPos_SYZ2, ObjPos_SYZ3 - routine 0
-;	Crabmeat - routine 6
+;	ObjPos_GHZ1, ObjPos_GHZ2, ObjPos_GHZ3 
+;	ObjPos_SYZ1, ObjPos_SYZ2, ObjPos_SYZ3
+
+; subtypes:
+;	%I000TTTT
+;	I = 1 to ignore slopes
+;	TTTT = type (see Crab_Settings)
 ; ---------------------------------------------------------------------------
 
 Crabmeat:
@@ -15,17 +19,20 @@ Crabmeat:
 ; ===========================================================================
 Crab_Index:	index *,,2
 		ptr Crab_Main
-		ptr Crab_Action
-		ptr Crab_BallMain
-		ptr Crab_BallMove
+		ptr Crab_Move
+		ptr Crab_Wait
+		ptr Crab_Fire
 
 		rsobj Crabmeat
-ost_crab_wait_time:	rs.w 1					; time until crabmeat fires (2 bytes)
-ost_crab_mode:		rs.b 1					; current action - 0/1 = not firing; 2/3 = firing
+ost_crab_time:		rs.w 1					; time until next action
+ost_crab_walk_time:	rs.w 1					; time spent walking
 		rsobjend
+		
+Crab_Settings:	dc.w 127, 128					; walk time (in frames), walk speed
 ; ===========================================================================
 
 Crab_Main:	; Routine 0
+		addq.b	#2,ost_routine(a0)			; goto Crab_Move next
 		move.b	#$10,ost_height(a0)
 		move.b	#8,ost_width(a0)
 		move.l	#Map_Crab,ost_mappings(a0)
@@ -34,161 +41,135 @@ Crab_Main:	; Routine 0
 		move.b	#3,ost_priority(a0)
 		move.b	#id_col_16x16,ost_col_type(a0)
 		move.b	#$15,ost_displaywidth(a0)
-		update_y_fall					; make crabmeat fall
-		jsr	(FindFloorObj).l			; find floor
-		tst.w	d1					; has crabmeat hit floor?
-		bpl.s	.floornotfound				; if not, branch
-		add.w	d1,ost_y_pos(a0)			; align to floor
-		move.b	d3,ost_angle(a0)			; copy floor angle
-		move.w	#0,ost_y_vel(a0)			; stop falling
-		addq.b	#2,ost_routine(a0)			; goto Crab_Action next
-
-	.floornotfound:
-		rts	
+		move.b	ost_subtype(a0),d0
+		andi.w	#$F,d0					; read low nybble of subtype
+		lsl.b	#2,d0					; multiply by 4
+		lea	Crab_Settings(pc,d0.w),a2
+		move.w	(a2)+,ost_crab_walk_time(a0)
+		move.w	ost_crab_walk_time(a0),ost_crab_time(a0)
+		move.w	(a2)+,ost_x_vel(a0)
+		btst	#status_xflip_bit,ost_status(a0)
+		bne.s	.noflip
+		neg.w	ost_x_vel(a0)
+		
+	.noflip:
+		jmp	SnapFloor
 ; ===========================================================================
 
-Crab_Action:	; Routine 2
-		moveq	#0,d0
-		move.b	ost_mode(a0),d0
-		move.w	Crab_Action_Index(pc,d0.w),d1
-		jsr	Crab_Action_Index(pc,d1.w)
-		lea	(Ani_Crab).l,a1
-		bsr.w	AnimateSprite
+Crab_Move:	; Routine 2
+		subq.w	#1,ost_crab_time(a0)			; decrement timer
+		bmi.w	.halt					; branch if -1
+		update_x_pos					; update position
+		btst	#0,(v_vblank_counter_byte).w
+		bne.s	.findfloor_here				; branch on odd frames
+		
+		move.w	ost_x_pos(a0),d3
+		addi.w	#$10,d3					; find floor 16px to the right
+		btst	#status_xflip_bit,ost_status(a0)
+		bne.s	.noflip
+		subi.w	#$20,d3					; find floor 16px to the left
+
+	.noflip:
+		jsr	(FindFloorObj2).l
+		cmpi.w	#-8,d1					; is there a wall ahead?
+		blt.s	.halt					; if yes, branch
+		cmpi.w	#$C,d1					; is there a drop ahead?
+		bge.s	.halt					; if yes, branch
+		lea	Ani_Crab(pc),a1
+		bsr.w	AnimateSprite				; animate
 		bra.w	DespawnObject
 ; ===========================================================================
-Crab_Action_Index:
-		index *
-		ptr Crab_WaitFire
-		ptr Crab_Walk
+
+.findfloor_here:
+		jsr	(FindFloorObj).l			; find floor at current position
+		add.w	d1,ost_y_pos(a0)			; snap to floor
+		;move.b	d3,ost_angle(a0)			; update angle
+		tst.b	ost_subtype(a0)
+		bmi.s	.noslope				; don't check for slope
+		
+		move.b	ost_anim(a0),d0
+		move.b	ost_status(a0),d1
+		andi.b	#$FC,d0					; assume floor is flat
+		addq.b	#6,d3
+		cmpi.b	#12,d3
+		bcs.s	.flat					; branch if floor is flat(ish)
+		addq.b	#1,d0					; floor isn't flat
+		tst.b	d3
+		bmi.s	.upright				; branch if floor slopes up-right
+		andi.b	#status_xflip,d1
+		bne.s	.flat
+		addq.b	#1,d0					; flip animation
+		
+	.flat:
+		move.b	d0,ost_anim(a0)
+		
+	.noslope:
+		lea	Ani_Crab(pc),a1
+		bsr.w	AnimateSprite				; animate
+		bra.w	DespawnObject
+		
+	.upright:
+		andi.b	#status_xflip,d1
+		beq.s	.flat
+		addq.b	#1,d0					; flip animation
+		bra.s	.flat
 ; ===========================================================================
 
-Crab_WaitFire:
-		subq.w	#1,ost_crab_wait_time(a0)		; decrement timer
-		bpl.s	.dontmove				; branch if time remains
-		tst.b	ost_render(a0)				; is crabmeat on-screen?
-		bpl.s	.movecrab				; if not, branch
-		bchg	#1,ost_crab_mode(a0)			; change flag for firing
-		bne.s	.fire					; branch if previously set
-
-	.movecrab:
-		addq.b	#2,ost_mode(a0)				; goto Crab_Walk next
-		move.w	#127,ost_crab_wait_time(a0)		; set time delay to approx 2 seconds
-		move.w	#$80,ost_x_vel(a0)			; move Crabmeat to the right
-		bsr.w	Crab_SetAni				; select animation based on floor angle
-		addq.b	#id_ani_crab_walk,d0			; use walking animation
-		set_anim
-		bchg	#status_xflip_bit,ost_status(a0)
-		bne.s	.noflip
-		neg.w	ost_x_vel(a0)				; change direction
-
-	.dontmove:
-	.noflip:
-		rts	
+.halt:
+		addq.b	#2,ost_routine(a0)			; goto Crab_Wait next
+		move.w	#59,ost_crab_time(a0)			; stop for 1 second before firing
+		bclr	#0,ost_frame(a0)
+		bra.w	DespawnObject
 ; ===========================================================================
 
-.fire:
-		move.w	#59,ost_crab_wait_time(a0)
-		move.b	#id_ani_crab_firing,ost_anim(a0)	; use firing animation
+Crab_Wait:	; Routine 4
+		subq.w	#1,ost_crab_time(a0)			; decrement timer
+		bpl.w	DespawnObject				; branch if time remains
+		
+		addq.b	#2,ost_routine(a0)			; goto Crab_Fire next
+		move.w	#59,ost_crab_time(a0)			; stop for 1 second before walking
+		tst.b	ost_mode(a0)
+		bne.s	.fire					; branch if not on first action cycle
+		move.b	#1,ost_mode(a0)				; fire on subsequent cycles
+		bra.s	Crab_ChgDir
+		
+	.fire:
+		move.b	#id_frame_crab_firing,ost_frame(a0)
+		
 		bsr.w	FindFreeObj
-		bne.s	.fail
-		move.l	#Crabmeat,ost_id(a1)			; load left fireball
-		move.b	#id_Crab_BallMain,ost_routine(a1)
+		bne.w	DespawnObject
+		move.l	#CrabBall,ost_id(a1)			; load left fireball
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		subi.w	#$10,ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		move.w	#-$100,ost_x_vel(a1)
 
 		bsr.w	FindFreeObj
-		bne.s	.fail
-		move.l	#Crabmeat,ost_id(a1)			; load right fireball
-		move.b	#id_Crab_BallMain,ost_routine(a1)
+		bne.w	DespawnObject
+		move.l	#CrabBall,ost_id(a1)			; load right fireball
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		addi.w	#$10,ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		move.w	#$100,ost_x_vel(a1)
-
-	.fail:
-		rts	
+		bra.w	DespawnObject
 ; ===========================================================================
 
-Crab_Walk:
-		subq.w	#1,ost_crab_wait_time(a0)		; decrement timer
-		bmi.s	.stop					; branch if -1
-		update_x_pos					; update position
-		bchg	#0,ost_crab_mode(a0)			; change flag for floor check
-		bne.s	.findfloor_here				; branch if previously set
-		move.w	ost_x_pos(a0),d3
-		addi.w	#$10,d3					; find floor 16px to the right
-		btst	#status_xflip_bit,ost_status(a0)
-		beq.s	.noflip
-		subi.w	#$20,d3					; find floor 16px to the left
-
-	.noflip:
-		jsr	(FindFloorObj2).l
-		cmpi.w	#-8,d1					; is there a wall ahead?
-		blt.s	.stop					; if yes, branch
-		cmpi.w	#$C,d1					; is there a drop ahead?
-		bge.s	.stop					; if yes, branch
-		rts	
-; ===========================================================================
-
-.findfloor_here:
-		jsr	(FindFloorObj).l			; find floor at current position
-		add.w	d1,ost_y_pos(a0)			; align to floor
-		move.b	d3,ost_angle(a0)			; update angle
-		bsr.w	Crab_SetAni				; set animation based on angle
-		addq.b	#id_ani_crab_walk,d0			; use walking animation
-		set_anim
-		rts
-; ===========================================================================
-
-.stop:
-		subq.b	#2,ost_mode(a0)				; goto Crab_WaitFire next
-		move.w	#59,ost_crab_wait_time(a0)
-		move.w	#0,ost_x_vel(a0)
-		bsr.w	Crab_SetAni				; set animation based on angle
-		set_anim
-		rts
+Crab_Fire:	; Routine 6
+		subq.w	#1,ost_crab_time(a0)			; decrement timer
+		bpl.w	DespawnObject				; branch if time remains
+		
+Crab_ChgDir:
+		bchg	#status_xflip_bit,ost_status(a0)
+		neg.w	ost_x_vel(a0)				; change direction
+		move.b	#id_Crab_Move,ost_routine(a0)		; goto Crab_Move next
+		move.w	ost_crab_walk_time(a0),ost_crab_time(a0)
+		bra.w	DespawnObject
 
 ; ---------------------------------------------------------------------------
-; Subroutine to	set the	correct	animation for a	Crabmeat
-
-; output:
-;	d0 = animation id (0 = flat; 1 = slope; 2 = xflip slope)
+; Crabmeat missile object
 ; ---------------------------------------------------------------------------
 
-Crab_SetAni:
-		moveq	#id_ani_crab_stand,d0			; use standing flat animation by default
-		move.b	ost_angle(a0),d3			; get floor angle
-		bmi.s	.slope_up_right				; branch if sloping up-right
-		cmpi.b	#6,d3					; is slope at least 6?
-		bcs.s	.nearly_flat				; if not, branch
-		moveq	#id_ani_crab_standslope,d0		; use standing up-left slope animation
-		btst	#status_xflip_bit,ost_status(a0)
-		bne.s	.nearly_flat
-		moveq	#id_ani_crab_standsloperev,d0		; use xflip animation
-
-	.nearly_flat:
-		rts	
-; ===========================================================================
-
-.slope_up_right:
-		cmpi.b	#-6,d3					; is slope at least 6?
-		bhi.s	.nearly_flat2				; if not, branch
-		moveq	#id_ani_crab_standsloperev,d0		; use standing up-right slope animation
-		btst	#status_xflip_bit,ost_status(a0)
-		bne.s	.nearly_flat2
-		moveq	#id_ani_crab_standslope,d0		; use xflip animation
-
-	.nearly_flat2:
-		rts
-
-; ---------------------------------------------------------------------------
-; Sub-object - missile that the	Crabmeat throws
-; ---------------------------------------------------------------------------
-
-Crab_BallMain:	; Routine 6
-		addq.b	#2,ost_routine(a0)			; goto Crab_BallMove next
+CrabBall:
 		move.l	#Map_Crab,ost_mappings(a0)
 		move.w	(v_tile_crabmeat).w,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
@@ -196,13 +177,11 @@ Crab_BallMain:	; Routine 6
 		move.b	#id_col_6x6+id_col_hurt,ost_col_type(a0)
 		move.b	#8,ost_displaywidth(a0)
 		move.w	#-$400,ost_y_vel(a0)
-		move.b	#id_ani_crab_ball,ost_anim(a0)
+		move.b	#id_frame_crab_ball1,ost_frame(a0)
 
-Crab_BallMove:	; Routine 8
 		shortcut
-		lea	Ani_Crab(pc),a1
-		bsr.w	AnimateSprite
-		update_xy_fall
+		toggleframe	1				; animate
+		update_xy_fall					; update position & apply gravity
 		move.w	(v_boundary_bottom).w,d0
 		addi.w	#screen_height,d0
 		cmp.w	ost_y_pos(a0),d0			; has object moved below the level boundary?
@@ -214,32 +193,9 @@ Crab_BallMove:	; Routine 8
 ; ---------------------------------------------------------------------------
 
 Ani_Crab:	index *
-		ptr ani_crab_stand
-		ptr ani_crab_standslope
-		ptr ani_crab_standsloperev
 		ptr ani_crab_walk
 		ptr ani_crab_walkslope
 		ptr ani_crab_walksloperev
-		ptr ani_crab_firing
-		ptr ani_crab_ball
-		
-ani_crab_stand:
-		dc.w $F
-		dc.w id_frame_crab_stand
-		dc.w id_Anim_Flag_Restart
-		even
-
-ani_crab_standslope:
-		dc.w $F
-		dc.w id_frame_crab_slope1
-		dc.w id_Anim_Flag_Restart
-		even
-
-ani_crab_standsloperev:
-		dc.w $F
-		dc.w id_frame_crab_slope1+afxflip
-		dc.w id_Anim_Flag_Restart
-		even
 
 ani_crab_walk:
 		dc.w $F
@@ -247,7 +203,6 @@ ani_crab_walk:
 		dc.w id_frame_crab_walk+afxflip
 		dc.w id_frame_crab_stand
 		dc.w id_Anim_Flag_Restart
-		even
 
 ani_crab_walkslope:
 		dc.w $F
@@ -255,7 +210,6 @@ ani_crab_walkslope:
 		dc.w id_frame_crab_slope2
 		dc.w id_frame_crab_slope1
 		dc.w id_Anim_Flag_Restart
-		even
 
 ani_crab_walksloperev:
 		dc.w $F
@@ -263,17 +217,3 @@ ani_crab_walksloperev:
 		dc.w id_frame_crab_slope2+afxflip
 		dc.w id_frame_crab_slope1+afxflip
 		dc.w id_Anim_Flag_Restart
-		even
-
-ani_crab_firing:
-		dc.w $F
-		dc.w id_frame_crab_firing
-		dc.w id_Anim_Flag_Restart
-		even
-
-ani_crab_ball:
-		dc.w 1
-		dc.w id_frame_crab_ball1
-		dc.w id_frame_crab_ball2
-		dc.w id_Anim_Flag_Restart
-		even

@@ -6,9 +6,9 @@ Map_Crab:	index *
 		ptr frame_crab_walk
 		ptr frame_crab_slope1
 		ptr frame_crab_slope2
-		ptr frame_crab_firing
 		ptr frame_crab_ball1
 		ptr frame_crab_ball2
+		ptr frame_crab_firing
 		
 frame_crab_stand:
 		spritemap					; standing/middle walking frame
@@ -61,4 +61,3 @@ frame_crab_ball2:
 		spritemap					; projectile
 		piece	-8, -8, 2x2, $40
 		endsprite
-		even
