@@ -34,7 +34,6 @@ frame_ex_4:	spritemap
 		piece	-$14, 4, 2x2, $3C, xflip, yflip
 		piece	-4, -4, 3x3, $33, xflip, yflip
 		endsprite
-		even
 		
 ; ---------------------------------------------------------------------------
 ; Sprite mappings - explosion from when	a boss is destroyed
@@ -54,4 +53,3 @@ frame_exbomb_1:	spritemap
 frame_exbomb_2:	spritemap
 		piece	-$10, -$10, 4x4, $50
 		endsprite
-		even

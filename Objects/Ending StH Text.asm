@@ -18,7 +18,7 @@ ESth_Index:	index *,,2
 		ptr ESth_GotoCredits
 
 		rsobj EndStH
-ost_esth_wait_time:	rs.w 1					; time until exit (2 bytes)
+ost_esth_wait_time:	rs.w 1					; time until exit
 		rsobjend
 ; ===========================================================================
 

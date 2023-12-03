@@ -21,10 +21,11 @@ FBall_Index:	index *,,2
 		ptr FBall_Main
 		ptr FBall_Action
 		ptr FBall_Delete
+		ptr FBall_Collide
 
 		rsobj Fireballs
+ost_fireball_y_start:	rs.w 1					; original y position
 ost_fireball_mz_boss:	rs.b 1					; set to $FF if spawned by MZ boss
-ost_fireball_y_start:	rs.w 1					; original y position (2 bytes)
 		rsobjend
 ; ===========================================================================
 
@@ -43,11 +44,14 @@ FBall_Main:	; Routine 0
 		addq.b	#2,ost_priority(a0)			; use lower sprite priority
 
 	.speed:
-		moveq	#0,d0
 		move.b	ost_subtype(a0),d0
-		andi.b	#%00000111,d0				; read bits 0-2
+		move.b	d0,d1
+		andi.w	#%00000111,d0				; read bits 0-2
 		lsl.w	#8,d0					; multiply by $100
 		neg.w	d0					; move up or left by default
+		andi.b	#%11000000,d1				; read only bits 6-7
+		lsr.b	#5,d1
+		move.b	d1,ost_mode(a0)				; save gravity/direction settings
 		move.b	ost_status(a0),d1
 		andi.b	#status_xflip+status_yflip,d1		; read xflip/yflip from status
 		beq.s	.noflip					; branch if neither are set
@@ -69,15 +73,10 @@ FBall_Main:	; Routine 0
 
 FBall_Action:	; Routine 2
 		moveq	#0,d0
-		move.b	ost_subtype(a0),d0
-		beq.s	.skip_type				; branch if subtype is 0
-		andi.b	#%11000000,d0				; read only bits 6-7
-		lsr.b	#5,d0
+		move.b	ost_mode(a0),d0
 		move.w	FBall_TypeIndex(pc,d0.w),d1
 		jsr	FBall_TypeIndex(pc,d1.w)		; update speed & check for wall collision
-		
-	.skip_type:
-		lea	(Ani_Fire).l,a1
+		lea	Ani_Fire(pc),a1
 		bsr.w	AnimateSprite
 		bra.w	DespawnQuick
 ; ===========================================================================
@@ -120,9 +119,8 @@ FBall_Type_Vert:
 		bsr.w	FindCeilingObj
 		tst.w	d1					; distance to ceiling
 		bpl.s	.no_ceiling				; branch if > 0
-		move.b	#0,ost_subtype(a0)
-		move.b	#id_ani_fire_vertcollide,ost_anim(a0)
-		move.w	#0,ost_y_vel(a0)			; stop the object when it touches the ceiling
+		move.b	#id_FBall_Collide,ost_routine(a0)	; goto FBall_Collide next
+		move.b	#id_frame_fire_vertcollide,ost_frame(a0)
 		rts
 
 	.no_ceiling:
@@ -133,9 +131,8 @@ FBall_Type_Vert:
 		bsr.w	FindFloorObj
 		tst.w	d1					; distance to floor
 		bpl.s	.no_ceiling				; branch if > 0
-		move.b	#0,ost_subtype(a0)
-		move.b	#id_ani_fire_vertcollide,ost_anim(a0)
-		move.w	#0,ost_y_vel(a0)			; stop the object when it touches the floor
+		move.b	#id_FBall_Collide,ost_routine(a0)	; goto FBall_Collide next
+		move.b	#id_frame_fire_vertcollide,ost_frame(a0)
 		rts	
 ; ===========================================================================
 
@@ -146,9 +143,8 @@ FBall_Type_Hori:
 		bsr.w	FindWallLeftObj
 		tst.w	d1					; distance to wall
 		bpl.s	.no_wall				; branch if > 0
-		move.b	#0,ost_subtype(a0)
-		move.b	#id_ani_fire_horicollide,ost_anim(a0)
-		move.w	#0,ost_x_vel(a0)			; stop object when it touches a wall
+		move.b	#id_FBall_Collide,ost_routine(a0)	; goto FBall_Collide next
+		move.b	#id_frame_fire_horicollide,ost_frame(a0)
 		rts
 
 	.no_wall:
@@ -159,11 +155,16 @@ FBall_Type_Hori:
 		bsr.w	FindWallRightObj
 		tst.w	d1					; distance to wall
 		bpl.s	.no_wall				; branch if > 0
-		move.b	#0,ost_subtype(a0)
-		move.b	#id_ani_fire_horicollide,ost_anim(a0)
-		move.w	#0,ost_x_vel(a0)			; stop object when it touches a wall
+		move.b	#id_FBall_Collide,ost_routine(a0)	; goto FBall_Collide next
+		move.b	#id_frame_fire_horicollide,ost_frame(a0)
 		rts
 ; ===========================================================================
+
+FBall_Collide:	; Routine 6
+		move.b	#5,ost_anim_time(a0)
+		shortcut
+		subq.b	#1,ost_anim_time(a0)			; decrement timer
+		bpl.w	DisplaySprite				; branch if time remains
 
 FBall_Delete:	; Routine 4
 		bra.w	DeleteObject
@@ -174,9 +175,7 @@ FBall_Delete:	; Routine 4
 
 Ani_Fire:	index *
 		ptr ani_fire_vertical
-		ptr ani_fire_vertcollide
 		ptr ani_fire_horizontal
-		ptr ani_fire_horicollide
 		
 ani_fire_vertical:
 		dc.w 5
@@ -186,11 +185,6 @@ ani_fire_vertical:
 		dc.w id_frame_fire_vertical2+afxflip+afyflip
 		dc.w id_Anim_Flag_Restart
 
-ani_fire_vertcollide:
-		dc.w 5
-		dc.w id_frame_fire_vertcollide+afyflip
-		dc.w id_Anim_Flag_Routine
-
 ani_fire_horizontal:
 		dc.w 5
 		dc.w id_frame_fire_horizontal1+afxflip
@@ -198,8 +192,3 @@ ani_fire_horizontal:
 		dc.w id_frame_fire_horizontal2+afxflip
 		dc.w id_frame_fire_horizontal2+afyflip+afxflip
 		dc.w id_Anim_Flag_Restart
-
-ani_fire_horicollide:
-		dc.w 5
-		dc.w id_frame_fire_horicollide+afxflip
-		dc.w id_Anim_Flag_Routine

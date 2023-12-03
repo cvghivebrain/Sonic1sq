@@ -47,14 +47,14 @@ Msl_Main:	; Routine 0
 		
 	.verify:
 		getparent					; a1 = OST of parent
-		cmpi.l	#ExplosionItem,ost_id(a1)		; has Buzz Bomber been destroyed?
+		tst.b	ost_col_type(a1)			; has Buzz Bomber been destroyed?
 		beq.w	DeleteObject				; if yes, branch
 		rts
 ; ===========================================================================
 
 Msl_BuzzFire:	; Routine 2
 		getparent					; a1 = OST of parent
-		cmpi.l	#ExplosionItem,ost_id(a1)		; has Buzz Bomber been destroyed?
+		tst.b	ost_col_type(a1)			; has Buzz Bomber been destroyed?
 		beq.w	DeleteObject				; if yes, branch
 		lea	Ani_Missile(pc),a1
 		bsr.w	AnimateSprite				; goto Msl_Diagonal after animation is finished

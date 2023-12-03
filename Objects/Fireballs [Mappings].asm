@@ -38,4 +38,3 @@ frame_fire_horicollide:
 		spritemap
 		piece	-$10, -8, 3x2, $26
 		endsprite
-		even

@@ -41,4 +41,3 @@ frame_smash_right:
 		piece	0, 0, 2x2, 8
 		piece	0, $10, 2x2, 8
 		endsprite
-		even
