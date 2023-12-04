@@ -3,6 +3,11 @@
 
 ; spawned by:
 ;	ObjPos_LZ1, ObjPos_LZ2, ObjPos_LZ3, ObjPos_SBZ3
+
+; subtypes:
+;	%W000BBBB
+;	W - 1 to block the effect of water current tunnels when shut
+;	BBBB - button id
 ; ---------------------------------------------------------------------------
 
 LabyrinthDoorV:
@@ -38,16 +43,21 @@ DoorV_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto DoorV_ChkBtn next
 
 DoorV_Solid:	; Routine 2
-		bsr.s	DoorV_ChkTunnel
 		bsr.w	SolidObject
+		tst.b	ost_subtype(a0)
+		bpl.w	DespawnQuick				; branch if high bit of subtype is 0
+		clr.b	(f_water_tunnel_disable).w		; enable water tunnels
+		move.w	ost_x_pos(a1),d0
+		cmp.w	ost_x_pos(a0),d0
+		bcc.w	DespawnQuick				; branch if Sonic is right of the door
+		move.b	#1,(f_water_tunnel_disable).w		; disable water tunnels if Sonic is to the left
 		bra.w	DespawnQuick
 ; ===========================================================================
 
 DoorV_ChkBtn:	; Routine 4
 		lea	(v_button_state).w,a2
-		moveq	#0,d0
 		move.b	ost_subtype(a0),d0
-		andi.b	#$F,d0					; get low nybble of subtype
+		andi.w	#$F,d0					; get low nybble of subtype
 		tst.b	(a2,d0.w)				; check state of linked button
 		beq.s	DoorV_Solid				; branch if button isn't pressed
 		bsr.w	SaveState
@@ -68,17 +78,4 @@ DoorV_Move:	; Routine 6
 	.fully_open:
 		move.b	#id_DoorV_Solid,ost_routine(a0)		; goto DoorV_Solid next
 		bra.s	DoorV_Solid
-; ===========================================================================
-
-DoorV_ChkTunnel:
-		tst.b	ost_subtype(a0)
-		bpl.s	.exit					; branch if high bit of subtype is 0
-		clr.b	(f_water_tunnel_disable).w		; enable water tunnels
-		move.w	(v_ost_player+ost_x_pos).w,d0
-		cmp.w	ost_x_pos(a0),d0
-		bcc.s	.exit					; branch if Sonic is right of the door
-		move.b	#1,(f_water_tunnel_disable).w		; disable water tunnels if Sonic is to the left
-		
-	.exit:
-		rts
 		

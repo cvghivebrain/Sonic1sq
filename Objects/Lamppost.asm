@@ -23,9 +23,9 @@ Lamp_Index:	index *,,2
 		ptr Lamp_Twirl
 
 		rsobj Lamppost
-ost_lamp_x_start:	rs.w 1					; original x-axis position (2 bytes)
-ost_lamp_y_start:	rs.w 1					; original y-axis position (2 bytes)
-ost_lamp_twirl_count:	rs.w 1					; length of time lamp has been twirled (2 bytes)
+ost_lamp_x_start:	rs.w 1					; original x-axis position
+ost_lamp_y_start:	rs.w 1					; original y-axis position
+ost_lamp_twirl_count:	rs.w 1					; length of time lamp has been twirled
 		rsobjend
 ; ===========================================================================
 
@@ -33,7 +33,8 @@ Lamp_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Lamp_Blue next
 		move.l	#Map_Lamp,ost_mappings(a0)
 		move.w	(v_tile_lamppost).w,ost_tile(a0)
-		move.b	#render_rel,ost_render(a0)
+		move.b	#render_rel+render_useheight,ost_render(a0)
+		move.b	#$2C,ost_height(a0)
 		move.b	#8,ost_displaywidth(a0)
 		move.b	#5,ost_priority(a0)
 		bsr.w	GetState
@@ -47,33 +48,17 @@ Lamp_Main:	; Routine 0
 		bcs.s	Lamp_Blue				; if yes, branch
 
 	.red:
-		bset	#0,2(a2,d0.w)				; remember lamppost as red
 		move.b	#id_Lamp_Red,ost_routine(a0)		; goto Lamp_Red next
 		move.b	#id_frame_lamp_red,ost_frame(a0)	; use red lamppost frame
 		bra.w	DespawnObject
 ; ===========================================================================
 
 Lamp_Blue:	; Routine 2
-		tst.w	(v_debug_active).w			; is debug mode	being used?
-		bne.w	DespawnObject				; if yes, branch
-		tst.b	(v_lock_multi).w			; is object collision enabled?
-		bmi.w	DespawnObject				; if not, branch
-		move.b	(v_last_lamppost).w,d1
-		andi.b	#$7F,d1
-		move.b	ost_subtype(a0),d2
-		andi.b	#$7F,d2
-		cmp.b	d2,d1					; is this a "new" lamppost?
-		bcs.s	.chkhit					; if yes, branch
-
-		bsr.w	SaveState
-		beq.w	DespawnObject				; branch if not in respawn table
-		bset	#0,(a2)					; remember lamppost as red
-		move.b	#id_Lamp_Red,ost_routine(a0)		; goto Lamp_Red next
-		move.b	#id_frame_lamp_red,ost_frame(a0)	; use red lamppost frame
-		bra.w	DespawnObject
-; ===========================================================================
-
-.chkhit:
+		tst.w	(v_debug_active).w
+		bne.w	DespawnObject				; branch if debug mode is in use
+		tst.b	(v_lock_multi).w
+		bmi.w	DespawnObject				; branch if collision is disabled
+		
 		getsonic					; a1 = OST of Sonic
 		range_x
 		cmp.w	#8,d1
@@ -125,11 +110,11 @@ Lamp_Twirl:	; Routine 6
 	.keep_twirling:
 		move.w	d0,ost_lamp_twirl_count(a0)		; update counter
 		andi.w	#$3F,d0					; limit to 16 positions
-		lea	Lamp_Twirl_Pos(pc,d0.w),a1		; get relative position
-		move.w	(a1)+,d1
+		lea	Lamp_Twirl_Pos(pc,d0.w),a2		; get relative position
+		move.w	(a2)+,d1
 		add.w	ost_lamp_x_start(a0),d1
 		move.w	d1,ost_x_pos(a0)
-		move.w	(a1),d1
+		move.w	(a2),d1
 		add.w	ost_lamp_y_start(a0),d1
 		move.w	d1,ost_y_pos(a0)
 		jmp	DisplaySprite

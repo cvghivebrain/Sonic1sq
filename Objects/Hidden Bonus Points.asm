@@ -63,7 +63,7 @@ Bonus_Points_3:	dc.w 10						; subtype 3 - 100 points
 Bonus_Display:	; Routine 2
 		shortcut
 		subq.w	#1,ost_bonus_wait_time(a0)		; decrement display time
-		bmi.s	Bonus_Delete				; if time is zero, branch
+		bmi.s	Bonus_Delete				; branch if expired
 		bra.w	DespawnQuick
 
 Bonus_Delete:

@@ -103,15 +103,13 @@ Crumble:
 
 CrumbWait:
 		subq.b	#1,ost_anim_time(a0)			; decrement timer
-		bpl.s	.wait					; branch if time remains
-		move.l	#CrumbFall,ost_id(a0)			; change object to falling type
-		
-	.wait:
+		bmi.s	CrumbFall				; branch if time hits -1
 		tst.b	ost_render(a0)				; is fragment on-screen?
 		bpl.w	DeleteObject				; if not, branch
 		bra.w	DisplaySprite
 
 CrumbFall:
+		shortcut
 		update_y_fall					; apply gravity & update position
 		tst.b	ost_render(a0)				; is fragment on-screen?
 		bpl.w	DeleteObject				; if not, branch

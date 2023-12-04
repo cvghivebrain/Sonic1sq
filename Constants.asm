@@ -265,6 +265,9 @@ ost_parent:		rs.w 1		; address of OST of parent object
 ost_linked:		rs.w 1		; address of OST of linked object
 ost_routine:		rs.w 1		; routine number
 ost_mode:		equ __rs-1	; secondary routine number
+ost_col_type:		rs.w 1		; collision response type - 0 = none; 1-$3F = enemy; $41-$7F = items; $81-BF = hurts; $C1-$FF = custom
+ost_col_property:	equ __rs-1	; collision extra property
+ost_sink:		equ ost_col_property ; amount platform has sunk when stood on - 0 is none, $1E is max
 ost_render:		rs.b 1		; bitfield for x/y flip, display mode
 	render_xflip:		equ 1	; xflip
 	render_yflip:		equ 2	; yflip
@@ -290,9 +293,6 @@ ost_displaywidth:	rs.b 1		; display width/2
 ost_anim_frame:		rs.b 1		; current frame in animation script
 ost_anim:		rs.b 1		; current animation
 ost_anim_time:		rs.b 1		; time to next frame (1 byte) / general timer
-ost_col_type:		rs.w 1		; collision response type - 0 = none; 1-$3F = enemy; $41-$7F = items; $81-BF = hurts; $C1-$FF = custom
-ost_col_property:	equ __rs-1	; collision extra property
-ost_sink:		equ ost_col_property ; amount platform has sunk when stood on - 0 is none, $1E is max
 ost_status:		rs.b 1		; orientation or mode
 	status_xflip:		equ 1	; xflip
 	status_yflip:		equ 2	; yflip (objects only)

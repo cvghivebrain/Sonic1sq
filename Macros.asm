@@ -108,7 +108,11 @@ rsobjend:	macro
 		if __rs>sizeof_ost
 		inform	3,"OST for \rsobj_name exceeds maximum by $%h bytes.",__rs-sizeof_ost
 		else
+		if sizeof_ost-__rs<3
+		inform	0,"0-$%h bytes of OST for \rsobj_name used, leaving $%h bytes unused!!!!!!!!",__rs-1,sizeof_ost-__rs
+		else
 		inform	0,"0-$%h bytes of OST for \rsobj_name used, leaving $%h bytes unused.",__rs-1,sizeof_ost-__rs
+		endc
 		endc
 		popo
 		endm

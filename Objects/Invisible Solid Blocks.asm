@@ -43,11 +43,8 @@ Invis_Main:	; Routine 0
 
 Invis_Solid:	; Routine 2
 		shortcut
-		bsr.w	CheckOffScreen				; is object off screen?
-		bne.s	.chkdel					; if yes, branch
-		bsr.w	SolidObject_SkipRender
-
-	.chkdel:
 		tst.w	(v_debug_active).w
-		beq.w	DespawnQuick_NoDisplay			; branch if debug mode isn't being used
-		bra.w	DespawnQuick				; visible with debug mode
+		bne.w	DespawnQuick				; branch if debug mode is in use (icons are visible)
+		
+		bsr.w	SolidObject_SkipRenderDebug
+		bra.w	DespawnQuick_NoDisplay

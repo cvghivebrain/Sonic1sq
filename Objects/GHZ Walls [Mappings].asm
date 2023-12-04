@@ -29,4 +29,3 @@ frame_edge_dark:
 		piece	-8, 0, 2x2, 0
 		piece	-8, $10, 2x2, 0
 		endsprite
-		even

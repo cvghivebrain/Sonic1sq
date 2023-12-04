@@ -14,4 +14,3 @@ frame_lblock_block:
 		spritemap					; block
 		piece	-$10, -$10, 4x4, 0
 		endsprite
-		even

@@ -38,7 +38,7 @@ LBlk_Main:	; Routine 0
 		
 		move.w	#tile_Kos_LzBlock+tile_pal3,ost_tile(a0)
 		move.b	#id_LBlk_Stop,ost_routine(a0)		; goto LBlk_Stop next
-		bra.s	LBlk_Stop
+		bra.s	LBlk_Solid
 ; ===========================================================================
 
 LBlk_Action:	; Routine 2
@@ -58,7 +58,7 @@ LBlk_Update:
 		move.w	ost_lblock_y_pos(a0),d0
 		bsr.w	Sink					; platform sinks slightly when stood on, update y pos
 		
-LBlk_Stop:	; Routine 6
+LBlk_Solid:	; Routine 6
 		bsr.w	SolidObject
 		bra.w	DespawnQuick
 ; ===========================================================================
@@ -67,10 +67,16 @@ LBlk_Fall:	; Routine 4
 		update_y_fall	8				; update position & apply gravity
 		bsr.w	FindFloorObj
 		tst.w	d1					; has block hit the floor?
-		bpl.s	LBlk_Stop				; if not, branch
+		bpl.s	LBlk_Solid				; if not, branch
 		addq.w	#1,d1
 		add.w	d1,ost_y_pos(a0)			; align to floor
 		clr.w	ost_y_vel(a0)				; stop when it touches the floor
 		addq.b	#2,ost_routine(a0)			; goto LBlk_Stop next
+		bsr.w	SolidObject
+		bra.w	DespawnQuick
+; ===========================================================================
+		
+LBlk_Stop:	; Routine 6
+		shortcut
 		bsr.w	SolidObject
 		bra.w	DespawnQuick

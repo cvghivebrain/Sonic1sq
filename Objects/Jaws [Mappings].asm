@@ -30,4 +30,3 @@ frame_jaws_shut2:
 		piece	-$10, -$C, 4x3, $C
 		piece	$10, -$B, 2x2, $1C, yflip
 		endsprite
-		even

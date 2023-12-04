@@ -71,4 +71,3 @@ ani_jaws_swim:	dc.w 7
 		dc.w id_frame_jaws_open2
 		dc.w id_frame_jaws_shut2
 		dc.w id_Anim_Flag_Restart
-		even

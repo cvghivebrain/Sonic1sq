@@ -24,6 +24,8 @@ SolidObject:
 SolidObject_SkipRender:
 		tst.w	(v_debug_active_hi).w
 		bne.s	Sol_None				; branch if debug mode is in use
+		
+SolidObject_SkipRenderDebug:
 		tst.b	ost_mode(a0)
 		bne.w	Sol_Stand				; branch if Sonic is already standing on object
 		getsonic

@@ -2,7 +2,7 @@
 ; Bubbles (LZ)
 
 ; spawned by:
-;	BubbleMaker
+;	BubbleMaker, DrownCount
 
 ; subtypes:
 ;	%000STTTT
@@ -48,9 +48,8 @@ Bub_Main:	; Routine 0
 		move.b	#render_onscreen+render_rel,ost_render(a0)
 		move.b	#1,ost_priority(a0)
 		move.w	#-$88,ost_y_vel(a0)
-		moveq	#0,d0
 		move.b	ost_subtype(a0),d0
-		andi.b	#$F,d0					; read low nybble of subtype
+		andi.w	#$F,d0					; read low nybble of subtype
 		mulu.w	#3,d0
 		lea	Bub_Settings(pc,d0.w),a2		; get settings for specified type
 		move.b	(a2)+,ost_routine(a0)

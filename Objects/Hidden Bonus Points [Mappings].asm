@@ -25,4 +25,3 @@ frame_bonus_100:
 		spritemap
 		piece	-$10, -$C, 4x3, $18
 		endsprite
-		even
