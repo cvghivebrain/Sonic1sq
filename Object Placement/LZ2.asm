@@ -45,7 +45,7 @@ ObjPos_LZ2:
 		objpos $0430,$0510,Burrobot,$00,rem
 		objpos $0490,$04A8,BubbleMaker,1
 		objpos $0490,$04C0,Burrobot,$00,rem
-		objpos $04C8,$0420,FlapDoor,$02,rem
+		objpos $04C8,$0420,FlapDoor,$02
 		objpos $04E0,$0230,Spikes,type_spike_3upwide+type_spike_still,yflip
 		objpos $04E4,$0190,Spikes,type_spike_3upwide+type_spike_still,yflip
 		objpos $0504,$0274,WaterfallSplash

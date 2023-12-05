@@ -138,7 +138,7 @@ ObjPos_SBZ3:
 		objpos $0CB0,$0210,Burrobot,$00,rem
 		objpos $0CE0,$05F8,Orbinaut,$00,rem
 		objpos $0D00,$0210,Burrobot,$00,rem
-		objpos $0D08,$0660,FlapDoor,$02,rem
+		objpos $0D08,$0660,FlapDoor,$02
 		objpos $0D10,$0310,Burrobot,$00,xflip,rem
 		objpos $0D20,$04B0,Jaws,$06,rem
 		objpos $0D50,$0260,Rings,$45,rem

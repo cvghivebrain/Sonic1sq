@@ -17,16 +17,21 @@ FlapDoor:
 ; ===========================================================================
 Flap_Index:	index *,,2
 		ptr Flap_Main
-		ptr Flap_OpenClose
+		ptr Flap_Opening
+		ptr Flap_Open
+		ptr Flap_Open2
+		ptr Flap_Closing
+		ptr Flap_Closed
+		ptr Flap_Closed2
 
 		rsobj FlapDoor
-ost_flap_time:		rs.w 1					; time until change (2 bytes)
-ost_flap_time_master:	rs.w 1					; time between opening/closing (2 bytes)
+ost_flap_time:		rs.w 1					; time until change
+ost_flap_time_master:	rs.w 1					; time between opening/closing
 		rsobjend
 ; ===========================================================================
 
 Flap_Main:	; Routine 0
-		addq.b	#2,ost_routine(a0)			; goto Flap_OpenClose next
+		addq.b	#2,ost_routine(a0)			; goto Flap_Opening next
 		move.l	#Map_Flap,ost_mappings(a0)
 		move.w	#tile_Kos_FlapDoor+tile_pal3,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
@@ -38,36 +43,53 @@ Flap_Main:	; Routine 0
 		mulu.w	#60,d0					; multiply by 60 (1 second)
 		move.w	d0,ost_flap_time_master(a0)		; set flap delay time
 
-Flap_OpenClose:	; Routine 2
-		shortcut
-		subq.w	#1,ost_flap_time(a0)			; decrement time delay
-		bpl.s	.wait					; if time remains, branch
-		move.w	ost_flap_time_master(a0),ost_flap_time(a0) ; reset time delay
-		bchg	#0,ost_anim(a0)				; open/close door
-		bclr	#7,ost_anim(a0)				; restart animation
-		tst.b	ost_render(a0)
-		bpl.s	.wait					; branch if not on screen
-		play.w	1, jsr, sfx_Door			; play door sound
-
-	.wait:
-		lea	Ani_Flap(pc),a1
+Flap_Opening:	; Routine 2
+Flap_Closing:	; Routine 8
+		lea	Ani_Flap(pc),a1				; animate & goto Flap_Open/Flap_Closed next
 		jsr	AnimateSprite
-		clr.b	(f_water_tunnel_disable).w		; enable wind tunnel
+		clr.b	(f_water_tunnel_disable).w		; enable water current tunnel
 		cmpi.b	#id_frame_flap_open,ost_frame(a0)
-		beq.w	DespawnQuick				; branch if fully open
+		beq.s	.open					; branch if fully open
+		bsr.w	SolidObject
+		move.w	ost_x_pos(a0),d0
+		sub.w	ost_x_pos(a1),d0
+		bmi.w	DespawnQuick				; branch if Sonic is to the right
+		move.b	#1,(f_water_tunnel_disable).w		; disable water tunnel
+		bra.w	DespawnQuick
 		
-	.closed:
-		bsr.w	SolidObject				; make the door	solid
-		move.w	ost_x_pos(a1),d0
-		move.w	ost_x_pos(a0),d1
-		btst	#status_xflip_bit,ost_status(a0)
-		beq.s	.noflip					; branch if door isn't xflipped
-		exg	d0,d1
-		
-	.noflip:
-		cmp.w	d1,d0
-		bcc.w	DespawnQuick				; branch if Sonic is on open side of the door
-		move.b	#1,(f_water_tunnel_disable).w		; disable wind tunnel
+	.open:
+		bsr.w	UnSolid
+		bra.w	DespawnQuick
+; ===========================================================================
+
+Flap_Open:	; Routine 4
+		move.w	ost_flap_time_master(a0),ost_flap_time(a0) ; reset time delay
+		addq.b	#2,ost_routine(a0)			; goto Flap_Open2 next
+
+Flap_Open2:	; Routine 6
+		subq.w	#1,ost_flap_time(a0)			; decrement time delay
+		bpl.w	DespawnQuick				; branch if time remains
+		move.b	#id_ani_flap_closing,ost_anim(a0)
+		addq.b	#2,ost_routine(a0)			; goto Flap_Closing next
+		tst.b	ost_render(a0)
+		bpl.w	DespawnQuick				; branch if not on screen
+		play.w	1, jsr, sfx_Door			; play door sound
+		bra.w	DespawnQuick
+; ===========================================================================
+
+Flap_Closed:	; Routine $A
+		move.w	ost_flap_time_master(a0),ost_flap_time(a0) ; reset time delay
+		addq.b	#2,ost_routine(a0)			; goto Flap_Closed2 next
+
+Flap_Closed2:	; Routine $C
+		bsr.w	SolidObject
+		subq.w	#1,ost_flap_time(a0)			; decrement time delay
+		bpl.w	DespawnQuick				; branch if time remains
+		move.b	#id_ani_flap_opening,ost_anim(a0)
+		move.b	#id_Flap_Opening,ost_routine(a0)	; goto Flap_Opening next
+		tst.b	ost_render(a0)
+		bpl.w	DespawnQuick				; branch if not on screen
+		play.w	1, jsr, sfx_Door			; play door sound
 		bra.w	DespawnQuick
 
 ; ---------------------------------------------------------------------------
@@ -83,11 +105,11 @@ ani_flap_opening:
 		dc.w id_frame_flap_closed
 		dc.w id_frame_flap_halfway
 		dc.w id_frame_flap_open
-		dc.w id_Anim_Flag_Stop
+		dc.w id_Anim_Flag_Routine
 
 ani_flap_closing:
 		dc.w 3
 		dc.w id_frame_flap_open
 		dc.w id_frame_flap_halfway
 		dc.w id_frame_flap_closed
-		dc.w id_Anim_Flag_Stop
+		dc.w id_Anim_Flag_Routine
