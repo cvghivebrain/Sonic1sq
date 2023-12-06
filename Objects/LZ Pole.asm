@@ -53,7 +53,7 @@ Pole_Grab:	; Routine 4
 		bclr	#status_xflip_bit,ost_status(a1)
 		move.b	#id_Hang,ost_anim(a1)			; set Sonic's animation to "hanging"
 		move.b	#1,(v_lock_multi).w			; lock controls
-		move.b	#1,(f_water_tunnel_disable).w		; disable wind tunnel
+		move.b	#1,(f_water_tunnel_disable).w		; disable water tunnel
 		addq.b	#2,ost_routine(a0)			; goto Pole_Hang next
 
 Pole_Hang:	; Routine 6

@@ -4,14 +4,18 @@
 ;	uses d0.l, d1.w, a1, a2
 ; ---------------------------------------------------------------------------
 
+despawnrange:	macro
+		andi.w	#$FF80,d0				; d0 = current object 128px strip
+		move.w	(v_camera_x_pos).w,d1
+		subi.w	#128,d1
+		andi.w	#$FF80,d1				; d1 = 128px strip to left of camera
+		sub.w	d1,d0					; d0 = distance between both strips (negative if object is left of screen)
+		cmpi.w	#128+screen_width+192,d0
+		endm
+		
 DespawnObject:
 		move.w	ost_x_pos(a0),d0
-		andi.w	#$FF80,d0				; round down to nearest $80
-		move.w	(v_camera_x_pos).w,d1			; get screen position
-		subi.w	#128,d1
-		andi.w	#$FF80,d1
-		sub.w	d1,d0					; d0 = approx distance between object and screen (negative if object is left of screen)
-		cmpi.w	#128+screen_width+192,d0
+		despawnrange
 		bls.w	DisplaySprite				; display instead of despawn
 
 		move.b	ost_respawn(a0),d0			; get respawn id
@@ -34,23 +38,13 @@ DespawnQuick:
 		move.w	ost_x_pos(a0),d0
 		
 DespawnQuick_AltX:
-		andi.w	#$FF80,d0				; round down to nearest $80
-		move.w	(v_camera_x_pos).w,d1			; get screen position
-		subi.w	#128,d1
-		andi.w	#$FF80,d1
-		sub.w	d1,d0					; d0 = approx distance between object and screen (negative if object is left of screen)
-		cmpi.w	#128+screen_width+192,d0
+		despawnrange
 		bhi.w	DeleteObject				; delete if object moves off screen
 		bra.w	DisplaySprite				; display instead of despawn
 
 DespawnQuick_NoDisplay:
 		move.w	ost_x_pos(a0),d0
-		andi.w	#$FF80,d0				; round down to nearest $80
-		move.w	(v_camera_x_pos).w,d1			; get screen position
-		subi.w	#128,d1
-		andi.w	#$FF80,d1
-		sub.w	d1,d0					; d0 = approx distance between object and screen (negative if object is left of screen)
-		cmpi.w	#128+screen_width+192,d0
+		despawnrange
 		bhi.w	DeleteObject				; delete if object moves off screen
 		rts						; don't display
 
@@ -67,12 +61,7 @@ DespawnFamily:
 		move.w	ost_x_pos(a0),d0
 		
 DespawnFamily_AltX:
-		andi.w	#$FF80,d0				; round down to nearest $80
-		move.w	(v_camera_x_pos).w,d1			; get screen position
-		subi.w	#128,d1
-		andi.w	#$FF80,d1
-		sub.w	d1,d0					; d0 = approx distance between object and screen (negative if object is left of screen)
-		cmpi.w	#128+screen_width+192,d0
+		despawnrange
 		bls.w	DisplaySprite				; display instead of despawn
 
 	DespawnFamily_Delete:
@@ -85,12 +74,7 @@ DespawnFamily_AltX:
 
 DespawnFamily_NoDisplay:
 		move.w	ost_x_pos(a0),d0
-		andi.w	#$FF80,d0				; round down to nearest $80
-		move.w	(v_camera_x_pos).w,d1			; get screen position
-		subi.w	#128,d1
-		andi.w	#$FF80,d1
-		sub.w	d1,d0					; d0 = approx distance between object and screen (negative if object is left of screen)
-		cmpi.w	#128+screen_width+192,d0
+		despawnrange
 		bhi.s	DespawnFamily_Delete			; delete if object moves off screen
 		rts						; don't display
 
@@ -111,12 +95,7 @@ DespawnFamily_NoDisplay:
 ; ---------------------------------------------------------------------------
 
 CheckActive:
-		andi.w	#$FF80,d0				; round down to nearest $80
-		move.w	(v_camera_x_pos).w,d1			; get screen position
-		subi.w	#128,d1
-		andi.w	#$FF80,d1
-		sub.w	d1,d0					; d0 = approx distance between object and screen (negative if object is left of screen)
-		cmpi.w	#128+screen_width+192,d0
+		despawnrange
 		bhi.s	.offscreen				; branch if d0 is negative or higher than 640
 		
 		moveq	#0,d0

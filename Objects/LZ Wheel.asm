@@ -30,13 +30,13 @@ Whee_Display:	; Routine 2
 		andi.b	#3,d0					; read only bits 0-1 (max. 4 frames)
 		bne.w	DespawnQuick				; branch if not 0
 		
-		tst.b	(f_convey_reverse).w			; is conveyor running in reverse?
-		beq.s	.no_reverse				; if not, branch
-		subq.b	#1,ost_frame(a0)			; decrement frame
+		tst.b	(f_convey_reverse).w
+		bne.s	.reverse				; branch if conveyor is running in reverse
+		addq.b	#1,ost_frame(a0)			; increment frame
 		andi.b	#3,ost_frame(a0)
 		bra.w	DespawnQuick
 
-	.no_reverse:
-		addq.b	#1,ost_frame(a0)			; increment frame
+	.reverse:
+		subq.b	#1,ost_frame(a0)			; decrement frame
 		andi.b	#3,ost_frame(a0)
 		bra.w	DespawnQuick

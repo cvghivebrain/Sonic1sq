@@ -124,7 +124,11 @@ Mon_Display:	; Routine 8
 		move.w	ost_x_pos(a0),d0
 		bsr.w	CheckActive
 		beq.w	DisplaySprite				; branch if on screen
+		bsr.w	SaveState
+		beq.s	.clear_slot				; branch if not in respawn table
+		bclr	#7,(a2)					; allow respawn
 		
+	.clear_slot:
 		moveq	#0,d0
 		move.b	ost_monitor_slot(a0),d0
 		bmi.w	DeleteObject				; branch if slot isn't used
@@ -424,4 +428,4 @@ ani_monitor_breaking:
 		dc.w id_frame_monitor_static1
 		dc.w id_frame_monitor_static2
 		dc.w id_frame_monitor_broken
-		dc.w id_Anim_Flag_Stop
+		dc.w id_Anim_Flag_Routine

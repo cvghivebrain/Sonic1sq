@@ -6,7 +6,7 @@
 
 ; subtypes:
 ;	%TTTTRRRR
-;	TTTT - type of object to spawn (only fireballs are defined)
+;	TTTT - type of object to spawn (see Gar_Settings; only fireballs are defined)
 ;	RRRR - fireball rate (+1, *30 for ost_gar_time_master)
 ; ---------------------------------------------------------------------------
 
@@ -24,7 +24,7 @@ Gar_Index:	index *,,2
 ost_gar_time_master:	rs.b 1					; time between fireballs
 		rsobjend
 
-Gar_Type_List:	dc.l GarFire					; object id
+Gar_Settings:	dc.l GarFire					; object id
 		dc.w $200, 0					; initial x/y vel
 ; ===========================================================================
 
@@ -48,23 +48,22 @@ Gar_MakeFire:	; Routine 2
 		bne.w	DespawnQuick				; if time remains, branch
 
 		move.b	ost_gar_time_master(a0),ost_anim_time(a0) ; reset timer
-		bsr.w	CheckOffScreen
-		bne.w	DespawnQuick				; branch if off screen
+		tst.b	ost_render(a0)
+		bpl.w	DespawnQuick				; branch if off screen
 		bsr.w	FindFreeObj				; find free OST slot
 		bne.w	DespawnQuick				; branch if not found
-		moveq	#0,d0
 		move.b	ost_subtype(a0),d0
-		andi.b	#$F0,d0					; read high nybble of subtype
+		andi.w	#$F0,d0					; read high nybble of subtype
 		lsr.b	#1,d0
-		lea	Gar_Type_List(pc,d0.w),a2
+		lea	Gar_Settings(pc,d0.w),a2
 		move.l	(a2)+,ost_id(a1)			; load fireball object
 		move.w	(a2)+,ost_x_vel(a1)
+		move.w	(a2)+,ost_y_vel(a1)
 		btst	#status_xflip_bit,ost_status(a0)
 		bne.s	.xflipped				; branch if xflipped
 		neg.w	ost_x_vel(a1)				; send in opposite direction
 		
 	.xflipped:
-		move.w	(a2)+,ost_y_vel(a1)
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		move.b	ost_render(a0),ost_render(a1)
@@ -92,12 +91,7 @@ GarFire:
 		play.w	1, jsr, sfx_FireBall			; play fireball sound
 
 		shortcut
-		move.b	(v_frame_counter_low).w,d0
-		andi.b	#7,d0
-		bne.s	.nochg
-		bchg	#0,ost_frame(a0)			; change frame every 8th frame
-
-	.nochg:
+		toggleframe	8				; animate
 		update_x_pos					; update position
 		tst.w	ost_x_vel(a0)
 		bpl.s	.isright				; branch if moving right

@@ -24,7 +24,8 @@ Spla_Main:	; Routine 0
 		move.b	#1,ost_priority(a0)
 		move.b	#$10,ost_displaywidth(a0)
 		move.w	#tile_Kos_Splash+tile_pal3,ost_tile(a0)
-		move.w	(v_ost_player+ost_x_pos).w,ost_x_pos(a0) ; copy x position from Sonic
+		getsonic					; a1 = OST of Sonic
+		move.w	ost_x_pos(a1),ost_x_pos(a0)		; copy x position from Sonic
 
 Spla_Display:	; Routine 2
 		move.w	(v_water_height_actual).w,ost_y_pos(a0)	; copy y position from water height

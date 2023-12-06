@@ -23,4 +23,3 @@ frame_gargoyle_fireball2:
 		spritemap
 		piece	-8, -4, 2x1, $F
 		endsprite
-		even

@@ -40,4 +40,3 @@ frame_harp_v_extended:
 		piece	-4, -$28, 1x3, $B
 		piece	-4, -$10, 1x3, $F
 		endsprite
-		even

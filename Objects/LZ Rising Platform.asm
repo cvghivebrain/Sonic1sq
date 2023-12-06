@@ -50,8 +50,6 @@ LPlat_Action:	; Routine 2
 LPlat_Update:
 		move.w	ost_lplat_y_pos(a0),d0
 		bsr.w	Sink					; platform sinks slightly when stood on, update y pos
-		
-LPlat_Stop:	; Routine 6
 		bsr.w	SolidObject
 		bra.w	DespawnQuick
 ; ===========================================================================
@@ -70,3 +68,9 @@ LPlat_Rise:	; Routine 4
 		clr.w	ost_y_vel(a0)				; stop when it touches the ceiling
 		addq.b	#2,ost_routine(a0)			; goto LPlat_Stop next
 		bra.s	LPlat_Update
+; ===========================================================================
+		
+LPlat_Stop:	; Routine 6
+		shortcut
+		bsr.w	SolidObject
+		bra.w	DespawnQuick

@@ -39,8 +39,7 @@ Pow_Main:	; Routine 0
 Pow_Move:	; Routine 2
 		tst.w	ost_y_vel(a0)
 		bpl.s	Pow_Checks				; branch if object has stopped rising
-		update_y_pos					; update position
-		addi.w	#$18,ost_y_vel(a0)			; reduce object speed
+		update_y_fall	$18				; update position & slow ascent
 		bra.w	DisplaySprite
 ; ===========================================================================
 

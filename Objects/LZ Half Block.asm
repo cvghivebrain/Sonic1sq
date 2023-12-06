@@ -43,9 +43,8 @@ HBlock_Main:	; Routine 0
 
 HBlock_ChkBtn:	; Routine 2
 		lea	(v_button_state).w,a2
-		moveq	#0,d0
 		move.b	ost_subtype(a0),d0
-		andi.b	#$F,d0					; read low nybble of subtype
+		andi.w	#$F,d0					; read low nybble of subtype
 		tst.b	(a2,d0.w)				; read button status
 		beq.w	DespawnQuick_NoDisplay			; branch if button isn't pressed
 		addq.b	#2,ost_routine(a0)			; goto HBlock_Solid next

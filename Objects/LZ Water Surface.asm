@@ -25,10 +25,12 @@ Surf_Main:	; Routine 0
 
 Surf_Action:	; Routine 2
 		shortcut
+		tst.b	ost_render(a0)
+		bpl.w	DisplaySprite				; branch if above or below screen
 		btst	#bitStart,(v_joypad_press_actual).w
 		bne.s	Surf_Pause				; branch if paused
 		move.w	(v_camera_x_pos).w,d1			; get camera x position
-		andi.w	#$FFE0,d1				; round down to $20
+		andi.w	#$FFE0,d1				; align to $20
 		btst	#0,(v_frame_counter_low).w
 		beq.s	.even_frame				; branch on even frames
 		addi.w	#$20,d1					; add $20 every other frame to create flicker
@@ -36,8 +38,6 @@ Surf_Action:	; Routine 2
 	.even_frame:
 		move.w	d1,ost_x_pos(a0)			; match x position to screen position
 		move.w	(v_water_height_actual).w,ost_y_pos(a0)	; match y position to water height
-		tst.b	ost_render(a0)
-		bpl.w	DisplaySprite				; branch if above or below screen
 		lea	Ani_Surf(pc),a1
 		jsr	AnimateSprite
 		bra.w	DisplaySprite
