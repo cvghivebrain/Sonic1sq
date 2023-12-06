@@ -65,6 +65,8 @@ Bri_Main:	; Routine 0
 
 Bri_Solid:	; Routine 2
 		shortcut
+		tst.w	(v_debug_active_hi).w
+		bne.w	DespawnFamily_NoDisplay			; branch if debug mode is in use
 		move.w	ost_bridge_y_start(a0),d0
 		bsr.s	Bri_Sink
 		bsr.w	SolidObject_TopOnly_SkipRender

@@ -13,7 +13,8 @@ MotoBug:
 ; ===========================================================================
 Moto_Index:	index *,,2
 		ptr Moto_Main
-		ptr Moto_Action
+		ptr Moto_Walk
+		ptr Moto_Wait
 
 		rsobj MotoBug
 ost_moto_wait_time:	rs.w 1						; time delay before changing direction (2 bytes)
@@ -30,63 +31,31 @@ Moto_Main:	; Routine 0
 		move.b	#$E,ost_height(a0)
 		move.b	#8,ost_width(a0)
 		move.b	#id_col_20x16,ost_col_type(a0)
-		update_y_fall					; apply gravity and update position
-		jsr	(FindFloorObj).l
-		tst.w	d1					; has motobug hit the floor?
-		bpl.s	.notonfloor				; if not, branch
-		add.w	d1,ost_y_pos(a0)			; align to floor
-		move.w	#0,ost_y_vel(a0)			; stop falling
-		addq.b	#2,ost_routine(a0)			; goto Moto_Action next
-		bchg	#status_xflip_bit,ost_status(a0)
-
-	.notonfloor:
-		rts
+		addq.b	#2,ost_routine(a0)			; goto Moto_Walk next
+		move.w	#-$100,ost_x_vel(a0)			; moves to the left
+		btst	#status_xflip_bit,ost_status(a0)
+		beq.w	SnapFloor				; branch if facing left
+		neg.w	ost_x_vel(a0)				; moves right
+		bra.w	SnapFloor
 ; ===========================================================================
 
-Moto_Action:	; Routine 2
-		shortcut
-		moveq	#0,d0
-		move.b	ost_mode(a0),d0
-		move.w	Moto_ActIndex(pc,d0.w),d1
-		jsr	Moto_ActIndex(pc,d1.w)
+Moto_Walk:	; Routine 2
 		lea	Ani_Moto(pc),a1
 		bsr.w	AnimateSprite
-		bra.w	DespawnObject
-
-; ===========================================================================
-Moto_ActIndex:	index *
-		ptr Moto_Move
-		ptr Moto_FindFloor
-; ===========================================================================
-
-Moto_Move:
-		subq.w	#1,ost_moto_wait_time(a0)		; decrement wait timer
-		bpl.s	.wait					; if time remains, branch
-		addq.b	#2,ost_mode(a0)				; goto Moto_FindFloor next
-		move.w	#-$100,ost_x_vel(a0)			; move object to the left
-		move.b	#id_ani_moto_walk,ost_anim(a0)
-		bchg	#status_xflip_bit,ost_status(a0)
-		bne.s	.wait
-		neg.w	ost_x_vel(a0)				; change direction
-
-	.wait:
-		rts	
-; ===========================================================================
-
-Moto_FindFloor:
-		update_x_pos					; update position
-		jsr	(FindFloorObj).l			; d1 = distance to floor
+		update_x_pos					; move left/right
+		
+		jsr	FindFloorObj				; find floor at current position
 		cmpi.w	#-8,d1
-		blt.s	.pause
+		blt.s	.stop_here
 		cmpi.w	#$C,d1
-		bge.s	.pause					; branch if object is more than 11px above or 8px below floor
-
-		add.w	d1,ost_y_pos(a0)			; align to floor
+		bge.s	.stop_here				; branch if more than 11px above or 8px below floor
+		add.w	d1,ost_y_pos(a0)			; snap to floor
+		
 		subq.b	#1,ost_moto_smoke_time(a0)		; decrement time between smoke puffs
-		bpl.s	.nosmoke				; branch if time remains
+		bpl.w	DespawnObject				; branch if time remains
 		move.b	#$F,ost_moto_smoke_time(a0)		; reset timer
 		bsr.w	FindFreeObj				; find free OST slot
-		bne.s	.nosmoke				; branch if not found
+		bne.w	DespawnObject				; branch if not found
 		move.l	#MotoSmoke,ost_id(a1)			; load exhaust smoke object
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
@@ -97,16 +66,22 @@ Moto_FindFloor:
 		move.b	ost_render(a0),ost_render(a1)
 		move.b	#4,ost_priority(a1)
 		move.b	#4,ost_displaywidth(a1)
-
-	.nosmoke:
-		rts	
-
-.pause:
-		subq.b	#2,ost_mode(a0)				; goto Moto_Move next
+		bra.w	DespawnObject
+		
+	.stop_here:
+		addq.b	#2,ost_routine(a0)			; goto Moto_Wait next
 		move.w	#59,ost_moto_wait_time(a0)		; set pause time to 1 second
-		move.w	#0,ost_x_vel(a0)			; stop the object moving
-		move.b	#id_ani_moto_stand,ost_anim(a0)
-		rts	
+		move.b	#id_frame_moto_2,ost_frame(a0)
+		bra.w	DespawnObject
+; ===========================================================================
+
+Moto_Wait:	; Routine 4
+		subq.w	#1,ost_moto_wait_time(a0)		; decrement wait timer
+		bpl.w	DespawnObject				; branch if time remains
+		subq.b	#2,ost_routine(a0)			; goto Moto_Walk next
+		bchg	#status_xflip_bit,ost_status(a0)
+		neg.w	ost_x_vel(a0)				; change direction
+		bra.w	DespawnObject
 		
 ; ---------------------------------------------------------------------------
 ; Moto Bug smoke (GHZ)
@@ -127,13 +102,8 @@ MotoSmoke:
 ; ---------------------------------------------------------------------------
 
 Ani_Moto:	index *
-		ptr ani_moto_stand
 		ptr ani_moto_walk
 		ptr ani_moto_smoke
-
-ani_moto_stand:	dc.w $F
-		dc.w id_frame_moto_2
-		dc.w id_Anim_Flag_Restart
 
 ani_moto_walk:	dc.w 7
 		dc.w id_frame_moto_0
