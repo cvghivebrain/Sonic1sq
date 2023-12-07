@@ -59,6 +59,8 @@ FindNearestSonic:
 	.loop:
 		tst.l	ost_id(a1)
 		beq.s	.next					; branch if there isn't an object in this OST
+		cmpi.l	#Map_Overlay,ost_mappings(a1)
+		beq.s	.stop_search				; branch if at debug OSTs (which are the last few OSTs)
 		move.w	ost_x_pos(a1),d3
 		sbabs.w	ost_x_pos(a2),d3			; d3 = x dist
 		move.w	ost_y_pos(a1),d4
@@ -74,6 +76,7 @@ FindNearestSonic:
 		lea	sizeof_ost(a1),a1			; goto next OST
 		dbf	d2,.loop				; repeat $5F times
 
+	.stop_search:
 		move.w	d1,ost_linked(a0)			; save OST address of nearest (or 0 if not found)
 		move.w	d1,(v_nearest_obj).w
 		rts
