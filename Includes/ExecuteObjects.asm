@@ -13,8 +13,6 @@ ExecuteObjects:
 		moveq	#countof_ost-1,d7			; $80 objects -1
 		cmpi.b	#id_Sonic_Death,(v_ost_player+ost_routine).w ; is Sonic dead?
 		bhs.s	.dead					; if yes, branch
-		bsr.s	.run_object
-		moveq	#countof_ost_final-1,d7
 
 .run_object:
 		move.l	ost_id(a0),d0				; load object pointer from RAM

@@ -41,7 +41,7 @@ FindFreeInert:
 		bra.s	FindFreeObj2
 		
 ; ---------------------------------------------------------------------------
-; Subroutine to find a free OST after regular OSTs
+; Subroutine to find the last free OST slot
 
 ; output:
 ;	a1 = address of free OST slot
@@ -50,9 +50,17 @@ FindFreeInert:
 ; ---------------------------------------------------------------------------
 
 FindFreeFinal:
-		lea	(v_ost_final).w,a1
-		move.w	#countof_ost_final-1,d0
-		bra.s	FindFreeObj2
+		lea	(v_ost_final).w,a1			; last possible OST slot
+		move.w	#countof_ost_ert-1,d0
+
+	.loop:
+		tst.l	ost_id(a1)				; is OST slot empty?
+		beq.s	.found					; if yes, branch
+		lea	-sizeof_ost(a1),a1			; goto previous OST
+		dbf	d0,.loop				; repeat $5F times
+
+	.found:
+		rts
 		
 ; ---------------------------------------------------------------------------
 ; Subroutine to find a free OST AFTER the current one
@@ -88,3 +96,17 @@ FindNextFreeObj:
 	.use_current:
 	.found:
 		rts
+
+; ---------------------------------------------------------------------------
+; Subroutine to move the current object to the last available OST slot
+
+;	uses d0.l, a1, a2
+; ---------------------------------------------------------------------------
+
+RunLast:
+		bsr.s	FindFreeFinal				; a1 = new OST slot
+		movea.l	a0,a2
+		rept sizeof_ost/4
+		move.l	(a2)+,(a1)+				; copy contents of OST to new slot
+		endr
+		bra.w	DeleteObject				; delete original

@@ -25,8 +25,7 @@ v_ost_all:			rs.b sizeof_ost*countof_ost ; object variable space ($40 bytes per 
 	v_ost_player:		equ v_ost_all ; object variable space for Sonic ($40 bytes)
 	v_ost_level_obj:	equ v_ost_all+(sizeof_ost*countof_ost_inert) ; level object variable space ($1800 bytes)
 v_ost_end:			equ __rs
-v_ost_final:			rs.b sizeof_ost*countof_ost_final
-v_ost_final_end:		equ __rs
+v_ost_final:			equ v_ost_end-sizeof_ost
 				rsblockend ost
 
 v_snddriver_ram:		rs.b v_snddriver_size ; start of RAM for the sound driver data ($5C0 bytes)
