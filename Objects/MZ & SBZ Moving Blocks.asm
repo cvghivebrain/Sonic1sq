@@ -28,18 +28,14 @@ MBlock_Var_1:	dc.b $20, id_frame_mblock_mz2			; $1x - double block (unused)
 		dc.w tile_Kos_MzBlock+tile_pal3
 MBlock_Var_2:	dc.b $20, id_frame_mblock_sbz			; $2x - SBZ black & yellow platform
 		dc.w tile_Kos_Stomper+tile_pal2
-MBlock_Var_3:	dc.b $3F, id_frame_mblock_sbzwide		; $3x - SBZ red horizontal door
-		dc.w tile_Kos_SlideFloor+tile_pal3
-MBlock_Var_4:	dc.b $30, id_frame_mblock_mz3			; $4x - triple block
+MBlock_Var_3:	dc.b $30, id_frame_mblock_mz3			; $3x - triple block
 		dc.w tile_Kos_MzBlock+tile_pal3
 
 sizeof_MBlock_Var:	equ MBlock_Var_1-MBlock_Var
 
 		rsobj MovingBlock
-ost_mblock_x_start:	rs.w 1					; original x position (2 bytes)
-ost_mblock_y_start:	rs.w 1					; original y position (2 bytes)
-ost_mblock_wait_time:	rs.w 1					; time delay before moving platform back - subtype x9/xA only (2 bytes)
-ost_mblock_move_flag:	rs.b 1					; 1 = move platform back to its original position - subtype x9/xA only
+ost_mblock_x_start:	rs.w 1					; original x position
+ost_mblock_y_start:	rs.w 1					; original y position
 		rsobjend
 ; ===========================================================================
 
@@ -88,8 +84,6 @@ MBlock_TypeIndex:index *
 		ptr MBlock_Drop_Now				; 6 - drops immediately
 		ptr MBlock_RightDrop_Button			; 7 - appears when button 2 is pressed; moves right when stood on, stops at wall and drops
 		ptr MBlock_UpDown				; 8 - moves up and down
-		ptr MBlock_Slide				; 9 - quickly slides right when stood on
-		ptr MBlock_Slide_Now				; $A - slides right immediately
 ; ===========================================================================
 
 ; Type 0
@@ -115,10 +109,8 @@ MBlock_LeftRight:
 
 ; Type 2
 ; Type 4
-; Type 9
 MBlock_Right:
 MBlock_RightDrop:
-MBlock_Slide:
 		tst.b	ost_mode(a0)				; is Sonic standing on the platform?
 		beq.s	.wait
 		addq.b	#1,ost_subtype(a0)			; if yes, add 1 to type
@@ -196,48 +188,4 @@ MBlock_UpDown:
 		move.w	ost_mblock_y_start(a0),d1
 		sub.w	d0,d1
 		move.w	d1,ost_y_pos(a0)
-		rts	
-; ===========================================================================
-
-; Type $A
-MBlock_Slide_Now:
-		move.w	#$80,d3
-		moveq	#8,d1
-		btst	#status_xflip_bit,ost_status(a0)
-		beq.s	.no_xflip
-		neg.w	d1
-		neg.w	d3
-
-	.no_xflip:
-		tst.b	ost_mblock_move_flag(a0)		; is platform set to move back?
-		bne.s	MBlock_0A_Back				; if yes, branch
-		move.w	ost_x_pos(a0),d0
-		sub.w	ost_mblock_x_start(a0),d0
-		cmp.w	d3,d0
-		beq.s	MBlock_0A_Wait
-		add.w	d1,ost_x_pos(a0)			; move platform
-		move.w	#300,ost_mblock_wait_time(a0)		; set time delay to 5 seconds
-		rts	
-; ===========================================================================
-
-MBlock_0A_Wait:
-		subq.w	#1,ost_mblock_wait_time(a0)		; subtract 1 from time delay
-		bne.s	.wait					; if time remains, branch
-		move.b	#1,ost_mblock_move_flag(a0)		; set platform to move back to its original position
-
-	.wait:
-		rts	
-; ===========================================================================
-
-MBlock_0A_Back:
-		move.w	ost_x_pos(a0),d0
-		sub.w	ost_mblock_x_start(a0),d0
-		beq.s	MBlock_0A_Reset
-		sub.w	d1,ost_x_pos(a0)			; return platform to its original position
-		rts	
-; ===========================================================================
-
-MBlock_0A_Reset:
-		clr.b	ost_mblock_move_flag(a0)
-		subq.b	#1,ost_subtype(a0)			; restore subtype to 9
-		rts	
+		rts

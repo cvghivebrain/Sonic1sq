@@ -109,9 +109,8 @@ Sol_Side:
 	.push:
 		btst	#status_air_bit,ost_status(a1)
 		bne.s	.in_air					; branch if Sonic is in the air
-		btst	#status_pushing_bit,ost_status(a1)
-		bne.s	.stop_moving				; branch if Sonic has started pushing
 		bset	#status_pushing_bit,ost_status(a1)	; make Sonic push object
+		bne.s	.stop_moving				; branch if Sonic has already started pushing
 		bset	#status_pushing_bit,ost_status(a0)	; make object be pushed
 		rts
 		
@@ -246,6 +245,8 @@ SolidObject_TopOnly:
 SolidObject_TopOnly_SkipRender:
 		tst.w	(v_debug_active_hi).w
 		bne.w	Sol_None				; branch if debug mode is in use
+		
+SolidObject_TopOnly_SkipRenderDebug:
 		tst.b	ost_mode(a0)
 		bne.w	Sol_Stand_TopOnly			; branch if Sonic is already standing on object
 		getsonic
@@ -256,7 +257,7 @@ SolidObject_TopOnly_SkipRender:
 		tst.w	d3
 		bpl.s	.exit					; branch if outside y hitbox
 		
-		cmpi.w	#-16,d3
+		cmpi.w	#-8,d3
 		bge.w	Sol_Above				; branch if Sonic is above
 		
 	.exit:

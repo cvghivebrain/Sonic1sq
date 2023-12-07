@@ -69,7 +69,7 @@ Bri_Solid:	; Routine 2
 		bne.w	DespawnFamily_NoDisplay			; branch if debug mode is in use
 		move.w	ost_bridge_y_start(a0),d0
 		bsr.s	Bri_Sink
-		bsr.w	SolidObject_TopOnly_SkipRender
+		bsr.w	SolidObject_TopOnly_SkipRenderDebug
 		tst.b	d1
 		beq.w	DespawnFamily_NoDisplay			; branch if no collision
 		lsr.w	#4,d4

@@ -50,7 +50,7 @@ SnapFloor:
 		bsr.s	FindFloorObj
 		cmpi.w	#0,d1
 		ble.s	.found
-		bra.w	DeleteObject				; delete object if floor not found
+		jmp	DeleteObject				; delete object if floor not found
 		
 	.found:
 		add.w	d1,ost_y_pos(a0)			; align to floor

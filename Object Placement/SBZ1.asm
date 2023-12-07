@@ -161,10 +161,10 @@ ObjPos_SBZ1:
 		objpos $1220,$01A7,SpinPlatform,type_spin_platform+0
 		objpos $1228,$03B0,Rings,$44,rem
 		objpos $1230,$05F8,Springs,type_spring_red+type_spring_up
-		objpos $1240,$0308,MovingBlock,type_mblock_sbzwide+type_mblock_slide,xflip
+		objpos $1240,$0308,SlideBlock,0,xflip
 		objpos $1240,$03B0,Rings,$44,rem
 		objpos $1240,$04AC,Trapdoor,2
-		objpos $1240,$0768,MovingBlock,type_mblock_sbzwide+type_mblock_slide
+		objpos $1240,$0768,SlideBlock,0
 		objpos $1250,$05F8,Springs,type_spring_red+type_spring_up
 		objpos $1258,$03B0,Rings,$44,rem
 		objpos $1260,$01A7,SpinPlatform,type_spin_platform+0
@@ -172,11 +172,11 @@ ObjPos_SBZ1:
 		objpos $1290,$06F2,Rings,$14,rem
 		objpos $1290,$0760,Invisibarrier,$17
 		objpos $12A0,$01A7,SpinPlatform,type_spin_platform+0
-		objpos $12C0,$0308,MovingBlock,type_mblock_sbzwide+type_mblock_slide
+		objpos $12C0,$0308,SlideBlock,0
 		objpos $12E0,$01A7,SpinPlatform,type_spin_platform+0
 		objpos $1310,$0300,Invisibarrier,$13
 		objpos $1318,$0194,Rings,$12,rem
-		objpos $1340,$0708,MovingBlock,type_mblock_sbzwide+type_mblock_slide
+		objpos $1340,$0708,SlideBlock,0
 		objpos $1378,$0174,Rings,$12,rem
 		objpos $1390,$04A0,Caterkiller,$00,rem
 		objpos $1390,$0700,Invisibarrier,$17
@@ -244,8 +244,8 @@ ObjPos_SBZ1:
 		objpos $1940,$0618,Electro,$08,yflip
 		objpos $195C,$060D,Rings,$13,rem
 		objpos $1980,$04CC,ScrapDoorH,0
-		objpos $1980,$050D,MovingBlock,type_mblock_sbzwide+type_mblock_slide
-		objpos $1980,$0550,MovingBlock,type_mblock_sbzwide+type_mblock_slide
+		objpos $1980,$050D,SlideBlock,0
+		objpos $1980,$0550,SlideBlock,0
 		objpos $1994,$00F1,Rings,$44,rem
 		objpos $19A5,$0646,Flamethrower,$43
 		objpos $19B0,$059B,Button,$00

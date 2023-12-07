@@ -121,15 +121,13 @@ type_glass_button_1:	equ $10				; $1x - button 1
 type_mblock_1:		equ ((MBlock_Var_0-MBlock_Var)/sizeof_MBlock_Var)<<4	; $0x - single block
 type_mblock_2:		equ ((MBlock_Var_1-MBlock_Var)/sizeof_MBlock_Var)<<4	; $1x - double block
 type_mblock_sbz:	equ ((MBlock_Var_2-MBlock_Var)/sizeof_MBlock_Var)<<4	; $2x - SBZ black & yellow platform
-type_mblock_sbzwide:	equ ((MBlock_Var_3-MBlock_Var)/sizeof_MBlock_Var)<<4	; $3x - SBZ red horizontal door
-type_mblock_3:		equ ((MBlock_Var_4-MBlock_Var)/sizeof_MBlock_Var)<<4	; $4x - triple block
+type_mblock_3:		equ ((MBlock_Var_3-MBlock_Var)/sizeof_MBlock_Var)<<4	; $3x - triple block
 type_mblock_still:	equ id_MBlock_Still					; $x0 - doesn't move
 type_mblock_leftright:	equ id_MBlock_LeftRight					; $x1 - moves side to side
 type_mblock_right:	equ id_MBlock_Right					; $x2 - moves right when stood on, stops at wall
 type_mblock_rightdrop:	equ id_MBlock_RightDrop					; $x4 - moves right when stood on, stops at wall and drops
 type_mblock_rightdrop_button: equ id_MBlock_RightDrop_Button			; $x7 - appears when button 2 is pressed; moves right when stood on, stops at wall and drops
 type_mblock_updown:	equ id_MBlock_UpDown					; $x8 - moves up and down
-type_mblock_slide:	equ id_MBlock_Slide					; $x9 - quickly slides right when stood on
 
 ; PushBlock
 type_pblock_single:	equ (PushB_Var_0-PushB_Var)/sizeof_PushB_Var		; 0 - single block
