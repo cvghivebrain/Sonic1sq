@@ -406,7 +406,8 @@ Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 
 		include "Objects\MZ Smashable Green Block.asm"	; SmashBlock
 
-		include "Objects\MZ & SBZ Moving Blocks.asm"	; MovingBlock
+		include "Objects\MZ Moving Blocks.asm"		; MovingBlock
+		include "Objects\SBZ Striped Yellow Platform.asm" ; YellowPlatform
 		include "Objects\SBZ Sliding Red Platform.asm"	; SlideBlock
 		include "Objects\LZ Half Block.asm"		; HalfBlock
 
@@ -1088,7 +1089,8 @@ Level_End_unused:	dc.b 0,	0, 0, 0
 		include "Objects\MZ Invisible Lava Tag [Mappings].asm" ; Map_LTag
 		include "Objects\MZ Lava Geyser [Mappings].asm"	; Map_Geyser
 		include "Objects\MZ Smashable Green Block [Mappings].asm" ; Map_Smab
-		include "Objects\MZ & SBZ Moving Blocks [Mappings].asm" ; Map_MBlock
+		include "Objects\MZ Moving Blocks [Mappings].asm" ; Map_MBlock
+		include "Objects\SBZ Striped Yellow Platform [Mappings].asm" ; Map_YPlat
 		include "Objects\SBZ Sliding Red Platform [Mappings].asm" ; Map_Slide
 		include "Objects\LZ Half Block [Mappings].asm"	; Map_MBlockLZ
 		include "Objects\SYZ Lamp [Mappings].asm"	; Map_Light

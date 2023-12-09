@@ -183,6 +183,7 @@ range_x_sonic:	macro
 		move.b	(v_player1_width).w,d4			; use fixed player width value
 		sub.w	d4,d1
 		move.b	ost_width(a0),d4
+		addq.b	#1,d4
 		sub.w	d4,d1					; d1 = x dist between hitbox edges (-ve if overlapping)
 		add.w	d0,d4					; d4 = Sonic's x pos relative to left edge
 		endm
@@ -201,6 +202,7 @@ range_y_exact:	macro
 		move.b	ost_height(a1),d5
 		sub.w	d5,d3
 		move.b	ost_height(a0),d5
+		addq.b	#1,d5
 		sub.w	d5,d3					; d3 = y dist between hitbox edges (-ve if overlapping)
 		endm
 		

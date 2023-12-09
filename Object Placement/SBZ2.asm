@@ -246,7 +246,7 @@ ObjPos_SBZ2:
 		objpos $13D0,$0490,Rings,$14,rem
 		objpos $13F0,$0238,Button,$03
 		objpos $13F5,$04A6,Flamethrower,$43
-		objpos $1420,$02F0,MovingBlock,type_mblock_sbz+type_mblock_updown
+		objpos $1420,$02F0,YellowPlatform,0
 		objpos $1438,$0588,Electro,$02
 		objpos $1470,$02F1,Monitor,type_monitor_shield,rem
 		objpos $1476,$0190,Flamethrower,$43,yflip

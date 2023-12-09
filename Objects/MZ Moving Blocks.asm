@@ -1,14 +1,13 @@
 ; ---------------------------------------------------------------------------
-; Object 52 - moving platform blocks (MZ, SBZ)
+; Object 52 - moving platform blocks (MZ)
 
 ; spawned by:
 ;	ObjPos_MZ1, ObjPos_MZ2, ObjPos_MZ3 - subtypes 1/2/$41
-;	ObjPos_SBZ1, ObjPos_SBZ2 - subtypes $28/$39
 
 ; subtypes:
 ;	%TTTTMMMM
-;	TTTT - type (0-4, each with its own width, frame & tile setting)
-;	MMMM - movement pattern (0-$A)
+;	TTTT - type (0-2, each with its own width, frame & tile setting)
+;	MMMM - movement pattern (0-7)
 ; ---------------------------------------------------------------------------
 
 MovingBlock:
@@ -26,16 +25,13 @@ MBlock_Var_0:	dc.b $10, id_frame_mblock_mz1			; $0x - single block
 		dc.w tile_Kos_MzBlock+tile_pal3
 MBlock_Var_1:	dc.b $20, id_frame_mblock_mz2			; $1x - double block (unused)
 		dc.w tile_Kos_MzBlock+tile_pal3
-MBlock_Var_2:	dc.b $20, id_frame_mblock_sbz			; $2x - SBZ black & yellow platform
-		dc.w tile_Kos_Stomper+tile_pal2
-MBlock_Var_3:	dc.b $30, id_frame_mblock_mz3			; $3x - triple block
+MBlock_Var_2:	dc.b $30, id_frame_mblock_mz3			; $3x - triple block
 		dc.w tile_Kos_MzBlock+tile_pal3
 
 sizeof_MBlock_Var:	equ MBlock_Var_1-MBlock_Var
 
 		rsobj MovingBlock
 ost_mblock_x_start:	rs.w 1					; original x position
-ost_mblock_y_start:	rs.w 1					; original y position
 		rsobjend
 ; ===========================================================================
 
@@ -55,7 +51,6 @@ MBlock_Main:	; Routine 0
 		move.b	#8,ost_height(a0)
 		move.b	#4,ost_priority(a0)
 		move.w	ost_x_pos(a0),ost_mblock_x_start(a0)
-		move.w	ost_y_pos(a0),ost_mblock_y_start(a0)
 		andi.b	#$F,ost_subtype(a0)			; clear high nybble of subtype
 
 MBlock_Solid:	; Routine 2
@@ -64,7 +59,7 @@ MBlock_Solid:	; Routine 2
 		bsr.s	MBlock_Move				; move & update position
 		bsr.w	SolidObject_TopOnly
 		move.w	ost_mblock_x_start(a0),d0
-		bsr.w	DespawnQuick_AltX
+		bra.w	DespawnQuick_AltX
 ; ===========================================================================
 
 MBlock_Move:
@@ -83,7 +78,6 @@ MBlock_TypeIndex:index *
 		ptr MBlock_RightDrop_Now			; 5 - moves right immediately, stops at wall and drops
 		ptr MBlock_Drop_Now				; 6 - drops immediately
 		ptr MBlock_RightDrop_Button			; 7 - appears when button 2 is pressed; moves right when stood on, stops at wall and drops
-		ptr MBlock_UpDown				; 8 - moves up and down
 ; ===========================================================================
 
 ; Type 0
@@ -172,20 +166,4 @@ MBlock_RightDrop_Button:
 		move.w	ost_mblock_x_start(a0),d0
 		bsr.w	CheckActive
 		bne.w	DeleteObject
-		rts	
-; ===========================================================================
-
-; Type 8
-MBlock_UpDown:
-		move.b	(v_oscillating_0_to_80).w,d0
-		move.w	#$80,d1
-		btst	#status_xflip_bit,ost_status(a0)
-		beq.s	.no_xflip
-		neg.w	d0					; reverse vertical direction if xflip bit is set
-		add.w	d1,d0
-
-	.no_xflip:
-		move.w	ost_mblock_y_start(a0),d1
-		sub.w	d0,d1
-		move.w	d1,ost_y_pos(a0)
 		rts

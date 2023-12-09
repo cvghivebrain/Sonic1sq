@@ -403,6 +403,7 @@ DebugList_SBZ:
 		dbitem	Trapdoor, Map_Trap, 3, 0, id_frame_trap_closed, tile_Kos_TrapDoor, tile_pal3
 		dbitem	Girder, Map_Gird, 0, 0, id_frame_girder_0, tile_Kos_Girder, tile_pal3
 		dbitem	SlideBlock, Map_Slide, 0, 0, id_frame_slide_0, tile_Kos_SlideFloor, tile_pal3
+		dbitem	YellowPlatform, Map_YPlat, 0, 0, id_frame_yplat_0, tile_Kos_Stomper, tile_pal2
 	.end:
 DebugList_Ending:
 		dbheader

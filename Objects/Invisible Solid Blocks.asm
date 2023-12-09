@@ -28,7 +28,7 @@ Invis_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Invis_Solid next
 		move.l	#Map_Invis,ost_mappings(a0)
 		move.w	#tile_Art_Lives+tile_hi,ost_tile(a0)
-		ori.b	#render_rel,ost_render(a0)
+		move.b	#render_rel+render_onscreen,ost_render(a0)
 		move.b	ost_subtype(a0),d0			; get object type
 		move.b	d0,d1
 		andi.w	#$F0,d0					; read only the	high nybble
@@ -40,6 +40,8 @@ Invis_Main:	; Routine 0
 		addq.w	#1,d1					; add 1
 		lsl.w	#3,d1					; multiply by 8
 		move.b	d1,ost_height(a0)			; set object height
+		bra.w	RunLast					; always run after other objects
+; ===========================================================================
 
 Invis_Solid:	; Routine 2
 		shortcut

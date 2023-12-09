@@ -181,7 +181,7 @@ Sol_Stand_SkipRange:
 		btst	#status_air_bit,ost_status(a1)
 		bne.s	Sol_Stand_Leave				; branch if Sonic jumps
 		tst	d1
-		bpl.s	Sol_Stand_Leave				; branch if Sonic is outside left/right edges
+		bpl.w	Sol_Stand_Leave				; branch if Sonic is outside left/right edges
 		
 		add.w	d3,ost_y_pos(a1)			; align Sonic with top of object
 		move.w	ost_x_prev(a0),d2
