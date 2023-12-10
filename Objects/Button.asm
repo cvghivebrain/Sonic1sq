@@ -14,6 +14,15 @@
 ;	F - 1 to flash red
 ;	P - 1 to use palette line 3
 ;	IIII - button id
+		
+type_button_pal3_bit:	equ 4
+type_button_flash_bit:	equ 5
+type_button_hi_bit:	equ 6
+type_button_block_bit:	equ 7
+type_button_pal3:	equ 1<<type_button_pal3_bit		; use palette line 3
+type_button_flash:	equ 1<<type_button_flash_bit		; flashing red
+type_button_hi:		equ 1<<type_button_hi_bit		; use high bit in button pressed status
+type_button_block:	equ 1<<type_button_block_bit		; can be activated by block
 ; ---------------------------------------------------------------------------
 
 Button:
@@ -25,15 +34,6 @@ Button:
 But_Index:	index *,,2
 		ptr But_Main
 		ptr But_Action
-		
-type_button_pal3_bit:	equ 4
-type_button_flash_bit:	equ 5
-type_button_hi_bit:	equ 6
-type_button_block_bit:	equ 7
-type_button_pal3:	equ 1<<type_button_pal3_bit		; use palette line 3
-type_button_flash:	equ 1<<type_button_flash_bit		; flashing red
-type_button_hi:		equ 1<<type_button_hi_bit		; use high bit in button pressed status
-type_button_block:	equ 1<<type_button_block_bit		; can be activated by block
 ; ===========================================================================
 
 But_Main:	; Routine 0

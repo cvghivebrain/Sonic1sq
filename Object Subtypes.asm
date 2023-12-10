@@ -88,20 +88,6 @@ type_grass_4:		equ id_LGrass_Type04					; $x4 - moves up and down 96 pixels
 type_grass_sinks:	equ id_LGrass_Type05					; $x5 - sinks and catches fire when stood on
 type_grass_rev:		equ 8							; +8 - reverse movement direction
 
-; ChainStomp
-type_cstomp_wide:	equ 0							; $0x - wide stomper
-type_cstomp_medium:	equ $10							; $1x - medium stomper
-type_cstomp_small:	equ $20							; $2x - small stomper, no spikes
-type_cstomp_proximity:	equ $40							; +$40 - activates when Sonic is near
-type_cstomp_controlled:	equ $80							; +$80 - controlled by button 0
-type_cstomp_0:		equ 0							; $x0 - chain length $70
-type_cstomp_1:		equ 1							; $x1 - chain length $A0
-type_cstomp_2:		equ 2							; $x2 - chain length $50
-type_cstomp_3:		equ 3							; $x3 - chain length $78
-type_cstomp_4:		equ 4							; $x4 - chain length $38
-type_cstomp_5:		equ 5							; $x5 - chain length $58
-type_cstomp_6:		equ 6							; $x6 - chain length $B8
-
 ; MarbleBrick
 type_brick_still:	equ id_Brick_Still/2		; 0 - doesn't move
 type_brick_wobbles:	equ id_Brick_Wobbles/2		; 1 - wobbles but doesn't fall
@@ -116,16 +102,6 @@ type_glass_drop_jump:	equ 3				; 3 - drops each time it's jumped on
 type_glass_drop_button:	equ 4				; 4 - drops when button is pressed, stops on floor
 type_glass_button_0:	equ 0				; $0x - button 0
 type_glass_button_1:	equ $10				; $1x - button 1
-
-; MovingBlock
-type_mblock_1:		equ ((MBlock_Var_0-MBlock_Var)/sizeof_MBlock_Var)<<4	; $0x - single block
-type_mblock_2:		equ ((MBlock_Var_1-MBlock_Var)/sizeof_MBlock_Var)<<4	; $1x - double block
-type_mblock_3:		equ ((MBlock_Var_2-MBlock_Var)/sizeof_MBlock_Var)<<4	; $2x - triple block
-type_mblock_still:	equ id_MBlock_Still					; $x0 - doesn't move
-type_mblock_leftright:	equ id_MBlock_LeftRight					; $x1 - moves side to side
-type_mblock_right:	equ id_MBlock_Right					; $x2 - moves right when stood on, stops at wall
-type_mblock_rightdrop:	equ id_MBlock_RightDrop					; $x4 - moves right when stood on, stops at wall and drops
-type_mblock_rightdrop_button: equ id_MBlock_RightDrop_Button			; $x7 - appears when button 2 is pressed; moves right when stood on, stops at wall and drops
 
 ; PushBlock
 type_pblock_single:	equ (PushB_Var_0-PushB_Var)/sizeof_PushB_Var		; 0 - single block

@@ -11,6 +11,19 @@
 ;	P - 1 if activated by proximity | button id if B is set
 ;	SS - size of stomper (0 = large; 1 = medium; 2 = small)
 ;	LLLL - chain length (from list)
+
+type_cstomp_wide:	equ 0							; $0x - wide stomper
+type_cstomp_medium:	equ $10							; $1x - medium stomper
+type_cstomp_small:	equ $20							; $2x - small stomper, no spikes
+type_cstomp_proximity:	equ $40							; +$40 - activates when Sonic is near
+type_cstomp_controlled:	equ $80							; +$80 - controlled by button 0
+type_cstomp_0:		equ 0							; $x0 - chain length $70
+type_cstomp_1:		equ 1							; $x1 - chain length $A0
+type_cstomp_2:		equ 2							; $x2 - chain length $50
+type_cstomp_3:		equ 3							; $x3 - chain length $78
+type_cstomp_4:		equ 4							; $x4 - chain length $38
+type_cstomp_5:		equ 5							; $x5 - chain length $58
+type_cstomp_6:		equ 6							; $x6 - chain length $B8
 ; ---------------------------------------------------------------------------
 
 ChainStomp:
@@ -48,10 +61,10 @@ CStom_Lengths:	; max chain lengths *$100
 ; ===========================================================================
 
 CStom_Main:	; Routine 0
-		moveq	#0,d0
 		move.b	ost_subtype(a0),d0			; get subtype
-		move.l	d0,d1
-		andi.b	#%00110000,d0				; read bits 5/4
+		move.b	d0,d1
+		move.b	d0,d3
+		andi.w	#%00110000,d0				; read bits 5/4
 		lsr.b	#2,d0
 		lea	CStom_Sizes(pc,d0.w),a2
 		move.b	(a2),ost_displaywidth(a0)
@@ -59,7 +72,7 @@ CStom_Main:	; Routine 0
 		move.b	(a2)+,ost_height(a0)
 		move.b	(a2)+,ost_frame(a0)
 		move.b	(a2),d2
-		andi.b	#$F,d1					; read low nybble
+		andi.w	#$F,d1					; read low nybble
 		add.b	d1,d1					; multiply by 2
 		move.w	CStom_Lengths(pc,d1.w),ost_cstomp_chain_max(a0)
 		tst.b	ost_subtype(a0)
@@ -67,12 +80,16 @@ CStom_Main:	; Routine 0
 		move.w	ost_cstomp_chain_max(a0),ost_cstomp_chain_length(a0) ; start fully extended
 		
 	.start_short:
+		andi.w	#%11000000,d3				; read bits 7-6 of subtype
+		lsr.b	#5,d3
+		move.b	d3,ost_subtype(a0)			; update subtype to only include action settings
 		move.l	#Map_CStom,ost_mappings(a0)
 		move.w	#tile_Kos_MzMetal,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.w	ost_y_pos(a0),ost_cstomp_y_start(a0)
 		move.b	#4,ost_priority(a0)
-		move.l	#CStom_Block,ost_id(a0)			; goto CStom_Block next, and skip routine check in future
+		addq.b	#2,ost_routine(a0)			; goto CStom_Block next
+		shortcut	CStom_Block			; go directly there in future
 		
 		bsr.w	FindNextFreeObj				; find free OST slot
 		bne.w	CStom_Block
@@ -106,9 +123,9 @@ CStom_Main:	; Routine 0
 		saveparent
 		
 		tst.b	d2
-		bne.w	CStom_Block				; branch if omit spikes flag is set
+		bne.s	CStom_Block				; branch if omit spikes flag is set
 		bsr.w	FindNextFreeObj				; find free OST slot
-		bne.w	CStom_Block
+		bne.s	CStom_Block
 		move.l	#ChainStomp,ost_id(a1)			; load spikes
 		move.b	#id_CStom_Spikes,ost_routine(a1)
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
@@ -126,7 +143,7 @@ CStom_Main:	; Routine 0
 CStom_Block:	; Routine 2
 		bsr.w	CStom_Types				; update speed & position
 		bsr.w	SolidObject
-		andi.b	#1,d1
+		andi.b	#solid_top,d1
 		beq.w	DespawnQuick				; branch if Sonic isn't on top
 		cmpi.b	#$10,ost_cstomp_chain_length(a0)
 		bcc.w	DespawnQuick				; branch if chain is longer than 16px
@@ -135,7 +152,7 @@ CStom_Block:	; Routine 2
 ; ===========================================================================
 		
 CStom_Ceiling:	; Routine 6
-		shortcut
+		shortcut	DespawnQuick
 		bra.w	DespawnQuick
 ; ===========================================================================
 
@@ -160,13 +177,12 @@ CStom_Spikes:	; Routine 4
 ; ===========================================================================
 
 CStom_Types:
+		moveq	#0,d0
 		move.b	ost_subtype(a0),d0			; get subtype
-		andi.w	#%11000000,d0				; read bits 7/6
-		lsr.w	#5,d0
 		move.w	CStom_TypeIndex(pc,d0.w),d1
 		jmp	CStom_TypeIndex(pc,d1.w)
 ; ===========================================================================
-CStom_TypeIndex:index *
+CStom_TypeIndex:index *,,2
 		ptr CStom_TypeNormal				; 0
 		ptr CStom_TypeProx				; $40
 		ptr CStom_TypeBtn0				; $80
@@ -175,11 +191,12 @@ CStom_TypeIndex:index *
 
 ; Type $80 - rises when button is pressed
 CStom_TypeBtn0:
+		lea	(v_button_state).w,a2			; load button status 0
+		bra.s	CStom_TypeBtnx
 CStom_TypeBtn1:
-		lea	(v_button_state).w,a2			; load button statuses
-		lsr.w	#1,d0
-		andi.w	#1,d0					; d0 = 0 or 1
-		tst.b	(a2,d0.w)				; has button (d0) been pressed?
+		lea	(v_button_state+1).w,a2			; load button status 1
+CStom_TypeBtnx:
+		tst.b	(a2)					; has button 0/1 been pressed?
 		beq.s	CStom_TypeBtn_Fall			; if not, branch
 		cmpi.b	#$10,ost_cstomp_chain_length(a0)	; is chain at its shortest?
 		beq.s	.stop					; if yes, branch
@@ -278,5 +295,5 @@ CStom_TypeProx:
 		range_x
 		cmpi.w	#144,d1					; is Sonic within 144px?
 		bcc.w	CStom_SetPos				; if not, branch
-		andi.b	#%00111111,ost_subtype(a0)		; allow stomper to drop by changing subtype
+		move.b	#0,ost_subtype(a0)			; allow stomper to drop by changing subtype to CStom_TypeNormal
 		bra.w	CStom_SetPos
