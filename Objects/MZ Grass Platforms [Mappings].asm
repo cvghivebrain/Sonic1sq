@@ -46,4 +46,3 @@ frame_grass_narrow:
 		piece	0, -$10, 4x4, 1
 		piece	0, $10, 4x4, 1
 		endsprite
-		even

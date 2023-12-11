@@ -1086,7 +1086,6 @@ Level_End_unused:	dc.b 0,	0, 0, 0
 		include "Objects\MZ Unused Sideways Stomper [Mappings].asm" ; Map_SStom
 		include "Objects\MZ Pushable Blocks [Mappings].asm" ; Map_Push
 		include "Objects\MZ Purple Brick Block [Mappings].asm" ; Map_Brick
-		include "Objects\MZ Invisible Lava Tag [Mappings].asm" ; Map_LTag
 		include "Objects\MZ Lava Geyser [Mappings].asm"	; Map_Geyser
 		include "Objects\MZ Smashable Green Block [Mappings].asm" ; Map_Smab
 		include "Objects\MZ Moving Blocks [Mappings].asm" ; Map_MBlock

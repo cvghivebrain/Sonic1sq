@@ -76,32 +76,11 @@ type_fire_vertical:	equ 0
 type_fire_horizontal:	equ $40
 type_fire_gravity:	equ $80
 
-; LargeGrass
-type_grass_wide:	equ 0							; $0x - wide platform
-type_grass_sloped:	equ $10							; $1x - sloped platform, usually sinks and catches fire
-type_grass_narrow:	equ $20							; $2x - narrow platform
-type_grass_still:	equ id_LGrass_Type00					; $x0 - doesn't move
-type_grass_1:		equ id_LGrass_Type01					; $x1 - moves up and down 32 pixels
-type_grass_2:		equ id_LGrass_Type02					; $x2 - moves up and down 48 pixels
-type_grass_3:		equ id_LGrass_Type03					; $x3 - moves up and down 64 pixels
-type_grass_4:		equ id_LGrass_Type04					; $x4 - moves up and down 96 pixels
-type_grass_sinks:	equ id_LGrass_Type05					; $x5 - sinks and catches fire when stood on
-type_grass_rev:		equ 8							; +8 - reverse movement direction
-
 ; MarbleBrick
 type_brick_still:	equ id_Brick_Still/2		; 0 - doesn't move
 type_brick_wobbles:	equ id_Brick_Wobbles/2		; 1 - wobbles but doesn't fall
 type_brick_falls:	equ id_Brick_Falls/2		; 2 - falls when Sonic is near
 type_brick_rev:		equ 8				; +8 - reverse wobble direction
-
-; GlassBlock
-type_glass_still:	equ 0				; 0 - doesn't move
-type_glass_updown:	equ 1				; 1 - moves up and down
-type_glass_updown_rev:	equ 2				; 2 - moves up and down, reversed
-type_glass_drop_jump:	equ 3				; 3 - drops each time it's jumped on
-type_glass_drop_button:	equ 4				; 4 - drops when button is pressed, stops on floor
-type_glass_button_0:	equ 0				; $0x - button 0
-type_glass_button_1:	equ $10				; $1x - button 1
 
 ; PushBlock
 type_pblock_single:	equ (PushB_Var_0-PushB_Var)/sizeof_PushB_Var		; 0 - single block

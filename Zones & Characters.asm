@@ -55,7 +55,7 @@ LoadPerZone:
 		move.w	d0,(v_water_height_normal).w
 		move.w	d0,(v_water_height_next).w
 	.no_water:
-		adda.l	#8,a4
+		addq.l	#8,a4
 
 		movea.l	(a4)+,a1				; get pointer for OPL list
 		move.l	(a1,d4.w),(v_opl_data_ptr).w		; get pointer for actual OPL data
@@ -86,7 +86,7 @@ LoadPerZone:
 		move.w	(a1)+,(v_titlecard_zone).w		; set zone name
 		move.w	(a1)+,(v_titlecard_act).w		; set act number
 		move.w	(a1)+,(v_titlecard_uplc).w		; set UPLC id
-		adda.l	#2,a1
+		addq.l	#2,a1
 
 		movea.l	(a4)+,a1				; get pointer for DLE list
 		move.l	(a1,d4.w),(v_dle_ptr).w			; get pointer for DLE routine

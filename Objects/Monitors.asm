@@ -215,7 +215,7 @@ Mon_FindSlot:
 	.loop1:
 		cmp.b	1(a1),d0
 		beq.s	.found_match				; branch if type matches existing type
-		adda.w	#2,a1					; next slot
+		addq.w	#2,a1					; next slot
 		dbf	d1,.loop1				; repeat for all slots
 		
 		movea.l	a2,a1
@@ -223,7 +223,7 @@ Mon_FindSlot:
 	.loop2:
 		tst.w	(a1)
 		beq.s	.found_empty				; branch if slot is fully empty
-		adda.w	#2,a1					; next slot
+		addq.w	#2,a1					; next slot
 		dbf	d1,.loop2				; repeat for all slots
 		
 		movea.l	a2,a1
@@ -231,7 +231,7 @@ Mon_FindSlot:
 	.loop3:
 		tst.b	(a1)
 		beq.s	.found_empty				; branch if slot is available but not empty
-		adda.w	#2,a1					; next slot
+		addq.w	#2,a1					; next slot
 		dbf	d1,.loop3				; repeat for all slots
 		
 		move.b	#id_ani_monitor_static,ost_anim(a0)	; use static animation

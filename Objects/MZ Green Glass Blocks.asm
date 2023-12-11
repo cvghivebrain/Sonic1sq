@@ -8,6 +8,14 @@
 ;	%BBBBTTTT
 ;	BBBB - button id (when TTTT is 4)
 ;	TTTT - block type (0 = still; 1/2 = up/down; 3 = drops on jump; 4 = drops on button)
+
+type_glass_still:	equ 0				; 0 - doesn't move
+type_glass_updown:	equ 1				; 1 - moves up and down
+type_glass_updown_rev:	equ 2				; 2 - moves up and down, reversed
+type_glass_drop_jump:	equ 3				; 3 - drops each time it's jumped on
+type_glass_drop_button:	equ 4				; 4 - drops when button is pressed, stops on floor
+type_glass_button_0:	equ 0				; $0x - button 0
+type_glass_button_1:	equ $10				; $1x - button 1
 ; ---------------------------------------------------------------------------
 
 GlassBlock:
@@ -22,6 +30,7 @@ Glass_Index:	index *,,2
 		ptr Glass_UpDownRev
 		ptr Glass_JumpDrop
 		ptr Glass_BtnDrop
+		ptr Glass_Drop
 		ptr Glass_Stop
 
 Glass_Type_List:
@@ -34,7 +43,7 @@ Glass_Type_List:
 		even
 
 		rsobj GlassBlock
-ost_glass_y_start:	rs.w 1					; original y position (2 bytes)
+ost_glass_y_start:	rs.w 1					; original y position
 ost_glass_move_mode:	rs.b 1					; flag set when block is moving
 ost_glass_in_floor:	rs.b 1					; flag set when block starts in floor
 		rsobjend
@@ -48,7 +57,7 @@ Glass_Main:	; Routine 0
 		move.w	ost_y_pos(a0),ost_glass_y_start(a0)
 		move.b	ost_subtype(a0),d0
 		move.b	d0,d1
-		andi.b	#$F,d0					; low nybble of subtype
+		andi.w	#$F,d0					; low nybble of subtype
 		mulu.w	#5,d0
 		lsr.b	#4,d1
 		move.b	d1,ost_subtype(a0)			; move subtype high nybble to low
@@ -136,16 +145,19 @@ Glass_JumpDrop:	; Routine 6
 ; ===========================================================================
 
 Glass_BtnDrop:	; Routine 8
-		tst.b	ost_glass_move_mode(a0)
-		bne.s	.skip_button				; branch if block is moving
 		lea	(v_button_state).w,a2
 		moveq	#0,d0
 		move.b	ost_subtype(a0),d0			; get subtype (not same as original)
 		tst.b	(a2,d0.w)				; has button number d0 been pressed?
 		beq.s	.solid					; if not, branch
-		move.b	#1,ost_glass_move_mode(a0)		; set moving flag
+		addq.b	#2,ost_routine(a0)			; goto Glass_Drop next
+		
+	.solid:
+		bsr.w	SolidObject
+		bra.w	DespawnQuick
+; ===========================================================================
 
-	.skip_button:
+Glass_Drop:	; Routine $A
 		addq.w	#2,ost_y_pos(a0)			; move down 2px
 		tst.b	ost_glass_in_floor(a0)
 		bne.s	.solid					; branch if block started in floor
@@ -160,7 +172,7 @@ Glass_BtnDrop:	; Routine 8
 		bra.w	DespawnQuick
 ; ===========================================================================
 
-Glass_Stop:	; Routine $A
+Glass_Stop:	; Routine $C
 		shortcut
 		bsr.w	SolidObject
 		bra.w	DespawnQuick
