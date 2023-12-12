@@ -65,7 +65,7 @@ Hel_Main:	; Routine 0
 		dbf	d2,.loop				; repeat d2 times (helix length)
 
 Hel_Action:	; Routine 2
-		shortcut
+		shortcut	DespawnFamily_NoDisplay
 		bra.w	DespawnFamily_NoDisplay
 
 ; ---------------------------------------------------------------------------

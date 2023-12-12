@@ -80,9 +80,10 @@ ost_animal_type:	rs.b 1					; routine to use after animal first hits the floor
 
 Anml_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Anml_Wait next
+		addq.b	#1,(v_animal_count).w			; increment animal counter
 		lea	(v_animal_type).w,a1
-		moveq	#1,d0
-		and.b	(v_frame_counter_low).w,d0		; d0 = 0 or 1 (basically random)
+		bsr.w	RandomNumber
+		andi.w	#1,d0					; d0 = 0 or 1 (random)
 		move.b	(a1,d0.w),d0				; get one of two types
 		mulu.w	#Anml_Settings_size-Anml_Settings,d0
 		lea	Anml_Settings(pc,d0.w),a1		; jump to settings for specified animal
@@ -144,9 +145,10 @@ Anml_Mammal:	; Routine 6
 		move.w	ost_animal_y_vel(a0),ost_y_vel(a0)	; reset y speed
 
 	.chkdel:
-		tst.b	ost_render(a0)				; is object on-screen?
-		bpl.w	DeleteObject				; if not, branch
-		bra.w	DisplaySprite
+		tst.b	ost_render(a0)
+		bmi.w	DisplaySprite				; branch if on screen
+		subq.b	#1,(v_animal_count).w			; decrement animal counter
+		bra.w	DeleteObject
 ; ===========================================================================
 
 Anml_Bird:	; Routine 8
@@ -168,8 +170,9 @@ Anml_Bird:	; Routine 8
 
 	.chkdel:
 		tst.b	ost_render(a0)
-		bpl.w	DeleteObject
-		bra.w	DisplaySprite
+		bmi.w	DisplaySprite				; branch if on screen
+		subq.b	#1,(v_animal_count).w			; decrement animal counter
+		bra.w	DeleteObject
 		
 ; ---------------------------------------------------------------------------
 ; Animals at ending

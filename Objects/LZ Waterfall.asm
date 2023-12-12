@@ -24,7 +24,7 @@ Waterfall:
 		andi.b	#$F,d0					; read only the	low nybble
 		move.b	d0,ost_frame(a0)			; set frame number
 		
-		shortcut
+		shortcut	DespawnQuick
 		bra.w	DespawnQuick
 		
 ; ---------------------------------------------------------------------------

@@ -7,7 +7,7 @@ ObjPos_SLZ2:
 		objpos $0118,$0130,Rings,$12,rem
 		objpos $0210,$00D0,Fan,type_fan_left_on,xflip
 		objpos $02E0,$00B0,Rings,$12,rem
-		objpos $0390,$00B0,Orbinaut,$03,rem
+		objpos $0390,$00B0,Orbinaut,type_orbinaut_passive+type_orbinaut_pal2,rem
 		objpos $0630,$0210,Rings,$42,rem
 		objpos $0668,$0130,Rings,$12,rem
 		objpos $0680,$0180,TileSwitch,2
@@ -40,11 +40,11 @@ ObjPos_SLZ2:
 		objpos $0E18,$0270,Bomb,$00,xflip,rem
 		objpos $0E50,$0210,Bomb,$00,yflip,rem
 		objpos $0E70,$041C,Rings,$45,rem
-		objpos $0E80,$00A8,Orbinaut,$03,rem
+		objpos $0E80,$00A8,Orbinaut,type_orbinaut_passive+type_orbinaut_pal2,rem
 		objpos $0E80,$0410,Rings,$46,rem
 		objpos $0E90,$041C,Rings,$45,rem
 		objpos $0EF0,$0558,Springs,type_spring_yellow+type_spring_up
-		objpos $0F00,$00A8,Orbinaut,$03,rem
+		objpos $0F00,$00A8,Orbinaut,type_orbinaut_passive+type_orbinaut_pal2,rem
 		objpos $0F68,$0170,Rings,$12,rem
 		objpos $0F68,$0450,Bomb,$00,rem
 		objpos $0F80,$0170,CirclingPlatform,$04
@@ -70,8 +70,8 @@ ObjPos_SLZ2:
 		objpos $10C8,$0110,Rings,$13,rem
 		objpos $10E8,$00D4,Rings,$12,rem
 		objpos $10F8,$0150,Fan,type_fan_left_on,xflip
-		objpos $11D0,$0420,Orbinaut,$03,rem
-		objpos $11F0,$02A8,Orbinaut,$03,rem
+		objpos $11D0,$0420,Orbinaut,type_orbinaut_passive+type_orbinaut_pal2,rem
+		objpos $11F0,$02A8,Orbinaut,type_orbinaut_passive+type_orbinaut_pal2,rem
 		objpos $123A,$016F,Rings,$10,rem
 		objpos $1243,$014E,Rings,$10,rem
 		objpos $125D,$0135,Rings,$10,rem
@@ -113,7 +113,7 @@ ObjPos_SLZ2:
 		objpos $1548,$02D0,Fan,type_fan_left_on,xflip
 		objpos $15F0,$02D8,Springs,type_spring_yellow+type_spring_up
 		objpos $1610,$0070,Staircase,type_stair_above,xflip
-		objpos $1610,$012C,Orbinaut,$03,rem
+		objpos $1610,$012C,Orbinaut,type_orbinaut_passive+type_orbinaut_pal2,rem
 		objpos $1610,$04D1,Monitor,type_monitor_1up,rem
 		objpos $1630,$04D8,Springs,type_spring_red+type_spring_up
 		objpos $163A,$066F,Rings,$10,rem
@@ -135,7 +135,7 @@ ObjPos_SLZ2:
 		objpos $1750,$0210,Bomb,$00,yflip,rem
 		objpos $1790,$01F0,Staircase,type_stair_above,xflip
 		objpos $1790,$0270,Fan,type_fan_left_on,xflip
-		objpos $17D8,$01AC,Orbinaut,$03,rem
+		objpos $17D8,$01AC,Orbinaut,type_orbinaut_passive+type_orbinaut_pal2,rem
 		objpos $17E0,$05C8,BasicPlatform,type_plat_slz+type_plat_falls
 		objpos $1820,$05A8,BasicPlatform,type_plat_slz+type_plat_falls
 		objpos $1860,$0588,BasicPlatform,type_plat_slz+type_plat_falls

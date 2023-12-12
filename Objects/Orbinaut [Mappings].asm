@@ -27,4 +27,3 @@ frame_orb_spikeball:
 		spritemap
 		piece	-8, -8, 2x2, $1B
 		endsprite
-		even

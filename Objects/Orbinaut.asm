@@ -11,6 +11,11 @@
 ;	SSSS - settings (see Orb_Settings)
 ;	T - 1 for passive type
 ;	P - 1 to use palette line 2
+
+type_orbinaut_pal2_bit:		equ 0
+type_orbinaut_passive_bit:	equ 1
+type_orbinaut_passive:		equ 1<<type_orbinaut_passive_bit
+type_orbinaut_pal2:		equ 1<<type_orbinaut_pal2_bit
 ; ---------------------------------------------------------------------------
 
 Orbinaut:
@@ -42,7 +47,7 @@ Orb_Main:	; Routine 0
 		move.l	#Map_Orb,ost_mappings(a0)
 		move.w	(v_tile_orbinaut).w,ost_tile(a0)
 		move.b	ost_subtype(a0),d4
-		btst	#0,d4					; check if low bit of subtype is set
+		btst	#type_orbinaut_pal2_bit,d4		; check if low bit of subtype is set
 		beq.s	.use_pal1				; if not, branch
 		add.w	#tile_pal2,ost_tile(a0)			; use palette 2
 
@@ -88,7 +93,7 @@ Orb_Main:	; Routine 0
 
 Orb_Move:	; Routine 2
 		update_x_pos					; update position
-		btst.b	#1,ost_subtype(a0)
+		btst.b	#type_orbinaut_passive_bit,ost_subtype(a0)
 		bne.w	DespawnObject				; branch if orbinaut is passive
 		getsonic					; a1 = OST of Sonic
 		range_x

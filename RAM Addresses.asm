@@ -192,6 +192,7 @@ v_palcycle_ss_time:		rs.w 1 ; palette cycling in Special Stage - time until next
 v_palcycle_ss_unused:		rs.w 1 ; palette cycling in Special Stage - unused offset value, always 0
 v_ss_bg_mode:			rs.w 1 ; Special Stage fish/bird background animation mode
 v_boss_status:			rs.b 1 ; status of boss and prison capsule - 01 = boss defeated; 02 = prison opened
+v_animal_count:			rs.b 1 ; number of animals on screen
 v_sonic_pos_tracker_num:	rs.w 1 ; current location within position tracking data
 v_sonic_pos_tracker_num_low:	equ __rs-1
 f_boss_boundary:		rs.b 1 ; flag set to stop Sonic moving off the right side of the screen at a boss

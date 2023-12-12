@@ -97,5 +97,5 @@ Pole_Release:
 		clr.b	(f_water_tunnel_disable).w		; enable water tunnel
 
 Pole_Display:	; Routine 8
-		shortcut
+		shortcut	DespawnQuick
 		bra.w	DespawnQuick

@@ -10,6 +10,19 @@
 ;	%FFFFTTTT
 ;	FFFF - frame id
 ;	TTTT - type (see Plat_Move)
+
+type_plat_still:	equ id_Plat_Type_Still			; 0 - doesn't move
+type_plat_sideways:	equ id_Plat_Type_Sideways		; 1 - moves side-to-side
+type_plat_updown:	equ id_Plat_Type_UpDown			; 2 - moves up and down
+type_plat_falls:	equ id_Plat_Type_Falls			; 3 - falls when stood on
+type_plat_sideways_rev:	equ id_Plat_Type_Sideways_Rev		; 5 - moves side-to-side, reversed
+type_plat_updown_rev:	equ id_Plat_Type_UpDown_Rev		; 6 - moves up and down, reversed
+type_plat_rises:	equ id_Plat_Type_Rises			; 7 - rises 512 pixels 1 second after a button is pressed
+type_plat_updown_large:	equ id_Plat_Type_UpDown_Large+(id_frame_plat_large<<4) ; $A - moves up and down, large column-shaped platform
+type_plat_updown_slow:	equ id_Plat_Type_UpDown_Slow		; $B - moves up and down, slow
+type_plat_updown_slow_rev: equ id_Plat_Type_UpDown_Slow_Rev	; $C - moves up and down, slow reversed
+type_plat_syz:		equ id_frame_plat_syz<<4		; +$20
+type_plat_slz:		equ id_frame_plat_slz<<4		; +$30
 ; ---------------------------------------------------------------------------
 
 BasicPlatform:
@@ -45,9 +58,12 @@ Plat_Main:	; Routine 0
 		move.w	ost_x_pos(a0),ost_plat_x_start(a0)
 		move.w	#$80,ost_angle(a0)
 		move.b	ost_subtype(a0),d0
+		move.b	d0,d1
 		lsr.b	#4,d0					; read high nybble
-		move.b	d0,ost_frame(a0)
-		andi.b	#$F,ost_subtype(a0)
+		move.b	d0,ost_frame(a0)			; set as frame
+		andi.b	#$F,d1					; read low nybble
+		add.b	d1,d1					; double it
+		move.b	d1,ost_subtype(a0)
 
 Plat_Solid:	; Routine 2
 		move.w	ost_x_pos(a0),ost_x_prev(a0)
@@ -76,8 +92,7 @@ Plat_Drop:	; Routine 4
 
 Plat_Move:
 		moveq	#0,d0
-		move.b	ost_subtype(a0),d0
-		add.w	d0,d0
+		move.b	ost_subtype(a0),d0			; subtypes have been doubled
 		move.w	.index(pc,d0.w),d1
 		jmp	.index(pc,d1.w)
 
@@ -180,7 +195,7 @@ Plat_Type_Falls:
 		subq.w	#1,ost_plat_wait_time(a0)		; decrement timer
 		bne.s	.type03_nomove				; branch if time remains
 		move.w	#32,ost_plat_wait_time(a0)
-		addq.b	#1,ost_subtype(a0)			; change to type 04 (falling)
+		addq.b	#2,ost_subtype(a0)			; change to type 04 (falling)
 		rts	
 ; ===========================================================================
 
@@ -208,7 +223,7 @@ Plat_Type_Rises:
 	.type07_wait:
 		subq.w	#1,ost_plat_wait_time(a0)		; subtract 1 from time delay
 		bne.s	.type07_nomove				; if time is > 0, branch
-		addq.b	#1,ost_subtype(a0)			; change to type 08
+		addq.b	#2,ost_subtype(a0)			; change to type 08
 		rts	
 ; ===========================================================================
 

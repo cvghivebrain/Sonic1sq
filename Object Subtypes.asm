@@ -47,20 +47,6 @@ type_edge_dark:		equ id_frame_edge_dark		; 2
 type_ledge_left:	equ id_frame_ledge_left		; 0 - facing left
 type_ledge_right:	equ id_frame_ledge_right	; 1 - also facing left, but always xflipped to face right
 
-; BasicPlatform
-type_plat_still:	equ id_Plat_Type_Still			; 0 - doesn't move
-type_plat_sideways:	equ id_Plat_Type_Sideways		; 1 - moves side-to-side
-type_plat_updown:	equ id_Plat_Type_UpDown			; 2 - moves up and down
-type_plat_falls:	equ id_Plat_Type_Falls			; 3 - falls when stood on
-type_plat_sideways_rev:	equ id_Plat_Type_Sideways_Rev		; 5 - moves side-to-side, reversed
-type_plat_updown_rev:	equ id_Plat_Type_UpDown_Rev		; 6 - moves up and down, reversed
-type_plat_rises:	equ id_Plat_Type_Rises			; 7 - rises 512 pixels 1 second after a button is pressed
-type_plat_updown_large:	equ id_Plat_Type_UpDown_Large+(id_frame_plat_large<<4) ; $A - moves up and down, large column-shaped platform
-type_plat_updown_slow:	equ id_Plat_Type_UpDown_Slow		; $B - moves up and down, slow
-type_plat_updown_slow_rev: equ id_Plat_Type_UpDown_Slow_Rev	; $C - moves up and down, slow reversed
-type_plat_syz:		equ id_frame_plat_syz<<4		; +$20
-type_plat_slz:		equ id_frame_plat_slz<<4		; +$30
-
 ; FireMaker
 type_fire_rate30:	equ (30/30)<<3				; every 0.5 seconds
 type_fire_rate60:	equ (60/30)<<3				; every 1 second

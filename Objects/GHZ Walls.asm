@@ -46,5 +46,5 @@ Edge_Solid:	; Routine 2
 ; ===========================================================================
 
 Edge_Display:	; Routine 4
-		shortcut
+		shortcut	DespawnQuick
 		bra.w	DespawnQuick

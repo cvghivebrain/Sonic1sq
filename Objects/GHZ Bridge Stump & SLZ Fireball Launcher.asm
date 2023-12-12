@@ -32,7 +32,7 @@ Scen_Main:	; Routine 0
 		move.b	(a1)+,ost_col_type(a0)
 
 Scen_ChkDel:	; Routine 2
-		shortcut
+		shortcut	DespawnQuick
 		bra.w	DespawnQuick
 ; ===========================================================================
 		

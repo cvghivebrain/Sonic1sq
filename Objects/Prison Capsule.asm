@@ -74,7 +74,7 @@ Pri_Body:	; Routine 2
 		move.b	#id_frame_prison_broken,ost_frame(a0)	; use use broken prison frame (2)
 		moveq	#id_UPLC_Prison2,d0
 		jsr	UncPLC					; load new gfx
-		shortcut
+		shortcut	DespawnQuick
 		jmp	DespawnQuick
 ; ===========================================================================
 
@@ -180,19 +180,9 @@ Pri_Animals:	; Routine 8
 ; ===========================================================================
 
 Pri_EndAct:	; Routine $A
-		moveq	#$40-2,d0
-		move.l	#Animals,d1
-		moveq	#sizeof_ost,d2				; d2 = $40
-		lea	(v_ost_player+sizeof_ost).w,a1		; start at first OST slot after Sonic
-
-	.findanimal:
-		cmp.l	ost_id(a1),d1				; is object $28	(animal) loaded?
-		beq.s	.found					; if yes, branch
-		adda.w	d2,a1					; next OST slot
-		dbf	d0,.findanimal				; repeat $3E times (this misses the last $40 OST slots)
-
+		tst.b	(v_animal_count).w
+		bne.s	.found					; branch if animals are still here
 		jsr	(HasPassedAct).l			; load gfx, play music (see "Signpost & HasPassedAct.asm")
-		addq.l	#4,sp
 		jmp	(DeleteObject).l
 
 	.found:
