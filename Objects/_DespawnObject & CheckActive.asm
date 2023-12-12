@@ -18,6 +18,7 @@ DespawnObject:
 		despawnrange
 		bls.w	DisplaySprite				; display instead of despawn
 
+	DespawnObject_Delete:
 		move.b	ost_respawn(a0),d0			; get respawn id
 		beq.w	DeleteObject				; branch if not set
 		andi.w	#$FF,d0
@@ -151,27 +152,6 @@ SaveState:
 		beq.s	.exit					; branch if object isn't in the respawn table
 		lea	(v_respawn_list+2).w,a2
 		adda.w	d0,a2					; jump to relevant position in respawn table
-		
-	.exit:
-		rts
-		
-; ---------------------------------------------------------------------------
-; Subroutine to prevent duplicate objects being loaded
-
-;	uses d0.l, a2
-; ---------------------------------------------------------------------------
-
-PreventDupe:
-		moveq	#0,d0
-		move.b	ost_respawn(a0),d0
-		beq.s	.exit					; branch if object isn't in the respawn table
-		lea	(v_respawn_list+2).w,a2
-		adda.w	d0,a2					; jump to relevant position in respawn table
-		bclr	#7,(a2)					; clear the already-loaded flag
-		bset	#0,(a2)					; remember this was loaded
-		beq.s	.exit					; branch if not previously loaded
-		addq.l	#4,sp					; don't execute object code after leaving this subroutine
-		bra.w	DeleteObject				; delete object if previously loaded
 		
 	.exit:
 		rts

@@ -12,6 +12,11 @@
 ;	FFF - frame id
 ;	K - 1 to keep frame id when collapsing
 ;	DDD - delay fragment pattern id
+
+type_cfloor_slz:		equ id_frame_cfloor_slz<<4	; +$20 - SLZ mappings
+type_cfloor_sided:		equ $80				; +$80 - collapse pattern depends on which side was touched
+type_cfloor_keepframe_bit:	equ 3
+type_cfloor_keepframe:		equ 1<<type_cfloor_keepframe_bit ; +8 - keep frame id when collapsing
 ; ---------------------------------------------------------------------------
 
 CollapseFloor:
@@ -68,7 +73,7 @@ CFlo_Wait:	; Routine 4
 CFlo_Collapse:	; Routine 6
 		bsr.w	UnSolid_TopOnly
 		move.b	ost_subtype(a0),d1
-		btst	#3,d1
+		btst	#type_cfloor_keepframe_bit,d1
 		bne.s	.keep_frame				; branch if bit 3 is set
 		addq.b	#1,ost_frame(a0)			; use frame consisting of smaller pieces
 		
@@ -81,7 +86,7 @@ CFlo_Collapse:	; Routine 6
 		bset	#render_xflip_bit,ost_render(a0)
 		
 	.no_sidedness:
-		andi.b	#%00000111,d1				; read bits 0-2 of subtype
+		andi.w	#%00000111,d1				; read bits 0-2 of subtype
 		add.b	d1,d1
 		move.w	CFlo_FragTiming_Index(pc,d1.w),d1
 		lea	CFlo_FragTiming_Index(pc,d1.w),a4

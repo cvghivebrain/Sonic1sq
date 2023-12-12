@@ -61,10 +61,6 @@ type_plat_updown_slow_rev: equ id_Plat_Type_UpDown_Slow_Rev	; $C - moves up and 
 type_plat_syz:		equ id_frame_plat_syz<<4		; +$20
 type_plat_slz:		equ id_frame_plat_slz<<4		; +$30
 
-; Newtron
-type_newt_blue:		equ 0
-type_newt_green:	equ 3
-
 ; FireMaker
 type_fire_rate30:	equ (30/30)<<3				; every 0.5 seconds
 type_fire_rate60:	equ (60/30)<<3				; every 1 second
@@ -75,21 +71,6 @@ type_fire_rate180:	equ (180/30)<<3				; every 3 seconds
 type_fire_vertical:	equ 0
 type_fire_horizontal:	equ $40
 type_fire_gravity:	equ $80
-
-; MarbleBrick
-type_brick_still:	equ id_Brick_Still/2		; 0 - doesn't move
-type_brick_wobbles:	equ id_Brick_Wobbles/2		; 1 - wobbles but doesn't fall
-type_brick_falls:	equ id_Brick_Falls/2		; 2 - falls when Sonic is near
-type_brick_rev:		equ 8				; +8 - reverse wobble direction
-
-; PushBlock
-type_pblock_single:	equ (PushB_Var_0-PushB_Var)/sizeof_PushB_Var		; 0 - single block
-type_pblock_four:	equ (PushB_Var_1-PushB_Var)/sizeof_PushB_Var		; 1 - four blocks in a row
-type_pblock_nograv:	equ $80							; +$80 - no gravity
-
-; CollapseFloor
-type_cfloor_slz:	equ id_frame_cfloor_slz<<4				; +$20 - SLZ mappings
-type_cfloor_sided:	equ $80							; +$80 - collapse pattern depends on which side was touched
 
 ; FloatingBlock
 type_fblock_syz1x1:	equ ((FBlock_Var_0-FBlock_Var)/sizeof_FBlock_Var)<<4	; $0x - single 32x32 square

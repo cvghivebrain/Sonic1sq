@@ -18,4 +18,3 @@ frame_smash_four:
 		piece	0, -$10, 2x2, 0, hi
 		piece	0, 0, 2x2, 0, hi
 		endsprite
-		even

@@ -5,9 +5,18 @@
 ;	ObjPos_MZ1, ObjPos_MZ2, ObjPos_MZ3 - subtypes 0/1/2/$A
 
 ; subtypes:
-;	%0000RTTT
+;	%000NRTTT
+;	N - 1 for not wobbling on lava
 ;	R - 1 for reverse wobble direction
 ;	TTT - type id (0 = still; 1 = wobbles; 2 = wobbles & falls)
+
+type_brick_still:		equ id_Brick_Still/2		; 0 - doesn't move
+type_brick_wobbles:		equ id_Brick_Wobbles/2		; 1 - wobbles but doesn't fall
+type_brick_falls:		equ id_Brick_Falls/2		; 2 - falls when Sonic is near
+type_brick_nowobble_bit:	equ 4
+type_brick_rev_bit:		equ 3
+type_brick_nowobble:		equ 1<<type_brick_nowobble_bit	; +$10 - don't wobble on lava
+type_brick_rev:			equ 1<<type_brick_rev_bit	; +8 - reverse wobble direction
 ; ---------------------------------------------------------------------------
 
 MarbleBrick:
@@ -77,7 +86,7 @@ Brick_Falls:
 Brick_Wobbles:
 		moveq	#0,d0
 		move.b	(v_oscillating_0_to_10).w,d0
-		btst	#3,ost_subtype(a0)			; is subtype 8 or above?
+		btst	#type_brick_rev_bit,ost_subtype(a0)	; is subtype +8?
 		beq.s	.no_rev					; if not, branch
 		neg.w	d0
 		addi.w	#$10,d0					; wobble the opposite way
@@ -98,12 +107,14 @@ Brick_FallNow:
 		add.w	d1,ost_y_pos(a0)			; align to floor
 		clr.w	ost_y_vel(a0)				; stop the block falling
 		move.w	ost_y_pos(a0),ost_brick_y_start(a0)
-		move.b	#id_Brick_FallLava,ost_brick_type(a0)	; final subtype - slow wobble on lava
+		move.b	#id_Brick_Still,ost_brick_type(a0)	; don't wobble
 		move.w	(a3),d0					; get 16x16 tile id the block is sitting on
 		andi.w	#$3FF,d0
 		cmpi.w	#$16A,d0				; is the 16x16 tile it's landed on lava?
-		bcc.s	.exit					; if yes, branch
-		move.b	#id_Brick_Still,ost_brick_type(a0)	; don't wobble
+		bcs.s	.exit					; if not, branch
+		btst	#type_brick_nowobble_bit,ost_subtype(a0)
+		bne.s	.exit					; branch if set not to wobble on lava
+		move.b	#id_Brick_FallLava,ost_brick_type(a0)	; final subtype - slow wobble on lava
 
 	.exit:
 		rts	

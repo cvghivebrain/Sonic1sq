@@ -51,8 +51,8 @@ SStom_Main:	; Routine 0
 		move.b	#3,ost_priority(a0)
 		addq.b	#2,ost_routine(a0)			; goto SStom_Base next
 		move.b	ost_subtype(a0),d0
+		andi.w	#%00110000,d0
 		lsr.b	#4,d0					; read high nybble of subtype
-		andi.b	#%11,d0
 		mulu.w	#60,d0
 		move.w	d0,ost_mash_wait_time(a0)		; set time the stomper waits before retracting
 		
@@ -75,7 +75,7 @@ SStom_Main:	; Routine 0
 		dbf	d1,.loop
 
 SStom_Base:	; Routine 2
-		shortcut
+		shortcut	DespawnFamily
 		bra.w	DespawnFamily
 
 SStom_Block:	; Routine 4
@@ -161,7 +161,6 @@ SStom_Move:
 		getparent					; a1 = OST of parent
 		moveq	#0,d0
 		move.b	ost_mash_mode(a0),d0
-		add.w	d0,d0
 		move.w	SStom_Move_Index(pc,d0.w),d1
 		jsr	SStom_Move_Index(pc,d1.w)
 		move.w	ost_x_pos(a0),d0
@@ -172,7 +171,7 @@ SStom_Move:
 
 ; ===========================================================================
 SStom_Move_Index:
-		index *
+		index *,,2
 		ptr SStom_Move_Extend
 		ptr SStom_Move_Wait
 		ptr SStom_Move_Retract

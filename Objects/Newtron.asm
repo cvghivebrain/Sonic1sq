@@ -9,6 +9,14 @@
 ;	SSSS - speed of missile/attack
 ;	P - 1 to use palette line 2
 ;	T - type (0 for drop attack; 1 for missile)
+
+type_newt_missile_bit:	equ 0
+type_newt_pal2_bit:	equ 1
+type_newt_missile:	equ 1<<type_newt_missile_bit		; fires missile
+type_newt_drop:		equ 0					; drop attack
+type_newt_pal2:		equ 1<<type_newt_pal2_bit		; uses palette 2
+type_newt_blue:		equ type_newt_drop
+type_newt_green:	equ type_newt_missile+type_newt_pal2
 ; ---------------------------------------------------------------------------
 
 Newtron:
@@ -36,7 +44,7 @@ Newt_Main:	; Routine 0
 		move.l	#Map_Newt,ost_mappings(a0)
 		move.w	(v_tile_newtron).w,ost_tile(a0)
 		move.b	ost_subtype(a0),d0
-		btst	#1,d0
+		btst	#type_newt_pal2_bit,d0
 		beq.s	.keep_pal
 		add.w	#tile_pal2,ost_tile(a0)
 		
@@ -44,7 +52,7 @@ Newt_Main:	; Routine 0
 		move.b	#render_rel,ost_render(a0)
 		move.b	#4,ost_priority(a0)
 		move.b	#$14,ost_displaywidth(a0)
-		btst	#0,d0
+		btst	#type_newt_missile_bit,d0
 		bne.s	Newt_Range				; branch if newtron is green missile-firing type
 		
 		move.b	#$10,ost_height(a0)
@@ -186,15 +194,18 @@ ani_newt_appear		dc.w $13
 			dc.w id_frame_newt_trans
 			dc.w id_frame_newt_norm
 			dc.w id_Anim_Flag_Routine
+			
 ani_newt_drop:		dc.w $13
 			dc.w id_frame_newt_drop1
 			dc.w id_frame_newt_drop2
 			dc.w id_frame_newt_drop3
 			dc.w id_Anim_Flag_Stop
+			
 ani_newt_fly1:		dc.w 2
 			dc.w id_frame_newt_fly1a
 			dc.w id_frame_newt_fly1b
 			dc.w id_Anim_Flag_Restart
+			
 ani_newt_firing:	dc.w $13
 			dc.w id_frame_newt_norm
 			dc.w id_frame_newt_firing

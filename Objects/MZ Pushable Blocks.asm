@@ -3,6 +3,15 @@
 
 ; spawned by:
 ;	ObjPos_MZ1, ObjPos_MZ2, ObjPos_MZ3 - subtypes 0/$81
+
+; subtypes:
+;	%G000TTTT
+;	G - 1 for no gravity
+;	TTTT - type (see PushB_Var; sets width & frame id)
+
+type_pblock_single:	equ (PushB_Var_0-PushB_Var)/sizeof_PushB_Var ; 0 - single block
+type_pblock_four:	equ (PushB_Var_1-PushB_Var)/sizeof_PushB_Var ; 1 - four blocks in a row
+type_pblock_nograv:	equ $80					; +$80 - no gravity
 ; ---------------------------------------------------------------------------
 
 PushBlock:
@@ -40,7 +49,6 @@ PushB_Main:	; Routine 0
 		move.w	#tile_Kos_MzBlock+tile_pal3,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#3,ost_priority(a0)
-		moveq	#0,d0
 		move.b	ost_subtype(a0),d0			; get subtype
 		andi.w	#$F,d0					; read low nybble
 		beq.s	.type0					; branch if 0
@@ -53,13 +61,12 @@ PushB_Main:	; Routine 0
 		move.b	(a2)+,ost_displaywidth(a0)
 		move.b	(a2)+,ost_frame(a0)
 		move.w	#2,ost_pblock_time(a0)
-		bsr.w	PreventDupe				; flag object as loaded & prevent the same object loading again
 
 PushB_Action:	; Routine 2
 		tst.w	ost_linked(a0)
 		bne.s	.stomper_skip				; branch if chain stomper was found
 		tst.b	ost_render(a0)
-		bpl.s	PushB_Display				; branch if block is off screen
+		bpl.w	DespawnObject				; branch if block is off screen
 		tst.b	ost_pblock_stompchk(a0)
 		bne.s	.stomper_skip				; branch if chain stomper check was already done
 		move.l	#CStom_Block,d0
@@ -70,27 +77,17 @@ PushB_Action:	; Routine 2
 		bsr.w	SolidObject
 		bsr.w	PushB_Pushing
 		tst.b	ost_subtype(a0)
-		bmi.s	PushB_Display				; branch if subtype is +$80 (no gravity)
+		bmi.w	DespawnObject				; branch if subtype is +$80 (no gravity)
 		bsr.w	PushB_ChkStomp
-		beq.s	PushB_Display				; branch if block is on stomper
+		beq.w	DespawnObject				; branch if block is on stomper
 		jsr	FindFloorObj
 		tst.w	d1
-		beq.s	PushB_Display				; branch if block is touching the floor
+		beq.w	DespawnObject				; branch if block is touching the floor
 		addi.b	#2,ost_routine(a0)			; goto PushB_Drop next
 		move.b	ost_pblock_pushed(a0),d0
 		ext.w	d0
 		add.w	d0,ost_x_pos(a0)			; align with edge if pushed
-		
-PushB_Display:
-		move.w	ost_x_pos(a0),d0
-		bsr.w	CheckActive
-		beq.w	DisplaySprite
-		
-PushB_Delete:
-		bsr.w	SaveState
-		beq.w	DeleteObject				; branch if not in respawn table
-		bclr	#0,(a2)					; allow object to load again later
-		bra.w	DeleteObject
+		bra.w	DespawnObject
 ; ===========================================================================
 
 PushB_Drop:	; Routine 4
@@ -98,26 +95,26 @@ PushB_Drop:	; Routine 4
 		bsr.w	PushB_ChkStomp
 		bne.s	.gravity				; branch if block isn't on stomper
 		subi.b	#2,ost_routine(a0)			; goto PushB_Action next
-		bra.s	PushB_Display
+		bra.w	DespawnObject
 		
 	.gravity:
 		update_xy_fall	$18				; update position & apply gravity
 		jsr	FindFloorObj
 		tst.w	d1
-		bpl.s	PushB_Display				; branch if block hasn't reached floor
+		bpl.w	DespawnObject				; branch if block hasn't reached floor
 		add.w	d1,ost_y_pos(a0)			; align to floor
 		clr.w	ost_y_vel(a0)				; stop falling
 		subi.b	#2,ost_routine(a0)			; goto PushB_Action next
 		move.w	(a3),d0					; get 16x16 tile the block is on
 		andi.w	#$3FF,d0
 		cmpi.w	#$16A,d0				; is it block $16A+ (lava)?
-		bcs.s	PushB_Display				; branch if not lava
+		bcs.w	DespawnObject				; branch if not lava
 		move.b	#id_PushB_Lava,ost_routine(a0)		; goto PushB_Lava next
 		move.b	ost_pblock_pushed(a0),d0
 		ext.w	d0
 		lsl.w	#3,d0
 		move.w	d0,ost_x_vel(a0)			; start moving in direction it was pushed
-		bra.s	PushB_Display
+		bra.w	DespawnObject
 ; ===========================================================================
 
 PushB_Lava:	; Routine 6
@@ -137,10 +134,10 @@ PushB_Move:
 		
 	.hit_wall:
 		tst.w	d1
-		bne.w	PushB_Display				; branch if not at wall
+		bne.w	DespawnObject				; branch if not at wall
 		move.b	#id_PushB_Sink,ost_routine(a0)		; goto PushB_Sink next
 		clr.w	ost_x_vel(a0)				; stop moving
-		bra.w	PushB_Display
+		bra.w	DespawnObject
 ; ===========================================================================
 
 PushB_Sink:	; Routine 8
@@ -148,11 +145,11 @@ PushB_Sink:	; Routine 8
 		addi.l	#$2001,ost_y_pos(a0)			; sink in lava, $2001 subpixels each frame
 		cmpi.b	#160,ost_y_sub+1(a0)
 		bcc.s	.sunk					; branch after 160 frames
-		bra.w	PushB_Display
+		bra.w	DespawnObject
 		
 	.sunk:
 		bclr	#status_platform_bit,ost_status(a1)
-		bra.w	PushB_Delete
+		bra.w	DespawnObject_Delete
 ; ===========================================================================
 
 PushB_WaitJump:	; Routine $A
@@ -172,22 +169,21 @@ PushB_WaitJump:	; Routine $A
 ; ===========================================================================
 
 PushB_Jump:	; Routine $C
-		addi.w	#$18,ost_y_vel(a0)			; apply gravity
 		move.w	ost_x_pos(a0),ost_x_prev(a0)
-		update_xy_pos
+		update_xy_fall	$18				; update position & apply gravity
 		bsr.w	SolidObject
 		jsr	FindFloorObj
 		tst.w	d1
-		bpl.w	PushB_Display				; branch if block hasn't reached floor
+		bpl.w	DespawnObject				; branch if block hasn't reached floor
 		add.w	d1,ost_y_pos(a0)			; align to floor
 		clr.w	ost_y_vel(a0)				; stop falling
 		move.b	#id_PushB_Action,ost_routine(a0)	; goto PushB_Action next
 		move.w	(a3),d0					; get 16x16 tile the block is on
 		andi.w	#$3FF,d0
 		cmpi.w	#$16A,d0				; is it block $16A+ (lava)?
-		bcs.w	PushB_Display				; branch if not lava
+		bcs.w	DespawnObject				; branch if not lava
 		move.b	#id_PushB_Lava,ost_routine(a0)		; goto PushB_Lava next
-		bra.w	PushB_Display
+		bra.w	DespawnObject
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to move block when pushed

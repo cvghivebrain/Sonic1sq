@@ -39,12 +39,12 @@ LFall_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto LFall_Action next
 		move.b	ost_subtype(a0),d0
 		move.w	d0,d1
-		andi.b	#$F,d0
+		andi.w	#$F,d0
 		addq.b	#1,d0					; d0 = subtype +1
 		mulu.w	#120,d0					; multiply by 2 seconds
 		move.w	d0,ost_lfall_time_master(a0)
 		move.w	d0,ost_lfall_time(a0)
-		andi.b	#%00110000,d1
+		andi.w	#%00110000,d1
 		lsr.b	#3,d1
 		move.w	LFall_Heights(pc,d1.w),ost_lfall_y_dist(a0)
 
@@ -111,7 +111,6 @@ LFall_Action:	; Routine 2
 		move.b	#id_LFall_Tail,ost_routine(a1)
 		move.w	a2,ost_parent(a1)			; set front of lava as parent
 		
-	.wait:
 		bra.w	DespawnQuick_NoDisplay
 ; ===========================================================================
 

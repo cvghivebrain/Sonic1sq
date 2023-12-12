@@ -70,9 +70,8 @@ LWall_Wait:	; Routine 2
 		cmpi.w	#192,d1
 		bcc.s	.wait					; branch if Sonic is > 192px on x
 		addq.b	#2,ost_routine(a0)			; goto LWall_Move next
-		moveq	#0,d0
 		move.b	ost_subtype(a0),d0
-		andi.b	#$F0,d0
+		andi.w	#$F0,d0
 		lsr.b	#3,d0					; read high nybble of subtype
 		lea	LWall_Speeds(pc),a2
 		move.w	(a2,d0.w),ost_x_vel(a0)			; move right
