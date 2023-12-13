@@ -100,9 +100,6 @@ Anml_Main:	; Routine 0
 		move.b	#7,ost_anim_time(a0)
 		move.b	#id_frame_animal1_drop,ost_frame(a0)	; use "dropping" frame
 		move.w	#-$400,ost_y_vel(a0)
-		tst.b	(v_boss_status).w
-		beq.s	Anml_Wait				; branch if not at prison capsule
-		move.b	#3,ost_priority(a0)			; make animal appear in front of prison
 
 Anml_Wait:	; Routine 2
 		subq.w	#1,ost_animal_delay(a0)			; decrement timer
@@ -110,9 +107,12 @@ Anml_Wait:	; Routine 2
 		addq.b	#2,ost_routine(a0)			; goto Anml_Drop next
 
 Anml_Drop:	; Routine 4
-		tst.b	ost_render(a0)				; is object on-screen?
-		bpl.w	DeleteObject				; if not, branch
+		tst.b	ost_render(a0)
+		bmi.s	.display				; branch if on screen
+		subq.b	#1,(v_animal_count).w			; decrement animal counter
+		bra.w	DeleteObject
 		
+	.display:
 		update_y_fall					; make object fall and update its position
 		bmi.w	DisplaySprite				; branch if still moving upwards
 		jsr	(FindFloorObj).l
@@ -124,6 +124,7 @@ Anml_Drop:	; Routine 4
 		move.b	ost_animal_type(a0),ost_routine(a0)	; goto relevant routine next
 		tst.b	(v_boss_status).w
 		beq.w	DisplaySprite				; branch if not at prison capsule
+		move.b	#3,ost_priority(a0)			; make animal appear in front of prison
 		btst	#4,(v_vblank_counter_byte).w		; check bit that changes every 16 frames
 		beq.w	DisplaySprite				; branch if 0
 		neg.w	ost_x_vel(a0)				; reverse direction

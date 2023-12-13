@@ -26,6 +26,12 @@ DespawnObject:
 		bclr	#7,2(a2,d0.w)				; clear high bit of respawn entry (i.e. object was despawned not broken)
 		bra.w	DeleteObject				; delete the object
 
+DespawnObject_NoDisplay:
+		move.w	ost_x_pos(a0),d0
+		despawnrange
+		bhi.s	DespawnObject_Delete			; delete if object moves off screen
+		rts						; don't display
+
 ; ---------------------------------------------------------------------------
 ; As above, but without checking the respawn table
 

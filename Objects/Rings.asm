@@ -14,7 +14,7 @@
 ; subtypes:
 ;	%SSSS0QQQ
 ;	SSSS - spacing (see Ring_Spacing)
-;	QQQ - ring quantity (minus 1)
+;	QQQ - ring quantity (0 = 1 ring; 1 = 2 rings ... 6 = 7 rings max)
 ; ---------------------------------------------------------------------------
 
 Rings:
@@ -49,7 +49,7 @@ Ring_Spacing:	dc.b $10, 0					; $0x - horizontal tight
 		dc.b -$18, $10					; $Fx - unused
 
 		rsobj Rings
-ost_ring_x_main:	rs.w 1					; x position of primary ring (2 bytes)
+ost_ring_x_main:	rs.w 1					; x position of primary ring
 ost_ring_num:		rs.b 1					; which ring in the group of 1-7 rings it is
 		rsobjend
 ; ===========================================================================
