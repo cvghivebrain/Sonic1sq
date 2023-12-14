@@ -33,12 +33,17 @@ saveparent:	macro
 ; ---------------------------------------------------------------------------
 
 getparent:	macro
+		ifarg \1
+		rg: equs "\1"
+		else
+		rg: equs "a1"					; set a1 as target
+		endc
+		if (v_ost_all&$FFFF)>$7FFF
+		movea.w	ost_parent(a0),\rg
+		else
 		moveq	#-1,d0					; d0 = $FFFFFFFF
 		move.w	ost_parent(a0),d0			; d0 = $FFFFxxxx
-		ifarg \1
-		movea.l	d0,\1
-		else
-		movea.l	d0,a1					; set a1 as parent
+		movea.l	d0,\rg					; set a1 as parent
 		endc
 		endm
 		
@@ -49,12 +54,17 @@ getparent:	macro
 ; ---------------------------------------------------------------------------
 
 getlinked:	macro
+		ifarg \1
+		rg: equs "\1"
+		else
+		rg: equs "a1"					; set a1 as target
+		endc
+		if (v_ost_all&$FFFF)>$7FFF
+		movea.w	ost_linked(a0),\rg
+		else
 		moveq	#-1,d0					; d0 = $FFFFFFFF
 		move.w	ost_linked(a0),d0			; d0 = $FFFFxxxx
-		ifarg \1
-		movea.l	d0,\1
-		else
-		movea.l	d0,a1					; set a1 as linked
+		movea.l	d0,\rg					; set a1 as parent
 		endc
 		endm
 		
@@ -242,22 +252,11 @@ set_anim:	macro
 
 waitvisible:	macro
 		sub.w	(v_camera_y_pos).w,d0			; d0 = dist between object and top of screen (-ve if object is above)
-		ifarg	\1
-		cmpi.w	#-\1,d0
-		else
-		cmpi.w	#-256,d0
-		endc
-		bgt.s	.inrangetop\@				; branch if below upper limit
-		rts						; object is above
-	.inrangetop\@:
-		ifarg	\2
-		cmpi.w	#\2+screen_height,d0
-		else
-		cmpi.w	#256+screen_height,d0
-		endc
-		blt.s	.inrangebtm\@				; branch if above lower limit
-		rts						; object is below
-	.inrangebtm\@:
+		addi.w	#\1,d0					; d0 = dist between object and upper limit (-ve if object is above)
+		cmpi.w	#\1+screen_height+\2,d0
+		bcs.s	.inside_range\@				; branch if within upper and lower limit
+		rts						; object is outside
+	.inside_range\@:
 		endm
 
 ; ---------------------------------------------------------------------------
