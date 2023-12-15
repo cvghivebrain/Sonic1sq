@@ -1,8 +1,8 @@
 ; ---------------------------------------------------------------------------
-; Object 38 - shield and invincibility stars
+; Object 38 - Shield
 
 ; spawned by:
-;	PowerUp - animations 0-4
+;	PowerUp
 ; ---------------------------------------------------------------------------
 
 ShieldItem:
@@ -14,11 +14,6 @@ ShieldItem:
 Shi_Index:	index *,,2
 		ptr Shi_Main
 		ptr Shi_Shield
-		ptr Shi_Stars
-
-		rsobj ShieldItem
-ost_invincibility_last_pos:	rs.b 1				; previous position in tracking index, for invincibility trail
-		rsobjend
 ; ===========================================================================
 
 Shi_Main:	; Routine 0
@@ -28,11 +23,7 @@ Shi_Main:	; Routine 0
 		move.b	#1,ost_priority(a0)
 		move.b	#$10,ost_displaywidth(a0)
 		move.w	#vram_shield/sizeof_cell,ost_tile(a0)
-		tst.b	ost_anim(a0)
-		beq.s	Shi_Shield				; branch if object is a shield
-		addq.b	#2,ost_routine(a0)			; goto Shi_Stars next
-		bra.s	Shi_Stars
-; ===========================================================================
+		move.b	#id_ani_shield_0,ost_anim(a0)
 
 Shi_Shield:	; Routine 2
 		shortcut
@@ -53,20 +44,48 @@ Shi_Shield:	; Routine 2
 
 	.hide:
 		rts
+		
+; ---------------------------------------------------------------------------
+; Invincibility stars
+
+; spawned by:
+;	PowerUp
+; ---------------------------------------------------------------------------
+
+InvincibilityItem:
+		moveq	#0,d0
+		move.b	ost_routine(a0),d0
+		move.w	Inv_Index(pc,d0.w),d1
+		jmp	Inv_Index(pc,d1.w)
+; ===========================================================================
+Inv_Index:	index *,,2
+		ptr Inv_Main
+		ptr Inv_Stars
+
+		rsobj InvincibilityItem
+ost_invincibility_last_pos:	rs.b 1				; previous position in tracking index, for invincibility trail
+		rsobjend
+		
+Inv_Offsets:	dc.b 4, 24+4, 48+4, 72+4
 ; ===========================================================================
 
-Shi_Stars:	; Routine 4
+Inv_Main:	; Routine 0
+		addq.b	#2,ost_routine(a0)			; goto Inv_Stars next
+		move.l	#Map_Shield,ost_mappings(a0)
+		move.b	#render_rel,ost_render(a0)
+		move.b	#1,ost_priority(a0)
+		move.b	#$10,ost_displaywidth(a0)
+		move.w	#vram_shield/sizeof_cell,ost_tile(a0)
+		moveq	#0,d0
+		move.b	ost_anim(a0),d0				; get animation id (0 to 3)
+		move.b	Inv_Offsets(pc,d0.w),ost_subtype(a0)
+
+Inv_Stars:	; Routine 2
 		shortcut
 		tst.b	(v_invincibility).w			; does Sonic have invincibility?
 		beq.w	DeleteObject				; if not, branch
 		move.w	(v_sonic_pos_tracker_num).w,d0		; get current index value for position tracking data
-		move.b	ost_anim(a0),d1				; get animation id (1 to 4)
-		subq.b	#1,d1					; subtract 1 (0 to 3)
-		lsl.b	#3,d1
-		move.b	d1,d2
-		add.b	d1,d1
-		add.b	d2,d1					; multiply animation number by 24
-		addq.b	#4,d1					; add 4
+		move.b	ost_subtype(a0),d1			; get tracking offset
 		sub.b	d1,d0					; subtract from tracker
 		move.b	ost_invincibility_last_pos(a0),d1	; retrieve previous index
 		sub.b	d1,d0					; subtract from tracker
@@ -91,11 +110,11 @@ Shi_Stars:	; Routine 4
 ; ---------------------------------------------------------------------------
 
 Ani_Shield:	index *
-		ptr ani_shield_0
 		ptr ani_stars1
 		ptr ani_stars2
 		ptr ani_stars3
 		ptr ani_stars4
+		ptr ani_shield_0
 		
 ani_shield_0:	dc.w 1
 		dc.w id_frame_shield_1

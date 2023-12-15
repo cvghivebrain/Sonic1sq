@@ -104,19 +104,19 @@ Pow_Invincible:
 		move.w	#sonic_invincible_time,(v_ost_player+ost_sonic_invincible_time).w ; time limit for the power-up
 		bsr.w	FindFreeInert
 		bne.s	.fail
-		move.l	#ShieldItem,ost_id(a1)			; load stars object ($3801)
+		move.l	#InvincibilityItem,ost_id(a1)		; load stars object
 		move.b	#id_ani_stars1,ost_anim(a1)
 		bsr.w	FindFreeInert
 		bne.s	.fail
-		move.l	#ShieldItem,ost_id(a1)			; load stars object ($3802)
+		move.l	#InvincibilityItem,ost_id(a1)		; load stars object
 		move.b	#id_ani_stars2,ost_anim(a1)
 		bsr.w	FindFreeInert
 		bne.s	.fail
-		move.l	#ShieldItem,ost_id(a1)			; load stars object ($3803)
+		move.l	#InvincibilityItem,ost_id(a1)		; load stars object
 		move.b	#id_ani_stars3,ost_anim(a1)
 		bsr.w	FindFreeInert
 		bne.s	.fail
-		move.l	#ShieldItem,ost_id(a1)			; load stars object ($3804)
+		move.l	#InvincibilityItem,ost_id(a1)		; load stars object
 		move.b	#id_ani_stars4,ost_anim(a1)
 		
 	.fail:
