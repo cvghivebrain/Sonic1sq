@@ -147,9 +147,8 @@ Jun_Update:
 		subq.b	#1,ost_anim_time(a0)			; decrement frame timer
 		bpl.s	.nochange				; if time remains, branch
 		move.b	#7,ost_anim_time(a0)			; 7 frames until next update
-		move.b	ost_junc_direction(a0),d1
 		move.b	ost_frame(a0),d0
-		add.b	d1,d0					; add direction (1 or -1) to frame
+		add.b	ost_junc_direction(a0),d0		; add direction (1 or -1) to frame
 		andi.b	#$F,d0
 		move.b	d0,ost_frame(a0)			; update frame
 

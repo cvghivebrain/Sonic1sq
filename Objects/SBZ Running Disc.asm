@@ -59,6 +59,7 @@ Disc_Main:	; Routine 0
 		move.b	d0,ost_angle(a0)			; use as starting angle
 
 Disc_Action:	; Routine 2
+		shortcut
 		bsr.s	Disc_Detect
 		add.w	d1,ost_angle(a0)			; update angle (d1 is ost_disc_rotation)
 		move.b	ost_angle(a0),d0

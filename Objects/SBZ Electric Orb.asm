@@ -18,7 +18,7 @@ Elec_Index:	index *,,2
 		ptr Elec_Reset
 
 		rsobj Electro
-ost_electro_mask:	rs.w 1					; zap rate - applies bitmask to frame counter (2 bytes)
+ost_electro_mask:	rs.w 1					; zap rate - applies bitmask to frame counter
 		rsobjend
 ; ===========================================================================
 

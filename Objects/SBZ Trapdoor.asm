@@ -3,6 +3,10 @@
 
 ; spawned by:
 ;	ObjPos_SBZ1, ObjPos_SBZ2 - subtypes 1/2
+
+; subtypes:
+;	%0000TTTT
+;	TTTT - time in seconds between opening/closing
 ; ---------------------------------------------------------------------------
 
 Trapdoor:
@@ -19,8 +23,8 @@ Trap_Index:	index *,,2
 		ptr Trap_Close
 
 		rsobj Trapdoor
-ost_trap_wait_time:	rs.w 1					; time until change (2 bytes)
-ost_trap_wait_master:	rs.w 1					; time between changes (2 bytes)
+ost_trap_wait_time:	rs.w 1					; time until change
+ost_trap_wait_master:	rs.w 1					; time between changes
 		rsobjend
 ; ===========================================================================
 

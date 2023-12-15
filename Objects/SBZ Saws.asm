@@ -45,6 +45,7 @@ Saw_Main:	; Routine 0
 		move.b	(a2)+,ost_subtype(a0)
 
 Saw_Action:	; Routine 2
+		shortcut
 		moveq	#0,d0
 		move.b	ost_subtype(a0),d0
 		move.w	Saw_Type_Index(pc,d0.w),d1

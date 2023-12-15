@@ -41,7 +41,6 @@ Spin_Main:	; Routine 0
 		move.w	#tile_Kos_SpinPlatform,ost_tile(a0)
 		move.b	#$10,ost_displaywidth(a0)
 		move.b	#id_ani_spin_1,ost_anim(a0)
-		moveq	#0,d0
 		move.b	ost_subtype(a0),d0			; get object type
 		move.w	d0,d1
 		andi.w	#$F,d0					; read only low nybble

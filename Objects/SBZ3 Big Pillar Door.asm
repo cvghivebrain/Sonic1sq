@@ -3,6 +3,11 @@
 
 ; spawned by:
 ;	ObjPos_SBZ3 - subtypes $80/$B
+
+; subtypes:
+;	%F000BBBB
+;	F - 0 for start position; 1 for final position (both versions are loaded simultaneously)
+;	BBBB - button id
 ; ---------------------------------------------------------------------------
 
 BigPillar:

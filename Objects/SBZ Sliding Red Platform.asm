@@ -30,7 +30,7 @@ Slide_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Slide_Solid next
 		move.l	#Map_Slide,ost_mappings(a0)
 		move.b	#render_rel,ost_render(a0)
-		move.b	#$3F,ost_displaywidth(a0)
+		move.b	#$40,ost_displaywidth(a0)
 		move.b	#$3F,ost_width(a0)
 		move.b	#8,ost_height(a0)
 		move.w	#tile_Kos_SlideFloor+tile_pal3,ost_tile(a0)
