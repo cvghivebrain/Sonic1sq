@@ -8,10 +8,12 @@
 ;	ObjPos_SBZ3 - subtypes 0/$30
 
 ; subtypes:
-;	%KTTTMMM0
+;	%KTTTRRHV
 ;	K - 1 for classic double-kill behaviour
 ;	TTT - size/direction type (see Spike_Var)
-;	MMM - movement type (see Spike_TypeIndex)
+;	RR - movement rate (see Spike_Times)
+;	H - 1 to move left/right every time interval
+;	V - 1 to move up/down every time interval
 
 type_spike_3up:		equ ((Spike_Var_0-Spike_Var)/4)<<4	; $0x - 3 facing up (or down if yflipped)
 type_spike_3left:	equ ((Spike_Var_1-Spike_Var)/4)<<4	; $1x - 3 facing left (or right if xflipped)
@@ -19,9 +21,11 @@ type_spike_1up:		equ ((Spike_Var_2-Spike_Var)/4)<<4	; $2x - 1 facing up (or down
 type_spike_3upwide:	equ ((Spike_Var_3-Spike_Var)/4)<<4	; $3x - 3 facing up (or down if yflipped), wide spacing
 type_spike_6upwide:	equ ((Spike_Var_4-Spike_Var)/4)<<4	; $4x - 6 facing up (or down if yflipped), wide spacing
 type_spike_1left:	equ ((Spike_Var_5-Spike_Var)/4)<<4	; $5x - 1 facing left (or right if xflipped)
-type_spike_still:	equ id_Spike_Still			; x0 - doesn't move
-type_spike_updown:	equ id_Spike_UpDown			; x2 - moves up and down 32px
-type_spike_leftright:	equ id_Spike_LeftRight			; x4 - moves side-to-side 32px
+type_spike_updown_bit:	equ 0
+type_spike_leftright_bit: equ 1
+type_spike_still:	equ 0					; x0 - doesn't move
+type_spike_updown:	equ 1<<type_spike_updown_bit		; x2 - moves up and down 32px
+type_spike_leftright:	equ 1<<type_spike_leftright_bit		; x4 - moves side-to-side 32px
 type_spike_doublekill:	equ $80					; classic pre-bugfix behaviour, kills Sonic after losing rings immediately
 ; ---------------------------------------------------------------------------
 
@@ -43,13 +47,15 @@ Spike_Var_3:	dc.b id_frame_spike_3upwide, 28, 16, solid_top+solid_bottom ; $3x
 Spike_Var_4:	dc.b id_frame_spike_6upwide, 64, 16, solid_top+solid_bottom ; $4x
 Spike_Var_5:	dc.b id_frame_spike_1left, 16, 4, solid_left+solid_right ; $5x
 
+Spike_Times:	dc.w 60, 30, 15, 90
+
 		rsobj Spikes
 ost_spike_x_start:	rs.w 1					; original X position
-ost_spike_y_start:	rs.w 1					; original Y position
-ost_spike_move_dist:	rs.w 1					; pixel distance to move object * $100, either direction
+ost_spike_move_master:	rs.w 1					; time between moves
 ost_spike_move_time:	rs.w 1					; time until object moves again
 ost_spike_move_flag:	rs.b 1					; 0 = original position; 1 = moved position
 ost_spike_side:		rs.b 1					; sidedness bitmask
+ost_spike_move_dist:	rs.b 1					; distance moved (0-4 meaning 0-32px)
 		rsobjend
 ; ===========================================================================
 
@@ -60,6 +66,7 @@ Spike_Main:	; Routine 0
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#4,ost_priority(a0)
 		move.b	ost_subtype(a0),d0
+		move.b	d0,d1
 		andi.w	#$70,d0					; read high nybble (excluding high bit)
 		lsr.w	#2,d0
 		lea	Spike_Var(pc,d0.w),a1
@@ -69,14 +76,17 @@ Spike_Main:	; Routine 0
 		move.b	(a1)+,ost_height(a0)
 		move.b	(a1)+,ost_spike_side(a0)
 		move.w	ost_x_pos(a0),ost_spike_x_start(a0)
-		move.w	ost_y_pos(a0),ost_spike_y_start(a0)
+		andi.w	#%00001100,d1				; read bits 2-3 of subtype
+		lsr.w	#1,d1
+		move.w	Spike_Times(pc,d1.w),ost_spike_move_master(a0) ; set master timer
 
 Spike_Solid:	; Routine 2
 		move.b	ost_subtype(a0),d0			; get subtype
-		andi.w	#$E,d0					; read only low nybble
-		move.w	Spike_TypeIndex(pc,d0.w),d1
-		jsr	Spike_TypeIndex(pc,d1.w)		; update position
+		andi.w	#type_spike_updown+type_spike_leftright,d0 ; read only bits 0-1
+		beq.s	.skip_move				; branch if both 0
+		bsr.s	Spike_Move				; update position
 		
+	.skip_move:
 		bsr.w	SolidObject
 		tst.b	(v_invincibility).w
 		bne.s	Spike_Display				; branch if Sonic is invincible
@@ -105,68 +115,43 @@ Spike_Solid:	; Routine 2
 Spike_Display:
 		move.w	ost_spike_x_start(a0),d0
 		bra.w	DespawnQuick_AltX
-; ===========================================================================
-Spike_TypeIndex:
-		index *,,2
-		ptr Spike_Still					; $x0
-		ptr Spike_UpDown				; $x2
-		ptr Spike_LeftRight				; $x4
-; ===========================================================================
 
-; Type 0 - doesn't move
-Spike_Still:
-		rts
-; ===========================================================================
+; ---------------------------------------------------------------------------
+; Subroutine to move spikes
+; ---------------------------------------------------------------------------
 
-; Type 1 - moves up and down
-Spike_UpDown:
-		bsr.w	Spike_Wait				; run timer and update ost_spike_move_dist
-		moveq	#0,d0
-		move.b	ost_spike_move_dist(a0),d0		; get distance to move
-		add.w	ost_spike_y_start(a0),d0		; add to initial y position
-		move.w	d0,ost_y_pos(a0)			; update position
-		rts	
-; ===========================================================================
-
-; Type 2 - moves side-to-side
-Spike_LeftRight:
-		bsr.w	Spike_Wait				; run timer and update ost_spike_move_dist
-		moveq	#0,d0
-		move.b	ost_spike_move_dist(a0),d0		; get distance to move
-		add.w	ost_spike_x_start(a0),d0		; add to initial x position
-		move.w	d0,ost_x_pos(a0)			; update position
-		rts	
-; ===========================================================================
-
-Spike_Wait:
-		tst.w	ost_spike_move_time(a0)			; has timer hit 0?
-		beq.s	.update					; if yes, branch
+Spike_Move:
+		tst.w	ost_spike_move_time(a0)
+		beq.s	.move_now				; branch if timer is on 0
 		subq.w	#1,ost_spike_move_time(a0)		; decrement timer
-		bne.s	.exit					; branch if not 0
-		tst.b	ost_render(a0)				; is spikes object on-screen?
-		bpl.s	.exit					; if not, branch
-		play.w	1, jsr, sfx_SpikeMove			; play "spikes moving" sound
+		bne.s	.exit					; branch if time remains
+		tst.b	ost_render(a0)
+		bpl.s	.exit					; branch if spikes are off screen
+		play.w	1, jmp, sfx_SpikeMove			; play "spikes moving" sound
+		
+	.move_now:
+		addq.b	#1,ost_spike_move_dist(a0)
+		moveq	#8,d1
+		tst.b	ost_spike_move_flag(a0)
+		beq.s	.initial_pos				; branch if in initial pos
+		neg.w	d1					; reverse direction
+		
+	.initial_pos:
+		btst	#type_spike_leftright_bit,d0
+		beq.s	.skip_leftright				; branch if not moving left/right
+		add.w	d1,ost_x_pos(a0)			; move left/right
+		
+	.skip_leftright:
+		andi.b	#type_spike_updown,d0
+		beq.s	.skip_updown				; branch if not moving up/down
+		add.w	d1,ost_y_pos(a0)			; move up/down
+		
+	.skip_updown:
+		cmpi.b	#4,ost_spike_move_dist(a0)
+		bne.s	.exit					; branch if not moved fully
+		move.b	#0,ost_spike_move_dist(a0)
+		bchg	#0,ost_spike_move_flag(a0)		; reverse next time
+		move.w	ost_spike_move_master(a0),ost_spike_move_time(a0) ; reset timer
+		
+	.exit:
 		rts
-; ===========================================================================
-
-.update:
-		tst.b	ost_spike_move_flag(a0)			; are spikes in original position?
-		beq.s	.original_pos				; if yes, branch
-		subi.w	#$800,ost_spike_move_dist(a0)		; subtract 8px from distance
-		bcc.s	.exit					; branch if 0 or more
-		move.w	#0,ost_spike_move_dist(a0)		; set minimum distance
-		move.b	#0,ost_spike_move_flag(a0)		; set flag that spikes are in original position
-		move.w	#60,ost_spike_move_time(a0)		; set time delay to 1 second
-		rts
-; ===========================================================================
-
-.original_pos:
-		addi.w	#$800,ost_spike_move_dist(a0)		; add 8px to move distance
-		cmpi.w	#$2000,ost_spike_move_dist(a0)		; has it moved 32px?
-		bcs.s	.exit					; if not, branch
-		move.w	#$2000,ost_spike_move_dist(a0)		; set max distance
-		move.b	#1,ost_spike_move_flag(a0)		; set flag that spikes are in new position
-		move.w	#60,ost_spike_move_time(a0)		; set time delay to 1 second
-
-.exit:
-		rts	
