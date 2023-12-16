@@ -12,6 +12,17 @@
 ;	K - 1 for classic double-kill behaviour
 ;	TTT - size/direction type (see Spike_Var)
 ;	MMM - movement type (see Spike_TypeIndex)
+
+type_spike_3up:		equ ((Spike_Var_0-Spike_Var)/4)<<4	; $0x - 3 facing up (or down if yflipped)
+type_spike_3left:	equ ((Spike_Var_1-Spike_Var)/4)<<4	; $1x - 3 facing left (or right if xflipped)
+type_spike_1up:		equ ((Spike_Var_2-Spike_Var)/4)<<4	; $2x - 1 facing up (or down if yflipped)
+type_spike_3upwide:	equ ((Spike_Var_3-Spike_Var)/4)<<4	; $3x - 3 facing up (or down if yflipped), wide spacing
+type_spike_6upwide:	equ ((Spike_Var_4-Spike_Var)/4)<<4	; $4x - 6 facing up (or down if yflipped), wide spacing
+type_spike_1left:	equ ((Spike_Var_5-Spike_Var)/4)<<4	; $5x - 1 facing left (or right if xflipped)
+type_spike_still:	equ id_Spike_Still			; x0 - doesn't move
+type_spike_updown:	equ id_Spike_UpDown			; x2 - moves up and down 32px
+type_spike_leftright:	equ id_Spike_LeftRight			; x4 - moves side-to-side 32px
+type_spike_doublekill:	equ $80					; classic pre-bugfix behaviour, kills Sonic after losing rings immediately
 ; ---------------------------------------------------------------------------
 
 Spikes:
@@ -62,7 +73,7 @@ Spike_Main:	; Routine 0
 
 Spike_Solid:	; Routine 2
 		move.b	ost_subtype(a0),d0			; get subtype
-		andi.b	#$E,d0					; read only low nybble
+		andi.w	#$E,d0					; read only low nybble
 		move.w	Spike_TypeIndex(pc,d0.w),d1
 		jsr	Spike_TypeIndex(pc,d1.w)		; update position
 		

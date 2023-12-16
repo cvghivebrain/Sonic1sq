@@ -32,7 +32,7 @@ ObjPos_SLZ1:
 		objpos $0864,$0255,Rings,$10,rem
 		objpos $0885,$024C,Rings,$10,rem
 		objpos $08A8,$05D4,Rings,$14,rem
-		objpos $0A08,$0250,Fan,type_fan_left_on,xflip
+		objpos $0A08,$0250,Fan,type_fan_alwayson,xflip
 		objpos $0B08,$0350,Scenery,type_scen_cannon
 		objpos $0B08,$03D0,Scenery,type_scen_cannon
 		objpos $0B08,$0450,Scenery,type_scen_cannon
@@ -74,7 +74,7 @@ ObjPos_SLZ1:
 		objpos $0D80,$0360,CirclingPlatform,$02
 		objpos $0D80,$0360,CirclingPlatform,$03
 		objpos $0DD0,$03D0,Bomb,$00,rem
-		objpos $0DF0,$0250,Fan,type_fan_left_on
+		objpos $0DF0,$0250,Fan,type_fan_alwayson
 		objpos $0E00,$00A0,Orbinaut,type_orbinaut_passive+type_orbinaut_pal2,rem
 		objpos $0E20,$0668,CollapseFloor,type_cfloor_slz+type_cfloor_sided+1
 		objpos $0E30,$03D0,Bomb,$00,rem
@@ -121,7 +121,7 @@ ObjPos_SLZ1:
 		objpos $1290,$0180,CirclingPlatform,$02
 		objpos $1290,$0180,CirclingPlatform,$03
 		objpos $1310,$02F0,Staircase,type_stair_below
-		objpos $1310,$0650,Fan,type_fan_left_on,xflip
+		objpos $1310,$0650,Fan,type_fan_alwayson,xflip
 		objpos $1320,$05E8,CollapseFloor,type_cfloor_slz+type_cfloor_sided+1
 		objpos $1358,$0100,Rings,$12,rem
 		objpos $1360,$05E8,CollapseFloor,type_cfloor_slz+type_cfloor_sided+1
@@ -131,10 +131,10 @@ ObjPos_SLZ1:
 		objpos $1370,$0100,CirclingPlatform,$03
 		objpos $13D8,$05E8,Elevator,type_elev_up_medium
 		objpos $13F8,$03D0,Springs,type_spring_red+type_spring_right,xflip
-		objpos $1410,$0250,Fan,type_fan_left_on,xflip
+		objpos $1410,$0250,Fan,type_fan_alwayson,xflip
 		objpos $1488,$0670,Scenery,type_scen_cannon
 		objpos $14A0,$0670,FireMaker,type_fire_rate120+type_fire_horizontal+2,xflip
-		objpos $1508,$0050,Fan,type_fan_left_onoff
+		objpos $1508,$0050,Fan,type_fan_onoff
 		objpos $1510,$0270,Staircase,type_stair_below,xflip
 		objpos $1530,$0358,Springs,type_spring_red+type_spring_up
 		objpos $1568,$05A0,Rings,$12,rem
@@ -165,7 +165,7 @@ ObjPos_SLZ1:
 		objpos $1780,$05A0,CirclingPlatform,$03
 		objpos $17B0,$00D0,Rings,$12,rem
 		objpos $17E8,$0640,Rings,$12,rem
-		objpos $17F8,$03D0,Fan,type_fan_left_on
+		objpos $17F8,$03D0,Fan,type_fan_alwayson
 		objpos $1800,$0640,CirclingPlatform,$04
 		objpos $1800,$0640,CirclingPlatform,$05
 		objpos $1800,$0640,CirclingPlatform,$06
@@ -192,7 +192,7 @@ ObjPos_SLZ1:
 		objpos $1AA4,$0136,Rings,$10,rem
 		objpos $1ABC,$0150,Rings,$10,rem
 		objpos $1AC4,$0170,Rings,$10,rem
-		objpos $1B78,$0250,Fan,type_fan_left_on,xflip
+		objpos $1B78,$0250,Fan,type_fan_alwayson,xflip
 		objpos $1B90,$0271,Monitor,type_monitor_rings,rem
 		objpos $1BA0,$01E8,CollapseFloor,type_cfloor_slz+type_cfloor_sided+1
 		objpos $1BE0,$01E8,CollapseFloor,type_cfloor_slz+type_cfloor_sided+1
@@ -211,7 +211,7 @@ ObjPos_SLZ1:
 		objpos $1D28,$0668,Elevator,type_elev_upright
 		objpos $1D50,$04D0,Rings,$14,rem
 		objpos $1D98,$0210,Rings,$14,rem
-		objpos $1DC8,$0250,Fan,type_fan_left_on,xflip
+		objpos $1DC8,$0250,Fan,type_fan_alwayson,xflip
 		objpos $1E10,$0270,Staircase,type_stair_below
 		objpos $1E28,$05E8,Elevator,type_elev_up_short
 		objpos $1E48,$02E8,Elevator,type_elev_down_short

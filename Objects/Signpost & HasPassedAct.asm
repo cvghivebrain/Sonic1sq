@@ -135,7 +135,7 @@ Sign_SonicRun:	; Routine 6
 ; ===========================================================================
 
 Sign_Exit:	; Routine 8
-		shortcut
+		shortcut	DespawnQuick
 		bra.w	DespawnQuick
 
 ; ---------------------------------------------------------------------------
@@ -144,7 +144,7 @@ Sign_Exit:	; Routine 8
 
 HasPassedAct:
 		tst.b	(v_haspassed_state).w			; has "Sonic Has Passed" title card loaded?
-		bne.w	DespawnQuick				; if yes, branch
+		bne.s	.exit					; if yes, branch
 
 		move.w	(v_boundary_right).w,(v_boundary_left).w
 		clr.b	(v_invincibility).w			; disable invincibility
@@ -174,6 +174,8 @@ HasPassedAct:
 		mulu.w	#10,d0					; multiply by 10
 		move.w	d0,(v_ring_bonus).w			; set ring bonus
 		play.w	1, jsr, mus_HasPassed			; play "Sonic Has Passed" music
+		
+	.exit:
 		rts
 
 ; ===========================================================================

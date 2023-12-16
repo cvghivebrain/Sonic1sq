@@ -3,6 +3,9 @@
 
 ; spawned by:
 ;	ObjPos_SLZ1, ObjPos_SLZ2, ObjPos_SLZ3 - subtypes 0/1
+
+type_fan_onoff:		equ 0					; 0 - on for 3 seconds, off for 2 seconds
+type_fan_alwayson:	equ 1					; 1 - always on
 ; ---------------------------------------------------------------------------
 
 Fan:

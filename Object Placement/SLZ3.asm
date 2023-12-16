@@ -17,9 +17,9 @@ ObjPos_SLZ3:
 		objpos $0590,$0110,Bomb,$00,yflip,rem
 		objpos $05D0,$0110,Bomb,$00,yflip,rem
 		objpos $05D8,$0151,Monitor,type_monitor_invincible,rem
-		objpos $0610,$0050,Fan,type_fan_left_on,xflip
+		objpos $0610,$0050,Fan,type_fan_alwayson,xflip
 		objpos $0610,$0110,Bomb,$00,yflip,rem
-		objpos $0610,$04D0,Fan,type_fan_left_on,xflip
+		objpos $0610,$04D0,Fan,type_fan_alwayson,xflip
 		objpos $0640,$0260,Seesaw,$00
 		objpos $0650,$0110,Bomb,$00,yflip,rem
 		objpos $0660,$0200,Rings,$42,rem
@@ -27,7 +27,7 @@ ObjPos_SLZ3:
 		objpos $0674,$02B0,Rings,$45,rem
 		objpos $0684,$02BC,Rings,$41,rem
 		objpos $0690,$0110,Bomb,$00,yflip,rem
-		objpos $0690,$0650,Fan,type_fan_left_on,xflip
+		objpos $0690,$0650,Fan,type_fan_alwayson,xflip
 		objpos $0720,$04E8,CollapseFloor,type_cfloor_slz+type_cfloor_sided+1
 		objpos $0728,$04D0,Rings,$12,rem
 		objpos $0728,$0548,Rings,$12,rem
@@ -36,7 +36,7 @@ ObjPos_SLZ3:
 		objpos $0770,$04B0,Orbinaut,type_orbinaut_passive+type_orbinaut_pal2,rem
 		objpos $0790,$0670,Bomb,$00,xflip,rem
 		objpos $07F0,$0670,Bomb,$00,rem
-		objpos $0810,$0450,Fan,type_fan_right_onoff,xflip
+		objpos $0810,$0450,Fan,type_fan_onoff,xflip
 		objpos $0810,$0670,Bomb,$00,xflip,rem
 		objpos $0818,$0050,Rings,$14,rem
 		objpos $0870,$0670,Bomb,$00,rem
@@ -64,7 +64,7 @@ ObjPos_SLZ3:
 		objpos $0AF0,$05D0,Bomb,$00,rem
 		objpos $0AF8,$03D0,Springs,type_spring_red+type_spring_right,xflip
 		objpos $0B00,$00AC,Orbinaut,type_orbinaut_passive+type_orbinaut_pal2,rem
-		objpos $0B10,$0050,Fan,type_fan_left_on,xflip
+		objpos $0B10,$0050,Fan,type_fan_alwayson,xflip
 		objpos $0B68,$05E0,Rings,$12,rem
 		objpos $0B80,$05E0,CirclingPlatform,$00
 		objpos $0B80,$05E0,CirclingPlatform,$01
@@ -99,7 +99,7 @@ ObjPos_SLZ3:
 		objpos $0F60,$0768,CollapseFloor,type_cfloor_slz+$01
 		objpos $0F68,$0130,Rings,$12,rem
 		objpos $0F80,$0180,TileSwitch,2
-		objpos $1000,$0750,Fan,type_fan_left_on,xflip
+		objpos $1000,$0750,Fan,type_fan_alwayson,xflip
 		objpos $1010,$05D1,Monitor,type_monitor_invincible,rem
 		objpos $103C,$0270,Rings,$10,rem
 		objpos $1044,$024E,Rings,$10,rem
@@ -120,7 +120,7 @@ ObjPos_SLZ3:
 		objpos $1170,$0770,Bomb,$00,rem
 		objpos $117C,$0088,Rings,$11,rem
 		objpos $1180,$0420,SquareBlock,4
-		objpos $1184,$0750,Fan,type_fan_left_onoff
+		objpos $1184,$0750,Fan,type_fan_onoff
 		objpos $1188,$0070,Rings,$10,rem
 		objpos $1200,$00C0,SwingingPlatform,$27
 		objpos $1220,$0768,CollapseFloor,type_cfloor_slz+$01
@@ -140,7 +140,7 @@ ObjPos_SLZ3:
 		objpos $12F0,$0370,Bomb,$00,rem
 		objpos $1310,$0370,Bomb,$00,xflip,rem
 		objpos $1310,$0448,Rings,$12,rem
-		objpos $1310,$06D0,Fan,type_fan_left_on,xflip
+		objpos $1310,$06D0,Fan,type_fan_alwayson,xflip
 		objpos $1328,$05E8,ElevatorMaker,$A
 		objpos $1358,$0168,Elevator,type_elev_up_short
 		objpos $1358,$0268,Elevator,type_elev_up_short
@@ -161,14 +161,14 @@ ObjPos_SLZ3:
 		objpos $1580,$0670,SquareBlock,4
 		objpos $15C0,$04F0,Seesaw,$00
 		objpos $15F0,$0550,Bomb,$00,rem
-		objpos $1610,$0350,Fan,type_fan_left_on,xflip
+		objpos $1610,$0350,Fan,type_fan_alwayson,xflip
 		objpos $1620,$0450,Rings,$12,rem
 		objpos $1630,$0210,Rings,$42,rem
 		objpos $1668,$0130,Rings,$12,rem
 		objpos $1680,$0180,TileSwitch,2
-		objpos $1710,$0250,Fan,type_fan_left_on,xflip
+		objpos $1710,$0250,Fan,type_fan_alwayson,xflip
 		objpos $1710,$05D1,Monitor,type_monitor_shield,rem
-		objpos $1710,$0650,Fan,type_fan_left_on,xflip
+		objpos $1710,$0650,Fan,type_fan_alwayson,xflip
 		objpos $1720,$0320,Orbinaut,type_orbinaut_passive+type_orbinaut_pal2,rem
 		objpos $1730,$05D1,Monitor,type_monitor_rings,rem
 		objpos $1750,$0471,Monitor,type_monitor_rings,rem
@@ -211,9 +211,9 @@ ObjPos_SLZ3:
 		objpos $1B90,$0490,Bomb,$00,yflip,rem
 		objpos $1BA0,$0310,Rings,$14,rem
 		objpos $1BB0,$0490,Bomb,$00,yflip,rem
-		objpos $1BD0,$0350,Fan,type_fan_left_on,xflip
+		objpos $1BD0,$0350,Fan,type_fan_alwayson,xflip
 		objpos $1BD0,$0490,Bomb,$00,yflip,rem
-		objpos $1BF0,$0450,Fan,type_fan_left_on,xflip
+		objpos $1BF0,$0450,Fan,type_fan_alwayson,xflip
 		objpos $1CD0,$0410,Bomb,$00,yflip,rem
 		objpos $1CD0,$05C0,Orbinaut,type_orbinaut_passive+type_orbinaut_pal2,rem
 		objpos $1CE0,$0450,Rings,$14,rem
@@ -232,7 +232,7 @@ ObjPos_SLZ3:
 		objpos $1D80,$0344,Orbinaut,type_orbinaut_passive+type_orbinaut_pal2,rem
 		objpos $1DA0,$0310,Bomb,$00,yflip,rem
 		objpos $1DC0,$0310,Bomb,$00,yflip,rem
-		objpos $1DE8,$02D0,Fan,type_fan_left_on,xflip
+		objpos $1DE8,$02D0,Fan,type_fan_alwayson,xflip
 		objpos $1E10,$03F0,Staircase,type_stair_below,xflip
 		objpos $1E78,$0470,Springs,type_spring_red+type_spring_right,xflip
 		objpos $1EB0,$0450,Rings,$12,rem

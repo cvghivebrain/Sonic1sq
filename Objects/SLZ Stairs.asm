@@ -9,6 +9,9 @@
 ;	%WWWWTTTT
 ;	WWWW - wait time after triggering staircase (*0.5 seconds)
 ;	TTTT - type (see Stair_Types)
+
+type_stair_above:	equ $10					; 0 - forms a staircase when stood on
+type_stair_below:	equ $21					; 1 - forms a staircase when hit from below
 ; ---------------------------------------------------------------------------
 
 Staircase:

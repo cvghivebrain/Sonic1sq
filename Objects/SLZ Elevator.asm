@@ -9,6 +9,12 @@
 ;	%DDDDTTTT
 ;	DDDD - distance to move (*128px)
 ;	TTTT - type of movement (see Elev_Type_Index)
+
+type_elev_up_short:	equ id_Elev_Up+$10			; rises 128px when stood on
+type_elev_up_medium:	equ id_Elev_Up+$20			; rises 256px when stood on
+type_elev_down_short:	equ id_Elev_Down+$10			; falls 128px when stood on
+type_elev_upright:	equ id_Elev_UpRight+$20			; rises diagonally right when stood on
+type_elev_up_vanish:	equ id_Elev_UpVanish+$30		; rises when stood on and vanishes
 ; ---------------------------------------------------------------------------
 
 Elevator:
@@ -51,6 +57,7 @@ Elev_Main:	; Routine 0
 		move.w	ost_y_pos(a0),ost_elev_y_start(a0)
 
 Elev_Solid:	; Routine 2
+		shortcut
 		move.w	ost_x_pos(a0),ost_x_prev(a0)		; save x pos before moving
 		moveq	#0,d0
 		move.b	ost_subtype(a0),d0

@@ -81,7 +81,7 @@ SBlock_Main:	; Routine 0
 		dbf	d1,.loop
 
 SBlock_Action:	; Routine 2
-		shortcut
+		shortcut	DespawnFamily_NoDisplay
 		bra.w	DespawnFamily_NoDisplay
 
 ; ---------------------------------------------------------------------------

@@ -37,6 +37,7 @@ Circ_Main:	; Routine 0
 		move.b	d0,ost_subtype(a0)
 
 Circ_Action:	; Routine 2
+		shortcut
 		move.w	ost_x_pos(a0),ost_x_prev(a0)		; save x pos before moving
 		
 		move.b	(v_oscillating_0_to_A0).w,d1

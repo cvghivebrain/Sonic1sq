@@ -75,7 +75,7 @@ See_Action:	; Routine 2
 		bclr	#render_xflip_bit,ost_render(a0)	; left side up, right side down
 		addq.b	#1,d0
 		move.b	d0,ost_seesaw_side(a0)			; remember which side Sonic is on
-		bra.w	DespawnQuick
+		bra.w	DespawnFamily
 		
 	.not_right:
 		cmpi.w	#$28,d4
@@ -85,7 +85,7 @@ See_Action:	; Routine 2
 		
 	.no_collision:
 		move.b	d0,ost_seesaw_side(a0)			; remember which side Sonic is on
-		bra.w	DespawnQuick
+		bra.w	DespawnFamily
 		
 ; ---------------------------------------------------------------------------
 ; Subroutine to make seesaw solid
@@ -105,10 +105,10 @@ See_Solid:
 See_Ball:	; Routine 4
 		getparent					; a1 = OST of seesaw object
 		tst.b	ost_mode(a1)
-		beq.w	DespawnQuick				; branch if Sonic isn't on the seesaw
+		beq.w	DisplaySprite				; branch if Sonic isn't on the seesaw
 		move.b	ost_seesaw_side(a1),d0
 		cmp.b	ost_subtype(a0),d0
-		beq.w	DespawnQuick				; branch if Sonic is on same side as spikeball
+		beq.w	DisplaySprite				; branch if Sonic is on same side as spikeball
 		
 		move.w	#-$818,d1				; spikeball speed from flat seesaw
 		move.w	#-$114,d2
@@ -133,7 +133,7 @@ See_Ball:	; Routine 4
 
 See_BallAir:	; Routine 6
 		update_xy_fall					; update position & apply gravity
-		bmi.w	DespawnQuick				; branch if spikeball is moving upwards
+		bmi.w	DisplaySprite				; branch if spikeball is moving upwards
 		getparent					; a1 = OST of seesaw object
 		moveq	#$1C,d1
 		cmpi.b	#id_frame_seesaw_flat,ost_frame(a1)
@@ -148,7 +148,7 @@ See_BallAir:	; Routine 6
 		move.w	ost_y_pos(a1),d0
 		sub.w	d1,d0
 		cmp.w	ost_y_pos(a0),d0
-		bgt.w	DespawnQuick				; branch if spikeball is above seesaw
+		bgt.w	DisplaySprite				; branch if spikeball is above seesaw
 		
 		subq.b	#2,ost_routine(a0)			; goto See_Ball next
 		move.w	ost_x_pos(a1),ost_x_pos(a0)
@@ -171,9 +171,9 @@ See_BallAir:	; Routine 6
 		
 	.chk_sonic:
 		move.b	ost_seesaw_side(a1),d0			; side of seesaw Sonic is on (0 = none; 1 = left; 2 = right; 4/5 = middle)
-		beq.w	DespawnQuick				; branch if 0
+		beq.w	DisplaySprite				; branch if 0
 		cmp.b	ost_subtype(a0),d0
-		beq.w	DespawnQuick				; branch if Sonic is on same side as spikeball
+		beq.w	DisplaySprite				; branch if Sonic is on same side as spikeball
 		getsonic a2					; a2 = OST of Sonic
 		move.w	ost_y_vel(a0),d0			; bounce Sonic with same speed the spikeball fell
 		neg.w	d0					; spikeball down, Sonic up
@@ -184,4 +184,4 @@ See_BallAir:	; Routine 6
 		move.b	#id_Spring,ost_anim(a2)			; Sonic uses spring animation
 		move.b	#id_Sonic_Control,ost_routine(a2)
 		play.w	1, jsr, sfx_Spring			; play spring sound
-		bra.w	DespawnQuick
+		bra.w	DisplaySprite

@@ -9,18 +9,6 @@ type_spring_up:		equ 0				; $0x - facing up
 type_spring_right:	equ $10				; $1x - facing right (or left if xflipped)
 type_spring_down:	equ $20				; $2x - facing down (must also be yflipped)
 
-; Spikes
-type_spike_3up:		equ ((Spike_Var_0-Spike_Var)/4)<<4	; $0x - 3 facing up (or down if yflipped)
-type_spike_3left:	equ ((Spike_Var_1-Spike_Var)/4)<<4	; $1x - 3 facing left (or right if xflipped)
-type_spike_1up:		equ ((Spike_Var_2-Spike_Var)/4)<<4	; $2x - 1 facing up (or down if yflipped)
-type_spike_3upwide:	equ ((Spike_Var_3-Spike_Var)/4)<<4	; $3x - 3 facing up (or down if yflipped), wide spacing
-type_spike_6upwide:	equ ((Spike_Var_4-Spike_Var)/4)<<4	; $4x - 6 facing up (or down if yflipped), wide spacing
-type_spike_1left:	equ ((Spike_Var_5-Spike_Var)/4)<<4	; $5x - 1 facing left (or right if xflipped)
-type_spike_still:	equ id_Spike_Still			; x0 - doesn't move
-type_spike_updown:	equ id_Spike_UpDown			; x2 - moves up and down 32px
-type_spike_leftright:	equ id_Spike_LeftRight			; x4 - moves side-to-side 32px
-type_spike_doublekill:	equ $80					; classic pre-bugfix behaviour, kills Sonic after losing rings immediately
-
 ; Monitor
 type_monitor_eggman:	equ id_Pow_Eggman			; Eggman, does nothing
 type_monitor_1up:	equ id_Pow_Sonic			; Extra life
@@ -99,23 +87,6 @@ type_wfall_hi:		equ $80					; +$80 - high priority sprite
 ; WaterfallSplash
 type_wfallsp_float:	equ 1					; matches y position to water surface
 type_wfallsp_hide:	equ 2					; hide until level is updated by button
-
-; Staircase
-type_stair_above:	equ $10				; 0 - forms a staircase when stood on
-type_stair_below:	equ $21				; 1 - forms a staircase when hit from below
-
-; Fan
-type_fan_left_onoff:	equ 0				; 0 - turns on/off every 3 seconds
-type_fan_right_onoff:	equ 0
-type_fan_left_on:	equ 1				; 1 - always on
-type_fan_right_on:	equ 1
-
-; Elevator
-type_elev_up_short:	equ id_Elev_Up+$10		; rises 128px when stood on
-type_elev_up_medium:	equ id_Elev_Up+$20		; rises 256px when stood on
-type_elev_down_short:	equ id_Elev_Down+$10		; falls 128px when stood on
-type_elev_upright:	equ id_Elev_UpRight+$20		; rises diagonally right when stood on
-type_elev_up_vanish:	equ id_Elev_UpVanish+$30	; rises when stood on and vanishes
 
 ; SpinPlatform
 type_spin_platform:	equ $80				; $8x - small spinning platform
