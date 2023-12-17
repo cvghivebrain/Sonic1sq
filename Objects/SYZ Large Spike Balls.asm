@@ -4,10 +4,15 @@
 ; spawned by:
 ;	ObjPos_SYZ1, ObjPos_SYZ2, ObjPos_SYZ3
 
-;	subtypes:
-;	%SSSSTTTT
+; subtypes:
+;	%SSSSTTT0
 ;	SSSS - rotation speed (1-7 = clockwise; 8-$F = anticlockwise; BBall_Circle only)
-;	TTTT - type (set as ost_routine)
+;	TTT - type (+2 set as ost_routine)
+
+type_bball_still:	equ id_BBall_Still-2			; 0 - doesn't move
+type_bball_sideways:	equ id_BBall_Sideways-2			; 2 - moves side-to-side
+type_bball_updown:	equ id_BBall_UpDown-2			; 4 - moves up and down
+type_bball_circle:	equ id_BBall_Circle-2			; 6 - moves in a circle
 ; ---------------------------------------------------------------------------
 
 BigSpikeBall:
@@ -52,13 +57,13 @@ BBall_Main:	; Routine 0
 		move.b	d0,ost_angle(a0)			; use as angle
 		move.b	#$50,ost_bball_radius(a0)		; set radius of circle motion
 		andi.b	#$E,d2					; read low nybble of subtype
-		beq.w	DeleteObject				; delete if 0
+		addq.b	#2,d2
 		move.b	d2,ost_routine(a0)			; goto specified routine next
 		bra.w	DespawnQuick
 ; ===========================================================================
 
 BBall_Still:	; Routine 2
-		shortcut
+		shortcut	DespawnQuick
 		bra.w	DespawnQuick
 ; ===========================================================================
 

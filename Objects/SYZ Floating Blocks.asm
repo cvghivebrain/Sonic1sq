@@ -8,6 +8,17 @@
 ;	%TTTTMMMM
 ;	TTTT - type (see FBlock_Var)
 ;	MMMM - movement type (see FBlock_Types)
+
+type_fblock_syz1x1:	equ ((FBlock_Var_0-FBlock_Var)/sizeof_FBlock_Var)<<4 ; $0x - single 32x32 square
+type_fblock_syz2x2:	equ ((FBlock_Var_1-FBlock_Var)/sizeof_FBlock_Var)<<4 ; $1x - 2x2 32x32 squares
+type_fblock_syz1x2:	equ ((FBlock_Var_2-FBlock_Var)/sizeof_FBlock_Var)<<4 ; $2x - 1x2 32x32 squares
+type_fblock_syzrect2x2:	equ ((FBlock_Var_3-FBlock_Var)/sizeof_FBlock_Var)<<4 ; $3x - 2x2 32x26 squares
+type_fblock_syzrect1x3:	equ ((FBlock_Var_4-FBlock_Var)/sizeof_FBlock_Var)<<4 ; $4x - 1x3 32x26 squares
+type_fblock_still:	equ id_FBlock_Still			; $x0 - doesn't move
+type_fblock_leftright:	equ id_FBlock_LeftRight			; $x1 - moves side to side
+type_fblock_leftrightwide: equ id_FBlock_LeftRightWide		; $x2 - moves side to side, larger distance
+type_fblock_updown:	equ id_FBlock_UpDown			; $x3 - moves up and down
+type_fblock_updownwide:	equ id_FBlock_UpDownWide		; $x4 - moves up and down, larger distance
 ; ---------------------------------------------------------------------------
 
 FloatingBlock:
@@ -21,8 +32,8 @@ FBlock_Index:	index *,,2
 		ptr FBlock_Action
 
 		rsobj FloatingBlock
-ost_fblock_y_start:	rs.w 1					; original y position (2 bytes)
-ost_fblock_x_start:	rs.w 1					; original x position (2 bytes)
+ost_fblock_y_start:	rs.w 1					; original y position
+ost_fblock_x_start:	rs.w 1					; original x position
 		rsobjend
 
 FBlock_Var:
@@ -43,6 +54,7 @@ FBlock_Main:	; Routine 0
 		move.b	#render_rel,ost_render(a0)
 		move.b	#3,ost_priority(a0)
 		move.b	ost_subtype(a0),d0			; get subtype
+		move.b	d0,d2
 		lsr.w	#4,d0
 		andi.w	#$F,d0					; read only high nybble
 		move.w	d0,d1
@@ -55,10 +67,9 @@ FBlock_Main:	; Routine 0
 		move.b	(a2)+,ost_frame(a0)
 		move.w	ost_x_pos(a0),ost_fblock_x_start(a0)
 		move.w	ost_y_pos(a0),ost_fblock_y_start(a0)
-		move.b	ost_subtype(a0),d0			; SYZ/SLZ specific code
-		andi.w	#$F,d0					; read low nybble of subtype
-		add.w	d0,d0
-		move.b	d0,ost_subtype(a0)			; update subtype for FBlock_Types
+		andi.w	#$F,d2					; read low nybble of subtype
+		add.w	d2,d2
+		move.b	d2,ost_subtype(a0)			; update subtype for FBlock_Types
 
 FBlock_Action:	; Routine 2
 		shortcut

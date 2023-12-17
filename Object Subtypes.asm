@@ -2,13 +2,6 @@
 ; Object subtypes
 ; ---------------------------------------------------------------------------
 
-; Springs
-type_spring_red:	equ 0				; x0 - red
-type_spring_yellow:	equ 2				; x2 - yellow
-type_spring_up:		equ 0				; $0x - facing up
-type_spring_right:	equ $10				; $1x - facing right (or left if xflipped)
-type_spring_down:	equ $20				; $2x - facing down (must also be yflipped)
-
 ; Monitor
 type_monitor_eggman:	equ id_Pow_Eggman			; Eggman, does nothing
 type_monitor_1up:	equ id_Pow_Sonic			; Extra life
@@ -45,24 +38,6 @@ type_fire_rate180:	equ (180/30)<<3				; every 3 seconds
 type_fire_vertical:	equ 0
 type_fire_horizontal:	equ $40
 type_fire_gravity:	equ $80
-
-; FloatingBlock
-type_fblock_syz1x1:	equ ((FBlock_Var_0-FBlock_Var)/sizeof_FBlock_Var)<<4	; $0x - single 32x32 square
-type_fblock_syz2x2:	equ ((FBlock_Var_1-FBlock_Var)/sizeof_FBlock_Var)<<4	; $1x - 2x2 32x32 squares
-type_fblock_syz1x2:	equ ((FBlock_Var_2-FBlock_Var)/sizeof_FBlock_Var)<<4	; $2x - 1x2 32x32 squares
-type_fblock_syzrect2x2:	equ ((FBlock_Var_3-FBlock_Var)/sizeof_FBlock_Var)<<4	; $3x - 2x2 32x26 squares
-type_fblock_syzrect1x3:	equ ((FBlock_Var_4-FBlock_Var)/sizeof_FBlock_Var)<<4	; $4x - 1x3 32x26 squares
-type_fblock_still:	equ id_FBlock_Still					; $x0 - doesn't move
-type_fblock_leftright:	equ id_FBlock_LeftRight					; $x1 - moves side to side
-type_fblock_leftrightwide: equ id_FBlock_LeftRightWide				; $x2 - moves side to side, larger distance
-type_fblock_updown:	equ id_FBlock_UpDown					; $x3 - moves up and down
-type_fblock_updownwide:	equ id_FBlock_UpDownWide				; $x4 - moves up and down, larger distance
-
-; BigSpikeBall
-type_bball_still:	equ id_BBall_Still		; 0 - doesn't move
-type_bball_sideways:	equ id_BBall_Sideways		; 1 - moves side-to-side
-type_bball_updown:	equ id_BBall_UpDown		; 2 - moves up and down
-type_bball_circle:	equ id_BBall_Circle		; 3 - moves in a circle
 
 ; Harpoon
 type_harp_h:		equ id_ani_harp_h_extending	; 0 - horizontal

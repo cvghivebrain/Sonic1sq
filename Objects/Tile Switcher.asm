@@ -17,7 +17,7 @@ TSwi_Index:	index *,,2
 		ptr TSwi_Detect
 		
 		rsobj TileSwitch
-ost_tswi_tile_ptr:	rs.w 1					; RAM address for specific tile within layout
+ost_tswi_tile_ptr:	rs.l 1					; RAM address for specific tile within layout
 ost_tswi_tile_default:	rs.b 1					; id for default tile
 ost_tswi_tile_alt:	rs.b 1					; id for replacement tile
 ost_tswi_flag:		rs.b 1					; flag set when hotspot has already triggered
@@ -56,7 +56,7 @@ TSwi_Main:	; Routine 0
 		add.w	d1,d0					; d0 = position within layout
 		lea	(v_level_layout).w,a2
 		adda.w	d0,a2					; jump to RAM address for specific tile within layout
-		move.w	a2,ost_tswi_tile_ptr(a0)		; save pointer
+		move.l	a2,ost_tswi_tile_ptr(a0)		; save pointer
 		
 		moveq	#0,d0
 		move.b	ost_subtype(a0),d0
@@ -79,7 +79,7 @@ TSwi_Main:	; Routine 0
 		add.w	d3,ost_y_pos(a1)
 		move.b	d4,ost_tswi_tile_default(a1)
 		move.b	d5,ost_tswi_tile_alt(a1)
-		move.w	ost_tswi_tile_ptr(a0),ost_tswi_tile_ptr(a1)
+		move.l	ost_tswi_tile_ptr(a0),ost_tswi_tile_ptr(a1)
 		move.b	(a2)+,ost_width(a1)
 		move.b	(a2)+,ost_height(a1)
 		move.b	(a2)+,ost_subtype(a1)
@@ -87,7 +87,7 @@ TSwi_Main:	; Routine 0
 		dbf	d1,.loop				; repeat for all hotspots
 
 TSwi_Detect:	; Routine 2
-		shortcut
+		shortcut	DespawnFamily_NoDisplay
 		bra.w	DespawnFamily_NoDisplay			; delete object and all hotspots if out of range
 
 ; ---------------------------------------------------------------------------
@@ -111,10 +111,7 @@ TileSwitchHotspot:
 		
 		bset	#0,ost_tswi_flag(a0)
 		bne.s	.already_done				; branch if hotspot has already been hit
-		moveq	#-1,d0
-		move.w	ost_tswi_tile_ptr(a0),d0
-		movea.l	d0,a3					; a3 = RAM address in layout
-		moveq	#0,d0
+		movea.l	ost_tswi_tile_ptr(a0),a3		; a3 = RAM address in layout
 		move.b	ost_subtype(a0),d0
 		move.w	Hotspot_Index(pc,d0.w),d1
 		jmp	Hotspot_Index(pc,d1.w)

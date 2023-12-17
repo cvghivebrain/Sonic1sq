@@ -29,8 +29,10 @@ Light_Animate:	; Routine 2
 		subq.b	#1,ost_anim_time(a0)			; decrement animation timer
 		bpl.w	DespawnQuick				; branch if time remains
 		move.b	#7,ost_anim_time(a0)			; reset timer
-		addq.b	#1,ost_frame(a0)			; next frame
-		cmpi.b	#id_frame_light_5+1,ost_frame(a0)	; is frame valid?
-		bcs.w	DespawnQuick				; if yes, branch
-		move.b	#id_frame_light_0,ost_frame(a0)		; reset to frame 0
+		moveq	#0,d0
+		move.b	ost_frame(a0),d0
+		move.b	Light_Next(pc,d0.w),ost_frame(a0)
 		bra.w	DespawnQuick
+		
+Light_Next:	dc.b 1, 2, 3, 4, 5, 0
+		even

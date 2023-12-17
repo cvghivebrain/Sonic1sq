@@ -11,6 +11,9 @@
 ;	SSSS - rotation speed (1-7 = clockwise; 8-$F = anticlockwise)
 ;	T - type (0 = LZ spikeball; 1 = SYZ spike chain)
 ;	LLL - length (1-7; excluding centre piece)
+
+type_sball_chain_bit:	equ 3
+type_sball_chain:	equ 1<<type_sball_chain_bit		; 8 - SYZ spike chain
 ; ---------------------------------------------------------------------------
 
 SpikeBall:
@@ -51,7 +54,7 @@ SBall_Main:	; Routine 0
 		move.b	ost_subtype(a0),d0
 		move.b	d0,d1
 		move.b	d0,d2
-		andi.w	#8,d0					; read bit 3 of subtype
+		andi.w	#type_sball_chain,d0			; read bit 3 of subtype
 		lsr.w	#3,d0
 		mulu.w	#SBall_Settings_end-SBall_Settings,d0
 		lea	SBall_Settings(pc,d0.w),a2

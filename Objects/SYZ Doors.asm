@@ -7,7 +7,7 @@
 ; subtypes:
 ;	%FTTTBBBB
 ;	F - 1 for far-right moving block in its final position
-;	TTT - type (0-7; see YDoor_Var)
+;	TTT - type (0-7; see YDoor_Types)
 ;	BBBB - button id
 ; ---------------------------------------------------------------------------
 
@@ -34,7 +34,7 @@ ost_ydoor_btn_num:	rs.b 1					; which button the block is linked to
 ost_ydoor_routine:	rs.b 1					; routine to run after button is pressed
 		rsobjend
 
-YDoor_Var:	dc.b  $10, $10, id_frame_fblock_syz1x1, id_YDoor_Up ; height, width, frame, routine
+YDoor_Types:	dc.b  $10, $10, id_frame_fblock_syz1x1, id_YDoor_Up ; height, width, frame, routine
 		dc.b  $20, $20, id_frame_fblock_syz2x2, id_YDoor_Up
 		dc.b  $10, $20, id_frame_fblock_syz1x2, id_YDoor_Up
 		dc.b  $20, $1A, id_frame_fblock_syzrect2x2, id_YDoor_FarRight
@@ -55,7 +55,7 @@ YDoor_Main:	; Routine 0
 		andi.w	#7,d0					; read only bits 4-6 of subtype
 		add.w	d0,d0
 		add.w	d0,d0					; multiply by 4
-		lea	YDoor_Var(pc,d0.w),a2			; get size data
+		lea	YDoor_Types(pc,d0.w),a2			; get size data
 		move.b	(a2),ost_width(a0)
 		move.b	(a2)+,ost_displaywidth(a0)
 		move.b	(a2)+,ost_height(a0)

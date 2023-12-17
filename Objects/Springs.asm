@@ -14,6 +14,16 @@
 ;	TTTT - type (see Spring_Settings)
 ;	SSS - strength (see Spring_Powers)
 ;	C - 1 to use palette line 2
+
+type_spring_pal2_bit:	equ 0
+type_spring_pal2:	equ 1<<type_spring_pal2_bit		; x1 - use palette line 2 (yellow)
+type_spring_strong:	equ 0
+type_spring_weak:	equ 2
+type_spring_red:	equ type_spring_strong			; x0 - red strong
+type_spring_yellow:	equ type_spring_weak+type_spring_pal2	; x2 - yellow weak
+type_spring_up:		equ 0					; $0x - facing up
+type_spring_right:	equ $10					; $1x - facing right (or left if xflipped)
+type_spring_down:	equ $20					; $2x - facing down (must also be yflipped)
 ; ---------------------------------------------------------------------------
 
 Springs:
@@ -36,7 +46,7 @@ Spring_Powers:	dc.w -spring_power_red				; power	of red spring
 Spring_Settings:
 		; up ($0x)
 		dc.l v_tile_hspring				; location of tile setting
-		dc.b 16, 8					; width, height
+		dc.b 14, 8					; width, height
 		dc.b id_ani_spring_up				; animation
 		dc.b id_frame_spring_up				; frame
 		dc.b id_Spring_Up				; routine number
@@ -45,7 +55,7 @@ Spring_Settings:
 		
 		; left/right ($1x)
 		dc.l v_tile_vspring
-		dc.b 8, 16
+		dc.b 8, 14
 		dc.b id_ani_spring_left
 		dc.b id_frame_spring_left
 		dc.b id_Spring_LR
@@ -53,7 +63,7 @@ Spring_Settings:
 		
 		; down ($2x)
 		dc.l v_tile_hspring
-		dc.b 16, 8
+		dc.b 14, 8
 		dc.b id_ani_spring_up
 		dc.b id_frame_spring_up
 		dc.b id_Spring_Down
@@ -75,7 +85,7 @@ Spring_Main:	; Routine 0
 		andi.w	#$E,d1					; read only low nybble of subtype (0 or 2)
 		move.w	Spring_Powers(pc,d1.w),ost_spring_power(a0) ; get power level
 		
-		btst	#0,d0
+		btst	#type_spring_pal2_bit,d0
 		beq.s	.not_yellow				; branch if bit 0 isn't set
 		bset	#tile_pal12_bit,ost_tile(a0)		; use 2nd palette (yellow spring)
 
@@ -85,7 +95,7 @@ Spring_Main:	; Routine 0
 		neg.w	ost_spring_power(a0)			; reverse direction
 
 	.not_yflipped:
-		andi.b	#$F0,d0					; read only high nybble
+		andi.w	#$F0,d0					; read only high nybble
 		lsr.b	#4,d0					; move to low nybble
 		mulu.w	#Spring_Settings_end-Spring_Settings,d0
 		lea	Spring_Settings(pc,d0.w),a2
