@@ -31,53 +31,36 @@ BuildSprites:
 		moveq	#0,d4
 		move.b	ost_render(a0),d4
 		btst	#render_rel_bit,d4
-		beq.s	.abs_screen_coords			; branch if render_abs
+		beq.w	.abs_screen_coords			; branch if render_abs
 
 		; check object is visible
 		moveq	#0,d0
 		move.b	ost_displaywidth(a0),d0
-		move.w	ost_x_pos(a0),d3
-		sub.w	(a3),d3
-		move.w	d3,d1
-		add.w	d0,d1					; d1 = x pos of object's right edge on screen
-		bmi.w	.next_object				; branch if object is outside left side of screen
-		move.w	d3,d1
-		sub.w	d0,d1					; d1 = x pos of object's left edge on screen
-		cmpi.w	#screen_width,d1
-		bge.s	.next_object				; branch if object is outside right side of screen
+		move.w	ost_x_pos(a0),d1
+		sub.w	(a3),d1
+		move.w	d1,d3
+		add.w	d0,d1
+		add.w	d0,d0
+		addi.w	#screen_width,d0
+		cmp.w	d0,d1
+		bcc.s	.next_object				; branch if outside left/right of screen
 		addi.w	#screen_left,d3				; d3 = x pos of object on screen, +128px for VDP sprite coordinate
 
+		moveq	#32,d0
 		btst	#render_useheight_bit,d4		; is use height flag on?
 		beq.s	.assume_height				; if not, branch
-		moveq	#0,d0
 		move.b	ost_height(a0),d0
-		move.w	ost_y_pos(a0),d2
-		sub.w	(a5),d2
-		move.w	d2,d1
-		add.w	d0,d1					; d1 = y pos of object's bottom edge on screen
-		bmi.s	.next_object				; branch if object is outside top side of screen
-		move.w	d2,d1
-		sub.w	d0,d1					; d1 = y pos of object's top edge on screen
-		cmpi.w	#screen_height,d1
-		bge.s	.next_object				; branch if object is outside bottom side of screen
-		addi.w	#screen_top,d2				; d2 = y pos of object on screen, +128px for VDP sprite coordinate
-		bra.s	.draw_object
-; ===========================================================================
-
-	.abs_screen_coords:
-		move.w	ost_y_screen(a0),d2			; d2 = y pos
-		move.w	ost_x_pos(a0),d3			; d3 = x pos
-		bra.s	.draw_object
-; ===========================================================================
-
+		
 	.assume_height:
-		move.w	ost_y_pos(a0),d2
-		sub.w	(a5),d2					; d2 = y pos of object on screen
-		addi.w	#screen_top,d2
-		cmpi.w	#screen_top-32,d2
-		blo.s	.next_object				; branch if > 32px outside top side of screen
-		cmpi.w	#screen_bottom+32,d2
-		bhs.s	.next_object				; branch if > 32px outside bottom side of screen
+		move.w	ost_y_pos(a0),d1
+		sub.w	(a5),d1
+		move.w	d1,d2
+		add.w	d0,d1
+		add.w	d0,d0
+		addi.w	#screen_height,d0
+		cmp.w	d0,d1
+		bcc.s	.next_object				; branch if outside top/bottom of screen
+		addi.w	#screen_top,d2				; d2 = y pos of object on screen, +128px for VDP sprite coordinate
 
 	.draw_object:
 		movea.l	ost_mappings(a0),a1			; get address of mappings
@@ -117,6 +100,23 @@ BuildSprites:
 	.max_sprites:
 		move.b	#0,-5(a2)				; set current sprite to link to first
 		rts
+; ===========================================================================
+
+	.abs_screen_coords:
+		moveq	#0,d0
+		move.b	ost_displaywidth(a0),d0
+		move.w	ost_x_pos(a0),d1
+		move.w	d1,d3
+		subi.w	#screen_left,d1
+		add.w	d0,d1
+		add.w	d0,d0
+		addi.w	#screen_width,d0
+		cmp.w	d0,d1
+		bcc.s	.next_object				; branch if outside left/right of screen
+		
+		move.w	ost_y_screen(a0),d2			; d2 = y pos
+		;move.w	ost_x_pos(a0),d3			; d3 = x pos
+		bra.s	.draw_object
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	convert	and add sprite mappings to the sprite buffer
@@ -135,7 +135,7 @@ BuildSprites:
 
 BuildSpr_Draw:
 		movea.w	ost_tile(a0),a6				; get VRAM setting (tile, x/yflip, palette, priority)
-		andi.b	#render_xflip+render_yflip,d4
+		andi.w	#render_xflip+render_yflip,d4
 		add.b	d4,d4
 		move.w	BuildSpr_Index(pc,d4.w),d4
 		jmp	BuildSpr_Index(pc,d4.w)

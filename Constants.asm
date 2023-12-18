@@ -234,7 +234,7 @@ emerald_all:			equ (1<<emerald_count)-1	; value stored in emerald bitfield when 
 		opt	ae+		; enable auto evens
 			rsset 0
 ost_id:			rs.l 1		; 0 ; object id
-ost_tile:		rs.w 1		; 2 ; palette line & VRAM setting (2 bytes)
+ost_tile:		rs.w 1		; 2 ; palette line & VRAM setting
 	tile_xflip:	equ $800
 	tile_yflip:	equ $1000
 	tile_pal1:	equ 0

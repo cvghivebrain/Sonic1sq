@@ -25,8 +25,8 @@ ost_card_x_speed:	rs.l 1					; x speed to enter screen
 ost_card_y_speed:	equ __rs-2				; y speed to enter screen
 ost_card_x_speed2:	rs.l 1					; x speed to leave screen
 ost_card_y_speed2:	equ __rs-2				; y speed to leave screen
-ost_card_time:		rs.w 1					; time to wait before entering
-ost_card_time2:		rs.w 1					; time to wait before leaving
+ost_card_time:		equ ost_inertia				; time to wait before entering
+ost_card_time2:		equ ost_angle				; time to wait before leaving
 		rsobjend
 
 Card_Settings:	index *
@@ -99,6 +99,7 @@ autocard:	macro namestr,zonestr,nameframe,zoneframe,ypos,options
 		dc.w 60						; delay before leaving screen
 		dc.w -32,0					; x/y speed leaving screen
 		dc.l v_tile_letters				; RAM address where tile setting is stored
+		dc.w namewidth/2				; ost_displaywidth
 		; zone
 		if strlen(\zonestr)>0
 		dc.l Map_Card					; mappings pointer
@@ -111,6 +112,7 @@ autocard:	macro namestr,zonestr,nameframe,zoneframe,ypos,options
 		dc.w 60						; delay before leaving screen
 		dc.w -32,0					; x/y speed leaving screen
 		dc.l v_tile_letters				; RAM address where tile setting is stored
+		dc.w zonewidth/2
 		endc
 		if instr("\options","noact")=0
 		; act
@@ -124,6 +126,7 @@ autocard:	macro namestr,zonestr,nameframe,zoneframe,ypos,options
 		dc.w 60						; delay before leaving screen
 		dc.w 32,0					; x/y speed leaving screen
 		dc.l v_tile_act					; RAM address where tile setting is stored
+		dc.w 20
 		endc
 		; oval
 		dc.l Map_Card					; mappings pointer
@@ -136,6 +139,7 @@ autocard:	macro namestr,zonestr,nameframe,zoneframe,ypos,options
 		dc.w 60						; delay before leaving screen
 		dc.w 32,0					; x/y speed leaving screen
 		dc.l v_tile_titlecard				; RAM address where tile setting is stored
+		dc.w 28
 		endm
 		
 CardSet_GHZ:	autocard "GREEN HILL","ZONE",id_frame_card_greenhill,id_frame_card_zone,72
@@ -184,7 +188,8 @@ Card_Load:
 		movea.l	(a2)+,a3
 		move.w	(a3),ost_tile(a1)
 		add.w	#tile_hi,ost_tile(a1)
-		move.b	#$20,ost_displaywidth(a1)
+		move.w	(a2)+,d0
+		move.b	d0,ost_displaywidth(a1)
 		move.b	#render_abs,ost_render(a1)
 		move.b	#0,ost_priority(a1)
 		dbf	d1,.loop
@@ -195,7 +200,7 @@ Card_WaitEnter:	; Routine 2
 		tst.b	ost_mode(a0)
 		bne.s	.flag_set				; branch if loaded flag is set
 		addq.b	#1,(v_titlecard_loaded).w		; add to object count
-		move.b	#1,ost_mode(a0)			; set flag
+		move.b	#1,ost_mode(a0)				; set flag
 		
 	.flag_set:
 		subq.w	#1,ost_card_time(a0)			; decrement timer
@@ -263,14 +268,13 @@ Card_Leave:	; Routine 8
 		add.w	d0,ost_x_pos(a0)			; update x pos
 		move.w	ost_card_y_speed2(a0),d0
 		add.w	d0,ost_y_screen(a0)			; update y pos
-		jsr	CheckOffScreen_Card
-		bne.s	.offscreen				; branch if off screen
+		tst.b	ost_render(a0)
+		bpl.s	.offscreen				; branch if off screen
 		jmp	DisplaySprite
 		
 	.offscreen:
 		subq.b	#1,(v_titlecard_state).w
 		subq.b	#1,(v_titlecard_loaded).w
-		tst.b	(v_titlecard_loaded).w
 		bne.s	.skip_gfx				; branch if not the last title card object
 		moveq	#id_UPLC_Explode,d0
 		jsr	UncPLC					; load explosion gfx
