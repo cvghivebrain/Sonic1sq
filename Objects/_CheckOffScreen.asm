@@ -12,15 +12,13 @@
 CheckOffScreen:
 		move.w	ost_x_pos(a0),d0			; get object x position
 		sub.w	(v_camera_x_pos).w,d0			; subtract screen x position
-		bmi.s	.offscreen				; branch if off left side of screen
 		cmpi.w	#screen_width,d0
-		bge.s	.offscreen				; branch if off right side of screen
+		bcc.s	.offscreen				; branch if off left/right side of screen
 
 		move.w	ost_y_pos(a0),d0			; get object y position
 		sub.w	(v_camera_y_pos).w,d0			; subtract screen y position
-		bmi.s	.offscreen				; branch if off top of screen
 		cmpi.w	#screen_height,d0
-		bge.s	.offscreen				; branch if off bottom of screen
+		bcc.s	.offscreen				; branch if off top/bottom of screen
 
 		moveq	#0,d0					; set flag to 0
 		rts	
@@ -49,49 +47,16 @@ CheckOffScreen_Wide:
 		move.b	ost_displaywidth(a0),d1
 		move.w	ost_x_pos(a0),d0			; get object x position
 		sub.w	(v_camera_x_pos).w,d0			; subtract screen x position
-		add.w	d1,d0					; d0 = x pos of object's right edge relative to screen
-		bmi.s	.offscreen				; branch if off left side of screen
+		add.w	d1,d0
 		add.w	d1,d1
-		sub.w	d1,d0					; d0 = x pos of object's left edge relative to screen
-		cmpi.w	#screen_width,d0
-		bge.s	.offscreen				; branch if off right side of screen
+		addi.w	#screen_width,d1
+		cmp.w	d1,d0
+		bcc.s	.offscreen				; branch if off left/right side of screen
 
 		move.w	ost_y_pos(a0),d1
 		sub.w	(v_camera_y_pos).w,d1
-		bmi.s	.offscreen				; branch if off top of screen
 		cmpi.w	#screen_height,d1
-		bge.s	.offscreen				; branch if off bottom of screen
-
-		moveq	#0,d0					; set flag to 0
-		rts	
-
-	.offscreen:
-		moveq	#1,d0					; set flag to 1
-		rts
-
-; ---------------------------------------------------------------------------
-; Subroutine to	check if title card object is off screen
-
-; output:
-;	d0.l = flag set if object is off screen
-
-; usage:
-;		bsr.w	CheckOffScreen_Card
-;		bne.s	.offscreen				; branch if off screen
-; ---------------------------------------------------------------------------
-
-CheckOffScreen_Card:
-		move.w	ost_x_pos(a0),d0			; get object x position
-		sub.w	#screen_left-32,d0			; subtract screen x position, plus 32px leeway
-		bmi.s	.offscreen				; branch if off left side of screen
-		cmpi.w	#screen_width+64,d0
-		bge.s	.offscreen				; branch if off right side of screen
-
-		move.w	ost_y_screen(a0),d0			; get object y position
-		sub.w	#screen_top-32,d0			; subtract screen y position, plus 32px leeway
-		bmi.s	.offscreen				; branch if off top of screen
-		cmpi.w	#screen_height+64,d0
-		bge.s	.offscreen				; branch if off bottom of screen
+		bcc.s	.offscreen				; branch if off top/bottom of screen
 
 		moveq	#0,d0					; set flag to 0
 		rts	

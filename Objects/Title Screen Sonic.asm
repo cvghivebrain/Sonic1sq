@@ -33,9 +33,11 @@ TSon_Main:	; Routine 0
 
 TSon_Delay:	; Routine 2
 		subq.b	#1,ost_tson_time(a0)			; decrement timer
-		bpl.w	DisplaySprite				; if time remains, branch
+		bpl.s	.wait					; if time remains, branch
 		addq.b	#2,ost_routine(a0)			; goto TSon_Move next
-		bra.w	DisplaySprite
+		
+	.wait:
+		rts
 ; ===========================================================================
 
 TSon_Move:	; Routine 4

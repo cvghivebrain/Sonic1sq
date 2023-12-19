@@ -28,7 +28,6 @@ BuildSprites:
 		beq.w	.next_object				; if object id is 0, branch
 
 		bclr	#render_onscreen_bit,ost_render(a0)	; set as not visible
-		moveq	#0,d4
 		move.b	ost_render(a0),d4
 		btst	#render_rel_bit,d4
 		beq.w	.abs_screen_coords			; branch if render_abs
@@ -71,13 +70,16 @@ BuildSprites:
 		move.w	ost_frame_hi(a0),d1
 		add.w	d1,d1
 		adda.w	(a1,d1.w),a1				; jump to frame within mappings
-		moveq	#0,d1
 		move.w	(a1)+,d1				; number of sprite pieces
-		subq.w	#1,d1					; subtract 1 for loops
 		bmi.s	.skip_draw				; branch if frame contained 0 sprite pieces
 
 	.draw_now:
-		bsr.s	BuildSpr_Draw				; write data from sprite pieces to buffer
+		cmpi.b	#countof_max_sprites,d5
+		beq.s	.skip_draw				; branch if at max sprites
+		andi.w	#render_xflip+render_yflip,d4
+		add.b	d4,d4
+		move.w	BuildSpr_Index(pc,d4.w),d4
+		jsr	BuildSpr_Index(pc,d4.w)			; write data from sprite pieces to buffer
 
 	.skip_draw:
 		bset	#render_onscreen_bit,ost_render(a0)	; set object as visible
@@ -125,21 +127,14 @@ BuildSprites:
 ;	d1.w = number of sprite pieces
 ;	d2.w = VDP y position
 ;	d3.w = VDP x position
-;	d4.w = render flags (ost_render)
 ;	d5.b = current sprite count
 ;	a1 = current address in sprite mappings
 ;	a2 = current address in sprite buffer
 
-;	uses d0.w, d1.w, d4.b, d5.b, a1, a2, a6
+;	uses d0.w, d1.w, d4.b, d5.b, a1, a2
 ; ---------------------------------------------------------------------------
 
 BuildSpr_Draw:
-		movea.w	ost_tile(a0),a6				; get VRAM setting (tile, x/yflip, palette, priority)
-		andi.w	#render_xflip+render_yflip,d4
-		add.b	d4,d4
-		move.w	BuildSpr_Index(pc,d4.w),d4
-		jmp	BuildSpr_Index(pc,d4.w)
-; ===========================================================================
 BuildSpr_Index:	index *,,2
 		ptr BuildSpr_Normal
 		ptr BuildSpr_FlipX
@@ -148,9 +143,6 @@ BuildSpr_Index:	index *,,2
 ; ===========================================================================
 
 BuildSpr_Normal:
-		cmpi.b	#$50,d5					; check sprite limit
-		beq.s	.return					; branch if at max sprites
-
 		move.b	(a1)+,d0				; get relative y pos from mappings
 		ext.w	d0
 		add.w	d2,d0					; add VDP y pos
@@ -161,7 +153,7 @@ BuildSpr_Normal:
 		move.b	d5,(a2)+				; write link to next sprite in buffer
 
 		move.w	(a1)+,d0				; get tile number from mappings
-		add.w	a6,d0					; add VRAM setting
+		add.w	ost_tile(a0),d0				; add VRAM setting
 		move.w	d0,(a2)+				; write to buffer
 
 		move.w	(a1)+,d0				; get relative x pos from mappings
@@ -174,14 +166,11 @@ BuildSpr_Normal:
 		move.w	d0,(a2)+				; write to buffer
 		dbf	d1,BuildSpr_Normal			; next sprite piece
 
-	.return:
 		rts
 
 ; ===========================================================================
 
 BuildSpr_FlipX:
-		cmpi.b	#$50,d5					; check sprite limit
-		beq.s	.return
 		move.b	(a1)+,d0				; y position
 		ext.w	d0
 		add.w	d2,d0
@@ -191,7 +180,7 @@ BuildSpr_FlipX:
 		addq.b	#1,d5					; link
 		move.b	d5,(a2)+
 		move.w	(a1)+,d0				; art tile
-		add.w	a6,d0
+		add.w	ost_tile(a0),d0
 		eori.w	#$800,d0				; toggle xflip in VDP
 		move.w	d0,(a2)+				; write to buffer
 		move.w	(a1)+,d0				; get x-offset
@@ -209,14 +198,11 @@ BuildSpr_FlipX:
 		move.w	d0,(a2)+				; write to buffer
 		dbf	d1,BuildSpr_FlipX			; process next sprite piece
 
-	.return:
 		rts
 
 ; ===========================================================================
 
 BuildSpr_FlipY:
-		cmpi.b	#$50,d5					; check sprite limit
-		beq.s	.return
 		move.b	(a1)+,d0				; get y-offset
 		move.b	(a1),d4					; get size
 		ext.w	d0
@@ -231,7 +217,7 @@ BuildSpr_FlipY:
 		addq.b	#1,d5
 		move.b	d5,(a2)+				; link
 		move.w	(a1)+,d0				; art tile
-		add.w	a6,d0
+		add.w	ost_tile(a0),d0
 		eori.w	#$1000,d0				; toggle yflip in VDP
 		move.w	d0,(a2)+
 		move.w	(a1)+,d0				; x-position
@@ -244,14 +230,11 @@ BuildSpr_FlipY:
 		move.w	d0,(a2)+				; write to buffer
 		dbf	d1,BuildSpr_FlipY			; process next sprite piece
 
-	.return:
 		rts
 
 ; ===========================================================================
 
 BuildSpr_FlipXY:
-		cmpi.b	#$50,d5					; check sprite limit
-		beq.s	.return
 		move.b	(a1)+,d0				; calculated flipped y
 		move.b	(a1),d4
 		ext.w	d0
@@ -267,7 +250,7 @@ BuildSpr_FlipXY:
 		addq.b	#1,d5
 		move.b	d5,(a2)+
 		move.w	(a1)+,d0				; art tile
-		add.w	a6,d0
+		add.w	ost_tile(a0),d0
 		eori.w	#$1800,d0				; toggle x/yflip in VDP
 		move.w	d0,(a2)+
 		move.w	(a1)+,d0				; calculate flipped x
@@ -285,5 +268,4 @@ BuildSpr_FlipXY:
 		move.w	d0,(a2)+				; write to buffer
 		dbf	d1,BuildSpr_FlipXY			; process next sprite piece
 
-	.return:
 		rts	

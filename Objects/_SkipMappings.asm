@@ -20,6 +20,7 @@ SkipMappings:
 		add.w	d0,d0
 		adda.w	(a2,d0.w),a2				; jump to mappings for frame
 		move.w	(a2)+,d0				; read sprite count from mappings
+		addq.w	#1,d0
 		add.w	d0,d0
 		move.w	d0,d2
 		add.w	d0,d0

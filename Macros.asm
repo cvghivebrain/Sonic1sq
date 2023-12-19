@@ -360,7 +360,7 @@ spritemap:	macro
 		current_sprite: = 1
 		endc
 		sprite_start: = *+1
-		dc.w (sprite_\#current_sprite-sprite_start)/6
+		dc.w ((sprite_\#current_sprite-sprite_start)/6)-1
 		endm
 
 endsprite:	macro

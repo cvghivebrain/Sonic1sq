@@ -99,7 +99,7 @@ autocard:	macro namestr,zonestr,nameframe,zoneframe,ypos,options
 		dc.w 60						; delay before leaving screen
 		dc.w -32,0					; x/y speed leaving screen
 		dc.l v_tile_letters				; RAM address where tile setting is stored
-		dc.w namewidth/2				; ost_displaywidth
+		dc.w namewidth					; ost_displaywidth
 		; zone
 		if strlen(\zonestr)>0
 		dc.l Map_Card					; mappings pointer
@@ -112,7 +112,7 @@ autocard:	macro namestr,zonestr,nameframe,zoneframe,ypos,options
 		dc.w 60						; delay before leaving screen
 		dc.w -32,0					; x/y speed leaving screen
 		dc.l v_tile_letters				; RAM address where tile setting is stored
-		dc.w zonewidth/2
+		dc.w zonewidth
 		endc
 		if instr("\options","noact")=0
 		; act
