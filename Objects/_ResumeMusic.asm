@@ -9,7 +9,7 @@ ResumeMusic:
 		cmpi.b	#air_alert,(v_air).w			; more than 12 seconds of air left?
 		bhi.s	.over12					; if yes, branch
 		move.b	(v_bgm).w,d0
-		tst.b	(v_invincibility).w			; is Sonic invincible?
+		tst.w	(v_invincibility).w			; is Sonic invincible?
 		beq.s	.notinvinc				; if not, branch
 		move.w	#mus_Invincible,d0
 

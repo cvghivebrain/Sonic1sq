@@ -81,8 +81,7 @@ ExtraLife:
 ; ===========================================================================
 
 Pow_Shoes:
-		move.b	#1,(v_shoes).w				; speed up the BG music
-		move.w	#sonic_shoe_time,(v_ost_player+ost_sonic_shoe_time).w ; time limit for the power-up
+		move.w	#sonic_shoe_time,(v_shoes).w		; enable speed shoes
 		move.w	#sonic_max_speed_shoes,(v_sonic_max_speed).w ; change Sonic's top speed
 		move.w	#sonic_acceleration_shoes,(v_sonic_acceleration).w ; change Sonic's acceleration
 		move.w	#sonic_deceleration_shoes,(v_sonic_deceleration).w ; change Sonic's deceleration
@@ -100,8 +99,7 @@ Pow_Shield:
 ; ===========================================================================
 
 Pow_Invincible:
-		move.b	#1,(v_invincibility).w			; make Sonic invincible
-		move.w	#sonic_invincible_time,(v_ost_player+ost_sonic_invincible_time).w ; time limit for the power-up
+		move.w	#sonic_invincible_time,(v_invincibility).w ; make Sonic invincible
 		bsr.w	FindFreeInert
 		bne.s	.fail
 		move.l	#InvincibilityItem,ost_id(a1)		; load stars object

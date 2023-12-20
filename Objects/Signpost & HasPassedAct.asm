@@ -147,7 +147,7 @@ HasPassedAct:
 		bne.s	.exit					; if yes, branch
 
 		move.w	(v_boundary_right).w,(v_boundary_left).w
-		clr.b	(v_invincibility).w			; disable invincibility
+		clr.w	(v_invincibility).w			; disable invincibility
 		clr.b	(f_hud_time_update).w			; stop time counter
 		bsr.w	FindFreeInert
 		bne.s	.fail

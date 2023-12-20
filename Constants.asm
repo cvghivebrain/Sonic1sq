@@ -29,53 +29,53 @@ screen_bottom:		equ screen_top+screen_height		; y coordinate of bottom edge of s
 screen_right:		equ screen_left+screen_width		; x coordinate of right edge of screen for sprites (448)
 
 ; VRAM data
-vram_window:		equ $A000	; window nametable - unused
-vram_fg:		equ $C000	; foreground nametable ($1000 bytes)
-vram_bg:		equ $E000	; background nametable ($1000 bytes)
-vram_sonic:		equ $F000	; Sonic graphics ($2E0 bytes)
+vram_window:		equ $A000				; window nametable - unused
+vram_fg:		equ $C000				; foreground nametable ($1000 bytes)
+vram_bg:		equ $E000				; background nametable ($1000 bytes)
+vram_sonic:		equ $F000				; Sonic graphics ($2E0 bytes)
 tile_sonic:		equ vram_sonic/sizeof_cell
-vram_sprites:		equ $F800	; sprite table ($280 bytes)
-vram_hscroll:		equ $FC00	; horizontal scroll table ($380 bytes)
+vram_sprites:		equ $F800				; sprite table ($280 bytes)
+vram_hscroll:		equ $FC00				; horizontal scroll table ($380 bytes)
 
-draw_base:		equ vram_fg			; base address for nametables, used by Calc_VRAM_Pos (must be multiple of $4000)
-draw_fg:		equ $4000+(vram_fg-draw_base)	; VRAM write command + fg nametable address relative to base
-draw_bg:		equ $4000+(vram_bg-draw_base)	; VRAM write command + bg nametable address relative to base
+draw_base:		equ vram_fg				; base address for nametables, used by Calc_VRAM_Pos (must be multiple of $4000)
+draw_fg:		equ $4000+(vram_fg-draw_base)		; VRAM write command + fg nametable address relative to base
+draw_bg:		equ $4000+(vram_bg-draw_base)		; VRAM write command + bg nametable address relative to base
 
-vram_ball:		equ $67C0	; GHZ ball graphics
-vram_continue:		equ $A000	; continue screen graphics
-vram_bonus:		equ $A200	; hidden bonus graphics
-vram_boss:		equ $A200	; boss ship graphics
-vram_shield:		equ $A800	; shield graphics (up to $AC80)
-vram_exhaust:		equ $AC80	; boss exhaust flame graphics
-vram_face:		equ $AE40	; boss face graphics
-vram_weapon:		equ $B0A0	; boss weapon graphics
-vram_overlay:		equ $B200	; debug overlay
+vram_ball:		equ $67C0				; GHZ ball graphics
+vram_continue:		equ $A000				; continue screen graphics
+vram_bonus:		equ $A200				; hidden bonus graphics
+vram_boss:		equ $A200				; boss ship graphics
+vram_shield:		equ $A800				; shield graphics (up to $AC80)
+vram_exhaust:		equ $AC80				; boss exhaust flame graphics
+vram_face:		equ $AE40				; boss face graphics
+vram_weapon:		equ $B0A0				; boss weapon graphics
+vram_overlay:		equ $B200				; debug overlay
 vram_overlay2:		equ $B300
-vram_credits:		equ $B400	; credits font graphics
-vram_monitors:		equ $D000	; monitor graphics
-vram_signpost:		equ $D000	; signpost graphics
-vram_giantring:		equ $D340	; giant ring graphics
-vram_animals:		equ $F400	; animal graphics
-vram_lifeicon:		equ $FA80	; life icon graphics
+vram_credits:		equ $B400				; credits font graphics
+vram_monitors:		equ $D000				; monitor graphics
+vram_signpost:		equ $D000				; signpost graphics
+vram_giantring:		equ $D340				; giant ring graphics
+vram_animals:		equ $F400				; animal graphics
+vram_lifeicon:		equ $FA80				; life icon graphics
 vram_overlay3:		equ $FF80
 
-sizeof_cell:		equ $20			; single 8x8 tile
-sizeof_vram_fg:		equ sizeof_vram_row*32	; fg nametable, assuming 64x32 ($1000 bytes)
-sizeof_vram_bg:		equ sizeof_vram_row*32	; bg nametable, assuming 64x32 ($1000 bytes)
-sizeof_vram_sonic:	equ $17*sizeof_cell	; Sonic's graphics ($2E0 bytes)
-sizeof_sprite:		equ 8			; one sprite in sprite table
-countof_max_sprites:	equ $50			; max number of sprites that can be displayed
-sizeof_vram_sprites:	equ sizeof_sprite*countof_max_sprites ; sprite table ($280 bytes)
+sizeof_cell:		equ $20					; single 8x8 tile
+sizeof_vram_fg:		equ sizeof_vram_row*32			; fg nametable, assuming 64x32 ($1000 bytes)
+sizeof_vram_bg:		equ sizeof_vram_row*32			; bg nametable, assuming 64x32 ($1000 bytes)
+sizeof_vram_sonic:	equ $17*sizeof_cell			; Sonic's graphics ($2E0 bytes)
+sizeof_sprite:		equ 8					; one sprite in sprite table
+countof_max_sprites:	equ $50					; max number of sprites that can be displayed
+sizeof_vram_sprites:	equ sizeof_sprite*countof_max_sprites	; sprite table ($280 bytes)
 sizeof_vram_hscroll:	equ $380
 sizeof_vram_hscroll_padded:	equ $400
-sizeof_vram_row:	equ 64*2		; single row of fg/bg nametable, assuming 64 wide
+sizeof_vram_row:	equ 64*2				; single row of fg/bg nametable, assuming 64 wide
 sizeof_art_text:	equ filesize("Graphics\Level Select & Debug Text.bin")
 
-countof_color:		equ 16				; colours per palette line
+countof_color:		equ 16					; colours per palette line
 countof_colour:		equ countof_color
-countof_pal:		equ 4				; palette lines
-sizeof_pal:		equ countof_color*2		; bytes in 1 palette line
-sizeof_pal_all:		equ sizeof_pal*countof_pal	; bytes in all palette lines
+countof_pal:		equ 4					; palette lines
+sizeof_pal:		equ countof_color*2			; bytes in 1 palette line
+sizeof_pal_all:		equ sizeof_pal*countof_pal		; bytes in all palette lines
 brightness_range:	equ 15
 
 			rsset 0
@@ -94,37 +94,37 @@ id_SYZ:		equ 4
 id_SBZ:		equ 5
 id_EndZ:	equ 6
 id_SS:		equ 7
-id_GHZ_act1:	equ (id_GHZ<<8)+0	; $0000
-id_GHZ_act2:	equ (id_GHZ<<8)+1	; $0001
-id_GHZ_act3:	equ (id_GHZ<<8)+2	; $0002
-id_LZ_act1:	equ (id_LZ<<8)+0	; $0100
-id_LZ_act2:	equ (id_LZ<<8)+1	; $0101
-id_LZ_act3:	equ (id_LZ<<8)+2	; $0102
-id_MZ_act1:	equ (id_MZ<<8)+0	; $0200
-id_MZ_act2:	equ (id_MZ<<8)+1	; $0201
-id_MZ_act3:	equ (id_MZ<<8)+2	; $0202
-id_SLZ_act1:	equ (id_SLZ<<8)+0	; $0300
-id_SLZ_act2:	equ (id_SLZ<<8)+1	; $0301
-id_SLZ_act3:	equ (id_SLZ<<8)+2	; $0302
-id_SYZ_act1:	equ (id_SYZ<<8)+0	; $0400
-id_SYZ_act2:	equ (id_SYZ<<8)+1	; $0401
-id_SYZ_act3:	equ (id_SYZ<<8)+2	; $0402
-id_SBZ_act1:	equ (id_SBZ<<8)+0	; $0500
-id_SBZ_act2:	equ (id_SBZ<<8)+1	; $0501
-id_SBZ_act3:	equ (id_LZ<<8)+3	; $0103
-id_FZ:		equ (id_SBZ<<8)+2	; $0502
-id_EndZ_good:	equ (id_EndZ<<8)+0	; $0600 - ending with all chaos emeralds (extra flowers)
-id_EndZ_bad:	equ (id_EndZ<<8)+1	; $0601 - ending without all emeralds (no flowers)
+id_GHZ_act1:	equ (id_GHZ<<8)+0				; $0000
+id_GHZ_act2:	equ (id_GHZ<<8)+1				; $0001
+id_GHZ_act3:	equ (id_GHZ<<8)+2				; $0002
+id_LZ_act1:	equ (id_LZ<<8)+0				; $0100
+id_LZ_act2:	equ (id_LZ<<8)+1				; $0101
+id_LZ_act3:	equ (id_LZ<<8)+2				; $0102
+id_MZ_act1:	equ (id_MZ<<8)+0				; $0200
+id_MZ_act2:	equ (id_MZ<<8)+1				; $0201
+id_MZ_act3:	equ (id_MZ<<8)+2				; $0202
+id_SLZ_act1:	equ (id_SLZ<<8)+0				; $0300
+id_SLZ_act2:	equ (id_SLZ<<8)+1				; $0301
+id_SLZ_act3:	equ (id_SLZ<<8)+2				; $0302
+id_SYZ_act1:	equ (id_SYZ<<8)+0				; $0400
+id_SYZ_act2:	equ (id_SYZ<<8)+1				; $0401
+id_SYZ_act3:	equ (id_SYZ<<8)+2				; $0402
+id_SBZ_act1:	equ (id_SBZ<<8)+0				; $0500
+id_SBZ_act2:	equ (id_SBZ<<8)+1				; $0501
+id_SBZ_act3:	equ (id_LZ<<8)+3				; $0103
+id_FZ:		equ (id_SBZ<<8)+2				; $0502
+id_EndZ_good:	equ (id_EndZ<<8)+0				; $0600 - ending with all chaos emeralds (extra flowers)
+id_EndZ_bad:	equ (id_EndZ<<8)+1				; $0601 - ending without all emeralds (no flowers)
 
 ; Colours
-cBlack:		equ $000		; colour black
-cWhite:		equ $EEE		; colour white
-cBlue:		equ $E00		; colour blue
-cGreen:		equ $0E0		; colour green
-cRed:		equ $00E		; colour red
-cYellow:	equ cGreen+cRed		; colour yellow
-cAqua:		equ cGreen+cBlue	; colour aqua
-cMagenta:	equ cBlue+cRed		; colour magenta
+cBlack:		equ $000					; colour black
+cWhite:		equ $EEE					; colour white
+cBlue:		equ $E00					; colour blue
+cGreen:		equ $0E0					; colour green
+cRed:		equ $00E					; colour red
+cYellow:	equ cGreen+cRed					; colour yellow
+cAqua:		equ cGreen+cBlue				; colour aqua
+cMagenta:	equ cBlue+cRed					; colour magenta
 
 ; Joypad input
 bitStart:	equ 7
@@ -230,11 +230,11 @@ emerald_count:			equ 6				; number of emeralds
 emerald_all:			equ (1<<emerald_count)-1	; value stored in emerald bitfield when all 6 are collected ($3F)
 
 ; Object variables
-		pusho			; save options
-		opt	ae+		; enable auto evens
+		pusho						; save options
+		opt	ae+					; enable auto evens
 			rsset 0
-ost_id:			rs.l 1		; 0 ; object id
-ost_tile:		rs.w 1		; 2 ; palette line & VRAM setting
+ost_id:			rs.l 1					; object id
+ost_tile:		rs.w 1					; palette line & VRAM setting
 	tile_xflip:	equ $800
 	tile_yflip:	equ $1000
 	tile_pal1:	equ 0
@@ -247,36 +247,27 @@ ost_tile:		rs.w 1		; 2 ; palette line & VRAM setting
 	tile_pal12_bit:	equ 5
 	tile_pal34_bit:	equ 6
 	tile_hi_bit:	equ 7
-ost_mappings:		rs.l 1		; mappings address
-ost_x_pos:		rs.l 1		; x-axis position
-ost_x_sub:		equ __rs-2	; x-axis subpixel position
-ost_y_screen:		equ __rs-2	; y-axis position for screen-fixed items
-ost_y_pos:		rs.l 1		; y-axis position
-ost_y_sub:		equ __rs-2	; y-axis subpixel position
-ost_x_vel:		rs.l 1		; x-axis velocity
-ost_y_vel:		equ __rs-2	; y-axis velocity
-ost_inertia:		rs.w 1		; potential speed
-ost_x_prev:		equ ost_inertia	; previous x position
-ost_angle:		rs.w 1		; angle of floor or rotation - 0 = flat; $40 = vertical left; $80 = ceiling; $C0 = vertical right
-ost_frame_hi:		rs.w 1		; current frame displayed
-ost_frame:		equ __rs-1
-ost_parent:		rs.w 1		; address of OST of parent object
-ost_linked:		rs.w 1		; address of OST of linked object
-ost_routine:		rs.w 1		; routine number
-ost_mode:		equ __rs-1	; secondary routine number
-ost_col_type:		rs.w 1		; collision response type - 0 = none; 1-$3F = enemy; $41-$7F = items; $81-BF = hurts; $C1-$FF = custom
-ost_col_property:	equ __rs-1	; collision extra property
-ost_sink:		equ ost_col_property ; amount platform has sunk when stood on - 0 is none, $1E is max
-ost_render:		rs.b 1		; bitfield for x/y flip, display mode
-	render_xflip:		equ 1	; xflip
-	render_yflip:		equ 2	; yflip
-	render_rel:		equ 4	; relative screen position - coordinates are based on the level
-	render_abs:		equ 0	; absolute screen position - coordinates are based on the screen (e.g. the HUD)
-	render_bg:		equ 8	; align to background
-	render_useheight:	equ $10	; use ost_height to decide if object is on screen, otherwise height is assumed to be $20 (used for large objects)
-	render_rawmap:		equ $20	; sprites use raw mappings - i.e. object consists of a single sprite instead of multipart sprite mappings (e.g. broken block fragments)
-	render_behind:		equ $40	; object is behind a loop (Sonic only)
-	render_onscreen:	equ $80	; object is on screen
+ost_mappings:		rs.l 1					; mappings address
+ost_x_pos:		rs.l 1					; x-axis position
+ost_x_sub:		equ ost_x_pos+2				; x-axis subpixel position
+ost_y_screen:		equ ost_x_pos+2				; y-axis position for screen-fixed items
+ost_y_pos:		rs.l 1					; y-axis position
+ost_y_sub:		equ ost_y_pos+2				; y-axis subpixel position
+ost_x_vel:		rs.l 1					; x-axis velocity
+ost_y_vel:		equ ost_x_vel+2				; y-axis velocity
+ost_inertia:		rs.w 1					; potential speed
+ost_x_prev:		equ ost_inertia				; previous x position
+ost_angle:		rs.w 1					; angle of floor or rotation - 0 = flat; $40 = vertical left; $80 = ceiling; $C0 = vertical right
+ost_frame_hi:		rs.w 1					; current frame displayed
+ost_frame:		equ ost_frame_hi+1
+ost_parent:		rs.w 1					; address of OST of parent object
+ost_linked:		rs.w 1					; address of OST of linked object
+ost_routine:		rs.w 1					; routine number
+ost_mode:		equ ost_routine+1			; secondary routine number
+ost_col_type:		rs.w 1					; collision response type - 0 = none; 1-$3F = enemy; $41-$7F = items; $81-BF = hurts; $C1-$FF = custom
+ost_col_property:	equ ost_col_type+1			; collision extra property
+ost_sink:		equ ost_col_property			; amount platform has sunk when stood on - 0 is none, $1E is max
+ost_render:		rs.b 1					; bitfield for x/y flip, display mode
 	render_xflip_bit:	equ 0
 	render_yflip_bit:	equ 1
 	render_rel_bit:		equ 2
@@ -285,23 +276,23 @@ ost_render:		rs.b 1		; bitfield for x/y flip, display mode
 	render_rawmap_bit:	equ 5
 	render_behind_bit:	equ 6
 	render_onscreen_bit:	equ 7
-ost_height:		rs.b 1		; height/2
-ost_width:		rs.b 1		; width/2
-ost_priority:		rs.b 1		; sprite stack priority - 0 is highest, 7 is lowest
-ost_displaywidth:	rs.b 1		; display width/2
-ost_anim_frame:		rs.b 1		; current frame in animation script
-ost_anim:		rs.b 1		; current animation
-ost_anim_time:		rs.b 1		; time to next frame (1 byte) / general timer
-ost_status:		rs.b 1		; orientation or mode
-	status_xflip:		equ 1	; xflip
-	status_yflip:		equ 2	; yflip (objects only)
-	status_air:		equ 2	; Sonic is in the air (Sonic only)
-	status_jump:		equ 4	; jumping or rolling (Sonic only)
-	status_platform:	equ 8	; Sonic is standing on this (objects) / Sonic is standing on object (Sonic)
-	status_rolljump:	equ $10	; Sonic is jumping after rolling (Sonic only)
-	status_pushing:		equ $20	; Sonic is pushing this (objects) / Sonic is pushing an object (Sonic)
-	status_underwater:	equ $40	; Sonic is underwater (Sonic only)
-	status_broken:		equ $80	; object has been broken (enemies/bosses)
+	render_xflip:		equ 1<<render_xflip_bit		; xflip
+	render_yflip:		equ 1<<render_yflip_bit		; yflip
+	render_rel:		equ 1<<render_rel_bit		; relative screen position - coordinates are based on the level
+	render_abs:		equ 0				; absolute screen position - coordinates are based on the screen (e.g. the HUD)
+	render_bg:		equ 1<<render_bg_bit		; align to background
+	render_useheight:	equ 1<<render_useheight_bit	; use ost_height to decide if object is on screen, otherwise height is assumed to be $20 (used for large objects)
+	render_rawmap:		equ 1<<render_rawmap_bit	; sprites use raw mappings - i.e. object consists of a single sprite instead of multipart sprite mappings (e.g. broken block fragments)
+	render_behind:		equ 1<<render_behind_bit	; object is behind a loop (Sonic only)
+	render_onscreen:	equ 1<<render_onscreen_bit	; object is on screen
+ost_height:		rs.b 1					; height/2
+ost_width:		rs.b 1					; width/2
+ost_priority:		rs.b 1					; sprite stack priority - 0 is highest, 7 is lowest
+ost_displaywidth:	rs.b 1					; display width/2
+ost_anim_frame:		rs.b 1					; current frame in animation script
+ost_anim:		rs.b 1					; current animation
+ost_anim_time:		rs.b 1					; time to next frame / general timer
+ost_status:		rs.b 1					; orientation or mode
 	status_xflip_bit:	equ 0
 	status_yflip_bit:	equ 1
 	status_air_bit:		equ 1
@@ -311,39 +302,47 @@ ost_status:		rs.b 1		; orientation or mode
 	status_pushing_bit:	equ 5
 	status_underwater_bit:	equ 6
 	status_broken_bit:	equ 7
-ost_respawn:		rs.b 1		; respawn list index number
-ost_subtype:		rs.b 1		; object subtype
-ost_used:		equ __rs	; bytes used by regular OST, everything after this is scratch RAM
-		popo			; restore options
+	status_xflip:		equ 1<<status_xflip_bit		; xflip
+	status_yflip:		equ 1<<status_yflip_bit		; yflip (objects only)
+	status_air:		equ 1<<status_air_bit		; Sonic is in the air (Sonic only)
+	status_jump:		equ 1<<status_jump_bit		; jumping or rolling (Sonic only)
+	status_platform:	equ 1<<status_platform_bit	; Sonic is standing on this (objects) / Sonic is standing on object (Sonic)
+	status_rolljump:	equ 1<<status_rolljump_bit	; Sonic is jumping after rolling (Sonic only)
+	status_pushing:		equ 1<<status_pushing_bit	; Sonic is pushing this (objects) / Sonic is pushing an object (Sonic)
+	status_underwater:	equ 1<<status_underwater_bit	; Sonic is underwater (Sonic only)
+	status_broken:		equ 1<<status_broken_bit	; object has been broken (enemies/bosses)
+ost_respawn:		rs.b 1					; respawn list index number
+ost_subtype:		rs.b 1					; object subtype
+ost_name:		rs.b 1					; name string id
+ost_used:		equ __rs				; bytes used by regular OST, everything after this is scratch RAM
+		popo						; restore options
 		inform	0,"0-$%h bytes of OST per object used, leaving $%h bytes of scratch RAM.",__rs-1,sizeof_ost-__rs
-ost_enemy_combo:	equ $3E		; number of enemies broken in a row (0-$A) (2 bytes)
+ost_enemy_combo:	equ $3E					; number of enemies broken in a row (0-$A) (2 bytes)
 
 ; Object variables used by Sonic
 		rsobj SonicPlayer
-ost_sonic_jump:		rs.b 1					; 1 if Sonic is jumping
-ost_sonic_flash_time:	rs.w 1					; time Sonic flashes for after getting hit (2 bytes)
-ost_sonic_invincible_time: rs.w 1				; time left for invincibility (2 bytes)
-ost_sonic_shoe_time:	rs.w 1					; time left for speed shoes (2 bytes)
-ost_sonic_restart_time:	rs.w 1					; time until level restarts (2 bytes)
-ost_sonic_lock_time:	rs.w 1					; time left for locked controls, e.g. after hitting a spring (2 bytes)
+ost_sonic_flash_time:	rs.w 1					; time Sonic flashes for after getting hit
+ost_sonic_restart_time:	rs.w 1					; time until level restarts 
+ost_sonic_lock_time:	rs.w 1					; time left for locked controls, e.g. after hitting a spring
 ost_sonic_angle_right:	rs.b 1					; angle of floor on Sonic's right side
 ost_sonic_angle_left:	rs.b 1					; angle of floor on Sonic's left side
 ost_sonic_sbz_disc:	rs.b 1					; 1 if Sonic is stuck to SBZ disc
 ost_sonic_anim_next:	rs.b 1					; next animation
 ost_sonic_jumpmask:	rs.b 1					; bitmask for buttons which trigger jump
+ost_sonic_jump:		rs.b 1					; 1 if Sonic is jumping
 ost_sonic_on_obj:	equ ost_parent				; OST index of object Sonic stands on (2 bytes)
 ost_sonic_impact:	equ ost_col_type			; copy of ost_y_vel when Sonic lands on a solid object (2 bytes)
 		rsobjend
 
 ; Object variables used by bosses
 		rsobj Boss
-ost_boss_mode:		rs.b 1					; $FF = lifting block (SYZ) / boss beaten (LZ)
 ost_boss_parent_x_pos:	rs.l 1					; parent x position (4 bytes)
 ost_boss_parent_y_pos:	rs.l 1					; parent y position (4 bytes)
 ost_boss_wait_time:	rs.w 1					; time to wait between each action (2 bytes)
 ost_boss_flash_num:	rs.b 1					; number of times to make boss flash when hit
 ost_boss_wobble:	rs.b 1					; wobble state as Eggman moves back & forth (1 byte incremented every frame & interpreted by CalcSine)
 ost_boss_attack:	rs.b 1					; flag set when boss is attacking & laughing
+ost_boss_mode:		rs.b 1					; $FF = lifting block (SYZ) / boss beaten (LZ)
 		rsobjend
 
 ; Boss constants

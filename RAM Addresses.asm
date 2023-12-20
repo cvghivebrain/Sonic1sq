@@ -236,6 +236,8 @@ v_scroll_block_3_height:	equ __rs-4 ; scroll block height - always $100, unused
 v_scroll_block_4_height:	equ __rs-2 ; scroll block height - $100 for GHZ; 0 for all others, unused
 v_slzboss_seesaws:		rs.w 3 ; OST addresses of 3 seesaws at SLZ boss
 v_nearest_obj:			rs.w 1 ; address of OST of nearest object, as found by FindNearestSonic
+v_invincibility:		rs.w 1 ; time left for invincibility
+v_shoes:			rs.w 1 ; time left for speed shoes
 				rsblockend levelinfo
 
 				rsblock sprites
@@ -315,8 +317,6 @@ v_time_sec:			equ __rs-2 ; time - seconds
 v_time_frames:			equ __rs-1 ; time - frames
 v_score:			rs.l 1 ; score
 v_shield:			rs.b 1 ; shield status - 00 = no; 01 = yes
-v_invincibility:		rs.b 1 ; invincibility status - 00 = no; 01 = yes
-v_shoes:			rs.b 1 ; speed shoes status - 00 = no; 01 = yes
 
 				rsblock lamppost ; written to as a block by GM_Credits
 v_last_lamppost:		rs.b 1 ; id of the last lamppost you hit

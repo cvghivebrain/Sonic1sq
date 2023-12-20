@@ -27,7 +27,7 @@ Shi_Main:	; Routine 0
 
 Shi_Shield:	; Routine 2
 		shortcut
-		tst.b	(v_invincibility).w			; does Sonic have invincibility?
+		tst.w	(v_invincibility).w			; does Sonic have invincibility?
 		bne.s	.hide					; if yes, branch
 		tst.b	(v_shield).w				; does Sonic have shield?
 		beq.w	DeleteObject				; if not, branch
@@ -82,7 +82,7 @@ Inv_Main:	; Routine 0
 
 Inv_Stars:	; Routine 2
 		shortcut
-		tst.b	(v_invincibility).w			; does Sonic have invincibility?
+		tst.w	(v_invincibility).w			; does Sonic have invincibility?
 		beq.w	DeleteObject				; if not, branch
 		move.w	(v_sonic_pos_tracker_num).w,d0		; get current index value for position tracking data
 		move.b	ost_subtype(a0),d1			; get tracking offset

@@ -128,7 +128,7 @@ React_Item:	; ost_col_type is $40-$7F (monitor, ring, giant ring)
 ; ===========================================================================
 
 React_Enemy:
-		tst.b	(v_invincibility).w			; is Sonic invincible?
+		tst.w	(v_invincibility).w			; is Sonic invincible?
 		bne.s	.donthurtsonic				; if yes, branch
 		cmpi.b	#id_Roll,ost_anim(a0)			; is Sonic rolling/jumping?
 		bne.w	React_ChkHurt				; if not, branch
@@ -194,7 +194,7 @@ Enemy_Points:	dc.w 100/10
 ; ===========================================================================
 
 React_Caterkiller:
-		tst.b	(v_invincibility).w
+		tst.w	(v_invincibility).w
 		bne.s	.break_caterkiller			; branch if Sonic is invincible
 		cmpi.b	#id_Roll,ost_anim(a0)
 		beq.s	.break_caterkiller			; branch if Sonic is rolling/jumping
@@ -210,7 +210,7 @@ React_Caterkiller:
 ; ===========================================================================
 
 React_ChkHurt:
-		tst.b	(v_invincibility).w			; is Sonic invincible?
+		tst.w	(v_invincibility).w			; is Sonic invincible?
 		beq.s	React_Hurt				; if not, branch
 
 	React_Exit:
@@ -304,7 +304,7 @@ HurtSonic:
 KillSonic:
 		tst.w	(v_debug_active).w			; is debug mode	active?
 		bne.s	.dontdie				; if yes, branch
-		move.b	#0,(v_invincibility).w			; remove invincibility
+		move.w	#0,(v_invincibility).w			; remove invincibility
 		move.b	#0,(f_hud_time_update).w		; stop HUD time counter
 		move.b	#id_Sonic_Death,ost_routine(a0)		; run death animation/action
 		bsr.w	Sonic_ResetOnFloor			; reset several of Sonic's flags

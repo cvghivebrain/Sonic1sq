@@ -105,19 +105,8 @@ BuildSprites:
 ; ===========================================================================
 
 	.abs_screen_coords:
-		moveq	#0,d0
-		move.b	ost_displaywidth(a0),d0
-		move.w	ost_x_pos(a0),d1
-		move.w	d1,d3
-		subi.w	#screen_left,d1
-		add.w	d0,d1
-		add.w	d0,d0
-		addi.w	#screen_width,d0
-		cmp.w	d0,d1
-		bcc.s	.next_object				; branch if outside left/right of screen
-		
 		move.w	ost_y_screen(a0),d2			; d2 = y pos
-		;move.w	ost_x_pos(a0),d3			; d3 = x pos
+		move.w	ost_x_pos(a0),d3			; d3 = x pos
 		bra.s	.draw_object
 
 ; ---------------------------------------------------------------------------

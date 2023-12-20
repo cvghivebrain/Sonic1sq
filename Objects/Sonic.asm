@@ -60,7 +60,6 @@ Sonic_Control:	; Routine 2
 	.lock:
 		btst	#0,(v_lock_multi).w			; are controls and position locked?
 		bne.s	.lock2					; if yes, branch
-		moveq	#0,d0
 		move.b	ost_status(a0),d0
 		andi.w	#status_air+status_jump,d0		; read status bits 1 and 2
 		move.w	Sonic_Modes(pc,d0.w),d1
@@ -111,33 +110,25 @@ Sonic_Display:
 		jsr	(DisplaySprite).l
 
 	.chkinvincible:
-		tst.b	(v_invincibility).w			; does Sonic have invincibility?
+		tst.w	(v_invincibility).w			; does Sonic have invincibility?
 		beq.s	.chkshoes				; if not, branch
-		tst.w	ost_sonic_invincible_time(a0)		; check invinciblity timer
-		beq.s	.chkshoes				; if 0, branch
-		subq.w	#1,ost_sonic_invincible_time(a0)	; decrement timer
+		subq.w	#1,(v_invincibility).w			; decrement timer
 		bne.s	.chkshoes				; if not 0, branch
 		tst.b	(f_boss_boundary).w
-		bne.s	.removeinvincible			; branch if at a boss
+		bne.s	.chkshoes				; branch if at a boss
 		cmpi.b	#air_alert,(v_air).w			; is air < $C?
-		bcs.s	.removeinvincible			; if yes, branch
+		bcs.s	.chkshoes				; if yes, branch
 		move.b	(v_bgm).w,d0
 		jsr	(PlaySound0).l				; play normal music
 
-	.removeinvincible:
-		move.b	#0,(v_invincibility).w			; cancel invincibility
-
 	.chkshoes:
-		tst.b	(v_shoes).w				; does Sonic have speed	shoes?
+		tst.w	(v_shoes).w				; does Sonic have speed	shoes?
 		beq.s	.exit					; if not, branch
-		tst.w	ost_sonic_shoe_time(a0)			; check	time remaining
-		beq.s	.exit					; if 0, branch
-		subq.w	#1,ost_sonic_shoe_time(a0)		; decrement timer
+		subq.w	#1,(v_shoes).w				; decrement timer
 		bne.s	.exit					; branch if time remains
 		move.w	#sonic_max_speed,(v_sonic_max_speed).w	; restore Sonic's speed
 		move.w	#sonic_acceleration,(v_sonic_acceleration).w ; restore Sonic's acceleration
 		move.w	#sonic_deceleration,(v_sonic_deceleration).w ; restore Sonic's deceleration
-		move.b	#0,(v_shoes).w				; cancel speed shoes
 		play.w	0, jmp, cmd_Slowdown			; run music at normal speed
 
 	.exit:

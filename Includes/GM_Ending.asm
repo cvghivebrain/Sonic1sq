@@ -71,8 +71,6 @@ GM_Ending:
 		move.l	d0,(v_time).w
 		move.b	d0,(v_ring_reward).w
 		move.b	d0,(v_shield).w
-		move.b	d0,(v_invincibility).w
-		move.b	d0,(v_shoes).w
 		move.w	d0,(v_debug_active).w
 		move.w	d0,(f_restart).w
 		move.w	d0,(v_frame_counter).w

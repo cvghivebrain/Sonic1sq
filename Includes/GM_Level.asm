@@ -124,8 +124,6 @@ Level_Skip_TtlCard:
 	.skip_clear:
 		move.b	d0,(f_time_over).w
 		move.b	d0,(v_shield).w				; clear shield
-		move.b	d0,(v_invincibility).w			; clear invincibility
-		move.b	d0,(v_shoes).w				; clear speed shoes
 		move.w	d0,(v_debug_active).w
 		move.w	d0,(f_restart).w
 		move.w	d0,(v_frame_counter).w
