@@ -574,13 +574,8 @@ DLE_SBZ2_Blocks:
 DLE_SBZ2_Eggman:
 		cmpi.w	#$1F60,(v_camera_x_pos).w
 		bcs.s	.set_boundary				; branch if camera is left of $1F60
-
-		bsr.w	FindFreeObj				; find free OST slot
-		bne.s	.fail					; branch if not found
-		move.l	#ScrapEggman,ost_id(a1)			; load SBZ2 Eggman object
+		
 		addq.b	#2,(v_dle_routine).w			; goto DLE_SBZ2_End next
-
-	.fail:
 		move.b	#1,(f_boss_boundary).w			; lock screen
 
 	.set_boundary:

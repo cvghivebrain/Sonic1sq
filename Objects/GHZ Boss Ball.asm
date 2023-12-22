@@ -26,7 +26,7 @@ ost_ball_base_y_pos:	rs.w 1					; y position of base (2 bytes)
 ost_ball_base_x_pos:	rs.w 1					; x position of base (2 bytes)
 ost_ball_radius:	rs.b 1					; distance of ball/link from base
 ost_ball_side:		rs.b 1					; which side the ball is on - 0 = right; 1 = left
-ost_ball_speed:		rs.w 1					; rate of change of angle (2 bytes)
+ost_ball_speed:		equ ost_inertia				; rate of change of angle (2 bytes)
 		rsobjend
 ; ===========================================================================
 

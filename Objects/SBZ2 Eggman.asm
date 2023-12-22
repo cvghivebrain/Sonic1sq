@@ -2,8 +2,7 @@
 ; Object 82 - Eggman (SBZ2)
 
 ; spawned by:
-;	DynamicLevelEvents - routine 0
-;	ScrapEggman - routines 2/4
+;	ObjPos_SBZ2
 ; ---------------------------------------------------------------------------
 
 ScrapEggman:
@@ -14,162 +13,136 @@ ScrapEggman:
 ; ===========================================================================
 SEgg_Index:	index *,,2
 		ptr SEgg_Main
-		ptr SEgg_Eggman
-		ptr SEgg_Button
-
-SEgg_ObjData:	dc.b id_SEgg_Eggman, id_ani_eggman_stand, 3	; routine number, animation, priority
-		dc.b id_SEgg_Button, 0, 3
+		ptr SEgg_Wait
+		ptr SEgg_Wait2
+		ptr SEgg_Jump
+		ptr SEgg_Stop
 
 		rsobj ScrapEggman
-ost_eggman_parent:	rs.l 1 ; $34				; address of OST of parent object (4 bytes)
-ost_eggman_wait_time:	rs.w 1 ; $3C				; time delay between events (2 bytes)
+ost_eggman_wait_time:	rs.w 1					; time delay between events
+ost_eggman_x_stop:	rs.w 1					; x position to stop at
+ost_eggman_y_stop:	rs.w 1					; y position to stop at
 		rsobjend
 ; ===========================================================================
 
 SEgg_Main:	; Routine 0
-		moveq	#id_UPLC_EggmanFZ,d0
+		moveq	#id_UPLC_EggmanSBZ,d0
 		jsr	UncPLC
 		
-		lea	SEgg_ObjData(pc),a2
-		move.w	#$2160,ost_x_pos(a0)
-		move.w	#$5A4,ost_y_pos(a0)
-		move.b	#id_col_24x24,ost_col_type(a0)
-		move.b	#$10,ost_col_property(a0)
-		bclr	#status_xflip_bit,ost_status(a0)
-		clr.b	ost_mode(a0)
-		move.b	(a2)+,ost_routine(a0)			; goto SEgg_Eggman next
-		move.b	(a2)+,ost_anim(a0)
-		move.b	(a2)+,ost_priority(a0)
+		addq.b	#2,ost_routine(a0)			; goto SEgg_Wait next
+		move.b	#3,ost_priority(a0)
 		move.l	#Map_SEgg,ost_mappings(a0)
 		move.w	#tile_Art_Sbz2Eggman,ost_tile(a0)
-		move.b	#render_rel,ost_render(a0)
-		bset	#render_onscreen_bit,ost_render(a0)
-		move.b	#$20,ost_displaywidth(a0)
-
-		jsr	(FindNextFreeObj).l			; find free OST slot
-		bne.s	SEgg_Eggman				; branch if not found
-		move.l	a0,ost_eggman_parent(a1)		; save address of OST of Eggman as parent
-		move.l	#ScrapEggman,ost_id(a1)			; load button object
-		move.w	#$2130,ost_x_pos(a1)
-		move.w	#$5BC,ost_y_pos(a1)
-		clr.b	ost_mode(a0)
-		move.b	(a2)+,ost_routine(a1)			; goto SEgg_Button next
-		move.b	(a2)+,ost_anim(a1)
-		move.b	(a2)+,ost_priority(a1)
-		move.l	#Map_But,ost_mappings(a1)
-		move.w	(v_tile_button).w,ost_tile(a1)
-		move.b	#render_rel,ost_render(a1)
-		bset	#render_onscreen_bit,ost_render(a1)
-		move.b	#$10,ost_displaywidth(a1)
-		move.b	#id_frame_button_up,ost_frame(a1)	; use unpressed frame
-
-SEgg_Eggman:	; Routine 2
-		moveq	#0,d0
-		move.b	ost_mode(a0),d0
-		move.w	SEgg_EggIndex(pc,d0.w),d1
-		jsr	SEgg_EggIndex(pc,d1.w)
-		lea	Ani_SEgg(pc),a1
-		jsr	(AnimateSprite).l
-		jmp	(DisplaySprite).l
-; ===========================================================================
-SEgg_EggIndex:	index *,,2
-		ptr SEgg_ChkSonic
-		ptr SEgg_PreLeap
-		ptr SEgg_Leap
-		ptr SEgg_Move
-; ===========================================================================
-
-SEgg_ChkSonic:
-		move.w	ost_x_pos(a0),d0
-		sub.w	(v_ost_player+ost_x_pos).w,d0
-		cmpi.w	#128,d0					; is Sonic within 128 pixels of	Eggman?
-		bcc.s	SEgg_Move				; if not, branch
-		addq.b	#2,ost_mode(a0)			; goto SEgg_PreLeap next
-		move.w	#180,ost_eggman_wait_time(a0)		; set delay to 3 seconds
+		move.b	#render_rel+render_onscreen,ost_render(a0)
 		move.b	#id_ani_eggman_laugh,ost_anim(a0)
+		move.b	#$20,ost_displaywidth(a0)
+		move.w	ost_y_pos(a0),ost_eggman_y_stop(a0)
+		subi.w	#9,ost_eggman_y_stop(a0)
+		move.w	#-$30,d2
+		btst	#status_xflip_bit,ost_status(a0)
+		beq.s	.noflip
+		neg.w	d2
 
-SEgg_Move:
-		jmp	(SpeedToPos).l				; update position
+	.noflip:
+		jsr	FindNextFreeObj				; find free OST slot
+		bne.s	SEgg_Wait				; branch if not found
+		move.l	#ScrapButton,ost_id(a1)			; load button object
+		move.w	ost_x_pos(a0),ost_x_pos(a1)
+		add.w	d2,ost_x_pos(a1)
+		move.w	ost_x_pos(a1),ost_eggman_x_stop(a0)
+		move.w	ost_y_pos(a0),ost_y_pos(a1)
+		addi.w	#$18,ost_y_pos(a1)
+		saveparent
+
+SEgg_Wait:	; Routine 2
+		lea	Ani_SEgg(pc),a1
+		jsr	AnimateSprite
+		getsonic					; a1 = OST of Sonic
+		range_x
+		cmpi.w	#128,d1
+		bcc.s	.wait					; branch if more than 128px away
+		move.w	#180,ost_eggman_wait_time(a0)		; set delay to 3 seconds
+		addq.b	#2,ost_routine(a0)			; goto SEgg_Wait2 next
+		
+	.wait:
+		jmp	DisplaySprite
 ; ===========================================================================
 
-SEgg_PreLeap:
+SEgg_Wait2:	; Routine 4
+		lea	Ani_SEgg(pc),a1
+		jsr	AnimateSprite
 		subq.w	#1,ost_eggman_wait_time(a0)		; decrement timer
 		bne.s	.wait					; if time remains, branch
-		addq.b	#2,ost_mode(a0)			; goto SEgg_Leap next
+		addq.b	#2,ost_routine(a0)			; goto SEgg_Jump next
 		move.b	#id_ani_eggman_jump1,ost_anim(a0)
+		move.b	#id_frame_eggman_jump1,ost_frame(a0)
 		addq.w	#4,ost_y_pos(a0)
-		move.w	#15,ost_eggman_wait_time(a0)		; wait quarter of a second before jumping
+		move.w	#-$3C0,ost_y_vel(a0)
+		move.w	#-$FC,ost_x_vel(a0)			; make Eggman leap
+		btst	#status_xflip_bit,ost_status(a0)
+		beq.s	.wait
+		neg.w	ost_x_vel(a0)
 
 	.wait:
-		bra.s	SEgg_Move
+		jmp	DisplaySprite
 ; ===========================================================================
 
-SEgg_Leap:
-		subq.w	#1,ost_eggman_wait_time(a0)		; decrement timer
-		bgt.s	.update_pos
+SEgg_Jump:	; Routine 6
+		lea	Ani_SEgg(pc),a1
+		jsr	AnimateSprite
+		cmpi.b	#id_frame_eggman_jump1,ost_frame(a0)
+		beq.s	.wait				; don't jump for first animation frame
+		update_xy_fall	$24			; update position & apply gravity
+		move.w	ost_x_pos(a0),d0
+		cmp.w	ost_eggman_x_stop(a0),d0
 		bne.s	.wait
-		move.w	#-$FC,ost_x_vel(a0)			; make Eggman leap
-		move.w	#-$3C0,ost_y_vel(a0)
-
-	.wait:
-		cmpi.w	#$2132,ost_x_pos(a0)			; has Eggman reach the button?
-		bgt.s	.not_at_btn				; if not, branch
-		clr.w	ost_x_vel(a0)				; stop moving horizontally
-
-	.not_at_btn:
-		addi.w	#$24,ost_y_vel(a0)			; apply gravity
-		tst.w	ost_y_vel(a0)				; is Eggman moving downwards?
-		bmi.s	.find_blocks				; if not, branch
-		cmpi.w	#$595,ost_y_pos(a0)			; has Eggman passed $595 on y axis?
-		bcs.s	.find_blocks				; if not, branch
-		move.b	#$53,ost_subtype(a0)			; set flag for button to change to pressed
-		cmpi.w	#$59B,ost_y_pos(a0)			; has Eggman passed $59B on y axis?
-		bcs.s	.find_blocks				; if not, branch
-		move.w	#$59B,ost_y_pos(a0)			; stop at $59B
-		clr.w	ost_y_vel(a0)				; stop falling
-
-.find_blocks:
-		move.w	ost_x_vel(a0),d0
-		or.w	ost_y_vel(a0),d0
-		bne.s	.update_pos				; branch if Eggman is moving at all
-		lea	(v_ost_all).w,a1			; start at the first OST slot
-		moveq	#$3E,d0
-		moveq	#sizeof_ost,d1				; $40
-
-	.loop:	
-		adda.w	d1,a1					; next OST slot
-		cmp.l	#FalseFloor,ost_id(a1)			; is object a block? (id $83)
-		dbeq	d0,.loop				; if not, repeat (max $3E times)
-
-		bne.s	.update_pos
-		move.b	#$47,ost_subtype(a1)			; set block to disintegrate
-		addq.b	#2,ost_mode(a0)			; goto SEgg_Move next
+		clr.w	ost_x_vel(a0)			; stop moving when above button
+		move.w	ost_y_pos(a0),d0
+		cmp.w	ost_eggman_y_stop(a0),d0
+		bcs.s	.wait				; branch if not on button
+		addq.b	#2,ost_routine(a0)		; goto SEgg_Stop next
+		move.w	ost_eggman_y_stop(a0),ost_y_pos(a0)
 		move.b	#id_ani_eggman_laugh,ost_anim(a0)
 
-.update_pos:
-		bra.w	SEgg_Move
+	.wait:
+		jmp	DisplaySprite
 ; ===========================================================================
 
-SEgg_Button:	; Routine 4
-		moveq	#0,d0
-		move.b	ost_mode(a0),d0
-		move.w	SEgg_BtnIndex(pc,d0.w),d0
-		jmp	SEgg_BtnIndex(pc,d0.w)
-; ===========================================================================
-SEgg_BtnIndex:	index *,,2
-		ptr SEgg_BtnChk
-		ptr SEgg_BtnDisplay
-; ===========================================================================
+SEgg_Stop:	; Routine 8
+		play.w	1, jsr, sfx_Switch		; play "blip" sound
+		move.b	ost_subtype(a0),d0
+		andi.w	#$F,d0				; get low nybble of subtype
+		lea	(v_button_state).w,a3
+		adda.w	d0,a3				; (a3) = button status
+		move.b	#1,(a3)				; set button as pressed
+		shortcut
+		lea	Ani_SEgg(pc),a1
+		jsr	AnimateSprite
+		jmp	DisplaySprite
 
-SEgg_BtnChk:
-		movea.l	ost_eggman_parent(a0),a1		; get address of parent OST (Eggman)
-		cmpi.b	#$53,ost_subtype(a1)			; has subtype been changed?
-		bne.s	SEgg_BtnDisplay				; if not, branch
+; ---------------------------------------------------------------------------
+; Button object for Eggman (SBZ2)
+
+; spawned by:
+;	ScrapEggman
+; ---------------------------------------------------------------------------
+
+ScrapButton:
+		move.l	#Map_But,ost_mappings(a0)
+		move.w	(v_tile_button).w,ost_tile(a0)
+		move.b	#render_rel+render_onscreen,ost_render(a0)
+		move.b	#3,ost_priority(a0)
+		move.b	#$10,ost_displaywidth(a0)
+		move.b	#id_frame_button_up,ost_frame(a0)	; use unpressed frame
+		shortcut
+		getparent					; a1 = OST of Eggman
+		cmpi.b	#id_SEgg_Stop,ost_routine(a1)
+		bne.s	.wait					; branch if not on button
 		move.b	#id_frame_button_down,ost_frame(a0)	; use pressed frame
-		addq.b	#2,ost_mode(a0)			; goto SEgg_BtnDisplay next
-
-SEgg_BtnDisplay:
-		jmp	(DisplaySprite).l
+		shortcut	DisplaySprite
+		
+	.wait:
+		jmp	DisplaySprite
 
 ; ---------------------------------------------------------------------------
 ; Animation script
@@ -188,7 +161,6 @@ ani_eggman_stand:
 		dc.w $7E
 		dc.w id_frame_eggman_stand
 		dc.w id_Anim_Flag_Restart
-		even
 
 ani_eggman_laugh:
 		dc.w 6
@@ -202,9 +174,7 @@ ani_eggman_jump1:
 		dc.w id_frame_eggman_jump2
 		dc.w id_frame_eggman_jump2
 		dc.w id_frame_eggman_stand
-		dc.w id_frame_eggman_stand
-		dc.w id_frame_eggman_stand
-		dc.w id_Anim_Flag_Restart
+		dc.w id_Anim_Flag_Stop
 
 ani_eggman_intube:
 		dc.w 0
@@ -226,10 +196,8 @@ ani_eggman_jump2:
 		dc.w id_frame_eggman_jump1
 		dc.w id_frame_eggman_jump1
 		dc.w id_Anim_Flag_Restart
-		even
 
 ani_eggman_jump:
 		dc.w $7E
 		dc.w id_frame_eggman_jump
 		dc.w id_Anim_Flag_Restart
-		even

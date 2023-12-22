@@ -386,6 +386,7 @@ DebugList_SBZ:
 		dbitem	Rings, Map_Ring, 0, 0, id_frame_ring_front, v_tile_rings, tile_pal2
 		dbitem	Monitor, Map_Monitor, type_monitor_rings, 0, id_frame_monitor_static0, tile_Art_Monitors, 0
 		dbitem	Bomb, Map_Bomb, 0, 0, id_frame_bomb_stand1, v_tile_bomb, 0
+		dbitem	ScrapEggman, Map_SEgg, 0, 0, id_frame_eggman_stand, tile_Art_Sbz2Eggman, 0
 		dbitem	Caterkiller, Map_Cat, 0, 0, id_frame_cat_head1, v_tile_caterkiller, tile_pal2
 		dbitem	BallHog, Map_Hog, $34, 0, id_frame_hog_standing, v_tile_ballhog, tile_pal2
 		dbitem	Spikes, Map_Spike, type_spike_3up, 0, id_frame_spike_3up, v_tile_spikes, 0

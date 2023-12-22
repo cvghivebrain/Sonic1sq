@@ -285,4 +285,5 @@ ObjPos_SBZ2:
 		objpos $1CF8,$0480,AutoDoor,$00
 		
 		objpos $1EE0,$05A4,Signpost,$00
+		objpos $2160,$5A4,ScrapEggman,0,rem
 		endobj
