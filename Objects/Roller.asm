@@ -35,6 +35,8 @@ Roll_Main:	; Routine 0
 		move.b	#$10,ost_displaywidth(a0)
 		move.b	#$E,ost_height(a0)
 		move.b	#8,ost_width(a0)
+		move.b	#14,ost_col_width(a0)
+		move.b	#14,ost_col_height(a0)
 		bra.w	SnapFloor
 ; ===========================================================================
 
@@ -49,7 +51,7 @@ Roll_Hide:	; Routine 2
 		addq.b	#2,ost_routine(a0)			; goto Roll_Roll next
 		move.b	#id_ani_roll_roll,ost_anim(a0)
 		move.w	#$700,ost_x_vel(a0)			; move roller right
-		move.b	#id_col_14x14+id_col_hurt,ost_col_type(a0) ; make roller invincible
+		move.b	#id_React_Hurt,ost_col_type(a0)		; make roller invincible
 		bra.s	Roll_Roll
 		
 	.left:
@@ -60,7 +62,7 @@ Roll_Hide:	; Routine 2
 		addq.b	#2,ost_routine(a0)			; goto Roll_Roll next
 		move.b	#id_ani_roll_roll,ost_anim(a0)
 		move.w	#-$700,ost_x_vel(a0)			; move roller left
-		move.b	#id_col_14x14+id_col_hurt,ost_col_type(a0) ; make roller invincible
+		move.b	#id_React_Hurt,ost_col_type(a0)		; make roller invincible
 
 Roll_Roll:	; Routine 4
 		lea	Ani_Roll(pc),a1
@@ -74,7 +76,7 @@ Roll_Roll:	; Routine 4
 		cmpi.w	#48,d1
 		bhi.s	.skip_stop				; branch if Sonic is > 48px away
 		move.b	#id_ani_roll_unfold,ost_anim(a0)
-		move.b	#id_col_14x14,ost_col_type(a0)		; make roller killable
+		move.b	#id_React_Enemy,ost_col_type(a0)	; make roller killable
 		move.w	#120,ost_roller_open_time(a0)		; set waiting time to 2 seconds
 		move.b	#id_Roll_Stop,ost_routine(a0)		; goto Roll_Stop next
 		move.b	#1,ost_roller_stopped(a0)		; set flag for roller stopped
@@ -127,7 +129,7 @@ Roll_Resume:	; Routine $C
 		cmpi.b	#id_ani_roll_roll,ost_anim(a0)
 		bne.w	DespawnObject				; branch if still folding
 		move.b	#id_Roll_Roll,ost_routine(a0)		; goto Roll_Roll next
-		move.b	#id_col_14x14+id_col_hurt,ost_col_type(a0) ; make roller invincible
+		move.b	#id_React_Hurt,ost_col_type(a0)		; make roller invincible
 		bra.w	DespawnObject
 
 ; ---------------------------------------------------------------------------

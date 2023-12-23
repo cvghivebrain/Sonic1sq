@@ -30,7 +30,9 @@ Moto_Main:	; Routine 0
 		move.b	#$14,ost_displaywidth(a0)
 		move.b	#$E,ost_height(a0)
 		move.b	#8,ost_width(a0)
-		move.b	#id_col_20x16,ost_col_type(a0)
+		move.b	#id_React_Enemy,ost_col_type(a0)
+		move.b	#20,ost_col_width(a0)
+		move.b	#16,ost_col_height(a0)
 		addq.b	#2,ost_routine(a0)			; goto Moto_Walk next
 		move.w	#-$100,ost_x_vel(a0)			; moves to the left
 		btst	#status_xflip_bit,ost_status(a0)

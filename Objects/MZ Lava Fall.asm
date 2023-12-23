@@ -92,7 +92,9 @@ LFall_Action:	; Routine 2
 		move.w	ost_y_pos(a2),ost_y_pos(a1)
 		subi.w	#$80,ost_y_pos(a1)
 		move.b	#id_LFall_Column,ost_routine(a1)
-		move.b	#id_col_32x112+id_col_hurt,ost_col_type(a1)
+		move.b	#id_React_Hurt,ost_col_type(a1)
+		move.b	#32,ost_col_width(a1)
+		move.b	#112,ost_col_height(a1)
 		move.b	#id_ani_lfall_column,ost_anim(a1)
 		move.w	a2,ost_parent(a1)			; set front of lava as parent
 		

@@ -75,7 +75,9 @@ GBall_Main:	; Routine 0
 		move.w	#(vram_ball/sizeof_cell)+tile_pal3,ost_tile(a1)
 		move.b	#id_frame_ball_check1,ost_frame(a1)
 		move.b	#5,ost_priority(a1)
-		move.b	#id_col_20x20+id_col_hurt,ost_col_type(a1) ; make object hurt Sonic
+		move.b	#id_React_Hurt,ost_col_type(a1)		; make object hurt Sonic
+		move.b	#20,ost_col_width(a1)
+		move.b	#20,ost_col_height(a1)
 		rts	
 ; ===========================================================================
 

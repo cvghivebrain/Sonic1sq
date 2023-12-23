@@ -79,7 +79,9 @@ Weapon_Spike:	; Routine 4
 		cmp.w	#$94,ost_weapon_y_diff(a0)
 		bge.s	.exit					; branch if spike is fully extended
 		add.w	#7,ost_weapon_y_diff(a0)
-		move.b	#id_col_4x16+id_col_hurt,ost_col_type(a0) ; make spike harmful
+		move.b	#id_React_Hurt,ost_col_type(a0)		; make spike harmful
+		move.b	#4,ost_col_width(a0)
+		move.b	#16,ost_col_height(a0)
 		
 	.exit:
 		rts

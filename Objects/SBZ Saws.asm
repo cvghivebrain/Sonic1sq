@@ -36,7 +36,9 @@ Saw_Main:	; Routine 0
 		move.b	#$20,ost_displaywidth(a0)
 		move.w	ost_x_pos(a0),ost_saw_x_start(a0)
 		move.w	ost_y_pos(a0),ost_saw_y_start(a0)
-		move.b	#id_col_24x24_2+id_col_hurt,ost_col_type(a0)
+		move.b	#id_React_Hurt,ost_col_type(a0)
+		move.b	#24,ost_col_width(a0)
+		move.b	#24,ost_col_height(a0)
 		moveq	#0,d0
 		move.b	ost_subtype(a0),d0
 		add.w	d0,d0

@@ -26,11 +26,10 @@ Cyl_PosData:	dc.w $24D0, $620				; bottom left
 		dc.w $2510, $4C0				; top right
 
 		rsobj EggmanCylinder
-ost_cylinder_flag:	rs.b 1 ; ost_subtype+1			; flag set when extending
 ost_cylinder_eggman:	rs.w 1 ; $30				; -1 if cylinder contains Eggman (2 bytes)
-ost_cylinder_parent:	rs.l 1 ; $34				; address of OST of parent object (4 bytes)
 ost_cylinder_y_start:	rs.l 1 ; $38				; original y position (4 bytes; low word always 0)
 ost_cylinder_y_move:	rs.l 1 ; $3C				; amount the cylinder has moved (4 bytes)
+ost_cylinder_flag:	rs.b 1					; flag set when extending
 		rsobjend
 ; ===========================================================================
 
@@ -82,7 +81,7 @@ Cyl_Update:
 
 	.not_ceiling:
 		add.w	d0,d1
-		movea.l	ost_cylinder_parent(a0),a1		; get address of OST of parent (Eggman)
+		getparent					; get address of OST of parent (Eggman)
 		move.w	d1,ost_y_pos(a1)			; update Eggman position
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 
@@ -138,7 +137,7 @@ Cyl_Move_Index:	index *,,2
 Cyl_Bottom:
 		tst.b	ost_cylinder_flag(a0)			; is cylinder extending?
 		bne.s	.extend					; if yes, branch
-		movea.l	ost_cylinder_parent(a0),a1		; get address of OST of parent (Eggman)
+		getparent					; get address of OST of parent (Eggman)
 		tst.b	ost_col_property(a1)			; has boss been beaten?
 		bne.s	.not_beaten				; if not, branch
 		bsr.w	BossExplode				; spawn explosion
@@ -148,7 +147,7 @@ Cyl_Bottom:
 		addi.l	#$20000,ost_cylinder_y_move(a0)		; retract 2px
 		bcc.s	.exit					; branch if not fully retracted
 		clr.l	ost_cylinder_y_move(a0)			; reset to 0
-		movea.l	ost_cylinder_parent(a0),a1		; get address of OST of parent
+		getparent					; get address of OST of parent
 		subq.w	#1,ost_fz_phase_state(a1)
 		clr.w	ost_fz_cylinder_flag(a1)
 		subq.b	#2,ost_routine(a0)			; goto Cyl_Action next
@@ -176,7 +175,7 @@ Cyl_Top:
 		bset	#render_yflip_bit,ost_render(a0)
 		tst.b	ost_cylinder_flag(a0)
 		bne.s	.extend
-		movea.l	ost_cylinder_parent(a0),a1
+		getparent
 		tst.b	ost_col_property(a1)
 		bne.s	.not_beaten
 		bsr.w	BossExplode
@@ -186,7 +185,7 @@ Cyl_Top:
 		subi.l	#$20000,ost_cylinder_y_move(a0)
 		bcc.s	.exit
 		clr.l	ost_cylinder_y_move(a0)
-		movea.l	ost_cylinder_parent(a0),a1
+		getparent
 		subq.w	#1,ost_fz_phase_state(a1)
 		clr.w	ost_fz_cylinder_flag(a1)
 		subq.b	#2,ost_routine(a0)			; goto Cyl_Action next

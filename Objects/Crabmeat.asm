@@ -39,7 +39,9 @@ Crab_Main:	; Routine 0
 		move.w	(v_tile_crabmeat).w,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#3,ost_priority(a0)
-		move.b	#id_col_16x16,ost_col_type(a0)
+		move.b	#id_React_Enemy,ost_col_type(a0)
+		move.b	#16,ost_col_width(a0)
+		move.b	#16,ost_col_height(a0)
 		move.b	#$15,ost_displaywidth(a0)
 		move.b	ost_subtype(a0),d0
 		andi.w	#$F,d0					; read low nybble of subtype
@@ -174,7 +176,9 @@ CrabBall:
 		move.w	(v_tile_crabmeat).w,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#3,ost_priority(a0)
-		move.b	#id_col_6x6+id_col_hurt,ost_col_type(a0)
+		move.b	#id_React_Hurt,ost_col_type(a0)
+		move.b	#6,ost_col_width(a0)
+		move.b	#6,ost_col_height(a0)
 		move.b	#8,ost_displaywidth(a0)
 		move.w	#-$400,ost_y_vel(a0)
 		move.b	#id_frame_crab_ball1,ost_frame(a0)

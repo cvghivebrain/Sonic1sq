@@ -55,6 +55,8 @@ Hel_Main:	; Routine 0
 		move.b	#render_rel,ost_render(a1)
 		move.b	#3,ost_priority(a1)
 		move.b	#8,ost_displaywidth(a1)
+		move.b	#4,ost_col_width(a0)
+		move.b	#16,ost_col_height(a0)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		move.w	d1,ost_x_pos(a1)
 		addi.w	#16,d1					; x position of next spike
@@ -84,7 +86,7 @@ HelixSpike:
 		andi.b	#7,d0					; there are 8 frames max
 		move.b	d0,ost_frame(a0)			; change current frame
 		bne.w	DisplaySprite				; branch if not 0
-		move.b	#id_col_4x16+id_col_hurt,ost_col_type(a0) ; make object harmful
+		move.b	#id_React_Hurt,ost_col_type(a0)		; make object harmful
 		bra.w	DisplaySprite
 
 HelixSpikeRev:
@@ -98,5 +100,5 @@ HelixSpikeRev:
 		andi.b	#7,d0					; there are 8 frames max
 		move.b	d0,ost_frame(a0)			; change current frame
 		bne.w	DisplaySprite				; branch if not 0
-		move.b	#id_col_4x16+id_col_hurt,ost_col_type(a0) ; make object harmful
+		move.b	#id_React_Hurt,ost_col_type(a0)		; make object harmful
 		bra.w	DisplaySprite

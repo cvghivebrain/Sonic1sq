@@ -81,7 +81,9 @@ Newt_Appear:	; Routine 4/$E
 ; ===========================================================================
 
 Newt_Fire:	; Routine 6
-		move.b	#id_col_20x16,ost_col_type(a0)
+		move.b	#id_React_Enemy,ost_col_type(a0)
+		move.b	#20,ost_col_width(a0)
+		move.b	#16,ost_col_height(a0)
 		move.b	#id_ani_newt_firing,ost_anim(a0)
 		addq.b	#2,ost_routine(a0)			; goto Newt_Fire2 next
 
@@ -118,7 +120,9 @@ Newt_Fire2:	; Routine 8
 ; ===========================================================================
 
 Newt_Drop:	; Routine $10
-		move.b	#id_col_20x16,ost_col_type(a0)
+		move.b	#id_React_Enemy,ost_col_type(a0)
+		move.b	#20,ost_col_width(a0)
+		move.b	#16,ost_col_height(a0)
 		move.b	#id_ani_newt_drop,ost_anim(a0)
 		addq.b	#2,ost_routine(a0)			; goto Newt_Drop2 next
 
@@ -145,7 +149,7 @@ Newt_Drop2:	; Routine $12
 		move.w	#0,ost_y_vel(a0)			; stop newtron falling
 		addq.b	#2,ost_routine(a0)			; goto Newt_Floor next
 		move.b	#id_ani_newt_fly1,ost_anim(a0)
-		move.b	#id_col_20x8,ost_col_type(a0)
+		move.b	#8,ost_col_height(a0)
 		move.b	ost_subtype(a0),d0
 		andi.w	#$F0,d0					; read high nybble of subtype
 		lsl.w	#4,d0

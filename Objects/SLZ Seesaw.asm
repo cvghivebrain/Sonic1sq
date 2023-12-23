@@ -35,10 +35,10 @@ See_Main:	; Routine 0
 		move.b	#$30,ost_width(a0)
 		move.b	#$15,ost_height(a0)
 		tst.b	ost_subtype(a0)
-		bmi.s	See_Action				; branch if subtype is -1
+		bmi.w	See_Action				; branch if subtype is -1
 		
 		bsr.w	FindNextFreeObj				; find free OST slot
-		bne.s	See_Action				; branch if not found
+		bne.w	See_Action				; branch if not found
 		move.l	#Seesaw,ost_id(a1)			; load spikeball object
 		move.b	#id_See_Ball,ost_routine(a1)
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
@@ -50,7 +50,9 @@ See_Main:	; Routine 0
 		move.w	#tile_Kos_SlzSpike,ost_tile(a1)
 		ori.b	#render_rel,ost_render(a1)
 		move.b	#4,ost_priority(a1)
-		move.b	#id_col_8x8+id_col_hurt,ost_col_type(a1)
+		move.b	#id_React_Hurt,ost_col_type(a1)
+		move.b	#8,ost_col_width(a1)
+		move.b	#8,ost_col_height(a1)
 		move.b	#$C,ost_displaywidth(a1)
 		move.b	#id_frame_seesaw_silver,ost_frame(a1)
 		move.b	#2,ost_subtype(a1)

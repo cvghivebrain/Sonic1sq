@@ -25,8 +25,8 @@ ReactToItem:
 	.not_rolling:
 		cmpi.b	#id_Duck,ost_anim(a0)
 		bne.s	.not_ducking				; branch if Sonic isn't ducking
-		addi.w	#6,d3
-		subi.b	#6,d5					; smaller hitbox when ducking
+		addq.w	#6,d3
+		subq.b	#6,d5					; smaller hitbox when ducking
 		
 	.not_ducking:
 		lea	(v_ost_level_obj).w,a1			; first OST slot for interactable objects
@@ -35,27 +35,32 @@ ReactToItem:
 React_Loop:
 		tst.b	ost_render(a1)
 		bpl.s	React_Next				; branch if object is off screen
-		move.b	ost_col_type(a1),d0
+		tst.b	ost_col_type(a1)
 		beq.s	React_Next				; branch if collision type is 0
-		move.b	d0,d1
-		andi.w	#$3F,d0					; read only bits 0-5
-		add.w	d0,d0
-		add.w	d0,d0
-		lea	React_Sizes(pc,d0.w),a2			; jump to relevant dimensions
 		move.w	ost_x_pos(a1),d0
-		sbabs.w	d2,d0					; d0 = x dist between Sonic & object
-		sub.w	d4,d0
-		sub.w	(a2)+,d0
-		bpl.s	React_Next				; branch if dist is > sum of widths
+		sub.w	d2,d0					; d0 = x dist between Sonic & object
+		moveq	#0,d1
+		move.b	ost_col_width(a1),d1
+		add.w	d1,d0
+		add.w	d4,d0					; add Sonic & object hitboxes
+		add.w	d4,d1
+		add.w	d1,d1					; d1 = combined hitbox widths
+		cmp.w	d1,d0
+		bcc.s	React_Next				; branch if no overlap on x
 		move.w	ost_y_pos(a1),d0
-		sbabs.w	d3,d0					; d0 = y dist between Sonic & object
-		sub.w	d5,d0
-		sub.w	(a2)+,d0
-		bpl.s	React_Next				; branch if dist is > sum of heights
-		andi.w	#$C0,d1					; read bits 6-7 of collision type
-		lsr.b	#5,d1
-		move.w	React_Index(pc,d1.w),d1
-		jmp	React_Index(pc,d1.w)			; collision successful, exit loop
+		sub.w	d3,d0					; d0 = y dist between Sonic & object
+		moveq	#0,d1
+		move.b	ost_col_height(a1),d1
+		add.w	d1,d0
+		add.w	d5,d0					; add Sonic & object hitboxes
+		add.w	d5,d1
+		add.w	d1,d1					; d1 = combined hitbox heights
+		cmp.w	d1,d0
+		bcc.s	React_Next				; branch if no overlap on y
+		moveq	#0,d0
+		move.b	ost_col_type(a1),d0
+		move.w	React_Index(pc,d0.w),d0
+		jmp	React_Index(pc,d0.w)			; collision successful, exit loop
 
 	React_Next:
 		lea	sizeof_ost(a1),a1			; next OST slot
@@ -63,67 +68,24 @@ React_Loop:
 		rts	
 ; ===========================================================================
 React_Index:	index *,,2
-		ptr React_Enemy
-		ptr React_Item
-		ptr React_ChkHurt
-		ptr React_Special
-
-colid:		macro *
-		id_\*: equ (*-React_Sizes)/4
-		dc.w \1,\2
-		endm
-
-id_col_enemy:	equ 0						; enemies
-id_col_item:	equ $40						; monitors, rings, giant rings
-id_col_hurt:	equ $80						; hurts Sonic when touched
-id_col_custom:	equ $C0						; enemies with spikes (yadrin, caterkiller), SYZ bumper
-
-React_Sizes:	;   width, height
-col_0x0:	colid  0, 0					; $00
-col_20x20:	colid  $14, $14					; $01 - GHZ ball
-col_12x20:	colid   $C, $14					; $02 - Splats
-col_20x12:	colid  $14,  $C					; $03
-col_4x16:	colid	4,  $10					; $04 - GHZ spike pole, SYZ boss spike
-col_12x18:	colid   $C, $12					; $05 - Ball Hog, Burrobot
-col_16x16:	colid  $10, $10					; $06 - SBZ spikeball, Crabmeat, Monitor, SYZ spikeball, Prison
-col_6x6:	colid	6,    6					; $07 - Cannonball, Crab/Buzz missile, Ring
-col_24x12:	colid  $18,  $C					; $08 - Buzz Bomber
-col_12x16:	colid   $C, $10					; $09 - Chopper
-col_16x12:	colid  $10,  $C					; $0A - Jaws
-col_8x8:	colid	8,    8					; $0B - MZ fire, Fireball, Batbrain, LZ spikeball, SLZ seesaw spike, Orbinaut, Caterkiller
-col_20x16:	colid  $14, $10					; $0C - Newtron, Motobug, Yadrin
-col_20x8:	colid  $14,   8					; $0D - Newtron
-col_14x14:	colid   $E,  $E					; $0E - Roller
-col_24x24:	colid  $18, $18					; $0F - Bosses
-col_40x16:	colid  $28, $10					; $10 - MZ stomper
-col_16x24:	colid  $10, $18					; $11 - MZ stomper
-col_8x16:	colid	8,  $10					; $12 - Giant ring
-col_32x112:	colid  $20, $70					; $13 - MZ geyser
-col_64x32:	colid  $40, $20					; $14 - MZ lava wall, MZ lava tag
-col_128x32:	colid  $80, $20					; $15 - MZ lava tag
-col_32x32:	colid  $20, $20					; $16 - MZ lava tag
-col_8x8_2:	colid	8,    8					; $17 - SYZ bumper
-col_4x4:	colid	4,    4					; $18 - SYZ spike chain, Bomb shrapnel, Orbinaut spike, LZ gargoyle fire
-col_32x8:	colid  $20,   8					; $19 - SLZ swing
-col_12x12:	colid   $C,  $C					; $1A - Bomb enemy, FZ plasma
-col_8x4:	colid	8,    4					; $1B - LZ harpoon
-col_24x4:	colid  $18,   4					; $1C - LZ harpoon
-col_40x4:	colid  $28,   4					; $1D - LZ harpoon
-col_4x8:	colid	4,    8					; $1E - LZ harpoon
-col_4x24:	colid	4,  $18					; $1F - LZ harpoon
-col_4x40:	colid	4,  $28					; $20 - LZ harpoon
-col_4x32:	colid	4,  $20					; $21 - LZ pole
-col_24x24_2:	colid  $18, $18					; $22 - SBZ saw
-col_12x24:	colid   $C, $18					; $23 - SBZ flamethrower
-col_72x8:	colid  $48,   8					; $24 - SBZ electric
+		ptr React_None					; unused
+		ptr React_Enemy					; breakable enemies
+		ptr React_Ring					; rings, giant rings
+		ptr React_Hurt					; hurts when touched
+		ptr React_Routine				; increment routine counter for object
+		ptr React_Bumper				; increment ost_col_property
+		ptr React_Caterkiller				; caterkiller
+		ptr React_Yadrin				; yadrin
 ; ===========================================================================
 
-React_Item:	; ost_col_type is $40-$7F (monitor, ring, giant ring)
+React_Ring:
 		cmpi.w	#sonic_flash_time-ring_delay,ost_sonic_flash_time(a0) ; has Sonic been hit recently?
-		bcc.s	.no_collide				; if yes, branch
+		bcc.s	React_None				; if yes, branch
+		
+React_Routine:
 		addq.b	#2,ost_routine(a1)			; goto Ring_Collect (if ring), RLoss_Collect (if bouncing ring), GRing_Collect (if giant ring) next
-
-	.no_collide:
+		
+React_None:
 		rts
 ; ===========================================================================
 
@@ -131,7 +93,7 @@ React_Enemy:
 		tst.w	(v_invincibility).w			; is Sonic invincible?
 		bne.s	.donthurtsonic				; if yes, branch
 		cmpi.b	#id_Roll,ost_anim(a0)			; is Sonic rolling/jumping?
-		bne.w	React_ChkHurt				; if not, branch
+		bne.w	React_Hurt				; if not, branch
 
 	.donthurtsonic:
 		tst.b	ost_col_property(a1)
@@ -199,7 +161,7 @@ React_Caterkiller:
 		cmpi.b	#id_Roll,ost_anim(a0)
 		beq.s	.break_caterkiller			; branch if Sonic is rolling/jumping
 		move.b	#id_Cat_Split,ost_mode(a1)		; caterkiller splits apart
-		bra.s	React_Hurt
+		bra.s	React_Hurt_
 		
 	.break_caterkiller:
 		pushr	a0-a1
@@ -209,15 +171,15 @@ React_Caterkiller:
 		bra.w	React_Enemy_Break
 ; ===========================================================================
 
-React_ChkHurt:
+React_Hurt:
 		tst.w	(v_invincibility).w			; is Sonic invincible?
-		beq.s	React_Hurt				; if not, branch
+		beq.s	React_Hurt_				; if not, branch
 
 	React_Exit:
 		rts	
 ; ===========================================================================
 
-React_Hurt:
+React_Hurt_:
 		nop	
 		tst.w	ost_sonic_flash_time(a0)		; is Sonic flashing?
 		bne.s	React_Exit				; if yes, branch
@@ -345,21 +307,7 @@ ObjectKillSonic:
 		
 ; ===========================================================================
 
-React_Special:
-		move.b	ost_col_type(a1),d1			; get collision type
-		andi.b	#$3F,d1					; read only bits 0-5 (size)
-		cmpi.b	#id_col_8x8,d1
-		beq.w	React_Caterkiller			; branch if $CB (caterkiller)
-		cmpi.b	#id_col_20x16,d1
-		beq.s	.yadrin					; branch if $CC (yadrin)
-		cmpi.b	#id_col_8x8_2,d1
-		beq.s	.D7orE1					; branch if $D7 (SYZ bumper)
-		cmpi.b	#id_col_4x32,d1
-		beq.s	React_NextRoutine			; branch if $E1 (LZ pole)
-		rts	
-; ===========================================================================
-
-.yadrin:
+React_Yadrin:
 		sub.w	d0,d5					; d5 = Sonic's height, minus y dist between Sonic & yadrin
 		cmpi.w	#8,d5
 		bcc.w	React_Enemy				; branch if Sonic is below spike level
@@ -373,20 +321,16 @@ React_Special:
 		sub.w	d2,d0					; d0 = x pos of yadrin's face, minus x pos of Sonic's left edge
 		bcc.s	.sonic_left				; branch if Sonic is left of the yadrin
 		addi.w	#$18,d0
-		bcs.w	React_ChkHurt				; branch if Sonic is inside the yadrin
+		bcs.w	React_Hurt				; branch if Sonic is inside the yadrin
 		bra.w	React_Enemy
 ; ===========================================================================
 
 .sonic_left:
 		cmp.w	d4,d0
 		bhi.w	React_Enemy				; branch if Sonic is outside the yadrin
-		bra.w	React_ChkHurt				; check for invincibility, then hurt Sonic
+		bra.w	React_Hurt				; check for invincibility, then hurt Sonic
 ; ===========================================================================
 
-.D7orE1:
-		addq.b	#1,ost_col_property(a1)			; set flag for Sonic touching bumper/pole
-		rts
-		
-React_NextRoutine:
-		addq.b	#2,ost_routine(a1)			; increment routine counter
+React_Bumper:
+		addq.b	#1,ost_col_property(a1)			; set flag for Sonic touching bumper
 		rts

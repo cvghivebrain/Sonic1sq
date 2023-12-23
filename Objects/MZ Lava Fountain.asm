@@ -82,7 +82,9 @@ Fount_Top:	; Routine $A
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		addi.w	#96,ost_y_pos(a1)			; 96px below top
 		move.b	#id_Fount_Column,ost_routine(a1)
-		move.b	#id_col_32x112+id_col_hurt,ost_col_type(a1)
+		move.b	#id_React_Hurt,ost_col_type(a1)
+		move.b	#32,ost_col_width(a1)
+		move.b	#112,ost_col_height(a1)
 		move.b	#id_ani_fount_column,ost_anim(a1)
 		saveparent
 		

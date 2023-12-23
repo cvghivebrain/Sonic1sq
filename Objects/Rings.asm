@@ -104,7 +104,9 @@ Ring_Main:	; Routine 0
 		add.w	#tile_pal2,ost_tile(a1)
 		move.b	#render_rel,ost_render(a1)
 		move.b	#2,ost_priority(a1)
-		move.b	#id_col_6x6+id_col_item,ost_col_type(a1) ; goto Ring_Collect when touched
+		move.b	#id_React_Ring,ost_col_type(a1)		; goto Ring_Collect when touched
+		move.b	#6,ost_col_width(a1)
+		move.b	#6,ost_col_height(a1)
 		move.b	#8,ost_displaywidth(a1)
 		move.b	ost_respawn(a0),ost_respawn(a1)
 		move.b	d1,ost_ring_num(a1)			; ring remembers which one in the current batch it is 

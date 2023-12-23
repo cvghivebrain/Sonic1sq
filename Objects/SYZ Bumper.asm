@@ -29,7 +29,9 @@ Bump_Main:	; Routine 0
 		move.b	#render_rel,ost_render(a0)
 		move.b	#$10,ost_displaywidth(a0)
 		move.b	#1,ost_priority(a0)
-		move.b	#id_col_8x8_2+id_col_custom,ost_col_type(a0)
+		move.b	#id_React_Bumper,ost_col_type(a0)
+		move.b	#8,ost_col_width(a0)
+		move.b	#8,ost_col_height(a0)
 		bsr.w	GetState				; d0 = hit count
 		move.b	d0,ost_bump_count(a0)
 

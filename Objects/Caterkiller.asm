@@ -49,7 +49,9 @@ Cat_Main:	; Routine 0
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#4,ost_priority(a0)
 		move.b	#8,ost_displaywidth(a0)
-		move.b	#id_col_8x8+id_col_custom,ost_col_type(a0)
+		move.b	#id_React_Caterkiller,ost_col_type(a0)
+		move.b	#8,ost_col_width(a0)
+		move.b	#8,ost_col_height(a0)
 		move.w	#-$C0,ost_x_vel(a0)
 		move.b	#id_frame_cat_mouth1,ost_frame(a0)
 		
@@ -75,7 +77,9 @@ Cat_Main:	; Routine 0
 		move.b	#8,ost_displaywidth(a1)
 		move.b	#7,ost_height(a1)
 		move.b	#8,ost_width(a1)
-		move.b	#id_col_8x8+id_col_hurt,ost_col_type(a1)
+		move.b	#id_React_Hurt,ost_col_type(a0)
+		move.b	#8,ost_col_width(a0)
+		move.b	#8,ost_col_height(a0)
 		add.w	d4,d2
 		move.w	d2,ost_x_pos(a1)			; body segment x pos = previous segment x pos +12
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
@@ -187,7 +191,9 @@ Cat_Split:
 	.no_xflip:
 		move.w	d0,ost_x_vel(a0)			; set x speed
 		move.w	#-$400,ost_y_vel(a0)
-		move.b	#id_col_8x8+id_col_hurt,ost_col_type(a0)
+		move.b	#id_React_Hurt,ost_col_type(a0)
+		move.b	#8,ost_col_width(a0)
+		move.b	#8,ost_col_height(a0)
 		jmp	DisplaySprite
 ; ===========================================================================
 

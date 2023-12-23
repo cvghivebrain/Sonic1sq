@@ -27,7 +27,9 @@ Bat_Main:	; Routine 0
 		move.b	#render_rel,ost_render(a0)
 		move.b	#$C,ost_height(a0)
 		move.b	#2,ost_priority(a0)
-		move.b	#id_col_8x8,ost_col_type(a0)
+		move.b	#id_React_Enemy,ost_col_type(a0)
+		move.b	#8,ost_col_width(a0)
+		move.b	#8,ost_col_height(a0)
 		move.b	#$10,ost_displaywidth(a0)
 
 Bat_Hang:	; Routine 2

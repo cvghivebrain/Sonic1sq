@@ -41,7 +41,9 @@ LWall_Main:	; Routine 0
 		move.b	#1,ost_priority(a0)
 		move.b	#$28,ost_width(a0)
 		move.b	#16,ost_height(a0)
-		move.b	#id_col_64x32+id_col_hurt,ost_col_type(a0)
+		move.b	#id_React_Hurt,ost_col_type(a0)
+		move.b	#64,ost_col_width(a0)
+		move.b	#32,ost_col_height(a0)
 		move.b	ost_subtype(a0),d0
 		andi.w	#$F,d0					; read low nybble of subtype
 		add.b	d0,d0

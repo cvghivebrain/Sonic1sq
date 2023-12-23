@@ -31,7 +31,9 @@ Buzz_Main:	; Routine 0
 		move.w	(v_tile_buzzbomber).w,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#3,ost_priority(a0)
-		move.b	#id_col_24x12,ost_col_type(a0)
+		move.b	#id_React_Enemy,ost_col_type(a0)
+		move.b	#24,ost_col_width(a0)
+		move.b	#12,ost_col_height(a0)
 		move.b	#$18,ost_displaywidth(a0)
 		move.b	#id_frame_buzz_fly3,ost_frame(a0)	; use frame with exhaust flame
 		move.w	#$400,ost_x_vel(a0)			; move Buzz Bomber to the right

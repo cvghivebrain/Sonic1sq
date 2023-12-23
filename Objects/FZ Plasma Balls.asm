@@ -182,7 +182,9 @@ Plasma_Drop:
 		addq.b	#2,ost_mode(a0)			; goto Plasma_Move next
 		moveq	#id_ani_plasma_short,d0
 		jsr	NewAnim
-		move.b	#id_col_12x12+id_col_hurt,ost_col_type(a0) ; make plasma ball harmful
+		move.b	#id_React_Hurt,ost_col_type(a0)
+		move.b	#12,ost_col_width(a0)
+		move.b	#12,ost_col_height(a0)
 		move.w	#180,ost_plasma_time(a0)
 		moveq	#0,d0
 		move.w	(v_ost_player+ost_x_pos).w,d0

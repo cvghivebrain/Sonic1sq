@@ -33,7 +33,9 @@ Bom_Main:	; Routine 0
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#3,ost_priority(a0)
 		move.b	#$C,ost_displaywidth(a0)
-		move.b	#id_col_12x12+id_col_hurt,ost_col_type(a0)
+		move.b	#id_React_Hurt,ost_col_type(a0)
+		move.b	#12,ost_col_width(a0)
+		move.b	#12,ost_col_height(a0)
 		bchg	#status_xflip_bit,ost_status(a0)
 		move.w	#$10,ost_x_vel(a0)
 
@@ -125,7 +127,9 @@ Bom_Explode:	; Routine 6
 		move.b	#id_frame_bomb_shrapnel1,ost_frame(a1)
 		move.w	(a2)+,ost_x_vel(a1)
 		move.w	(a2)+,ost_y_vel(a1)
-		move.b	#id_col_4x4+id_col_hurt,ost_col_type(a1)
+		move.b	#id_React_Hurt,ost_col_type(a1)
+		move.b	#4,ost_col_width(a1)
+		move.b	#4,ost_col_height(a1)
 		bset	#render_onscreen_bit,ost_render(a1)
 		dbf	d1,.loop				; repeat 3 more	times
 		bra.w	DespawnObject

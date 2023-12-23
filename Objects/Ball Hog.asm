@@ -29,7 +29,9 @@ Hog_Main:	; Routine 0
 		add.w	#tile_pal2,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#4,ost_priority(a0)
-		move.b	#id_col_12x18,ost_col_type(a0)
+		move.b	#id_React_Enemy,ost_col_type(a0)
+		move.b	#12,ost_col_width(a0)
+		move.b	#18,ost_col_height(a0)
 		move.b	#$C,ost_displaywidth(a0)
 		addq.b	#2,ost_routine(a0)			; goto Hog_Action next
 		jmp	SnapFloor				; align to floor

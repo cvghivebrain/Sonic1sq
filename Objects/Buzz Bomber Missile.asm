@@ -63,7 +63,9 @@ Msl_BuzzFire:	; Routine 2
 
 Msl_Diagonal:	; Routine 4
 		move.b	#id_frame_buzz_ball1,ost_frame(a0)
-		move.b	#id_col_6x6+id_col_hurt,ost_col_type(a0)
+		move.b	#id_React_Hurt,ost_col_type(a0)
+		move.b	#6,ost_col_width(a0)
+		move.b	#6,ost_col_height(a0)
 		shortcut
 		toggleframe	1				; animate
 		update_xy_pos					; update position
@@ -76,7 +78,9 @@ Msl_Diagonal:	; Routine 4
 
 Msl_Horizontal:	; Routine 6
 		move.b	#id_frame_buzz_ball1,ost_frame(a0)
-		move.b	#id_col_6x6+id_col_hurt,ost_col_type(a0)
+		move.b	#id_React_Hurt,ost_col_type(a0)
+		move.b	#6,ost_col_width(a0)
+		move.b	#6,ost_col_height(a0)
 		shortcut
 		toggleframe	1				; animate
 		tst.b	ost_render(a0)				; is object on-screen?

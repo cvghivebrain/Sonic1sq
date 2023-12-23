@@ -32,7 +32,9 @@ GRing_Main:	; Routine 0
 		move.b	#$40,ost_displaywidth(a0)
 		addq.b	#2,ost_routine(a0)			; goto GRing_Animate next
 		move.b	#2,ost_priority(a0)
-		move.b	#id_col_8x16+id_col_item,ost_col_type(a0) ; when Sonic hits the item, goto GRing_Collect next (see ReactToItem)
+		move.b	#id_React_Ring,ost_col_type(a0)		; when Sonic hits the item, goto GRing_Collect next (see ReactToItem)
+		move.b	#8,ost_col_width(a0)
+		move.b	#16,ost_col_height(a0)
 		rts	
 ; ===========================================================================
 

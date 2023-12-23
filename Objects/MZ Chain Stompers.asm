@@ -137,7 +137,9 @@ CStom_Main:	; Routine 0
 		move.b	#render_rel,ost_render(a1)
 		move.b	#4,ost_priority(a1)
 		move.b	#48,ost_displaywidth(a1)
-		move.b	#id_col_40x16+id_col_hurt,ost_col_type(a1) ; make spikes harmful
+		move.b	#id_React_Hurt,ost_col_type(a1)		; make spikes harmful
+		move.b	#40,ost_col_width(a1)
+		move.b	#16,ost_col_height(a1)
 		saveparent
 
 CStom_Block:	; Routine 2

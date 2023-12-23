@@ -44,7 +44,9 @@ BBall_Main:	; Routine 0
 		move.b	#$18,ost_displaywidth(a0)
 		move.w	ost_x_pos(a0),ost_bball_x_start(a0)
 		move.w	ost_y_pos(a0),ost_bball_y_start(a0)
-		move.b	#id_col_16x16+id_col_hurt,ost_col_type(a0)
+		move.b	#id_React_Hurt,ost_col_type(a0)
+		move.b	#16,ost_col_width(a0)
+		move.b	#16,ost_col_height(a0)
 		move.b	ost_subtype(a0),d1			; get object type
 		move.b	d1,d2
 		andi.b	#$F0,d1					; read only the	high nybble

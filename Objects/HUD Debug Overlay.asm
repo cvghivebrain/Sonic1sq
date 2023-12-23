@@ -318,16 +318,12 @@ Overlay_BoxLeftObj:
 		moveq	#-1,d3
 		move.w	(v_nearest_obj).w,d3
 		movea.l	d3,a1					; a1 = OST of linked object
-		moveq	#0,d3
-		move.b	ost_col_type(a1),d3			; get hitbox id
+		tst.b	ost_col_type(a1)			; get hitbox id
 		beq.w	Overlay_Hide				; don't display if object has no hitbox
-		andi.w	#$3F,d3
-		add.w	d3,d3
-		add.w	d3,d3					; multiply by 4
-		lea	React_Sizes,a2
-		adda.l	d3,a2					; jump to hitbox dimensions
-		move.w	(a2)+,d0				; get width
-		move.w	(a2),d1					; get height
+		moveq	#0,d0
+		moveq	#0,d1
+		move.b	ost_col_width(a1),d0			; get width
+		move.b	ost_col_height(a1),d1			; get height
 		bset	#tile_pal12_bit,ost_tile(a0)
 		bra.w	Overlay_SetBox
 		

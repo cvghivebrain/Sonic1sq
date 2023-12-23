@@ -32,7 +32,9 @@ Burro_Main:	; Routine 0
 		move.w	(v_tile_burrobot).w,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#4,ost_priority(a0)
-		move.b	#id_col_12x18,ost_col_type(a0)
+		move.b	#id_React_Enemy,ost_col_type(a0)
+		move.b	#12,ost_col_width(a0)
+		move.b	#18,ost_col_height(a0)
 		move.b	#$C,ost_displaywidth(a0)
 		move.b	#id_Burro_ChkSonic,ost_routine(a0)	; goto Burro_ChkSonic next
 		move.b	#id_frame_burro_dig1,ost_frame(a0)

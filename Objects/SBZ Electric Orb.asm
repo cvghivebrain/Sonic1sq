@@ -28,6 +28,8 @@ Elec_Main:	; Routine 0
 		move.w	#tile_Kos_Electric,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#$28,ost_displaywidth(a0)
+		move.b	#72,ost_col_width(a0)
+		move.b	#8,ost_col_height(a0)
 		moveq	#0,d0
 		move.b	ost_subtype(a0),d0			; read object type (2/4/8)
 		lsl.w	#4,d0					; multiply by $10
@@ -52,7 +54,7 @@ Elec_Zap:	; Routine 4
 		move.b	Elec_Hurt(pc,d0.w),ost_col_type(a0)	; convert frame id to collision type
 		bra.w	DespawnQuick
 		
-Elec_Hurt:	dc.b 0, 0, 0, 0, id_col_72x8+id_col_hurt, 0
+Elec_Hurt:	dc.b 0, 0, 0, 0, id_React_Hurt, 0
 		even
 ; ===========================================================================
 

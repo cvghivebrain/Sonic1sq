@@ -54,7 +54,9 @@ Orb_Main:	; Routine 0
 	.use_pal1:
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#4,ost_priority(a0)
-		move.b	#id_col_8x8,ost_col_type(a0)
+		move.b	#id_React_Enemy,ost_col_type(a0)
+		move.b	#8,ost_col_width(a0)
+		move.b	#8,ost_col_height(a0)
 		move.b	#$C,ost_displaywidth(a0)
 		andi.w	#$F0,d4					; read high nybble of subtype
 		lsr.w	#4,d4
@@ -84,7 +86,9 @@ Orb_Main:	; Routine 0
 		move.b	#4,ost_priority(a1)
 		move.b	#8,ost_displaywidth(a1)
 		move.b	#id_frame_orb_spikeball,ost_frame(a1)
-		move.b	#id_col_4x4+id_col_hurt,ost_col_type(a1)
+		move.b	#id_React_Hurt,ost_col_type(a1)
+		move.b	#4,ost_col_width(a1)
+		move.b	#4,ost_col_height(a1)
 		move.b	d2,ost_angle(a1)			; set position around orbinaut
 		add.b	d4,d2					; next orb is a quarter circle ahead
 		move.b	d3,ost_subtype(a1)			; set spin rate/direction
@@ -195,4 +199,3 @@ ani_orb_angry:	dc.w $F
 		dc.w id_frame_orb_medium
 		dc.w id_frame_orb_angry
 		dc.w id_Anim_Flag_Routine
-		even

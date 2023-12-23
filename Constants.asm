@@ -266,6 +266,8 @@ ost_routine:		rs.w 1					; routine number
 ost_mode:		equ ost_routine+1			; secondary routine number
 ost_col_type:		rs.w 1					; collision response type - 0 = none; 1-$3F = enemy; $41-$7F = items; $81-BF = hurts; $C1-$FF = custom
 ost_col_property:	equ ost_col_type+1			; collision extra property
+ost_col_width:		rs.w 1					; hitbox width
+ost_col_height:		equ ost_col_width+1			; hitbox height
 ost_sink:		equ ost_col_property			; amount platform has sunk when stood on - 0 is none, $1E is max
 ost_render:		rs.b 1					; bitfield for x/y flip, display mode
 	render_xflip_bit:	equ 0

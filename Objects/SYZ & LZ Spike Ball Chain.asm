@@ -32,15 +32,15 @@ ost_sball_radius:	rs.b 1					; radius
 		rsobjend
 		
 SBall_Settings:	dc.l Map_SBall2					; mappings
-		dc.b 0, id_frame_sball_base			; collision/frame for base
-		dc.b 0, id_frame_sball_chain			; collision/frame for chain
-		dc.b id_col_8x8+id_col_hurt, id_frame_sball_spikeball ; collision/frame for last piece
+		dc.b 0, 0, 0, id_frame_sball_base		; collision/frame for base
+		dc.b 0, 0, 0, id_frame_sball_chain		; collision/frame for chain
+		dc.b id_React_Hurt, 8, 8, id_frame_sball_spikeball ; collision/frame for last piece
 		even
 	SBall_Settings_end:
 		dc.l Map_SBall
-		dc.b id_col_4x4+id_col_hurt, id_frame_sball_syz
-		dc.b id_col_4x4+id_col_hurt, id_frame_sball_syz
-		dc.b id_col_4x4+id_col_hurt, id_frame_sball_syz
+		dc.b id_React_Hurt, 4, 4, id_frame_sball_syz
+		dc.b id_React_Hurt, 4, 4, id_frame_sball_syz
+		dc.b id_React_Hurt, 4, 4, id_frame_sball_syz
 		even
 ; ===========================================================================
 
@@ -60,6 +60,8 @@ SBall_Main:	; Routine 0
 		lea	SBall_Settings(pc,d0.w),a2
 		move.l	(a2)+,ost_mappings(a0)
 		move.b	(a2)+,ost_col_type(a0)			; set collision for base
+		move.b	(a2)+,ost_col_width(a0)
+		move.b	(a2)+,ost_col_height(a0)
 		move.b	(a2)+,ost_frame(a0)			; set frame id for base
 		
 		andi.b	#$F0,d1					; read high nybble of subtype

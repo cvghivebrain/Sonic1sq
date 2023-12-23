@@ -36,6 +36,7 @@ Harp_Main:	; Routine 0
 		move.w	#tile_Kos_Harpoon,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#4,ost_priority(a0)
+		move.b	#id_React_Hurt,ost_col_type(a0)
 		move.b	ost_subtype(a0),d0
 		move.w	d0,d1
 		andi.b	#%11,d0					; read bits 0-1 of subtype
@@ -59,18 +60,20 @@ Harp_Move2:	; Routine 6
 		bsr.w	AnimateSprite				; animate and goto Harp_Wait next
 		cmpi.b	#3,ost_anim_time(a0)
 		bne.w	DespawnQuick				; branch if frame hasn't updated
-		moveq	#0,d0
-		move.b	ost_frame(a0),d0			; get frame number
-		move.b	Harp_Hitbox_List(pc,d0.w),ost_col_type(a0) ; get collision type
+		move.w	ost_frame_hi(a0),d0			; get frame number
+		add.b 	d0,d0
+		lea	Harp_Hitbox_List(pc,d0.w),a2		; get hitboxes
+		move.b	(a2)+,ost_col_width(a0)
+		move.b	(a2)+,ost_col_height(a0)
 		bra.w	DespawnQuick
 
 Harp_Hitbox_List:
-		dc.b id_col_8x4+id_col_hurt			; horizontal, short
-		dc.b id_col_24x4+id_col_hurt			; horizontal, middle
-		dc.b id_col_40x4+id_col_hurt			; horizontal, extended
-		dc.b id_col_4x8+id_col_hurt			; vertical, short
-		dc.b id_col_4x24+id_col_hurt			; vertical, middle
-		dc.b id_col_4x40+id_col_hurt			; vertical, extended
+		dc.b 8, 4					; horizontal, short
+		dc.b 24, 4					; horizontal, middle
+		dc.b 40, 4					; horizontal, extended
+		dc.b 4, 8					; vertical, short
+		dc.b 4, 24					; vertical, middle
+		dc.b 4, 40					; vertical, extended
 		even
 
 Harp_Wait:	; Routine 4

@@ -3,6 +3,10 @@
 
 ; spawned by:
 ;	ObjPos_SBZ2
+
+; subtypes:
+;	%0000BBBB
+;	BBBB - button id
 ; ---------------------------------------------------------------------------
 
 ScrapEggman:

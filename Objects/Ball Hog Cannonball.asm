@@ -29,7 +29,9 @@ Cbal_Main:	; Routine 0
 		add.w	#tile_pal2,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#3,ost_priority(a0)
-		move.b	#id_col_6x6+id_col_hurt,ost_col_type(a0)
+		move.b	#id_React_Hurt,ost_col_type(a0)
+		move.b	#6,ost_col_width(a0)
+		move.b	#6,ost_col_height(a0)
 		move.b	#8,ost_displaywidth(a0)
 		move.b	ost_subtype(a0),d0			; move subtype to d0
 		move.w	d0,d1

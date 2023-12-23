@@ -45,8 +45,8 @@ BFZ_ObjData2:	; routine num, animation, sprite priority, width, height
 		even
 
 		rsobj BossFinal
-ost_fz_cylinder_flag:	rs.w 1 ; $30				; -1 when cylinders activate; id of cylinder Eggman is in when crushing (2 bytes)
-ost_fz_phase_state:	rs.w 1 ; $32				; 1 = crushing; 0 = plasma; -1 = crushing/plasma complete (2 bytes)
+ost_fz_cylinder_flag:	equ ost_inertia				; -1 when cylinders activate; id of cylinder Eggman is in when crushing (2 bytes)
+ost_fz_phase_state:	equ ost_angle				; 1 = crushing; 0 = plasma; -1 = crushing/plasma complete (2 bytes)
 ost_fz_mode:		rs.b 1 ; $34				; action being performed, increments of 2 - parent only
 ost_fz_flash_num:	rs.b 1 ; $35				; number of times to make boss flash when hit - parent only
 ost_fz_plasma_child:	rs.w 1 ; $36				; address of OST of plasma object - parent only (2 bytes)
@@ -105,7 +105,7 @@ BFZ_Main:	; Routine 0
 		bne.s	.fail2					; branch if not found
 		move.w	a1,(a2)+				; save address of OST of crusher in parent OST
 		move.l	#EggmanCylinder,ost_id(a1)		; load crushing	cylinder object
-		move.l	a0,ost_cylinder_parent(a1)		; save parent OST in crusher OST
+		saveparent					; save parent OST in crusher OST
 		move.b	d2,ost_subtype(a1)			; set subtype to 0/2/4/6
 		addq.w	#2,d2					; next subtype
 		dbf	d1,.loop_crushers			; repeat for all crushers
@@ -409,7 +409,9 @@ BFZ_Eggman_Ship:
 		bcc.s	.keep_rising				; if not, branch
 		move.w	#$180,ost_x_vel(a0)			; move right
 		move.w	#-$18,ost_y_vel(a0)			; move up slowly
-		move.b	#id_col_24x24,ost_col_type(a0)		; enable collision
+		move.b	#id_React_Enemy,ost_col_type(a0)
+		move.b	#24,ost_col_width(a0)
+		move.b	#24,ost_col_height(a0)
 		addq.b	#2,ost_fz_mode(a0)			; goto BFZ_Eggman_Escape next
 		
 		jsr	(FindNextFreeObj).l			; find free OST slot
@@ -442,7 +444,7 @@ BFZ_Eggman_Escape:
 ; ===========================================================================
 
 .off_screen:
-		move.b	#id_col_24x24,ost_col_type(a0)
+		move.b	#id_React_Enemy,ost_col_type(a0)
 
 .chk_sonic:
 		cmpi.w	#$2790,(v_ost_player+ost_x_pos).w	; is Sonic at ledge?

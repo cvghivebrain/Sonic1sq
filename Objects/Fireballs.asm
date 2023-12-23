@@ -37,7 +37,9 @@ FBall_Main:	; Routine 0
 		move.w	(v_tile_fireball).w,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#3,ost_priority(a0)
-		move.b	#id_col_8x8+id_col_hurt,ost_col_type(a0)
+		move.b	#id_React_Hurt,ost_col_type(a0)
+		move.b	#8,ost_col_width(a0)
+		move.b	#8,ost_col_height(a0)
 		move.w	ost_y_pos(a0),ost_fireball_y_start(a0)
 		tst.b	ost_fireball_mz_boss(a0)		; was fireball spawned by MZ boss?
 		beq.s	.speed					; if not, branch

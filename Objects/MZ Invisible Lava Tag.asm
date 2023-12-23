@@ -15,17 +15,20 @@ LTag_Index:	index *,,2
 		ptr LTag_Main
 		ptr LTag_ChkDel
 
-LTag_ColTypes:	dc.b id_col_32x32+id_col_hurt			; 0
-		dc.b id_col_64x32+id_col_hurt			; 1
-		dc.b id_col_128x32+id_col_hurt			; 2
+LTag_ColTypes:	dc.b 32, 32					; 0
+		dc.b 64, 32					; 1
+		dc.b 128, 32					; 2
 		even
 ; ===========================================================================
 
 LTag_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto LTag_ChkDel next
+		move.b	#id_React_Hurt,ost_col_type(a0)
 		moveq	#0,d0
 		move.b	ost_subtype(a0),d0
-		move.b	LTag_ColTypes(pc,d0.w),ost_col_type(a0)	; get collision setting based on subtype
+		lea	LTag_ColTypes(pc,d0.w),a2
+		move.b	(a2)+,ost_col_width(a0)			; get collision setting based on subtype
+		move.b	(a2)+,ost_col_height(a0)
 		move.b	#render_onscreen+render_rel,ost_render(a0)
 
 LTag_ChkDel:	; Routine 2

@@ -36,6 +36,8 @@ Flame_Main:	; Routine 0
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#1,ost_priority(a0)
 		move.b	#$C,ost_displaywidth(a0)
+		move.b	#12,ost_col_width(a0)
+		move.b	#24,ost_col_height(a0)
 		move.b	ost_subtype(a0),d0
 		andi.w	#$F0,d0					; read high nybble of type
 		add.w	d0,d0					; multiply by 2
@@ -55,7 +57,7 @@ Flame_On:	; Routine 2
 		bsr.w	AnimateSprite
 		cmpi.b	#20,ost_anim_frame(a0)
 		bne.s	.wait_anim				; branch if not at final animation frame
-		move.b	#id_col_12x24+id_col_hurt,ost_col_type(a0) ; make flame harmful
+		move.b	#id_React_Hurt,ost_col_type(a0)		; make flame harmful
 		
 	.wait_anim:
 		subq.w	#1,ost_flame_time(a0)			; decrement timer

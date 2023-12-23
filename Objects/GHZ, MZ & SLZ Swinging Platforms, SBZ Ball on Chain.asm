@@ -42,6 +42,8 @@ Swing_Info_0:	; $0x - normal swinging platform
 		dc.b id_Swing_Platform				; routine
 		dc.b id_frame_swing_block			; frame
 		dc.b 0						; collision type
+		dc.b 0
+		dc.b 0
 		dc.b 24						; width
 		dc.b 8						; height
 		even
@@ -54,7 +56,9 @@ Swing_Info_1:	; $1x - GHZ swinging ball
 		dc.w tile_pal3					; value added to tile setting
 		dc.b id_Swing_Chain				; routine
 		dc.b id_frame_ball_check1			; frame
-		dc.b id_col_20x20+id_col_hurt			; collision type
+		dc.b id_React_Hurt				; collision type
+		dc.b 20
+		dc.b 20
 		dc.b 24						; width
 		dc.b 24						; height
 		even
@@ -67,7 +71,9 @@ Swing_Info_2:	; $2x - SLZ spiked platform
 		dc.w tile_pal3					; value added to tile setting
 		dc.b id_Swing_Platform				; routine
 		dc.b id_frame_swing_slz_block			; frame
-		dc.b id_col_32x8+id_col_hurt			; collision type
+		dc.b id_React_Hurt				; collision type
+		dc.b 32
+		dc.b 8
 		dc.b 32						; width
 		dc.b 16						; height
 		even
@@ -80,7 +86,9 @@ Swing_Info_3:	; $3x - SBZ spiked ball
 		dc.w 0						; value added to tile setting
 		dc.b id_Swing_Chain				; routine
 		dc.b id_frame_bball_ball			; frame
-		dc.b id_col_16x16+id_col_hurt			; collision type
+		dc.b id_React_Hurt				; collision type
+		dc.b 16
+		dc.b 16
 		dc.b 24						; width
 		dc.b 24						; height
 		even
@@ -128,6 +136,8 @@ Swing_Main:	; Routine 0
 		move.b	(a2)+,ost_routine(a1)
 		move.b	(a2)+,ost_frame(a1)
 		move.b	(a2)+,ost_col_type(a1)
+		move.b	(a2)+,ost_col_width(a1)
+		move.b	(a2)+,ost_col_height(a1)
 		move.b	(a2),ost_displaywidth(a1)
 		move.b	(a2)+,ost_width(a1)
 		move.b	(a2)+,ost_height(a1)
