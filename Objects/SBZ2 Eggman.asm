@@ -38,10 +38,10 @@ SEgg_Main:	; Routine 0
 		move.b	#$20,ost_displaywidth(a0)
 		move.w	ost_y_pos(a0),ost_eggman_y_stop(a0)
 		subi.w	#9,ost_eggman_y_stop(a0)
-		move.w	#-$30,d2
+		move.w	#-$30,d2				; button is to Eggman's left
 		btst	#status_xflip_bit,ost_status(a0)
-		beq.s	.noflip
-		neg.w	d2
+		beq.s	.noflip					; branch if facing left
+		neg.w	d2					; button is to his right
 
 	.noflip:
 		jsr	FindNextFreeObj				; find free OST slot
@@ -78,10 +78,10 @@ SEgg_Wait2:	; Routine 4
 		move.b	#id_frame_eggman_jump1,ost_frame(a0)
 		addq.w	#4,ost_y_pos(a0)
 		move.w	#-$3C0,ost_y_vel(a0)
-		move.w	#-$FC,ost_x_vel(a0)			; make Eggman leap
+		move.w	#-$FC,ost_x_vel(a0)			; make Eggman jump left
 		btst	#status_xflip_bit,ost_status(a0)
-		beq.s	.wait
-		neg.w	ost_x_vel(a0)
+		beq.s	.wait					; branch if facing left
+		neg.w	ost_x_vel(a0)				; make him jump right
 
 	.wait:
 		jmp	DisplaySprite
@@ -91,16 +91,16 @@ SEgg_Jump:	; Routine 6
 		lea	Ani_SEgg(pc),a1
 		jsr	AnimateSprite
 		cmpi.b	#id_frame_eggman_jump1,ost_frame(a0)
-		beq.s	.wait				; don't jump for first animation frame
-		update_xy_fall	$24			; update position & apply gravity
+		beq.s	.wait					; don't jump for first animation frame
+		update_xy_fall	$24				; update position & apply gravity
 		move.w	ost_x_pos(a0),d0
 		cmp.w	ost_eggman_x_stop(a0),d0
 		bne.s	.wait
-		clr.w	ost_x_vel(a0)			; stop moving when above button
+		clr.w	ost_x_vel(a0)				; stop moving when above button
 		move.w	ost_y_pos(a0),d0
 		cmp.w	ost_eggman_y_stop(a0),d0
-		bcs.s	.wait				; branch if not on button
-		addq.b	#2,ost_routine(a0)		; goto SEgg_Stop next
+		bcs.s	.wait					; branch if not on button
+		addq.b	#2,ost_routine(a0)			; goto SEgg_Stop next
 		move.w	ost_eggman_y_stop(a0),ost_y_pos(a0)
 		move.b	#id_ani_eggman_laugh,ost_anim(a0)
 
@@ -109,12 +109,12 @@ SEgg_Jump:	; Routine 6
 ; ===========================================================================
 
 SEgg_Stop:	; Routine 8
-		play.w	1, jsr, sfx_Switch		; play "blip" sound
+		play.w	1, jsr, sfx_Switch			; play "blip" sound
 		move.b	ost_subtype(a0),d0
-		andi.w	#$F,d0				; get low nybble of subtype
+		andi.w	#$F,d0					; get low nybble of subtype
 		lea	(v_button_state).w,a3
-		adda.w	d0,a3				; (a3) = button status
-		move.b	#1,(a3)				; set button as pressed
+		adda.w	d0,a3					; (a3) = button status
+		move.b	#1,(a3)					; set button as pressed
 		shortcut
 		lea	Ani_SEgg(pc),a1
 		jsr	AnimateSprite

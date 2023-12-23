@@ -36,4 +36,3 @@ frame_ffloor_bottomright:
 		piece	-8, -8, 1x2, $A
 		piece	0, -8, 1x2, $E
 		endsprite
-		even

@@ -561,9 +561,6 @@ DLE_SBZ2_Blocks:
 		cmpi.w	#$1EB0,(v_camera_x_pos).w
 		bcs.s	.exit					; branch if camera is left of $1EB0
 
-		bsr.w	FindFreeObj				; find free OST slot
-		bne.s	.exit					; branch if not found
-		move.l	#FalseFloor,ost_id(a1)			; load collapsing block object
 		addq.b	#2,(v_dle_routine).w			; goto DLE_SBZ2_Eggman next
 ; ===========================================================================
 
