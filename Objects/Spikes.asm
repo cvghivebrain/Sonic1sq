@@ -63,6 +63,7 @@ Spike_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Spike_Solid next
 		move.l	#Map_Spike,ost_mappings(a0)
 		move.w	(v_tile_spikes).w,ost_tile(a0)
+		bset	#status_pointy_bit,ost_status(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#4,ost_priority(a0)
 		move.b	ost_subtype(a0),d0
@@ -107,10 +108,7 @@ Spike_Solid:	; Routine 2
 		asl.l	#8,d0
 		sub.l	d0,d1
 		move.l	d1,ost_y_pos(a1)			; move Sonic away from spikes, based on his y speed
-		movea.l	a0,a2					; a2 = OST of object that hurt Sonic
-		exg	a0,a1					; temporarily make Sonic the current object
-		jsr	(HurtSonic).l				; lose rings/die
-		exg	a0,a2					; restore spikes as current object
+		jsr	ObjectHurtSonic				; lose rings/die
 
 Spike_Display:
 		move.w	ost_spike_x_start(a0),d0

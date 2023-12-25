@@ -160,19 +160,22 @@ BuildSpr_FlipX:
 		ext.w	d0
 		add.w	d2,d0
 		move.w	d0,(a2)+
-		move.b	(a1)+,d4				; size
-		move.b	d4,(a2)+	
-		addq.b	#1,d5					; link
-		move.b	d5,(a2)+
+		
+		move.b	(a1)+,d4
+		move.b	d4,(a2)+				; size
+		addq.b	#1,d5
+		move.b	d5,(a2)+				; link
+		
 		move.w	(a1)+,d0				; art tile
 		add.w	ost_tile(a0),d0
 		eori.w	#$800,d0				; toggle xflip in VDP
 		move.w	d0,(a2)+				; write to buffer
+		
 		move.w	(a1)+,d0				; get x-offset
 		neg.w	d0					; negate it
 		add.b	d4,d4					; calculate flipped position by size
 		andi.w	#$18,d4
-		addq.w	#8,d4
+		addq.w	#7,d4
 		sub.w	d4,d0
 		add.w	d3,d0
 		andi.w	#$1FF,d0				; keep within 512px
@@ -197,17 +200,20 @@ BuildSpr_FlipY:
 		neg.w	d0					; negate y-offset
 		lsl.b	#3,d4					; calculate flip offset
 		andi.w	#$18,d4
-		addq.w	#8,d4
+		addq.w	#7,d4
 		sub.w	d4,d0
 		add.w	d2,d0					; add y-position
 		move.w	d0,(a2)+				; write to buffer
+		
 		move.b	(a1)+,(a2)+				; size
 		addq.b	#1,d5
 		move.b	d5,(a2)+				; link
+		
 		move.w	(a1)+,d0				; art tile
 		add.w	ost_tile(a0),d0
 		eori.w	#$1000,d0				; toggle yflip in VDP
 		move.w	d0,(a2)+
+		
 		move.w	(a1)+,d0				; x-position
 		add.w	d3,d0
 		andi.w	#$1FF,d0
@@ -232,23 +238,26 @@ BuildSpr_FlipXY:
 		neg.w	d0
 		lsl.b	#3,d4
 		andi.w	#$18,d4
-		addq.w	#8,d4
+		addq.w	#7,d4
 		sub.w	d4,d0
 		add.w	d2,d0
 		move.w	d0,(a2)+				; write to buffer
-		move.b	(a1)+,d4				; size
-		move.b	d4,(a2)+				; link
+		
+		move.b	(a1)+,d4
+		move.b	d4,(a2)+				; size
 		addq.b	#1,d5
-		move.b	d5,(a2)+
+		move.b	d5,(a2)+				; link
+		
 		move.w	(a1)+,d0				; art tile
 		add.w	ost_tile(a0),d0
 		eori.w	#$1800,d0				; toggle x/yflip in VDP
 		move.w	d0,(a2)+
+		
 		move.w	(a1)+,d0				; calculate flipped x
 		neg.w	d0
 		add.b	d4,d4
 		andi.w	#$18,d4
-		addq.w	#8,d4
+		addq.w	#7,d4
 		sub.w	d4,d0
 		add.w	d3,d0
 		andi.w	#$1FF,d0

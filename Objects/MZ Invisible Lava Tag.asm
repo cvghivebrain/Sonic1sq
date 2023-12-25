@@ -26,6 +26,7 @@ LTag_Main:	; Routine 0
 		move.b	#id_React_Hurt,ost_col_type(a0)
 		moveq	#0,d0
 		move.b	ost_subtype(a0),d0
+		add.b	d0,d0
 		lea	LTag_ColTypes(pc,d0.w),a2
 		move.b	(a2)+,ost_col_width(a0)			; get collision setting based on subtype
 		move.b	(a2)+,ost_col_height(a0)

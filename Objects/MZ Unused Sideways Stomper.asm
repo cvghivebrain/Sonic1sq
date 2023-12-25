@@ -132,6 +132,7 @@ SStom_Spikes:	; Routine 6
 		move.b	#16,ost_width(a0)
 		move.b	#24,ost_height(a0)
 		move.w	(v_tile_spikes).w,ost_tile(a0)
+		bset	#status_pointy_bit,ost_status(a0)
 		shortcut
 		getparent					; a1 = address of parent OST
 		move.w	ost_x_pos(a0),ost_x_prev(a0)
@@ -147,10 +148,7 @@ SStom_Spikes:	; Routine 6
 		bsr.w	SolidObject
 		andi.b	#solid_left+solid_right,d1
 		beq.w	DisplaySprite				; branch if not touching left/right side
-		movea.l	a0,a2					; a2 = OST of object that hurt Sonic
-		exg	a0,a1					; temporarily make Sonic the current object
-		jsr	(HurtSonic).l				; lose rings/die
-		exg	a0,a2					; restore spikes as current object
+		jsr	ObjectHurtSonic				; lose rings/die
 		bra.w	DisplaySprite
 
 ; ---------------------------------------------------------------------------

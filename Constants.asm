@@ -300,6 +300,7 @@ ost_status:		rs.b 1					; orientation or mode
 	status_air_bit:		equ 1
 	status_jump_bit:	equ 2
 	status_platform_bit:	equ 3
+	status_pointy_bit:	equ 4
 	status_rolljump_bit:	equ 4
 	status_pushing_bit:	equ 5
 	status_underwater_bit:	equ 6
@@ -309,6 +310,7 @@ ost_status:		rs.b 1					; orientation or mode
 	status_air:		equ 1<<status_air_bit		; Sonic is in the air (Sonic only)
 	status_jump:		equ 1<<status_jump_bit		; jumping or rolling (Sonic only)
 	status_platform:	equ 1<<status_platform_bit	; Sonic is standing on this (objects) / Sonic is standing on object (Sonic)
+	status_pointy:		equ 1<<status_pointy_bit	; object is pointy (objects only)
 	status_rolljump:	equ 1<<status_rolljump_bit	; Sonic is jumping after rolling (Sonic only)
 	status_pushing:		equ 1<<status_pushing_bit	; Sonic is pushing this (objects) / Sonic is pushing an object (Sonic)
 	status_underwater:	equ 1<<status_underwater_bit	; Sonic is underwater (Sonic only)
@@ -319,7 +321,6 @@ ost_name:		rs.b 1					; name string id
 ost_used:		equ __rs				; bytes used by regular OST, everything after this is scratch RAM
 		popo						; restore options
 		inform	0,"0-$%h bytes of OST per object used, leaving $%h bytes of scratch RAM.",__rs-1,sizeof_ost-__rs
-ost_enemy_combo:	equ $3E					; number of enemies broken in a row (0-$A) (2 bytes)
 
 ; Object variables used by Sonic
 		rsobj SonicPlayer

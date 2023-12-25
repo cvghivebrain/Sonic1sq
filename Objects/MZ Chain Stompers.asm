@@ -140,6 +140,7 @@ CStom_Main:	; Routine 0
 		move.b	#id_React_Hurt,ost_col_type(a1)		; make spikes harmful
 		move.b	#40,ost_col_width(a1)
 		move.b	#16,ost_col_height(a1)
+		bset	#status_pointy_bit,ost_status(a1)
 		saveparent
 
 CStom_Block:	; Routine 2

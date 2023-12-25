@@ -124,12 +124,12 @@ React_Enemy_Break:
 		moveq	#Enemy_Points_end-Enemy_Points-2,d0	; max bonus is #6 (1000 points)
 
 	.bonusokay:
-		move.w	d0,ost_enemy_combo(a1)			; set frame for points object (spawned by animal object)
+		move.w	d0,ost_subtype(a1)			; set frame for points object (spawned by animal object)
 		move.w	Enemy_Points(pc,d0.w),d0
 		cmpi.w	#combo_max,(v_enemy_combo).w		; have 16 enemies been destroyed?
 		bcs.s	.lessthan16				; if not, branch
 		move.w	#combo_max_points,d0			; fix bonus to 10000
-		move.w	#id_frame_points_10k*2,ost_enemy_combo(a1) ; use 10k frame for points object
+		move.w	#id_frame_points_10k*2,ost_subtype(a1)	; use 10k frame for points object
 
 	.lessthan16:
 		jsr	AddPoints				; update score
@@ -140,8 +140,7 @@ React_Enemy_Break:
 		cmp.w	ost_y_pos(a1),d3			; d3 = Sonic's y pos
 		bcc.s	.bounceup				; branch if Sonic is below enemy
 		neg.w	ost_y_vel(a0)
-		rts	
-; ===========================================================================
+		rts
 
 	.bouncedown:
 		addi.w	#$100,ost_y_vel(a0)
@@ -156,7 +155,6 @@ Enemy_Points:	dc.w 100/10
 		dc.w 500/10
 		dc.w 1000/10
 	Enemy_Points_end:
-
 ; ===========================================================================
 
 React_Caterkiller:
@@ -165,7 +163,7 @@ React_Caterkiller:
 		cmpi.b	#id_Roll,ost_anim(a0)
 		beq.s	.break_caterkiller			; branch if Sonic is rolling/jumping
 		move.b	#id_Cat_Split,ost_mode(a1)		; caterkiller splits apart
-		bra.s	React_Hurt_
+		bra.w	React_Hurt_SkipInv
 		
 	.break_caterkiller:
 		pushr	a0-a1
@@ -175,12 +173,40 @@ React_Caterkiller:
 		bra.w	React_Enemy_Break
 ; ===========================================================================
 
+React_Yadrin:
+		sub.w	d0,d5					; d5 = Sonic's height, minus y dist between Sonic & yadrin
+		cmpi.w	#8,d5
+		bcc.w	React_Enemy				; branch if Sonic is below spike level
+		move.w	ost_x_pos(a1),d0
+		subq.w	#4,d0
+		btst	#status_xflip_bit,ost_status(a1)
+		beq.s	.no_xflip
+		subi.w	#$10,d0
+
+	.no_xflip:
+		sub.w	d2,d0					; d0 = x pos of yadrin's face, minus x pos of Sonic's left edge
+		bcc.s	.sonic_left				; branch if Sonic is left of the yadrin
+		addi.w	#$18,d0
+		bcs.s	React_Hurt				; branch if Sonic is inside the yadrin
+		bra.w	React_Enemy
+; ===========================================================================
+
+.sonic_left:
+		cmp.w	d4,d0
+		bhi.w	React_Enemy				; branch if Sonic is outside the yadrin
+		bra.w	React_Hurt				; check for invincibility, then hurt Sonic
+; ===========================================================================
+
+React_Bumper:
+		addq.b	#1,ost_col_property(a1)			; set flag for Sonic touching bumper
+		rts
+; ===========================================================================
+
 React_Hurt:
 		tst.w	(v_invincibility).w
 		bne.w	React_None				; branch if Sonic is invincible
 
-React_Hurt_:
-		nop	
+React_Hurt_SkipInv:
 		tst.w	ost_sonic_flash_time(a0)		; is Sonic flashing?
 		bne.w	React_None				; if yes, branch
 		movea.l	a1,a2
@@ -195,8 +221,9 @@ React_Hurt_:
 ;	a2 = address of OST of object hurting Sonic
 
 ; output:
-;	d0.l = -1
 ;	a1 = address of OST of ring loss object (if Sonic had rings)
+
+;	uses d0.l
 ; ---------------------------------------------------------------------------
 
 HurtSonic:
@@ -235,15 +262,12 @@ HurtSonic:
 		move.b	#id_Hurt,ost_anim(a0)
 		move.w	#sonic_flash_time,ost_sonic_flash_time(a0) ; set temp invincible time to 2 seconds
 		move.w	#sfx_Death,d0				; load normal damage sound
-		cmp.l	#Spikes,ost_id(a2)			; was damage caused by spikes?
-		bne.s	.sound					; if not, branch
-		cmp.l	#Harpoon,ost_id(a2)			; was damage caused by LZ harpoon?
-		bne.s	.sound					; if not, branch
+		btst	#status_pointy_bit,ost_status(a2)	; check	if you were hit by spikes
+		beq.s	.sound					; if not, branch
 		move.w	#sfx_SpikeHit,d0			; load spikes damage sound
 
 	.sound:
-		jsr	(PlaySound1).l
-		rts	
+		jmp	(PlaySound1).l
 ; ===========================================================================
 
 .norings:
@@ -259,8 +283,7 @@ HurtSonic:
 ;	a0 = address of OST of Sonic
 ;	a2 = address of OST of object killing Sonic
 
-; output:
-;	d0.l = -1
+;	uses d0.l
 ; ---------------------------------------------------------------------------
 
 KillSonic:
@@ -277,12 +300,12 @@ KillSonic:
 		move.b	#id_Death,ost_anim(a0)
 		bset	#tile_hi_bit,ost_tile(a0)
 		move.w	#sfx_Death,d0				; play normal death sound
-		cmpi.l	#Spikes,ost_id(a2)			; check	if you were killed by spikes
-		bne.s	.sound
+		btst	#status_pointy_bit,ost_status(a2)	; check	if you were killed by spikes
+		beq.s	.sound
 		move.w	#sfx_SpikeHit,d0			; play spikes death sound
 
 	.sound:
-		jsr	(PlaySound1).l
+		jmp	(PlaySound1).l
 
 	.dontdie:
 		rts
@@ -294,7 +317,6 @@ KillSonic:
 ;	a0 = address of OST of object killing Sonic
 
 ; output:
-;	d0.l = -1
 ;	a2 = address of OST of Sonic
 ; ---------------------------------------------------------------------------
 
@@ -304,33 +326,21 @@ ObjectKillSonic:
 		bsr.s	KillSonic				; kill Sonic
 		exg	a0,a2					; restore current object
 		rts
-		
-; ===========================================================================
 
-React_Yadrin:
-		sub.w	d0,d5					; d5 = Sonic's height, minus y dist between Sonic & yadrin
-		cmpi.w	#8,d5
-		bcc.w	React_Enemy				; branch if Sonic is below spike level
-		move.w	ost_x_pos(a1),d0
-		subq.w	#4,d0
-		btst	#status_xflip_bit,ost_status(a1)
-		beq.s	.no_xflip
-		subi.w	#$10,d0
+; ---------------------------------------------------------------------------
+; Subroutine to	hurt Sonic (from object)
 
-	.no_xflip:
-		sub.w	d2,d0					; d0 = x pos of yadrin's face, minus x pos of Sonic's left edge
-		bcc.s	.sonic_left				; branch if Sonic is left of the yadrin
-		addi.w	#$18,d0
-		bcs.w	React_Hurt				; branch if Sonic is inside the yadrin
-		bra.w	React_Enemy
-; ===========================================================================
+; input:
+;	a0 = address of OST of object hurting Sonic
 
-.sonic_left:
-		cmp.w	d4,d0
-		bhi.w	React_Enemy				; branch if Sonic is outside the yadrin
-		bra.w	React_Hurt				; check for invincibility, then hurt Sonic
-; ===========================================================================
+; output:
+;	a2 = address of OST of Sonic
+; ---------------------------------------------------------------------------
 
-React_Bumper:
-		addq.b	#1,ost_col_property(a1)			; set flag for Sonic touching bumper
+ObjectHurtSonic:
+		movea.l	a0,a2					; object which hurt Sonic
+		lea	(v_ost_player).w,a0			; make Sonic the current object
+		bsr.w	HurtSonic				; hurt Sonic
+		exg	a0,a2					; restore current object
 		rts
+		
