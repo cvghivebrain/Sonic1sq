@@ -409,7 +409,7 @@ BFZ_Eggman_Ship:
 		bcc.s	.keep_rising				; if not, branch
 		move.w	#$180,ost_x_vel(a0)			; move right
 		move.w	#-$18,ost_y_vel(a0)			; move up slowly
-		move.b	#id_React_Enemy,ost_col_type(a0)
+		move.b	#id_React_Boss,ost_col_type(a0)
 		move.b	#24,ost_col_width(a0)
 		move.b	#24,ost_col_height(a0)
 		addq.b	#2,ost_fz_mode(a0)			; goto BFZ_Eggman_Escape next
@@ -444,7 +444,7 @@ BFZ_Eggman_Escape:
 ; ===========================================================================
 
 .off_screen:
-		move.b	#id_React_Enemy,ost_col_type(a0)
+		move.b	#id_React_Boss,ost_col_type(a0)
 
 .chk_sonic:
 		cmpi.w	#$2790,(v_ost_player+ost_x_pos).w	; is Sonic at ledge?

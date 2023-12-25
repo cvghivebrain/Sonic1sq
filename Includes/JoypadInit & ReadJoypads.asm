@@ -31,8 +31,9 @@ ReadJoypads:
 		nop	
 		nop	
 		move.b	(a1),d0					; d0 = 00SA00DU
-		lsl.b	#2,d0					; d0 = SA00DU00
-		andi.b	#$C0,d0					; d0 = SA000000
+		add.b	d0,d0
+		add.b	d0,d0					; d0 = SA00DU00
+		andi.b	#%11000000,d0				; d0 = SA000000
 		move.b	#$40,(a1)				; set port to read 00CBRLDU
 		nop	
 		nop	

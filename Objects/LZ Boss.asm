@@ -22,7 +22,7 @@ BLZ_Main:	; Routine 0
 		move.w	#$5C0,ost_y_pos(a0)
 		move.w	ost_x_pos(a0),ost_boss_parent_x_pos(a0)
 		move.w	ost_y_pos(a0),ost_boss_parent_y_pos(a0)
-		move.b	#id_React_Enemy,ost_col_type(a0)
+		move.b	#id_React_Boss,ost_col_type(a0)
 		move.b	#24,ost_col_width(a0)
 		move.b	#24,ost_col_height(a0)
 		move.b	#hitcount_lz,ost_col_property(a0)	; set number of hits to 8
@@ -112,7 +112,7 @@ BLZ_Update_SkipPos:
 		move.w	d0,(a1)					; load colour stored in	d0
 		subq.b	#1,ost_boss_flash_num(a0)		; decrement flash counter
 		bne.s	.exit					; branch if not 0
-		move.b	#id_React_Enemy,ost_col_type(a0)	; enable boss collision again
+		move.b	#id_React_Boss,ost_col_type(a0)	; enable boss collision again
 
 	.exit:
 		rts	

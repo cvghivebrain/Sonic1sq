@@ -74,8 +74,6 @@ BuildSprites:
 		bmi.s	.skip_draw				; branch if frame contained 0 sprite pieces
 
 	.draw_now:
-		cmpi.b	#countof_max_sprites,d5
-		beq.s	.skip_draw				; branch if at max sprites
 		andi.w	#render_xflip+render_yflip,d4
 		add.b	d4,d4
 		move.w	BuildSpr_Index(pc,d4.w),d4
@@ -93,13 +91,6 @@ BuildSprites:
 		lea	sizeof_priority(a4),a4			; next priority section ($80)
 		dbf	d7,.priority_loop			; repeat for all sections
 		move.b	d5,(v_spritecount).w			; set sprite count
-		cmpi.b	#countof_max_sprites,d5			; max displayable sprites ($50)
-		beq.s	.max_sprites				; branch if at max
-		move.l	#0,(a2)					; set next sprite to link to first
-		rts	
-; ===========================================================================
-
-	.max_sprites:
 		move.b	#0,-5(a2)				; set current sprite to link to first
 		rts
 ; ===========================================================================
@@ -132,6 +123,8 @@ BuildSpr_Index:	index *,,2
 ; ===========================================================================
 
 BuildSpr_Normal:
+		cmpi.b	#countof_max_sprites,d5
+		beq.s	.exit					; branch if at max sprites
 		move.b	(a1)+,d0				; get relative y pos from mappings
 		ext.w	d0
 		add.w	d2,d0					; add VDP y pos
@@ -155,11 +148,14 @@ BuildSpr_Normal:
 		move.w	d0,(a2)+				; write to buffer
 		dbf	d1,BuildSpr_Normal			; next sprite piece
 
+	.exit:
 		rts
 
 ; ===========================================================================
 
 BuildSpr_FlipX:
+		cmpi.b	#countof_max_sprites,d5
+		beq.s	.exit					; branch if at max sprites
 		move.b	(a1)+,d0				; y position
 		ext.w	d0
 		add.w	d2,d0
@@ -187,11 +183,14 @@ BuildSpr_FlipX:
 		move.w	d0,(a2)+				; write to buffer
 		dbf	d1,BuildSpr_FlipX			; process next sprite piece
 
+	.exit:
 		rts
 
 ; ===========================================================================
 
 BuildSpr_FlipY:
+		cmpi.b	#countof_max_sprites,d5
+		beq.s	.exit					; branch if at max sprites
 		move.b	(a1)+,d0				; get y-offset
 		move.b	(a1),d4					; get size
 		ext.w	d0
@@ -219,11 +218,14 @@ BuildSpr_FlipY:
 		move.w	d0,(a2)+				; write to buffer
 		dbf	d1,BuildSpr_FlipY			; process next sprite piece
 
+	.exit:
 		rts
 
 ; ===========================================================================
 
 BuildSpr_FlipXY:
+		cmpi.b	#countof_max_sprites,d5
+		beq.s	.exit					; branch if at max sprites
 		move.b	(a1)+,d0				; calculated flipped y
 		move.b	(a1),d4
 		ext.w	d0
@@ -257,4 +259,5 @@ BuildSpr_FlipXY:
 		move.w	d0,(a2)+				; write to buffer
 		dbf	d1,BuildSpr_FlipXY			; process next sprite piece
 
+	.exit:
 		rts	

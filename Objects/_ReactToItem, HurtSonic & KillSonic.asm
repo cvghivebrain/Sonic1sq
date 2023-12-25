@@ -70,6 +70,7 @@ React_Loop:
 React_Index:	index *,,2
 		ptr React_None					; unused
 		ptr React_Enemy					; breakable enemies
+		ptr React_Boss					; bosses
 		ptr React_Ring					; rings, giant rings
 		ptr React_Hurt					; hurts when touched
 		ptr React_Routine				; increment routine counter for object
@@ -89,16 +90,13 @@ React_None:
 		rts
 ; ===========================================================================
 
-React_Enemy:
-		tst.w	(v_invincibility).w			; is Sonic invincible?
-		bne.s	.donthurtsonic				; if yes, branch
-		cmpi.b	#id_Roll,ost_anim(a0)			; is Sonic rolling/jumping?
-		bne.w	React_Hurt				; if not, branch
+React_Boss:
+		tst.w	(v_invincibility).w
+		bne.s	.donthurtsonic				; branch if Sonic is invincible
+		cmpi.b	#id_Roll,ost_anim(a0)
+		bne.w	React_Hurt				; branch if not rolling/jumping
 
 	.donthurtsonic:
-		tst.b	ost_col_property(a1)
-		beq.s	React_Enemy_Break			; branch if it's not a boss
-
 		neg.w	ost_x_vel(a0)				; repel Sonic
 		neg.w	ost_y_vel(a0)
 		asr	ost_x_vel(a0)
@@ -111,6 +109,12 @@ React_Enemy:
 	.flagnotclear:
 		rts	
 ; ===========================================================================
+
+React_Enemy:
+		tst.w	(v_invincibility).w
+		bne.s	React_Enemy_Break			; branch if Sonic is invincible
+		cmpi.b	#id_Roll,ost_anim(a0)
+		bne.w	React_Hurt				; branch if not rolling/jumping
 
 React_Enemy_Break:
 		move.w	(v_enemy_combo).w,d0
@@ -172,17 +176,13 @@ React_Caterkiller:
 ; ===========================================================================
 
 React_Hurt:
-		tst.w	(v_invincibility).w			; is Sonic invincible?
-		beq.s	React_Hurt_				; if not, branch
-
-	React_Exit:
-		rts	
-; ===========================================================================
+		tst.w	(v_invincibility).w
+		bne.w	React_None				; branch if Sonic is invincible
 
 React_Hurt_:
 		nop	
 		tst.w	ost_sonic_flash_time(a0)		; is Sonic flashing?
-		bne.s	React_Exit				; if yes, branch
+		bne.w	React_None				; if yes, branch
 		movea.l	a1,a2
 
 ; continue straight to HurtSonic
