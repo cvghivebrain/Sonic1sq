@@ -15,7 +15,7 @@ BuildSprites:
 		lea	(v_sprite_buffer).w,a2			; set address for sprite table - $280 bytes, copied to VRAM at VBlank
 		moveq	#0,d5
 		lea	(v_sprite_queue).w,a4			; address of sprite queue - $400 bytes, 8 sections of $80 bytes (1 word for count, $3F words for OST addresses)
-		moveq	#8-1,d7					; there are 8 priority levels
+		moveq	#countof_priority-1,d7			; there are 8 priority levels
 
 	.priority_loop:
 		tst.w	(a4)					; are there objects left in current section?

@@ -47,7 +47,7 @@ Cat_Main:	; Routine 0
 		add.w	#tile_pal2,ost_tile(a0)
 		move.b	ost_status(a0),ost_render(a0)
 		ori.b	#render_rel,ost_render(a0)
-		move.b	#4,ost_priority(a0)
+		move.b	#priority_4,ost_priority(a0)
 		move.b	#8,ost_displaywidth(a0)
 		move.b	#id_React_Caterkiller,ost_col_type(a0)
 		move.b	#8,ost_col_width(a0)
@@ -73,7 +73,7 @@ Cat_Main:	; Routine 0
 		move.b	#id_Cat_Segment,ost_routine(a1)		; goto Cat_Segment next
 		move.l	ost_mappings(a0),ost_mappings(a1)
 		move.w	ost_tile(a0),ost_tile(a1)
-		move.b	#5,ost_priority(a1)
+		move.b	#priority_5,ost_priority(a1)
 		move.b	#8,ost_displaywidth(a1)
 		move.b	#7,ost_height(a1)
 		move.b	#8,ost_width(a1)

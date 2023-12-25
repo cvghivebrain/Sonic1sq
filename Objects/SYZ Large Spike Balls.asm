@@ -40,7 +40,7 @@ BBall_Main:	; Routine 0
 		move.l	#Map_BBall,ost_mappings(a0)
 		move.w	(v_tile_spikeball).w,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
-		move.b	#4,ost_priority(a0)
+		move.b	#priority_4,ost_priority(a0)
 		move.b	#$18,ost_displaywidth(a0)
 		move.w	ost_x_pos(a0),ost_bball_x_start(a0)
 		move.w	ost_y_pos(a0),ost_bball_y_start(a0)

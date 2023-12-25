@@ -199,7 +199,7 @@ Card_Load:
 		move.w	(a2)+,d0
 		move.b	d0,ost_displaywidth(a1)
 		move.b	#render_abs,ost_render(a1)
-		move.b	#0,ost_priority(a1)
+		move.b	#priority_0,ost_priority(a1)
 		dbf	d1,.loop
 		rts
 ; ===========================================================================

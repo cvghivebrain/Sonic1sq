@@ -35,7 +35,7 @@ Over_Main:	; Routine 0
 		move.l	#Map_Over,ost_mappings(a0)
 		move.w	#tile_Art_GameOver+tile_hi,ost_tile(a0)
 		move.b	#render_abs,ost_render(a0)
-		move.b	#0,ost_priority(a0)
+		move.b	#priority_0,ost_priority(a0)
 
 Over_Move:	; Routine 2
 		moveq	#$10,d1					; set horizontal speed

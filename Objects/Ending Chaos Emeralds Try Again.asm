@@ -49,7 +49,7 @@ TCha_Main:	; Routine 0
 		move.l	#Map_ECha,ost_mappings(a1)
 		move.w	(v_tile_emeralds).w,ost_tile(a1)
 		move.b	#render_abs,ost_render(a1)
-		move.b	#1,ost_priority(a1)
+		move.b	#priority_1,ost_priority(a1)
 		move.w	#$104,ost_x_pos(a1)
 		move.w	#$120,ost_ectry_x_start(a1)
 		move.w	#$EC,ost_y_screen(a1)

@@ -28,7 +28,7 @@ Yad_Main:	; Routine 0
 		move.w	(v_tile_yadrin).w,ost_tile(a0)
 		add.w	#tile_pal2,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
-		move.b	#4,ost_priority(a0)
+		move.b	#priority_4,ost_priority(a0)
 		move.b	#$14,ost_displaywidth(a0)
 		move.b	#id_React_Yadrin,ost_col_type(a0)
 		move.b	#20,ost_col_width(a0)

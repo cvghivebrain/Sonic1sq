@@ -79,7 +79,7 @@ Spring_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Spring_Up next
 		move.l	#Map_Spring,ost_mappings(a0)
 		ori.b	#render_rel,ost_render(a0)
-		move.b	#4,ost_priority(a0)
+		move.b	#priority_4,ost_priority(a0)
 		move.b	ost_subtype(a0),d0			; get subtype
 		move.l	d0,d1
 		andi.w	#$E,d1					; read only low nybble of subtype (0 or 2)

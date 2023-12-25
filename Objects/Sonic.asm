@@ -31,7 +31,7 @@ Sonic_Main:	; Routine 0
 		move.b	(v_player1_width).w,ost_width(a0)
 		move.l	#Map_Sonic,ost_mappings(a0)
 		move.w	#tile_sonic,ost_tile(a0)
-		move.b	#2,ost_priority(a0)
+		move.b	#priority_2,ost_priority(a0)
 		move.b	#$18,ost_displaywidth(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.w	#sonic_max_speed,(v_sonic_max_speed).w	; Sonic's top speed

@@ -25,7 +25,7 @@ Pow_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Pow_Move next
 		move.w	#tile_Art_Monitors,ost_tile(a0)
 		move.b	#render_rel+render_rawmap,ost_render(a0) ; use raw mappings
-		move.b	#3,ost_priority(a0)
+		move.b	#priority_3,ost_priority(a0)
 		move.b	#8,ost_displaywidth(a0)
 		move.w	#-$300,ost_y_vel(a0)
 		moveq	#0,d0

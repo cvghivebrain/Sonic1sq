@@ -30,7 +30,7 @@ Fount_Main:	; Routine 0
 		move.l	#Map_Geyser,ost_mappings(a0)
 		move.w	#tile_Kos_Lava+tile_pal4+tile_hi,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
-		move.b	#1,ost_priority(a0)
+		move.b	#priority_1,ost_priority(a0)
 		move.b	#$38,ost_displaywidth(a0)
 
 Fount_Animate:	; Routine 2

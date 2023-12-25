@@ -34,7 +34,7 @@ HBlock_Main:	; Routine 0
 		move.b	#16,ost_width(a0)
 		move.b	#8,ost_height(a0)
 		move.b	#render_rel,ost_render(a0)
-		move.b	#4,ost_priority(a0)
+		move.b	#priority_4,ost_priority(a0)
 		btst	#4,ost_subtype(a0)
 		beq.s	HBlock_ChkBtn				; branch if subtype isn't +$10
 		addq.b	#2,ost_routine(a0)			; goto HBlock_Solid next

@@ -38,7 +38,7 @@ LWall_Main:	; Routine 0
 		move.w	#tile_Kos_Lava+tile_pal4,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#$50,ost_displaywidth(a0)
-		move.b	#1,ost_priority(a0)
+		move.b	#priority_1,ost_priority(a0)
 		move.b	#$28,ost_width(a0)
 		move.b	#16,ost_height(a0)
 		move.b	#id_React_Hurt,ost_col_type(a0)

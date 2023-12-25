@@ -96,7 +96,7 @@ SpinCP_Main:	; Routine 0
 		move.b	#16,ost_width(a0)
 		move.b	#7,ost_height(a0)
 		ori.b	#render_rel,ost_render(a0)
-		move.b	#4,ost_priority(a0)
+		move.b	#priority_4,ost_priority(a0)
 		moveq	#0,d0
 		move.b	ost_subtype(a0),d0			; get subtype (not the same as initial subtype)
 		move.w	d0,d1

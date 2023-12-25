@@ -53,7 +53,7 @@ Glass_Main:	; Routine 0
 		move.l	#Map_Glass,ost_mappings(a0)
 		move.w	#tile_Kos_MzGlass+tile_pal3+tile_hi,ost_tile(a0)
 		move.b	#render_rel+render_useheight,ost_render(a0)
-		move.b	#4,ost_priority(a0)
+		move.b	#priority_4,ost_priority(a0)
 		move.w	ost_y_pos(a0),ost_glass_y_start(a0)
 		move.b	ost_subtype(a0),d0
 		move.b	d0,d1
@@ -74,7 +74,7 @@ Glass_Main:	; Routine 0
 		move.w	#tile_Kos_MzGlass+tile_pal3+tile_hi,ost_tile(a1)
 		move.b	#render_rel,ost_render(a1)
 		move.b	#$10,ost_displaywidth(a1)
-		move.b	#3,ost_priority(a1)
+		move.b	#priority_3,ost_priority(a1)
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.b	#id_frame_glass_shine,ost_frame(a1)
 		move.b	(a2)+,ost_subtype(a1)

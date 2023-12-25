@@ -43,7 +43,7 @@ ExItem_Main:	; Routine 2
 		move.l	#Map_ExplodeItem,ost_mappings(a0)
 		move.w	#tile_Art_Explode,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
-		move.b	#1,ost_priority(a0)
+		move.b	#priority_1,ost_priority(a0)
 		move.b	#0,ost_col_type(a0)
 		move.b	#$C,ost_displaywidth(a0)
 		move.b	#7,ost_anim_time(a0)			; set frame duration to 7 frames
@@ -84,7 +84,7 @@ ExBom_Main:	; Routine 0
 		move.l	#Map_ExplodeBomb,ost_mappings(a0)
 		move.w	#tile_Art_Explode,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
-		move.b	#1,ost_priority(a0)
+		move.b	#priority_1,ost_priority(a0)
 		move.b	#0,ost_col_type(a0)
 		move.b	#$C,ost_displaywidth(a0)
 		move.b	#7,ost_anim_time(a0)

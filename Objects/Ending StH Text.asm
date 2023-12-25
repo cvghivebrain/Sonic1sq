@@ -31,7 +31,7 @@ ESth_Main:	; Routine 0
 		move.l	#Map_ESTH,ost_mappings(a0)
 		move.w	#tile_Art_EndStH,ost_tile(a0)
 		move.b	#render_abs,ost_render(a0)
-		move.b	#0,ost_priority(a0)
+		move.b	#priority_0,ost_priority(a0)
 
 ESth_Move:	; Routine 2
 		cmpi.w	#$C0,ost_x_pos(a0)			; has object reached $C0?

@@ -54,7 +54,7 @@ Exhaust_Main:	; Routine 0
 		move.w	#vram_exhaust/sizeof_cell,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#$20,ost_displaywidth(a0)
-		move.b	#3,ost_priority(a0)
+		move.b	#priority_3,ost_priority(a0)
 		move.b	#id_ani_exhaust_flame1,ost_anim(a0)
 		
 Exhaust_Chk:	; Routine 2

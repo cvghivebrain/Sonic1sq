@@ -103,7 +103,7 @@ Ring_Main:	; Routine 0
 		move.w	(v_tile_rings).w,ost_tile(a1)
 		add.w	#tile_pal2,ost_tile(a1)
 		move.b	#render_rel,ost_render(a1)
-		move.b	#2,ost_priority(a1)
+		move.b	#priority_2,ost_priority(a1)
 		move.b	#id_React_Ring,ost_col_type(a1)		; goto Ring_Collect when touched
 		move.b	#6,ost_col_width(a1)
 		move.b	#6,ost_col_height(a1)
@@ -131,7 +131,7 @@ Ring_Animate:	; Routine 2
 Ring_Collect:	; Routine 4
 		addq.b	#2,ost_routine(a0)			; goto Ring_Sparkle next
 		move.b	#0,ost_col_type(a0)
-		move.b	#1,ost_priority(a0)
+		move.b	#priority_1,ost_priority(a0)
 		moveq	#1,d0
 		bsr.w	CollectRing				; add ring/extra life, play sound
 		lea	(v_respawn_list).w,a2

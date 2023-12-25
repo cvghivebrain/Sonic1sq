@@ -55,7 +55,7 @@ Face_Main:	; Routine 0
 		move.w	#vram_face/sizeof_cell,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#$20,ost_displaywidth(a0)
-		move.b	#3,ost_priority(a0)
+		move.b	#priority_3,ost_priority(a0)
 		move.b	#id_ani_face_face1,ost_anim(a0)		; use default animation
 		
 Face_Chk:	; Routine 2

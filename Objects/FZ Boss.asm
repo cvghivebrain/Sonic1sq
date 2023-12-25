@@ -37,11 +37,11 @@ BFZ_ObjData:	; x pos, y pos,	VRAM setting, mappings pointer
 		dc.l Map_Bosses
 
 BFZ_ObjData2:	; routine num, animation, sprite priority, width, height
-		dc.b id_BFZ_Eggman, id_ani_eggman_stand, 4, $20, $19
-		dc.b id_BFZ_Panel, 0, 1, $12, 8
-		dc.b id_BFZ_Legs, 0, 3, 0, 0
-		dc.b id_BFZ_Cockpit, 0, 3, 0, 0
-		dc.b id_BFZ_EmptyShip, 0, 3, $20, $20
+		dc.b id_BFZ_Eggman, id_ani_eggman_stand, priority_4, $20, $19
+		dc.b id_BFZ_Panel, 0, priority_1, $12, 8
+		dc.b id_BFZ_Legs, 0, priority_3, 0, 0
+		dc.b id_BFZ_Cockpit, 0, priority_3, 0, 0
+		dc.b id_BFZ_EmptyShip, 0, priority_3, $20, $20
 		even
 
 		rsobj BossFinal
@@ -517,7 +517,7 @@ BFZ_Cockpit:	; Routine 8
 		tst.b	ost_render(a0)				; is object on-screen?
 		bpl.w	BFZ_Delete				; if not, branch
 		bsr.w	BossExplode				; spawn explosions
-		move.b	#2,ost_priority(a0)
+		move.b	#priority_2,ost_priority(a0)
 		move.b	#id_ani_fzeggman_0,ost_anim(a0)
 		move.l	#Map_FZDamaged,ost_mappings(a0)		; use mappings for damaged ship
 		move.w	#tile_Kos_FzEggman,ost_tile(a0)

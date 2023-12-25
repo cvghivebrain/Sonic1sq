@@ -33,7 +33,7 @@ Cred_Main:	; Routine 0
 		move.w	(v_credits_num).w,d0			; load credits index number
 		move.b	d0,ost_frame(a0)			; display appropriate sprite
 		move.b	#render_abs,ost_render(a0)
-		move.b	#0,ost_priority(a0)
+		move.b	#priority_0,ost_priority(a0)
 
 		cmpi.b	#id_Title,(v_gamemode).w		; is the mode #4 (title screen)?
 		bne.s	Cred_Display				; if not, branch

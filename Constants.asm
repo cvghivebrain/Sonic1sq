@@ -13,6 +13,7 @@ countof_ost_inert:	equ $20					; number of OSTs that don't interact with Sonic (
 countof_ost_ert:	equ $60					; number of OSTs that do interact with Sonic
 countof_ost:		equ countof_ost_inert+countof_ost_ert	; number of OSTs in RAM
 sizeof_priority:	equ $80					; size of one priority section in sprite queue
+countof_priority:	equ 8					; number of priority levels
 sizeof_dma:		equ 14					; size of one DMA command
 countof_dma:		equ 28					; number of DMA slots in queue
 
@@ -84,6 +85,15 @@ piece_size:		rs.b 1
 piece_tile:		rs.w 1
 piece_x_pos:		rs.w 1
 sizeof_piece:		equ __rs
+
+priority_0:		equ 0
+priority_1:		equ 2
+priority_2:		equ 4
+priority_3:		equ 6
+priority_4:		equ 8
+priority_5:		equ $A
+priority_6:		equ $C
+priority_7:		equ $E
 
 ; Levels
 id_GHZ:		equ 0

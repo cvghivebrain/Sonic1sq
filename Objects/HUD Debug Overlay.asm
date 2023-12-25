@@ -87,7 +87,7 @@ Overlay_Main:	; Routine 0
 		move.w	(a2)+,ost_tile(a1)
 		move.w	(a2)+,ost_linked(a1)
 		move.b	#render_rel,ost_render(a1)
-		move.b	#0,ost_priority(a1)
+		move.b	#priority_0,ost_priority(a1)
 		move.b	#16,ost_displaywidth(a1)
 		dbf	d1,.loop
 		

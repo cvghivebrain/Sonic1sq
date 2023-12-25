@@ -65,7 +65,7 @@ GBall_Main:	; Routine 0
 		move.b	d5,(a2)+				; add to list in parent OST
 		move.b	#render_rel,ost_render(a1)
 		move.b	#8,ost_displaywidth(a1)
-		move.b	#6,ost_priority(a1)
+		move.b	#priority_6,ost_priority(a1)
 		move.w	ost_parent(a0),ost_parent(a1)
 		dbf	d1,.loop				; repeat sequence 5 more times
 
@@ -74,7 +74,7 @@ GBall_Main:	; Routine 0
 		move.l	#Map_GBall,ost_mappings(a1)		; replace last object with ball
 		move.w	#(vram_ball/sizeof_cell)+tile_pal3,ost_tile(a1)
 		move.b	#id_frame_ball_check1,ost_frame(a1)
-		move.b	#5,ost_priority(a1)
+		move.b	#priority_5,ost_priority(a1)
 		move.b	#id_React_Hurt,ost_col_type(a1)		; make object hurt Sonic
 		move.b	#20,ost_col_width(a1)
 		move.b	#20,ost_col_height(a1)

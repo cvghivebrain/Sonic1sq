@@ -26,7 +26,7 @@ BLZ_Main:	; Routine 0
 		move.b	#24,ost_col_width(a0)
 		move.b	#24,ost_col_height(a0)
 		move.b	#hitcount_lz,ost_col_property(a0)	; set number of hits to 8
-		move.b	#4,ost_priority(a0)
+		move.b	#priority_4,ost_priority(a0)
 		bclr	#status_xflip_bit,ost_status(a0)
 		clr.b	ost_mode(a0)
 		move.b	#id_BLZ_ShipMain,ost_routine(a0)	; goto BLZ_ShipMain

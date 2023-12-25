@@ -66,7 +66,7 @@ Has_Main:	; Routine 0
 		move.w	(v_tile_bonus).w,ost_tile(a1)
 		add.w	#tile_hi,ost_tile(a1)
 		move.b	#render_abs,ost_render(a1)
-		move.b	#0,ost_priority(a1)
+		move.b	#priority_0,ost_priority(a1)
 		move.b	d1,ost_frame(a1)			; use frames 2, 1 and 0
 		move.w	#screen_right,ost_x_pos(a1)
 		move.w	#screen_left+80,ost_has_x_stop(a1)	; x pos when text stops on screen

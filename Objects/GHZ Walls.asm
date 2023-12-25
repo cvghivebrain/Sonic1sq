@@ -30,7 +30,7 @@ Edge_Main:	; Routine 0
 		move.b	#8,ost_displaywidth(a0)
 		move.b	#9,ost_width(a0)
 		move.b	#32,ost_height(a0)
-		move.b	#6,ost_priority(a0)
+		move.b	#priority_6,ost_priority(a0)
 		move.b	ost_subtype(a0),ost_frame(a0)		; copy object type number to frame number
 		bclr	#4,ost_frame(a0)			; clear 4th bit (deduct $10)
 		beq.s	Edge_Solid				; branch if already clear (subtype 0/1/2 is solid)

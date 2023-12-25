@@ -30,6 +30,7 @@ _Sonic 1-squared_ is an enhanced version of the original _Sonic the Hedgehog_ ga
 * `ost_parent` contains the parent object's OST address (shortened to a word), if the `saveparent` was useded when the child object was created. `getparent` will set the parent object as `a1`. Calling `DeleteFamily` will delete an object as well as any objects which have it set as their parent.
 * `ost_linked` is similar to `ost_parent`. `GetLinked` will set the linked object as `a1`. `DeleteFamily` won't delete linked objects.
 * `ost_col_width` and `ost_col_height` set an object's hitbox for `ReactToItem` instead of using a table.
+* `ost_status` now includes `status_pointy_bit` for spikes and similar objects. It causes a different sound to play when Sonic is harmed by the object.
 * Monitor icons load only as needed, allowing for up to 256 unique monitor types (with a maximum of 8 loaded at any one time).
 * Each title card has its own PLC, so only letters that are used need to be loaded. Title cards are automatically centered by the `autocard` macro. Title card mappings are also automated, and can use sprite mappings more efficiently by joining two letters together as a single sprite.
 * GHZ/SLZ loops use an object instead of being hard-coded. The object reads Sonic's position within the loop and updates the level layout accordingly.
@@ -43,6 +44,7 @@ _Sonic 1-squared_ is an enhanced version of the original _Sonic the Hedgehog_ ga
 
 ## Bugfixes
 * Spikes no longer kill Sonic immediately after losing rings. Add $80 to the subtype to restore the original lethal behaviour.
+* Mirrored sprites are no longer misaligned by 1 pixel. This was most obvious when pushing a wall to the left.
 
 # Credits
 * [flamewing](https://github.com/flamewing) for [mdcomp](https://github.com/flamewing/mdcomp).

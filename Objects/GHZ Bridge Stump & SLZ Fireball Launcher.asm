@@ -39,17 +39,17 @@ Scen_ChkDel:	; Routine 2
 Scen_Values:
 Scen_Values_0:	dc.l Map_Scen					; mappings address
 		dc.w tile_Kos_SlzCannon+tile_pal3		; VRAM setting
-		dc.b id_frame_scen_cannon, 8, 2, 0		; frame, width, priority, collision response
+		dc.b id_frame_scen_cannon, 8, priority_2, 0	; frame, width, priority, collision response
 		
 Scen_Values_1:	dc.l Map_Scen
 		dc.w tile_Kos_SlzCannon+tile_pal3
-		dc.b id_frame_scen_cannon, 8, 2, 0
+		dc.b id_frame_scen_cannon, 8, priority_2, 0
 		
 Scen_Values_2:	dc.l Map_Scen
 		dc.w tile_Kos_SlzCannon+tile_pal3
-		dc.b id_frame_scen_cannon, 8, 2, 0
+		dc.b id_frame_scen_cannon, 8, priority_2, 0
 		
 Scen_Values_3:	dc.l Map_Bri
 		dc.w tile_Kos_Bridge+tile_pal3
-		dc.b id_frame_bridge_stump, $10, 1, 0
+		dc.b id_frame_bridge_stump, $10, priority_1, 0
 		even

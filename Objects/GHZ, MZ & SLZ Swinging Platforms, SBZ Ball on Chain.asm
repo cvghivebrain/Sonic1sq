@@ -118,7 +118,7 @@ Swing_Main:	; Routine 0
 		add.w	(a2)+,d0
 		move.w	d0,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
-		move.b	#3,ost_priority(a0)
+		move.b	#priority_3,ost_priority(a0)
 		move.b	#$18,ost_displaywidth(a0)
 		move.b	#id_frame_swing_anchor,ost_frame(a0)
 		
@@ -142,7 +142,7 @@ Swing_Main:	; Routine 0
 		move.b	(a2)+,ost_width(a1)
 		move.b	(a2)+,ost_height(a1)
 		move.b	#render_rel,ost_render(a1)
-		move.b	#3,ost_priority(a1)
+		move.b	#priority_3,ost_priority(a1)
 		moveq	#0,d1
 		move.b	ost_subtype(a0),d1			; d1 = chain length
 		andi.b	#$F,d1					; read low nybble
@@ -164,7 +164,7 @@ Swing_Main:	; Routine 0
 		move.b	#8,ost_displaywidth(a1)
 		move.b	#render_rel,ost_render(a1)
 		move.b	#id_frame_swing_chain,ost_frame(a1)
-		move.b	#4,ost_priority(a1)
+		move.b	#priority_4,ost_priority(a1)
 		move.b	d2,ost_swing_radius(a1)			; position relative to anchor
 		addi.b	#16,d2
 		saveparent

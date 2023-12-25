@@ -206,7 +206,7 @@ Drown_NumWait:	; Routine 2
 		ori.w	#tile_hi,ost_tile(a0)
 		move.b	#render_rel+render_onscreen,ost_render(a0)
 		move.b	#4,ost_displaywidth(a0)
-		move.b	#1,ost_priority(a0)
+		move.b	#priority_1,ost_priority(a0)
 		move.w	#-$88,ost_y_vel(a0)
 		moveq	#6,d0					; 6 pixels to right
 		getsonic

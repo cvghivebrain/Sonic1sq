@@ -22,7 +22,7 @@ Whee_Main:	; Routine 0
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#$10,ost_displaywidth(a0)
 		move.w	#tile_Kos_LzWheel,ost_tile(a0)
-		move.b	#1,ost_priority(a0)
+		move.b	#priority_1,ost_priority(a0)
 		
 Whee_Display:	; Routine 2
 		shortcut

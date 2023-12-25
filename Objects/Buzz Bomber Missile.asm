@@ -37,7 +37,7 @@ Msl_Main:	; Routine 0
 		move.w	(v_tile_buzzbomber).w,ost_tile(a0)
 		add.w	#tile_pal2,ost_tile(a0)
 		move.b	#render_rel+render_onscreen,ost_render(a0)
-		move.b	#3,ost_priority(a0)
+		move.b	#priority_3,ost_priority(a0)
 		move.b	#8,ost_displaywidth(a0)
 		andi.b	#status_xflip+status_yflip,ost_status(a0)
 		move.b	ost_subtype(a0),d0

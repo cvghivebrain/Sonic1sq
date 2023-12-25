@@ -21,7 +21,7 @@ MDis_Main:	; Routine 0
 		move.l	#Map_MisDissolve,ost_mappings(a0)
 		move.w	#$41C,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
-		move.b	#1,ost_priority(a0)
+		move.b	#priority_1,ost_priority(a0)
 		move.b	#0,ost_col_type(a0)
 		move.b	#$C,ost_displaywidth(a0)
 		move.b	#9,ost_anim_time(a0)

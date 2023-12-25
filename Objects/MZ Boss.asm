@@ -29,7 +29,7 @@ BMZ_Main:	; Routine 0
 		clr.b	ost_mode(a0)
 		move.b	#id_BMZ_ShipMain,ost_routine(a0)	; goto BMZ_ShipMain
 		move.b	#id_ani_boss_ship,ost_anim(a0)
-		move.b	#4,ost_priority(a0)
+		move.b	#priority_4,ost_priority(a0)
 		move.l	#Map_Bosses,ost_mappings(a0)
 		move.w	#tile_Art_Eggman,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)

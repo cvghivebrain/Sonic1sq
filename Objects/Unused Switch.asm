@@ -30,7 +30,7 @@ Swi_Main:	; Routine 0
 		move.b	#render_rel,ost_render(a0)
 		move.w	ost_y_pos(a0),ost_switch_y_start(a0)	; save position on y-axis
 		move.b	#$10,ost_displaywidth(a0)
-		move.b	#5,ost_priority(a0)
+		move.b	#priority_5,ost_priority(a0)
 
 Swi_Action:	; Routine 2
 		move.w	ost_switch_y_start(a0),ost_y_pos(a0)	; restore position on y-axis

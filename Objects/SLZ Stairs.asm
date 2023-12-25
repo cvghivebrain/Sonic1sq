@@ -43,7 +43,7 @@ Stair_Main:	; Routine 0
 		move.l	#Map_Stair,ost_mappings(a0)
 		move.w	#0+tile_pal3,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
-		move.b	#3,ost_priority(a0)
+		move.b	#priority_3,ost_priority(a0)
 		move.b	#$40,ost_displaywidth(a0)
 		move.b	#$40,ost_width(a0)
 		move.b	#$10,ost_height(a0)

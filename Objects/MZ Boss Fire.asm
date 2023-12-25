@@ -33,7 +33,7 @@ BFire_Main:	; Routine 0
 		move.l	#Map_Fire,ost_mappings(a0)
 		move.w	(v_tile_fireball).w,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
-		move.b	#5,ost_priority(a0)
+		move.b	#priority_5,ost_priority(a0)
 		move.w	ost_y_pos(a0),ost_bfire_y_start(a0)
 		move.b	#8,ost_displaywidth(a0)
 		addq.b	#2,ost_routine(a0)			; goto BFire_Action next

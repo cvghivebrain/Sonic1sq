@@ -28,7 +28,7 @@ Ledge_Main:	; Routine 0
 		move.l	#Map_Ledge,ost_mappings(a0)
 		move.w	#0+tile_pal3,ost_tile(a0)
 		ori.b	#render_rel+render_useheight,ost_render(a0)
-		move.b	#4,ost_priority(a0)
+		move.b	#priority_4,ost_priority(a0)
 		move.b	#14,ost_ledge_wait_time(a0)		; set time delay for collapse
 		move.b	#$64,ost_displaywidth(a0)
 		move.b	#$30,ost_width(a0)

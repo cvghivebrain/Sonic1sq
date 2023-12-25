@@ -50,7 +50,7 @@ Newt_Main:	; Routine 0
 		
 	.keep_pal:
 		move.b	#render_rel,ost_render(a0)
-		move.b	#4,ost_priority(a0)
+		move.b	#priority_4,ost_priority(a0)
 		move.b	#$14,ost_displaywidth(a0)
 		btst	#type_newt_missile_bit,d0
 		bne.s	Newt_Range				; branch if newtron is green missile-firing type

@@ -33,7 +33,7 @@ Jun_Main:	; Routine 0
 		move.b	#$30,ost_width(a0)
 		move.b	#$30,ost_height(a0)
 		move.b	#$30,ost_displaywidth(a0)
-		move.b	#4,ost_priority(a0)
+		move.b	#priority_4,ost_priority(a0)
 		move.b	#1,ost_junc_direction(a0)		; set default direction (anticlockwise)
 		
 		bsr.w	FindFreeObj				; find free OST slot
@@ -41,7 +41,7 @@ Jun_Main:	; Routine 0
 		move.l	#JunctionBG,ost_id(a1)			; load 2nd junction object
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
-		move.b	#3,ost_priority(a1)
+		move.b	#priority_3,ost_priority(a1)
 		move.b	#id_frame_junc_circle,ost_frame(a1)	; use large circular sprite
 		move.l	ost_mappings(a0),ost_mappings(a1)
 		move.w	ost_tile(a0),ost_tile(a1)

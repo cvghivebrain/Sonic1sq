@@ -26,7 +26,7 @@ BGHZ_Main:	; Routine 0
 		move.w	#tile_Art_Eggman,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#$20,ost_displaywidth(a0)
-		move.b	#3,ost_priority(a0)
+		move.b	#priority_3,ost_priority(a0)
 		move.b	#id_ani_boss_ship,ost_anim(a0)
 		
 		moveq	#id_UPLC_Boss,d0

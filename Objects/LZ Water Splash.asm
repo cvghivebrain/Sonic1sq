@@ -21,7 +21,7 @@ Spla_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Spla_Display next
 		move.l	#Map_Splash,ost_mappings(a0)
 		ori.b	#render_rel,ost_render(a0)
-		move.b	#1,ost_priority(a0)
+		move.b	#priority_1,ost_priority(a0)
 		move.b	#$10,ost_displaywidth(a0)
 		move.w	#tile_Kos_Splash+tile_pal3,ost_tile(a0)
 		getsonic					; a1 = OST of Sonic

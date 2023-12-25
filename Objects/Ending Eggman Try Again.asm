@@ -24,7 +24,7 @@ EEgg_Main:	; Routine 0
 		move.l	#Map_EEgg,ost_mappings(a0)
 		move.w	#tile_Kos_TryAgain+1,ost_tile(a0)
 		move.b	#render_abs,ost_render(a0)
-		move.b	#2,ost_priority(a0)
+		move.b	#priority_2,ost_priority(a0)
 		move.b	#id_ani_eegg_end,ost_anim(a0)		; use "END" animation
 		cmpi.l	#emerald_all,(v_emeralds).w		; do you have all 6 emeralds?
 		beq.s	EEgg_Animate				; if yes, branch

@@ -43,9 +43,9 @@ ost_weapon_parent:	rs.l 1					; address of OST of parent
 ost_weapon_y_diff:	rs.w 1					; value to add to y pos
 		rsobjend
 
-Weapon_Data:	dc.b id_frame_boss_pipe,3,id_Weapon_Done,id_UPLC_MZPipe
-		dc.b id_frame_boss_widepipe,3,id_Weapon_Done,id_UPLC_SLZPipe
-		dc.b id_frame_boss_spike,5,id_Weapon_Spike,id_UPLC_SYZSpike
+Weapon_Data:	dc.b id_frame_boss_pipe,priority_3,id_Weapon_Done,id_UPLC_MZPipe
+		dc.b id_frame_boss_widepipe,priority_3,id_Weapon_Done,id_UPLC_SLZPipe
+		dc.b id_frame_boss_spike,priority_5,id_Weapon_Spike,id_UPLC_SYZSpike
 		even
 ; ===========================================================================
 

@@ -33,7 +33,7 @@ Sign_Main:	; Routine 0
 		move.w	#vram_signpost/sizeof_cell,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#$18,ost_displaywidth(a0)
-		move.b	#4,ost_priority(a0)
+		move.b	#priority_4,ost_priority(a0)
 		moveq	#id_UPLC_Bonus,d0
 		jsr	UncPLC					; load hidden bonus gfx
 		lea	Ani_Sign(pc),a1
@@ -89,7 +89,7 @@ Sign_Spin:	; Routine 4
 		move.w	(v_tile_rings).w,ost_tile(a1)
 		add.w	#tile_pal2,ost_tile(a1)
 		move.b	#render_rel,ost_render(a1)
-		move.b	#2,ost_priority(a1)
+		move.b	#priority_2,ost_priority(a1)
 		move.b	#8,ost_displaywidth(a1)
 
 	.fail:

@@ -58,7 +58,7 @@ RLoss_Count:	; Routine 0
 		move.w	(v_tile_rings).w,ost_tile(a1)
 		add.w	#tile_pal2,ost_tile(a1)
 		move.b	#render_rel,ost_render(a1)
-		move.b	#3,ost_priority(a1)
+		move.b	#priority_3,ost_priority(a1)
 		move.b	#id_React_Ring,ost_col_type(a1)		; goto RLoss_Collect when touched
 		move.b	#6,ost_col_width(a1)
 		move.b	#6,ost_col_height(a1)
@@ -106,7 +106,7 @@ RLoss_Bounce:	; Routine 2
 RLoss_Collect:	; Routine 4
 		addq.b	#2,ost_routine(a0)			; goto RLoss_Sparkle next
 		move.b	#0,ost_col_type(a0)
-		move.b	#1,ost_priority(a0)
+		move.b	#priority_1,ost_priority(a0)
 		moveq	#1,d0
 		bsr.w	CollectRing				; add ring/extra life, play sound
 
