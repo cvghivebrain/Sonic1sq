@@ -301,9 +301,7 @@ Overlay_BoxLeftObj:
 		moveq	#0,d2
 		move.w	(v_debug_hitbox_setting).w,d0
 		bne.s	.hitbox_or_none				; branch on settings 1-2
-		moveq	#-1,d3
-		move.w	(v_nearest_obj).w,d3
-		movea.l	d3,a1					; a1 = OST of linked object
+		movea.w	(v_nearest_obj).w,a1			; a1 = OST of linked object
 		move.b	ost_width(a1),d0
 		beq.w	Overlay_Hide				; don't display if width is 0
 		moveq	#0,d1
@@ -315,9 +313,7 @@ Overlay_BoxLeftObj:
 	.hitbox_or_none:
 		cmpi.w	#2,d0
 		beq.w	Overlay_Hide				; don't display on setting #2
-		moveq	#-1,d3
-		move.w	(v_nearest_obj).w,d3
-		movea.l	d3,a1					; a1 = OST of linked object
+		movea.w	(v_nearest_obj).w,a1			; a1 = OST of linked object
 		tst.b	ost_col_type(a1)			; get hitbox id
 		beq.w	Overlay_Hide				; don't display if object has no hitbox
 		moveq	#0,d0

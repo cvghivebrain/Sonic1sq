@@ -38,13 +38,7 @@ getparent:	macro
 		else
 		rg: equs "a1"					; set a1 as target
 		endc
-		if (v_ost_all&$FFFF)>$7FFF
 		movea.w	ost_parent(a0),\rg
-		else
-		moveq	#-1,d0					; d0 = $FFFFFFFF
-		move.w	ost_parent(a0),d0			; d0 = $FFFFxxxx
-		movea.l	d0,\rg					; set a1 as parent
-		endc
 		endm
 		
 ; ---------------------------------------------------------------------------
@@ -59,13 +53,7 @@ getlinked:	macro
 		else
 		rg: equs "a1"					; set a1 as target
 		endc
-		if (v_ost_all&$FFFF)>$7FFF
 		movea.w	ost_linked(a0),\rg
-		else
-		moveq	#-1,d0					; d0 = $FFFFFFFF
-		move.w	ost_linked(a0),d0			; d0 = $FFFFxxxx
-		movea.l	d0,\rg					; set a1 as parent
-		endc
 		endm
 		
 ; ---------------------------------------------------------------------------

@@ -278,7 +278,7 @@ ost_col_type:		rs.w 1					; collision response type - 0 = none; 1-$3F = enemy; $
 ost_col_property:	equ ost_col_type+1			; collision extra property
 ost_col_width:		rs.w 1					; hitbox width
 ost_col_height:		equ ost_col_width+1			; hitbox height
-ost_sink:		equ ost_col_property			; amount platform has sunk when stood on - 0 is none, $1E is max
+ost_sink:		equ ost_col_width			; amount platform has sunk when stood on - 0 is none, $1E is max
 ost_render:		rs.b 1					; bitfield for x/y flip, display mode
 	render_xflip_bit:	equ 0
 	render_yflip_bit:	equ 1

@@ -111,7 +111,7 @@ BuildSprites:
 ;	a1 = current address in sprite mappings
 ;	a2 = current address in sprite buffer
 
-;	uses d0.w, d1.w, d4.b, d5.b, a1, a2
+;	uses d0.w, d1.w, d4.w, d5.b, a1, a2
 ; ---------------------------------------------------------------------------
 
 BuildSpr_Draw:
@@ -145,7 +145,7 @@ BuildSpr_Normal:
 		addq.w	#1,d0					; add 1 to prevent sprite masking (sprites at x pos 0 act as masks)
 
 	.x_not_0:
-		move.w	d0,(a2)+				; write to buffer
+		move.w	d0,(a2)+				; write x pos to buffer
 		dbf	d1,BuildSpr_Normal			; next sprite piece
 
 	.exit:
