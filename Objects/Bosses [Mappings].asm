@@ -155,7 +155,6 @@ frame_boss_chainanchor2:
 		piece	-8, -4, 2x1, 4
 		piece	-8, -8, 2x2, 0
 		endsprite
-		even
 		
 frame_boss_widepipe:
 		spritemap					; SLZ boss
@@ -174,4 +173,3 @@ frame_boss_spike:
 		piece	0, -8, 1x2, 2, xflip
 		piece	-8, 8, 2x1, 4
 		endsprite
-		even

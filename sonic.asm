@@ -508,6 +508,7 @@ Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 		include "Objects\Boss Exhaust.asm"		; Exhaust
 		include "Objects\Boss Face.asm"			; BossFace
 		include "Objects\Boss Weapons.asm"		; BossWeapon
+		include "Objects\Bosses.asm"			; Boss
 
 		include "Objects\LZ Boss.asm"			; BossLabyrinth
 		include "Objects\MZ Boss.asm"			; BossMarble
