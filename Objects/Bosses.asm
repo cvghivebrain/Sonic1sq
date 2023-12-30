@@ -21,25 +21,33 @@ ost_boss2_y_normal:	rs.l 1					; y position without wobble
 ost_boss2_time:		rs.w 1					; time until next action
 ost_boss2_cam_start:	equ ost_boss2_time			; camera x pos where boss activates
 ost_boss2_wobble:	rs.b 1					; wobble counter
+ost_boss2_laugh:	rs.b 1					; flag set when Eggman laughs
 		rsobjend
 		
 Boss_CamXPos:	dc.w 0,$2960					; camera x pos where the boss becomes active
-Boss_InitMode:	dc.b 0						; initial mode for each boss
+Boss_InitMode:	dc.b (Boss_MoveGHZ-Boss_MoveList)/sizeof_bmove	; initial mode for each boss
 		even
 		
 bmove:		macro xvel,yvel,time,xflip,next
 		dc.w xvel, yvel, time
 		dc.b xflip, next
 		endm
-Boss_MoveList:	; x speed, y speed, duration, xflip flag, next mode
-		bmove 0, $100, $B8, 0, 1
-		bmove -$100, -$40, $60, 0, 2
-		bmove 0, 0, 119, 0, 3
-		bmove -$40, 0, 127, 0, 4
-		bmove 0, 0, 63, 1, 5
-		bmove $100, 0, 63, 1, 6
-		bmove 0, 0, 63, 0, 7
-		bmove -$100, 0, 63, 0, 4
+		
+bmove_xflip_bit:	equ 0
+bmove_laugh_bit:	equ 1
+bmove_xflip:		equ 1<<bmove_xflip_bit
+bmove_laugh:		equ 1<<bmove_laugh_bit
+sizeof_bmove:		equ 8
+
+Boss_MoveList:	; x speed, y speed, duration, flags, value to add to mode
+Boss_MoveGHZ:	bmove 0, $100, $B8, 0, 1
+		bmove -$100, -$40, $60, 0, 1
+		bmove 0, 0, 119, bmove_laugh, 1
+		bmove -$40, 0, 127, 0, 1
+		bmove 0, 0, 63, bmove_xflip, 1
+		bmove $100, 0, 63, bmove_xflip, 1
+		bmove 0, 0, 63, 0, 1
+		bmove -$100, 0, 63, 0, -3
 ; ===========================================================================
 
 Boss_Main:	; Routine 0
@@ -97,6 +105,14 @@ Boss_Move:	; Routine 4
 		move.w	d0,ost_y_pos(a0)			; update actual y pos
 		addq.b	#2,ost_boss2_wobble(a0)			; increment wobble (wraps to 0 after $FE)
 		
+		tst.b	ost_col_type(a0)
+		bne.s	.no_flash				; branch if not flashing
+		eori.w	#cWhite,(v_pal_dry_line2+2).w		; toggle black/white on palette line 2 colour 2
+		subq.b	#1,(v_boss_flash).w			; decrement flash counter
+		bne.s	.no_flash				; branch if not 0
+		move.b	#id_React_Boss,ost_col_type(a0)		; enable boss collision again
+		
+	.no_flash:
 		jmp	DisplaySprite
 
 ; ---------------------------------------------------------------------------
@@ -112,15 +128,23 @@ Boss_SetMode:
 		move.w	(a2)+,ost_x_vel(a0)
 		move.w	(a2)+,ost_y_vel(a0)
 		move.w	(a2)+,ost_boss2_time(a0)
-		move.b	(a2)+,d0
-		bclr	#render_xflip_bit,ost_render(a0)
+		move.b	(a2)+,d0				; get flags
+		bclr	#render_xflip_bit,ost_render(a0)	; assume facing left
 		bclr	#status_xflip_bit,ost_status(a0)
-		andi.b	#status_xflip,d0
-		beq.s	.noflip
-		bset	#render_xflip_bit,ost_render(a0)
+		move.b	#0,ost_boss2_laugh(a0)			; assume not laughing
+		
+		btst	#bmove_xflip_bit,d0
+		beq.s	.noflip					; branch if xflip bit isn't set
+		bset	#render_xflip_bit,ost_render(a0)	; face right
 		bset	#status_xflip_bit,ost_status(a0)
 		
 	.noflip:
-		move.b	(a2)+,ost_mode(a0)
+		btst	#bmove_laugh_bit,d0
+		beq.s	.nolaugh				; branch if laughing bit isn't set
+		move.b	#1,ost_boss2_laugh(a0)			; Eggman laughs
+		
+	.nolaugh:
+		move.b	(a2)+,d0
+		add.b	d0,ost_mode(a0)				; next mode
 		rts
 		

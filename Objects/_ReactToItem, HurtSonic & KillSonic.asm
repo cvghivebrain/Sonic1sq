@@ -101,6 +101,8 @@ React_Boss:
 		neg.w	ost_y_vel(a0)
 		asr	ost_x_vel(a0)
 		asr	ost_y_vel(a0)
+		move.b	#16*2,(v_boss_flash).w			; set ship to flash 16 times
+		play.w	1, jsr, sfx_BossHit			; play boss damage sound
 		move.b	#0,ost_col_type(a1)			; temporarily make boss harmless
 		subq.b	#1,ost_col_property(a1)			; decrement hit counter
 		bne.s	.flagnotclear				; branch if not 0
