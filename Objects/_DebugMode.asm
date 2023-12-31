@@ -284,7 +284,7 @@ DebugList_GHZ:
 		dbitem	Rings, Map_Ring, 0, 0, id_frame_ring_front, v_tile_rings, tile_pal2
 		dbitem	Monitor, Map_Monitor, type_monitor_rings, 0, id_frame_monitor_static0, tile_Art_Monitors, 0
 		;dbitem	HiddenBonus, Map_Bonus, type_bonus_10k, 0, id_frame_bonus_10000, vram_bonus/sizeof_cell, 0
-		dbitem	Boss, Map_Bosses, 0, 0, id_frame_boss_ship, tile_Art_Eggman, 0
+		dbitem	Boss, Map_Bosses, $80, 0, id_frame_boss_ship, tile_Art_Eggman, 0
 		dbitem	Crabmeat, Map_Crab, 0, 0, id_frame_crab_stand, v_tile_crabmeat, 0
 		dbitem	BuzzBomber, Map_Buzz, 0, 0, id_frame_buzz_fly1, v_tile_buzzbomber, 0
 		dbitem	Chopper, Map_Chop, 0, 0, id_frame_chopper_shut, v_tile_chopper, 0

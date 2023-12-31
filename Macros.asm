@@ -104,15 +104,18 @@ rsobj:		macro name
 		opt	ae+					; enable auto evens
 		endm
 
+		used_max: equs "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+		unused_max: equs "................................"
+
 rsobjend:	macro
 		if __rs>sizeof_ost
 		inform	3,"OST for \rsobj_name exceeds maximum by $%h bytes.",__rs-sizeof_ost
 		else
-		if sizeof_ost-__rs<3
-		inform	0,"0-$%h bytes of OST for \rsobj_name used, leaving $%h bytes unused!!!!!!!!",__rs-1,sizeof_ost-__rs
-		else
-		inform	0,"0-$%h bytes of OST for \rsobj_name used, leaving $%h bytes unused.",__rs-1,sizeof_ost-__rs
-		endc
+		used: = __rs-ost_used
+		unused: = sizeof_ost-__rs
+		usedstr: substr ,used,"\used_max"
+		unusedstr: substr ,unused,"\unused_max"
+		inform	0,"\usedstr\\unusedstr\ \rsobj_name - \#used/%d used.",sizeof_ost-ost_used
 		endc
 		popo
 		endm

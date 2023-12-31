@@ -3,6 +3,11 @@
 
 ; spawned by:
 ;	
+
+; subtypes:
+;	%ITTTTTTT
+;	I - 1 to ignore Boss_CamXPos
+;	TTTTTTT - type
 ; ---------------------------------------------------------------------------
 
 Boss:
@@ -28,7 +33,7 @@ ost_boss2_wobble:	rs.b 1					; wobble counter
 ost_boss2_laugh:	rs.b 1					; flag set when Eggman laughs
 		rsobjend
 		
-Boss_CamXPos:	dc.w 0,$2960					; camera x pos where the boss becomes active
+Boss_CamXPos:	dc.w $2960					; camera x pos where the boss becomes active
 Boss_InitMode:	dc.b (Boss_MoveGHZ-Boss_MoveList)/sizeof_bmove	; initial mode for each boss
 		even
 		
@@ -66,14 +71,17 @@ Boss_Main:	; Routine 0
 		move.b	#24,ost_col_height(a0)
 		move.b	#hitcount_ghz,ost_col_property(a0)	; set number of hits to 8
 		move.w	ost_y_pos(a0),ost_boss2_y_normal(a0)
-		moveq	#0,d0
 		move.b	ost_subtype(a0),d0
+		andi.w	#$7F,d0
 		lea	Boss_InitMode,a2
 		move.b	(a2,d0.w),ost_mode(a0)
+		tst.b	ost_subtype(a0)
+		bmi.s	.ignore_cam				; branch if high bit of subtype is set
 		add.w	d0,d0
 		lea	Boss_CamXPos,a2
 		move.w	(a2,d0.w),ost_boss2_cam_start(a0)
 		
+	.ignore_cam:
 		moveq	#id_UPLC_Boss,d0
 		jsr	UncPLC
 		jsr	FindNextFreeObj
@@ -235,7 +243,7 @@ Boss_Escape:	; Routine $C
 		jmp	DisplaySprite
 		
 	.delete:
-		jmp	DeleteFamily				; delete ship, face & flame objects
+		jmp	DeleteFamily				; delete ship, cockpit & flame objects
 		
 ; ---------------------------------------------------------------------------
 ; Boss exhaust flame
