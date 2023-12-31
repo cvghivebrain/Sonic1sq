@@ -15,6 +15,10 @@ Boss_Index:	index *,,2
 		ptr Boss_Main
 		ptr Boss_Wait
 		ptr Boss_Move
+		ptr Boss_Explode
+		ptr Boss_Drop
+		ptr Boss_Recover
+		ptr Boss_Escape
 
 		rsobj Boss2
 ost_boss2_y_normal:	rs.l 1					; y position without wobble
@@ -72,6 +76,10 @@ Boss_Main:	; Routine 0
 		
 		moveq	#id_UPLC_Boss,d0
 		jsr	UncPLC
+		jsr	FindNextFreeObj
+		bne.s	Boss_Wait
+		move.l	#BossExhaust,ost_id(a1)
+		saveparent
 
 Boss_Wait:	; Routine 2
 		move.w	ost_boss2_cam_start(a0),d0
@@ -81,7 +89,7 @@ Boss_Wait:	; Routine 2
 		
 	.activate:
 		addq.b	#2,ost_routine(a0)			; goto Boss_Move next
-		bsr.s	Boss_SetMode
+		bsr.w	Boss_SetMode
 		jmp	DisplaySprite
 		
 ; ===========================================================================
@@ -105,6 +113,8 @@ Boss_Move:	; Routine 4
 		move.w	d0,ost_y_pos(a0)			; update actual y pos
 		addq.b	#2,ost_boss2_wobble(a0)			; increment wobble (wraps to 0 after $FE)
 		
+		tst.b	ost_status(a0)
+		bmi.s	.beaten					; branch if boss has been beaten
 		tst.b	ost_col_type(a0)
 		bne.s	.no_flash				; branch if not flashing
 		eori.w	#cWhite,(v_pal_dry_line2+2).w		; toggle black/white on palette line 2 colour 2
@@ -113,6 +123,15 @@ Boss_Move:	; Routine 4
 		move.b	#id_React_Boss,ost_col_type(a0)		; enable boss collision again
 		
 	.no_flash:
+		jmp	DisplaySprite
+		
+	.beaten:
+		moveq	#100,d0
+		bsr.w	AddPoints				; give Sonic 1000 points
+		addq.b	#2,ost_routine(a0)			; goto Boss_Explode next
+		move.w	#179,ost_boss2_time(a0)			; set timer to 3 seconds
+		move.w	#0,ost_x_vel(a0)
+		move.w	#0,ost_y_vel(a0)
 		jmp	DisplaySprite
 
 ; ---------------------------------------------------------------------------
@@ -148,3 +167,112 @@ Boss_SetMode:
 		add.b	d0,ost_mode(a0)				; next mode
 		rts
 		
+; ===========================================================================
+
+Boss_Explode:	; Routine 6
+		subq.w	#1,ost_boss2_time(a0)			; decrement timer
+		bmi.s	.done					; branch if time hits -1
+		move.b	(v_vblank_counter_byte).w,d0		; get byte that increments every frame
+		andi.b	#7,d0					; read bits 0-2
+		bne.s	.fail					; branch if any are set
+		jsr	FindFreeObj				; find free OST slot
+		bne.s	.fail					; branch if not found
+		move.l	#ExplosionBomb,ost_id(a1)		; load explosion object every 8th frame
+		move.w	ost_x_pos(a0),ost_x_pos(a1)
+		move.w	ost_y_pos(a0),ost_y_pos(a1)
+		jsr	RandomNumber
+		moveq	#0,d1
+		move.b	d0,d1
+		lsr.b	#2,d1
+		subi.w	#$20,d1
+		add.w	d1,ost_x_pos(a1)			; randomise position
+		lsr.w	#8,d0
+		lsr.b	#3,d0
+		add.w	d0,ost_y_pos(a1)
+
+	.fail:
+		jmp	DisplaySprite
+		
+	.done:
+		move.w	#38,ost_boss2_time(a0)			; set timer to 0.6 seconds
+		addq.b	#2,ost_routine(a0)			; goto Boss_Drop next
+		move.b	#1,(v_boss_status).w			; set boss beaten flag
+		bset	#render_xflip_bit,ost_render(a0)	; face right
+		bset	#status_xflip_bit,ost_status(a0)
+
+Boss_Drop:	; Routine 8
+		subq.w	#1,ost_boss2_time(a0)			; decrement timer
+		beq.s	.stop_falling				; branch if timer hits 0
+		update_y_fall	$18				; update position & apply gravity
+		jmp	DisplaySprite
+		
+	.stop_falling:
+		clr.w	ost_y_vel(a0)				; stop falling
+		move.w	#56,ost_boss2_time(a0)			; set timer to 1 second
+		addq.b	#2,ost_routine(a0)			; goto Boss_Recover next
+
+Boss_Recover:	; Routine $A
+		subq.w	#1,ost_boss2_time(a0)			; decrement timer
+		beq.s	.escape					; branch if timer hits 0
+		cmpi.w	#8,ost_boss2_time(a0)
+		bls.s	.skip_rising				; branch if timer is <= 8
+		update_y_fall	-8				; update position & rise faster
+		
+	.skip_rising:
+		jmp	DisplaySprite
+		
+	.escape:
+		addq.b	#2,ost_routine(a0)			; goto Boss_Escape next
+		play.w	0, jsr, mus_GHZ				; play GHZ music
+		move.w	#$400,ost_x_vel(a0)			; move ship right
+		move.w	#-$40,ost_y_vel(a0)			; move ship upwards
+
+Boss_Escape:	; Routine $C
+		shortcut
+		update_xy_pos					; update position
+		tst.b	ost_render(a0)
+		bpl.s	.delete					; branch if off screen
+		jmp	DisplaySprite
+		
+	.delete:
+		jmp	DeleteFamily				; delete ship, face & flame objects
+		
+; ---------------------------------------------------------------------------
+; Boss exhaust flame
+
+; spawned by:
+;	Boss
+; ---------------------------------------------------------------------------
+
+BossExhaust:
+		move.l	#Map_Exhaust,ost_mappings(a0)
+		move.w	#vram_exhaust/sizeof_cell,ost_tile(a0)
+		move.b	#render_rel,ost_render(a0)
+		move.b	#$20,ost_displaywidth(a0)
+		move.b	#priority_3,ost_priority(a0)
+		move.b	#id_ani_exhaust_flame1,ost_anim(a0)
+		
+		shortcut
+		getparent					; a1 = OST of boss ship
+		tst.w	ost_x_vel(a1)
+		beq.s	.hide					; branch if boss isn't moving
+		tst.b	ost_subtype(a0)
+		bne.s	.skip_chk				; branch if escape flag is set
+		cmpi.b	#id_Boss_Escape,ost_routine(a1)
+		bne.s	.skip_chk				; branch if not escaping
+		move.b	#id_ani_exhaust_bigflame,ost_anim(a0)	; use big flame
+		move.b	#1,ost_subtype(a0)			; don't check again
+		
+	.skip_chk:
+		move.w	ost_x_pos(a1),ost_x_pos(a0)
+		move.w	ost_y_pos(a1),ost_y_pos(a0)
+		move.b	ost_status(a1),ost_status(a0)
+		move.b	ost_render(a1),ost_render(a0)
+		lea	Ani_Exhaust(pc),a1
+		jsr	AnimateSprite
+		set_dma_dest vram_exhaust,d1			; set VRAM address to write gfx
+		jsr	DPLCSprite				; write gfx if frame has changed
+		jmp	DisplaySprite
+		
+	.hide:
+		rts

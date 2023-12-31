@@ -21,7 +21,6 @@ v_sonic_pos_tracker:		rs.l $40 ; earlier position tracking list for Sonic, used 
 				rsblock hscroll
 v_hscroll_buffer:		rs.b sizeof_vram_hscroll ; scrolling table data ($380 bytes)
 				rsblockend hscroll
-v_hscroll_buffer_padding:	rs.b sizeof_vram_hscroll_padded-sizeof_vram_hscroll ; not needed but cleared by ClearScreen ($80 bytes)
 
 				rsblock ost ; cleared by GM_Title, GM_Level, GM_Special, GM_Continue, GM_Credits, GM_Ending
 v_ost_all:			rs.b sizeof_ost*countof_ost ; object variable space ($40 bytes per object; $80 objects) ($2000 bytes)
