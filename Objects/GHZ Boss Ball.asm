@@ -21,7 +21,7 @@ GBall_Index:	index *,,2
 
 		rsobj BossBall
 ist_ball_child_list:	rs.b 6
-ost_ball_boss_dist:	rs.w 1					; distance of base from boss (2 bytes)
+ost_ball_boss_dist:	equ ost_x_vel				; distance of base from boss (2 bytes)
 ost_ball_base_y_pos:	rs.w 1					; y position of base (2 bytes)
 ost_ball_base_x_pos:	rs.w 1					; x position of base (2 bytes)
 ost_ball_radius:	rs.b 1					; distance of ball/link from base

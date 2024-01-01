@@ -24,7 +24,7 @@ LCon_Index:	index *,,2
 
 		rsobj LabyrinthConvey
 ost_lcon_platform_ptr:	rs.l 1					; pointer to platform list data
-ost_lcon_visible_left:	rs.w 1					; visible left limit of camera x pos
+ost_lcon_visible_left:	equ ost_sink				; visible left limit of camera x pos
 ost_lcon_visible_right:	rs.w 1					; visible right limit of camera x pos
 ost_lcon_visible_top:	rs.w 1					; visible upper limit of camera y pos
 ost_lcon_visible_btm:	rs.w 1					; visible lower limit of camera y pos

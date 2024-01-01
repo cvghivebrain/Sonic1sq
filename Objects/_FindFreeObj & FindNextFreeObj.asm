@@ -9,7 +9,7 @@
 ; usage:
 ;		bsr.w	FindFreeObj
 ;		bne.s	.fail					; branch if empty slot isn't found
-;		move.b	#id_Crabmeat,ost_id(a1)			; load Crabmeat object
+;		move.l	#Crabmeat,ost_id(a1)			; load Crabmeat object
 ; ---------------------------------------------------------------------------
 
 FindFreeObj:
@@ -110,3 +110,30 @@ RunLast:
 		move.l	(a2)+,(a1)+				; copy contents of OST to new slot
 		endr
 		bra.w	DeleteObject				; delete original
+
+; ---------------------------------------------------------------------------
+; Subroutine to find a free subsprite slot
+
+; output:
+;	a1 = address of free subsprite slot
+
+;	uses d0.w
+
+; usage:
+;		bsr.w	FindFreeSub
+;		bne.s	.fail					; branch if empty slot isn't found
+;		addq.w	#1,(a1)					; create first subsprite
+; ---------------------------------------------------------------------------
+
+FindFreeSub:
+		lea	(v_subsprite_queue).w,a1		; start address for subsprites
+		move.w	#countof_subsprite-1,d0
+
+	.loop:
+		tst.w	(a1)					; is OST slot empty?
+		beq.s	.found					; if yes, branch
+		lea	sizeof_subsprite(a1),a1			; goto next slot
+		dbf	d0,.loop				; repeat
+
+	.found:
+		rts

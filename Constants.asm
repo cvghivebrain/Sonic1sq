@@ -84,6 +84,8 @@ piece_size:		rs.b 1
 piece_tile:		rs.w 1
 piece_x_pos:		rs.w 1
 sizeof_piece:		equ __rs
+sizeof_subsprite:	equ (sizeof_piece*8)+2
+countof_subsprite:	equ 8
 
 priority_0:		equ 0
 priority_1:		equ 2
@@ -278,6 +280,7 @@ ost_col_property:	equ ost_col_type+1			; collision extra property
 ost_col_width:		rs.w 1					; hitbox width
 ost_col_height:		equ ost_col_width+1			; hitbox height
 ost_sink:		equ ost_col_width			; amount platform has sunk when stood on - 0 is none, $1E is max
+ost_subsprite:		rs.w 1					; pointer to subsprite table
 ost_render:		rs.b 1					; bitfield for x/y flip, display mode
 	render_xflip_bit:	equ 0
 	render_yflip_bit:	equ 1
@@ -350,7 +353,7 @@ ost_sonic_impact:	equ ost_col_type			; copy of ost_y_vel when Sonic lands on a s
 		rsobj Boss
 ost_boss_parent_x_pos:	rs.l 1					; parent x position (4 bytes)
 ost_boss_parent_y_pos:	rs.l 1					; parent y position (4 bytes)
-ost_boss_wait_time:	rs.w 1					; time to wait between each action (2 bytes)
+ost_boss_wait_time:	equ ost_inertia				; time to wait between each action (2 bytes)
 ost_boss_flash_num:	rs.b 1					; number of times to make boss flash when hit
 ost_boss_wobble:	rs.b 1					; wobble state as Eggman moves back & forth (1 byte incremented every frame & interpreted by CalcSine)
 ost_boss_attack:	rs.b 1					; flag set when boss is attacking & laughing

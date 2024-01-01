@@ -97,3 +97,24 @@ DeleteChildren:
 		cmpa.w	#v_ost_end&$FFFF,a1
 		bne.s	.loop					; repeat if not at end of OSTs
 		rts
+
+; ---------------------------------------------------------------------------
+; Subroutine to	delete subsprites for an object
+
+; input:
+;	a0 = address of OST of object
+
+;	uses d0.l, a1
+; ---------------------------------------------------------------------------
+
+DeleteSub:
+		tst.w	ost_subsprite(a0)
+		beq.s	.exit					; branch if no subsprites are found
+		movea.w	ost_subsprite(a0),a1			; a1 = RAM address of subsprite table
+		moveq	#0,d0
+		rept sizeof_subsprite/2
+		move.w	d0,(a1)+
+		endr
+		
+	.exit:
+		rts

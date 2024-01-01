@@ -20,12 +20,12 @@ Plasma_Index:	index *,,2
 		ptr Plasma_Balls
 
 		rsobj BossPlasma
-ost_plasma_flag:	rs.b 1 ; ost_subtype+1			; flag set when firing
 ost_plasma_x_target:	rs.w 1 ; $30				; x position where plasma ball stops (2 bytes)
 ost_plasma_count_top:	rs.w 1 ; $32				; number of plasma balls moving across top (2 bytes)
 ost_plasma_parent:	rs.l 1 ; $34				; address of OST of parent object (4 bytes)
 ost_plasma_count_any:	rs.w 1 ; $38				; number of plasma balls on-screen (2 bytes)
-ost_plasma_time:	rs.w 1
+ost_plasma_flag:	rs.b 1 ; ost_subtype+1			; flag set when firing
+ost_plasma_time:	equ ost_inertia
 		rsobjend
 ; ===========================================================================
 

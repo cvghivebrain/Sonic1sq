@@ -78,6 +78,14 @@ BuildSprites:
 		add.b	d4,d4
 		move.w	BuildSpr_Index(pc,d4.w),d4
 		jsr	BuildSpr_Index(pc,d4.w)			; write data from sprite pieces to buffer
+		
+		tst.w	ost_subsprite(a0)
+		beq.s	.skip_draw				; branch if no subsprites are found
+		movea.w	ost_subsprite(a0),a1			; a1 = RAM address of subsprite table
+		move.w	(a1)+,d1				; number of sprite pieces
+		beq.s	.skip_draw				; branch if 0
+		subq.w	#1,d1					; subtract 1 for loops
+		bsr.w	BuildSpr_Sub
 
 	.skip_draw:
 		bset	#render_onscreen_bit,ost_render(a0)	; set object as visible
@@ -150,7 +158,6 @@ BuildSpr_Normal:
 
 	.exit:
 		rts
-
 ; ===========================================================================
 
 BuildSpr_FlipX:
@@ -188,7 +195,6 @@ BuildSpr_FlipX:
 
 	.exit:
 		rts
-
 ; ===========================================================================
 
 BuildSpr_FlipY:
@@ -226,7 +232,6 @@ BuildSpr_FlipY:
 
 	.exit:
 		rts
-
 ; ===========================================================================
 
 BuildSpr_FlipXY:
@@ -269,4 +274,33 @@ BuildSpr_FlipXY:
 		dbf	d1,BuildSpr_FlipXY			; process next sprite piece
 
 	.exit:
-		rts	
+		rts
+; ===========================================================================
+
+BuildSpr_Sub:
+		cmpi.b	#countof_max_sprites,d5
+		beq.s	.exit					; branch if at max sprites
+		move.b	(a1)+,d0				; get relative y pos from subsprite table
+		ext.w	d0
+		add.w	d2,d0					; add VDP y pos
+		move.w	d0,(a2)+				; write y pos to sprite buffer
+
+		move.b	(a1)+,(a2)+				; write sprite size to buffer
+		addq.b	#1,d5					; increment sprite counter
+		move.b	d5,(a2)+				; write link to next sprite in buffer
+
+		move.w	(a1)+,(a2)+				; write VRAM setting to buffer
+
+		move.w	(a1)+,d0				; get relative x pos from subsprite table
+		add.w	d3,d0					; add VDP x pos
+		andi.w	#$1FF,d0				; keep within 512px
+		bne.s	.x_not_0				; branch if x pos isn't 0
+		addq.w	#1,d0					; add 1 to prevent sprite masking (sprites at x pos 0 act as masks)
+
+	.x_not_0:
+		move.w	d0,(a2)+				; write x pos to buffer
+		dbf	d1,BuildSpr_Sub				; next sprite piece
+
+	.exit:
+		rts
+		
