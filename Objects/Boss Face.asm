@@ -160,32 +160,27 @@ ani_face_face1:
 		dc.w id_frame_face_face1
 		dc.w id_frame_face_face2
 		dc.w id_Anim_Flag_Restart
-		even
 
 ani_face_laugh:
 		dc.w 4
 		dc.w id_frame_face_laugh1
 		dc.w id_frame_face_laugh2
 		dc.w id_Anim_Flag_Restart
-		even
 
 ani_face_hit:
 		dc.w $1F
 		dc.w id_frame_face_hit
 		dc.w id_frame_face_face1
 		dc.w id_Anim_Flag_Restart
-		even
 
 ani_face_panic:
 		dc.w 3
 		dc.w id_frame_face_panic
 		dc.w id_frame_face_face1
 		dc.w id_Anim_Flag_Restart
-		even
 
 ani_face_defeat:
-		dc.w $F
+		dc.w $7F
 		dc.w id_frame_face_defeat
 		dc.w id_Anim_Flag_Restart
-		even
 		

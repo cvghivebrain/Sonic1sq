@@ -71,6 +71,7 @@ Boss_Main:	; Routine 0
 		move.b	#24,ost_col_height(a0)
 		move.b	#hitcount_ghz,ost_col_property(a0)	; set number of hits to 8
 		move.w	ost_y_pos(a0),ost_boss2_y_normal(a0)
+		clr.b	(v_boss_flash).w
 		move.b	ost_subtype(a0),d0
 		andi.w	#$7F,d0
 		lea	Boss_InitMode,a2
@@ -87,6 +88,10 @@ Boss_Main:	; Routine 0
 		jsr	FindNextFreeObj
 		bne.s	Boss_Wait
 		move.l	#BossExhaust,ost_id(a1)
+		saveparent
+		jsr	FindNextFreeObj
+		bne.s	Boss_Wait
+		move.l	#BossCockpit,ost_id(a1)
 		saveparent
 
 Boss_Wait:	; Routine 2
@@ -231,7 +236,8 @@ Boss_Recover:	; Routine $A
 		
 	.escape:
 		addq.b	#2,ost_routine(a0)			; goto Boss_Escape next
-		play.w	0, jsr, mus_GHZ				; play GHZ music
+		move.b	(v_bgm).w,d0
+		jsr	PlaySound0				; play level music
 		move.w	#$400,ost_x_vel(a0)			; move ship right
 		move.w	#-$40,ost_y_vel(a0)			; move ship upwards
 
@@ -284,3 +290,62 @@ BossExhaust:
 		
 	.hide:
 		rts
+
+; ---------------------------------------------------------------------------
+; Boss cockpit and Eggman
+
+; spawned by:
+;	Boss
+; ---------------------------------------------------------------------------
+
+BossCockpit:
+		move.l	#Map_Face,ost_mappings(a0)
+		move.w	#vram_face/sizeof_cell,ost_tile(a0)
+		move.b	#render_rel,ost_render(a0)
+		move.b	#$20,ost_displaywidth(a0)
+		move.b	#priority_3,ost_priority(a0)
+		
+		shortcut
+		getparent					; a1 = OST of boss ship
+		move.w	ost_x_pos(a1),ost_x_pos(a0)
+		move.w	ost_y_pos(a1),ost_y_pos(a0)
+		move.b	ost_status(a1),ost_status(a0)
+		move.b	ost_render(a1),ost_render(a0)
+		cmpi.b	#id_Sonic_Hurt,(v_ost_player+ost_routine).w
+		bcc.s	.laugh					; branch if Sonic is hit
+		tst.b	ost_boss2_laugh(a1)
+		bne.s	.laugh					; branch if boss is set to laugh
+		cmpi.b	#id_Boss_Explode,ost_routine(a1)
+		beq.s	.hit					; branch if boss is exploding
+		cmpi.b	#id_Boss_Escape,ost_routine(a1)
+		beq.s	.panic					; branch if boss is escaping
+		cmpi.b	#id_Boss_Drop,ost_routine(a1)
+		bcc.s	.defeat					; branch if boss is dropping/recovering
+		tst.b	(v_boss_flash).w
+		bne.s	.hit					; branch if boss is flashing
+		moveq	#id_ani_face_face1,d0
+		
+	.animate:
+		set_anim					; update animation if different from last frame
+		lea	Ani_Face,a1
+		jsr	AnimateSprite
+		set_dma_dest vram_face,d1			; set VRAM address to write gfx
+		jsr	DPLCSprite				; write gfx if frame has changed
+		jmp	DisplaySprite
+		
+	.hit:
+		moveq	#id_ani_face_hit,d0
+		bra.s	.animate
+		
+	.laugh:
+		moveq	#id_ani_face_laugh,d0
+		bra.s	.animate
+		
+	.panic:
+		moveq	#id_ani_face_panic,d0
+		bra.s	.animate
+		
+	.defeat:
+		moveq	#id_ani_face_defeat,d0
+		bra.s	.animate
+		
