@@ -117,7 +117,7 @@ RunLast:
 ; output:
 ;	a1 = address of free subsprite slot
 
-;	uses d0.w
+;	uses d0.l
 
 ; usage:
 ;		bsr.w	FindFreeSub
@@ -134,6 +134,9 @@ FindFreeSub:
 		beq.s	.found					; if yes, branch
 		lea	sizeof_subsprite(a1),a1			; goto next slot
 		dbf	d0,.loop				; repeat
+		rts
 
 	.found:
+		move.w	a1,ost_subsprite(a0)			; save subsprite table address
+		moveq	#0,d0					; flag that subsprite slot was found
 		rts

@@ -112,6 +112,7 @@ DeleteSub:
 		beq.s	.exit					; branch if no subsprites are found
 		movea.w	ost_subsprite(a0),a1			; a1 = RAM address of subsprite table
 		moveq	#0,d0
+		move.w	d0,ost_subsprite(a0)
 		rept sizeof_subsprite/2
 		move.w	d0,(a1)+
 		endr

@@ -134,8 +134,9 @@ v_opl_data_ptr:			rs.l 1 ; pointer to start of OPL data
 v_aniart_ptr:			rs.l 1 ; pointer to animated level art routine
 v_debug_ptr:			rs.l 1 ; pointer to debug list
 v_debug_lastitem:		rs.w 1 ; location of last item in debug list
-v_debug_ost_setting:		rs.w 1 ; which OST values are displayed (0 = x/y pos; 4 = x/y speed; 8 = angle/routine; $C = none)
-v_debug_hitbox_setting:		rs.w 1 ; which hitboxes are displayed (0 = width/height; 1 = hitbox; 2 = none)
+v_debug_ost_setting:		rs.w 1 ; which OST values are displayed (0 = x/y pos; 4 = x/y speed; 8 = angle/routine)
+v_debug_hitbox_setting:		rs.b 1 ; which hitboxes are displayed (0 = width/height; 1 = hitbox)
+f_debug_overlay_hide:		rs.b 1 ; flag set to hide overlay
 v_palcycle_ptr:			rs.l 1 ; pointer to palette cycling routine
 v_dle_ptr:			rs.l 1 ; pointer to dynamic level event routine
 v_deformlayer_ptr:		rs.l 1 ; pointer to bg deformation routine

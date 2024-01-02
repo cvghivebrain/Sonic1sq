@@ -46,7 +46,7 @@ FindNearestObj:
 ; ---------------------------------------------------------------------------
 ; As above, but finds nearest to Sonic instead of local object
 
-;	uses d1.l, d2.w, d3.w, d4.w, d5.l, a1, a2
+;	uses d1.l, d2.w, d3.l, d4.w, d5.l, a1, a2
 ; ---------------------------------------------------------------------------
 
 FindNearestSonic:
@@ -59,7 +59,7 @@ FindNearestSonic:
 	.loop:
 		tst.l	ost_id(a1)
 		beq.s	.next					; branch if there isn't an object in this OST
-		cmpi.l	#Map_Overlay,ost_mappings(a1)
+		cmpi.l	#Map_HUD,ost_mappings(a1)
 		beq.s	.stop_search				; branch if at debug OSTs (which are the last few OSTs)
 		move.w	ost_x_pos(a1),d3
 		sbabs.w	ost_x_pos(a2),d3			; d3 = x dist

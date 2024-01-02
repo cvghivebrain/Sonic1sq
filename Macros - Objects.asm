@@ -65,14 +65,14 @@ getsonic:	macro
 		endm
 		
 ; ---------------------------------------------------------------------------
-; Set a1 as subsprite table
+; Set a2 as subsprite table
 ; ---------------------------------------------------------------------------
 
 getsubsprite:	macro
 		ifarg \1
 		rg: equs "\1"
 		else
-		rg: equs "a1"					; set a1 as subsprite table
+		rg: equs "a2"					; set a1 as subsprite table
 		endc
 		movea.w	ost_subsprite(a0),\rg
 		endm

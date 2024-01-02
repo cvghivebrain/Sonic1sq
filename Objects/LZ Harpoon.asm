@@ -58,7 +58,7 @@ Harp_Main:	; Routine 0
 Harp_Move:	; Routine 2
 Harp_Move2:	; Routine 6
 		lea	Ani_Harp(pc),a1
-		bsr.w	AnimateSprite				; animate and goto Harp_Wait next
+		jsr	AnimateSprite				; animate and goto Harp_Wait next
 		cmpi.b	#3,ost_anim_time(a0)
 		bne.w	DespawnQuick				; branch if frame hasn't updated
 		move.w	ost_frame_hi(a0),d0			; get frame number

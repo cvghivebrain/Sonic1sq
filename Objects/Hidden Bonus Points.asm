@@ -50,7 +50,7 @@ Bonus_Main:	; Routine 0
 		jsr	(AddPoints).l				; add points and update HUD
 		move.w	#119,ost_bonus_wait_time(a0)		; set display time to 2 seconds
 		play.w	1, jsr, sfx_Bonus			; play bonus sound
-		bra.w	DespawnQuick_NoDisplay
+		jmp	DespawnQuick_NoDisplay
 
 ; ===========================================================================
 Bonus_Points:	; Bonus	points array
@@ -64,7 +64,7 @@ Bonus_Display:	; Routine 2
 		shortcut
 		subq.w	#1,ost_bonus_wait_time(a0)		; decrement display time
 		bmi.s	Bonus_Delete				; branch if expired
-		bra.w	DespawnQuick
+		jmp	DespawnQuick
 
 Bonus_Delete:
 		jmp	DeleteObject

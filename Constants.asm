@@ -50,15 +50,15 @@ vram_shield:		equ $A800				; shield graphics (up to $AC80)
 vram_exhaust:		equ $AC80				; boss exhaust flame graphics
 vram_face:		equ $AE40				; boss face graphics
 vram_weapon:		equ $B0A0				; boss weapon graphics
-vram_overlay:		equ $B200				; debug overlay
-vram_overlay2:		equ $B300
+vram_overlay:		equ $B200				; debug overlay - Sonic's x/y pos
+vram_overlay2:		equ $B300				; debug overlay - object's x/y pos
 vram_credits:		equ $B400				; credits font graphics
 vram_monitors:		equ $D000				; monitor graphics
 vram_signpost:		equ $D000				; signpost graphics
 vram_giantring:		equ $D340				; giant ring graphics
 vram_animals:		equ $F400				; animal graphics
 vram_lifeicon:		equ $FA80				; life icon graphics
-vram_overlay3:		equ $FF80
+vram_overlay3:		equ $FF80				; debug overlay - hitbox corner and centre dot
 
 sizeof_cell:		equ $20					; single 8x8 tile
 sizeof_vram_fg:		equ sizeof_vram_row*32			; fg nametable, assuming 64x32 ($1000 bytes)
@@ -86,6 +86,14 @@ piece_x_pos:		rs.w 1
 sizeof_piece:		equ __rs
 sizeof_subsprite:	equ (sizeof_piece*8)+2
 countof_subsprite:	equ 8
+sub0:			equ 0
+sub1:			equ sizeof_piece
+sub2:			equ sizeof_piece*2
+sub3:			equ sizeof_piece*3
+sub4:			equ sizeof_piece*4
+sub5:			equ sizeof_piece*5
+sub6:			equ sizeof_piece*6
+sub7:			equ sizeof_piece*7
 
 priority_0:		equ 0
 priority_1:		equ 2
