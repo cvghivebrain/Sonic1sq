@@ -72,6 +72,7 @@ Overlay_Sonic:	; Routine 2
 		btst	#bitZ,d0				; is Z pressed?
 		beq.s	.z_not_pressed				; if not, branch
 		bchg	#0,(v_debug_hitbox_setting).w
+		bset	#7,(v_debug_hitbox_setting).w
 		tst.w	ost_subsprite(a0)
 		beq.s	.z_not_pressed				; branch if subsprites weren't loaded
 		getsubsprite					; a2 = subsprite table
@@ -97,7 +98,7 @@ Overlay_Sonic:	; Routine 2
 		beq.s	Overlay_ShowDigits			; branch if subsprites weren't loaded
 		getsubsprite					; a2 = subsprite table
 		moveq	#0,d2
-		tst.b	(v_debug_hitbox_setting).w
+		btst	#0,(v_debug_hitbox_setting).w
 		bne.s	.yellow_hitbox				; branch if hitbox is set to yellow
 		move.b	ost_height(a1),d0			; use standard width/height
 		move.b	ost_width(a1),d2
@@ -234,13 +235,25 @@ Overlay_Nearest:
 		beq.w	Overlay_ShowDigits			; branch if subsprites weren't loaded
 		getsubsprite					; a2 = subsprite table
 		moveq	#0,d2
-		tst.b	(v_debug_hitbox_setting).w
+		move.b	(v_debug_hitbox_setting).w,d0
+		bpl.s	.skip_update				; branch if high bit of setting is 0
+		bclr	#7,(v_debug_hitbox_setting).w
+		bchg	#tile_pal12_bit,2+sub1+piece_tile(a2)	; toggle hitbox between red/yellow
+		bchg	#tile_pal12_bit,2+sub2+piece_tile(a2)
+		bchg	#tile_pal12_bit,2+sub3+piece_tile(a2)
+		bchg	#tile_pal12_bit,2+sub4+piece_tile(a2)
+		
+	.skip_update:
+		btst	#0,d0
 		bne.s	.yellow_hitbox				; branch if hitbox is set to yellow
 		move.b	ost_height(a1),d0			; use standard width/height
 		beq.s	.hide_hitbox				; branch if 0
 		move.b	ost_width(a1),d2
-		bne.w	Overlay_ShowBox
-		bra.s	.hide_hitbox				; branch if 0
+		bne.w	Overlay_ShowBox				; branch if not 0
+		
+	.hide_hitbox:
+		move.w	#1,(a2)+				; only show centre dot
+		bra.w	Overlay_ShowDigits
 		
 	.yellow_hitbox:
 		tst.b	ost_col_type(a1)			; get hitbox type id
@@ -248,8 +261,4 @@ Overlay_Nearest:
 		move.b	ost_col_height(a1),d0			; get height
 		move.b	ost_col_width(a1),d2			; get width
 		bra.w	Overlay_ShowBox
-		
-	.hide_hitbox:
-		move.w	#1,(a2)+				; only show centre dot
-		bra.w	Overlay_ShowDigits
 		

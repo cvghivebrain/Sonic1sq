@@ -10,7 +10,6 @@ Map_HUD:	index *
 		ptr frame_hud_debug
 		ptr frame_hud_debugsonic
 		ptr frame_hud_debugsonictop
-		ptr frame_hud_blank
 
 frame_hud_allyellow:
 		spritemap
@@ -91,8 +90,4 @@ frame_hud_debugsonictop:
 		spritemap
 		piece	-16, -40, 4x1, 0, hi			; object x pos
 		piece	-16, -32, 4x1, 4, hi			; object y pos
-		endsprite
-		
-frame_hud_blank:
-		spritemap
 		endsprite

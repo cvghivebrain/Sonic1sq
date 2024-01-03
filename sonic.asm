@@ -1186,7 +1186,6 @@ Level_End_unused:	dc.b 0,	0, 0, 0
 		include "Objects\Bosses [Mappings].asm"		; Map_Bosses, Map_BossItems
 		include "Objects\Explosions [Mappings].asm"	; Map_ExplodeItem & Map_ExplodeBomb
 		include "Objects\HUD Score, Time & Rings [Mappings].asm" ; Map_HUD
-		include "Objects\HUD Debug Overlay [Mappings].asm" ; Map_Overlay
 		include "Objects\Title Screen Press Start & TM [Mappings].asm" ; Map_PSB
 		include "Objects\Title Screen Sonic [Mappings].asm" ; Map_TSon
 		include "Objects\Game Over & Time Over [Mappings].asm" ; Map_Over

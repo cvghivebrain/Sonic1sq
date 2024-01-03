@@ -436,3 +436,8 @@ countof_ss_update:	equ $20		; number of update slots
 year:		equ _year+1900
 month:		substr ((_month-1)*3)+1,((_month-1)*3)+3,"JANFEBMARAPRMAYJUNJULAUGSEPOCTNOVDEC"
 date:		equs "\#year\.\month"				; e.g. "1991.APR" for use in header
+
+		if sizeof_ost%4 > 0
+		inform	3,"sizeof_ost must be a multiple of 4."
+		endc
+		
