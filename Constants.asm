@@ -86,14 +86,15 @@ piece_x_pos:		rs.w 1
 sizeof_piece:		equ __rs
 sizeof_subsprite:	equ (sizeof_piece*8)+2
 countof_subsprite:	equ 8
-sub0:			equ 0
-sub1:			equ sizeof_piece
-sub2:			equ sizeof_piece*2
-sub3:			equ sizeof_piece*3
-sub4:			equ sizeof_piece*4
-sub5:			equ sizeof_piece*5
-sub6:			equ sizeof_piece*6
-sub7:			equ sizeof_piece*7
+subcount:		equ 0
+sub0:			equ 2
+sub1:			equ sizeof_piece+2
+sub2:			equ (sizeof_piece*2)+2
+sub3:			equ (sizeof_piece*3)+2
+sub4:			equ (sizeof_piece*4)+2
+sub5:			equ (sizeof_piece*5)+2
+sub6:			equ (sizeof_piece*6)+2
+sub7:			equ (sizeof_piece*7)+2
 
 priority_0:		equ 0
 priority_1:		equ 2

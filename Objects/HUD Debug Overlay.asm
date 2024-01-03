@@ -76,10 +76,10 @@ Overlay_Sonic:	; Routine 2
 		tst.w	ost_subsprite(a0)
 		beq.s	.z_not_pressed				; branch if subsprites weren't loaded
 		getsubsprite					; a2 = subsprite table
-		bchg	#tile_pal12_bit,2+sub1+piece_tile(a2)	; toggle hitbox between red/yellow
-		bchg	#tile_pal12_bit,2+sub2+piece_tile(a2)
-		bchg	#tile_pal12_bit,2+sub3+piece_tile(a2)
-		bchg	#tile_pal12_bit,2+sub4+piece_tile(a2)
+		bchg	#tile_pal12_bit,sub1+piece_tile(a2)	; toggle hitbox between red/yellow
+		bchg	#tile_pal12_bit,sub2+piece_tile(a2)
+		bchg	#tile_pal12_bit,sub3+piece_tile(a2)
+		bchg	#tile_pal12_bit,sub4+piece_tile(a2)
 		
 	.z_not_pressed:
 		btst	#bitM,d0				; is Mode pressed?
@@ -117,7 +117,7 @@ Overlay_Sonic:	; Routine 2
 		subi.b	#6,d0					; smaller hitbox when ducking
 		
 Overlay_ShowBox:
-		move.w	#5,(a2)+
+		move.w	#5,(a2)
 		move.b	d0,d6
 		neg.b	d0
 		move.b	d0,sub1+piece_y_pos(a2)
@@ -238,10 +238,10 @@ Overlay_Nearest:
 		move.b	(v_debug_hitbox_setting).w,d0
 		bpl.s	.skip_update				; branch if high bit of setting is 0
 		bclr	#7,(v_debug_hitbox_setting).w
-		bchg	#tile_pal12_bit,2+sub1+piece_tile(a2)	; toggle hitbox between red/yellow
-		bchg	#tile_pal12_bit,2+sub2+piece_tile(a2)
-		bchg	#tile_pal12_bit,2+sub3+piece_tile(a2)
-		bchg	#tile_pal12_bit,2+sub4+piece_tile(a2)
+		bchg	#tile_pal12_bit,sub1+piece_tile(a2)	; toggle hitbox between red/yellow
+		bchg	#tile_pal12_bit,sub2+piece_tile(a2)
+		bchg	#tile_pal12_bit,sub3+piece_tile(a2)
+		bchg	#tile_pal12_bit,sub4+piece_tile(a2)
 		
 	.skip_update:
 		btst	#0,d0
@@ -252,7 +252,7 @@ Overlay_Nearest:
 		bne.w	Overlay_ShowBox				; branch if not 0
 		
 	.hide_hitbox:
-		move.w	#1,(a2)+				; only show centre dot
+		move.w	#1,(a2)					; only show centre dot
 		bra.w	Overlay_ShowDigits
 		
 	.yellow_hitbox:

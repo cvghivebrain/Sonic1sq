@@ -9,7 +9,7 @@ _Sonic 1-squared_ is an enhanced version of the original _Sonic the Hedgehog_ ga
 * `LoadPerDemo` loads the level number, demo data, character and start position for all demos, including those during the credits.
 * Rewritten level select routine to be more customisable. It now uses standard ASCII, and supports multiple columns (which are automatically generated based on the lines-per-column setting).
 * The hidden Japanese credits, "try again" and "end" screens have been given their own gamemodes, which are accessible through the level select.
-* The HUD has new debug features, including a CPU cycle usage counter (displayed as a decimal percentage) and sprite counter ($4F is max).
+* The HUD has new debug features, including a CPU cycle usage counter (displayed as a decimal percentage), sprite counter ($50 is max) and camera x/y position.
 * 6 button support. `v_joypad_hold_actual_xyz` contains the status of the X/Y/Z/Mode buttons.
 
 ## Graphics
@@ -40,8 +40,9 @@ _Sonic 1-squared_ is an enhanced version of the original _Sonic the Hedgehog_ ga
   * C (as object) - Place an object.
   * Hold A (as object) - Select an object with left/right. The previous and next objects are now visible.
   * X - Target overlay to current nearest object. This is not automatically updated until the targeted object despawns.
-  * Y - Toggle between displaying x/y position, x/y speed, angle/routine numbers and nothing.
-  * Z - Toggle between displaying actual width/height, hitbox width/height and nothing.
+  * Y - Toggle between displaying x/y position, x/y speed and angle/routine numbers.
+  * Z - Toggle between displaying actual width/height and hitbox width/height.
+  * Mode - Toggle hide all overlays. Overlays use approximately 5% of available CPU cycles, so hiding them provides a more accurate reading of CPU usage.
 
 ## Bugfixes
 * Spikes no longer kill Sonic immediately after losing rings. Add $80 to the subtype to restore the original lethal behaviour.
