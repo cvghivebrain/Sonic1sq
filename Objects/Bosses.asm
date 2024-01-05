@@ -37,8 +37,9 @@ Boss_CamXPos:	dc.w $2960					; camera x pos where the boss becomes active
 Boss_InitMode:	dc.b (Boss_MoveGHZ-Boss_MoveList)/sizeof_bmove	; initial mode for each boss
 		even
 		
-bmove:		macro xvel,yvel,time,xflip,next
+bmove:		macro xvel,yvel,time,loadobj,xflip,next
 		dc.w xvel, yvel, time
+		dc.l loadobj
 		dc.b xflip, next
 		endm
 		
@@ -46,17 +47,17 @@ bmove_xflip_bit:	equ 0
 bmove_laugh_bit:	equ 1
 bmove_xflip:		equ 1<<bmove_xflip_bit
 bmove_laugh:		equ 1<<bmove_laugh_bit
-sizeof_bmove:		equ 8
+sizeof_bmove:		equ 12
 
-Boss_MoveList:	; x speed, y speed, duration, flags, value to add to mode
-Boss_MoveGHZ:	bmove 0, $100, $B8, 0, 1
-		bmove -$100, -$40, $60, 0, 1
-		bmove 0, 0, 119, bmove_laugh, 1
-		bmove -$40, 0, 127, 0, 1
-		bmove 0, 0, 63, bmove_xflip, 1
-		bmove $100, 0, 63, bmove_xflip, 1
-		bmove 0, 0, 63, 0, 1
-		bmove -$100, 0, 63, 0, -3
+Boss_MoveList:	; x speed, y speed, duration, object to load, flags, value to add to mode
+Boss_MoveGHZ:	bmove 0, $100, $B8, 0, 0, 1
+		bmove -$100, -$40, $60, 0, 0, 1
+		bmove 0, 0, 128, BossBall, bmove_laugh, 1
+		bmove -$40, 0, 128, 0, 0, 1
+		bmove 0, 0, 63, 0, bmove_xflip, 1
+		bmove $100, 0, 63, 0, bmove_xflip, 1
+		bmove 0, 0, 63, 0, 0, 1
+		bmove -$100, 0, 63, 0, 0, -3
 ; ===========================================================================
 
 Boss_Main:	; Routine 0
@@ -154,12 +155,20 @@ Boss_Move:	; Routine 4
 Boss_SetMode:
 		moveq	#0,d0
 		move.b	ost_mode(a0),d0
-		lsl.w	#3,d0
+		mulu.w	#sizeof_bmove,d0
 		lea	Boss_MoveList,a2
 		adda.l	d0,a2
 		move.w	(a2)+,ost_x_vel(a0)
 		move.w	(a2)+,ost_y_vel(a0)
 		move.w	(a2)+,ost_boss2_time(a0)
+		move.l	(a2)+,d1
+		beq.s	.skip_object				; branch if no object should be loaded
+		jsr	FindNextFreeObj				; find free OST slot
+		bne.s	.skip_object				; branch if not found
+		move.l	d1,ost_id(a1)				; load object
+		saveparent
+		
+	.skip_object:
 		move.b	(a2)+,d0				; get flags
 		bclr	#render_xflip_bit,ost_render(a0)	; assume facing left
 		bclr	#status_xflip_bit,ost_status(a0)

@@ -86,6 +86,27 @@ DespawnFamily_NoDisplay:
 		rts						; don't display
 
 ; ---------------------------------------------------------------------------
+; As DespawnObject, but also deletes subsprite table
+
+;	uses d0.l, a1, a2
+; ---------------------------------------------------------------------------
+
+DespawnSub:
+		move.w	ost_x_pos(a0),d0
+		despawnrange
+		bls.w	DisplaySprite				; display instead of despawn
+
+		move.b	ost_respawn(a0),d0			; get respawn id
+		beq.s	.skip_respawn				; branch if not set
+		andi.w	#$FF,d0
+		lea	(v_respawn_list).w,a2
+		bclr	#7,2(a2,d0.w)				; clear high bit of respawn entry (i.e. object was despawned not broken)
+		
+	.skip_respawn:
+		bsr.w	DeleteSub				; delete subsprite table
+		bra.w	DeleteObject				; delete the object
+
+; ---------------------------------------------------------------------------
 ; Subroutine to check if object is within active space around the screen
 
 ; input:

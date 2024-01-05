@@ -55,8 +55,8 @@ Hel_Main:	; Routine 0
 		move.b	#render_rel,ost_render(a1)
 		move.b	#priority_3,ost_priority(a1)
 		move.b	#8,ost_displaywidth(a1)
-		move.b	#4,ost_col_width(a0)
-		move.b	#16,ost_col_height(a0)
+		move.b	#4,ost_col_width(a1)
+		move.b	#16,ost_col_height(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		move.w	d1,ost_x_pos(a1)
 		addi.w	#16,d1					; x position of next spike
