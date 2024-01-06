@@ -23,6 +23,7 @@ GBall_Index:	index *,,2
 ost_gball_speed:	rs.w 1					; rate of change of angle
 ost_gball_time:		rs.b 1					; timer
 ost_gball_radius:	rs.b 1					; distance of ball/link from base
+ost_gball_radius_now:	rs.b 1					; current distance from base
 		rsobjend
 ; ===========================================================================
 
@@ -37,26 +38,9 @@ GBall_Main:	; Routine 0
 		move.b	#priority_6,ost_priority(a0)
 		moveq	#id_UPLC_GHZAnchor,d0
 		jsr	UncPLC
-		moveq	#4-1,d1
-		moveq	#16,d2
-		
-	.loop:
-		jsr	FindNextFreeObj				; find free OST slot
-		bne.w	GBall_Wait				; branch if not found
-		move.l	#BossChain,ost_id(a1)			; load chain link object
-		move.l	#Map_Swing_GHZ,ost_mappings(a1)
-		move.w	(v_tile_swing).w,ost_tile(a1)
-		move.b	#id_frame_swing_chain,ost_frame(a1)
-		move.b	#render_rel,ost_render(a1)
-		move.b	#8,ost_displaywidth(a1)
-		move.b	#priority_6,ost_priority(a1)
-		move.b	d2,ost_gball_radius(a1)
-		addi.b	#16,d2					; chain links are 16px apart
-		saveparent
-		dbf	d1,.loop
 		
 		jsr	FindNextFreeObj				; find free OST slot
-		bne.s	GBall_Wait				; branch if not found
+		bne.w	.fail					; branch if not found
 		move.l	#BossBall,ost_id(a1)			; load ball object
 		move.b	#id_GBall_BallDrop,ost_routine(a1)
 		move.l	#Map_GBall,ost_mappings(a1)
@@ -69,12 +53,42 @@ GBall_Main:	; Routine 0
 		move.b	#20,ost_col_width(a1)
 		move.b	#20,ost_col_height(a1)
 		move.b	#$60,ost_gball_radius(a1)
+		move.b	#-32,ost_gball_radius_now(a1)
 		getparent	a2
 		move.w	ost_x_pos(a2),ost_x_pos(a1)
 		move.w	ost_y_pos(a2),ost_y_pos(a1)		; match position to ship
 		saveparent
+		move.w	a1,ost_linked(a0)			; anchor remembers ball OST
+		
+		moveq	#4-1,d1
+		moveq	#16,d2
+		
+	.loop:
+		jsr	FindNextFreeObj				; find free OST slot
+		bne.s	.fail					; branch if not found
+		move.l	#BossChain,ost_id(a1)			; load chain link object
+		move.l	#Map_Swing_GHZ,ost_mappings(a1)
+		move.w	(v_tile_swing).w,ost_tile(a1)
+		move.b	#id_frame_swing_chain,ost_frame(a1)
+		move.b	#render_rel,ost_render(a1)
+		move.b	#8,ost_displaywidth(a1)
+		move.b	#priority_6,ost_priority(a1)
+		move.b	d2,ost_gball_radius(a1)
+		addi.b	#16,d2					; chain links are 16px apart
+		saveparent
+		move.w	ost_linked(a0),ost_linked(a1)		; remember ball OST
+		dbf	d1,.loop
+		
+	.fail:
+		rts
 
 GBall_Wait:	; Routine 2
+		getlinked					; a1 = OST of ball
+		tst.b	ost_gball_radius_now(a1)
+		bpl.s	.visible				; branch if ball is below object
+		rts
+		
+	.visible:
 		getparent					; a1 = OST of ship
 		tst.w	ost_x_vel(a1)
 		beq.s	GBall_Pos				; branch if ship isn't moving
@@ -102,6 +116,7 @@ GBall_Pos:
 ; ===========================================================================
 
 GBall_Swing:	; Routine 4
+		shortcut
 		getparent					; a1 = OST of ship
 		move.w	ost_gball_speed(a0),d0
 		btst	#status_xflip_bit,ost_status(a1)
@@ -126,11 +141,9 @@ GBall_Swing:	; Routine 4
 
 GBall_BallDrop:	; Routine 6
 		addq.w	#1,ost_y_pos(a0)			; move down 1px
-		getparent					; a1 = OST of anchor
-		moveq	#0,d0
-		move.b	ost_gball_radius(a0),d0
-		add.w	ost_y_pos(a1),d0			; d0 = anchor y pos + radius
-		cmp.w	ost_y_pos(a0),d0
+		addq.b	#1,ost_gball_radius_now(a0)
+		move.b	ost_gball_radius_now(a0),d0
+		cmp.b	ost_gball_radius(a0),d0
 		bne.s	GBall_BallAni				; branch if not at correct radius
 		addq.b	#2,ost_routine(a0)			; goto GBall_BallSwing next
 
@@ -152,6 +165,7 @@ GBall_BallAni:
 ; ===========================================================================
 
 GBall_BallExplode:	; Routine $A
+		shortcut
 		subq.b	#1,ost_gball_time(a0)			; decrement timer
 		beq.s	.done					; branch if time hits 0
 		move.b	(v_vblank_counter_byte).w,d0		; get byte that increments every frame
@@ -175,10 +189,10 @@ GBall_BallExplode:	; Routine $A
 		bra.s	GBall_BallAni
 		
 	.done:
-		move.b	#id_frame_ball_check1,ost_frame(a0)
+		move.b	#id_frame_ball_check1,ost_frame(a0)	; use frame with check pattern
 		move.w	#$38,d2					; gravity for fragments
 		lea	GBall_FragSpeed(pc),a4
-		bra.w	Shatter
+		bra.w	Shatter					; break into pieces
 		
 GBall_FragSpeed:
 		dc.w -$200, -$200				; x speed, y speed
@@ -217,6 +231,14 @@ GBall_SetPos:
 ; ---------------------------------------------------------------------------
 
 BossChain:
+		getlinked					; a1 = OST of ball
+		move.b	ost_gball_radius_now(a1),d0
+		cmp.b	ost_gball_radius(a0),d0
+		beq.s	BossChain_Visible			; branch if ball reaches chain link
+		rts
+		
+BossChain_Visible:
+		shortcut
 		bsr.s	GBall_SetPos
 		tst.b	ost_status(a1)				; has boss been beaten?
 		bpl.s	.not_beaten				; if not, branch

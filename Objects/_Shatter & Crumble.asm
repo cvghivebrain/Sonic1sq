@@ -18,6 +18,7 @@ Shatter:
 		subq.w	#1,d1					; -1 for loops
 		move.b	ost_render(a0),d3
 		bset	#render_rawmap_bit,d3
+		bclr	#render_useheight_bit,d3
 		
 	.loop:
 		bsr.w	FindFreeObj
@@ -74,6 +75,7 @@ Crumble:
 		subq.w	#1,d1					; -1 for loops
 		move.b	ost_render(a0),d3
 		bset	#render_rawmap_bit,d3
+		bclr	#render_useheight_bit,d3
 		
 	.loop:
 		bsr.w	FindFreeObj
