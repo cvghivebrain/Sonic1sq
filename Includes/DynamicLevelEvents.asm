@@ -53,14 +53,43 @@ DynamicLevelEvents:
 ; ---------------------------------------------------------------------------
 
 DLE_GHZ1:
-		move.w	#$300,(v_boundary_bottom_next).w	; initial boundary
-		cmpi.w	#$1780,(v_camera_x_pos).w
-		bcs.s	.exit					; branch if camera is left of $1780
+		lea	DLE_GHZ1_Sect(pc),a1
 
-		move.w	#$400,(v_boundary_bottom_next).w	; set lower y-boundary
+; ---------------------------------------------------------------------------
+; Subroutine to update level boundaries
 
-	.exit:
-		rts	
+; input:
+;	a1 = address of section & camera boundary data
+
+;	uses d0.w, a1
+; ---------------------------------------------------------------------------
+
+DLE_BoundaryUpdate:
+		moveq	#0,d0
+		move.b	(v_dle_routine).w,d0
+		adda.l	d0,a1					; jump to current section
+		move.w	(v_camera_x_pos).w,d0
+		cmp.w	(a1),d0
+		bcs.s	.prev_sect				; branch if camera is left of section
+		cmp.w	6(a1),d0
+		bcc.s	.next_sect				; branch if camera is right of next section
+		rts
+		
+	.prev_sect:
+		subq.b	#6,(v_dle_routine).w
+		move.w	-4(a1),(v_boundary_top).w
+		move.w	-2(a1),(v_boundary_bottom_next).w
+		rts
+		
+	.next_sect:
+		addq.b	#6,(v_dle_routine).w
+		move.w	8(a1),(v_boundary_top).w
+		move.w	10(a1),(v_boundary_bottom_next).w
+		rts
+		
+DLE_GHZ1_Sect:	dc.w 0, 0, $300					; v_camera_x_pos, v_boundary_top, v_boundary_bottom_next
+		dc.w $1780, 0, $400
+		dc.w -1
 ; ===========================================================================
 
 DLE_GHZ2:
