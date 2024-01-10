@@ -82,6 +82,9 @@ Boss_Main:	; Routine 0
 		add.w	d0,d0
 		lea	Boss_CamXPos,a2
 		move.w	(a2,d0.w),ost_boss2_cam_start(a0)
+		play.w	0, jsr, mus_Boss			; play boss music
+		move.b	#1,(f_boss_boundary).w			; lock screen
+		move.w	(v_camera_x_pos).w,(v_boundary_left).w	; set boundary to current position
 		
 	.ignore_cam:
 		moveq	#id_UPLC_Boss,d0
@@ -102,6 +105,10 @@ Boss_Wait:	; Routine 2
 		jmp	DisplaySprite
 		
 	.activate:
+		move.w	(v_camera_x_pos).w,d0
+		move.w	d0,(v_boundary_left).w			; set boundary to current position
+		move.w	d0,(v_boundary_right).w			; lock screen
+		move.w	d0,(v_boundary_right_next).w
 		addq.b	#2,ost_routine(a0)			; goto Boss_Move next
 		bsr.w	Boss_SetMode
 		jmp	DisplaySprite
@@ -251,6 +258,7 @@ Boss_Recover:	; Routine $A
 		move.w	#-$40,ost_y_vel(a0)			; move ship upwards
 
 Boss_Escape:	; Routine $C
+		addi.w	#$600,(v_boundary_right_next).w		; allow screen to scroll right
 		shortcut
 		update_xy_pos					; update position
 		tst.b	ost_render(a0)

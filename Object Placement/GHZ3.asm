@@ -287,6 +287,7 @@ ObjPos_GHZ3:
 		objpos $26A8,$03AC,Lamppost,$04,rem
 		
 		objpos $2980,$0380,BasicPlatform,type_plat_still
+		objpos $2A60,$280,Boss,0,rem
 		objpos $2A80,$0380,BasicPlatform,type_plat_still
 		objpos $2B60,$03A2,Prison,$00
 		endobj

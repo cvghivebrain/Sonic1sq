@@ -61,9 +61,25 @@ Pri_Main:	; Routine 0
 Pri_Body:	; Routine 2
 		cmpi.b	#2,(v_boss_status).w			; has prison been opened?
 		beq.s	.is_open				; if yes, branch
+		tst.b	ost_subtype(a0)
+		beq.s	.update_boundary
+		
+	.solid:
 		jsr	SolidObject
+		
+	.skip_solid:
 		jmp	DespawnQuick
-; ===========================================================================
+		
+.update_boundary:
+		tst.b	ost_render(a0)
+		bpl.s	.skip_solid				; branch if off screen
+		cmpi.b	#1,(v_boss_status).w
+		bne.s	.solid					; branch if boss isn't beaten
+		move.w	ost_x_pos(a0),d0
+		subi.w	#screen_width/2,d0
+		move.w	d0,(v_boundary_right_next).w		; lock screen with prison in centre
+		move.b	#1,ost_subtype(a0)			; don't repeat this check
+		bra.s	.solid
 
 .is_open:
 		tst.b	ost_mode(a0)				; is Sonic on top of the prison?
@@ -91,7 +107,7 @@ Pri_Switch:	; Routine 4
 		move.b	#id_Pri_Explosion,ost_routine(a0)	; goto Pri_Explosion next
 		move.w	#60,ost_prison_time(a0)			; set time for explosions to 1 sec
 		clr.b	(f_hud_time_update).w			; stop time counter
-		clr.b	(f_boss_boundary).w			; lock screen position
+		clr.b	(f_boss_boundary).w
 		move.b	#1,(f_lock_controls).w			; lock controls
 		move.w	#(btnR<<8),(v_joypad_hold).w		; make Sonic run to the right
 		jsr	UnSolid

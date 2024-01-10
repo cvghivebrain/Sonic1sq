@@ -1,32 +1,40 @@
 ; ---------------------------------------------------------------------------
 ; Dynamic level events
 
-;	uses d0, d1, a1
+;	uses d0.l, d1.w, d2.l, a1
 ; ---------------------------------------------------------------------------
 
 DynamicLevelEvents:
-		moveq	#0,d0
 		tst.l	(v_dle_ptr).w
-		beq.s	.skip_events				; branch if pointer is empty
+		beq.s	.keep_boundary				; branch if pointer is empty
 		movea.l	(v_dle_ptr).w,a1
-		jsr	(a1)
+		jsr	(a1)					; update v_boundary_bottom_next if needed
+		moveq	#2,d2
+		move.w	(v_boundary_right_next).w,d1
+		sub.w	(v_boundary_right).w,d1
+		beq.s	.keep_right				; branch if right boundary is unchanged
+		bpl.s	.move_right				; branch if new boundary is right of current one
+		neg.w	d2
 		
-	.skip_events:
-		moveq	#2,d1
-		move.w	(v_boundary_bottom_next).w,d0		; new boundary y pos is written here
-		sub.w	(v_boundary_bottom).w,d0
+	.move_right:
+		add.w	d2,(v_boundary_right).w			; update boundary
+		
+	.keep_right:
+		moveq	#2,d2
+		move.w	(v_boundary_bottom_next).w,d1		; new boundary y pos is written here
+		sub.w	(v_boundary_bottom).w,d1
 		beq.s	.keep_boundary				; branch if boundary is where it should be
 		bcc.s	.move_boundary_down			; branch if new boundary is below current one
 
-		neg.w	d1
-		move.w	(v_camera_y_pos).w,d0
-		cmp.w	(v_boundary_bottom_next).w,d0
+		neg.w	d2
+		move.w	(v_camera_y_pos).w,d1
+		cmp.w	(v_boundary_bottom_next).w,d1
 		bls.s	.camera_below				; branch if camera y pos is above boundary
-		move.w	d0,(v_boundary_bottom).w		; match boundary to camera
-		andi.w	#$FFFE,(v_boundary_bottom).w		; round down to nearest 2px
+		andi.w	#$FFFE,d1				; round down to nearest 2px
+		move.w	d1,(v_boundary_bottom).w
 
 	.camera_below:
-		add.w	d1,(v_boundary_bottom).w		; move boundary up 2px
+		add.w	d2,(v_boundary_bottom).w		; move boundary up 2px
 		move.b	#1,(f_boundary_bottom_change).w
 
 	.keep_boundary:
@@ -34,17 +42,16 @@ DynamicLevelEvents:
 ; ===========================================================================
 
 .move_boundary_down:
-		move.w	(v_camera_y_pos).w,d0
-		addq.w	#8,d0
-		cmp.w	(v_boundary_bottom).w,d0
+		move.w	(v_camera_y_pos).w,d1
+		addq.w	#8,d1
+		cmp.w	(v_boundary_bottom).w,d1
 		bcs.s	.down_2px				; branch if boundary is at least 8px below camera
 		btst	#status_air_bit,(v_ost_player+ost_status).w
 		beq.s	.down_2px				; branch if Sonic isn't in the air
-		add.w	d1,d1
-		add.w	d1,d1					; boundary moves 8px instead of 2px
+		moveq	#8,d2					; boundary moves 8px instead of 2px
 
 	.down_2px:
-		add.w	d1,(v_boundary_bottom).w		; move boundary down 2px (or 8px)
+		add.w	d2,(v_boundary_bottom).w		; move boundary down 2px (or 8px)
 		move.b	#1,(f_boundary_bottom_change).w
 		rts
 
@@ -61,7 +68,10 @@ DLE_GHZ1:
 ; input:
 ;	a1 = address of section & camera boundary data
 
-;	uses d0.w, a1
+; output:
+;	d0.w = v_camera_x_pos
+
+;	uses d0.l, a1
 ; ---------------------------------------------------------------------------
 
 DLE_BoundaryUpdate:
@@ -93,97 +103,26 @@ DLE_GHZ1_Sect:	dc.w 0, 0, $300					; v_camera_x_pos, v_boundary_top, v_boundary_
 ; ===========================================================================
 
 DLE_GHZ2:
-		move.w	#$300,(v_boundary_bottom_next).w
-		cmpi.w	#$ED0,(v_camera_x_pos).w
-		bcs.s	.exit
-
-		move.w	#$200,(v_boundary_bottom_next).w
-		cmpi.w	#$1600,(v_camera_x_pos).w
-		bcs.s	.exit
-
-		move.w	#$400,(v_boundary_bottom_next).w
-		cmpi.w	#$1D60,(v_camera_x_pos).w
-		bcs.s	.exit
-
-		move.w	#$300,(v_boundary_bottom_next).w
-
-	.exit:
-		rts	
+		lea	DLE_GHZ2_Sect(pc),a1
+		bra.s	DLE_BoundaryUpdate
+		
+DLE_GHZ2_Sect:	dc.w 0, 0, $300
+		dc.w $ED0, 0, $200
+		dc.w $1600, 0, $400
+		dc.w $1D60, 0, $300
+		dc.w -1
 ; ===========================================================================
 
 DLE_GHZ3:
-		moveq	#0,d0
-		move.b	(v_dle_routine).w,d0
-		move.w	DLE_GHZ3_Index(pc,d0.w),d0
-		jmp	DLE_GHZ3_Index(pc,d0.w)
-; ===========================================================================
-DLE_GHZ3_Index:	index *
-		ptr DLE_GHZ3_Main
-		ptr DLE_GHZ3_Boss
-		ptr DLE_GHZ3_End
-; ===========================================================================
-
-DLE_GHZ3_Main:
-		move.w	#$300,(v_boundary_bottom_next).w
-		cmpi.w	#$380,(v_camera_x_pos).w
-		bcs.s	.exit					; branch if camera is left of $380
-
-		move.w	#$310,(v_boundary_bottom_next).w
-		cmpi.w	#$960,(v_camera_x_pos).w
-		bcs.s	.exit					; branch if camera is left of $960
-
-		cmpi.w	#$280,(v_camera_y_pos).w
-		bcs.s	.final_section				; branch if camera is above $280
-
-		move.w	#$400,(v_boundary_bottom_next).w
-		cmpi.w	#$1380,(v_camera_x_pos).w
-		bcc.s	.skip_underground			; branch if camera is right of $1380
-
-		move.w	#$4C0,(v_boundary_bottom_next).w
-		move.w	#$4C0,(v_boundary_bottom).w
-
-	.skip_underground:
-		cmpi.w	#$1700,(v_camera_x_pos).w
-		bcc.s	.final_section				; branch if camera is right of $1700
-
-	.exit:
-		rts	
-; ===========================================================================
-
-.final_section:
-		move.w	#$300,(v_boundary_bottom_next).w
-		addq.b	#2,(v_dle_routine).w			; goto DLE_GHZ3_Boss next
-		rts	
-; ===========================================================================
-
-DLE_GHZ3_Boss:
-		cmpi.w	#$960,(v_camera_x_pos).w
-		bcc.s	.dont_return				; branch if camera is right of $960
-		subq.b	#2,(v_dle_routine).w			; goto DLE_GHZ3_Main next
-
-	.dont_return:
-		cmpi.w	#$2960,(v_camera_x_pos).w
-		bcs.s	.exit					; branch if camera is left of $2960
-		bsr.w	FindFreeObj				; find free OST slot
-		bne.s	.fail					; branch if not found
-		move.l	#BossGreenHill,ost_id(a1)		; load GHZ boss	object
-		move.w	#$2A60,ost_x_pos(a1)
-		move.w	#$280,ost_y_pos(a1)
-
-	.fail:
-		play.w	0, bsr.w, mus_Boss			; play boss music
-		move.b	#1,(f_boss_boundary).w			; lock screen
-		addq.b	#2,(v_dle_routine).w			; goto DLE_GHZ3_End next
-		rts
-; ===========================================================================
-
-.exit:
-		rts	
-; ===========================================================================
-
-DLE_GHZ3_End:
-		move.w	(v_camera_x_pos).w,(v_boundary_left).w	; set boundary to current position
-		rts
+		lea	DLE_GHZ3_Sect(pc),a1
+		bra.s	DLE_BoundaryUpdate
+		
+DLE_GHZ3_Sect:	dc.w 0, 0, $300
+		dc.w $380, 0, $310
+		dc.w $960, 0, $400
+		dc.w $1380, 0, $4C0
+		dc.w $1700, 0, $300
+		dc.w -1
 
 ; ---------------------------------------------------------------------------
 ; Labyrinth Zone dynamic level events
