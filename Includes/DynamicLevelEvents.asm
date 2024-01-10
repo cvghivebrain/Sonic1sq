@@ -155,7 +155,7 @@ DLE_LZ3:
 
 	.fail:
 		play.w	0, bsr.w, mus_Boss			; play boss music
-		move.b	#1,(f_boss_boundary).w			; lock screen
+		move.b	#1,(f_boss_loaded).w			; lock screen
 		addq.b	#2,(v_dle_routine).w			; don't load boss again
 		rts
 ; ===========================================================================
@@ -338,7 +338,7 @@ DLE_MZ3_Boss:
 
 	.fail:
 		play.w	0, bsr.w, mus_Boss			; play boss music
-		move.b	#1,(f_boss_boundary).w			; lock screen
+		move.b	#1,(f_boss_loaded).w			; lock screen
 		addq.b	#2,(v_dle_routine).w			; goto DLE_MZ3_End next
 		rts
 ; ===========================================================================
@@ -392,7 +392,7 @@ DLE_SLZ3_Boss:
 
 	.fail:
 		play.w	0, bsr.w, mus_Boss			; play boss music
-		move.b	#1,(f_boss_boundary).w			; lock screen
+		move.b	#1,(f_boss_loaded).w			; lock screen
 		addq.b	#2,(v_dle_routine).w			; goto DLE_SLZ3_End next
 		rts
 ; ===========================================================================
@@ -466,7 +466,7 @@ DLE_SYZ3_Boss:
 
 	.fail:
 		play.w	0, bsr.w, mus_Boss			; play boss music
-		move.b	#1,(f_boss_boundary).w			; lock screen
+		move.b	#1,(f_boss_loaded).w			; lock screen
 		rts
 ; ===========================================================================
 
@@ -541,7 +541,7 @@ DLE_SBZ2_Eggman:
 		bcs.s	.set_boundary				; branch if camera is left of $1F60
 		
 		addq.b	#2,(v_dle_routine).w			; goto DLE_SBZ2_End next
-		move.b	#1,(f_boss_boundary).w			; lock screen
+		move.b	#1,(f_boss_loaded).w			; lock screen
 
 	.set_boundary:
 		bra.s	DLE_SBZ2_SetBoundary
@@ -590,7 +590,7 @@ DLE_FZ_Boss:
 		bne.s	.set_boundary				; branch if not found
 		move.l	#BossFinal,ost_id(a1)			; load FZ boss object
 		addq.b	#2,(v_dle_routine).w			; goto DLE_FZ_Arena next
-		move.b	#1,(f_boss_boundary).w			; lock screen
+		move.b	#1,(f_boss_loaded).w			; lock screen
 
 	.set_boundary:
 		bra.s	DLE_SBZ2_SetBoundary

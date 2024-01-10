@@ -120,7 +120,7 @@ Pow_Invincible:
 	.fail:
 		moveq	#id_UPLC_Stars,d0
 		jsr	UncPLC					; load stars gfx
-		tst.b	(f_boss_boundary).w			; is boss mode on?
+		tst.b	(f_boss_loaded).w			; is boss mode on?
 		bne.s	.skip_music				; if yes, branch
 		cmpi.b	#air_alert,(v_air).w
 		bls.s	.skip_music

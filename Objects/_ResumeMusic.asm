@@ -14,7 +14,7 @@ ResumeMusic:
 		move.w	#mus_Invincible,d0
 
 	.notinvinc:
-		tst.b	(f_boss_boundary).w			; is Sonic at a boss?
+		tst.b	(f_boss_loaded).w			; is Sonic at a boss?
 		beq.s	.playselected				; if not, branch
 		move.w	#mus_Boss,d0
 

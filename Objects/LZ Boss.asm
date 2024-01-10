@@ -276,7 +276,7 @@ BLZ_ShipWait:
 
 	.beaten:
 		play.w	0, jsr, mus_LZ				; play LZ music
-		clr.b	(f_boss_boundary).w
+		clr.b	(f_boss_loaded).w
 		bset	#status_xflip_bit,ost_status(a0)	; ship face right
 		addq.b	#2,ost_mode(a0)			; goto BLZ_Escape1 next
 

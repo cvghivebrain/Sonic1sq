@@ -199,7 +199,7 @@ v_boss_status:			rs.b 1 ; status of boss and prison capsule - 01 = boss defeated
 v_animal_count:			rs.b 1 ; number of animals on screen
 v_sonic_pos_tracker_num:	rs.w 1 ; current location within position tracking data
 v_sonic_pos_tracker_num_low:	equ __rs-1
-f_boss_boundary:		rs.b 1 ; flag set to stop Sonic moving off the right side of the screen at a boss
+f_boss_loaded:			rs.b 1 ; flag set when a boss is loaded
 v_boss_flash:			rs.b 1 ; number of times the boss should flash
 v_digit_buffer:			rs.b 6 ; decimal digit buffer for score counter
 v_monitor_slots:		rs.w 8 ; available monitor slots

@@ -107,7 +107,7 @@ Pri_Switch:	; Routine 4
 		move.b	#id_Pri_Explosion,ost_routine(a0)	; goto Pri_Explosion next
 		move.w	#60,ost_prison_time(a0)			; set time for explosions to 1 sec
 		clr.b	(f_hud_time_update).w			; stop time counter
-		clr.b	(f_boss_boundary).w
+		clr.b	(f_boss_loaded).w
 		move.b	#1,(f_lock_controls).w			; lock controls
 		move.w	#(btnR<<8),(v_joypad_hold).w		; make Sonic run to the right
 		jsr	UnSolid

@@ -83,7 +83,7 @@ Boss_Main:	; Routine 0
 		lea	Boss_CamXPos,a2
 		move.w	(a2,d0.w),ost_boss2_cam_start(a0)
 		play.w	0, jsr, mus_Boss			; play boss music
-		move.b	#1,(f_boss_boundary).w			; lock screen
+		move.b	#1,(f_boss_loaded).w			; lock screen
 		move.w	(v_camera_x_pos).w,(v_boundary_left).w	; set boundary to current position
 		
 	.ignore_cam:

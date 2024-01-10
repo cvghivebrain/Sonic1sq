@@ -114,7 +114,7 @@ Sonic_Display:
 		beq.s	.chkshoes				; if not, branch
 		subq.w	#1,(v_invincibility).w			; decrement timer
 		bne.s	.chkshoes				; if not 0, branch
-		tst.b	(f_boss_boundary).w
+		tst.b	(f_boss_loaded).w
 		bne.s	.chkshoes				; branch if at a boss
 		cmpi.b	#air_alert,(v_air).w			; is air < $C?
 		bcs.s	.chkshoes				; if yes, branch
@@ -788,7 +788,7 @@ Sonic_LevelBound:
 		bhi.s	.sides					; if yes, branch
 		move.w	(v_boundary_right).w,d0
 		addi.w	#296,d0
-		tst.b	(f_boss_boundary).w			; is screen locked at boss?
+		tst.b	(f_boss_loaded).w			; is screen locked at boss?
 		bne.s	.screenlocked				; if yes, branch
 		addi.w	#64,d0
 
