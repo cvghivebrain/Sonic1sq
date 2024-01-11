@@ -73,10 +73,13 @@ DespawnFamily_AltX:
 
 	DespawnFamily_Delete:
 		move.b	ost_respawn(a0),d0			; get respawn id
-		beq.w	DeleteFamily				; branch if not set
+		beq.s	.skip_respawn				; branch if not set
 		andi.w	#$FF,d0
 		lea	(v_respawn_list).w,a2
 		bclr	#7,2(a2,d0.w)				; clear high bit of respawn entry (i.e. object was despawned not broken)
+		
+	.skip_respawn:
+		bsr.w	DeleteSub				; delete subsprite table
 		bra.w	DeleteFamily				; delete the object
 
 DespawnFamily_NoDisplay:

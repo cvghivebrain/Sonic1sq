@@ -96,6 +96,23 @@ sub5:			equ (sizeof_piece*5)+2
 sub6:			equ (sizeof_piece*6)+2
 sub7:			equ (sizeof_piece*7)+2
 
+sprite1x1:		equ 0
+sprite1x2:		equ 1
+sprite1x3:		equ 2
+sprite1x4:		equ 3
+sprite2x1:		equ 4
+sprite2x2:		equ 5
+sprite2x3:		equ 6
+sprite2x4:		equ 7
+sprite3x1:		equ 8
+sprite3x2:		equ 9
+sprite3x3:		equ $A
+sprite3x4:		equ $B
+sprite4x1:		equ $C
+sprite4x2:		equ $D
+sprite4x3:		equ $E
+sprite4x4:		equ $F
+
 priority_0:		equ 0
 priority_1:		equ 2
 priority_2:		equ 4
