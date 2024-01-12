@@ -180,6 +180,21 @@ Swing_Anchor:	; Routine 2
 		addi.w	#$80,d0					; d0 = oscillating value, same for all platforms
 
 	.no_xflip:
+		move.w	ost_x_pos(a0),d1
+		sub.w	(v_camera_x_pos).w,d1			; d1 = x pos relative to camera
+		addi.w	#32,d1
+		bmi.s	.toleft					; branch if object is left of screen
+		cmpi.w	#screen_width+64,d1
+		bcs.s	.onscreen				; branch if object is on screen
+		cmpi.b	#$40,d0
+		bls.w	DespawnFamily_NoDisplay			; branch if swinging right
+		bra.s	.onscreen
+		
+	.toleft:
+		cmpi.b	#$40,d0
+		bhi.w	DespawnFamily_NoDisplay			; branch if swinging left
+		
+	.onscreen:
 		bsr.w	CalcSine
 		move.w	d0,ost_swing_sine(a0)			; save sine
 		move.w	d1,ost_swing_cosine(a0)			; save cosine
