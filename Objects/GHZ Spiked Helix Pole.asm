@@ -25,7 +25,7 @@ Hel_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Hel_Action next
 		move.l	#Map_Hel,ost_mappings(a0)
 		move.w	#tile_Kos_SpikePole+tile_pal3,ost_tile(a0)
-		move.b	#status_xflip+status_yflip+status_jump,ost_status(a0)
+		move.b	#status_pointy,ost_status(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#priority_3,ost_priority(a0)
 		move.l	#HelixSpike,d4
@@ -54,6 +54,7 @@ Hel_Main:	; Routine 0
 		move.w	ost_tile(a0),ost_tile(a1)
 		move.b	#render_rel,ost_render(a1)
 		move.b	#priority_3,ost_priority(a1)
+		move.w	ost_status(a0),ost_status(a1)
 		move.b	#8,ost_displaywidth(a1)
 		move.b	#4,ost_col_width(a1)
 		move.b	#16,ost_col_height(a1)

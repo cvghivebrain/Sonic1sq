@@ -345,4 +345,19 @@ ObjectHurtSonic:
 		bsr.w	HurtSonic				; hurt Sonic
 		exg	a0,a2					; restore current object
 		rts
+
+; ---------------------------------------------------------------------------
+; Subroutine to	kill Sonic (from non-object)
+
+; input:
+;	a0 = address of OST of Sonic
+
+; output:
+;	a2 = address of OST of Sonic
+; ---------------------------------------------------------------------------
+
+SelfKillSonic:
+		movea.l	a0,a2					; Sonic killed himself (by falling out of the level)
+		bsr.s	KillSonic				; kill Sonic
+		rts
 		

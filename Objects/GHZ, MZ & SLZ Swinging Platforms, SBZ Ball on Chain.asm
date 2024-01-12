@@ -203,7 +203,7 @@ Swing_Anchor:	; Routine 2
 		move.b	d4,piece_y_pos(a2)			; update position
 		move.w	d5,piece_x_pos(a2)
 		addi.w	#16,d3
-		adda.w	#sizeof_piece,a2			; next sprite
+		lea	sizeof_piece(a2),a2			; next sprite
 		dbf	d2,.loop
 		
 		bra.w	DespawnFamily				; delete child objects on despawn

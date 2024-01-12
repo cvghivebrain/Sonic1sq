@@ -815,7 +815,7 @@ Sonic_LevelBound:
 		rts
 
 .kill:
-		jmp	KillSonic
+		jmp	SelfKillSonic
 ; ===========================================================================
 
 .sides:
@@ -1339,7 +1339,7 @@ Sonic_HurtStop:
 		move.w	(v_boundary_bottom).w,d0
 		addi.w	#224,d0
 		cmp.w	ost_y_pos(a0),d0
-		bcs.w	KillSonic				; branch if Sonic falls below level boundary
+		bcs.w	SelfKillSonic				; branch if Sonic falls below level boundary
 		bsr.w	Sonic_JumpCollision			; floor/wall collision
 		btst	#status_air_bit,ost_status(a0)
 		bne.s	.no_floor				; branch if Sonic is still in the air
