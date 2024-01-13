@@ -155,6 +155,7 @@ GBall_BallSwing:
 		bpl.s	GBall_BallAni				; if not, branch
 		addq.b	#2,ost_routine(a0)			; goto GBall_BallExplode next
 		move.b	#$61,ost_gball_time(a0)			; set timer to 1.5-ish seconds
+		move.b	#id_ani_ball_break,ost_anim(a0)		; use frame with check pattern
 		
 GBall_BallAni:
 		lea	Ani_Ball(pc),a1
@@ -168,28 +169,12 @@ GBall_BallExplode:	; Routine $A
 		shortcut
 		subq.b	#1,ost_gball_time(a0)			; decrement timer
 		beq.s	.done					; branch if time hits 0
-		move.b	(v_vblank_counter_byte).w,d0		; get byte that increments every frame
-		addq.b	#3,d0					; 3 frame offset
-		andi.b	#7,d0					; read bits 0-2
-		bne.s	GBall_BallAni				; branch if any are set
-		jsr	FindFreeObj				; find free OST slot
-		bne.s	GBall_BallAni				; branch if not found
-		move.l	#ExplosionBomb,ost_id(a1)		; load explosion object every 8th frame
-		move.w	ost_x_pos(a0),ost_x_pos(a1)
-		move.w	ost_y_pos(a0),ost_y_pos(a1)
-		jsr	RandomNumber
-		moveq	#0,d1
-		move.b	d0,d1
-		lsr.b	#2,d1
-		subi.w	#$20,d1
-		add.w	d1,ost_x_pos(a1)			; randomise position
-		lsr.w	#8,d0
-		lsr.b	#3,d0
-		add.w	d0,ost_y_pos(a1)
+		moveq	#3,d0
+		moveq	#7,d1
+		jsr	Exploding				; create explosions every 8th frame
 		bra.s	GBall_BallAni
 		
 	.done:
-		move.b	#id_frame_ball_check1,ost_frame(a0)	; use frame with check pattern
 		move.w	#$38,d2					; gravity for fragments
 		lea	GBall_FragSpeed(pc),a4
 		bra.w	Shatter					; break into pieces
@@ -254,9 +239,15 @@ BossChain_Visible:
 
 Ani_Ball:	index *
 		ptr ani_ball_boss
+		ptr ani_ball_break
 		
 ani_ball_boss:
 		dc.w 0
 		dc.w id_frame_ball_shiny
+		dc.w id_frame_ball_check1
+		dc.w id_Anim_Flag_Restart
+		
+ani_ball_break:
+		dc.w $7F
 		dc.w id_frame_ball_check1
 		dc.w id_Anim_Flag_Restart

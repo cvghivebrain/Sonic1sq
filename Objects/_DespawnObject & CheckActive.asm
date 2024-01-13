@@ -1,5 +1,5 @@
 ; ---------------------------------------------------------------------------
-; Routine to check if object is still on-screen: display if yes, delete if not
+; Subroutine to check if object is still on-screen: display if yes, delete if not
 
 ;	uses d0.l, d1.w, a1, a2
 ; ---------------------------------------------------------------------------
