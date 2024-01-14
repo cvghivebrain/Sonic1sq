@@ -2,14 +2,6 @@
 ; Object subtypes
 ; ---------------------------------------------------------------------------
 
-; Monitor
-type_monitor_eggman:	equ id_Pow_Eggman			; Eggman, does nothing
-type_monitor_1up:	equ id_Pow_Sonic			; Extra life
-type_monitor_shoes:	equ id_Pow_Shoes			; speed shoes
-type_monitor_shield:	equ id_Pow_Shield			; shield
-type_monitor_invincible: equ id_Pow_Invincible			; invincibility
-type_monitor_rings:	equ id_Pow_Rings			; 10 rings
-
 ; HiddenBonus
 type_bonus_10k:		equ (Bonus_Points_1-Bonus_Points)/2	; 1 - 10000 points
 type_bonus_1k:		equ (Bonus_Points_2-Bonus_Points)/2	; 2 - 1000 points

@@ -8,6 +8,13 @@
 ;	ObjPos_LZ1, ObjPos_LZ2, ObjPos_LZ3 - subtypes 2/4/5/6
 ;	ObjPos_SLZ1, ObjPos_SLZ2, ObjPos_SLZ3 - subtypes 2/4/5/6
 ;	ObjPos_SBZ1, ObjPos_SBZ2, ObjPos_SBZ3 - subtypes 2/4/5/6
+
+type_monitor_eggman:		equ id_Pow_Eggman		; Eggman, does nothing
+type_monitor_1up:		equ id_Pow_Sonic		; Extra life
+type_monitor_shoes:		equ id_Pow_Shoes		; speed shoes
+type_monitor_shield:		equ id_Pow_Shield		; shield
+type_monitor_invincible:	equ id_Pow_Invincible		; invincibility
+type_monitor_rings:		equ id_Pow_Rings		; 10 rings
 ; ---------------------------------------------------------------------------
 
 Monitor:
@@ -20,9 +27,9 @@ Mon_Index:	index *,,2
 		ptr Mon_Main
 		ptr Mon_Solid
 		ptr Mon_Break
-		ptr Mon_Animate
-		ptr Mon_Display
 		ptr Mon_Drop
+		ptr Mon_AniBreak
+		ptr Mon_Broken
 
 		rsobj Monitor
 ost_monitor_slot:	rs.b 1					; slot used by monitor (0-7; -1 if none)
@@ -42,7 +49,7 @@ Mon_Main:	; Routine 0
 		bsr.w	GetState
 		andi.b	#1,d0
 		beq.s	.not_broken				; branch if monitor wasn't broken
-		move.b	#id_Mon_Display,ost_routine(a0)		; goto Mon_Display next
+		move.b	#id_Mon_Broken,ost_routine(a0)		; goto Mon_Broken next
 		move.b	#id_frame_monitor_broken,ost_frame(a0)	; use broken monitor frame
 		rts	
 ; ===========================================================================
@@ -83,7 +90,7 @@ Mon_Solid:	; Routine 2
 ; ===========================================================================
 
 Mon_Break:	; Routine 4
-		addq.b	#2,ost_routine(a0)			; goto Mon_Animate next
+		move.b	#id_Mon_AniBreak,ost_routine(a0)	; goto Mon_AniBreak next
 		bsr.w	FindFreeObj				; find free OST slot
 		bne.s	.fail					; branch if not found
 		move.l	#PowerUp,ost_id(a1)			; load monitor contents object
@@ -116,11 +123,10 @@ Mon_Break:	; Routine 4
 		beq.s	Mon_Animate
 		bset	#0,(a2)					; remember broken
 
-Mon_Animate:	; Routine 6
+Mon_Animate:
+Mon_AniBreak:	; Routine 8
 		lea	(Ani_Monitor).l,a1
 		bsr.w	AnimateSprite
-
-Mon_Display:	; Routine 8
 		move.w	ost_x_pos(a0),d0
 		bsr.w	CheckActive
 		beq.w	DisplaySprite				; branch if on screen
@@ -138,7 +144,7 @@ Mon_Display:	; Routine 8
 		bra.w	DeleteObject
 ; ===========================================================================
 
-Mon_Drop:	; Routine $A
+Mon_Drop:	; Routine 6
 		update_y_fall					; apply gravity and update position
 		jsr	(FindFloorObj).l
 		tst.w	d1					; has monitor hit the floor?
@@ -147,6 +153,11 @@ Mon_Drop:	; Routine $A
 		clr.w	ost_y_vel(a0)				; stop moving
 		move.b	#id_Mon_Solid,ost_routine(a0)		; goto Mon_Solid next
 		bra.s	Mon_Animate
+; ===========================================================================
+
+Mon_Broken:	; Routine $A
+		shortcut	DespawnObject
+		bra.w	DespawnObject
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	make a monitor solid (mostly the same as SolidObject)
