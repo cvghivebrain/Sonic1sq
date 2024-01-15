@@ -10,7 +10,7 @@
 ;	FFFF - frame id
 
 type_edge_unsolid_bit:	equ 4
-type_edge_unsolid:	equ 1<<type_edge_unsolid_bit
+type_edge_unsolid:	equ 1<<type_edge_unsolid_bit		; wall isn't solid
 type_edge_shadow:	equ id_frame_edge_shadow		; 0
 type_edge_light:	equ id_frame_edge_light			; 1
 type_edge_dark:		equ id_frame_edge_dark			; 2

@@ -180,10 +180,8 @@ BuildSpr_FlipX:
 		
 		move.w	(a1)+,d0				; get x-offset
 		neg.w	d0					; negate it
-		add.b	d4,d4					; calculate flipped position by size
-		andi.w	#$18,d4
-		addq.w	#7,d4
-		sub.w	d4,d0
+		add.b	d4,d4
+		sub.w	BuildSpr_FlipX_Shift(pc,d4.w),d0	; calculate flipped position by size
 		add.w	d3,d0
 		andi.w	#$1FF,d0				; keep within 512px
 		bne.s	.x_not_0
@@ -204,10 +202,8 @@ BuildSpr_FlipY:
 		move.b	(a1),d4					; get size
 		ext.w	d0
 		neg.w	d0					; negate y-offset
-		lsl.b	#3,d4					; calculate flip offset
-		andi.w	#$18,d4
-		addq.w	#7,d4
-		sub.w	d4,d0
+		add.b	d4,d4
+		sub.w	BuildSpr_FlipY_Shift(pc,d4.w),d0	; calculate flipped position by size
 		add.w	d2,d0					; add y-position
 		move.w	d0,(a2)+				; write to buffer
 		
@@ -232,6 +228,18 @@ BuildSpr_FlipY:
 
 	.exit:
 		rts
+; ===========================================================================		
+BuildSpr_FlipX_Shift:
+		dc.w ((0*2)&$18)+7, ((1*2)&$18)+7, ((2*2)&$18)+7, ((3*2)&$18)+7
+		dc.w ((4*2)&$18)+7, ((5*2)&$18)+7, ((6*2)&$18)+7, ((7*2)&$18)+7
+		dc.w ((8*2)&$18)+7, ((9*2)&$18)+7, (($A*2)&$18)+7, (($B*2)&$18)+7
+		dc.w (($C*2)&$18)+7, (($D*2)&$18)+7, (($E*2)&$18)+7, (($F*2)&$18)+7
+		
+BuildSpr_FlipY_Shift:
+		dc.w ((0*8)&$18)+7, ((1*8)&$18)+7, ((2*8)&$18)+7, ((3*8)&$18)+7
+		dc.w ((4*8)&$18)+7, ((5*8)&$18)+7, ((6*8)&$18)+7, ((7*8)&$18)+7
+		dc.w ((8*8)&$18)+7, ((9*8)&$18)+7, (($A*8)&$18)+7, (($B*8)&$18)+7
+		dc.w (($C*8)&$18)+7, (($D*8)&$18)+7, (($E*8)&$18)+7, (($F*8)&$18)+7
 ; ===========================================================================
 
 BuildSpr_FlipXY:
@@ -241,15 +249,12 @@ BuildSpr_FlipXY:
 		move.b	(a1),d4
 		ext.w	d0
 		neg.w	d0
-		lsl.b	#3,d4
-		andi.w	#$18,d4
-		addq.w	#7,d4
-		sub.w	d4,d0
+		add.b	d4,d4
+		sub.w	BuildSpr_FlipY_Shift(pc,d4.w),d0	; calculate flipped position by size
 		add.w	d2,d0
 		move.w	d0,(a2)+				; write to buffer
 		
-		move.b	(a1)+,d4
-		move.b	d4,(a2)+				; size
+		move.b	(a1)+,(a2)+				; size
 		addq.b	#1,d5
 		move.b	d5,(a2)+				; link
 		
@@ -260,10 +265,7 @@ BuildSpr_FlipXY:
 		
 		move.w	(a1)+,d0				; calculate flipped x
 		neg.w	d0
-		add.b	d4,d4
-		andi.w	#$18,d4
-		addq.w	#7,d4
-		sub.w	d4,d0
+		sub.w	BuildSpr_FlipX_Shift(pc,d4.w),d0	; calculate flipped position by size
 		add.w	d3,d0
 		andi.w	#$1FF,d0
 		bne.s	.x_not_0
@@ -283,6 +285,10 @@ BuildSpr_Sub:
 		move.b	(a1)+,d0				; get relative y pos from subsprite table
 		ext.w	d0
 		add.w	d2,d0					; add VDP y pos
+		move.w	d0,d4
+		subi.w	#screen_top-32,d4
+		cmpi.w	#screen_height+32,d4
+		bhi.s	.abort_y				; branch if subsprite is off screen
 		move.w	d0,(a2)+				; write y pos to sprite buffer
 
 		move.b	(a1)+,(a2)+				; write sprite size to buffer
@@ -293,14 +299,24 @@ BuildSpr_Sub:
 
 		move.w	(a1)+,d0				; get relative x pos from subsprite table
 		add.w	d3,d0					; add VDP x pos
-		andi.w	#$1FF,d0				; keep within 512px
-		bne.s	.x_not_0				; branch if x pos isn't 0
-		addq.w	#1,d0					; add 1 to prevent sprite masking (sprites at x pos 0 act as masks)
-
-	.x_not_0:
+		move.w	d0,d4
+		subi.w	#screen_left-32,d4
+		cmpi.w	#screen_width+32,d4
+		bhi.s	.abort_x				; branch if subsprite is off screen
 		move.w	d0,(a2)+				; write x pos to buffer
 		dbf	d1,BuildSpr_Sub				; next sprite piece
 
 	.exit:
+		rts
+		
+	.abort_y:
+		addq.w	#5,a1					; skip this subsprite
+		dbf	d1,BuildSpr_Sub				; next sprite piece
+		rts
+		
+	.abort_x:
+		subq.w	#6,a2					; undo this subsprite
+		subq.b	#1,d5					; decrement sprite counter
+		dbf	d1,BuildSpr_Sub				; next sprite piece
 		rts
 		
