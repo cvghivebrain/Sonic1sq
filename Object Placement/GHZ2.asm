@@ -35,7 +35,7 @@ ObjPos_GHZ2:
 		objpos $0470,$0100,Crabmeat,$00,rem
 		objpos $0480,$02C8,BasicPlatform,type_plat_sideways
 		objpos $04F8,$0332,PurpleRock,$00
-		objpos $0508,$02F0,EdgeWalls,type_edge_shadow+$10
+		objpos $0508,$02F0,EdgeWalls,type_edge_shadow+type_edge_unsolid
 		objpos $0530,$0108,Scenery,type_scen_stump,xflip
 		objpos $0564,$0268,Rings,$15,rem
 		objpos $0570,$0100,Rings,$14,rem
@@ -178,8 +178,8 @@ ObjPos_GHZ2:
 		objpos $1650,$0150,Monitor,type_monitor_rings,rem
 		objpos $16A0,$01B0,MotoBug,$00,rem
 		objpos $16B0,$01A0,Newtron,type_newt_green+$20,xflip,rem
-		objpos $16F8,$01F0,EdgeWalls,type_edge_dark+$10
-		objpos $16F8,$0220,EdgeWalls,type_edge_dark+$10
+		objpos $16F8,$01F0,EdgeWalls,type_edge_dark+type_edge_unsolid
+		objpos $16F8,$0220,EdgeWalls,type_edge_dark+type_edge_unsolid
 		objpos $16F8,$02F0,EdgeWalls,type_edge_dark
 		objpos $16F8,$0330,EdgeWalls,type_edge_dark
 		objpos $16F8,$0370,EdgeWalls,type_edge_dark
@@ -192,7 +192,7 @@ ObjPos_GHZ2:
 		objpos $17A0,$0200,Crabmeat,$00,rem
 		objpos $17D0,$01FE,PurpleRock,$00
 		objpos $17E0,$03F0,CollapseLedge,type_ledge_left,rem
-		objpos $1808,$03F0,EdgeWalls,type_edge_shadow+$10
+		objpos $1808,$03F0,EdgeWalls,type_edge_shadow+type_edge_unsolid
 		objpos $1810,$0370,Newtron,type_newt_blue+$20,rem
 		objpos $1820,$03B0,Spikes,type_spike_3up+type_spike_still
 		objpos $1828,$0430,PurpleRock,$00
@@ -217,7 +217,7 @@ ObjPos_GHZ2:
 		objpos $19AC,$04D0,Spikes,type_spike_6upwide+type_spike_still
 		objpos $19C8,$02B4,Rings,$10,rem
 		objpos $19F4,$02B5,Rings,$10,rem
-		objpos $19F8,$0320,EdgeWalls,type_edge_dark+$10
+		objpos $19F8,$0320,EdgeWalls,type_edge_dark+type_edge_unsolid
 		objpos $1A08,$04B0,EdgeWalls,type_edge_shadow
 		objpos $1A08,$04F0,EdgeWalls,type_edge_light
 		objpos $1A1D,$02B6,Rings,$10,rem

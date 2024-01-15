@@ -2,20 +2,6 @@
 ; Object subtypes
 ; ---------------------------------------------------------------------------
 
-; HiddenBonus
-type_bonus_10k:		equ (Bonus_Points_1-Bonus_Points)/2	; 1 - 10000 points
-type_bonus_1k:		equ (Bonus_Points_2-Bonus_Points)/2	; 2 - 1000 points
-type_bonus_100:		equ (Bonus_Points_3-Bonus_Points)/2	; 3 - 10 points (should be 100)
-
-; Scenery
-type_scen_cannon:	equ (Scen_Values_0-Scen_Values)/(Scen_Values_1-Scen_Values_0)	; 0 - SLZ cannon
-type_scen_stump:	equ (Scen_Values_3-Scen_Values)/(Scen_Values_1-Scen_Values_0)	; 3 - GHZ bridge stump
-
-; EdgeWalls
-type_edge_shadow:	equ id_frame_edge_shadow	; 0
-type_edge_light:	equ id_frame_edge_light		; 1
-type_edge_dark:		equ id_frame_edge_dark		; 2
-
 ; CollapseLedge
 type_ledge_left:	equ id_frame_ledge_left		; 0 - facing left
 type_ledge_right:	equ id_frame_ledge_right	; 1 - also facing left, but always xflipped to face right

@@ -8,6 +8,12 @@
 ;	%000SFFFF
 ;	S - 1 if wall isn't solid
 ;	FFFF - frame id
+
+type_edge_unsolid_bit:	equ 4
+type_edge_unsolid:	equ 1<<type_edge_unsolid_bit
+type_edge_shadow:	equ id_frame_edge_shadow		; 0
+type_edge_light:	equ id_frame_edge_light			; 1
+type_edge_dark:		equ id_frame_edge_dark			; 2
 ; ---------------------------------------------------------------------------
 
 EdgeWalls:
@@ -31,12 +37,15 @@ Edge_Main:	; Routine 0
 		move.b	#9,ost_width(a0)
 		move.b	#32,ost_height(a0)
 		move.b	#priority_6,ost_priority(a0)
-		move.b	ost_subtype(a0),ost_frame(a0)		; copy object type number to frame number
-		bclr	#4,ost_frame(a0)			; clear 4th bit (deduct $10)
-		beq.s	Edge_Solid				; branch if already clear (subtype 0/1/2 is solid)
+		move.b	ost_subtype(a0),d0
+		move.b	d0,d1
+		andi.w	#$F,d0					; read low nybble of subtype
+		move.b	d0,ost_frame(a0)			; set as frame number
+		btst	#type_edge_unsolid_bit,d1
+		beq.s	Edge_Solid				; branch if unsolid bit is clear
 
 		addq.b	#2,ost_routine(a0)			; goto Edge_Display next
-		bra.s	Edge_Display				; bit 4 was already set (subtype $10/$11/$12 is not solid)
+		bra.s	Edge_Display
 ; ===========================================================================
 
 Edge_Solid:	; Routine 2

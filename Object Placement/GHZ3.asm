@@ -174,10 +174,10 @@ ObjPos_GHZ3:
 		objpos $14E8,$0420,BuzzBomber,$00,rem
 		objpos $14F0,$0401,Spikes,type_spike_1up+type_spike_still
 		objpos $14F8,$02F0,EdgeWalls,type_edge_dark
-		objpos $14F8,$0330,EdgeWalls,type_edge_dark+$10
-		objpos $14F8,$0360,EdgeWalls,type_edge_dark+$10
-		objpos $14F8,$03B0,EdgeWalls,type_edge_dark+$10
-		objpos $14F8,$03F0,EdgeWalls,type_edge_dark+$10
+		objpos $14F8,$0330,EdgeWalls,type_edge_dark+type_edge_unsolid
+		objpos $14F8,$0360,EdgeWalls,type_edge_dark+type_edge_unsolid
+		objpos $14F8,$03B0,EdgeWalls,type_edge_dark+type_edge_unsolid
+		objpos $14F8,$03F0,EdgeWalls,type_edge_dark+type_edge_unsolid
 		objpos $14F8,$0440,EdgeWalls,type_edge_dark
 		objpos $14F8,$0480,EdgeWalls,type_edge_dark
 		objpos $14F8,$04B0,EdgeWalls,type_edge_dark
@@ -194,10 +194,10 @@ ObjPos_GHZ3:
 		objpos $1698,$04B0,Monitor,type_monitor_rings,rem
 		objpos $16C0,$04B0,Monitor,type_monitor_rings,rem
 		objpos $16E8,$04B0,Monitor,type_monitor_1up,rem
-		objpos $1708,$03B0,EdgeWalls,type_edge_shadow+$10
-		objpos $1708,$03F0,EdgeWalls,type_edge_light+$10
-		objpos $1708,$0430,EdgeWalls,type_edge_light+$10
-		objpos $1708,$0460,EdgeWalls,type_edge_light+$10
+		objpos $1708,$03B0,EdgeWalls,type_edge_shadow+type_edge_unsolid
+		objpos $1708,$03F0,EdgeWalls,type_edge_light+type_edge_unsolid
+		objpos $1708,$0430,EdgeWalls,type_edge_light+type_edge_unsolid
+		objpos $1708,$0460,EdgeWalls,type_edge_light+type_edge_unsolid
 		objpos $1708,$04B0,EdgeWalls,type_edge_shadow
 		objpos $1720,$02C8,BasicPlatform,type_plat_falls
 		objpos $1730,$0479,Springs,type_spring_yellow+type_spring_up
