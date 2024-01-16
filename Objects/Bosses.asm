@@ -6,7 +6,7 @@
 
 ; subtypes:
 ;	%ITTTTTTT
-;	I - 1 to ignore Boss_CamXPos
+;	I - 1 to ignore x pos check and boundary changes
 ;	TTTTTTT - type
 ; ---------------------------------------------------------------------------
 
@@ -105,10 +105,14 @@ Boss_Wait:	; Routine 2
 		jmp	DisplaySprite
 		
 	.activate:
+		tst.b	ost_subtype(a0)
+		bmi.s	.keep_boundaries			; branch if high bit of subtype is set
 		move.w	(v_camera_x_pos).w,d0
 		move.w	d0,(v_boundary_left).w			; set boundary to current position
 		move.w	d0,(v_boundary_right).w			; lock screen
 		move.w	d0,(v_boundary_right_next).w
+		
+	.keep_boundaries:
 		addq.b	#2,ost_routine(a0)			; goto Boss_Move next
 		bsr.w	Boss_SetMode
 		jmp	DisplaySprite
@@ -195,7 +199,6 @@ Boss_SetMode:
 		move.b	(a2)+,d0
 		add.b	d0,ost_mode(a0)				; next mode
 		rts
-		
 ; ===========================================================================
 
 Boss_Explode:	; Routine 6

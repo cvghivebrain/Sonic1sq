@@ -76,8 +76,8 @@ BuildSprites:
 	.draw_now:
 		andi.w	#render_xflip+render_yflip,d4
 		add.b	d4,d4
-		move.w	BuildSpr_Index(pc,d4.w),d4
-		jsr	BuildSpr_Index(pc,d4.w)			; write data from sprite pieces to buffer
+		move.w	BuildSpr_Index(pc,d4.w),d0
+		jsr	BuildSpr_Index(pc,d0.w)			; write data from sprite pieces to buffer
 		
 		tst.w	ost_subsprite(a0)
 		beq.s	.skip_draw				; branch if no subsprites are found

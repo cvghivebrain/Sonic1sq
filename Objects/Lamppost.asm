@@ -8,6 +8,11 @@
 ;	ObjPos_LZ1, ObjPos_LZ2, ObjPos_LZ3 - subtypes 1/2
 ;	ObjPos_SLZ3 - subtype 1
 ;	ObjPos_SBZ1, ObjPos_SBZ3 - subtypes 1/2
+
+; subtypes:
+;	%LIIIIIII
+;	L - 1 to lock screen to disallow backtracking after Sonic respawns
+;	IIIIIII - lamppost id
 ; ---------------------------------------------------------------------------
 
 Lamppost:
@@ -193,7 +198,11 @@ Lamp_LoadInfo:
 		move.b	(f_water_pal_full_lampcopy).w,(f_water_pal_full).w
 
 	.notwater:
+		tst.b	(v_last_lamppost).w
+		bpl.s	.dont_lock				; branch if high bit of lamppost id is clear
 		move.w	(v_sonic_x_pos_lampcopy).w,d0
 		subi.w	#screen_width/2,d0
 		move.w	d0,(v_boundary_left).w			; set left boundary to half a screen to Sonic's left
+		
+	.dont_lock:
 		rts	
