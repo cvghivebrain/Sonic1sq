@@ -43,8 +43,7 @@ SpinC_Main:	; Routine 0
 
 SpinC_ChkDist:	; Routine 2
 		getsonic					; a1 = OST of Sonic
-		range_x
-		cmpi.w	#256+160,d1
+		range_x_test	256+160
 		bcs.s	.exit					; branch if Sonic is nearby
 		moveq	#0,d0
 		move.b	ost_respawn(a0),d0			; get respawn id

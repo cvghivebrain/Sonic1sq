@@ -63,11 +63,9 @@ Bom_Walk:	; Routine 4
 
 Bom_ChkDist:
 		getsonic
-		range_x
-		cmpi.w	#$60,d1					; is Sonic within $60 pixels?
-		bcc.w	DespawnObject				; if not, branch
-		range_y
-		cmpi.w	#$60,d3
+		range_x_test	$60
+		bcc.w	DespawnObject				; branch if Sonic is outside $60px
+		range_y_test	$60
 		bcc.w	DespawnObject
 		tst.w	(v_debug_active).w
 		bne.w	DespawnObject

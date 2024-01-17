@@ -100,11 +100,9 @@ Orb_Move:	; Routine 2
 		btst.b	#type_orbinaut_passive_bit,ost_subtype(a0)
 		bne.w	DespawnObject				; branch if orbinaut is passive
 		getsonic					; a1 = OST of Sonic
-		range_x
-		cmpi.w	#160,d1
+		range_x_test	160
 		bcc.w	DespawnObject				; branch if Sonic is > 160px from orbinaut
-		range_y
-		cmpi.w	#80,d3
+		range_y_test	80
 		bcc.w	DespawnObject				; branch if Sonic is > 80px above/below orbinaut
 		tst.w	(v_debug_active).w
 		beq.s	.angry					; branch if not in debug mode

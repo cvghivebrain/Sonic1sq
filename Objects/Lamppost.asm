@@ -65,11 +65,9 @@ Lamp_Blue:	; Routine 2
 		bmi.w	DespawnObject				; branch if collision is disabled
 		
 		getsonic					; a1 = OST of Sonic
-		range_x
-		cmp.w	#8,d1
+		range_x_test	8
 		bcc.w	DespawnObject
-		range_y
-		cmp.w	#$28,d3
+		range_y_test	$28
 		bcc.w	DespawnObject
 
 		play.w	1, jsr, sfx_Lamppost			; play lamppost sound

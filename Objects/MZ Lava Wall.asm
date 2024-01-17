@@ -65,11 +65,9 @@ LWall_Main:	; Routine 0
 
 LWall_Wait:	; Routine 2
 		getsonic					; a1 = OST of Sonic
-		range_y
-		cmpi.w	#96,d3
+		range_y_test	96
 		bcc.s	.wait					; branch if Sonic is > 96px on y
-		range_x
-		cmpi.w	#192,d1
+		range_x_test	192
 		bcc.s	.wait					; branch if Sonic is > 192px on x
 		addq.b	#2,ost_routine(a0)			; goto LWall_Move next
 		move.b	ost_subtype(a0),d0

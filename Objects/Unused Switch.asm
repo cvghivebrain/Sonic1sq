@@ -35,12 +35,10 @@ Swi_Main:	; Routine 0
 Swi_Action:	; Routine 2
 		move.w	ost_switch_y_start(a0),ost_y_pos(a0)	; restore position on y-axis
 		getsonic					; a1 = OST of Sonic
-		range_x
-		cmp.w	#16,d1
-		bge.w	DespawnQuick
-		range_y
-		cmp.w	#16,d3
-		bge.w	DespawnQuick
+		range_x_test	16
+		bcc.w	DespawnQuick
+		range_y_test	16
+		bcc.w	DespawnQuick
 
 		addq.w	#2,ost_y_pos(a0)			; move object down 2px
 		tst.b	ost_switch_done(a0)

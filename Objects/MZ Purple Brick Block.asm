@@ -77,8 +77,7 @@ Brick_Still:
 ; Type 2
 Brick_Falls:
 		getsonic					; a1 = OST of Sonic
-		range_x
-		cmpi.w	#144,d1					; is Sonic within 144px of the block?
+		range_x_test	144				; is Sonic within 144px of the block?
 		bcc.s	Brick_Wobbles				; if not, resume wobbling
 		move.b	#id_Brick_FallNow,ost_brick_type(a0)	; if yes, make the block fall
 

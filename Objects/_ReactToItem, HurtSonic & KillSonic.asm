@@ -358,6 +358,4 @@ ObjectHurtSonic:
 
 SelfKillSonic:
 		movea.l	a0,a2					; Sonic killed himself (by falling out of the level)
-		bsr.s	KillSonic				; kill Sonic
-		rts
-		
+		bra.s	KillSonic				; kill Sonic		

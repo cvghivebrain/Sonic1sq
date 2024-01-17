@@ -42,14 +42,12 @@ Burro_Main:	; Routine 0
 Burro_ChkSonic:	; Routine $A
 		toggleframe	3
 		getsonic					; a1 = OST of Sonic
-		range_x
-		cmp.w	#$60,d1
+		range_x_test	$60
 		bcc.w	DespawnObject				; branch if Sonic is > $60px away
-		range_y
-		tst.w	d2
+		range_y_quick
 		bpl.w	DespawnObject				; branch if Sonic is below
-		cmp.w	#$80,d3
-		bcc.w	DespawnObject				; branch if Sonic is > $80px above
+		cmp.w	#-$80,d2
+		blt.w	DespawnObject				; branch if Sonic is > $80px above
 		tst.w	(v_debug_active).w
 		bne.w	DespawnObject				; branch if debug mode is on
 		
@@ -57,7 +55,7 @@ Burro_ChkSonic:	; Routine $A
 		move.w	#-$400,ost_y_vel(a0)			; burrobot jumps
 		bset	#status_xflip_bit,ost_status(a0)
 		move.w	#$80,ost_x_vel(a0)
-		tst.w	d0
+		range_x_quick
 		bpl.w	DespawnObject				; branch if Sonic is to the right
 		bclr	#status_xflip_bit,ost_status(a0)
 		neg.w	ost_x_vel(a0)

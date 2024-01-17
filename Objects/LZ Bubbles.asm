@@ -97,13 +97,11 @@ Bub_Big2:	; Routine 8
 		tst.b	(v_lock_multi).w
 		bmi.w	DespawnQuick				; branch if object collision disabled
 		getsonic
-		range_x
-		cmp.w	#16,d1
+		range_x_test	16
 		bcc.w	DespawnQuick
-		range_y
-		tst.w	d2
+		range_y_quick
 		bmi.w	DespawnQuick				; branch if Sonic is above bubble
-		cmp.w	#16,d3
+		cmp.w	#16,d2
 		bcc.w	DespawnQuick
 
 		bsr.w	ResumeMusic				; cancel countdown music & reset air

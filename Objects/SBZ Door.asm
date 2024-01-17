@@ -32,8 +32,7 @@ ADoor_Main:	; Routine 0
 
 ADoor_WaitOpen:	; Routine 2
 		getsonic					; a1 = OST of Sonic
-		range_x
-		cmp.w	#64,d1
+		range_x_test	64
 		bcc.w	DespawnQuick				; branch if > 64px away
 		btst.b	#status_xflip_bit,ost_status(a0)
 		beq.s	.no_xflip
@@ -58,9 +57,8 @@ ADoor_Open:	; Routine 4
 
 ADoor_WaitShut:	; Routine 6
 		getsonic					; a1 = OST of Sonic
-		range_x
-		cmp.w	#64,d1
-		bcs.w	DespawnQuick				; branch if > 64px away
+		range_x_test	64
+		bcs.w	DisplaySprite				; branch if < 64px away
 		addq.b	#2,ost_routine(a0)			; goto ADoor_Shut next
 		move.b	#id_ani_autodoor_close,ost_anim(a0)
 

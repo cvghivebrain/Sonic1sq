@@ -72,9 +72,8 @@ Roll_Roll:	; Routine 4
 		tst.b	ost_roller_stopped(a0)
 		bne.s	.skip_stop				; branch if roller previously stopped
 		getsonic					; a1 = OST of Sonic
-		range_x
-		cmpi.w	#48,d1
-		bhi.s	.skip_stop				; branch if Sonic is > 48px away
+		range_x_test	48
+		bcc.s	.skip_stop				; branch if Sonic is > 48px away
 		move.b	#id_ani_roll_unfold,ost_anim(a0)
 		move.b	#id_React_Enemy,ost_col_type(a0)	; make roller killable
 		move.w	#120,ost_roller_open_time(a0)		; set waiting time to 2 seconds

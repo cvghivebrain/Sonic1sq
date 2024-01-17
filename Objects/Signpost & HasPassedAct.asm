@@ -43,8 +43,7 @@ Sign_Main:	; Routine 0
 
 Sign_Touch:	; Routine 2
 		getsonic					; a1 = OST of Sonic
-		range_x
-		cmpi.w	#32,d0					; is Sonic within 32px of right?
+		range_x_test	32				; is Sonic within 32px?
 		bcc.w	DespawnQuick				; if not, branch
 
 		play.w	0, jsr, sfx_Signpost			; play signpost sound

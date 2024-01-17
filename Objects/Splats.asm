@@ -33,11 +33,10 @@ Splats_Main:	; Routine 0
 
 Splats_ChkDist:	; Routine 2
 		getsonic					; a1 = OST of Sonic
-		range_x
-		cmpi.w	#224,d1
-		bcc.w	DespawnQuick				; branch if Sonic is > 224px away
-		tst.w	d0
+		range_x_quick
 		bmi.s	.sonic_left				; branch if Sonic is to the left
+		cmpi.w	#244,d0
+		bcc.w	DespawnQuick				; branch if Sonic is > 224px away
 		bset	#render_xflip_bit,ost_render(a0)	; face right
 		move.w	#$100,ost_x_vel(a0)			; move right
 		addq.b	#2,ost_routine(a0)			; goto Splats_Move next

@@ -140,18 +140,6 @@ update_xy_fall:	macro
 ;	d3.w = y distance (always +ve)
 ; ---------------------------------------------------------------------------
 
-range_x:	macro
-		move.w	ost_x_pos(a1),d0
-		sub.w	ost_x_pos(a0),d0			; d0 = x dist (-ve if Sonic is to the left)
-		mvabs.w	d0,d1					; make d1 +ve
-		endm
-		
-range_y:	macro
-		move.w	ost_y_pos(a1),d2
-		sub.w	ost_y_pos(a0),d2			; d2 = y dist (-ve if Sonic is above)
-		mvabs.w	d2,d3					; make d3 +ve
-		endm
-
 range_x_quick:	macro
 		move.w	ost_x_pos(a1),d0
 		sub.w	ost_x_pos(a0),d0			; d0 = x dist (-ve if Sonic is to the left)
@@ -160,6 +148,50 @@ range_x_quick:	macro
 range_y_quick:	macro
 		move.w	ost_y_pos(a1),d2
 		sub.w	ost_y_pos(a0),d2			; d2 = y dist (-ve if Sonic is above)
+		endm
+
+range_x:	macro
+		range_x_quick					; d0 = x dist (-ve if Sonic is to the left)
+		mvabs.w	d0,d1					; make d1 +ve
+		endm
+		
+range_y:	macro
+		range_y_quick					; d2 = y dist (-ve if Sonic is above)
+		mvabs.w	d2,d3					; make d3 +ve
+		endm
+
+; ---------------------------------------------------------------------------
+; Test if two objects (a0 and a1) are within range of each other
+
+; input:
+;	\dist = distance to test
+
+;	uses d0.w, d2.w
+
+; usage:
+;		range_x_test	16				; test for 16px range
+;		bcs.w	.inrange				; branch if within 16px
+;		bcc.w	.outrange				; branch if outside 16px
+; ---------------------------------------------------------------------------
+
+range_x_test:	macro dist
+		range_x_quick					; d0 = x dist (-ve if Sonic is to the left)
+		if dist<=8
+		addq.w	#dist,d0
+		else
+		addi.w	#dist,d0
+		endc
+		cmpi.w	#dist*2,d0
+		endm
+
+range_y_test:	macro dist
+		range_y_quick					; d2 = y dist (-ve if Sonic is above)
+		if dist<=8
+		addq.w	#dist,d2
+		else
+		addi.w	#dist,d2
+		endc
+		cmpi.w	#dist*2,d2
 		endm
 
 ; ---------------------------------------------------------------------------

@@ -38,9 +38,8 @@ Bat_Hang:	; Routine 2
 		bmi.w	DespawnObject				; branch if Sonic is above
 		cmp.w	#128,d2
 		bge.w	DespawnObject				; branch if > 128px below
-		range_x
-		cmp.w	#128,d1
-		bge.w	DespawnObject				; branch if > 128px away
+		range_x_test	128
+		bcc.w	DespawnObject				; branch if > 128px away
 		tst.w	(v_debug_active).w
 		bne.w	DespawnObject				; branch if debug mode is in use
 

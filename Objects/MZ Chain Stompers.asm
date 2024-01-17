@@ -295,8 +295,7 @@ CStom_TypeNormal_Fall:
 ; Type $40 - drops when Sonic is nearby
 CStom_TypeProx:
 		getsonic
-		range_x
-		cmpi.w	#144,d1					; is Sonic within 144px?
+		range_x_test	144				; is Sonic within 144px?
 		bcc.w	CStom_SetPos				; if not, branch
 		move.b	#0,ost_subtype(a0)			; allow stomper to drop by changing subtype to CStom_TypeNormal
 		bra.w	CStom_SetPos

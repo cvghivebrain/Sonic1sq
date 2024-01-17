@@ -45,8 +45,7 @@ Buzz_Fly:	; Routine 2
 		toggleframe	1				; animate
 		update_x_pos					; update position
 		getsonic					; a1 = OST of Sonic
-		range_x
-		cmpi.w	#$60,d1
+		range_x_test	96
 		bcc.w	DespawnObject				; branch if > 96px from Sonic
 		
 		addq.b	#2,ost_routine(a0)			; goto Buzz_Wait next

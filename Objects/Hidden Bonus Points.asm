@@ -28,11 +28,9 @@ ost_bonus_wait_time:	rs.w 1					; length of time to display bonus sprites
 
 Bonus_Main:	; Routine 0
 		getsonic
-		range_x
-		cmp.w	#16,d1
+		range_x_test	16
 		bcc.w	DespawnQuick_NoDisplay			; branch if Sonic is > 16px away
-		range_y
-		cmp.w	#16,d3
+		range_y_test	16
 		bcc.w	DespawnQuick_NoDisplay
 
 		tst.w	(v_debug_active).w

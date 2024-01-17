@@ -62,8 +62,7 @@ SEgg_Wait:	; Routine 2
 		lea	Ani_SEgg(pc),a1
 		jsr	AnimateSprite
 		getsonic					; a1 = OST of Sonic
-		range_x
-		cmpi.w	#128,d1
+		range_x_test	128
 		bcc.s	.wait					; branch if more than 128px away
 		move.w	#180,ost_eggman_wait_time(a0)		; set delay to 3 seconds
 		addq.b	#2,ost_routine(a0)			; goto SEgg_Wait2 next

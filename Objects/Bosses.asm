@@ -2,7 +2,7 @@
 ; Bosses
 
 ; spawned by:
-;	
+;	ObjPos_GHZ3
 
 ; subtypes:
 ;	%ITTTTTTT
