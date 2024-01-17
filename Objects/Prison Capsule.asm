@@ -37,7 +37,7 @@ Pri_Main:	; Routine 0
 		move.b	#id_frame_prison_capsule,ost_frame(a0)
 		moveq	#id_UPLC_Prison,d0
 		jsr	UncPLC					; load prison gfx
-		
+
 		jsr	FindFreeObj				; find free OST slot
 		bne.s	.fail
 		move.l	#Prison,ost_id(a1)			; load switch object
@@ -53,7 +53,7 @@ Pri_Main:	; Routine 0
 		move.b	#8,ost_height(a1)
 		move.b	#priority_5,ost_priority(a1)
 		move.b	#id_frame_prison_switch1,ost_frame(a1)
-		
+
 	.fail:
 		jmp	DespawnQuick
 ; ===========================================================================
@@ -63,13 +63,13 @@ Pri_Body:	; Routine 2
 		beq.s	.is_open				; if yes, branch
 		tst.b	ost_subtype(a0)
 		beq.s	.update_boundary
-		
+
 	.solid:
 		jsr	SolidObject
-		
+
 	.skip_solid:
 		jmp	DespawnQuick
-		
+
 .update_boundary:
 		tst.b	ost_render(a0)
 		bpl.s	.skip_solid				; branch if off screen
@@ -95,7 +95,7 @@ Pri_Body:	; Routine 2
 ; ===========================================================================
 
 Pri_Switch:	; Routine 4
-		lea	(Ani_Pri).l,a1
+		lea	Ani_Pri(pc),a1
 		jsr	AnimateSprite
 		jsr	SolidObject
 		andi.b	#solid_top,d1
@@ -193,7 +193,7 @@ Pri_EndAct:	; Routine $A
 
 Ani_Pri:	index *
 		ptr ani_prison_switchflash
-		
+
 ani_prison_switchflash:
 		dc.w 2
 		dc.w id_frame_prison_switch1

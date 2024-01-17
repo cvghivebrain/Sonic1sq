@@ -18,7 +18,7 @@ RLoss_Index:	index *,,2
 		ptr RLoss_Collect
 		ptr RLoss_Sparkle
 		ptr RLoss_Delete
-		
+
 RLoss_VelTable:	dc.w   -$C4,  -$3EC,    $C4,  -$3EC,  -$238,  -$350,   $238,  -$350
 		dc.w  -$350,  -$238,   $350,  -$238,  -$3EC,   -$C4,   $3EC,   -$C4
 		dc.w  -$3EC,    $C4,   $3EC,    $C4,  -$350,   $238,   $350,   $238
@@ -111,7 +111,7 @@ RLoss_Collect:	; Routine 4
 		bsr.w	CollectRing				; add ring/extra life, play sound
 
 RLoss_Sparkle:	; Routine 6
-		lea	(Ani_Ring).l,a1
+		lea	Ani_Ring(pc),a1
 		bsr.w	AnimateSprite				; animate and goto RLoss_Delete when finished
 		bra.w	DisplaySprite
 ; ===========================================================================

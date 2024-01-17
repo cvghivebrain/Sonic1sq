@@ -67,7 +67,7 @@ LZDynamicWater:
 		add.w	d1,(v_water_height_normal).w		; move water up/down
 
 	.exit:
-		rts	
+		rts
 ; ===========================================================================
 DynWater_Index:	index *
 		ptr DynWater_LZ1
@@ -107,7 +107,7 @@ DynWater_LZ1:
 
 	.set_water:
 		move.w	d1,(v_water_height_next).w		; set next target water height
-		rts	
+		rts
 ; ===========================================================================
 
 .sonicishigh:
@@ -139,7 +139,7 @@ DynWater_LZ1_1:
 
 	.skip:
 DynWater_LZ1_2:
-		rts	
+		rts
 ; ===========================================================================
 
 DynWater_LZ2:
@@ -156,7 +156,7 @@ DynWater_LZ2:
 
 	.set_water:
 		move.w	d1,(v_water_height_next).w		; set next target water height
-		rts	
+		rts
 ; ===========================================================================
 
 DynWater_LZ3:
@@ -181,7 +181,7 @@ DynWater_LZ3:
 	.set_water:
 		move.w	d1,(v_water_height_next).w
 		move.w	d1,(v_water_height_normal).w		; change water height instantly
-		rts	
+		rts
 ; ===========================================================================
 
 DynWater_LZ3_1:
@@ -212,7 +212,7 @@ DynWater_LZ3_1:
 
 	.set_water:
 		move.w	d1,(v_water_height_next).w		; set next target water height
-		rts	
+		rts
 ; ===========================================================================
 
 DynWater_LZ3_2:
@@ -235,7 +235,7 @@ DynWater_LZ3_2:
 
 	.set_water:
 		move.w	d1,(v_water_height_next).w		; set next target water height
-		rts	
+		rts
 ; ===========================================================================
 
 DynWater_LZ3_3:
@@ -254,13 +254,13 @@ DynWater_LZ3_3:
 		move.w	#$608,(v_water_height_next).w
 		move.w	#$7C0,(v_water_height_normal).w
 		move.b	#1,(v_button_state+8).w			; set flag for button 8 pressed
-		rts	
+		rts
 ; ===========================================================================
 
 .set_water:
 		move.w	d1,(v_water_height_next).w
 		move.w	d1,(v_water_height_normal).w		; instantly change water height
-		rts	
+		rts
 ; ===========================================================================
 
 DynWater_LZ3_4:
@@ -270,7 +270,7 @@ DynWater_LZ3_4:
 		move.w	#$128,(v_water_height_next).w		; set next target water height
 
 	.dontset:
-		rts	
+		rts
 ; ===========================================================================
 
 DynWater_SBZ3:
@@ -293,7 +293,7 @@ DynWater_SBZ3:
 LZWindTunnels:
 		tst.w	(v_debug_active).w
 		bne.w	.exit					; branch if debug mode is currently in use
-		lea	(LZWind_Data+8).l,a2			; address of list of tunnel area boundaries
+		lea	LZWind_Data+8(pc),a2			; address of list of tunnel area boundaries
 		moveq	#0,d0
 		move.b	(v_act).w,d0				; get act number
 		lsl.w	#3,d0					; multiply by 8
@@ -358,7 +358,7 @@ LZWindTunnels:
 		addq.w	#1,ost_y_pos(a1)			; move Sonic down on pole
 
 	.end:
-		rts	
+		rts
 ; ===========================================================================
 
 .chknext:
@@ -419,13 +419,13 @@ LZWaterSlides:
 		clr.b	(f_jump_only).w				; unlock controls
 
 	.not_locked:
-		rts	
+		rts
 ; ===========================================================================
 
 LZSlide_Move:
 		cmpi.w	#3,d1
 		bcc.s	.steep_slope				; branch if 256x256 tile id is 4/8/$4B/$4C (steep slopes)
-		nop	
+		nop
 
 	.steep_slope:
 		bclr	#status_xflip_bit,ost_status(a1)	; face Sonic right

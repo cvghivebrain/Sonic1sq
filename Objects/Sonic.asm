@@ -49,7 +49,7 @@ Sonic_Control:	; Routine 2
 		beq.s	.no_debug				; if not, branch
 		move.w	#1,(v_debug_active).w			; change Sonic into a ring/item
 		clr.b	(f_lock_controls).w
-		rts	
+		rts
 ; ===========================================================================
 
 .no_debug:
@@ -86,7 +86,7 @@ Sonic_Control:	; Routine 2
 	.no_collision:
 		;bsr.w	Sonic_LoopPlane				; move Sonic to correct plane when in a GHZ/SLZ loop
 		bsr.w	Sonic_LoadGfx				; load new gfx when Sonic's frame changes
-		rts	
+		rts
 
 ; ===========================================================================
 Sonic_Modes:	index *,,2
@@ -132,7 +132,7 @@ Sonic_Display:
 		play.w	0, jmp, cmd_Slowdown			; run music at normal speed
 
 	.exit:
-		rts	
+		rts
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	record Sonic's previous positions for invincibility stars
@@ -156,7 +156,7 @@ Sonic_Water:
 		bne.s	.waterok				; branch if water is enabled
 
 	.exit:
-		rts	
+		rts
 ; ===========================================================================
 
 	.waterok:
@@ -167,7 +167,7 @@ Sonic_Water:
 		bne.s	.exit					; branch if already set
 
 		bsr.w	ResumeMusic
-		
+
 	.fail:
 		move.w	#sonic_max_speed_water,(v_sonic_max_speed).w ; change Sonic's top speed
 		move.w	#sonic_acceleration_water,(v_sonic_acceleration).w ; change Sonic's acceleration
@@ -182,7 +182,7 @@ Sonic_Water:
 		bne.s	.fail2
 		move.l	#Splash,ost_id(a1)			; load splash object
 		move.b	#1,(f_splash).w
-		
+
 	.fail2:
 		play.w	1, jmp, sfx_Splash			; play splash sound
 ; ===========================================================================
@@ -203,7 +203,7 @@ Sonic_Water:
 		bne.s	.fail3
 		move.l	#Splash,ost_id(a1)			; load splash object
 		move.b	#1,(f_splash).w
-		
+
 	.fail3:
 		cmpi.w	#-sonic_max_speed_surface,ost_y_vel(a0)
 		bgt.s	.belowmaxspeed
@@ -225,7 +225,7 @@ Sonic_Mode_Normal:
 		jsr	(SpeedToPos).l
 		bsr.w	Sonic_AnglePos
 		bsr.w	Sonic_SlopeRepel
-		rts	
+		rts
 ; ===========================================================================
 
 Sonic_Mode_Air:
@@ -240,7 +240,7 @@ Sonic_Mode_Air:
 	.notwater:
 		bsr.w	Sonic_JumpAngle
 		bsr.w	Sonic_JumpCollision
-		rts	
+		rts
 ; ===========================================================================
 
 Sonic_Mode_Roll:
@@ -251,7 +251,7 @@ Sonic_Mode_Roll:
 		jsr	(SpeedToPos).l
 		bsr.w	Sonic_AnglePos
 		bsr.w	Sonic_SlopeRepel
-		rts	
+		rts
 ; ===========================================================================
 
 Sonic_Mode_Jump:
@@ -266,7 +266,7 @@ Sonic_Mode_Jump:
 	.notwater:
 		bsr.w	Sonic_JumpAngle
 		bsr.w	Sonic_JumpCollision
-		rts	
+		rts
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	make Sonic walk/run
@@ -300,7 +300,7 @@ Sonic_Move:
 		move.b	#id_Wait,ost_anim(a0)			; use "standing" animation
 		btst	#status_platform_bit,ost_status(a0)	; is Sonic on a platform?
 		beq.s	Sonic_Balance				; if not, branch
-		
+
 		moveq	#-1,d0
 		move.w	ost_sonic_on_obj(a0),d0			; get OST of platform or object
 		movea.l	d0,a1					; a1 = actual address of OST of object being stood on
@@ -436,24 +436,24 @@ Sonic_StopAtWall:
 		beq.s	.wall_left				; branch if wall is left
 		cmpi.b	#$80,d0
 		beq.s	.wall_above				; branch if wall is above
-		
+
 	.wall_right:
 		add.w	d1,ost_x_vel(a0)
 		bset	#status_pushing_bit,ost_status(a0)	; start pushing when Sonic hits a wall
 		move.w	#0,ost_inertia(a0)			; stop Sonic moving
-		rts	
+		rts
 ; ===========================================================================
 
 	.wall_above:
 		sub.w	d1,ost_y_vel(a0)
-		rts	
+		rts
 ; ===========================================================================
 
 	.wall_left:
 		sub.w	d1,ost_x_vel(a0)
 		bset	#status_pushing_bit,ost_status(a0)
 		move.w	#0,ost_inertia(a0)
-		rts	
+		rts
 ; ===========================================================================
 
 	.wall_below:
@@ -488,7 +488,7 @@ Sonic_MoveLeft:
 	.below_max:
 		move.w	d0,ost_inertia(a0)
 		move.b	#id_Walk,ost_anim(a0)			; use walking animation
-		rts	
+		rts
 ; ===========================================================================
 
 .inertia_pos:
@@ -532,7 +532,7 @@ Sonic_MoveRight:
 	.below_max:
 		move.w	d0,ost_inertia(a0)
 		move.b	#id_Walk,ost_anim(a0)			; use walking animation
-		rts	
+		rts
 ; ===========================================================================
 
 .inertia_neg:
@@ -645,7 +645,7 @@ Sonic_RollLeft:
 	.no_change:
 		bset	#status_xflip_bit,ost_status(a0)	; face Sonic left
 		move.b	#id_Roll,ost_anim(a0)			; use "rolling" animation
-		rts	
+		rts
 ; ===========================================================================
 
 .inertia_pos:
@@ -667,7 +667,7 @@ Sonic_RollRight:
 
 		bclr	#status_xflip_bit,ost_status(a0)	; face Sonic left
 		move.b	#id_Roll,ost_anim(a0)			; use "rolling" animation
-		rts	
+		rts
 ; ===========================================================================
 
 .inertia_neg:
@@ -689,7 +689,7 @@ Sonic_JumpDirection:
 		asl.w	#1,d5
 		btst	#status_rolljump_bit,ost_status(a0)	; is Sonic jumping while rolling?
 		bne.s	.chk_camera				; if yes, branch
-		
+
 		move.w	ost_x_vel(a0),d0
 		btst	#bitL,(v_joypad_hold).w			; is left being pressed?
 		beq.s	.not_left				; if not, branch
@@ -738,7 +738,7 @@ Sonic_JumpDirection:
 
 	.speed_pos:
 		move.w	d0,ost_x_vel(a0)			; apply air drag
-		rts	
+		rts
 ; ===========================================================================
 
 .moving_left:
@@ -769,7 +769,7 @@ Sonic_JumpDirection:
 		move.b	#id_Warp3,ost_anim(a0)			; use "warping" animation
 
 	.dont_squash:
-		rts	
+		rts
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	prevent	Sonic leaving the boundaries of	a level
@@ -801,7 +801,7 @@ Sonic_LevelBound:
 		addi.w	#224,d0
 		cmp.w	ost_y_pos(a0),d0			; has Sonic touched the bottom boundary?
 		blt.s	.bottom					; if yes, branch
-		rts	
+		rts
 ; ===========================================================================
 
 .bottom:
@@ -846,13 +846,13 @@ Sonic_Roll:
 		bne.s	Sonic_ChkRoll				; if yes, branch
 
 	.noroll:
-		rts	
+		rts
 ; ===========================================================================
 
 Sonic_ChkRoll:
 		btst	#status_jump_bit,ost_status(a0)		; is Sonic already rolling or jumping?
 		beq.s	.roll					; if not, branch
-		rts	
+		rts
 ; ===========================================================================
 
 .roll:
@@ -918,7 +918,7 @@ Sonic_Jump:
 		add.w	d0,ost_y_pos(a0)
 
 	.no_jump:
-		rts	
+		rts
 ; ===========================================================================
 
 .is_rolling:
@@ -946,7 +946,7 @@ Sonic_JumpHeight:
 		move.w	d1,ost_y_vel(a0)			; update y speed with smaller jump power
 
 	.keep_speed:
-		rts	
+		rts
 ; ===========================================================================
 
 .not_jumping:							; unused?
@@ -978,7 +978,7 @@ Sonic_SlopeResist:
 		add.w	d0,ost_inertia(a0)			; update Sonic's inertia
 
 	.no_change_:
-		rts	
+		rts
 ; ===========================================================================
 
 .inertia_neg:
@@ -1008,7 +1008,7 @@ Sonic_RollRepel:
 
 	.sine_pos:
 		add.w	d0,ost_inertia(a0)			; update Sonic's inertia
-		rts	
+		rts
 ; ===========================================================================
 
 .inertia_neg:
@@ -1027,7 +1027,7 @@ Sonic_RollRepel:
 ; ---------------------------------------------------------------------------
 
 Sonic_SlopeRepel:
-		nop	
+		nop
 		tst.b	ost_sonic_sbz_disc(a0)			; is Sonic on a SBZ disc?
 		bne.s	.exit					; if yes, branch
 		tst.w	ost_sonic_lock_time(a0)			; are controls temporarily locked?
@@ -1048,7 +1048,7 @@ Sonic_SlopeRepel:
 		move.w	#30,ost_sonic_lock_time(a0)		; lock controls for half a second
 
 	.exit:
-		rts	
+		rts
 ; ===========================================================================
 
 .locked:
@@ -1146,7 +1146,7 @@ Sonic_JumpCollision:
 .flat:
 		move.w	#0,ost_y_vel(a0)			; stop Sonic falling
 		move.w	ost_x_vel(a0),ost_inertia(a0)
-		rts	
+		rts
 ; ===========================================================================
 
 .steep:
@@ -1162,7 +1162,7 @@ Sonic_JumpCollision:
 		neg.w	ost_inertia(a0)
 
 .exit:
-		rts	
+		rts
 ; ===========================================================================
 
 Sonic_JumpCollision_Left:
@@ -1172,7 +1172,7 @@ Sonic_JumpCollision_Left:
 		sub.w	d1,ost_x_pos(a0)			; align to wall
 		move.w	#0,ost_x_vel(a0)			; stop moving left
 		move.w	ost_y_vel(a0),ost_inertia(a0)
-		rts	
+		rts
 ; ===========================================================================
 
 .no_wallleft:
@@ -1185,7 +1185,7 @@ Sonic_JumpCollision_Left:
 		move.w	#0,ost_y_vel(a0)			; stop moving up
 
 	.moving_down:
-		rts	
+		rts
 ; ===========================================================================
 
 .no_ceiling:
@@ -1202,7 +1202,7 @@ Sonic_JumpCollision_Left:
 		move.w	ost_x_vel(a0),ost_inertia(a0)
 
 	.exit:
-		rts	
+		rts
 ; ===========================================================================
 
 Sonic_JumpCollision_Up:
@@ -1229,7 +1229,7 @@ Sonic_JumpCollision_Up:
 		andi.b	#$40,d0
 		bne.s	.steep					; branch if ceiling is almost-vertical slope
 		move.w	#0,ost_y_vel(a0)
-		rts	
+		rts
 ; ===========================================================================
 
 .steep:
@@ -1241,7 +1241,7 @@ Sonic_JumpCollision_Up:
 		neg.w	ost_inertia(a0)
 
 .exit:
-		rts	
+		rts
 ; ===========================================================================
 
 Sonic_JumpCollision_Right:
@@ -1251,7 +1251,7 @@ Sonic_JumpCollision_Right:
 		add.w	d1,ost_x_pos(a0)			; align to wall
 		move.w	#0,ost_x_vel(a0)			; stop moving right
 		move.w	ost_y_vel(a0),ost_inertia(a0)
-		rts	
+		rts
 ; ===========================================================================
 
 .no_wallright:
@@ -1264,7 +1264,7 @@ Sonic_JumpCollision_Right:
 		move.w	#0,ost_y_vel(a0)			; stop moving up
 
 	.moving_down:
-		rts	
+		rts
 ; ===========================================================================
 
 .no_ceiling:
@@ -1290,9 +1290,9 @@ Sonic_JumpCollision_Right:
 Sonic_ResetOnFloor:
 		btst	#status_rolljump_bit,ost_status(a0)	; is Sonic jumping while rolling?
 		beq.s	.no_rolljump				; if not, branch
-		nop	
-		nop	
-		nop	
+		nop
+		nop
+		nop
 
 	.no_rolljump:
 		bclr	#status_pushing_bit,ost_status(a0)
@@ -1389,7 +1389,7 @@ GameOver:
 		bne.s	.fail
 		move.l	#GameOverCard,ost_id(a1)		; load OVER object
 		move.b	#id_frame_gameover_over,ost_frame(a1)	; set OVER object to correct frame
-		
+
 	.fail:
 		clr.b	(f_time_over).w
 
@@ -1429,7 +1429,7 @@ Sonic_ResetLevel:
 		move.w	#1,(f_restart).w			; restart the level
 
 	.exit:
-		rts	
+		rts
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	update Sonic's plane setting when in a loop (GHZ/SLZ)
@@ -1461,7 +1461,7 @@ Sonic_LoopPlane:
 		cmp.b	(v_256x256_with_loop_2).w,d1
 		beq.s	.chkifinair
 		bclr	#render_behind_bit,ost_render(a0)	; return Sonic to high plane
-		rts	
+		rts
 ; ===========================================================================
 
 .chkifinair:
@@ -1469,7 +1469,7 @@ Sonic_LoopPlane:
 		beq.s	.chkifleft				; if not, branch
 
 		bclr	#render_behind_bit,ost_render(a0)	; return Sonic to high plane
-		rts	
+		rts
 ; ===========================================================================
 
 .chkifleft:
@@ -1478,7 +1478,7 @@ Sonic_LoopPlane:
 		bcc.s	.chkifright				; branch if Sonic is > 44px from left edge of tile
 
 		bclr	#render_behind_bit,ost_render(a0)	; return Sonic to high plane
-		rts	
+		rts
 ; ===========================================================================
 
 .chkifright:
@@ -1486,7 +1486,7 @@ Sonic_LoopPlane:
 		bcs.s	.chkangle1				; branch if Sonic is > 32px from right edge of tile
 
 		bset	#render_behind_bit,ost_render(a0)	; send Sonic to low plane
-		rts	
+		rts
 ; ===========================================================================
 
 .chkangle1:
@@ -1498,7 +1498,7 @@ Sonic_LoopPlane:
 		cmpi.b	#$80,d1
 		bhi.s	.done					; branch if Sonic is on right surface of loop
 		bset	#render_behind_bit,ost_render(a0)	; send Sonic to low plane
-		rts	
+		rts
 ; ===========================================================================
 
 .chkangle2:
@@ -1516,19 +1516,19 @@ Sonic_LoopPlane:
 ; ---------------------------------------------------------------------------
 
 Sonic_Animate:
-		lea	(Ani_Sonic).l,a1
+		lea	Ani_Sonic(pc),a1
 		movea.l	a1,a2
 		moveq	#0,d0
 		moveq	#status_xflip,d2
 		move.b	ost_anim(a0),d0
 		cmp.b	ost_sonic_anim_next(a0),d0		; is animation set to restart?
 		beq.w	Anim_Run				; if not, branch
-		
+
 		move.b	d0,ost_sonic_anim_next(a0)		; set to "no restart"
 		move.b	#0,ost_anim_frame(a0)			; reset animation
 		move.b	#0,ost_anim_time(a0)			; reset frame duration
 		bra.w	Anim_Run
-		
+
 ; ---------------------------------------------------------------------------
 ; Subroutine to load Sonic's graphics to RAM
 ; ---------------------------------------------------------------------------
@@ -1592,7 +1592,7 @@ Sonic_AnglePos:
 		moveq	#0,d0
 		move.b	d0,(v_angle_right).w			; clear angle hotspots
 		move.b	d0,(v_angle_left).w
-		rts	
+		rts
 ; ===========================================================================
 
 .not_on_platform:
@@ -1667,7 +1667,7 @@ Sonic_AnglePos:
 		add.w	d1,ost_y_pos(a0)			; align to floor
 
 	.on_floor:
-		rts	
+		rts
 ; ===========================================================================
 
 .above_floor:
@@ -1676,7 +1676,7 @@ Sonic_AnglePos:
 
 .on_disc:
 		add.w	d1,ost_y_pos(a0)			; align to floor
-		rts	
+		rts
 ; ===========================================================================
 
 .in_air:
@@ -1685,7 +1685,7 @@ Sonic_AnglePos:
 		bset	#status_air_bit,ost_status(a0)
 		bclr	#status_pushing_bit,ost_status(a0)
 		move.b	#id_Run,ost_sonic_anim_next(a0)
-		rts	
+		rts
 ; ===========================================================================
 
 Sonic_BelowFloor:
@@ -1703,11 +1703,11 @@ Sonic_BelowFloor:
 		asl.l	#8,d0
 		sub.l	d0,d3
 		move.l	d3,ost_y_pos(a0)
-		rts	
+		rts
 ; ===========================================================================
 
 Sonic_InsideWall:
-		rts	
+		rts
 ; ===========================================================================
 		move.l	ost_y_pos(a0),d3
 		move.w	ost_y_vel(a0),d0
@@ -1717,8 +1717,8 @@ Sonic_InsideWall:
 		asl.l	#8,d0
 		sub.l	d0,d3
 		move.l	d3,ost_y_pos(a0)
-		rts	
-		rts	
+		rts
+		rts
 ; ===========================================================================
 		move.l	ost_x_pos(a0),d2
 		move.l	ost_y_pos(a0),d3
@@ -1732,7 +1732,7 @@ Sonic_InsideWall:
 		sub.l	d0,d3
 		move.l	d2,ost_x_pos(a0)
 		move.l	d3,ost_y_pos(a0)
-		rts	
+		rts
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	update Sonic's angle
@@ -1757,7 +1757,7 @@ Sonic_Angle:
 		btst	#0,d2
 		bne.s	.snap_angle				; branch if bit 0 of angle is set
 		move.b	d2,ost_angle(a0)			; update angle
-		rts	
+		rts
 ; ===========================================================================
 
 .snap_angle:
@@ -1811,7 +1811,7 @@ Sonic_WalkVertR:
 		add.w	d1,ost_x_pos(a0)			; align to wall
 
 	.on_wall:
-		rts	
+		rts
 ; ===========================================================================
 
 .outside_wall:
@@ -1820,7 +1820,7 @@ Sonic_WalkVertR:
 
 .on_disc:
 		add.w	d1,ost_x_pos(a0)			; align to wall
-		rts	
+		rts
 ; ===========================================================================
 
 .in_air:
@@ -1876,7 +1876,7 @@ Sonic_WalkCeiling:
 		sub.w	d1,ost_y_pos(a0)			; align to ceiling
 
 	.on_ceiling:
-		rts	
+		rts
 ; ===========================================================================
 
 .below_ceiling:
@@ -1885,7 +1885,7 @@ Sonic_WalkCeiling:
 
 .on_disc:
 		sub.w	d1,ost_y_pos(a0)			; align to ceiling
-		rts	
+		rts
 ; ===========================================================================
 
 .in_air:
@@ -1941,7 +1941,7 @@ Sonic_WalkVertL:
 		sub.w	d1,ost_x_pos(a0)			; align to wall
 
 	.on_wall:
-		rts	
+		rts
 ; ===========================================================================
 
 .outside_wall:
@@ -1950,7 +1950,7 @@ Sonic_WalkVertL:
 
 .on_disc:
 		sub.w	d1,ost_x_pos(a0)			; align to wall
-		rts	
+		rts
 ; ===========================================================================
 
 .in_air:
@@ -2069,7 +2069,7 @@ Sonic_FindFloor:
 		moveq	#tilemap_solid_top_bit,d5		; bit to test for solidness (top solid)
 		bsr.w	FindFloor
 		move.w	d1,-(sp)				; save d1 (distance to floor) to stack
-		
+
 		move.w	ost_y_pos(a0),d2
 		move.w	ost_x_pos(a0),d3
 		moveq	#0,d0
@@ -2162,7 +2162,7 @@ Sonic_FindWallRight:
 		moveq	#tilemap_solid_lrb_bit,d5		; bit to test for solidness (left/right/bottom solid)
 		bsr.w	FindWall
 		move.w	d1,-(sp)				; save d1 (distance to wall) to stack
-		
+
 		move.w	ost_y_pos(a0),d2
 		move.w	ost_x_pos(a0),d3
 		moveq	#0,d0
@@ -2177,7 +2177,7 @@ Sonic_FindWallRight:
 		moveq	#tilemap_solid_lrb_bit,d5		; bit to test for solidness (left/right/bottom solid)
 		bsr.w	FindWall				; d1 = distance to wall upper side
 		move.w	(sp)+,d0				; d0 = distance to wall lower side
-		
+
 		move.b	#$C0,d2
 		bra.w	Sonic_FindSmaller			; make d1 the smaller distance
 
@@ -2235,7 +2235,7 @@ Sonic_FindCeiling:
 		moveq	#tilemap_solid_lrb_bit,d5		; bit to test for solidness (left/right/bottom solid)
 		bsr.w	FindCeiling
 		move.w	d1,-(sp)				; save d1 (distance to ceiling) to stack
-		
+
 		move.w	ost_y_pos(a0),d2
 		move.w	ost_x_pos(a0),d3
 		moveq	#0,d0
@@ -2251,7 +2251,7 @@ Sonic_FindCeiling:
 		moveq	#tilemap_solid_lrb_bit,d5		; bit to test for solidness (left/right/bottom solid)
 		bsr.w	FindCeiling				; d1 = distance to ceiling on left side
 		move.w	(sp)+,d0				; d0 = distance to ceiling on right side
-		
+
 		move.b	#$80,d2
 		bra.w	Sonic_FindSmaller			; make d1 the smaller distance
 
@@ -2309,7 +2309,7 @@ Sonic_FindWallLeft:
 		moveq	#tilemap_solid_lrb_bit,d5		; bit to test for solidness (left/right/bottom solid)
 		bsr.w	FindWallLeft
 		move.w	d1,-(sp)				; save d1 (distance to wall) to stack
-		
+
 		move.w	ost_y_pos(a0),d2
 		move.w	ost_x_pos(a0),d3
 		moveq	#0,d0
@@ -2325,7 +2325,7 @@ Sonic_FindWallLeft:
 		moveq	#tilemap_solid_lrb_bit,d5		; bit to test for solidness (left/right/bottom solid)
 		bsr.w	FindWallLeft				; d1 = distance to wall lower side
 		move.w	(sp)+,d0				; d0 = distance to wall upper side
-		
+
 		move.b	#$40,d2
 		bra.w	Sonic_FindSmaller			; make d1 the smaller distance
 

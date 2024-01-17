@@ -228,13 +228,13 @@ DrawBGScrollBlock2_SBZ:
 		beq.s	.chk_other				; branch if already clear
 		move.w	#224,d4					; draw at bottom of screen
 	.top_bottom:
-		lea	(locj_6DF4+1).l,a0
+		lea	locj_6DF4+1(pc),a0
 		move.w	(v_bg1_y_pos).w,d0
 		add.w	d4,d0					; d0 = v_bg1_y_pos -16 or +224
 		andi.w	#$1F0,d0				; round down to nearest 16
 		lsr.w	#4,d0					; divide by 16
 		move.b	(a0,d0.w),d0
-		lea	(DrawBG_XPosCopy_Ptrs).l,a3		; dc.w v_bg1_x_pos_copy, v_bg1_x_pos_copy, v_bg2_x_pos_copy, v_bg3_x_pos_copy
+		lea	DrawBG_XPosCopy_Ptrs(pc),a3		; dc.w v_bg1_x_pos_copy, v_bg1_x_pos_copy, v_bg2_x_pos_copy, v_bg3_x_pos_copy
 		movea.w	(a3,d0.w),a3				; get pointer to bg block 1/2/3 x pos
 		beq.s	.bg_x_pos_0				; branch if 0
 		moveq	#-16,d5					; x coordinate
@@ -255,7 +255,7 @@ DrawBGScrollBlock2_SBZ:
 		tst.b	(a2)					; are any redraw flags set?
 		bne.s	.more					; if yes, branch
 		rts
-;===============================================================================			
+;===============================================================================
 	.more:
 		moveq	#-16,d4					; y coordinate - top of screen
 		moveq	#-16,d5					; x coordinate - left of screen
@@ -266,7 +266,7 @@ DrawBGScrollBlock2_SBZ:
 		move.b	d0,(a2)
 		move.w	#320,d5					; x coordinate - right of screen
 	locj_6E8C:
-		lea	(locj_6DF4).l,a0
+		lea	locj_6DF4(pc),a0
 		move.w	(v_bg1_y_pos).w,d0
 		andi.w	#$1F0,d0
 		lsr.w	#4,d0
@@ -320,7 +320,7 @@ DrawBGScrollBlock3_MZ:
 		beq.s	locj_6FAE
 		move.w	#224,d4
 	locj_6F66:
-		lea	(locj_6EF2+1).l,a0
+		lea	locj_6EF2(pc),a0
 		move.w	(v_bg1_y_pos).w,d0
 		subi.w	#$200,d0
 		add.w	d4,d0
@@ -347,7 +347,7 @@ DrawBGScrollBlock3_MZ:
 		tst.b	(a2)
 		bne.s	locj_6FB4
 		rts
-;===============================================================================			
+;===============================================================================
 	locj_6FB4:
 		moveq	#-16,d4
 		moveq	#-16,d5
@@ -358,20 +358,20 @@ DrawBGScrollBlock3_MZ:
 		move.b	d0,(a2)
 		move.w	#320,d5
 	locj_6FC8:
-		lea	(locj_6EF2).l,a0
+		lea	locj_6EF2(pc),a0
 		move.w	(v_bg1_y_pos).w,d0
 		subi.w	#$200,d0
 		andi.w	#$7F0,d0
 		lsr.w	#4,d0
 		lea	(a0,d0.w),a0
 		bra.w	locj_6FEC
-;===============================================================================			
+;===============================================================================
 	DrawBG_XPosCopy_Ptrs:
 		dc.w v_bg1_x_pos_copy, v_bg1_x_pos_copy, v_bg2_x_pos_copy, v_bg3_x_pos_copy
 	locj_6FEC:
 		moveq	#((224+16+16)/16)-1,d6
 		move.l	#$800000,d7
-	locj_6FF4:			
+	locj_6FF4:
 		moveq	#0,d0
 		move.b	(a0)+,d0
 		btst	d0,(a2)
@@ -562,7 +562,7 @@ DrawFlipXY:
 
 GetBlockData:
 		add.w	(a3),d5					; add camera x pos to relative coordinate
-		
+
 GetBlockData_IgnoreX:
 		add.w	4(a3),d4				; add camera y pos to relative coordinate
 		movea.l	(v_16x16_ptr).w,a1
@@ -692,9 +692,9 @@ DrawChunks:
 DrawTilesAtStart_GHZ:
 		moveq	#0,d4
 		moveq	#((224+16+16)/16)-1,d6
-	locj_7224:			
+	locj_7224:
 		movem.l	d4-d6,-(sp)
-		lea	(locj_724a),a0
+		lea	locj_724a(pc),a0
 		move.w	(v_bg1_y_pos).w,d0
 		add.w	d4,d0
 		andi.w	#$F0,d0
@@ -709,9 +709,9 @@ DrawTilesAtStart_GHZ:
 DrawTilesAtStart_MZ:
 		moveq	#-16,d4
 		moveq	#((224+16+16)/16)-1,d6
-	locj_725E:			
+	locj_725E:
 		movem.l	d4-d6,-(sp)
-		lea	(locj_6EF2+1),a0
+		lea	locj_6EF2+1(pc),a0
 		move.w	(v_bg1_y_pos).w,d0
 		subi.w	#$200,d0
 		add.w	d4,d0
@@ -725,9 +725,9 @@ DrawTilesAtStart_MZ:
 DrawTilesAtStart_SBZ1:
 		moveq	#-16,d4
 		moveq	#((224+16+16)/16)-1,d6
-	locj_728C:			
+	locj_728C:
 		movem.l	d4-d6,-(sp)
-		lea	(locj_6DF4+1),a0
+		lea	locj_6DF4+1(pc),a0
 		move.w	(v_bg1_y_pos).w,d0
 		add.w	d4,d0
 		andi.w	#$1F0,d0

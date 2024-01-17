@@ -34,8 +34,8 @@ GM_Continue:
 		jsr	FindFreeInert
 		move.l	#ContScrItem,ost_id(a1)			; load mini Sonic
 		move.b	#id_CSI_MakeMiniSonic,ost_routine(a1)	; set routine for mini Sonic
-		jsr	(ExecuteObjects).l
-		jsr	(BuildSprites).l
+		bsr.w	ExecuteObjects
+		bsr.w	BuildSprites
 		enable_display
 		bsr.w	PaletteFadeIn
 
@@ -46,8 +46,8 @@ GM_Continue:
 Cont_MainLoop:
 		move.b	#id_VBlank_Continue,(v_vblank_routine).w
 		bsr.w	WaitForVBlank
-		jsr	(ExecuteObjects).l
-		jsr	(BuildSprites).l
+		bsr.w	ExecuteObjects
+		bsr.w	BuildSprites
 		cmpi.w	#$180,(v_ost_player+ost_x_pos).w	; has Sonic run off screen?
 		bhs.s	.goto_level				; if yes, branch
 		cmpi.b	#id_CSon_Run,(v_ost_player+ost_routine).w

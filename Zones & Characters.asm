@@ -14,7 +14,7 @@ LoadPerZone:
 		move.l	d4,d5
 		add.l	d5,d5					; d5 = act * 8
 		mulu.w	#ZoneDefs_size-ZoneDefs,d0		; get offset for zone
-		lea	(ZoneDefs).l,a4
+		lea	ZoneDefs(pc),a4
 		adda.l	d0,a4					; jump to relevant zone data
 
 		movea.l	(a4)+,a1				; get pointer for Kosinski PLC list
@@ -29,7 +29,7 @@ LoadPerZone:
 		lea	(v_256x256_tiles).l,a1			; RAM address for 256x256 mappings
 		bsr.w	KosDec					; decompress
 		move.l	(a4)+,(v_collision_index_ptr).w		; load collision index pointer
-		
+
 		moveq	#0,d0
 		movea.l	(a4)+,a1				; get pointer for palette id list for Sonic & title cards
 		move.b	(a1,d1.w),d0				; get palette id
@@ -48,7 +48,7 @@ LoadPerZone:
 		move.b	d0,(f_water_enable).w			; set water enable flag
 		movea.l	(a4),a1					; get pointer for water filter id list
 		move.b	(a1,d1.w),(v_waterfilter_id).w		; set water filter id
-		
+
 		movea.l	4(a4),a1				; get pointer for initial water height list
 		move.w	(a1,d2.w),d0				; get water height
 		move.w	d0,(v_water_height_actual).w		; set water heights
@@ -59,28 +59,28 @@ LoadPerZone:
 
 		movea.l	(a4)+,a1				; get pointer for OPL list
 		move.l	(a1,d4.w),(v_opl_data_ptr).w		; get pointer for actual OPL data
-		
+
 		movea.l	(a4)+,a1				; get pointer for music list
 		move.b	(a1,d1.w),(v_bgm).w			; set music id
-		
+
 		move.l	(a4)+,(v_aniart_ptr).w			; load animated level art routine pointer
-		
+
 		movea.l	(a4)+,a1				; get pointer for level boundary list
 		lea	(a1,d5.w),a1
 		move.l	(a1),(v_boundary_left).w		; set left & right boundaries
 		move.l	(a1)+,(v_boundary_left_next).w
 		move.l	(a1),(v_boundary_top).w			; set top & bottom boundaries
 		move.l	(a1)+,(v_boundary_top_next).w
-		
+
 		movea.l	(a4)+,a1				; get pointer for start position list
 		lea	(a1,d4.w),a1
 		move.w	(a1)+,(v_ost_player+ost_x_pos).w	; set Sonic's x pos
 		move.w	(a1)+,(v_ost_player+ost_y_pos).w	; set Sonic's y pos
-		
+
 		movea.l	(a4)+,a1				; get pointer for debug list
 		move.w	(a1)+,(v_debug_lastitem).w
 		move.l	a1,(v_debug_ptr).w			; save address of first item in list
-		
+
 		movea.l	(a4)+,a1				; get pointer for title card list
 		lea	(a1,d5.w),a1
 		move.w	(a1)+,(v_titlecard_zone).w		; set zone name
@@ -96,14 +96,14 @@ LoadPerZone:
 
 		movea.l	(a4)+,a1				; get pointer for bg deformation routine list
 		move.l	(a1,d4.w),(v_deformlayer_ptr).w		; get pointer for bg deformation routine
-		
+
 		move.w	(a4)+,d0				; get id for animal graphics
 		pushr	d1-d2
 		jsr	UncPLC					; load animal graphics
 		popr	d1-d2
 		move.w	(a4)+,(v_animal_type).w			; get ids for animal types
 		rts
-		
+
 ; ---------------------------------------------------------------------------
 ; Zone definitions
 ; ---------------------------------------------------------------------------
@@ -158,7 +158,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.w id_UPLC_PenguinSeal
 		dc.b id_Penguin, id_Seal
 		even
-		
+
 		; Marble Zone
 		dc.l Zone_KPLC_MZ
 		dc.l Blk16_MZ
@@ -183,7 +183,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.w id_UPLC_SquirrelSeal
 		dc.b id_Squirrel, id_Seal
 		even
-		
+
 		; Star Light Zone
 		dc.l Zone_KPLC_SLZ
 		dc.l Blk16_SLZ
@@ -208,7 +208,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.w id_UPLC_PigFlicky
 		dc.b id_Pig, id_Flicky
 		even
-		
+
 		; Spring Yard Zone
 		dc.l Zone_KPLC_SYZ
 		dc.l Blk16_SYZ
@@ -233,7 +233,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.w id_UPLC_PigChicken
 		dc.b id_Pig, id_Chicken
 		even
-		
+
 		; Scrap Brain Zone
 		dc.l Zone_KPLC_SBZ
 		dc.l Blk16_SBZ
@@ -258,7 +258,7 @@ ZoneDefs:	; Green Hill Zone
 		dc.w id_UPLC_RabbitChicken
 		dc.b id_Rabbit, id_Chicken
 		even
-		
+
 		; Ending
 		dc.l Zone_KPLC_End
 		dc.l Blk16_GHZ
@@ -482,9 +482,9 @@ LoadPerCharacter:
 		moveq	#0,d0
 		move.w	(v_character1).w,d0			; get character number
 		mulu.w	#CharDefs_size-CharDefs,d0		; get offset for character
-		lea	(CharDefs).l,a4
+		lea	CharDefs(pc),a4
 		adda.l	d0,a4					; jump to relevant character data
-		
+
 		move.l	(a4),(v_ost_player).w			; load player object
 		move.l	(a4)+,(v_player1_ptr).w			; save pointer to player object
 		cmp.b	#id_Special,(v_gamemode).w
@@ -492,20 +492,20 @@ LoadPerCharacter:
 		move.l	(a4),(v_ost_player).w			; load Special Stage player object
 	.not_special:
 		lea	4(a4),a4
-		
+
 		move.w	(a4)+,d0
 		bmi.s	.skip_pal
 		bsr.w	PalLoad					; load character palette
-		
+
 	.skip_pal:
 		move.w	(a4)+,d0
 		jsr	UncPLC					; load life icon graphics
-		
+
 		move.w	(a4)+,(v_haspassed_character).w		; set settings id for "Sonic has passed"
 		move.w	(a4)+,(v_haspassed_uplc).w		; set UPLC id for "Sonic has passed"
 		move.w	(a4)+,(v_gotthemall_character).w	; set settings id for "Sonic got them all"
 		move.w	(a4)+,(v_gotthemall_uplc).w		; set UPLC id for "Sonic got them all"
-		
+
 		moveq	#0,d0
 		move.b	(a4)+,(v_player1_width).w		; set width
 		move.b	(a4),d0
@@ -518,7 +518,7 @@ LoadPerCharacter:
 		move.b	(a4)+,(v_player1_hitbox_height).w
 		move.b	(a4)+,(v_player1_hitbox_width_roll).w
 		move.b	(a4)+,(v_player1_hitbox_height_roll).w
-		
+
 		rts
 
 CharDefs:
@@ -564,7 +564,7 @@ CharDefs:
 		dc.b 14/2, 28/2
 		dc.b 18/2, 34/2
 		dc.b 18/2, 24/2
-		
+
 ; ---------------------------------------------------------------------------
 ; Subroutine to load demo data
 ; ---------------------------------------------------------------------------
@@ -573,25 +573,25 @@ LoadPerDemo:
 		moveq	#0,d0
 		move.w	(v_demo_num).w,d0			; get demo number
 		mulu.w	#DemoDefs_size-DemoDefs,d0		; get offset for particular demo
-		lea	(DemoDefs).l,a4
+		lea	DemoDefs(pc),a4
 		adda.l	d0,a4					; jump to relevant demo data
-		
+
 		move.w	(a4)+,d0				; get zone number
 		move.b	d0,(v_zone).w
 		move.w	(a4)+,d0				; get act number
 		move.b	d0,(v_act).w
-		
+
 		move.w	(a4)+,(v_character1).w			; get character id
-		
+
 		move.l	(a4)+,(v_demo_ptr).w			; get pointer for demo data
-		
+
 		move.l	(a4)+,(v_demo_x_start).w		; get start position
-		
+
 		rts
-		
+
 countof_demo:		equ (DemoDefs_Credits-DemoDefs)/(DemoDefs_size-DemoDefs) ; number of regular demos (4)
 countof_credits:	equ (DemoDefs_end-DemoDefs_Credits)/(DemoDefs_size-DemoDefs) ; number of credits demos (8)
-		
+
 DemoDefs:
 		dc.w id_GHZ					; zone
 		dc.w 0						; act
@@ -599,69 +599,69 @@ DemoDefs:
 		dc.l Demo_GHZ					; pointer for demo control data
 		dc.w 0,0					; start position (0,0 to use default level start)
 	DemoDefs_size:
-	
+
 		dc.w id_MZ
 		dc.w 0
 		dc.w 1
 		dc.l Demo_MZ
 		dc.w 0,0
-	
+
 		dc.w id_SYZ
 		dc.w 0
 		dc.w 2
 		dc.l Demo_SYZ
 		dc.w 0,0
-	
+
 		; Special Stage
 		dc.w -1
 		dc.w 0
 		dc.w 0
 		dc.l Demo_SS
 		dc.w 0,0
-		
+
 DemoDefs_Credits:
 		dc.w id_GHZ
 		dc.w 0
 		dc.w 0
 		dc.l Demo_EndGHZ1
 		dc.w $0050, $03B0
-		
+
 		dc.w id_MZ
 		dc.w 1
 		dc.w 1
 		dc.l Demo_EndMZ
 		dc.w $0EA0, $046C
-		
+
 		dc.w id_SYZ
 		dc.w 2
 		dc.w 0
 		dc.l Demo_EndSYZ
 		dc.w $1750, $00BD
-		
+
 		dc.w id_LZ
 		dc.w 2
 		dc.w 0
 		dc.l Demo_EndLZ
 		dc.w $0A00, $062C
-		
+
 		dc.w id_SLZ
 		dc.w 2
 		dc.w 0
 		dc.l Demo_EndSLZ
 		dc.w $0BB0, $004C
-		
+
 		dc.w id_SBZ
 		dc.w 0
 		dc.w 0
 		dc.l Demo_EndSBZ1
 		dc.w $1570, $016C
-		
+
 		dc.w id_SBZ
 		dc.w 1
 		dc.w 0
 		dc.l Demo_EndSBZ2
 		dc.w $01B0, $072C
-		
+
 		dc.w id_GHZ
 		dc.w 0
 		dc.w 0

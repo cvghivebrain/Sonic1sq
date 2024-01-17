@@ -41,12 +41,12 @@ BubM_Main:	; Routine 0
 		move.b	ost_subtype(a0),d0
 		andi.b	#$F,d0					; low nybble of subtype
 		move.b	d0,ost_bubble_freq(a0)			; set as frequency
-		
+
 BubM_Wait:	; Routine 2
 		move.w	(v_water_height_actual).w,d0
 		cmp.w	ost_y_pos(a0),d0
 		bcc.w	DespawnQuick_NoDisplay			; branch if not underwater
-		
+
 		subq.w	#1,ost_bubble_wait_time(a0)		; decrement timer
 		bpl.s	.animate				; branch if time remains
 		addq.b	#2,ost_routine(a0)			; goto BubM_Active next
@@ -61,18 +61,18 @@ BubM_Wait:	; Routine 2
 		move.b	d1,ost_bubble_mini_index(a0)		; set bubble pattern
 		clr.w	ost_bubble_wait_time(a0)		; first bubble spawns immediately
 		clr.b	ost_bubble_flag(a0)
-		
+
 	.animate:
-		lea	(Ani_BubM).l,a1
+		lea	Ani_BubM(pc),a1
 		jsr	(AnimateSprite).l
 		bra.w	DespawnQuick
 ; ===========================================================================
-		
+
 BubM_Active:	; Routine 4
 		move.w	(v_water_height_actual).w,d0
 		cmp.w	ost_y_pos(a0),d0
 		bcc.w	DespawnQuick_NoDisplay			; branch if not underwater
-		
+
 		subq.w	#1,ost_bubble_wait_time(a0)		; decrement timer
 		bpl.w	.animate				; branch if time remains
 		jsr	(RandomNumber).w
@@ -90,7 +90,7 @@ BubM_Active:	; Routine 4
 		move.b	ost_bubble_mini_index(a0),d0
 		move.b	BubM_Mini_List(pc,d0.w),ost_subtype(a1)	; get subtype from list based on random number
 		addq.b	#1,ost_bubble_mini_index(a0)
-		
+
 		tst.b	ost_bubble_freq(a0)
 		bne.s	.fail					; branch if current sequence shouldn't contain a big bubble
 		tst.b	ost_bubble_flag(a0)
@@ -100,11 +100,11 @@ BubM_Active:	; Routine 4
 		move.b	(v_frame_counter_low).w,d0
 		andi.b	#3,d0
 		bne.s	.fail					; branch if two random bits aren't both 0
-		
+
 	.force_big:
 		move.b	#2,ost_subtype(a1)			; convert mini bubble to big bubble
 		move.b	#1,ost_bubble_flag(a0)			; don't spawn another big bubble
-		
+
 	.fail:
 		subq.b	#1,ost_bubble_mini_count(a0)		; decrement bubble counter
 		bpl.s	.animate				; branch if not -1
@@ -114,18 +114,18 @@ BubM_Active:	; Routine 4
 		move.b	ost_subtype(a0),d0
 		andi.b	#$F,d0					; low nybble of subtype
 		move.b	d0,ost_bubble_freq(a0)			; set as frequency
-		
+
 	.keep_freq:
 		jsr	(RandomNumber).w
 		andi.w	#$7F,d0
 		addi.w	#$80,d0
 		move.w	d0,ost_bubble_wait_time(a0)		; set time until next sequence
-		
+
 	.animate:
 		lea	Ani_BubM(pc),a1
 		jsr	(AnimateSprite).l
 		bra.w	DespawnQuick
-		
+
 BubM_Mini_List:	dc.b 0, 1, 0, 0, 0, 0				; 0 = small, 1 = medium
 		dc.b 1, 0, 0, 0, 0, 1
 		dc.b 0, 1, 0, 0, 1, 0
@@ -137,7 +137,7 @@ BubM_Mini_List:	dc.b 0, 1, 0, 0, 0, 0				; 0 = small, 1 = medium
 
 Ani_BubM:	index *
 		ptr ani_bubble_bubmaker
-		
+
 ani_bubble_bubmaker:						; bubble maker on the floor
 		dc.w $F
 		dc.w id_frame_bubble_bubmaker1

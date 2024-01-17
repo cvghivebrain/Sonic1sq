@@ -103,7 +103,7 @@ GameProgram:
 FirstRun:
 		lea	(v_keep_after_reset).w,a1		; $FFFFFE00
 		move.w	#(($FFFFFFFF-v_keep_after_reset+1)/4)-1,d1
-		jsr	ClearRAM				; clear RAM ($FE00-$FFFF)
+		bsr.w	ClearRAM				; clear RAM ($FE00-$FFFF)
 
 		move.b	(console_version).l,d0
 		andi.b	#console_region+console_speed,d0	; get bits 7+6 of console version

@@ -28,16 +28,16 @@ BGHZ_Main:	; Routine 0
 		move.b	#$20,ost_displaywidth(a0)
 		move.b	#priority_3,ost_priority(a0)
 		move.b	#id_ani_boss_ship,ost_anim(a0)
-		
+
 		moveq	#id_UPLC_Boss,d0
 		jsr	UncPLC
-		
+
 		jsr	(FindNextFreeObj).l			; find free OST slot
 		bne.s	.fail					; branch if not found
 		move.l	#Exhaust,ost_id(a1)
 		move.w	#$400,ost_exhaust_escape(a1)		; set speed at which ship escapes
 		move.l	a0,ost_exhaust_parent(a1)		; save address of OST of parent
-		
+
 		jsr	(FindNextFreeObj).l			; find free OST slot
 		bne.s	.fail					; branch if not found
 		move.l	#BossFace,ost_id(a1)
@@ -58,7 +58,7 @@ BGHZ_ShipMain:	; Routine 2
 		move.b	ost_mode(a0),d0
 		move.w	BGHZ_ShipIndex(pc,d0.w),d1
 		jsr	BGHZ_ShipIndex(pc,d1.w)
-		lea	(Ani_Bosses).l,a1
+		lea	Ani_Bosses(pc),a1
 		jsr	(AnimateSprite).l
 		move.b	ost_status(a0),d0
 		andi.b	#status_xflip+status_yflip,d0
@@ -117,7 +117,7 @@ BGHZ_Update:
 		move.b	#id_React_Boss,ost_col_type(a0)		; enable boss collision again
 
 	.exit:
-		rts	
+		rts
 ; ===========================================================================
 
 .beaten:
@@ -125,7 +125,7 @@ BGHZ_Update:
 		bsr.w	AddPoints				; give Sonic 1000 points
 		move.b	#id_BGHZ_Explode,ost_mode(a0)
 		move.w	#179,ost_boss_wait_time(a0)		; set timer to 3 seconds
-		rts	
+		rts
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to load explosions when a boss is beaten
@@ -255,7 +255,7 @@ BGHZ_Explode:
 		move.b	#1,(v_boss_status).w			; set boss beaten flag
 
 	.exit:
-		rts	
+		rts
 ; ===========================================================================
 
 BGHZ_Recover:
