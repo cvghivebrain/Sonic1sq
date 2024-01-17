@@ -51,7 +51,7 @@ Mon_Main:	; Routine 0
 		beq.s	.not_broken				; branch if monitor wasn't broken
 		move.b	#id_Mon_Broken,ost_routine(a0)		; goto Mon_Broken next
 		move.b	#id_frame_monitor_broken,ost_frame(a0)	; use broken monitor frame
-		rts	
+		rts
 ; ===========================================================================
 
 	.not_broken:
@@ -59,7 +59,7 @@ Mon_Main:	; Routine 0
 		bne.s	.not_1up				; branch if monitor isn't a 1-up
 		move.b	#id_ani_monitor_sonic,ost_anim(a0)	; use 1-up animation
 		bra.s	Mon_Solid				; skip slot check
-		
+
 	.not_1up:
 		bsr.w	Mon_FindSlot
 
@@ -77,12 +77,12 @@ Mon_Solid:	; Routine 2
 		bmi.w	Mon_Animate				; branch if Sonic is moving upwards
 		cmpi.b	#id_Roll,ost_anim(a1)
 		bne.w	Mon_Animate				; branch if Sonic isn't rolling/jumping
-		
+
 	.break:
 		neg.w	ost_y_vel(a1)				; reverse Sonic's y speed
 		addq.b	#2,ost_routine(a0)			; goto Mon_Break next
 		bra.w	Mon_Animate
-		
+
 	.drop:
 		move.w	#-$180,ost_y_vel(a0)			; move monitor upwards
 		move.b	#id_Mon_Drop,ost_routine(a0)		; goto Mon_Drop next
@@ -102,7 +102,7 @@ Mon_Break:	; Routine 4
 		cmp.b	#type_monitor_1up,ost_subtype(a0)
 		bne.s	.not_1up				; branch if not 1-up
 		move.b	#id_frame_monitor_sonic,ost_frame(a1)	; use 1-up icon instead
-		
+
 	.not_1up:
 		tst.b	ost_monitor_slot(a0)
 		bmi.s	.no_slot				; branch if monitor isn't using a slot
@@ -125,7 +125,7 @@ Mon_Break:	; Routine 4
 
 Mon_Animate:
 Mon_AniBreak:	; Routine 8
-		lea	(Ani_Monitor).l,a1
+		lea	Ani_Monitor(pc),a1
 		bsr.w	AnimateSprite
 		move.w	ost_x_pos(a0),d0
 		bsr.w	CheckActive
@@ -133,7 +133,7 @@ Mon_AniBreak:	; Routine 8
 		bsr.w	SaveState
 		beq.s	.clear_slot				; branch if not in respawn table
 		bclr	#7,(a2)					; allow respawn
-		
+
 	.clear_slot:
 		moveq	#0,d0
 		move.b	ost_monitor_slot(a0),d0
@@ -176,18 +176,18 @@ Mon_Solid_Detect:
 		bgt.w	Sol_None				; branch if outside x hitbox
 		range_y_exact
 		bpl.w	Sol_None				; branch if outside y hitbox
-		
+
 		cmp.w	d1,d3
 		blt.s	.side					; branch if Sonic is to the side
-		
+
 		tst.w	d2
 		bmi.s	.above					; branch if Sonic is above
-		
+
 		sub.w	d3,ost_y_pos(a1)			; snap to hitbox
 		neg.w	ost_y_vel(a1)				; stop Sonic moving up
 		moveq	#solid_bottom,d1			; set collision flag to bottom
 		rts
-		
+
 	.side:
 		cmpi.b	#id_Roll,ost_anim(a1)
 		bne.w	Sol_Side				; use regular side collision if not rolling/jumping
@@ -195,11 +195,11 @@ Mon_Solid_Detect:
 		bmi.s	.left					; branch if Sonic is on left side
 		moveq	#solid_right,d1				; set collision flag to right
 		rts
-		
+
 	.left:
 		moveq	#solid_left,d1				; set collision flag to left
 		rts
-		
+
 	.above:
 		cmpi.b	#id_Roll,ost_anim(a1)
 		bne.w	Sol_Above				; use regular top collision if not rolling/jumping
@@ -209,7 +209,7 @@ Mon_Solid_Detect:
 		move.b	#4,ost_mode(a0)
 		moveq	#solid_top,d1				; set collision flag to top
 		rts
-		
+
 ; ---------------------------------------------------------------------------
 ; Subroutine to	find a free monitor slot, set animation and load graphics
 
@@ -221,14 +221,14 @@ Mon_FindSlot:
 		movea.l	a1,a2
 		moveq	#0,d0
 		move.b	ost_subtype(a0),d0
-		
+
 		moveq	#8-1,d1					; number of slots to check
 	.loop1:
 		cmp.b	1(a1),d0
 		beq.s	.found_match				; branch if type matches existing type
 		addq.w	#2,a1					; next slot
 		dbf	d1,.loop1				; repeat for all slots
-		
+
 		movea.l	a2,a1
 		moveq	#8-1,d1
 	.loop2:
@@ -236,7 +236,7 @@ Mon_FindSlot:
 		beq.s	.found_empty				; branch if slot is fully empty
 		addq.w	#2,a1					; next slot
 		dbf	d1,.loop2				; repeat for all slots
-		
+
 		movea.l	a2,a1
 		moveq	#8-1,d1
 	.loop3:
@@ -244,10 +244,10 @@ Mon_FindSlot:
 		beq.s	.found_empty				; branch if slot is available but not empty
 		addq.w	#2,a1					; next slot
 		dbf	d1,.loop3				; repeat for all slots
-		
+
 		move.b	#id_ani_monitor_static,ost_anim(a0)	; use static animation
 		rts
-		
+
 	.found_match:
 		addq.b	#1,(a1)+				; increment usage counter
 		neg.w	d1
@@ -255,11 +255,11 @@ Mon_FindSlot:
 		move.b	d1,ost_monitor_slot(a0)
 		move.b	d1,ost_anim(a0)
 		rts
-		
+
 	.found_empty:
 		bsr.s	.found_match				; set ost_anim & ost_monitor_slot
 		move.b	d0,(a1)					; save type to slot
-		
+
 		set_dma_size	sizeof_cell*4,d2		; number of tiles to load
 		add.w	d1,d1
 		add.w	d1,d1					; d1 * 4
@@ -290,7 +290,7 @@ Mon_GfxSource:
 		set_dma_src	Art_RingIcon			; Rings
 		set_dma_src	Art_SIcon			; S
 		set_dma_src	Art_GogglesIcon			; Goggles
-		
+
 countof_monitor_types:	equ (*-Mon_GfxSource)/6
 ; ---------------------------------------------------------------------------
 ; Animation script
@@ -308,7 +308,7 @@ Ani_Monitor:	index *
 		ptr ani_monitor_static
 		ptr ani_monitor_sonic
 		ptr ani_monitor_breaking
-		
+
 ani_monitor_static:
 		dc.w 1
 		dc.w id_frame_monitor_static0

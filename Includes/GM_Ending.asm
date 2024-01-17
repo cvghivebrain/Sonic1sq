@@ -63,9 +63,9 @@ GM_Ending:
 		move.w	#-$800,(v_ost_player+ost_inertia).w	; set Sonic's speed
 		jsr	FindFreeInert
 		move.l	#HUD,ost_id(a1)				; load HUD object
-		jsr	(ObjPosLoad).l				; load objects for level
-		jsr	(ExecuteObjects).l			; run all objects
-		jsr	(BuildSprites).l			; create sprite table
+		bsr.w	ObjPosLoad				; load objects for level
+		bsr.w	ExecuteObjects			; run all objects
+		bsr.w	BuildSprites			; create sprite table
 		moveq	#0,d0
 		move.w	d0,(v_rings).w
 		move.l	d0,(v_time).w
@@ -95,10 +95,10 @@ End_MainLoop:
 		bsr.w	WaitForVBlank
 		addq.w	#1,(v_frame_counter).w
 		bsr.w	End_MoveSonic				; auto control Sonic
-		jsr	(ExecuteObjects).l			; run all objects
+		bsr.w	ExecuteObjects			; run all objects
 		bsr.w	DeformLayers				; scroll background
-		jsr	(BuildSprites).l			; create sprite table
-		jsr	(ObjPosLoad).l				; spawn objects
+		bsr.w	BuildSprites			; create sprite table
+		bsr.w	ObjPosLoad				; spawn objects
 		bsr.w	PaletteCycle				; animate water in background
 		bsr.w	OscillateNumDo
 		bsr.w	SynchroAnimate
@@ -127,10 +127,10 @@ End_FlashLoop:
 		bsr.w	WaitForVBlank
 		addq.w	#1,(v_frame_counter).w
 		bsr.w	End_MoveSonic				; auto control Sonic
-		jsr	(ExecuteObjects).l
+		bsr.w	ExecuteObjects
 		bsr.w	DeformLayers
-		jsr	(BuildSprites).l
-		jsr	(ObjPosLoad).l
+		bsr.w	BuildSprites
+		bsr.w	ObjPosLoad
 		bsr.w	OscillateNumDo
 		bsr.w	SynchroAnimate
 		subq.w	#1,(v_palfade_time).w			; decrement palette timer

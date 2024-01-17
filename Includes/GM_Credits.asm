@@ -32,8 +32,8 @@ GM_Credits:
 		bsr.w	PalLoad					; load Sonic's palette
 		jsr	FindFreeInert
 		move.l	#CreditsText,ost_id(a1)			; load credits object
-		jsr	(ExecuteObjects).l
-		jsr	(BuildSprites).l
+		bsr.w	ExecuteObjects
+		bsr.w	BuildSprites
 		bsr.w	EndDemoSetup				; setup for next mini-demo
 		moveq	#id_UPLC_Monitors,d0
 		jsr	UncPLC					; load graphics for monitors
@@ -82,7 +82,7 @@ EndDemoSetup:
 		cmpi.w	#3+1,(v_credits_num).w			; is LZ demo running?
 		bne.s	.exit					; if not, branch
 
-		lea	(EndDemo_LampVar).l,a1			; load lamppost variables
+		lea	EndDemo_LampVar(pc),a1			; load lamppost variables
 		lea	(v_last_lamppost).w,a2
 		move.w	#((EndDemo_LampVar_end-EndDemo_LampVar)/4)-1,d0
 

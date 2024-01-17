@@ -26,7 +26,7 @@ SSRC_PosData:	; x positions for chaos emeralds
 
 SSRC_Main:	; Routine 0
 		movea.l	a0,a1					; replace current object with 1st emerald
-		lea	(SSRC_PosData).l,a2
+		lea	SSRC_PosData(pc),a2
 		moveq	#0,d2
 		moveq	#emerald_count-1,d1
 		move.l	(v_emeralds).w,d4			; get emerald bitfield
@@ -34,7 +34,7 @@ SSRC_Main:	; Routine 0
 
 	.loop:
 		jsr	FindFreeInert
-		
+
 	.skip_findost:
 		move.l	#0,ost_id(a1)				; set object to none by default
 		btst	d2,d4					; check if emerald was collected

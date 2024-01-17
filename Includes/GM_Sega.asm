@@ -25,7 +25,7 @@ GM_Sega:
 		bsr.w	ClearScreen
 		moveq	#id_KPLC_Sega,d0
 		jsr	KosPLC
-		
+
 		lea	($FF0000).l,a1				; RAM buffer
 		lea	(KosMap_SegaLogo).l,a0			; Sega logo mappings
 		locVRAM	vram_fg+(sizeof_vram_row*0)+(0*2),d0	; foreground, x=0, y=0
@@ -33,7 +33,7 @@ GM_Sega:
 		moveq	#sega_fg_height,d2			; height
 		moveq	#0,d3					; tile setting
 		bsr.w	LoadTilemap
-		
+
 		lea	($FF0000).l,a1				; RAM buffer
 		lea	(KosMap_SegaLogoBG).l,a0		; Sega logo background mappings
 		locVRAM	vram_bg+(sizeof_vram_row*10)+(8*2),d0	; foreground, x=8, y=10
@@ -41,7 +41,7 @@ GM_Sega:
 		moveq	#sega_bg_height,d2			; height
 		moveq	#0,d3					; tile setting
 		bsr.w	LoadTilemap
-		
+
 		moveq	#id_Pal_SegaBG,d0
 		bsr.w	PalLoad					; load Sega logo palette
 		move.w	#0,(v_brightness).w
@@ -86,12 +86,12 @@ PalCycle_Sega_Stripe:
 		tst.b	(f_sega_pal_next).w
 		bne.s	PalCycle_Sega_Full			; branch if stripe animation is finished
 		lea	(v_pal_dry_line2).w,a1			; address for 2nd palette line
-		lea	(Pal_Sega1).l,a0			; address of blue gradient palette source
+		lea	Pal_Sega1(pc),a0			; address of blue gradient palette source
 		moveq	#countof_stripe-1,d1			; 6-1
 		move.w	(v_palcycle_num).w,d0			; d0 = -$A (initially)
 
 	.loop_findcolour:
-		bpl.s	.loop_colours				; branch if d0 = 0 
+		bpl.s	.loop_colours				; branch if d0 = 0
 		addq.w	#2,a0					; read next colour from source
 		subq.w	#1,d1
 		addq.w	#2,d0					; increment d0
@@ -129,7 +129,7 @@ PalCycle_Sega_Stripe:
 	.not_at_end:
 		move.w	d0,(v_palcycle_num).w
 		moveq	#1,d0
-		rts	
+		rts
 ; ===========================================================================
 
 PalCycle_Sega_Full:
@@ -141,12 +141,12 @@ PalCycle_Sega_Full:
 		cmpi.w	#countof_sega*2*4,d0			; $30
 		blo.s	.update					; branch if animation is incomplete
 		moveq	#0,d0					; set flag when animation is complete
-		rts	
+		rts
 ; ===========================================================================
 
 .update:
 		move.w	d0,(v_palcycle_num).w			; update counter
-		lea	(Pal_Sega2).l,a0
+		lea	Pal_Sega2(pc),a0
 		lea	(a0,d0.w),a0				; jump to source palette
 		lea	(v_pal_dry_line1+(2*2)).w,a1		; start on first palette line, 3rd colour
 		move.l	(a0)+,(a1)+

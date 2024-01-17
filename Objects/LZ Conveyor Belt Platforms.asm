@@ -46,7 +46,7 @@ LCon_Main:	; Routine 0
 		movea.l	(a2,d0.w),a2				; get address of platform position data
 		move.l	a2,ost_lcon_platform_ptr(a0)
 		add.w	d0,d0
-		lea	(LCon_Edge_Data).l,a2			; get edge data
+		lea	LCon_Edge_Data(pc),a2			; get edge data
 		lea	(a2,d0.w),a2
 		move.w	(a2)+,ost_lcon_visible_left(a0)		; set limits of visibility
 		move.w	(a2)+,ost_lcon_visible_right(a0)
@@ -65,7 +65,7 @@ LCon_Action:	; Routine 2
 		beq.s	.no_button				; branch if button isn't pressed
 		move.b	#1,(f_convey_reverse).w			; set global reverse flag
 		move.b	#2,ost_mode(a0)				; set local reverse flag
-		
+
 	.no_button:
 		move.w	(v_camera_x_pos).w,d0
 		cmp.w	ost_lcon_visible_left(a0),d0
@@ -79,7 +79,7 @@ LCon_Action:	; Routine 2
 		bhi.s	.not_visible				; branch if camera is below
 		tst.b	ost_lcon_visible_flag(a0)
 		bne.s	.exit					; branch if already visible
-		
+
 		move.b	#1,ost_lcon_visible_flag(a0)		; set flag
 		movea.l	ost_lcon_platform_ptr(a0),a2		; get pointer to platform position data
 		move.w	(a2)+,d1				; get object count
@@ -94,10 +94,10 @@ LCon_Action:	; Routine 2
 		move.b	d0,ost_subtype(a1)
 		saveparent
 		dbf	d1,.loop				; repeat for number of objects
-		
+
 	.exit:
 		rts
-		
+
 	.not_visible:
 		tst.b	ost_lcon_visible_flag(a0)
 		beq.s	.exit					; branch if already not visible
@@ -173,30 +173,30 @@ LConP_Platform:	; Routine 2
 		neg.w	ost_x_vel(a0)				; go backwards
 		neg.w	ost_y_vel(a0)
 		bra.w	LConP_RevCorner
-		
+
 	.skip_reverse:
 		move.w	ost_x_pos(a0),ost_x_prev(a0)
 		update_xy_pos
-		
+
 LConP_ChkCorner:
 		move.w	ost_lcon_corner_x_pos(a0),d0
 		cmp.w	ost_x_pos(a0),d0
 		bne.s	.continue_x				; branch if not at corner on x
 		clr.w	ost_x_vel(a0)				; stop moving x
-		
+
 	.continue_x:
 		move.w	ost_lcon_corner_y_pos(a0),d0
 		cmp.w	ost_y_pos(a0),d0
 		bne.s	.continue_y				; branch if not at corner on y
 		clr.w	ost_y_vel(a0)				; stop moving y
-		
+
 	.continue_y:
 		tst.l	ost_x_vel(a0)
 		beq.s	LConP_NextCorner			; branch if at corner
 		bsr.w	SolidObject_TopOnly
 		bra.w	DisplaySprite
 ; ===========================================================================
-		
+
 LConP_NextCorner:
 		tst.b	ost_mode(a1)
 		bne.s	LConP_RevCorner				; branch if reverse flag is set
@@ -206,7 +206,7 @@ LConP_NextCorner:
 		cmp.b	ost_lcon_corner_count(a0),d0
 		bne.s	.corner_valid				; branch if corner exists
 		moveq	#0,d0					; reset to 0
-		
+
 	.corner_valid:
 		move.b	d0,ost_lcon_corner_next(a0)
 		movea.l	ost_lcon_corner_ptr(a0),a2		; get pointer to corner data
@@ -227,7 +227,7 @@ LConP_RevCorner:
 		subq.b	#8,d0
 		bpl.s	.corner_valid				; branch if corner exists
 		add.b	ost_lcon_corner_count(a0),d0		; reset to final corner
-		
+
 	.corner_valid:
 		move.b	d0,ost_lcon_corner_next(a0)
 		movea.l	ost_lcon_corner_ptr(a0),a2		; get pointer to corner data

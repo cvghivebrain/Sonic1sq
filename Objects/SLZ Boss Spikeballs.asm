@@ -65,7 +65,7 @@ BSpike_Main:	; Routine 0
 BSpike_Fall:	; Routine 2
 		jsr	(ObjectFall).l				; apply gravity and update position
 		movea.l	ost_bspike_seesaw(a0),a1		; get address of OST of seesaw below
-		lea	(BSpike_YPos).l,a2
+		lea	BSpike_YPos(pc),a2
 		moveq	#0,d0
 		move.b	ost_frame(a1),d0			; get seesaw frame
 		move.w	ost_x_pos(a0),d1
@@ -93,7 +93,7 @@ BSpike_Fall:	; Routine 2
 ; ===========================================================================
 
 .exit:
-		rts	
+		rts
 ; ===========================================================================
 
 BSpike_Bounce:	; Routine 4
@@ -133,7 +133,7 @@ BSpike_Bounce:	; Routine 4
 ; ===========================================================================
 
 .no_change:
-		lea	(BSpike_YPos).l,a2
+		lea	BSpike_YPos(pc),a2
 		moveq	#0,d0
 		move.b	ost_frame(a1),d0			; get seesaw frame
 		move.w	#$28,d2					; dist from seesaw centre to edge
@@ -156,7 +156,7 @@ BSpike_Bounce:	; Routine 4
 		bne.s	BSpike_Animate				; branch if time remains
 		move.w	#$20,ost_bspike_time(a0)		; set subtype to allow spawning of shrapnel objects
 		move.b	#id_BSpike_Explode,ost_routine(a0)	; goto BSpike_Explode next
-		rts	
+		rts
 ; ===========================================================================
 
 BSpike_Animate:
@@ -176,7 +176,7 @@ BSpike_Animate:
 		move.b	ost_bspike_time_master(a0),ost_anim_time(a0)
 
 	.wait:
-		rts	
+		rts
 ; ===========================================================================
 
 BSpike_HitBoss:	; Routine 6
@@ -260,7 +260,7 @@ BSpike_HitBoss:	; Routine 6
 .downwards:
 		jsr	(ObjectFall).l				; apply gravity and update position
 		movea.l	ost_bspike_seesaw(a0),a1		; get address of OST of seesaw below
-		lea	(BSpike_YPos).l,a2
+		lea	BSpike_YPos(pc),a2
 		moveq	#0,d0
 		move.b	ost_frame(a1),d0			; get seesaw frame
 		move.w	ost_x_pos(a0),d1
@@ -338,7 +338,7 @@ BSpike_Explode:	; Routine 8
 		clr.b	ost_routine(a0)
 		cmpi.w	#$20,ost_bspike_time(a0)		; is shrapnel flag set?
 		beq.s	.make_frags				; if yes, branch
-		rts	
+		rts
 ; ===========================================================================
 
 .make_frags:
@@ -368,7 +368,7 @@ BSpike_Explode:	; Routine 8
 	.fail:
 		dbf	d1,.loop				; repeat sequence 3 more times
 
-		rts	
+		rts
 ; ===========================================================================
 BSpike_FragSpeed:
 		dc.w -$100, -$340				; horizontal, vertical
@@ -393,4 +393,4 @@ BSpike_MoveFrag:
 		bra.w	BSLZ_Delete
 
 	.end:
-		rts	
+		rts

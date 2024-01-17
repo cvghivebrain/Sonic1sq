@@ -56,7 +56,7 @@ GM_Title:
 		lea	(v_level_layout+level_max_width).w,a4	; background layout start address ($FFFFA440)
 		move.w	#draw_bg,d2
 		bsr.w	DrawChunks				; draw background
-		
+
 		lea	($FF0000).l,a1				; RAM buffer
 		lea	(KosMap_Title).l,a0			; title screen mappings
 		locVRAM	vram_fg+(sizeof_vram_row*4)+(3*2),d0	; foreground, x=3, y=4
@@ -88,7 +88,7 @@ GM_Title:
 		bne.s	.no_slots
 		move.l	#PSBTM,ost_id(a1)			; load object which hides part of Sonic
 		move.b	#id_frame_psb_mask,ost_frame(a1)
-		
+
 	.no_slots:
 		jsr	(ExecuteObjects).l
 		bsr.w	DeformLayers
@@ -114,14 +114,14 @@ Title_MainLoop:
 		beq.w	PlayDemo				; if yes, branch
 		andi.b	#btnStart,(v_joypad_press_actual).w	; check if Start is pressed
 		beq.s	Title_MainLoop				; if not, branch
-		
+
 		tst.b	(f_levelselect_cheat).w			; check if level select code is on
 		beq.w	PlayLevel				; if not, play level
 		btst	#bitA,(v_joypad_hold_actual).w		; check if A is pressed
 		beq.w	PlayLevel				; if not, play level
 		bra.w	LevSel_Init				; goto level select
 ; ===========================================================================
-		
+
 Title_Dpad:
 		tst.b	(f_levelselect_cheat).w
 		bne.s	.exit					; branch if code has been entered
@@ -135,20 +135,20 @@ Title_Dpad:
 		addq.w	#1,(v_title_d_count).w			; next input
 		tst.b	1(a0)
 		bmi.s	.complete				; branch if next input is $FF
-		
+
 	.exit:
 		rts
-	
+
 	.reset_cheat:
 		move.w	#0,(v_title_d_count).w			; reset cheat counter
 		rts
-		
+
 	.complete:
 		move.b	#1,(f_levelselect_cheat).w		; set level select flag
 		move.b	#1,(f_debug_cheat).w			; set debug mode flag
 		play.b	1, jsr, sfx_Ring			; play ring sound
 		rts
-		
+
 LevSelCode:	dc.b btnUp,btnDn,btnL,btnR,$FF
 		even
 ; ===========================================================================
@@ -162,7 +162,7 @@ LevSel_Init:
 
 		move.l	#0,(v_fg_y_pos_vsram).w
 		disable_ints
-		
+
 		locVRAM	vram_bg,d0
 		move.l	#sizeof_vram_bg,d1
 		moveq	#0,d2
@@ -199,30 +199,30 @@ LevSel_Control:
 		move.b	(v_joypad_press_actual).w,d1
 		beq.s	.exit					; branch if nothing is pressed
 		move.w	#8,(v_levelselect_hold_delay).w		; reset timer for autoscroll
-		
+
 		btst	#bitDn,d1
 		beq.s	.not_down				; branch if down isn't pressed
 		bsr.s	LevSel_Down
-		
+
 	.not_down:
 		btst	#bitUp,d1
 		beq.s	.not_up					; branch if up isn't pressed
 		bsr.s	LevSel_Up
-		
+
 	.not_up:
 		btst	#bitR,d1
 		beq.s	.not_right				; branch if right isn't pressed
 		bsr.s	LevSel_Right
-		
+
 	.not_right:
 		btst	#bitL,d1
 		beq.s	.not_left				; branch if right isn't pressed
 		bsr.w	LevSel_Left
-		
+
 	.not_left:
 		move.w	d0,(v_levelselect_item).w		; set new selection
 		bra.w	LevSel_Display
-		
+
 	.exit:
 		rts
 
@@ -234,20 +234,20 @@ LevSel_Hold:
 		subq.w	#1,(v_levelselect_hold_delay).w		; decrement timer
 		bpl.s	.exit					; branch if time remains
 		move.w	#8,(v_levelselect_hold_delay).w		; reset timer
-		
+
 		btst	#bitDn,d1
 		beq.s	.not_down				; branch if down isn't held
 		bsr.s	LevSel_Down
-		
+
 	.not_down:
 		btst	#bitUp,d1
 		beq.s	.not_up					; branch if up isn't held
 		bsr.s	LevSel_Up
-		
+
 	.not_up:
 		move.w	d0,(v_levelselect_item).w		; set new selection
 		bra.w	LevSel_Display
-		
+
 	.exit:
 		rts
 
@@ -312,15 +312,15 @@ LevSel_Left:
 		rts
 
 LevSel_Display:
-		lea	(LevSel_Strings).l,a1
-		lea	(LevSel_CharStrings).l,a2
+		lea	LevSel_Strings(pc),a1
+		lea	LevSel_CharStrings(pc),a2
 		lea	(vdp_control_port).l,a6
 		locVRAM	vram_bg+linestart,d3
 		move.l	d3,d4
 		move.w	#linecount-1,d0
 		moveq	#0,d5
 		moveq	#0,d6
-	
+
 	.loop:
 		move.l	d3,(a6)
 		bsr.w	LevSel_Line				; draw line of text
@@ -333,14 +333,14 @@ LevSel_Display:
 		add.l	#(columnwidth*2)<<16,d4			; jump to next column
 		move.l	d4,d3					; update drawing position
 		moveq	#0,d5
-	
+
 	.not_last:
 		dbf	d0,.loop				; repeat for all lines
 		rts
-		
+
 LevSel_Line:
 		move.w	#linesize-1,d1
-		
+
 	.loop:
 		moveq	#0,d2
 		move.b	(a1)+,d2				; get character
@@ -355,7 +355,7 @@ LevSel_Line:
 		and.b	#$F,d2					; read single nybble
 		add.b	#$30,d2					; convert to character
 		lsr.w	#2,d1					; restore d1
-		
+
 	.not_soundtest:
 		cmp.w	#linecharsel,d6				; d6 = current line being drawn
 		bne.s	.not_charsel				; branch if not the character select
@@ -369,23 +369,23 @@ LevSel_Line:
 		neg.w	d1
 		add.w	#charselsize-1,d1			; restore d1
 		move.b	(a2,d2.w),d2				; get character
-		
+
 	.not_charsel:
 		add.w	#tile_Kos_Text+tile_pal4+tile_hi-$20,d2	; convert to tile
 		cmp.w	(v_levelselect_item).w,d6		; d6 = current line being drawn
 		bne.s	.unselected				; branch if line is not selected
 		sub.w	#$2000,d2				; use yellow text
-		
+
 	.unselected:
 		move.w	d2,-4(a6)				; write to nametable in VRAM
 		dbf	d1,.loop				; repeat for all characters in line
 		rts
-		
+
 LevSel_Select:
 		move.b	(v_joypad_press_actual).w,d0
 		andi.b	#btnABC+btnStart,d0			; is A, B, C, or Start pressed?
 		beq.s	.nothing				; branch if not
-		lea	(LevSel_Strings).l,a1
+		lea	LevSel_Strings(pc),a1
 		move.w	(v_levelselect_item).w,d1
 		mulu.w	#linesize+6,d1
 		add.w	#linesize,d1
@@ -398,11 +398,11 @@ LevSel_Select:
 		beq.s	.nothing				; don't exit if on the sound test
 		moveq	#1,d0					; set flag to exit level select
 		rts
-		
+
 	.nothing:
 		moveq	#0,d0
 		rts
-		
+
 LevSel_Index:	index *
 		ptr LevSel_Level
 		ptr LevSel_Special
@@ -410,7 +410,7 @@ LevSel_Index:	index *
 		ptr LevSel_Credits
 		ptr LevSel_Gamemode
 		ptr LevSel_Sound
-		
+
 LevSel_Level:
 		move.w	(a1)+,d0
 		move.b	d0,(v_zone).w				; set zone
@@ -430,7 +430,7 @@ PlayLevel:
 		move.l	#5000,(v_score_next_life).w		; extra life is awarded at 50000 points
 		play.b	1, jsr, cmd_Fade			; fade out music
 		rts
-		
+
 LevSel_Special:
 		move.w	(a1)+,d0
 		move.b	d0,(v_last_ss_levelid).w		; set Special Stage number
@@ -443,7 +443,7 @@ LevSel_Special:
 		move.l	d0,(v_score).w				; clear score
 		move.l	#5000,(v_score_next_life).w		; extra life is awarded at 50000 points
 		rts
-		
+
 LevSel_Ending:
 		move.w	(a1)+,d0
 		move.b	d0,(v_zone).w				; set zone
@@ -451,7 +451,7 @@ LevSel_Ending:
 		move.b	d0,(v_act).w				; set act
 		move.b	#id_Ending,(v_gamemode).w		; set gamemode to $18 (Ending)
 		rts
-		
+
 LevSel_Gamemode:
 		move.w	(a1)+,d0
 		move.b	d0,(v_gamemode).w			; set gamemode
@@ -459,13 +459,13 @@ LevSel_Gamemode:
 		move.w	d0,(v_emeralds+2).w			; set emeralds
 		move.b	#3,(v_continues).w			; give Sonic 3 continues
 		rts
-		
+
 LevSel_Credits:
 		move.w	(a1)+,d0
 		move.w	d0,(v_credits_num).w			; set credits number
 		move.b	#id_Credits,(v_gamemode).w		; set gamemode to credits
 		rts
-		
+
 LevSel_Sound:
 		btst.b	#bitA,(v_joypad_press_actual).w		; is button A pressed?
 		beq.s	.play					; branch if not
@@ -475,7 +475,7 @@ LevSel_Sound:
 		move.w	#0,(v_levelselect_sound).w		; reset to 0
 	.exit:
 		bra.w	LevSel_Display				; update number
-		
+
 	.play:
 		move.w	(v_levelselect_sound).w,d0
 		addi.w	#$80,d0
@@ -571,4 +571,4 @@ LevSel_CharStrings:
 		dc.b "   TAILS"
 		dc.b "KNUCKLES"
 		even
-		
+

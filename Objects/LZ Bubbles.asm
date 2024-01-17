@@ -24,7 +24,7 @@ Bub_Index:	index *,,2
 		ptr Bub_Big2
 		ptr Bub_Burst
 		ptr Bub_Delete
-		
+
 Bub_Settings:	; routine, animation, width/2
 		dc.b id_Bub_Mini, id_ani_bubble_small, 4
 		dc.b id_Bub_Mini, id_ani_bubble_medium, 8
@@ -67,15 +67,15 @@ Bub_Main:	; Routine 0
 		add.w	ost_x_pos(a1),d0			; copy Sonic's position
 		move.w	d0,ost_x_pos(a0)
 		move.w	ost_y_pos(a1),ost_y_pos(a0)
-		
+
 	.skip_sonic:
 		move.w	ost_x_pos(a0),ost_bubble_x_start(a0)
 
 Bub_Mini:	; Routine 2
 Bub_Big:	; Routine 6
-		lea	(Ani_Bub).l,a1
+		lea	Ani_Bub(pc),a1
 		jsr	(AnimateSprite).l
-		
+
 Bub_Mini2:	; Routine 4
 		tst.b	ost_render(a0)
 		bpl.w	DeleteObject				; delete if off screen
@@ -93,7 +93,7 @@ Bub_Big2:	; Routine 8
 		move.w	(v_water_height_actual).w,d0
 		cmp.w	ost_y_pos(a0),d0
 		bcc.w	.burst					; branch if bubble is above water
-		
+
 		tst.b	(v_lock_multi).w
 		bmi.w	DespawnQuick				; branch if object collision disabled
 		getsonic
@@ -119,12 +119,12 @@ Bub_Big2:	; Routine 8
 		move.b	(v_player1_height).w,ost_height(a1)
 		move.b	(v_player1_width).w,ost_width(a1)
 		subq.w	#5,ost_y_pos(a1)
-		
+
 	.burst:
 		move.b	#id_ani_bubble_burst,ost_anim(a0)
 		addq.b	#2,ost_routine(a0)			; goto Bub_Burst next
 		bra.w	DespawnQuick
-		
+
 ; ---------------------------------------------------------------------------
 ; Subroutine to move bubble up and side-to-side
 
@@ -141,7 +141,7 @@ Bub_Move:
 		add.w	ost_bubble_x_start(a0),d0
 		move.w	d0,ost_x_pos(a0)			; update x pos
 		rts
-		
+
 Bub_WobbleData:
 LZ_BG_Ripple_Data:
 		rept 2
@@ -174,7 +174,7 @@ Ani_Bub:	index *
 		ptr ani_bubble_medium
 		ptr ani_bubble_large
 		ptr ani_bubble_burst
-		
+
 ani_bubble_small:						; small bubble forming
 		dc.w $E
 		dc.w id_frame_bubble_0

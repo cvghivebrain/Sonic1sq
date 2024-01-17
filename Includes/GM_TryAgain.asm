@@ -30,8 +30,8 @@ GM_TryAgain:
 		clr.w	(v_pal_dry+$40).w			; set bg colour to black
 		jsr	FindFreeInert
 		move.l	#EndEggman,ost_id(a1)			; load Eggman object
-		jsr	(ExecuteObjects).l
-		jsr	(BuildSprites).l
+		bsr.w	ExecuteObjects
+		bsr.w	BuildSprites
 		move.w	#1800,(v_countdown).w			; show screen for 30 seconds
 		bsr.w	PaletteFadeIn				; fade in from black
 
@@ -43,8 +43,8 @@ TryAg_MainLoop:
 		bsr.w	PauseGame
 		move.b	#id_VBlank_Title,(v_vblank_routine).w
 		bsr.w	WaitForVBlank
-		jsr	(ExecuteObjects).l
-		jsr	(BuildSprites).l
+		bsr.w	ExecuteObjects
+		bsr.w	BuildSprites
 		andi.b	#btnStart,(v_joypad_press_actual).w	; is Start button pressed?
 		bne.s	.exit					; if yes, branch
 		tst.w	(v_countdown).w				; has 30 seconds elapsed?
@@ -54,4 +54,4 @@ TryAg_MainLoop:
 
 	.exit:
 		move.b	#id_Sega,(v_gamemode).w			; goto Sega screen
-		rts	
+		rts

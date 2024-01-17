@@ -57,7 +57,7 @@ BLZ_ShipMain:	; Routine 2
 		move.b	ost_mode(a0),d0
 		move.w	BLZ_ShipIndex(pc,d0.w),d1
 		jsr	BLZ_ShipIndex(pc,d1.w)
-		lea	(Ani_Bosses).l,a1
+		lea	Ani_Bosses(pc),a1
 		jsr	(AnimateSprite).l
 		moveq	#status_xflip+status_yflip,d0
 		and.b	ost_status(a0),d0

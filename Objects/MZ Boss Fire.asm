@@ -61,7 +61,7 @@ BFire_Action:	; Routine 2
 		jsr	(AnimateSprite).l
 		cmpi.w	#$2E8,ost_y_pos(a0)			; has fireball fallen into the lava in the middle?
 		bhi.s	BFire_Delete				; if yes, branch
-		rts	
+		rts
 ; ===========================================================================
 
 BFire_Delete:
@@ -91,7 +91,7 @@ BFire_Drop:
 		addq.b	#2,ost_mode(a0)				; goto BFire_Duplicate when it hits the floor
 
 	.exit:
-		rts	
+		rts
 ; ===========================================================================
 
 BFire_Duplicate:
@@ -120,7 +120,7 @@ BFire_Duplicate:
 
 	.fail:
 		addq.b	#2,ost_mode(a0)				; goto BFire_FireSpread next
-		rts	
+		rts
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to spawn another fireball in the current one's position
@@ -135,7 +135,7 @@ BFire_SpawnFire:
 		move.b	#$67,ost_bfire_wait_time(a1)		; timer 1.7 seconds
 
 	.fail:
-		rts	
+		rts
 
 ; ===========================================================================
 
@@ -158,17 +158,17 @@ BFire_FireSpread:
 
 	.skip_fire:
 		move.w	ost_x_pos(a0),ost_bfire_x_start(a0)
-		rts	
+		rts
 ; ===========================================================================
 
 .not_on_floor:
 		addq.b	#2,ost_mode(a0)				; goto BFire_FallEdge next
-		rts	
+		rts
 ; ===========================================================================
 
 .outside_right:
 		addq.b	#2,ost_routine(a0)			; goto BFire_TempFire next
-		rts	
+		rts
 ; ===========================================================================
 
 BFire_FallEdge:
@@ -197,7 +197,7 @@ BFire_FallEdge:
 		subq.b	#2,ost_mode(a0)				; goto BFire_FireSpread next
 
 	.not_on_floor:
-		rts	
+		rts
 ; ===========================================================================
 
 .delete:
