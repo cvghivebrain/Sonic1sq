@@ -30,12 +30,12 @@ WaitForVBlank_CPU:
 		lea	CPUGfxIndex(pc,d0.w),a2
 		set_dma_dest	$DF40,d1			; VRAM address
 		set_dma_size	sizeof_cell,d2
-		jsr	AddDMA					; load tens digit
+		jsr	(AddDMA).w				; load tens digit
 		move.b	(a1),d0					; get low digit
 		lea	CPUGfxIndex(pc,d0.w),a2
 		set_dma_dest	$DF60,d1			; VRAM address
 		set_dma_size	sizeof_cell,d2
-		jsr	AddDMA					; load low digit
+		jsr	(AddDMA).w				; load low digit
 
 WaitForVBlank:
 		enable_ints

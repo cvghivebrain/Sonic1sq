@@ -6,7 +6,7 @@ GM_Level:
 GM_Demo:
 		tst.w	(v_demo_mode).w				; is this an ending demo?
 		bmi.s	.keep_music				; if yes, branch
-		play.b	1, bsr.w, cmd_Fade			; fade out music
+		play.b	1, jsr, cmd_Fade			; fade out music
 
 	.keep_music:
 		bsr.w	PaletteFadeOut				; fade out from previous gamemode
@@ -20,7 +20,7 @@ GM_Demo:
 		lea	(v_ost_all).w,a1			; RAM address to start clearing
 		move.w	#loops_to_clear_ost,d1			; size of RAM block to clear
 		bsr.w	ClearRAM				; fill OST with 0
-		
+
 		lea	(v_vblank_routine).w,a1
 		move.w	#loops_to_clear_vblankstuff,d1
 		bsr.w	ClearRAM
@@ -67,7 +67,7 @@ GM_Demo:
 		move.l	#TitleCard,ost_id(a1)			; load title card object
 		move.b	#1,(f_brightness_update).w		; show Sonic/title card palette
 		move.b	(v_bgm).w,d0
-		bsr.w	PlaySound0				; play music
+		jsr	(PlaySound0).w				; play music
 
 Level_TtlCardLoop:
 		move.b	#id_VBlank_TitleCard,(v_vblank_routine).w
@@ -200,7 +200,7 @@ Level_MainLoop:
 		beq.s	Level_Demo				; if yes, branch
 		cmpi.b	#id_Level,(v_gamemode).w
 		beq.w	Level_MainLoop				; if gamemode is still $C (level), branch
-		rts	
+		rts
 ; ===========================================================================
 
 Level_Demo:
@@ -211,7 +211,7 @@ Level_Demo:
 		cmpi.b	#id_Demo,(v_gamemode).w
 		beq.w	Level_MainLoop				; if gamemode is 8 (demo), branch
 		move.b	#id_Sega,(v_gamemode).w			; go to Sega screen
-		rts	
+		rts
 ; ===========================================================================
 
 .end_of_demo:
@@ -241,7 +241,7 @@ Level_Demo:
 	.wait:
 		tst.w	(v_countdown).w				; has main timer hit 0?
 		bne.s	.fade_loop				; if not, branch
-		rts	
+		rts
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to check Sonic's position and load signpost graphics

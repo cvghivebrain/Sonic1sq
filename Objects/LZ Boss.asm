@@ -82,7 +82,7 @@ BLZ_ShipStart:
 		bcs.s	BLZ_Update				; if not, branch
 		move.w	#-$180,ost_y_vel(a0)			; move ship up
 		move.w	#$60,ost_x_vel(a0)			; move ship right
-		addq.b	#2,ost_mode(a0)			; goto BLZ_ShipMove1 next
+		addq.b	#2,ost_mode(a0)				; goto BLZ_ShipMove1 next
 
 BLZ_Update:
 		bsr.w	BossMove				; update parent position
@@ -112,7 +112,7 @@ BLZ_Update_SkipPos:
 		move.w	d0,(a1)					; load colour stored in	d0
 		subq.b	#1,ost_boss_flash_num(a0)		; decrement flash counter
 		bne.s	.exit					; branch if not 0
-		move.b	#id_React_Boss,ost_col_type(a0)	; enable boss collision again
+		move.b	#id_React_Boss,ost_col_type(a0)		; enable boss collision again
 
 	.exit:
 		rts	
@@ -149,7 +149,7 @@ BLZ_ShipMove1:
 
 		move.w	#$140,ost_x_vel(a0)			; move ship right
 		move.w	#-$200,ost_y_vel(a0)			; move ship up
-		addq.b	#2,ost_mode(a0)			; goto BLZ_ShipMove2 next
+		addq.b	#2,ost_mode(a0)				; goto BLZ_ShipMove2 next
 
 	.continue:
 		bra.w	BLZ_Update				; update position, check for hit
@@ -174,7 +174,7 @@ BLZ_ShipMove2:
 		bne.s	.continue				; branch if ship is still moving
 
 		move.w	#-$180,ost_y_vel(a0)			; move ship up
-		addq.b	#2,ost_mode(a0)			; goto BLZ_ShipMove3 next
+		addq.b	#2,ost_mode(a0)				; goto BLZ_ShipMove3 next
 		clr.b	ost_boss_wobble(a0)
 
 	.continue:
@@ -193,7 +193,7 @@ BLZ_ShipMove3:
 		asl	ost_y_vel(a0)
 
 	.not_beaten:
-		addq.b	#2,ost_mode(a0)			; goto BLZ_ShipAtTop next
+		addq.b	#2,ost_mode(a0)				; goto BLZ_ShipAtTop next
 		bra.w	BLZ_Update				; update position, check for hit
 ; ===========================================================================
 
@@ -201,7 +201,7 @@ BLZ_ShipWobble:
 		bset	#status_xflip_bit,ost_status(a0)	; ship face right
 		addq.b	#2,ost_boss_wobble(a0)			; increment wobble
 		move.b	ost_boss_wobble(a0),d0
-		jsr	(CalcSine).l				; convert to sine/cosine
+		jsr	(CalcSine).w				; convert to sine/cosine
 		tst.w	d1
 		bpl.s	.face_right				; branch if cosine is +ve
 		bclr	#status_xflip_bit,ost_status(a0)	; ship face left
@@ -258,7 +258,7 @@ BLZ_ShipAtTop:
 	.continue_up:
 		bne.s	.continue				; branch if ship is still moving
 
-		addq.b	#2,ost_mode(a0)			; goto BLZ_ShipWait next
+		addq.b	#2,ost_mode(a0)				; goto BLZ_ShipWait next
 		bclr	#status_xflip_bit,ost_status(a0)	; ship face left
 
 	.continue:
@@ -278,7 +278,7 @@ BLZ_ShipWait:
 		play.w	0, jsr, mus_LZ				; play LZ music
 		clr.b	(f_boss_loaded).w
 		bset	#status_xflip_bit,ost_status(a0)	; ship face right
-		addq.b	#2,ost_mode(a0)			; goto BLZ_Escape1 next
+		addq.b	#2,ost_mode(a0)				; goto BLZ_Escape1 next
 
 	.wait_for_sonic:
 		bra.w	BLZ_Update				; update position, check for hit
@@ -295,7 +295,7 @@ BLZ_Escape1:
 		move.w	#$400,ost_x_vel(a0)			; move ship right
 		move.w	#-$40,ost_y_vel(a0)			; move ship up
 		clr.b	ost_boss_mode(a0)
-		addq.b	#2,ost_mode(a0)			; goto BLZ_Escape2 next
+		addq.b	#2,ost_mode(a0)				; goto BLZ_Escape2 next
 
 	.wait:
 		bra.w	BLZ_Update				; update position

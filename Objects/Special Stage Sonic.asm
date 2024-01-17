@@ -130,7 +130,7 @@ SSS_UpdatePos:
 		addi.b	#$20,d0					; rotate angle 45 degrees (for wall/floor/ceiling detection)
 		andi.b	#$C0,d0					; read only bits 7 and 6
 		neg.b	d0
-		jsr	(CalcSine).l				; convert to sine/cosine
+		jsr	(CalcSine).w				; convert to sine/cosine
 		muls.w	ost_inertia(a0),d1
 		add.l	d1,ost_x_pos(a0)			; add (inertia*cosine) to x pos
 		muls.w	ost_inertia(a0),d0
@@ -213,7 +213,7 @@ SSS_Jump:
 		andi.b	#$FC,d0					; round down to nearest 4
 		neg.b	d0
 		subi.b	#$40,d0
-		jsr	(CalcSine).l				; convert to sine/cosine
+		jsr	(CalcSine).w				; convert to sine/cosine
 		muls.w	#sonic_jump_power,d1
 		asr.l	#8,d1
 		move.w	d1,ost_x_vel(a0)
@@ -295,7 +295,7 @@ SSS_Fall:
 		move.l	ost_x_pos(a0),d3
 		move.b	(v_ss_angle).w,d0			; get special stage angle
 		andi.b	#$FC,d0					; round down to nearest 4
-		jsr	(CalcSine).l				; convert to sine/cosine
+		jsr	(CalcSine).w				; convert to sine/cosine
 		move.w	ost_x_vel(a0),d4
 		ext.l	d4
 		asl.l	#8,d4
@@ -580,8 +580,8 @@ SSS_ChkBumper:
 		subi.w	#$44,d2					; d2 = y position of bumper
 		sub.w	ost_x_pos(a0),d1
 		sub.w	ost_y_pos(a0),d2
-		jsr	(CalcAngle).l
-		jsr	(CalcSine).l
+		jsr	(CalcAngle).w
+		jsr	(CalcSine).w
 		muls.w	#-bumper_power,d1
 		asr.l	#8,d1
 		move.w	d1,ost_x_vel(a0)			; bounce Sonic away from bumper

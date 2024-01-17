@@ -108,7 +108,7 @@ BBall_Circle:	; Routine 8
 		move.w	ost_bball_speed(a0),d0			; get rotation speed
 		add.w	d0,ost_angle(a0)			; add to angle
 		move.b	ost_angle(a0),d0
-		jsr	(CalcSine).l				; convert angle to sine
+		jsr	(CalcSine).w				; convert angle to sine
 		move.w	ost_bball_y_start(a0),d2
 		move.w	ost_bball_x_start(a0),d3
 		moveq	#0,d4

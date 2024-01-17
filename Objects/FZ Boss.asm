@@ -47,10 +47,10 @@ BFZ_ObjData2:	; routine num, animation, sprite priority, width, height
 		rsobj BossFinal
 ost_fz_cylinder_flag:	equ ost_inertia				; -1 when cylinders activate; id of cylinder Eggman is in when crushing (2 bytes)
 ost_fz_phase_state:	equ ost_angle				; 1 = crushing; 0 = plasma; -1 = crushing/plasma complete (2 bytes)
-ost_fz_mode:		rs.b 1 ; $34				; action being performed, increments of 2 - parent only
-ost_fz_flash_num:	rs.b 1 ; $35				; number of times to make boss flash when hit - parent only
-ost_fz_plasma_child:	rs.w 1 ; $36				; address of OST of plasma object - parent only (2 bytes)
-ost_fz_cylinder_child:	rs.w 4 ; $38				; address of OST of cylinder object - parent only (2 bytes * 4)
+ost_fz_mode:		rs.b 1					; $34				; action being performed, increments of 2 - parent only
+ost_fz_flash_num:	rs.b 1					; $35				; number of times to make boss flash when hit - parent only
+ost_fz_plasma_child:	rs.w 1					; $36				; address of OST of plasma object - parent only (2 bytes)
+ost_fz_cylinder_child:	rs.w 4					; $38				; address of OST of cylinder object - parent only (2 bytes * 4)
 		rsobjend
 ; ===========================================================================
 
@@ -148,7 +148,7 @@ BFZ_Eggman_Crush:
 		tst.w	ost_fz_cylinder_flag(a0)		; are crushers set to activate?
 		bpl.s	.skip_crushers				; if not, branch
 		clr.w	ost_fz_cylinder_flag(a0)
-		jsr	(RandomNumber).l			; get random number
+		jsr	(RandomNumber).w			; get random number
 		andi.w	#$C,d0					; low word of d0 = 0/4/8/$C (high word is kept)
 		move.w	d0,d1
 		addq.w	#2,d1					; add 2 to copy in d1

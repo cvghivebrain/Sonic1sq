@@ -30,12 +30,12 @@ ProcessSlowPLC:
 		bmi.s	.end_of_splc				; branch if SlowPLC is finished
 		movea.l	d0,a0					; get gfx source address
 		lea	(v_slowplc_buffer).w,a1			; gfx buffer address in RAM
-		jsr	KosDec					; decompress to RAM
+		jsr	(KosDec).w				; decompress to RAM
 		
 		move.l	(a3)+,d1				; get destination VRAM address
 		move.l	(a3)+,d2				; get size of gfx
 		lea	SPLC_Src(pc),a2				; get RAM buffer address
-		jsr	AddDMA					; DMA gfx to VRAM on next VBlank
+		jsr	(AddDMA).w				; DMA gfx to VRAM on next VBlank
 		move.w	(a3)+,d1				; get tile setting
 		move.w	(a3)+,d0				; get RAM address to save tile setting
 		beq.s	.no_tile				; branch if tile setting shouldn't be saved

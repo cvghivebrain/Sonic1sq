@@ -176,7 +176,7 @@ DynWater_LZ3:
 		move.w	#$4C8,d1
 		move.b	#$4B,(v_level_layout+(sizeof_levelrow*2)+6).w ; modify level layout (row 2, column 6)
 		move.b	#1,(v_water_routine).w			; goto DynWater_LZ3_1 next
-		play.w	1, bsr.w, sfx_Rumbling			; play the rumbling sound
+		play.w	1, jsr, sfx_Rumbling			; play the rumbling sound
 
 	.set_water:
 		move.w	d1,(v_water_height_next).w

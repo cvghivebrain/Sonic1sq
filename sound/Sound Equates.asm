@@ -451,7 +451,7 @@ env_\const:	rs.b 0						; generate alt constants
 		shift
 		endr
 
-env_\const:	rs.b 1				; generate the main constant
+env_\const:	rs.b 1						; generate the main constant
 		endm
 ; ---------------------------------------------------------------------------
 

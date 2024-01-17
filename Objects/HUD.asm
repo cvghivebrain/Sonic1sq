@@ -123,13 +123,13 @@ HUD_LivesCount:	; Routine 6
 		lea	HUD_LivesGfxIndex(pc,d0.w),a2
 		set_dma_dest	$FBC0,d1			; VRAM address for tens digit
 		set_dma_size	sizeof_cell,d2
-		jsr	AddDMA					; load tens digit
+		jsr	(AddDMA).w				; load tens digit
 		
 		move.b	(a1),d0					; get low digit
 		lsl.b	#3,d0					; multiply by 8
 		lea	HUD_LivesGfxIndex(pc,d0.w),a2
 		set_dma_dest	$FBE0,d1			; VRAM address for low digit
-		jsr	AddDMA					; load low digit
+		jsr	(AddDMA).w				; load low digit
 		
 		bra.s	HUD_Display
 		
@@ -194,7 +194,7 @@ HUD_ShowDigit:
 		lsl.b	#3,d0					; multiply by 8
 		lea	HUD_DigitGfxIndex(pc,d0.w),a2
 		set_dma_size	sizeof_cell*2,d2		; set size to 2 cells
-		jmp	AddDMA					; load digit
+		jmp	(AddDMA).w				; load digit
 		
 HUD_DigitGfxIndex:
 		set_dma_src	Art_HUDNums,0
@@ -383,14 +383,14 @@ HUD_ShowByte:
 		lsr.b	#1,d3					; multiply by 8
 		lea	HUD_ByteGfxIndex(pc,d3.w),a2
 		set_dma_size	sizeof_cell,d2			; set size to 1 cell
-		jsr	AddDMA					; load high digit
+		jsr	(AddDMA).w				; load high digit
 		add.l	#$200000,d1				; next tile in VRAM
 		
 		move.b	d0,d3
 		andi.b	#$F,d3					; read low nybble of byte
 		lsl.b	#3,d3					; multiply by 8
 		lea	HUD_ByteGfxIndex(pc,d3.w),a2
-		jsr	AddDMA					; load low digit
+		jsr	(AddDMA).w				; load low digit
 		add.l	#$200000,d1				; next tile in VRAM
 		rts
 		

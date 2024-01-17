@@ -124,7 +124,7 @@ Anml_Drop:	; Routine 4
 		move.b	ost_animal_type(a0),ost_routine(a0)	; goto relevant routine next
 		tst.b	(v_boss_status).w
 		beq.w	DisplaySprite				; branch if not at prison capsule
-		move.b	#priority_3,ost_priority(a0)			; make animal appear in front of prison
+		move.b	#priority_3,ost_priority(a0)		; make animal appear in front of prison
 		btst	#4,(v_vblank_counter_byte).w		; check bit that changes every 16 frames
 		beq.w	DisplaySprite				; branch if 0
 		neg.w	ost_x_vel(a0)				; reverse direction

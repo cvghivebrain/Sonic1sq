@@ -63,7 +63,7 @@ Disc_Action:	; Routine 2
 		bsr.s	Disc_Detect
 		add.w	d1,ost_angle(a0)			; update angle (d1 is ost_disc_rotation)
 		move.b	ost_angle(a0),d0
-		jsr	(CalcSine).l				; convert to sine/cosine
+		jsr	(CalcSine).w				; convert to sine/cosine
 		move.w	ost_disc_y_start(a0),d2
 		move.w	ost_disc_x_start(a0),d3
 		moveq	#0,d4

@@ -82,11 +82,11 @@ BGHZ_ShipStart:
 		cmpi.w	#$338,ost_boss_parent_y_pos(a0)		; has ship reached target position?
 		bne.s	BGHZ_Update				; if not, branch
 		move.w	#0,ost_y_vel(a0)			; stop ship
-		addq.b	#2,ost_mode(a0)			; goto BGHZ_MakeBall next
+		addq.b	#2,ost_mode(a0)				; goto BGHZ_MakeBall next
 
 BGHZ_Update:
 		move.b	ost_boss_wobble(a0),d0			; get wobble byte
-		jsr	(CalcSine).l				; convert to sine
+		jsr	(CalcSine).w				; convert to sine
 		asr.w	#6,d0					; divide by 64
 		add.w	ost_boss_parent_y_pos(a0),d0		; add y pos
 		move.w	d0,ost_y_pos(a0)			; update actual y pos
@@ -114,7 +114,7 @@ BGHZ_Update:
 		move.w	d0,(a1)					; load colour stored in	d0
 		subq.b	#1,ost_boss_flash_num(a0)		; decrement flash counter
 		bne.s	.exit					; branch if not 0
-		move.b	#id_React_Boss,ost_col_type(a0)	; enable boss collision again
+		move.b	#id_React_Boss,ost_col_type(a0)		; enable boss collision again
 
 	.exit:
 		rts	
@@ -140,7 +140,7 @@ BossExplode:
 		move.l	#ExplosionBomb,ost_id(a1)		; load explosion object every 8th frame
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
-		jsr	(RandomNumber).l
+		jsr	(RandomNumber).w
 		move.w	d0,d1
 		moveq	#0,d1
 		move.b	d0,d1
@@ -184,7 +184,7 @@ BGHZ_MakeBall:
 		bne.s	.wait					; if not, branch
 		move.w	#0,ost_x_vel(a0)			; stop ship
 		move.w	#0,ost_y_vel(a0)
-		addq.b	#2,ost_mode(a0)			; goto BGHZ_ShipMove next
+		addq.b	#2,ost_mode(a0)				; goto BGHZ_ShipMove next
 		jsr	(FindNextFreeObj).l			; find free OST slot
 		bne.s	.fail					; branch if not found
 		move.l	#BossBall,ost_id(a1)			; load swinging ball object
@@ -204,7 +204,7 @@ BGHZ_ShipMove:
 		subq.w	#1,ost_boss_wait_time(a0)		; decrement timer
 		bpl.s	.wait					; branch if time remains
 		move.b	#0,ost_boss_attack(a0)
-		addq.b	#2,ost_mode(a0)			; goto BGHZ_ChgDir next
+		addq.b	#2,ost_mode(a0)				; goto BGHZ_ChgDir next
 		move.w	#63,ost_boss_wait_time(a0)		; set wait time to 1 second
 		move.w	#$100,ost_x_vel(a0)			; set speed
 		cmpi.w	#$2A00,ost_boss_parent_x_pos(a0)	; has ship moved after ball was spawned?
@@ -231,7 +231,7 @@ BGHZ_ChgDir:
 .chg_dir:
 		bchg	#status_xflip_bit,ost_status(a0)	; change direction
 		move.w	#63,ost_boss_wait_time(a0)		; set wait time
-		subq.b	#2,ost_mode(a0)			; goto BGHZ_ShipMove next
+		subq.b	#2,ost_mode(a0)				; goto BGHZ_ShipMove next
 		move.w	#0,ost_x_vel(a0)			; stop moving
 
 .update_pos:
@@ -248,7 +248,7 @@ BGHZ_Explode:
 		bset	#status_xflip_bit,ost_status(a0)	; ship face right
 		bclr	#status_broken_bit,ost_status(a0)
 		clr.w	ost_x_vel(a0)				; stop moving
-		addq.b	#2,ost_mode(a0)			; goto BGHZ_Recover next
+		addq.b	#2,ost_mode(a0)				; goto BGHZ_Recover next
 		move.w	#-38,ost_boss_wait_time(a0)		; set timer (counts up)
 		tst.b	(v_boss_status).w
 		bne.s	.exit
@@ -277,7 +277,7 @@ BGHZ_Recover:
 		beq.s	.stop_rising				; if exactly 48, branch
 		cmpi.w	#$38,ost_boss_wait_time(a0)		; have 56 frames passed since ship stopped rising?
 		bcs.s	.update					; if not, branch
-		addq.b	#2,ost_mode(a0)			; if yes, goto BGHZ_Escape next
+		addq.b	#2,ost_mode(a0)				; if yes, goto BGHZ_Escape next
 		bra.s	.update
 ; ===========================================================================
 

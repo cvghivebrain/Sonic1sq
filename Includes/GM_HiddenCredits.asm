@@ -3,7 +3,7 @@
 ; ---------------------------------------------------------------------------
 
 GM_HiddenCredits:
-		play.b	1, bsr.w, cmd_Stop			; stop music
+		play.b	1, jsr, cmd_Stop			; stop music
 		bsr.w	PaletteFadeOut				; fade from previous gamemode to black
 		disable_ints
 		lea	(vdp_control_port).l,a6
@@ -15,7 +15,7 @@ GM_HiddenCredits:
 		move.w	#vdp_bg_color+$20,(a6)			; set background colour
 		clr.b	(f_water_pal_full).w
 		bsr.w	ClearScreen
-		
+
 		moveq	#id_KPLC_HiddenCredits,d0
 		jsr	KosPLC					; load gfx
 		lea	($FF0000).l,a1				; RAM buffer
@@ -25,22 +25,21 @@ GM_HiddenCredits:
 		moveq	#$1C,d2					; height
 		move.w	#0,d3					; tile setting
 		bsr.w	LoadTilemap
-		
+
 		lea	(v_pal_dry).w,a1
 		move.w	#loops_to_clear_pal,d1
 		bsr.w	ClearRAM				; clear palette
 
 		moveq	#id_Pal_HidCred,d0
-		bsr.w	PalLoad				; palette will be shown after fading in
+		bsr.w	PalLoad					; palette will be shown after fading in
 		bsr.w	PaletteFadeIn
-		
+
 Hidden_MainLoop:
 		move.b	#id_VBlank_Title,(v_vblank_routine).w
 		bsr.w	WaitForVBlank
 		move.b	(v_joypad_press_actual).w,d0
 		btst	#bitStart,d0
 		beq.s	Hidden_MainLoop				; branch if Start isn't pressed
-		
+
 		move.b	#id_Title,(v_gamemode).w		; goto title screen
 		rts
-		

@@ -3,7 +3,7 @@
 ; ---------------------------------------------------------------------------
 
 GM_Special:
-		play.w	1, bsr.w, sfx_EnterSS			; play special stage entry sound
+		play.w	1, jsr, sfx_EnterSS			; play special stage entry sound
 		bsr.w	PaletteWhiteOut				; fade to white from previous gamemode
 		disable_ints
 		lea	(vdp_control_port).l,a6
@@ -45,7 +45,7 @@ GM_Special:
 		clr.b	(f_water_pal_full).w
 		clr.w	(f_restart).w
 		moveq	#id_Pal_Special,d0
-		bsr.w	PalLoad				; load special stage palette
+		bsr.w	PalLoad					; load special stage palette
 		jsr	(SS_Load).l				; load SS layout data
 		move.l	#0,(v_camera_x_pos).w
 		move.l	#0,(v_camera_y_pos).w
@@ -53,7 +53,7 @@ GM_Special:
 		bsr.w	PalCycle_SS
 		clr.w	(v_ss_angle).w				; set stage angle to "upright"
 		move.w	#$40,(v_ss_rotation_speed).w		; set stage rotation speed
-		play.w	0, bsr.w, mus_SpecialStage		; play special stage BG	music
+		play.w	0, jsr, mus_SpecialStage		; play special stage BG	music
 		move.w	#0,(v_demo_input_counter).w
 		movea.l	(v_demo_ptr).w,a1			; get pointer for demo data
 		move.b	1(a1),(v_demo_input_time).w		; load 1st button press duration
@@ -156,7 +156,7 @@ SS_NormalExit:
 		jsr	(BuildSprites).l
 		tst.w	(f_restart).w
 		beq.s	SS_NormalExit
-		play.w	1, bsr.w, sfx_EnterSS			; play special stage exit sound
+		play.w	1, jsr, sfx_EnterSS			; play special stage exit sound
 		bsr.w	PaletteWhiteOut
 		rts	
 ; ===========================================================================
@@ -228,10 +228,10 @@ PalCycle_SS:
 		move.l	(a2)+,d2				; set size
 		mulu.w	#3,d0
 		lea	(a2,d0.w),a2				; jump to mappings source address
-		jsr	AddDMA					; add mappings to DMA queue
+		jsr	(AddDMA).w				; add mappings to DMA queue
 		suba.l	#6,a2					; jump back to same mappings
 		add.l	#$800<<16,d1				; add $800 to VRAM address
-		jsr	AddDMA					; add mappings to DMA queue again
+		jsr	(AddDMA).w				; add mappings to DMA queue again
 		
 		move.w	#$8400,d0				; VDP register - bg nametable address
 		move.b	(a0)+,d0				; apply address from list
@@ -470,7 +470,7 @@ SS_ShowLayout:
 		lea	(v_ss_sprite_grid_plot).l,a1		; address to write grid coords
 		move.b	(v_ss_angle).w,d0
 		andi.b	#$FC,d0					; round down angle to nearest 4 (disable this line for smoother rotation)
-		jsr	(CalcSine).l				; convert to sine/cosine
+		jsr	(CalcSine).w				; convert to sine/cosine
 		move.w	d0,d4
 		move.w	d1,d5
 		muls.w	#ss_block_width,d4
@@ -989,7 +989,7 @@ SS_LoadData:
 		move.w	(a1)+,(v_ost_player+ost_y_pos).w
 		movea.l	SS_LayoutIndex(pc,d0.w),a0
 		lea	(v_ss_layout_buffer).l,a1		; load level layout ($FF4000)
-		jsr	KosDec
+		jsr	(KosDec).w
 
 		lea	(v_ss_layout).l,a1
 		move.w	#loops_to_clear_sslayout,d1

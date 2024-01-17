@@ -33,9 +33,9 @@ ost_mash_mode:		rs.b 1					; 0 = extend; 2 = wait; 4 = retract
 		rsobjend
 
 		; routine, frame, display width
-SStom_Var:	dc.b id_SStom_Block, id_frame_mash_block, 16 ; block
-		dc.b id_SStom_Spikes, id_frame_mash_spikes, 16 ; spikes
-		dc.b id_SStom_Pole, id_frame_mash_pole1, $B0 ; pole
+SStom_Var:	dc.b id_SStom_Block, id_frame_mash_block, 16	; block
+		dc.b id_SStom_Spikes, id_frame_mash_spikes, 16	; spikes
+		dc.b id_SStom_Pole, id_frame_mash_pole1, $B0	; pole
 		even
 ; ===========================================================================
 

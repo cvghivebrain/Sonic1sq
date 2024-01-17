@@ -11,7 +11,7 @@ countof_stripe:	equ filesize("Palettes\Sega - Stripe.bin")/2	; colours in stripe
 countof_sega:	equ $C/2					; colours in Sega logo
 
 GM_Sega:
-		play.b	1, bsr.w, cmd_Stop			; stop music
+		play.b	1, jsr, cmd_Stop			; stop music
 		bsr.w	PaletteFadeOut				; fade out from previous gamemode
 		lea	(vdp_control_port).l,a6
 		move.w	#vdp_md_color,(a6)			; use normal colour mode
@@ -43,7 +43,7 @@ GM_Sega:
 		bsr.w	LoadTilemap
 		
 		moveq	#id_Pal_SegaBG,d0
-		bsr.w	PalLoad				; load Sega logo palette
+		bsr.w	PalLoad					; load Sega logo palette
 		move.w	#0,(v_brightness).w
 		move.w	#-((countof_stripe-1)*2),(v_palcycle_num).w ; -$A
 		move.w	#0,(v_palcycle_time).w
@@ -57,7 +57,7 @@ Sega_PaletteLoop:
 		bsr.w	PalCycle_Sega				; update palette
 		bne.s	Sega_PaletteLoop			; repeat until palette cycle is complete (d0 = 0)
 
-		play.b	1, bsr.w, cmd_Sega			; play "SEGA" sound
+		play.b	1, jsr, cmd_Sega			; play "SEGA" sound
 		move.b	#id_VBlank_Sega_SkipLoad,(v_vblank_routine).w
 		bsr.w	WaitForVBlank
 		move.w	#30,(v_countdown).w			; set timer to 0.5 seconds

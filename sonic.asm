@@ -323,7 +323,7 @@ Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 
 		include "Objects\Monitors.asm"			; Monitor
 		include "Objects\Monitor Contents.asm"		; PowerUp
-		
+
 		include "Objects\Title Screen Sonic.asm"	; TitleSonic
 		include "Objects\Title Screen Press Start & TM.asm" ; PSBTM
 
@@ -867,118 +867,118 @@ Level_Index:	index *
 		ptr Level_GHZ1
 		ptr Level_GHZ_bg
 		ptr Level_GHZ1_unused
-		
+
 		ptr Level_GHZ2
 		ptr Level_GHZ_bg
 		ptr Level_GHZ2_unused
-		
+
 		ptr Level_GHZ3
 		ptr Level_GHZ_bg
 		ptr Level_GHZ3_unused
-		
+
 		ptr Level_GHZ4_unused
 		ptr Level_GHZ4_unused
 		ptr Level_GHZ4_unused
-		
+
 		; LZ
 		ptr Level_LZ1
 		ptr Level_LZ_bg
 		ptr Level_LZ1_unused
-		
+
 		ptr Level_LZ2
 		ptr Level_LZ_bg
 		ptr Level_LZ2_unused
-		
+
 		ptr Level_LZ3
 		ptr Level_LZ_bg
 		ptr Level_LZ3_unused
-		
+
 		ptr Level_SBZ3
 		ptr Level_LZ_bg
 		ptr Level_SBZ3_unused
-		
+
 		; MZ
 		ptr Level_MZ1
 		ptr Level_MZ1bg
 		ptr Level_MZ1
-		
+
 		ptr Level_MZ2
 		ptr Level_MZ2bg
 		ptr Level_MZ2_unused
-		
+
 		ptr Level_MZ3
 		ptr Level_MZ3bg
 		ptr Level_MZ3_unused
-		
+
 		ptr Level_MZ4_unused
 		ptr Level_MZ4_unused
 		ptr Level_MZ4_unused
-		
+
 		; SLZ
 		ptr Level_SLZ1
 		ptr Level_SLZ_bg
 		ptr Level_SLZ_unused
-		
+
 		ptr Level_SLZ2
 		ptr Level_SLZ_bg
 		ptr Level_SLZ_unused
-		
+
 		ptr Level_SLZ3
 		ptr Level_SLZ_bg
 		ptr Level_SLZ_unused
-		
+
 		ptr Level_SLZ_unused
 		ptr Level_SLZ_unused
 		ptr Level_SLZ_unused
-		
+
 		; SYZ
 		ptr Level_SYZ1
 		ptr Level_SYZ_bg
 		ptr Level_SYZ1_unused
-		
+
 		ptr Level_SYZ2
 		ptr Level_SYZ_bg
 		ptr Level_SYZ2_unused
-		
+
 		ptr Level_SYZ3
 		ptr Level_SYZ_bg
 		ptr Level_SYZ3_unused
-		
+
 		ptr Level_SYZ4_unused
 		ptr Level_SYZ4_unused
 		ptr Level_SYZ4_unused
-		
+
 		; SBZ
 		ptr Level_SBZ1
 		ptr Level_SBZ1bg
 		ptr Level_SBZ1bg
-		
+
 		ptr Level_SBZ2
 		ptr Level_SBZ2bg
 		ptr Level_SBZ2bg
-		
+
 		; FZ
 		ptr Level_SBZ2
 		ptr Level_SBZ2bg
 		ptr Level_SBZ2_unused
-		
+
 		ptr Level_SBZ4_unused
 		ptr Level_SBZ4_unused
 		ptr Level_SBZ4_unused
-		
+
 		; Ending
 		ptr Level_End
 		ptr Level_GHZ_bg
 		ptr Level_End_unused
-		
+
 		ptr Level_End
 		ptr Level_GHZ_bg
 		ptr Level_End_unused
-		
+
 		ptr Level_End_unused
 		ptr Level_End_unused
 		ptr Level_End_unused
-		
+
 		ptr Level_End_unused
 		ptr Level_End_unused
 		ptr Level_End_unused
@@ -1224,7 +1224,7 @@ ObjPosSBZPlatform_Index:
 		ptr ObjPos_SBZ1pf2
 		include	"Object Placement\LZ Platforms.asm"
 		include	"Object Placement\SBZ Platforms.asm"
-		
+
 		include "Object Subtypes.asm"
 		endobj
 		include	"Object Placement\GHZ1.asm"

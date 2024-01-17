@@ -43,7 +43,7 @@ FBall_Main:	; Routine 0
 		move.w	ost_y_pos(a0),ost_fireball_y_start(a0)
 		tst.b	ost_fireball_mz_boss(a0)		; was fireball spawned by MZ boss?
 		beq.s	.speed					; if not, branch
-		addq.b	#priority_2,ost_priority(a0)			; use lower sprite priority
+		addq.b	#priority_2,ost_priority(a0)		; use lower sprite priority
 
 	.speed:
 		move.b	ost_subtype(a0),d0

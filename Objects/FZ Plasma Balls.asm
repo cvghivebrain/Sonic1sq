@@ -20,11 +20,11 @@ Plasma_Index:	index *,,2
 		ptr Plasma_Balls
 
 		rsobj BossPlasma
-ost_plasma_x_target:	rs.w 1 ; $30				; x position where plasma ball stops (2 bytes)
-ost_plasma_count_top:	rs.w 1 ; $32				; number of plasma balls moving across top (2 bytes)
-ost_plasma_parent:	rs.l 1 ; $34				; address of OST of parent object (4 bytes)
-ost_plasma_count_any:	rs.w 1 ; $38				; number of plasma balls on-screen (2 bytes)
-ost_plasma_flag:	rs.b 1 ; ost_subtype+1			; flag set when firing
+ost_plasma_x_target:	rs.w 1					; $30				; x position where plasma ball stops (2 bytes)
+ost_plasma_count_top:	rs.w 1					; $32				; number of plasma balls moving across top (2 bytes)
+ost_plasma_parent:	rs.l 1					; $34				; address of OST of parent object (4 bytes)
+ost_plasma_count_any:	rs.w 1					; $38				; number of plasma balls on-screen (2 bytes)
+ost_plasma_flag:	rs.b 1					; ost_subtype+1			; flag set when firing
 ost_plasma_time:	equ ost_inertia
 		rsobjend
 ; ===========================================================================
@@ -102,7 +102,7 @@ Plasma_MakeBalls:
 		move.b	#render_rel,ost_render(a1)
 		bset	#render_onscreen_bit,ost_render(a1)
 		move.l	a0,ost_plasma_parent(a1)		; save launcher OST to plasma ball OST
-		jsr	(RandomNumber).l			; d0 = random number
+		jsr	(RandomNumber).w			; d0 = random number
 		move.w	ost_plasma_count_top(a0),d1		; id of plasma ball (0-3)
 		muls.w	#-$4F,d1				; avg distance between balls
 		addi.w	#$2578,d1				; add initial x pos
@@ -158,7 +158,7 @@ Plasma_Spread:
 		asl.w	#4,d0
 		move.w	d0,ost_x_vel(a0)			; set speed so balls all arrive in position at the same time
 		move.w	#180,ost_plasma_time(a0)		; set timer to 3 seconds
-		addq.b	#2,ost_mode(a0)			; goto Plasma_Drop next
+		addq.b	#2,ost_mode(a0)				; goto Plasma_Drop next
 		rts	
 ; ===========================================================================
 
@@ -179,7 +179,7 @@ Plasma_Drop:
 		jsr	NewAnim
 		subq.w	#1,ost_plasma_time(a0)			; decrement timer
 		bne.s	.wait					; branch if not 0
-		addq.b	#2,ost_mode(a0)			; goto Plasma_Move next
+		addq.b	#2,ost_mode(a0)				; goto Plasma_Move next
 		moveq	#id_ani_plasma_short,d0
 		jsr	NewAnim
 		move.b	#id_React_Hurt,ost_col_type(a0)
