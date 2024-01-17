@@ -45,7 +45,7 @@ AniArt_Run:
 		lsl.w	#3,d3					; multiply frame number by 8
 		adda.l	d3,a2					; jump to duration for relevant frame
 		move.w	(a2)+,2(a4)				; reset timer
-		jsr	AddDMA					; add to DMA queue
+		jsr	(AddDMA).w				; add to DMA queue
 		
 	.next:
 		lea	4(a4),a4				; next time/frame counter in RAM

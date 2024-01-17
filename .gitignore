@@ -7,3 +7,5 @@ s1built.prev.bin
 *.symcmp
 *.tpl
 s1rev01.bin
+Comment.exe
+Comment.bat

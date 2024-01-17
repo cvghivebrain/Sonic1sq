@@ -24,7 +24,7 @@ Cred_Main:	; Routine 0
 		
 	.not_tryagain:
 		jsr	UncPLC
-		jsr	ProcessDMA
+		jsr	(ProcessDMA).w
 		addq.b	#2,ost_routine(a0)			; goto Cred_Display next
 		move.w	#$120,ost_x_pos(a0)
 		move.w	#$F0,ost_y_screen(a0)

@@ -269,7 +269,7 @@ HurtSonic:
 		move.w	#sfx_SpikeHit,d0			; load spikes damage sound
 
 	.sound:
-		jmp	(PlaySound1).l
+		jmp	(PlaySound1).w
 ; ===========================================================================
 
 .norings:
@@ -307,7 +307,7 @@ KillSonic:
 		move.w	#sfx_SpikeHit,d0			; play spikes death sound
 
 	.sound:
-		jmp	(PlaySound1).l
+		jmp	(PlaySound1).w
 
 	.dontdie:
 		rts

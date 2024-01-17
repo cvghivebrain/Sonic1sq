@@ -17,11 +17,11 @@ GM_Continue:
 
 		moveq	#id_UPLC_Continue,d0
 		jsr	UncPLC					; load title card patterns
-		jsr	ProcessDMA
-		
+		jsr	(ProcessDMA).w
+
 		moveq	#id_Pal_Continue,d0
 		bsr.w	PalLoad					; load continue	screen palette
-		play.b	0, bsr.w, mus_Continue			; play continue	music
+		play.b	0, jsr, mus_Continue			; play continue	music
 		move.w	#659,(v_countdown).w			; set timer to 11 seconds
 		clr.l	(v_camera_x_pos).w
 		move.l	#$1000000,(v_camera_y_pos).w
@@ -55,7 +55,7 @@ Cont_MainLoop:
 		tst.w	(v_countdown).w				; is time left on countdown?
 		bne.w	Cont_MainLoop				; if yes, branch
 		move.b	#id_Sega,(v_gamemode).w			; go to Sega screen
-		rts	
+		rts
 ; ===========================================================================
 
 .goto_level:
@@ -67,4 +67,4 @@ Cont_MainLoop:
 		move.l	d0,(v_score).w				; clear score
 		move.b	d0,(v_last_lamppost).w			; clear lamppost count
 		subq.b	#1,(v_continues).w			; subtract 1 from continues
-		rts	
+		rts

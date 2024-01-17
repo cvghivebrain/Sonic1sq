@@ -15,10 +15,10 @@ DynamicLevelEvents:
 		beq.s	.keep_right				; branch if right boundary is unchanged
 		bpl.s	.move_right				; branch if new boundary is right of current one
 		neg.w	d2
-		
+
 	.move_right:
 		add.w	d2,(v_boundary_right).w			; update boundary
-		
+
 	.keep_right:
 		moveq	#2,d2
 		move.w	(v_boundary_bottom_next).w,d1		; new boundary y pos is written here
@@ -38,7 +38,7 @@ DynamicLevelEvents:
 		move.b	#1,(f_boundary_bottom_change).w
 
 	.keep_boundary:
-		rts	
+		rts
 ; ===========================================================================
 
 .move_boundary_down:
@@ -84,19 +84,19 @@ DLE_BoundaryUpdate:
 		cmp.w	6(a1),d0
 		bcc.s	.next_sect				; branch if camera is right of next section
 		rts
-		
+
 	.prev_sect:
 		subq.b	#6,(v_dle_routine).w
 		move.w	-4(a1),(v_boundary_top).w
 		move.w	-2(a1),(v_boundary_bottom_next).w
 		rts
-		
+
 	.next_sect:
 		addq.b	#6,(v_dle_routine).w
 		move.w	8(a1),(v_boundary_top).w
 		move.w	10(a1),(v_boundary_bottom_next).w
 		rts
-		
+
 DLE_GHZ1_Sect:	dc.w 0, 0, $300					; v_camera_x_pos, v_boundary_top, v_boundary_bottom_next
 		dc.w $1780, 0, $400
 		dc.w -1
@@ -105,7 +105,7 @@ DLE_GHZ1_Sect:	dc.w 0, 0, $300					; v_camera_x_pos, v_boundary_top, v_boundary_
 DLE_GHZ2:
 		lea	DLE_GHZ2_Sect(pc),a1
 		bra.s	DLE_BoundaryUpdate
-		
+
 DLE_GHZ2_Sect:	dc.w 0, 0, $300
 		dc.w $ED0, 0, $200
 		dc.w $1600, 0, $400
@@ -116,7 +116,7 @@ DLE_GHZ2_Sect:	dc.w 0, 0, $300
 DLE_GHZ3:
 		lea	DLE_GHZ3_Sect(pc),a1
 		bra.s	DLE_BoundaryUpdate
-		
+
 DLE_GHZ3_Sect:	dc.w 0, 0, $300
 		dc.w $380, 0, $310
 		dc.w $960, 0, $400
@@ -139,7 +139,7 @@ DLE_LZ3:
 		cmpi.b	#7,(a1)
 		beq.s	.skip_layout				; branch if already modified
 		move.b	#7,(a1)					; modify level layout
-		play.w	1, bsr.w, sfx_Rumbling			; play rumbling sound
+		play.w	1, jsr, sfx_Rumbling			; play rumbling sound
 
 	.skip_layout:
 		tst.b	(v_dle_routine).w
@@ -154,18 +154,18 @@ DLE_LZ3:
 		move.l	#BossLabyrinth,ost_id(a1)		; load LZ boss object
 
 	.fail:
-		play.w	0, bsr.w, mus_Boss			; play boss music
+		play.w	0, jsr, mus_Boss			; play boss music
 		move.b	#1,(f_boss_loaded).w			; lock screen
 		addq.b	#2,(v_dle_routine).w			; don't load boss again
 		rts
 ; ===========================================================================
 
 .skip_boss2:
-		rts	
+		rts
 ; ===========================================================================
 
 .skip_boss:
-		rts	
+		rts
 ; ===========================================================================
 
 DLE_SBZ3:
@@ -215,7 +215,7 @@ DLE_MZ1_0:
 		addq.b	#2,(v_dle_routine).w			; goto DLE_MZ1_2 next
 
 	.exit:
-		rts	
+		rts
 ; ===========================================================================
 
 DLE_MZ1_2:
@@ -223,7 +223,7 @@ DLE_MZ1_2:
 		bcc.s	.next					; branch if camera is below $340
 
 		subq.b	#2,(v_dle_routine).w			; goto DLE_MZ1_0 next
-		rts	
+		rts
 ; ===========================================================================
 
 .next:
@@ -243,7 +243,7 @@ DLE_MZ1_2:
 		addq.b	#2,(v_dle_routine).w			; goto DLE_MZ1_4 next
 
 	.exit:
-		rts	
+		rts
 ; ===========================================================================
 
 DLE_MZ1_4:
@@ -251,7 +251,7 @@ DLE_MZ1_4:
 		bcc.s	.next					; branch if camera is below $370
 
 		subq.b	#2,(v_dle_routine).w			; goto DLE_MZ1_2 next
-		rts	
+		rts
 ; ===========================================================================
 
 .next:
@@ -263,7 +263,7 @@ DLE_MZ1_4:
 		addq.b	#2,(v_dle_routine).w			; goto DLE_MZ1_6 next
 
 	.exit:
-		rts	
+		rts
 ; ===========================================================================
 
 DLE_MZ1_6:
@@ -296,7 +296,7 @@ DLE_MZ1_6:
 		move.w	#$210,(v_boundary_bottom_next).w
 
 	.exit:
-		rts	
+		rts
 ; ===========================================================================
 
 DLE_MZ2:
@@ -307,7 +307,7 @@ DLE_MZ2:
 		move.w	#$200,(v_boundary_bottom_next).w
 
 	.exit:
-		rts	
+		rts
 ; ===========================================================================
 
 DLE_MZ3:
@@ -337,14 +337,14 @@ DLE_MZ3_Boss:
 		move.w	#$22C,ost_y_pos(a1)
 
 	.fail:
-		play.w	0, bsr.w, mus_Boss			; play boss music
+		play.w	0, jsr, mus_Boss			; play boss music
 		move.b	#1,(f_boss_loaded).w			; lock screen
 		addq.b	#2,(v_dle_routine).w			; goto DLE_MZ3_End next
 		rts
 ; ===========================================================================
 
 .exit:
-		rts	
+		rts
 ; ===========================================================================
 
 DLE_MZ3_End:
@@ -379,7 +379,7 @@ DLE_SLZ3_Main:
 		addq.b	#2,(v_dle_routine).w			; goto DLE_SLZ3_Boss next
 
 	.exit:
-		rts	
+		rts
 ; ===========================================================================
 
 DLE_SLZ3_Boss:
@@ -391,14 +391,14 @@ DLE_SLZ3_Boss:
 		move.l	#BossStarLight,(a1)			; load SLZ boss object
 
 	.fail:
-		play.w	0, bsr.w, mus_Boss			; play boss music
+		play.w	0, jsr, mus_Boss			; play boss music
 		move.b	#1,(f_boss_loaded).w			; lock screen
 		addq.b	#2,(v_dle_routine).w			; goto DLE_SLZ3_End next
 		rts
 ; ===========================================================================
 
 .exit:
-		rts	
+		rts
 ; ===========================================================================
 
 DLE_SLZ3_End:
@@ -411,7 +411,7 @@ DLE_SLZ3_End:
 ; ---------------------------------------------------------------------------
 
 DLE_SYZ1:
-		rts						; no events for act 1	
+		rts						; no events for act 1
 ; ===========================================================================
 
 DLE_SYZ2:
@@ -426,7 +426,7 @@ DLE_SYZ2:
 		move.w	#$520,(v_boundary_bottom_next).w
 
 	.exit:
-		rts	
+		rts
 ; ===========================================================================
 
 DLE_SYZ3:
@@ -451,7 +451,7 @@ DLE_SYZ3_Main:
 		addq.b	#2,(v_dle_routine).w			; goto DLE_SYZ3_Boss next
 
 	.exit:
-		rts	
+		rts
 ; ===========================================================================
 
 DLE_SYZ3_Boss:
@@ -465,13 +465,13 @@ DLE_SYZ3_Boss:
 		addq.b	#2,(v_dle_routine).w			; goto DLE_SYZ3_End next
 
 	.fail:
-		play.w	0, bsr.w, mus_Boss			; play boss music
+		play.w	0, jsr, mus_Boss			; play boss music
 		move.b	#1,(f_boss_loaded).w			; lock screen
 		rts
 ; ===========================================================================
 
 .exit:
-		rts	
+		rts
 ; ===========================================================================
 
 DLE_SYZ3_End:
@@ -494,7 +494,7 @@ DLE_SBZ1:
 		move.w	#$2A0,(v_boundary_bottom_next).w
 
 	.exit:
-		rts	
+		rts
 ; ===========================================================================
 
 DLE_SBZ2:
@@ -522,7 +522,7 @@ DLE_SBZ2_Main:
 		addq.b	#2,(v_dle_routine).w			; goto DLE_SBZ2_Blocks next
 
 	.exit:
-		rts	
+		rts
 ; ===========================================================================
 
 DLE_SBZ2_Blocks:
@@ -533,13 +533,13 @@ DLE_SBZ2_Blocks:
 ; ===========================================================================
 
 .exit:
-		rts	
+		rts
 ; ===========================================================================
 
 DLE_SBZ2_Eggman:
 		cmpi.w	#$1F60,(v_camera_x_pos).w
 		bcs.s	.set_boundary				; branch if camera is left of $1F60
-		
+
 		addq.b	#2,(v_dle_routine).w			; goto DLE_SBZ2_End next
 		move.b	#1,(f_boss_loaded).w			; lock screen
 
@@ -550,12 +550,12 @@ DLE_SBZ2_Eggman:
 DLE_SBZ2_End:
 		cmpi.w	#$2050,(v_camera_x_pos).w
 		bcs.s	DLE_SBZ2_SetBoundary			; branch if camera is left of $2050
-		rts	
+		rts
 ; ===========================================================================
 
 DLE_SBZ2_SetBoundary:
 		move.w	(v_camera_x_pos).w,(v_boundary_left).w	; set boundary to current position
-		rts	
+		rts
 ; ===========================================================================
 
 DLE_FZ:
@@ -618,4 +618,4 @@ DLE_FZ_End:
 ; ---------------------------------------------------------------------------
 
 DLE_Ending:
-		rts	
+		rts

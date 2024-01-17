@@ -17,7 +17,7 @@ Exploding:
 		move.l	#ExplosionBomb,ost_id(a1)		; load explosion object
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
-		jsr	RandomNumber
+		jsr	(RandomNumber).w
 		andi.w	#$3F,d1
 		subi.w	#$20,d1					; d1 = -$20 to $1F
 		add.w	d1,ost_x_pos(a1)

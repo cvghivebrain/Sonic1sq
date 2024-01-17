@@ -17,8 +17,8 @@ Moto_Index:	index *,,2
 		ptr Moto_Wait
 
 		rsobj MotoBug
-ost_moto_wait_time:	rs.w 1						; time delay before changing direction (2 bytes)
-ost_moto_smoke_time:	rs.b 1						; time delay between smoke puffs
+ost_moto_wait_time:	rs.w 1					; time delay before changing direction (2 bytes)
+ost_moto_smoke_time:	rs.b 1					; time delay between smoke puffs
 		rsobjend
 ; ===========================================================================
 

@@ -269,7 +269,7 @@ Mon_FindSlot:
 		add.w	d0,d0
 		add.w	d3,d0					; d0 * 6
 		lea	Mon_GfxSource(pc,d0.w),a2		; get ROM address for gfx
-		jmp	AddDMA					; add gfx to DMA queue
+		jmp	(AddDMA).w				; add gfx to DMA queue
 
 Mon_GfxSlots:
 		set_dma_dest	vram_monitors+$400

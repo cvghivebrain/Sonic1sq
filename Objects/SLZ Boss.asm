@@ -105,13 +105,13 @@ BSLZ_ShipStart:
 		move.w	#-$100,ost_x_vel(a0)			; move ship left
 		cmpi.w	#$2120,ost_boss_parent_x_pos(a0)	; has ship reached right side of screen?
 		bcc.s	BSLZ_Update				; if not, branch
-		addq.b	#2,ost_mode(a0)			; goto BSLZ_ShipMove next
+		addq.b	#2,ost_mode(a0)				; goto BSLZ_ShipMove next
 
 BSLZ_Update:
 		bsr.w	BossMove				; update parent position
 		move.b	ost_boss_wobble(a0),d0			; get wobble byte
 		addq.b	#2,ost_boss_wobble(a0)			; increment wobble (wraps to 0 after $FE)
-		jsr	(CalcSine).l				; convert to sine
+		jsr	(CalcSine).w				; convert to sine
 		asr.w	#6,d0					; divide by 64
 		add.w	ost_boss_parent_y_pos(a0),d0		; add y pos
 		move.w	d0,ost_y_pos(a0)			; update actual y pos
@@ -147,7 +147,7 @@ BSLZ_Update_SkipPos:
 		move.w	d0,(a1)					; load colour stored in	d0
 		subq.b	#1,ost_boss_flash_num(a0)		; decrement flash counter
 		bne.s	.exit					; branch if not 0
-		move.b	#id_React_Boss,ost_col_type(a0)	; enable boss collision again
+		move.b	#id_React_Boss,ost_col_type(a0)		; enable boss collision again
 
 	.exit:
 		rts	
@@ -210,7 +210,7 @@ BSLZ_ShipMove:
 
 .seesaw_found:
 		move.b	d2,ost_subtype(a0)			; number of seesaw the ship is above (0/1/2)
-		addq.b	#2,ost_mode(a0)			; goto BSLZ_MakeBall next
+		addq.b	#2,ost_mode(a0)				; goto BSLZ_MakeBall next
 		move.b	#$28,ost_boss_wait_time(a0)		; set timer to 40 frames
 		bra.w	BSLZ_Update				; update position, check for hit
 ; ===========================================================================
@@ -257,7 +257,7 @@ BSLZ_MakeBall:
 ; ===========================================================================
 
 .exit:
-		subq.b	#2,ost_mode(a0)			; goto BSLZ_ShipMove next
+		subq.b	#2,ost_mode(a0)				; goto BSLZ_ShipMove next
 		bra.w	BSLZ_Update				; update position, check for hit
 ; ===========================================================================
 
@@ -268,7 +268,7 @@ BSLZ_Explode:
 ; ===========================================================================
 
 .stop_exploding:
-		addq.b	#2,ost_mode(a0)			; goto BSLZ_Recover next
+		addq.b	#2,ost_mode(a0)				; goto BSLZ_Recover next
 		clr.w	ost_y_vel(a0)				; stop moving
 		bset	#status_xflip_bit,ost_status(a0)	; ship face right
 		bclr	#status_broken_bit,ost_status(a0)
@@ -301,7 +301,7 @@ BSLZ_Recover:
 		beq.s	.ship_rising				; if exactly 32, branch
 		cmpi.b	#$2A,ost_boss_wait_time(a0)		; have 42 frames passed since ship stopped rising?
 		bcs.s	.update					; if not, branch
-		addq.b	#2,ost_mode(a0)			; goto BSLZ_Escape next
+		addq.b	#2,ost_mode(a0)				; goto BSLZ_Escape next
 		bra.s	.update
 ; ===========================================================================
 

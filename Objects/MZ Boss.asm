@@ -81,7 +81,7 @@ BMZ_ShipIndex:index *,,2
 BMZ_ShipStart:
 		move.b	ost_boss_wobble(a0),d0			; get wobble byte
 		addq.b	#2,ost_boss_wobble(a0)			; increment wobble (wraps to 0 after $FE)
-		jsr	(CalcSine).l				; convert to sine
+		jsr	(CalcSine).w				; convert to sine
 		asr.w	#2,d0					; divide by 4
 		move.w	d0,ost_y_vel(a0)			; set as y speed
 		move.w	#-$100,ost_x_vel(a0)			; move ship left
@@ -93,7 +93,7 @@ BMZ_ShipStart:
 		clr.l	ost_x_vel(a0)				; stop moving
 
 	.not_at_pos:
-		jsr	(RandomNumber).l
+		jsr	(RandomNumber).w
 		move.b	d0,ost_boss_fireball_time(a0)		; set fireball timer to random value
 
 BMZ_Update:
@@ -121,7 +121,7 @@ BMZ_Update:
 		move.w	d0,(a1)					; load colour stored in	d0
 		subq.b	#1,ost_boss_flash_num(a0)		; decrement flash counter
 		bne.s	.exit					; branch if not 0
-		move.b	#id_React_Boss,ost_col_type(a0)	; enable boss collision again
+		move.b	#id_React_Boss,ost_col_type(a0)		; enable boss collision again
 
 	.exit:
 		rts	
@@ -189,7 +189,7 @@ BMZ_ChgDir:
 		move.l	#FireBall,ost_id(a1)			; load fireball object that comes from lava
 		move.w	#$2E8,ost_y_pos(a1)			; set y position as beneath lava
 		move.b	#type_fire_gravity+4,ost_subtype(a1)
-		jsr	(RandomNumber).l
+		jsr	(RandomNumber).w
 		andi.l	#$FFFF,d0
 		divu.w	#$50,d0
 		swap	d0
@@ -199,7 +199,7 @@ BMZ_ChgDir:
 		move.b	#$FF,ost_fireball_mz_boss(a1)		; flag fireball as being spawned by boss
 
 	.fail:
-		jsr	(RandomNumber).l
+		jsr	(RandomNumber).w
 		andi.b	#$1F,d0
 		addi.b	#$40,d0
 		move.b	d0,ost_boss_fireball_time(a0)		; reset fireball timer as random
@@ -214,9 +214,9 @@ BMZ_ChgDir:
 ; ===========================================================================
 
 .chk_left:
-		cmpi.w	#$1830,ost_boss_parent_x_pos(a0)		; is boss on far left of screen?
+		cmpi.w	#$1830,ost_boss_parent_x_pos(a0)	; is boss on far left of screen?
 		bgt.s	.exit					; if not, branch
-		move.w	#$1830,ost_boss_parent_x_pos(a0)		; keep from moving further
+		move.w	#$1830,ost_boss_parent_x_pos(a0)	; keep from moving further
 
 .stop_moving_h:
 		clr.w	ost_x_vel(a0)				; stop moving horizontally

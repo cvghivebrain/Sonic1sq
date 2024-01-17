@@ -52,7 +52,7 @@ BubM_Wait:	; Routine 2
 		addq.b	#2,ost_routine(a0)			; goto BubM_Active next
 
 	.rand_0_to_5:
-		jsr	(RandomNumber).l
+		jsr	(RandomNumber).w
 		andi.w	#7,d0					; d0 = random 0-7
 		cmpi.w	#6,d0
 		bcc.s	.rand_0_to_5				; branch if 6 or 7
@@ -75,7 +75,7 @@ BubM_Active:	; Routine 4
 		
 		subq.w	#1,ost_bubble_wait_time(a0)		; decrement timer
 		bpl.w	.animate				; branch if time remains
-		jsr	(RandomNumber).l
+		jsr	(RandomNumber).w
 		andi.w	#$1F,d0
 		move.w	d0,ost_bubble_wait_time(a0)		; set next time (0-31 frames)
 		bsr.w	FindFreeObj				; find free OST slot
@@ -116,7 +116,7 @@ BubM_Active:	; Routine 4
 		move.b	d0,ost_bubble_freq(a0)			; set as frequency
 		
 	.keep_freq:
-		jsr	(RandomNumber).l
+		jsr	(RandomNumber).w
 		andi.w	#$7F,d0
 		addi.w	#$80,d0
 		move.w	d0,ost_bubble_wait_time(a0)		; set time until next sequence

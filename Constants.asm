@@ -412,8 +412,8 @@ redraw_left_bit:	equ 2
 redraw_right_bit:	equ 3
 redraw_topall_bit:	equ 4
 redraw_bottomall_bit:	equ 5
-redraw_bg2_left_bit:	equ 0 ; REV01 only
-redraw_bg2_right_bit:	equ 1 ; REV01 only
+redraw_bg2_left_bit:	equ 0					; REV01 only
+redraw_bg2_right_bit:	equ 1					; REV01 only
 
 ; 16x16 and 256x256 mappings
 tilemap_xflip:		equ $800
@@ -427,28 +427,28 @@ tilemap_solid_top_bit:	equ $D
 tilemap_solid_lrb_bit:	equ $E
 
 ; Special Stages
-ss_block_width:		equ $18		; width of blocks in grid (walls, items, et al)
-ss_width:		equ $80		; width of level in blocks, including $20 padding on both sides
-ss_width_actual:	equ $40		; width of level in blocks, without padding
-ss_width_padding_left:	equ (ss_width-ss_width_actual)/2 ; amount of padding on left side ($20 bytes)
-ss_height_actual:	equ $40		; height of level in blocks, without padding
-ss_height_padding_top:	equ $20		; amount of padding on top side
+ss_block_width:		equ $18					; width of blocks in grid (walls, items, et al)
+ss_width:		equ $80					; width of level in blocks, including $20 padding on both sides
+ss_width_actual:	equ $40					; width of level in blocks, without padding
+ss_width_padding_left:	equ (ss_width-ss_width_actual)/2	; amount of padding on left side ($20 bytes)
+ss_height_actual:	equ $40					; height of level in blocks, without padding
+ss_height_padding_top:	equ $20					; amount of padding on top side
 sizeof_ss_padding_top:	equ ss_height_padding_top*ss_width
-ss_visible_width:	equ $10		; width of area in blocks that are drawn on screen
+ss_visible_width:	equ $10					; width of area in blocks that are drawn on screen
 ss_visible_height:	equ ss_visible_width
 
-ss_sprite_mappings:	equ 0		; mappings pointer in v_ss_sprite_info
-ss_sprite_frame:	equ 4		; frame id in v_ss_sprite_info
+ss_sprite_mappings:	equ 0					; mappings pointer in v_ss_sprite_info
+ss_sprite_frame:	equ 4					; frame id in v_ss_sprite_info
 ss_sprite_frame_low:	equ ss_sprite_frame+1
-ss_sprite_tile:		equ 6		; tile id in v_ss_sprite_info
-sizeof_ss_sprite_info:	equ 8		; size of each entry in v_ss_sprite_info (8 bytes)
+ss_sprite_tile:		equ 6					; tile id in v_ss_sprite_info
+sizeof_ss_sprite_info:	equ 8					; size of each entry in v_ss_sprite_info (8 bytes)
 
-ss_update_id:		equ 0		; sprite update id (1-6) in v_ss_sprite_update_list
-ss_update_time:		equ 2		; time until next frame update
-ss_update_frame:	equ 3		; frame within update data
-ss_update_levelptr:	equ 4		; pointer to item in level layout being updated
-sizeof_ss_update:	equ 8		; bytes in one update slot
-countof_ss_update:	equ $20		; number of update slots
+ss_update_id:		equ 0					; sprite update id (1-6) in v_ss_sprite_update_list
+ss_update_time:		equ 2					; time until next frame update
+ss_update_frame:	equ 3					; frame within update data
+ss_update_levelptr:	equ 4					; pointer to item in level layout being updated
+sizeof_ss_update:	equ 8					; bytes in one update slot
+countof_ss_update:	equ $20					; number of update slots
 
 ; Date
 year:		equ _year+1900

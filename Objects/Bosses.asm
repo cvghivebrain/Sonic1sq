@@ -132,7 +132,7 @@ Boss_Move:	; Routine 4
 		add.l	d0,ost_boss2_y_normal(a0)		; update y position
 		
 		move.b	ost_boss2_wobble(a0),d0			; get wobble byte
-		jsr	(CalcSine).l				; convert to sine
+		jsr	(CalcSine).w				; convert to sine
 		asr.w	#6,d0					; divide by 64
 		add.w	ost_boss2_y_normal(a0),d0		; add y pos
 		move.w	d0,ost_y_pos(a0)			; update actual y pos

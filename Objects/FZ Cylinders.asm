@@ -26,9 +26,9 @@ Cyl_PosData:	dc.w $24D0, $620				; bottom left
 		dc.w $2510, $4C0				; top right
 
 		rsobj EggmanCylinder
-ost_cylinder_eggman:	rs.w 1 ; $30				; -1 if cylinder contains Eggman (2 bytes)
-ost_cylinder_y_start:	rs.l 1 ; $38				; original y position (4 bytes; low word always 0)
-ost_cylinder_y_move:	rs.l 1 ; $3C				; amount the cylinder has moved (4 bytes)
+ost_cylinder_eggman:	rs.w 1					; $30				; -1 if cylinder contains Eggman (2 bytes)
+ost_cylinder_y_start:	rs.l 1					; $38				; original y position (4 bytes; low word always 0)
+ost_cylinder_y_move:	rs.l 1					; $3C				; amount the cylinder has moved (4 bytes)
 ost_cylinder_flag:	rs.b 1					; flag set when extending
 		rsobjend
 ; ===========================================================================

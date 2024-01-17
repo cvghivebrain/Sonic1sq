@@ -100,7 +100,7 @@ Drown_Bubble:
 		bne.s	.fail					; branch if not found
 		move.l	#Bubble,ost_id(a1)			; load mini bubble object
 		move.b	#$10,ost_subtype(a1)
-		jsr	(RandomNumber).l
+		jsr	(RandomNumber).w
 		andi.b	#1,d0
 		beq.s	.fail					; branch if random bit is 0
 		movea.l	a1,a2					; copy OST address of first bubble
@@ -122,7 +122,7 @@ Drown_Number:
 		bsr.s	Drown_Bubble				; spawn 1 or 2 bubbles
 		tst.b	ost_anim_time(a1)
 		beq.s	.convert_bubble				; branch if only 1 bubble was spawned
-		jsr	(RandomNumber).l
+		jsr	(RandomNumber).w
 		andi.b	#1,d0
 		beq.s	.convert_bubble				; branch if random bit is 0
 		movea.l	a2,a1					; select first bubble
@@ -139,7 +139,7 @@ Drown_Death:
 		play.w	1, jsr, sfx_Drown			; play drowning sound
 		move.b	#11,ost_subtype(a0)			; create 11 bubbles
 		move.w	#120,ost_drown_restart_time(a0)		; restart after 2 seconds
-		jsr	(RandomNumber).l
+		jsr	(RandomNumber).w
 		andi.b	#$F,d0					; d0 = 0-15
 		move.b	d0,ost_anim_time(a0)			; time until first bubble
 		getsonic					; a1 = OST of Sonic
@@ -173,7 +173,7 @@ Drown_Death:
 		
 	.spawn_bubble:
 		subq.b	#1,ost_subtype(a0)			; decrement bubble counter
-		jsr	(RandomNumber).l
+		jsr	(RandomNumber).w
 		andi.b	#7,d0					; d0 = 0-7
 		addq.b	#1,d0					; d0 = 1-8
 		move.b	d0,ost_anim_time(a0)			; time until next bubble

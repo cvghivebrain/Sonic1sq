@@ -13,8 +13,8 @@
 ; ---------------------------------------------------------------
 
 ; Screen appearence flags
-_eh_address_error	equ	$01		; use for address and bus errors only (tells error handler to display additional "Address" field)
-_eh_show_sr_usp		equ	$02		; displays SR and USP registers content on error screen
+_eh_address_error	equ	$01				; use for address and bus errors only (tells error handler to display additional "Address" field)
+_eh_show_sr_usp		equ	$02				; displays SR and USP registers content on error screen
 
 ; Advanced execution flags
 ; WARNING! For experts only, DO NOT USES them unless you know what you're doing
@@ -27,7 +27,7 @@ _eh_align_offset	equ	$80
 ; ---------------------------------------------------------------
 
 ; Default screen configuration
-_eh_default			equ	0 ;_eh_show_sr_usp
+_eh_default			equ	0			;_eh_show_sr_usp
 
 ; ---------------------------------------------------------------
 
@@ -172,9 +172,9 @@ DebuggerExtensions:
 
 ; WARNING! Don't move! This must be placed directly below "DebuggerExtensions"
 DebuggerExtensions_ExtraDebuggerList:
-	dc.l	DEBUGGER__EXTENSIONS__BTN_A_DEBUGGER	; for button A
-	dc.l	DEBUGGER__EXTENSIONS__BTN_C_DEBUGGER	; for button C (not B)
-	dc.l	DEBUGGER__EXTENSIONS__BTN_B_DEBUGGER	; for button B (not C)
+	dc.l	DEBUGGER__EXTENSIONS__BTN_A_DEBUGGER		; for button A
+	dc.l	DEBUGGER__EXTENSIONS__BTN_C_DEBUGGER		; for button C (not B)
+	dc.l	DEBUGGER__EXTENSIONS__BTN_B_DEBUGGER		; for button B (not C)
 
 ; ---------------------------------------------------------------
 ; Error handler blob

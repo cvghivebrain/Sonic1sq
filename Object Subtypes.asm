@@ -3,8 +3,8 @@
 ; ---------------------------------------------------------------------------
 
 ; CollapseLedge
-type_ledge_left:	equ id_frame_ledge_left		; 0 - facing left
-type_ledge_right:	equ id_frame_ledge_right	; 1 - also facing left, but always xflipped to face right
+type_ledge_left:	equ id_frame_ledge_left			; 0 - facing left
+type_ledge_right:	equ id_frame_ledge_right		; 1 - also facing left, but always xflipped to face right
 
 ; FireMaker
 type_fire_rate30:	equ (30/30)<<3				; every 0.5 seconds
@@ -18,13 +18,13 @@ type_fire_horizontal:	equ $40
 type_fire_gravity:	equ $80
 
 ; Harpoon
-type_harp_h:		equ id_ani_harp_h_extending	; 0 - horizontal
-type_harp_v:		equ id_ani_harp_v_extending	; 2 - vertical
-type_harp_sync:		equ 8				; synchronised animation
+type_harp_h:		equ id_ani_harp_h_extending		; 0 - horizontal
+type_harp_v:		equ id_ani_harp_v_extending		; 2 - vertical
+type_harp_sync:		equ 8					; synchronised animation
 
 ; LabyrinthBlock
-type_lblock_solid:	equ 0				; doesn't move
-type_lblock_sink:	equ 1				; sinks when stood on
+type_lblock_solid:	equ 0					; doesn't move
+type_lblock_sink:	equ 1					; sinks when stood on
 
 ; Waterfall
 type_wfall_vert:	equ id_frame_wfall_vertnarrow		; 0 - vertical narrow
@@ -42,20 +42,20 @@ type_wfallsp_float:	equ 1					; matches y position to water surface
 type_wfallsp_hide:	equ 2					; hide until level is updated by button
 
 ; SpinPlatform
-type_spin_platform:	equ $80				; $8x - small spinning platform
-type_spin_platform_alt:	equ $90				; $9x - small spinning platform, longer delay between spins
+type_spin_platform:	equ $80					; $8x - small spinning platform
+type_spin_platform_alt:	equ $90					; $9x - small spinning platform, longer delay between spins
 
 ; Saws
-type_saw_pizza_still:	equ 0			 	; 0 - pizza cutter, doesn't move
-type_saw_pizza_sideways: equ 1			 	; 1 - pizza cutter, moves side-to-side
-type_saw_pizza_updown:	equ 2			 	; 2 - pizza cutter, moves up and down
-type_saw_ground_right:	equ 3			 	; 3 - ground saw, moves right
-type_saw_ground_left:	equ 4			 	; 4 - ground saw, moves left
+type_saw_pizza_still:	equ 0					; 0 - pizza cutter, doesn't move
+type_saw_pizza_sideways: equ 1					; 1 - pizza cutter, moves side-to-side
+type_saw_pizza_updown:	equ 2					; 2 - pizza cutter, moves up and down
+type_saw_ground_right:	equ 3					; 3 - ground saw, moves right
+type_saw_ground_left:	equ 4					; 4 - ground saw, moves left
 
 ; ScrapStomp
-type_stomp_slow:	equ 0				; stomper, drops quickly and rises slowly
-type_stomp_fast_short:	equ 1				; stomper, drops quickly and rises quickly (64px)
-type_stomp_fast_long:	equ 2				; stomper, drops quickly and rises quickly (96px)
+type_stomp_slow:	equ 0					; stomper, drops quickly and rises slowly
+type_stomp_fast_short:	equ 1					; stomper, drops quickly and rises quickly (64px)
+type_stomp_fast_long:	equ 2					; stomper, drops quickly and rises quickly (96px)
 
 ; AnimalsEnd
 type_animal_end_flicky:		equ 0

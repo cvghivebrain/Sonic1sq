@@ -119,7 +119,7 @@ Sonic_Display:
 		cmpi.b	#air_alert,(v_air).w			; is air < $C?
 		bcs.s	.chkshoes				; if yes, branch
 		move.b	(v_bgm).w,d0
-		jsr	(PlaySound0).l				; play normal music
+		jsr	(PlaySound0).w				; play normal music
 
 	.chkshoes:
 		tst.w	(v_shoes).w				; does Sonic have speed	shoes?
@@ -402,7 +402,7 @@ Sonic_Inertia:
 
 Sonic_InertiaLR:
 		move.b	ost_angle(a0),d0
-		jsr	(CalcSine).l
+		jsr	(CalcSine).w
 		muls.w	ost_inertia(a0),d1
 		asr.l	#8,d1
 		move.w	d1,ost_x_vel(a0)
@@ -614,7 +614,7 @@ Sonic_RollSpeed:
 
 .update_speed:
 		move.b	ost_angle(a0),d0
-		jsr	(CalcSine).l				; convert angle to sine/cosine
+		jsr	(CalcSine).w				; convert angle to sine/cosine
 		muls.w	ost_inertia(a0),d0
 		asr.l	#8,d0
 		move.w	d0,ost_y_vel(a0)			; update y speed
@@ -893,7 +893,7 @@ Sonic_Jump:
 		moveq	#0,d0
 		move.b	ost_angle(a0),d0
 		subi.b	#$40,d0
-		jsr	(CalcSine).l
+		jsr	(CalcSine).w
 		muls.w	d2,d1
 		asr.l	#8,d1
 		add.w	d1,ost_x_vel(a0)			; make Sonic jump
@@ -967,7 +967,7 @@ Sonic_SlopeResist:
 		cmpi.b	#$C0,d0
 		bcc.s	.no_change				; branch if Sonic is on ceiling
 		move.b	ost_angle(a0),d0
-		jsr	(CalcSine).l				; convert angle to sine
+		jsr	(CalcSine).w				; convert angle to sine
 		muls.w	#$20,d0
 		asr.l	#8,d0
 		tst.w	ost_inertia(a0)
@@ -997,7 +997,7 @@ Sonic_RollRepel:
 		cmpi.b	#$C0,d0
 		bcc.s	.no_change				; branch if Sonic is on ceiling
 		move.b	ost_angle(a0),d0
-		jsr	(CalcSine).l				; convert angle to sine
+		jsr	(CalcSine).w				; convert angle to sine
 		muls.w	#$50,d0
 		asr.l	#8,d0
 		tst.w	ost_inertia(a0)
@@ -1090,7 +1090,7 @@ Sonic_JumpAngle:
 Sonic_JumpCollision:
 		move.w	ost_x_vel(a0),d1
 		move.w	ost_y_vel(a0),d2
-		jsr	(CalcAngle).l				; convert x/y speed to angle of direction
+		jsr	(CalcAngle).w				; convert x/y speed to angle of direction
 		subi.b	#$20,d0
 		andi.b	#$C0,d0
 		cmpi.b	#$40,d0
@@ -1570,7 +1570,7 @@ Sonic_LoadGfx:
 		lea	DMA_Sonic(pc),a2
 		move.l	(a2)+,d1
 		move.l	(a2)+,d2
-		jsr	AddDMA
+		jsr	(AddDMA).w
 
 	.nochange:
 		rts

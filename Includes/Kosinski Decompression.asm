@@ -40,7 +40,7 @@ KosPlusDec:
 
 .FetchNewCode:
 	_KosPlus_ReadBit
-	bcs.s	.FetchCodeLoop				; If code = 1, branch.
+	bcs.s	.FetchCodeLoop					; If code = 1, branch.
 
 	; Codes 00 and 01.
 	moveq	#-1,d5

@@ -110,7 +110,7 @@ SBall_Move:	; Routine 2
 ChainPiece:
 		getparent					; a1 = OST of parent object
 		move.b	ost_angle(a1),d0			; get updated angle
-		jsr	(CalcSine).l				; convert to sine/cosine
+		jsr	(CalcSine).w				; convert to sine/cosine
 		move.w	ost_y_pos(a1),d2			; get position of chain base
 		move.w	ost_x_pos(a1),d3
 		moveq	#0,d4

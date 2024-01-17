@@ -158,7 +158,7 @@ Pri_Animals:	; Routine 8
 		move.l	#Animals,ost_id(a1)			; load animal object every 8 frames
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
-		jsr	(RandomNumber).l
+		jsr	(RandomNumber).w
 		andi.w	#$1F,d0
 		subq.w	#6,d0
 		tst.w	d1

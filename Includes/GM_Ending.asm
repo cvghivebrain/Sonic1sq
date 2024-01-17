@@ -3,7 +3,7 @@
 ; ---------------------------------------------------------------------------
 
 GM_Ending:
-		play.b	1, bsr.w, cmd_Stop			; stop music
+		play.b	1, jsr, cmd_Stop			; stop music
 		bsr.w	PaletteFadeOut				; fade out from previous gamemode
 
 		lea	(v_ost_all).w,a1			; RAM address to start clearing
@@ -50,7 +50,7 @@ GM_Ending:
 		bsr.w	LevelParameterLoad			; load level boundaries and start positions
 		bsr.w	DrawTilesAtStart
 		move.b	(v_bgm).w,d0
-		bsr.w	PlaySound0				; play music
+		jsr	(PlaySound0).w				; play music
 		btst	#bitA,(v_joypad_hold_actual).w		; is button A being held?
 		beq.s	.no_debug				; if not, branch
 		move.b	#1,(f_debug_enable).w			; enable debug mode
@@ -107,7 +107,7 @@ End_MainLoop:
 
 		move.b	#id_Credits,(v_gamemode).w		; goto credits
 		move.w	#0,(v_credits_num).w			; set credits index number to 0
-		rts	
+		rts
 ; ===========================================================================
 
 .continue_ending:
@@ -169,7 +169,7 @@ End_MoveSonic:	; Routine 0
 		addq.b	#2,(v_end_sonic_routine).w		; goto End_Sonic_Stop next
 		move.b	#1,(f_lock_controls).w			; lock player's controls
 		move.w	#(btnR<<8),(v_joypad_hold).w		; stop Sonic by virtual pressing right
-		rts	
+		rts
 ; ===========================================================================
 
 End_Sonic_Stop:	; Routine 2
@@ -188,7 +188,7 @@ End_Sonic_Stop:	; Routine 2
 		move.b	#id_Wait,(v_ost_player+ost_anim).w	; use "standing" animation
 		move.b	#id_Wait,(v_ost_player+ost_sonic_anim_next).w
 		move.b	#3,(v_ost_player+ost_anim_time).w
-		rts	
+		rts
 ; ===========================================================================
 
 End_Sonic_Replace:

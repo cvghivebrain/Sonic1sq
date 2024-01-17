@@ -305,7 +305,7 @@ DPLCSprite:
 		bsr.w	SkipMappings				; jump to data after mappings (where DPLCs are stored)
 		tst.w	d0
 		beq.s	.exit					; branch if mappings contained 0 pieces (i.e. blank)
-		jmp	AddDMA2					; add to DMA queue
+		jmp	(AddDMA2).w				; add to DMA queue
 		
 	.exit:
 		rts

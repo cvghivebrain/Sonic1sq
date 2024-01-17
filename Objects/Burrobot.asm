@@ -64,7 +64,7 @@ Burro_ChkSonic:	; Routine $A
 		bra.w	DespawnObject
 ; ===========================================================================
 
-Burro_ChangeDir:	; Routine 2
+Burro_ChangeDir:						; Routine 2
 		subq.w	#1,ost_burro_turn_time(a0)		; decrement timer
 		bpl.s	.nochg					; branch if time remains
 		addq.b	#2,ost_routine(a0)			; goto Burro_Move next

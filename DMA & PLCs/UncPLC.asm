@@ -17,7 +17,7 @@ UncPLC:
 
 	.loop:
 		move.l	(a2)+,d1				; get destination VRAM address
-		jsr	AddDMA2					; add to DMA queue (source/size already in a2)
+		jsr	(AddDMA2).w				; add to DMA queue (source/size already in a2)
 		move.w	(a2)+,d1				; get tile setting
 		move.w	(a2)+,d0				; get RAM address to save tile setting
 		beq.s	.skip_tileram				; branch if tile setting shouldn't be saved

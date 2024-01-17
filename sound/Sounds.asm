@@ -10,7 +10,7 @@ play:		macro	queue, command, song
 		inform 2,"Invalid or undefined sound queue slot. Must be between 0 and \#v_soundqueue_size"
 		endc
 
-		\command	PlaySound\queue			; call playsound based on the slot ID
+		\command	(PlaySound\queue).w		; call playsound based on the slot ID
 		endm
 
 ; ---------------------------------------------------------------------------

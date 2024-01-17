@@ -9,13 +9,13 @@
 ;	BBBB - button id (when TTTT is 4)
 ;	TTTT - block type (0 = still; 1/2 = up/down; 3 = drops on jump; 4 = drops on button)
 
-type_glass_still:	equ 0				; 0 - doesn't move
-type_glass_updown:	equ 1				; 1 - moves up and down
-type_glass_updown_rev:	equ 2				; 2 - moves up and down, reversed
-type_glass_drop_jump:	equ 3				; 3 - drops each time it's jumped on
-type_glass_drop_button:	equ 4				; 4 - drops when button is pressed, stops on floor
-type_glass_button_0:	equ 0				; $0x - button 0
-type_glass_button_1:	equ $10				; $1x - button 1
+type_glass_still:	equ 0					; 0 - doesn't move
+type_glass_updown:	equ 1					; 1 - moves up and down
+type_glass_updown_rev:	equ 2					; 2 - moves up and down, reversed
+type_glass_drop_jump:	equ 3					; 3 - drops each time it's jumped on
+type_glass_drop_button:	equ 4					; 4 - drops when button is pressed, stops on floor
+type_glass_button_0:	equ 0					; $0x - button 0
+type_glass_button_1:	equ $10					; $1x - button 1
 ; ---------------------------------------------------------------------------
 
 GlassBlock:

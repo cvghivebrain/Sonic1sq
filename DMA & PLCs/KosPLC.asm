@@ -21,7 +21,7 @@ KosPLC:
 		movea.l	d2,a1					; a1 = current position in RAM buffer
 		movea.l	(a2)+,a0				; get pointer for compressed gfx
 		
-		jsr	KosDec					; decompress
+		jsr	(KosDec).w				; decompress
 		move.w	(a2)+,d1				; get tile setting
 		move.w	(a2)+,d2				; get RAM address to save tile setting
 		beq.s	.skip_tileram				; branch if tile setting shouldn't be saved
@@ -34,8 +34,8 @@ KosPLC:
 		set_dma_dest	0,d1				; destination = 0 in VRAM
 		move.l	(a2),d2					; read size from end of KPLC
 		lea	KPLC_Src(pc),a2				; source = $FF0000 in RAM
-		jsr	AddDMA					; add to DMA queue
-		jsr	ProcessDMA				; process queue now
+		jsr	(AddDMA).w				; add to DMA queue
+		jsr	(ProcessDMA).w				; process queue now
 		popr	d1-d2
 	
 	.exit:

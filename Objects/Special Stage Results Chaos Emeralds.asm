@@ -16,12 +16,12 @@ SSRC_Index:	index *,,2
 		ptr SSRC_Flash
 
 SSRC_PosData:	; x positions for chaos emeralds
-		dc.w screen_left+144					; blue
-		dc.w screen_left+168					; yellow
-		dc.w screen_left+120					; pink
-		dc.w screen_left+192					; green
-		dc.w screen_left+96					; red
-		dc.w screen_left+216					; grey
+		dc.w screen_left+144				; blue
+		dc.w screen_left+168				; yellow
+		dc.w screen_left+120				; pink
+		dc.w screen_left+192				; green
+		dc.w screen_left+96				; red
+		dc.w screen_left+216				; grey
 ; ===========================================================================
 
 SSRC_Main:	; Routine 0

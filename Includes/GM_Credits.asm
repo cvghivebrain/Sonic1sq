@@ -5,9 +5,9 @@
 GM_Credits:
 		tst.b	(f_credits_started).w
 		bne.s	.keep_music				; branch if credits were already running
-		play.b	1, bsr.w, mus_Credits			; play credits music
+		play.b	1, jsr, mus_Credits			; play credits music
 		move.b	#1,(f_credits_started).w
-		
+
 	.keep_music:
 		bsr.w	PaletteFadeOut				; fade out from previous gamemode
 		lea	(vdp_control_port).l,a6
@@ -56,7 +56,7 @@ Cred_WaitLoop:
 Cred_TryAgain:
 		move.b	#id_TryAgain,(v_gamemode).w
 		rts
-		
+
 ; ---------------------------------------------------------------------------
 ; Subroutine to setup an ending sequence demo
 

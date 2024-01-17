@@ -17,13 +17,13 @@ CollectRing:
 		cmp.w	(v_rings).w,d0
 		bls.s	.got_life				; branch if ring count matches or exceeds target
 		move.w	#sfx_Ring,d0				; play ring sound
-		jmp	PlaySound1
+		jmp	(PlaySound1).w
 		
 	.got_life:
 		addq.b	#1,(v_ring_reward).w			; increment to next target
 		addq.b	#1,(v_lives).w				; add 1 to the number of lives you have
 		addq.b	#1,(f_hud_lives_update).w		; update the lives counter
 		move.w	#mus_ExtraLife,d0			; play extra life music
-		jmp	PlaySound1
+		jmp	(PlaySound1).w
 		
 Ring_NextLife:	dc.w 100, 200, 300, 400, 500, 600, 700, 800, 900, 9999

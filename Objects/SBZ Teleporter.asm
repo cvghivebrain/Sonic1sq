@@ -92,7 +92,7 @@ Tele_Bump:	; Routine 4
 		getsonic					; a1 = OST of Sonic
 		move.b	ost_tele_bump(a0),d0			; get bump value
 		addq.b	#2,ost_tele_bump(a0)			; increment bump value
-		jsr	(CalcSine).l				; convert to sine
+		jsr	(CalcSine).w				; convert to sine
 		asr.w	#5,d0
 		move.w	ost_y_pos(a0),d2
 		sub.w	d0,d2

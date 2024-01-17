@@ -378,7 +378,7 @@ endsprite:	macro
 ; ---------------------------------------------------------------------------
 
 piece:		macro
-		dc.b \2		; ypos
+		dc.b \2						; ypos
 		sprite_width:	substr	1,1,"\3"
 		sprite_height:	substr	3,3,"\3"
 		dc.b ((sprite_width-1)<<2)+sprite_height-1

@@ -15,13 +15,13 @@
 ; Enable debugger extensions
 ; Pressing A/B/C on the exception screen can open other debuggers
 ; Pressing Start or unmapped button returns to the exception
-DEBUGGER__EXTENSIONS__ENABLE:			equ		1		; 0 = OFF, 1 = ON
+DEBUGGER__EXTENSIONS__ENABLE:			equ		1 ; 0 = OFF, 1 = ON
 
 ; Debuggers mapped to pressing A/B/C on the exception screen
 ; Use 0 to disable button, use debugger's entry point otherwise.
-DEBUGGER__EXTENSIONS__BTN_A_DEBUGGER:	equ		Debugger_AddressRegisters	; display address register symbols
-DEBUGGER__EXTENSIONS__BTN_B_DEBUGGER:	equ		Debugger_Backtrace			; display exception backtrace
-DEBUGGER__EXTENSIONS__BTN_C_DEBUGGER:	equ		0		; disabled
+DEBUGGER__EXTENSIONS__BTN_A_DEBUGGER:	equ		Debugger_AddressRegisters ; display address register symbols
+DEBUGGER__EXTENSIONS__BTN_B_DEBUGGER:	equ		Debugger_Backtrace ; display exception backtrace
+DEBUGGER__EXTENSIONS__BTN_C_DEBUGGER:	equ		0	; disabled
 
 
 ; ===============================================================
@@ -38,7 +38,7 @@ hex		equ		$80				; flag to display as hexadecimal number
 deci		equ		$90				; flag to display as decimal number
 bin		equ		$A0				; flag to display as binary number
 sym		equ		$B0				; flag to display as symbol (treat as offset, decode into symbol +displacement, if present)
-symdisp	equ		$C0				; flag to display as symbol's displacement alone (DO NOT USE, unless complex formatting is required, see notes below)
+symdisp	equ		$C0					; flag to display as symbol's displacement alone (DO NOT USE, unless complex formatting is required, see notes below)
 str		equ		$D0				; flag to display as string (treat as offset, insert string from that offset)
 
 ; NOTES:
@@ -56,14 +56,14 @@ str		equ		$D0				; flag to display as string (treat as offset, insert string fro
 
 ; Additional flags ...
 ; ... for number formatters (hex, deci, bin)
-signed	equ		8				; treat number as signed (display + or - before the number depending on sign)
+signed	equ		8					; treat number as signed (display + or - before the number depending on sign)
 
 ; ... for symbol formatter (sym)
-split	equ		8				; DO NOT write displacement (if present), skip and wait for "symdisp" flag to write it later (optional)
-forced	equ		4				; display "<unknown>" if symbol was not found, otherwise, plain offset is displayed by the displacement formatter
+split	equ		8					; DO NOT write displacement (if present), skip and wait for "symdisp" flag to write it later (optional)
+forced	equ		4					; display "<unknown>" if symbol was not found, otherwise, plain offset is displayed by the displacement formatter
 
 ; ... for symbol displacement formatter (symdisp)
-weak	equ		8				; DO NOT write plain offset if symbol is displayed as "<unknown>"
+weak	equ		8					; DO NOT write plain offset if symbol is displayed as "<unknown>"
 
 ; Argument type flags:
 ; - DO NOT USE in formatted strings processed by macros, as these are included automatically
@@ -77,18 +77,18 @@ long	equ		3
 ; -----------------------
 
 ; Plain control flags: no arguments following
-endl	equ		$E0				; "End of line": flag for line break
+endl	equ		$E0					; "End of line": flag for line break
 cr		equ		$E6				; "Carriage return": jump to the beginning of the line
-pal0	equ		$E8				; use palette line #0
-pal1	equ		$EA				; use palette line #1
-pal2	equ		$EC				; use palette line #2
-pal3	equ		$EE				; use palette line #3
+pal0	equ		$E8					; use palette line #0
+pal1	equ		$EA					; use palette line #1
+pal2	equ		$EC					; use palette line #2
+pal3	equ		$EE					; use palette line #3
 
 ; Parametrized control flags: followed by 1-byte argument
-setw	equ		$F0				; set line width: number of characters before automatic line break
-setoff	equ		$F4				; set tile offset: lower byte of base pattern, which points to tile index of ASCII character 00
-setpat	equ		$F8				; set tile pattern: high byte of base pattern, which determines palette flags and $100-tile section id
-setx	equ		$FA				; set x-position
+setw	equ		$F0					; set line width: number of characters before automatic line break
+setoff	equ		$F4					; set tile offset: lower byte of base pattern, which points to tile index of ASCII character 00
+setpat	equ		$F8					; set tile pattern: high byte of base pattern, which determines palette flags and $100-tile section id
+setx	equ		$FA					; set x-position
 
 
 
@@ -137,23 +137,23 @@ RaiseError &
 	__FSTRING_GenerateArgumentsCode \string
 	jsr		__global__ErrorHandler
 	__FSTRING_GenerateDecodedString \string
-	if strlen("\console_program")			; if console program offset is specified ...
-		dc.b	\opts+_eh_enter_console|(((*&1)^1)*_eh_align_offset)	; add flag "_eh_align_offset" if the next byte is at odd offset ...
-		even															; ... to tell Error handler to skip this byte, so it'll jump to ...
+	if strlen("\console_program")				; if console program offset is specified ...
+		dc.b	\opts+_eh_enter_console|(((*&1)^1)*_eh_align_offset) ; add flag "_eh_align_offset" if the next byte is at odd offset ...
+		even						; ... to tell Error handler to skip this byte, so it'll jump to ...
 		if DEBUGGER__EXTENSIONS__ENABLE
-			jsr		\console_program										; ... an aligned "jsr" instruction that calls console program itself
+			jsr		\console_program	; ... an aligned "jsr" instruction that calls console program itself
 			jmp		__global__ErrorHandler_PagesController
 		else
-			jmp		\console_program										; ... an aligned "jmp" instruction that calls console program itself
+			jmp		\console_program	; ... an aligned "jmp" instruction that calls console program itself
 		endc
 	else
 		if DEBUGGER__EXTENSIONS__ENABLE
-			dc.b	\opts+_eh_return|(((*&1)^1)*_eh_align_offset)			; add flag "_eh_align_offset" if the next byte is at odd offset ...
-			even															; ... to tell Error handler to skip this byte, so it'll jump to ...
+			dc.b	\opts+_eh_return|(((*&1)^1)*_eh_align_offset) ; add flag "_eh_align_offset" if the next byte is at odd offset ...
+			even					; ... to tell Error handler to skip this byte, so it'll jump to ...
 			jmp		__global__ErrorHandler_PagesController
 		else
-			dc.b	\opts+0						; otherwise, just specify \opts for error handler, +0 will generate dc.b 0 ...
-			even								; ... in case \opts argument is empty or skipped
+			dc.b	\opts+0				; otherwise, just specify \opts for error handler, +0 will generate dc.b 0 ...
+			even					; ... in case \opts argument is empty or skipped
 		endc
 	endc
 	even
@@ -253,7 +253,7 @@ Console &
 KDebug &
 	macro
 
-	if def(__DEBUG__)	; KDebug interface is only available in DEBUG builds
+	if def(__DEBUG__)					; KDebug interface is only available in DEBUG builds
 	if strcmp("\0","write")|strcmp("\0","writeline")|strcmp("\0","Write")|strcmp("\0","WriteLine")
 		move.w	sr, -(sp)
 		__FSTRING_GenerateArgumentsCode \1
@@ -310,9 +310,9 @@ __ErrorMessage &
 		jsr		__global__ErrorHandler
 		__FSTRING_GenerateDecodedString \string
 		if DEBUGGER__EXTENSIONS__ENABLE
-			dc.b	\opts+_eh_return|(((*&1)^1)*_eh_align_offset)	; add flag "_eh_align_offset" if the next byte is at odd offset ...
-			even													; ... to tell Error handler to skip this byte, so it'll jump to ...
-			jmp		__global__ErrorHandler_PagesController	; ... extensions controller
+			dc.b	\opts+_eh_return|(((*&1)^1)*_eh_align_offset) ; add flag "_eh_align_offset" if the next byte is at odd offset ...
+			even					; ... to tell Error handler to skip this byte, so it'll jump to ...
+			jmp		__global__ErrorHandler_PagesController ; ... extensions controller
 		else
 			dc.b	\opts+0
 			even
@@ -323,9 +323,9 @@ __ErrorMessage &
 __FSTRING_GenerateArgumentsCode &
 	macro	string
 
-	__pos:	set 	instr(\string,'%<')		; token position
-	__stack:set		0						; size of actual stack
-	__sp:	set		0						; stack displacement
+	__pos:	set 	instr(\string,'%<')			; token position
+	__stack:set		0				; size of actual stack
+	__sp:	set		0				; stack displacement
 
 	; Parse string itself
 	while (__pos)
@@ -336,13 +336,13 @@ __FSTRING_GenerateArgumentsCode &
     	if (__midpos<1)|(__midpos>__endpos)
 			__midpos: = __endpos
     	endc
-		__substr:	substr	__pos+1+1,__endpos-1,\string			; .type ea param
-		__type:		substr	__pos+1+1,__pos+1+1+1,\string			; .type
+		__substr:	substr	__pos+1+1,__endpos-1,\string ; .type ea param
+		__type:		substr	__pos+1+1,__pos+1+1+1,\string ; .type
 
 		; Expression is an effective address (e.g. %(.w d0 hex) )
 		if "\__type">>8="."
-			__operand:	substr	__pos+1+1,__midpos-1,\string			; .type ea
-			__param:	substr	__midpos+1,__endpos-1,\string			; param
+			__operand:	substr	__pos+1+1,__midpos-1,\string ; .type ea
+			__param:	substr	__midpos+1,__endpos-1,\string ; param
 
 			if "\__type"=".b"
 				pushp	"move\__operand\,1(sp)"
@@ -380,8 +380,8 @@ __FSTRING_GenerateArgumentsCode &
 __FSTRING_GenerateDecodedString &
 	macro string
 
-	__lpos:	set		1						; start position
-	__pos:	set 	instr(\string,'%<')		; token position
+	__lpos:	set		1				; start position
+	__pos:	set 	instr(\string,'%<')			; token position
 
 	while (__pos)
 
@@ -395,15 +395,15 @@ __FSTRING_GenerateDecodedString &
     	if (__midpos<1)|(__midpos>__endpos)
 			__midpos: = __endpos
     	endc
-		__type:		substr	__pos+1+1,__pos+1+1+1,\string			; .type
+		__type:		substr	__pos+1+1,__pos+1+1+1,\string ; .type
 
 		; Expression is an effective address (e.g. %<.w d0 hex> )
 		if "\__type">>8="."    
-			__param:	substr	__midpos+1,__endpos-1,\string			; param
+			__param:	substr	__midpos+1,__endpos-1,\string ; param
 			
-			; Validate format setting ("param")
+								; Validate format setting ("param")
 			if strlen("\__param")<1
-				__param: substr ,,"hex"			; if param is ommited, set it to "hex"
+				__param: substr ,,"hex"		; if param is ommited, set it to "hex"
 			elseif strcmp("\__param","signed")
 				__param: substr ,,"hex+signed"	; if param is "signed", correct it to "hex+signed"
 			endc

@@ -113,7 +113,7 @@ TCha_Arc:	; Routine 6
 		
 TCha_Update:
 		move.b	ost_angle(a0),d0			; get angle
-		jsr	(CalcSine).l				; convert angle (d0) to sine (d0) and cosine (d1)
+		jsr	(CalcSine).w				; convert angle (d0) to sine (d0) and cosine (d1)
 		moveq	#0,d4
 		move.b	ost_ectry_radius(a0),d4
 		muls.w	d4,d1

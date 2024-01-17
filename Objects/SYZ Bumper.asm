@@ -47,8 +47,8 @@ Bump_Hit:
 		move.w	ost_y_pos(a0),d2
 		sub.w	ost_x_pos(a1),d1			; get distance betwen Sonic & bumper
 		sub.w	ost_y_pos(a1),d2
-		jsr	(CalcAngle).l				; convert to angle
-		jsr	(CalcSine).l				; convert to sine/cosine
+		jsr	(CalcAngle).w				; convert to angle
+		jsr	(CalcSine).w				; convert to sine/cosine
 		muls.w	#-bumper_power,d1
 		asr.l	#8,d1
 		move.w	d1,ost_x_vel(a1)			; bounce Sonic away

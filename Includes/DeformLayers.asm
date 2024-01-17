@@ -18,7 +18,7 @@ DeformLayers:
 		bsr.w	UpdateCamera_X				; update camera position & redraw flags
 		bsr.w	UpdateCamera_Y
 		bsr.w	DynamicLevelEvents			; update level boundaries, load bosses etc.
-		move.w	(v_camera_y_pos).w,(v_fg_y_pos_vsram).w ; v_fg_y_pos_vsram is sent to VSRAM during VBlank
+		move.w	(v_camera_y_pos).w,(v_fg_y_pos_vsram).w	; v_fg_y_pos_vsram is sent to VSRAM during VBlank
 		move.w	(v_bg1_y_pos).w,(v_bg_y_pos_vsram).w
 		
 		movea.l	(v_deformlayer_ptr).w,a1

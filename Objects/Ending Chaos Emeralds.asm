@@ -17,10 +17,10 @@ ECha_Index:	index *,,2
 		ptr ECha_Move
 
 		rsobj EndChaos
-ost_echaos_x_start:	rs.w 1						; x-axis centre of emerald circle (2 bytes)
-ost_echaos_y_start:	rs.w 1						; y-axis centre of emerald circle (2 bytes)
-ost_echaos_radius:	rs.w 1						; radius (2 bytes)
-ost_echaos_angle:	rs.w 1						; angle for rotation (2 bytes)
+ost_echaos_x_start:	rs.w 1					; x-axis centre of emerald circle (2 bytes)
+ost_echaos_y_start:	rs.w 1					; y-axis centre of emerald circle (2 bytes)
+ost_echaos_radius:	rs.w 1					; radius (2 bytes)
+ost_echaos_angle:	rs.w 1					; angle for rotation (2 bytes)
 		rsobjend
 ; ===========================================================================
 
@@ -66,7 +66,7 @@ ECha_Move:	; Routine 2
 		move.w	ost_echaos_angle(a0),d0
 		add.w	d0,ost_angle(a0)
 		move.b	ost_angle(a0),d0
-		jsr	(CalcSine).l
+		jsr	(CalcSine).w
 		moveq	#0,d4
 		move.b	ost_echaos_radius(a0),d4
 		muls.w	d4,d1

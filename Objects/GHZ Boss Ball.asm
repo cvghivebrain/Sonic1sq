@@ -165,7 +165,7 @@ GBall_BallAni:
 		jmp	DisplaySprite
 ; ===========================================================================
 
-GBall_BallExplode:	; Routine $A
+GBall_BallExplode:						; Routine $A
 		shortcut
 		subq.b	#1,ost_gball_time(a0)			; decrement timer
 		beq.s	.done					; branch if time hits 0

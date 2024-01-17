@@ -232,7 +232,7 @@ Swing_Platform:	; Routine 4
 		bra.w	DisplaySprite
 ; ===========================================================================
 
-Swing_Spikeball:	; Routine 6
+Swing_Spikeball:						; Routine 6
 		shortcut
 		bsr.s	Swing_Update
 		bra.w	DisplaySprite

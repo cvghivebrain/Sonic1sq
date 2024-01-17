@@ -12,18 +12,18 @@
 ;	SS - size of stomper (0 = large; 1 = medium; 2 = small)
 ;	LLLL - chain length (from list)
 
-type_cstomp_wide:	equ 0							; $0x - wide stomper
-type_cstomp_medium:	equ $10							; $1x - medium stomper
-type_cstomp_small:	equ $20							; $2x - small stomper, no spikes
-type_cstomp_proximity:	equ $40							; +$40 - activates when Sonic is near
-type_cstomp_controlled:	equ $80							; +$80 - controlled by button 0
-type_cstomp_0:		equ 0							; $x0 - chain length $70
-type_cstomp_1:		equ 1							; $x1 - chain length $A0
-type_cstomp_2:		equ 2							; $x2 - chain length $50
-type_cstomp_3:		equ 3							; $x3 - chain length $78
-type_cstomp_4:		equ 4							; $x4 - chain length $38
-type_cstomp_5:		equ 5							; $x5 - chain length $58
-type_cstomp_6:		equ 6							; $x6 - chain length $B8
+type_cstomp_wide:	equ 0					; $0x - wide stomper
+type_cstomp_medium:	equ $10					; $1x - medium stomper
+type_cstomp_small:	equ $20					; $2x - small stomper, no spikes
+type_cstomp_proximity:	equ $40					; +$40 - activates when Sonic is near
+type_cstomp_controlled:	equ $80					; +$80 - controlled by button 0
+type_cstomp_0:		equ 0					; $x0 - chain length $70
+type_cstomp_1:		equ 1					; $x1 - chain length $A0
+type_cstomp_2:		equ 2					; $x2 - chain length $50
+type_cstomp_3:		equ 3					; $x3 - chain length $78
+type_cstomp_4:		equ 4					; $x4 - chain length $38
+type_cstomp_5:		equ 5					; $x5 - chain length $58
+type_cstomp_6:		equ 6					; $x6 - chain length $B8
 ; ---------------------------------------------------------------------------
 
 ChainStomp:
