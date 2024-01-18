@@ -39,7 +39,7 @@ AddDMA:
 		move.w	(a2)+,(a1)+				; write source address
 		move.l	d2,(a1)+				; write length
 		move.l	d1,(a1)					; write destination address
-		
+
 	.not_found:
 		popr	d0/a1
 		rts
@@ -62,7 +62,7 @@ AddDMA2:
 		move.w	(a2)+,(a1)+				; write source address
 		move.l	(a2)+,(a1)+				; write length
 		move.l	d1,(a1)					; write destination address
-		
+
 	.not_found:
 		popr	d0/a1
 		rts
@@ -73,7 +73,7 @@ AddDMA2:
 ; output:
 ;	a6 = vdp_control_port
 
-;	uses d0.l, d1.l, d2.l, a1
+;	uses d0.l, d1.l, a1
 ; ---------------------------------------------------------------------------
 
 ProcessDMA:
@@ -85,16 +85,15 @@ ProcessDMA:
 	.loop:
 		tst.b	(a1)					; is DMA slot empty?
 		beq.s	.empty					; if yes, branch
-		move.l	(a1),(a6)				; write source address
+		move.l	(a1),(a6)				; write source address (high and mid)
 		move.l	d1,(a1)+				; delete from queue
-		move.w	(a1),(a6)				; write source address
+		move.l	(a1),(a6)				; write source address (low) and length (high)
+		move.l	d1,(a1)+
+		move.l	(a1),(a6)				; write length (low) and destination (high)
+		move.l	d1,(a1)+
+		move.w	(a1),(a6)				; write destination address (low)
 		move.w	d1,(a1)+
-		move.l	(a1),(a6)				; write length
-		move.l	d1,(a1)+
-		move.l	(a1),d2
-		move.l	d2,(a6)					; write destination address
-		move.l	d1,(a1)+
 		dbf	d0,.loop				; repeat for all DMA slots
-	
+
 	.empty:
 		rts
