@@ -30,7 +30,7 @@ Ledge_Main:	; Routine 0
 		ori.b	#render_rel+render_useheight,ost_render(a0)
 		move.b	#priority_4,ost_priority(a0)
 		move.b	#14,ost_ledge_wait_time(a0)		; set time delay for collapse
-		move.b	#$64,ost_displaywidth(a0)
+		move.b	#$30,ost_displaywidth(a0)
 		move.b	#$30,ost_width(a0)
 		move.b	ost_subtype(a0),ost_frame(a0)
 		move.b	#$38,ost_height(a0)

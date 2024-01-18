@@ -20,7 +20,7 @@ v_subsprite_queue:		rs.b sizeof_subsprite*countof_subsprite
 v_sonic_gfx_buffer:		rs.b sizeof_vram_sonic		; buffered Sonic graphics ($17 cells) ($2E0 bytes)
 v_sonic_pos_tracker:		rs.l $40			; earlier position tracking list for Sonic, used by invincibility stars ($100 bytes)
 				rsblock hscroll
-v_hscroll_buffer:		rs.b sizeof_vram_hscroll	; scrolling table data ($380 bytes)
+v_hscroll_buffer:		rs.b sizeof_vram_hscroll+$80	; scrolling table data ($380 bytes)
 				rsblockend hscroll
 
 				rsblock ost			; cleared by GM_Title, GM_Level, GM_Special, GM_Continue, GM_Credits, GM_Ending

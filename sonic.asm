@@ -402,7 +402,6 @@ Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 
 		include "Objects\_SolidObject.asm"
 		include "Objects\_SkipMappings.asm"
-		include "Objects\_Range.asm"
 
 		include "Objects\MZ Smashable Green Block.asm"	; SmashBlock
 

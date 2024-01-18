@@ -30,7 +30,7 @@ SolidObject_SkipRenderDebug:
 		bne.w	Sol_Stand				; branch if Sonic is already standing on object
 		getsonic
 		range_x_sonic					; get distances between Sonic (a1) and object (a0)
-		cmp.w	#0,d1
+		cmpi.w	#0,d1
 		bgt.s	Sol_None				; branch if outside x hitbox
 		range_y_exact
 		bpl.s	Sol_None				; branch if outside y hitbox
@@ -244,7 +244,7 @@ SolidObject_TopOnly:
 		
 SolidObject_TopOnly_SkipRender:
 		tst.w	(v_debug_active_hi).w
-		bne.w	Sol_None				; branch if debug mode is in use
+		bne.w	Sol_OffScreen				; branch if debug mode is in use
 		
 SolidObject_TopOnly_SkipRenderDebug:
 		tst.b	ost_mode(a0)
@@ -296,7 +296,37 @@ SolidObject_Heightmap:
 		bpl.w	Sol_OffScreen				; branch if object isn't on screen
 		tst.w	(v_debug_active_hi).w
 		bne.w	Sol_None				; branch if debug mode is in use
-		bsr.w	RangePlus_Heightmap			; get distances between Sonic (a1) and object (a0)
+		
+		getsonic
+		range_x_sonic					; get distances between Sonic (a1) and object (a0)
+		cmpi.w	#0,d1
+		bgt.w	Sol_None				; branch if outside x hitbox
+		
+		moveq	#0,d5
+		move.w	ost_y_pos(a1),d2
+		sub.w	ost_y_pos(a0),d2			; d2 = y dist (-ve if Sonic is above)
+		move.w	d2,d3
+		bmi.s	.use_heightmap				; branch if Sonic is above object
+		move.b	ost_height(a0),d5			; use regular height if below
+		bra.s	.skip_heightmap
+		
+	.use_heightmap:
+		neg.w	d3					; make d3 +ve
+		tst.w	d4
+		bmi.s	.left_edge				; branch if outside left edge (d5 stays 0)
+		move.w	d4,d5					; d5 = x pos on object
+		lsr.w	d6,d5					; reduce precision
+		
+	.left_edge:
+		move.b	(a2,d5.w),d5				; get height byte from heightmap
+		andi.w	#$FF,d5
+		
+	.skip_heightmap:
+		sub.w	d5,d3
+		move.b	ost_height(a1),d5
+		sub.w	d5,d3					; d3 = y dist between hitbox edges (-ve if overlapping)
+		subq.w	#1,d3
+		
 		tst.b	ost_mode(a0)
 		bne.w	Sol_Stand_SkipRange			; branch if Sonic is already standing on object
 		tst.w	d3
@@ -328,8 +358,30 @@ SolidObject_TopOnly_Heightmap:
 		tst.b	ost_render(a0)
 		bpl.w	Sol_OffScreen				; branch if object isn't on screen
 		tst.w	(v_debug_active_hi).w
-		bne.w	Sol_None				; branch if debug mode is in use
-		bsr.w	RangePlus_Heightmap_NoPlayerWidth	; get distances between Sonic (a1) and object (a0)
+		bne.s	.exit					; branch if debug mode is in use
+		
+		getsonic
+		range_x_sonic0
+		cmp.w	#0,d1
+		bgt.s	.exit
+		
+		moveq	#0,d5
+		move.w	ost_y_pos(a1),d2
+		sub.w	ost_y_pos(a0),d2			; d2 = y dist (-ve if Sonic is above)
+		mvabs.w	d2,d3					; make d3 +ve
+		tst.w	d4
+		bmi.s	.left_edge				; branch if outside left edge (d5 stays 0)
+		move.w	d4,d5					; d5 = x pos on object
+		lsr.w	d6,d5					; reduce precision
+		
+	.left_edge:
+		move.b	(a2,d5.w),d5				; get height byte from heightmap
+		andi.w	#$FF,d5
+		sub.w	d5,d3
+		move.b	ost_height(a1),d5
+		sub.w	d5,d3					; d3 = y dist between hitbox edges (-ve if overlapping)
+		subq.w	#1,d3
+		
 		tst.b	ost_mode(a0)
 		bne.w	Sol_Stand_SkipRange			; branch if Sonic is already standing on object
 		tst.w	d3
@@ -337,7 +389,7 @@ SolidObject_TopOnly_Heightmap:
 		tst.w	d2
 		bpl.s	.exit					; branch if below middle
 		
-		cmpi.w	#-16,d3
+		cmpi.w	#-8,d3
 		bge.w	Sol_Above				; branch if Sonic is above
 		
 	.exit:
