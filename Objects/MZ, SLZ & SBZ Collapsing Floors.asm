@@ -29,7 +29,6 @@ CFlo_Index:	index *,,2
 		ptr CFlo_Main
 		ptr CFlo_Solid
 		ptr CFlo_Wait
-		ptr CFlo_Collapse
 
 		rsobj CollapseFloor
 ost_cfloor_wait_time:	rs.b 1					; time delay for collapsing floor
@@ -57,21 +56,6 @@ CFlo_Solid:	; Routine 2
 		tst.b	d1
 		beq.w	DespawnObject				; branch if no collision
 		addq.b	#2,ost_routine(a0)			; goto CFlo_Wait next
-		bra.w	DespawnObject
-; ===========================================================================
-
-CFlo_Wait:	; Routine 4
-		subq.b	#1,ost_cfloor_wait_time(a0)		; decrement timer
-		bpl.s	.wait					; branch if time remains
-		addq.b	#2,ost_routine(a0)			; goto CFlo_Collapse next
-		
-	.wait:
-		bsr.w	SolidObject_TopOnly
-		bra.w	DespawnObject
-; ===========================================================================
-
-CFlo_Collapse:	; Routine 6
-		bsr.w	UnSolid_TopOnly
 		move.b	ost_subtype(a0),d1
 		btst	#type_cfloor_keepframe_bit,d1
 		bne.s	.keep_frame				; branch if bit 3 is set
@@ -90,7 +74,8 @@ CFlo_Collapse:	; Routine 6
 		add.b	d1,d1
 		move.w	CFlo_FragTiming_Index(pc,d1.w),d1
 		lea	CFlo_FragTiming_Index(pc,d1.w),a4
-		bra.w	Crumble					; spawn fragments and delete original
+		bsr.w	Crumble					; spawn fragments
+		bra.w	DespawnObject
 
 CFlo_FragTiming_Index:	index *,,2
 		ptr CFlo_FragTiming_0
@@ -101,3 +86,14 @@ CFlo_FragTiming_0:
 CFlo_FragTiming_1:
 		dc.b $16, $1E, $1A, $12, 6, $E,	$A, 2
 		even
+; ===========================================================================
+
+CFlo_Wait:	; Routine 4
+		subq.b	#1,ost_cfloor_wait_time(a0)		; decrement timer
+		bmi.s	.delete					; branch if time hits -1
+		bsr.w	SolidObject_TopOnly
+		bra.w	DespawnQuick_NoDisplay
+		
+	.delete:
+		bsr.w	UnSolid_TopOnly
+		bra.w	DeleteObject

@@ -15,7 +15,6 @@ Ledge_Index:	index *,,2
 		ptr Ledge_Main
 		ptr Ledge_Solid
 		ptr Ledge_Wait
-		ptr Ledge_Collapse
 
 		rsobj CollapseLedge
 ost_ledge_heightmap:	rs.l 1					; pointer to heightmap
@@ -46,28 +45,25 @@ Ledge_Solid:	; Routine 2
 		tst.b	d1
 		beq.w	DespawnObject				; branch if no collision
 		addq.b	#2,ost_routine(a0)			; goto Ledge_Wait next
-		bra.w	DespawnObject
-; ===========================================================================
-
-Ledge_Wait:	; Routine 4
-		subq.b	#1,ost_ledge_wait_time(a0)		; decrement timer
-		bpl.s	.wait					; branch if time remains
-		addq.b	#2,ost_routine(a0)			; goto Ledge_Collapse next
-		
-	.wait:
-		moveq	#1,d6					; 1 byte in heightmap = 2px
-		movea.l	ost_ledge_heightmap(a0),a2		; heightmap
-		bsr.w	SolidObject_TopOnly_Heightmap
-		bra.w	DespawnObject
-; ===========================================================================
-
-Ledge_Collapse:	; Routine 6
-		bsr.w	UnSolid_TopOnly
 		addq.b	#2,ost_frame(a0)			; use frame consisting of smaller pieces
 		lea	Ledge_FragTiming(pc),a4
-		bra.w	Crumble					; spawn fragments and delete original
+		bsr.w	Crumble					; create crumbling fragments
+		bra.w	DespawnObject
 
 Ledge_FragTiming:
 		dc.b $1C, $18, $14, $10, $1A, $16, $12,	$E, $A,	6, $18,	$14, $10, $C, 8, 4
 		dc.b $16, $12, $E, $A, 6, 2, $14, $10, $C
 		even
+; ===========================================================================
+
+Ledge_Wait:	; Routine 4
+		subq.b	#1,ost_ledge_wait_time(a0)		; decrement timer
+		bmi.s	.delete					; branch if time hits -1
+		moveq	#1,d6					; 1 byte in heightmap = 2px
+		movea.l	ost_ledge_heightmap(a0),a2		; heightmap
+		bsr.w	SolidObject_TopOnly_Heightmap
+		bra.w	DespawnQuick_NoDisplay
+		
+	.delete:
+		bsr.w	UnSolid_TopOnly
+		bra.w	DeleteObject

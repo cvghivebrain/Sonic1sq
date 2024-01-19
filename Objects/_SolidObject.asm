@@ -73,7 +73,7 @@ Sol_Above:
 		move.b	#2,ost_mode(a0)				; set flag - Sonic is on the object
 		cmpi.b	#id_Roll,ost_anim(a1)
 		bne.s	.not_rolling				; branch if Sonic wasn't rolling/jumping
-		addi.b	#2,ost_mode(a0)				; set flag - Sonic hit the object rolling/jumping
+		addq.b	#2,ost_mode(a0)				; set flag - Sonic hit the object rolling/jumping
 		
 	.not_rolling:
 		bset	#status_platform_bit,ost_status(a0)	; set object's platform flag
@@ -363,12 +363,14 @@ SolidObject_TopOnly_Heightmap:
 		getsonic
 		range_x_sonic0
 		cmp.w	#0,d1
-		bgt.s	.exit
+		bgt.s	.exit					; branch if outside x hitbox
 		
 		moveq	#0,d5
 		move.w	ost_y_pos(a1),d2
 		sub.w	ost_y_pos(a0),d2			; d2 = y dist (-ve if Sonic is above)
-		mvabs.w	d2,d3					; make d3 +ve
+		bpl.s	.exit					; branch if Sonic is below
+		move.w	d2,d3
+		neg.w	d3					; make d3 +ve
 		tst.w	d4
 		bmi.s	.left_edge				; branch if outside left edge (d5 stays 0)
 		move.w	d4,d5					; d5 = x pos on object
@@ -386,10 +388,14 @@ SolidObject_TopOnly_Heightmap:
 		bne.w	Sol_Stand_SkipRange			; branch if Sonic is already standing on object
 		tst.w	d3
 		bpl.s	.exit					; branch if outside y hitbox
-		tst.w	d2
-		bpl.s	.exit					; branch if below middle
 		
-		cmpi.w	#-8,d3
+		moveq	#-8,d5
+		cmpi.w	#$800,ost_y_vel(a1)
+		blt.s	.slow_fall				; branch if Sonic isn't falling fast
+		subq.w	#8,d5					; 16px tolerance
+		
+	.slow_fall:
+		cmp.w	d5,d3
 		bge.w	Sol_Above				; branch if Sonic is above
 		
 	.exit:

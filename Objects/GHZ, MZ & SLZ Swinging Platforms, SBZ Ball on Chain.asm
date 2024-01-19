@@ -146,7 +146,7 @@ Swing_Main:	; Routine 0
 		move.b	ost_subtype(a0),d1			; d1 = chain length
 		andi.w	#$F,d1					; read low nybble
 		cmpi.w	#countof_subsprite,d1
-		bcc.s	.chain_ok				; branch if length is within max
+		bls.s	.chain_ok				; branch if length is within max
 		moveq	#countof_subsprite,d1			; enforce limit
 		
 	.chain_ok:
