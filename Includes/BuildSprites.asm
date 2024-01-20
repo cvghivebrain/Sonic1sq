@@ -79,9 +79,9 @@ BuildSprites:
 		move.w	BuildSpr_Index(pc,d4.w),d0
 		jsr	BuildSpr_Index(pc,d0.w)			; write data from sprite pieces to buffer
 		
-		tst.w	ost_subsprite(a0)
+		move.w	ost_subsprite(a0),d0
 		beq.s	.skip_draw				; branch if no subsprites are found
-		movea.w	ost_subsprite(a0),a1			; a1 = RAM address of subsprite table
+		movea.w	d0,a1					; a1 = RAM address of subsprite table
 		move.w	(a1)+,d1				; number of sprite pieces
 		beq.s	.skip_draw				; branch if 0
 		subq.w	#1,d1					; subtract 1 for loops
@@ -109,7 +109,7 @@ BuildSprites:
 		bra.s	.draw_object
 
 ; ---------------------------------------------------------------------------
-; Subroutine to	convert	and add sprite mappings to the sprite buffer
+; Subroutines to convert and add sprite mappings to the sprite buffer
 ;
 ; input:
 ;	d1.w = number of sprite pieces
@@ -122,7 +122,6 @@ BuildSprites:
 ;	uses d0.w, d1.w, d4.w, d5.b, a1, a2
 ; ---------------------------------------------------------------------------
 
-BuildSpr_Draw:
 BuildSpr_Index:	index *,,2
 		ptr BuildSpr_Normal
 		ptr BuildSpr_FlipX
@@ -148,15 +147,20 @@ BuildSpr_Normal:
 
 		move.w	(a1)+,d0				; get relative x pos from mappings
 		add.w	d3,d0					; add VDP x pos
-		andi.w	#$1FF,d0				; keep within 512px
-		bne.s	.x_not_0				; branch if x pos isn't 0
-		addq.w	#1,d0					; add 1 to prevent sprite masking (sprites at x pos 0 act as masks)
-
-	.x_not_0:
+		move.w	d0,d4
+		subi.w	#screen_left-32,d4
+		cmpi.w	#screen_width+32,d4
+		bhi.s	.abort_x				; branch if sprite is off screen
 		move.w	d0,(a2)+				; write x pos to buffer
 		dbf	d1,BuildSpr_Normal			; next sprite piece
 
 	.exit:
+		rts
+		
+	.abort_x:
+		subq.w	#6,a2					; undo this sprite
+		subq.b	#1,d5					; decrement sprite counter
+		dbf	d1,BuildSpr_Normal			; next sprite piece
 		rts
 ; ===========================================================================
 
@@ -168,6 +172,7 @@ BuildSpr_FlipX:
 		add.w	d2,d0
 		move.w	d0,(a2)+
 		
+		moveq	#0,d4
 		move.b	(a1)+,d4
 		move.b	d4,(a2)+				; size
 		addq.b	#1,d5
@@ -183,15 +188,20 @@ BuildSpr_FlipX:
 		add.b	d4,d4
 		sub.w	BuildSpr_FlipX_Shift(pc,d4.w),d0	; calculate flipped position by size
 		add.w	d3,d0
-		andi.w	#$1FF,d0				; keep within 512px
-		bne.s	.x_not_0
-		addq.w	#1,d0
-
-	.x_not_0:
+		move.w	d0,d4
+		subi.w	#screen_left-32,d4
+		cmpi.w	#screen_width+32,d4
+		bhi.s	.abort_x				; branch if sprite is off screen
 		move.w	d0,(a2)+				; write to buffer
 		dbf	d1,BuildSpr_FlipX			; process next sprite piece
 
 	.exit:
+		rts
+		
+	.abort_x:
+		subq.w	#6,a2					; undo this sprite
+		subq.b	#1,d5					; decrement sprite counter
+		dbf	d1,BuildSpr_FlipX			; next sprite piece
 		rts
 ; ===========================================================================
 
@@ -199,6 +209,7 @@ BuildSpr_FlipY:
 		cmpi.b	#countof_max_sprites,d5
 		beq.s	.exit					; branch if at max sprites
 		move.b	(a1)+,d0				; get y-offset
+		moveq	#0,d4
 		move.b	(a1),d4					; get size
 		ext.w	d0
 		neg.w	d0					; negate y-offset
@@ -218,15 +229,20 @@ BuildSpr_FlipY:
 		
 		move.w	(a1)+,d0				; x-position
 		add.w	d3,d0
-		andi.w	#$1FF,d0
-		bne.s	.x_not_0
-		addq.w	#1,d0
-
-	.x_not_0:
+		move.w	d0,d4
+		subi.w	#screen_left-32,d4
+		cmpi.w	#screen_width+32,d4
+		bhi.s	.abort_x				; branch if sprite is off screen
 		move.w	d0,(a2)+				; write to buffer
 		dbf	d1,BuildSpr_FlipY			; process next sprite piece
 
 	.exit:
+		rts
+		
+	.abort_x:
+		subq.w	#6,a2					; undo this sprite
+		subq.b	#1,d5					; decrement sprite counter
+		dbf	d1,BuildSpr_FlipY			; next sprite piece
 		rts
 ; ===========================================================================		
 BuildSpr_FlipX_Shift:
@@ -246,6 +262,7 @@ BuildSpr_FlipXY:
 		cmpi.b	#countof_max_sprites,d5
 		beq.s	.exit					; branch if at max sprites
 		move.b	(a1)+,d0				; calculated flipped y
+		moveq	#0,d4
 		move.b	(a1),d4
 		ext.w	d0
 		neg.w	d0
@@ -267,15 +284,20 @@ BuildSpr_FlipXY:
 		neg.w	d0
 		sub.w	BuildSpr_FlipX_Shift(pc,d4.w),d0	; calculate flipped position by size
 		add.w	d3,d0
-		andi.w	#$1FF,d0
-		bne.s	.x_not_0
-		addq.w	#1,d0
-
-	.x_not_0:
+		move.w	d0,d4
+		subi.w	#screen_left-32,d4
+		cmpi.w	#screen_width+32,d4
+		bhi.s	.abort_x				; branch if sprite is off screen
 		move.w	d0,(a2)+				; write to buffer
 		dbf	d1,BuildSpr_FlipXY			; process next sprite piece
 
 	.exit:
+		rts
+		
+	.abort_x:
+		subq.w	#6,a2					; undo this sprite
+		subq.b	#1,d5					; decrement sprite counter
+		dbf	d1,BuildSpr_FlipXY			; next sprite piece
 		rts
 ; ===========================================================================
 
