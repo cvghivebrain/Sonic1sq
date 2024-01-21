@@ -3,6 +3,10 @@
 
 ; spawned by:
 ;	ObjPos_SBZ1, ObjPos_SBZ2 - subtypes 0/1/2
+
+type_stomp_slow:	equ (Sto_Settings0-Sto_Settings)/sizeof_Sto_Settings ; drops quickly and rises slowly
+type_stomp_fast_short:	equ (Sto_Settings1-Sto_Settings)/sizeof_Sto_Settings ; drops quickly and rises quickly (64px)
+type_stomp_fast_long:	equ (Sto_Settings2-Sto_Settings)/sizeof_Sto_Settings ; drops quickly and rises quickly (96px)
 ; ---------------------------------------------------------------------------
 
 ScrapStomp:
@@ -18,24 +22,6 @@ Sto_Index:	index *,,2
 		ptr Sto_Wait2
 		ptr Sto_Rise
 
-Sto_Settings:	dc.w $38					; distance to move
-		dc.w 60						; drop delay (in frames)
-		dc.w 60						; rising delay (in frames)
-		dc.b 8						; drop speed (distance must be divisible by this)
-		dc.b 1						; rising speed (distance must be divisible by this)
-
-		dc.w $40
-		dc.w 60
-		dc.w 60
-		dc.b 8
-		dc.b 8
-		
-		dc.w $60
-		dc.w 60
-		dc.w 60
-		dc.b 8
-		dc.b 8
-
 		rsobj ScrapStomp
 ost_stomp_moved:	rs.w 1					; distance moved
 ost_stomp_distance:	rs.w 1					; distance to move
@@ -45,13 +31,34 @@ ost_stomp_rise_master:	rs.w 1					; time to wait until rising
 ost_stomp_drop_speed:	rs.b 1					; px per frame when dropping
 ost_stomp_rise_speed:	rs.b 1					; px per frame when rising
 		rsobjend
+
+Sto_Settings:
+Sto_Settings0:	dc.w $38					; distance to move
+		dc.w 60						; drop delay (in frames)
+		dc.w 60						; rising delay (in frames)
+		dc.b 8						; drop speed (distance must be divisible by this)
+		dc.b 1						; rising speed (distance must be divisible by this)
+
+Sto_Settings1:	dc.w $40
+		dc.w 60
+		dc.w 60
+		dc.b 8
+		dc.b 8
+		
+Sto_Settings2:	dc.w $60
+		dc.w 60
+		dc.w 60
+		dc.b 8
+		dc.b 8
+		
+sizeof_Sto_Settings:	equ Sto_Settings1-Sto_Settings
 ; ===========================================================================
 
 Sto_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Sto_Wait next
 		moveq	#0,d0
 		move.b	ost_subtype(a0),d0			; get subtype
-		lsl.w	#3,d0
+		lsl.w	#3,d0					; multiply by 8
 		lea	Sto_Settings(pc,d0.w),a2		; get variables from list
 		move.b	#28,ost_displaywidth(a0)
 		move.b	#28,ost_width(a0)

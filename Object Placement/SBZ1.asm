@@ -20,20 +20,20 @@ ObjPos_SBZ1:
 		objpos $0594,$04C0,Rings,$46,rem
 		objpos $05DC,$05AC,Rings,$12,rem
 		objpos $05F0,$03C0,Invisibarrier,$13
-		objpos $0620,$03A7,SpinPlatform,type_spin_platform+0
-		objpos $0640,$03A7,SpinPlatform,type_spin_platform+0
-		objpos $0650,$0407,SpinPlatform,type_spin_platform+0
+		objpos $0620,$03A7,SpinPlatform,type_spin_wait64+0
+		objpos $0640,$03A7,SpinPlatform,type_spin_wait64+0
+		objpos $0650,$0407,SpinPlatform,type_spin_wait64+0
 		objpos $0660,$05F8,Invisibarrier,$70
 		objpos $0660,$0678,Invisibarrier,$70
 		objpos $0660,$06F8,Invisibarrier,$70
-		objpos $0670,$0407,SpinPlatform,type_spin_platform+0
-		objpos $0690,$0467,SpinPlatform,type_spin_platform+0
-		objpos $0698,$0387,SpinPlatform,type_spin_platform+0
+		objpos $0670,$0407,SpinPlatform,type_spin_wait64+0
+		objpos $0690,$0467,SpinPlatform,type_spin_wait64+0
+		objpos $0698,$0387,SpinPlatform,type_spin_wait64+0
 		objpos $06A0,$0618,Girder,$00
 		objpos $06A0,$0698,Girder,$00
 		objpos $06A0,$0718,Girder,$00
-		objpos $06B0,$0467,SpinPlatform,type_spin_platform+0
-		objpos $06B8,$0387,SpinPlatform,type_spin_platform+0
+		objpos $06B0,$0467,SpinPlatform,type_spin_wait64+0
+		objpos $06B8,$0387,SpinPlatform,type_spin_wait64+0
 		objpos $0700,$05D8,Invisibarrier,$17
 		objpos $0700,$0658,Invisibarrier,$17
 		objpos $0700,$06D8,Invisibarrier,$17
@@ -158,7 +158,7 @@ ObjPos_SBZ1:
 		objpos $11F0,$0300,Invisibarrier,$13
 		objpos $11F0,$0710,Bomb,$00,yflip,rem
 		objpos $1210,$05F1,Monitor,type_monitor_rings,rem
-		objpos $1220,$01A7,SpinPlatform,type_spin_platform+0
+		objpos $1220,$01A7,SpinPlatform,type_spin_wait64+0
 		objpos $1228,$03B0,Rings,$44,rem
 		objpos $1230,$05F8,Springs,type_spring_red+type_spring_up
 		objpos $1240,$0308,SlideBlock,0,xflip
@@ -167,13 +167,13 @@ ObjPos_SBZ1:
 		objpos $1240,$0768,SlideBlock,0
 		objpos $1250,$05F8,Springs,type_spring_red+type_spring_up
 		objpos $1258,$03B0,Rings,$44,rem
-		objpos $1260,$01A7,SpinPlatform,type_spin_platform+0
+		objpos $1260,$01A7,SpinPlatform,type_spin_wait64+0
 		objpos $1270,$05F1,Monitor,type_monitor_rings,rem
 		objpos $1290,$06F2,Rings,$14,rem
 		objpos $1290,$0760,Invisibarrier,$17
-		objpos $12A0,$01A7,SpinPlatform,type_spin_platform+0
+		objpos $12A0,$01A7,SpinPlatform,type_spin_wait64+0
 		objpos $12C0,$0308,SlideBlock,0
-		objpos $12E0,$01A7,SpinPlatform,type_spin_platform+0
+		objpos $12E0,$01A7,SpinPlatform,type_spin_wait64+0
 		objpos $1310,$0300,Invisibarrier,$13
 		objpos $1318,$0194,Rings,$12,rem
 		objpos $1340,$0708,SlideBlock,0
@@ -269,10 +269,10 @@ ObjPos_SBZ1:
 		objpos $1B00,$01D8,Invisibarrier,$17
 		objpos $1B00,$0258,Invisibarrier,$17
 		objpos $1B00,$02D8,Invisibarrier,$17
-		objpos $1B10,$04A7,SpinPlatform,type_spin_platform+0
-		objpos $1B30,$04A7,SpinPlatform,type_spin_platform+1
-		objpos $1B50,$04A7,SpinPlatform,type_spin_platform+2
-		objpos $1B70,$04A7,SpinPlatform,type_spin_platform+3
+		objpos $1B10,$04A7,SpinPlatform,type_spin_wait64+0
+		objpos $1B30,$04A7,SpinPlatform,type_spin_wait64+1
+		objpos $1B50,$04A7,SpinPlatform,type_spin_wait64+2
+		objpos $1B70,$04A7,SpinPlatform,type_spin_wait64+3
 		objpos $1B76,$0490,Flamethrower,$43,yflip
 		objpos $1B80,$0600,SpinConvey,4,rem
 		objpos $1B90,$04C0,Invisibarrier,$13
@@ -280,11 +280,11 @@ ObjPos_SBZ1:
 		objpos $1BC0,$0378,Electro,$08,yflip
 		objpos $1BD0,$03B4,Rings,$14,rem
 		objpos $1BF0,$04C0,Invisibarrier,$13
-		objpos $1C10,$04A7,SpinPlatform,type_spin_platform+0
-		objpos $1C30,$04A7,SpinPlatform,type_spin_platform+1
+		objpos $1C10,$04A7,SpinPlatform,type_spin_wait64+0
+		objpos $1C30,$04A7,SpinPlatform,type_spin_wait64+1
 		objpos $1C40,$0378,Electro,$08,yflip
-		objpos $1C50,$04A7,SpinPlatform,type_spin_platform+2
-		objpos $1C70,$04A7,SpinPlatform,type_spin_platform+3
+		objpos $1C50,$04A7,SpinPlatform,type_spin_wait64+2
+		objpos $1C70,$04A7,SpinPlatform,type_spin_wait64+3
 		objpos $1C76,$0490,Flamethrower,$43,yflip
 		objpos $1C80,$0580,SpinConvey,5,rem
 		objpos $1C90,$04C0,Invisibarrier,$13

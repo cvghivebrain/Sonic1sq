@@ -2,12 +2,17 @@
 ; Object 69 - spinning platforms (SBZ)
 
 ; spawned by:
-;	ObjPos_SBZ1, ObjPos_SBZ2 - subtypes $80-$83, $90-$9E
+;	ObjPos_SBZ1, ObjPos_SBZ2
 
 ; subtypes:
-;	%0MMMDDDD
-;	MMM - bitmask for triggering spin (0 = every 64 frame; 1 = 128th frame)
+;	%00MMDDDD
+;	MM - bitmask id for triggering spin (0 = every 64 frame; 1 = 128th frame)
 ;	DDDD - delay after spin is triggered (*6 frames)
+
+type_spin_wait32:	equ 0					; spin every 32 frames
+type_spin_wait64:	equ $10					; spin every 64 frames
+type_spin_wait128:	equ $20					; spin every 128 frames
+type_spin_wait256:	equ $30					; spin every 256 frames
 ; ---------------------------------------------------------------------------
 
 SpinPlatform:
@@ -29,6 +34,8 @@ ost_spin_wait_time:	rs.w 1					; time until change
 ost_spin_wait_master:	rs.w 1					; time between changes
 ost_spin_bitmask:	rs.w 1					; bitmask used to synchronise timing: subtype $8x = $3F; subtype $9x = $7F
 		rsobjend
+		
+Spin_Masks:	dc.w $1F, $3F, $7F, $FF
 ; ===========================================================================
 
 Spin_Main:	; Routine 0
@@ -40,18 +47,15 @@ Spin_Main:	; Routine 0
 		move.l	#Map_Spin,ost_mappings(a0)
 		move.w	#tile_Kos_SpinPlatform,ost_tile(a0)
 		move.b	#$10,ost_displaywidth(a0)
-		move.b	#id_ani_spin_1,ost_anim(a0)
 		move.b	ost_subtype(a0),d0			; get object type
 		move.w	d0,d1
 		andi.w	#$F,d0					; read only low nybble
 		mulu.w	#6,d0					; multiply by 6
 		move.w	d0,ost_spin_wait_time(a0)
 		move.w	d0,ost_spin_wait_master(a0)		; set time delay
-		andi.w	#$70,d1					; read high nybble (e.g. $80/$90), ignore high bit ($00/$10)
-		addi.w	#$10,d1					; add $10 ($10/$20)
-		lsl.w	#2,d1					; multiply by 4 ($40/$80)
-		subq.w	#1,d1					; subtract 1 ($3F/$7F)
-		move.w	d1,ost_spin_bitmask(a0)
+		andi.w	#%00110000,d1				; read bits 4-5
+		lsr.b	#3,d1
+		move.w	Spin_Masks(pc,d1.w),ost_spin_bitmask(a0) ; get bitmask from list
 
 Spin_Wait:	; Routine 2
 		move.w	(v_frame_counter).w,d0			; read frame counter

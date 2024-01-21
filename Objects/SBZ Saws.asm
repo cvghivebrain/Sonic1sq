@@ -3,6 +3,12 @@
 
 ; spawned by:
 ;	ObjPos_SBZ1, ObjPos_SBZ2 - subtypes 1/2/3
+
+type_saw_pizza_still:		equ 0				; 0 - pizza cutter, doesn't move
+type_saw_pizza_sideways:	equ 1				; 1 - pizza cutter, moves side-to-side
+type_saw_pizza_updown:		equ 2				; 2 - pizza cutter, moves up and down
+type_saw_ground_right:		equ 3				; 3 - ground saw, moves right
+type_saw_ground_left:		equ 4				; 4 - ground saw, moves left
 ; ---------------------------------------------------------------------------
 
 Saws:

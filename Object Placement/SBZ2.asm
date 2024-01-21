@@ -48,44 +48,44 @@ ObjPos_SBZ2:
 		objpos $04B0,$05B0,RunningDisc,$40
 		objpos $04C1,$06C4,ScrapDoorH,0
 		objpos $04E0,$0508,Button,$01
-		objpos $0510,$0127,SpinPlatform,type_spin_platform_alt+$E
-		objpos $0530,$0127,SpinPlatform,type_spin_platform_alt+$C
+		objpos $0510,$0127,SpinPlatform,type_spin_wait128+$E
+		objpos $0530,$0127,SpinPlatform,type_spin_wait128+$C
 		objpos $0540,$01E8,Electro,$04
 		objpos $0540,$03AC,Trapdoor,1
 		objpos $0540,$03E8,Electro,$04
-		objpos $0550,$0127,SpinPlatform,type_spin_platform_alt+$A
-		objpos $0570,$0127,SpinPlatform,type_spin_platform_alt+8
+		objpos $0550,$0127,SpinPlatform,type_spin_wait128+$A
+		objpos $0570,$0127,SpinPlatform,type_spin_wait128+8
 		objpos $0576,$0390,Flamethrower,$43,yflip
-		objpos $0590,$0127,SpinPlatform,type_spin_platform_alt+6
-		objpos $0590,$0167,SpinPlatform,type_spin_platform_alt+6
+		objpos $0590,$0127,SpinPlatform,type_spin_wait128+6
+		objpos $0590,$0167,SpinPlatform,type_spin_wait128+6
 		objpos $0590,$04C0,Invisibarrier,$12
 		objpos $05A0,$06A0,Caterkiller,$00,rem
 		objpos $05A8,$0394,Rings,$12,rem
-		objpos $05B0,$0127,SpinPlatform,type_spin_platform_alt+4
-		objpos $05B0,$0167,SpinPlatform,type_spin_platform_alt+4
+		objpos $05B0,$0127,SpinPlatform,type_spin_wait128+4
+		objpos $05B0,$0167,SpinPlatform,type_spin_wait128+4
 		objpos $05C1,$04CC,ScrapDoorH,1
-		objpos $05D0,$0127,SpinPlatform,type_spin_platform_alt+2
-		objpos $05D0,$0167,SpinPlatform,type_spin_platform_alt+2
+		objpos $05D0,$0127,SpinPlatform,type_spin_wait128+2
+		objpos $05D0,$0167,SpinPlatform,type_spin_wait128+2
 		objpos $05D0,$01E8,Electro,$04
 		objpos $05D0,$06B2,Rings,$14,rem
-		objpos $05F0,$0167,SpinPlatform,type_spin_platform_alt+0
-		objpos $0610,$0167,SpinPlatform,type_spin_platform_alt+$E
-		objpos $0610,$01A7,SpinPlatform,type_spin_platform_alt+$E
+		objpos $05F0,$0167,SpinPlatform,type_spin_wait128+0
+		objpos $0610,$0167,SpinPlatform,type_spin_wait128+$E
+		objpos $0610,$01A7,SpinPlatform,type_spin_wait128+$E
 		objpos $0628,$0490,Rings,$12,rem
-		objpos $0630,$0167,SpinPlatform,type_spin_platform_alt+$C
-		objpos $0630,$01A7,SpinPlatform,type_spin_platform_alt+$C
+		objpos $0630,$0167,SpinPlatform,type_spin_wait128+$C
+		objpos $0630,$01A7,SpinPlatform,type_spin_wait128+$C
 		objpos $0640,$03AC,Trapdoor,1
 		objpos $0640,$03E8,Electro,$04
 		objpos $0640,$04AC,Trapdoor,1
 		objpos $064B,$06A8,Flamethrower,$43,xflip
-		objpos $0650,$0167,SpinPlatform,type_spin_platform_alt+$A
-		objpos $0650,$01A7,SpinPlatform,type_spin_platform_alt+$A
+		objpos $0650,$0167,SpinPlatform,type_spin_wait128+$A
+		objpos $0650,$01A7,SpinPlatform,type_spin_wait128+$A
 		objpos $0660,$01E8,Electro,$04
-		objpos $0670,$01A7,SpinPlatform,type_spin_platform_alt+8
+		objpos $0670,$01A7,SpinPlatform,type_spin_wait128+8
 		objpos $0676,$0390,Flamethrower,$43,yflip
-		objpos $0690,$01A7,SpinPlatform,type_spin_platform_alt+6
-		objpos $06B0,$01A7,SpinPlatform,type_spin_platform_alt+4
-		objpos $06D0,$01A7,SpinPlatform,type_spin_platform_alt+2
+		objpos $0690,$01A7,SpinPlatform,type_spin_wait128+6
+		objpos $06B0,$01A7,SpinPlatform,type_spin_wait128+4
+		objpos $06D0,$01A7,SpinPlatform,type_spin_wait128+2
 		objpos $06D0,$0690,Caterkiller,$00,rem
 		objpos $06F0,$01F1,Monitor,type_monitor_rings,rem
 		objpos $0728,$0140,Rings,$12,rem
@@ -124,13 +124,13 @@ ObjPos_SBZ2:
 		objpos $0A10,$04F1,Monitor,type_monitor_rings,rem
 		objpos $0A30,$0291,Monitor,type_monitor_rings,rem
 		objpos $0A50,$0450,RunningDisc,$40
-		objpos $0A60,$01C7,SpinPlatform,type_spin_platform+0
-		objpos $0A60,$0217,SpinPlatform,type_spin_platform+0
-		objpos $0A80,$01C7,SpinPlatform,type_spin_platform+0
-		objpos $0A80,$0217,SpinPlatform,type_spin_platform+0
-		objpos $0A80,$0267,SpinPlatform,type_spin_platform+0
-		objpos $0AA0,$01C7,SpinPlatform,type_spin_platform+0
-		objpos $0AA0,$0267,SpinPlatform,type_spin_platform+0
+		objpos $0A60,$01C7,SpinPlatform,type_spin_wait64+0
+		objpos $0A60,$0217,SpinPlatform,type_spin_wait64+0
+		objpos $0A80,$01C7,SpinPlatform,type_spin_wait64+0
+		objpos $0A80,$0217,SpinPlatform,type_spin_wait64+0
+		objpos $0A80,$0267,SpinPlatform,type_spin_wait64+0
+		objpos $0AA0,$01C7,SpinPlatform,type_spin_wait64+0
+		objpos $0AA0,$0267,SpinPlatform,type_spin_wait64+0
 		objpos $0AD0,$0390,SwingingPlatform,$37
 		objpos $0AD0,$0690,Caterkiller,$00,rem
 		objpos $0AE0,$01C1,Saws,type_saw_ground_right

@@ -180,6 +180,17 @@ Anml_Bird:	; Routine 8
 
 ; spawned by:
 ;	ObjPos_End - subtypes 0-9
+
+type_animal_end_flicky:		equ 0
+type_animal_end_flicky_onspot:	equ 1
+type_animal_end_rabbit:		equ 2
+type_animal_end_rabbit_onspot:	equ 3
+type_animal_end_penguin:	equ 4
+type_animal_end_penguin_onspot:	equ 5
+type_animal_end_seal:		equ 6
+type_animal_end_pig_onspot:	equ 7
+type_animal_end_chicken:	equ 8
+type_animal_end_squirrel:	equ 9
 ; ---------------------------------------------------------------------------
 
 AnimalsEnd:

@@ -1224,7 +1224,6 @@ ObjPosSBZPlatform_Index:
 		include	"Object Placement\LZ Platforms.asm"
 		include	"Object Placement\SBZ Platforms.asm"
 
-		include "Object Subtypes.asm"
 		endobj
 		include	"Object Placement\GHZ1.asm"
 		include	"Object Placement\GHZ2.asm"
