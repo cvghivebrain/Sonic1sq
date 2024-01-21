@@ -36,7 +36,7 @@ BuildSprites:
 		moveq	#0,d0
 		move.b	ost_displaywidth(a0),d0
 		move.w	ost_x_pos(a0),d1
-		sub.w	(a3),d1
+		sub.w	(a3),d1					; d1 = object x pos on screen (-ve if left of screen)
 		move.w	d1,d3
 		add.w	d0,d1
 		add.w	d0,d0

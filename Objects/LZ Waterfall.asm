@@ -8,6 +8,17 @@
 ;	%H000FFFF
 ;	H - 1 for high priority sprite
 ;	FFFF - frame id
+
+type_wfall_vert:	equ id_frame_wfall_vertnarrow		; 0 - vertical narrow
+type_wfall_cornermedium: equ id_frame_wfall_cornermedium	; 2 - corner
+type_wfall_cornernarrow: equ id_frame_wfall_cornernarrow	; 3 - corner narrow
+type_wfall_cornermedium2: equ id_frame_wfall_cornermedium2	; 4 - corner
+type_wfall_cornernarrow2: equ id_frame_wfall_cornernarrow2	; 5 - corner narrow
+type_wfall_cornernarrow3: equ id_frame_wfall_cornernarrow3	; 6 - corner narrow
+type_wfall_vertwide:	equ id_frame_wfall_vertwide		; 7 - vertical wide
+type_wfall_diagonal:	equ id_frame_wfall_diagonal		; 8 - diagonal
+type_wfall_hi_bit:	equ 7
+type_wfall_hi:		equ 1<<type_wfall_hi_bit		; +$80 - high priority sprite
 ; ---------------------------------------------------------------------------
 
 Waterfall:
@@ -38,6 +49,13 @@ Waterfall:
 ;	H - 1 for high priority sprite
 ;	L - 1 to hide until level is updated by button (LZ3 only)
 ;	W - 1 to float on water surface
+
+type_wfallsp_float_bit:	equ 0
+type_wfallsp_hide_bit:	equ 1
+type_wfallsp_hi_bit:	equ 7
+type_wfallsp_float:	equ 1<<type_wfallsp_float_bit		; matches y position to water surface
+type_wfallsp_hide:	equ 1<<type_wfallsp_hide_bit		; hide until level is updated by button
+type_wfallsp_hi:	equ 1<<type_wfallsp_hi_bit		; +$80 - high priority sprite
 ; ---------------------------------------------------------------------------
 
 WaterfallSplash:
@@ -65,14 +83,14 @@ WFall_Main:	; Routine 0
 WFall_Animate:	; Routine 2
 		shortcut
 		move.b	ost_subtype(a0),d0
-		btst	#0,d0
+		btst	#type_wfallsp_float_bit,d0
 		beq.s	.not_floating				; branch if not floating on water surface
 		move.w	(v_water_height_actual).w,d1
 		subi.w	#$10,d1
 		move.w	d1,ost_y_pos(a0)			; match object position to water height
 		
 	.not_floating:
-		btst	#1,d0
+		btst	#type_wfallsp_hide_bit,d0
 		beq.s	.not_hidden				; branch if not hidden
 		cmpi.b	#7,(v_level_layout+$106).w		; check if level has been modified by pressing a button (LZ3 only)
 		bne.w	DespawnQuick_NoDisplay			; don't display sprite

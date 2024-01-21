@@ -9,6 +9,11 @@
 ;	RRRR - time between animations (+1, *30 for ost_harp_time_master)
 ;	S - 1 for forced synchronisation (ignores RRRR, changes every 64 frames instead)
 ;	AA - starting animation (0/1 = horizontal; 2/3 = vertical)
+
+type_harp_h:		equ id_ani_harp_h_extending		; 0 - horizontal
+type_harp_v:		equ id_ani_harp_v_extending		; 2 - vertical
+type_harp_sync_bit:	equ 3
+type_harp_sync:		equ 1<<type_harp_sync_bit		; synchronised animation
 ; ---------------------------------------------------------------------------
 
 Harpoon:
@@ -25,7 +30,7 @@ Harp_Index:	index *,,2
 		ptr Harp_Wait2
 
 		rsobj Harpoon
-ost_harp_time:		rs.w 1					; time between stabbing/retracting (2 bytes)
+ost_harp_time:		rs.w 1					; time between stabbing/retracting
 ost_harp_time_master:	rs.w 1
 		rsobjend
 ; ===========================================================================
@@ -43,7 +48,7 @@ Harp_Main:	; Routine 0
 		andi.b	#%11,d0					; read bits 0-1 of subtype
 		move.b	d0,ost_anim(a0)				; get type (vert/horiz)
 		move.b	#$14,ost_displaywidth(a0)
-		btst	#3,d1
+		btst	#type_harp_sync_bit,d1
 		beq.s	.no_sync				; branch if not synchronised
 		addq.b	#4,ost_routine(a0)			; goto Harp_Move2 next
 		bra.s	Harp_Move2

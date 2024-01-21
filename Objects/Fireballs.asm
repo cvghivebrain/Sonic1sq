@@ -43,7 +43,7 @@ FBall_Main:	; Routine 0
 		move.w	ost_y_pos(a0),ost_fireball_y_start(a0)
 		tst.b	ost_fireball_mz_boss(a0)		; was fireball spawned by MZ boss?
 		beq.s	.speed					; if not, branch
-		addq.b	#priority_2,ost_priority(a0)		; use lower sprite priority
+		move.b	#priority_5,ost_priority(a0)		; use lower sprite priority
 
 	.speed:
 		move.b	ost_subtype(a0),d0
@@ -51,7 +51,7 @@ FBall_Main:	; Routine 0
 		andi.w	#%00000111,d0				; read bits 0-2
 		lsl.w	#8,d0					; multiply by $100
 		neg.w	d0					; move up or left by default
-		andi.b	#%11000000,d1				; read only bits 6-7
+		andi.b	#type_fire_gravity+type_fire_horizontal,d1 ; read only bits 6-7
 		lsr.b	#5,d1
 		move.b	d1,ost_mode(a0)				; save gravity/direction settings
 		move.b	ost_status(a0),d1
@@ -62,7 +62,7 @@ FBall_Main:	; Routine 0
 	.noflip:
 		move.w	d0,ost_y_vel(a0)			; set object speed (vertical)
 		move.b	#8,ost_displaywidth(a0)
-		btst	#6,ost_subtype(a0)			; is fireball horizontal?
+		btst	#type_fire_horizontal_bit,ost_subtype(a0) ; is fireball horizontal?
 		beq.s	.sound					; if not, branch
 
 		move.b	#$10,ost_displaywidth(a0)

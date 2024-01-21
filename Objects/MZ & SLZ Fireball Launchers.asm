@@ -11,6 +11,18 @@
 ;	H - 1 if horizontal, 0 if vertical
 ;	RRR - firing rate (1 = 0.5 seconds)
 ;	SSS - initial speed (1 = $100)
+
+type_fire_rate30:		equ (30/30)<<3			; every 0.5 seconds
+type_fire_rate60:		equ (60/30)<<3			; every 1 second
+type_fire_rate90:		equ (90/30)<<3			; every 1.5 seconds
+type_fire_rate120:		equ (120/30)<<3			; every 2 seconds
+type_fire_rate150:		equ (150/30)<<3			; every 2.5 seconds
+type_fire_rate180:		equ (180/30)<<3			; every 3 seconds
+type_fire_horizontal_bit:	equ 6
+type_fire_gravity_bit:		equ 7
+type_fire_vertical:		equ 0
+type_fire_horizontal:		equ 1<<type_fire_horizontal_bit
+type_fire_gravity:		equ 1<<type_fire_gravity_bit
 ; ---------------------------------------------------------------------------
 
 FireMaker:
@@ -31,7 +43,7 @@ ost_firem_time_master:	rs.b 1
 FireM_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto FireM_MakeFire next
 		move.b	ost_subtype(a0),d0
-		andi.b	#%00111000,d0				; read bits for firing rate
+		andi.w	#%00111000,d0				; read bits for firing rate
 		beq.w	DeleteObject				; delete if 0
 		lsr.b	#3,d0
 		mulu.w	#30,d0					; multiply by 0.5 seconds

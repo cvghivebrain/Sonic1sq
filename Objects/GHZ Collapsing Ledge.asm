@@ -3,6 +3,9 @@
 
 ; spawned by:
 ;	ObjPos_GHZ1, ObjPos_GHZ2, ObjPos_GHZ3 - subtypes 0/1
+
+type_ledge_left:	equ id_frame_ledge_left			; 0 - facing left
+type_ledge_right:	equ id_frame_ledge_right		; 1 - also facing left, but always xflipped to face right
 ; ---------------------------------------------------------------------------
 
 CollapseLedge:
@@ -37,6 +40,7 @@ Ledge_Main:	; Routine 0
 		tst.b	ost_subtype(a0)
 		beq.s	Ledge_Solid
 		move.l	#Ledge_SlopeData_Flip,ost_ledge_heightmap(a0) ; heightmap xflipped
+		subq.w	#1,ost_x_pos(a0)
 
 Ledge_Solid:	; Routine 2
 		moveq	#1,d6					; 1 byte in heightmap = 2px

@@ -3,6 +3,13 @@
 
 ; spawned by:
 ;	ObjPos_LZ1, ObjPos_LZ2, ObjPos_LZ3, ObjPos_SBZ3 - subtypes 0/1
+
+; subtypes:
+;	%0000TTTT
+;	TTTT - type (see LBlk_Types)
+
+type_lblock_sink:	equ 0					; sinks when stood on
+type_lblock_solid:	equ 1					; doesn't move
 ; ---------------------------------------------------------------------------
 
 LabyrinthBlock:
@@ -21,24 +28,30 @@ LBlk_Index:	index *,,2
 ost_lblock_y_pos:	rs.w 1					; y pos without sink
 ost_lblock_wait_time:	rs.w 1					; time delay for block movement
 		rsobjend
+		
+LBlk_Types:	dc.w tile_Kos_LzDoorH+tile_pal3			; tile setting
+		dc.b id_frame_lblock_sinkblock, id_LBlk_Action	; frame, routine
+		dc.w tile_Kos_LzBlock+tile_pal3
+		dc.b id_frame_lblock_block, id_LBlk_Stop
 ; ===========================================================================
 
 LBlk_Main:	; Routine 0
-		addq.b	#2,ost_routine(a0)			; goto LBlk_Action next
 		move.l	#Map_LBlock,ost_mappings(a0)
-		move.w	#tile_Kos_LzDoorH+tile_pal3,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#priority_3,ost_priority(a0)
 		move.b	#16,ost_displaywidth(a0)
 		move.b	#16,ost_width(a0)
 		move.b	#16,ost_height(a0)
 		move.w	ost_y_pos(a0),ost_lblock_y_pos(a0)
-		move.b	ost_subtype(a0),ost_frame(a0)
-		bne.s	LBlk_Action				; branch if not type 0
-		
-		move.w	#tile_Kos_LzBlock+tile_pal3,ost_tile(a0)
-		move.b	#id_LBlk_Stop,ost_routine(a0)		; goto LBlk_Stop next
-		bra.s	LBlk_Solid
+		move.b	ost_subtype(a0),d0
+		andi.b	#$F,d0					; read low nybble of subtype
+		add.w	d0,d0
+		add.w	d0,d0					; multiply by 4
+		lea	LBlk_Types(pc,d0.w),a2
+		move.w	(a2)+,ost_tile(a0)
+		move.b	(a2)+,ost_frame(a0)
+		move.b	(a2)+,ost_routine(a0)
+		bra.w	DespawnQuick
 ; ===========================================================================
 
 LBlk_Action:	; Routine 2
@@ -58,7 +71,7 @@ LBlk_Update:
 		move.w	ost_lblock_y_pos(a0),d0
 		bsr.w	Sink					; platform sinks slightly when stood on, update y pos
 		
-LBlk_Solid:	; Routine 6
+LBlk_Solid:
 		bsr.w	SolidObject
 		bra.w	DespawnQuick
 ; ===========================================================================

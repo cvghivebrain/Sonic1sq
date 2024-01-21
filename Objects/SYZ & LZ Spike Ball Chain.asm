@@ -90,12 +90,17 @@ SBall_Main:	; Routine 0
 		move.b	ost_displaywidth(a0),ost_displaywidth(a1)
 		saveparent
 		move.b	(a2),ost_col_type(a1)
-		move.b	1(a2),ost_frame(a1)
+		move.b	1(a2),ost_col_width(a1)
+		move.b	2(a2),ost_col_height(a1)
+		move.b	3(a2),ost_frame(a1)
 		addi.b	#16,d3					; each piece is 16px further from centre
 		move.b	d3,ost_sball_radius(a1)
 		dbf	d2,.loop				; repeat for length of chain
-		move.b	2(a2),ost_col_type(a1)			; final piece has different collision/frame
-		move.b	3(a2),ost_frame(a1)
+		addq.l	#4,a2
+		move.b	(a2)+,ost_col_type(a1)			; final piece has different collision/frame
+		move.b	(a2)+,ost_col_width(a1)
+		move.b	(a2)+,ost_col_height(a1)
+		move.b	(a2)+,ost_frame(a1)
 
 SBall_Move:	; Routine 2
 		shortcut
