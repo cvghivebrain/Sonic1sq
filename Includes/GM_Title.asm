@@ -74,20 +74,18 @@ GM_Title:
 		jsr	FindFreeInert
 		bne.s	.no_slots
 		move.l	#TitleSonic,ost_id(a1)			; load big Sonic object
+		move.b	#104,(v_spritemask_pos).w
+		move.b	#64,(v_spritemask_height).w
 
 		jsr	FindFreeInert
 		bne.s	.no_slots
 		move.l	#PSBTM,ost_id(a1)			; load "PRESS START BUTTON" object
+		move.b	#0,ost_subtype(a1)
 
 		jsr	FindFreeInert
 		bne.s	.no_slots
 		move.l	#PSBTM,ost_id(a1)			; load "TM" object
-		move.b	#id_frame_psb_tm,ost_frame(a1)
-
-		jsr	FindFreeInert
-		bne.s	.no_slots
-		move.l	#PSBTM,ost_id(a1)			; load object which hides part of Sonic
-		move.b	#id_frame_psb_mask,ost_frame(a1)
+		move.b	#1,ost_subtype(a1)
 
 	.no_slots:
 		jsr	(ExecuteObjects).l

@@ -4,7 +4,6 @@
 Map_PSB:	index *
 		ptr frame_psb_blank
 		ptr frame_psb_psb
-		ptr frame_psb_mask
 		ptr frame_psb_tm
 
 frame_psb_blank:
@@ -18,39 +17,6 @@ frame_psb_psb:	spritemap					; "PRESS START BUTTON"
 		piece	$38, 0, 4x1, $F4
 		piece	$60, 0, 3x1, $F8
 		piece	$78, 0, 3x1, $FB
-		endsprite
-		
-frame_psb_mask:	spritemap					; sprite line limit mask
-		piece	-$80, -$48, 4x4, 0
-		piece	-$80, -$48, 4x4, 0
-		piece	-$80, -$48, 4x4, 0
-		piece	-$80, -$48, 4x4, 0
-		piece	-$80, -$48, 4x4, 0
-		piece	-$80, -$48, 4x4, 0
-		piece	-$80, -$48, 4x4, 0
-		piece	-$80, -$48, 4x4, 0
-		piece	-$80, -$48, 4x4, 0
-		piece	-$80, -$48, 4x4, 0
-		piece	-$80, -$28, 4x4, 0
-		piece	-$80, -$28, 4x4, 0
-		piece	-$80, -$28, 4x4, 0
-		piece	-$80, -$28, 4x4, 0
-		piece	-$80, -$28, 4x4, 0
-		piece	-$80, -$28, 4x4, 0
-		piece	-$80, -$28, 4x4, 0
-		piece	-$80, -$28, 4x4, 0
-		piece	-$80, -$28, 4x4, 0
-		piece	-$80, -$28, 4x4, 0
-		piece	-$80, -8, 4x4, 0
-		piece	-$80, -8, 4x4, 0
-		piece	-$80, -8, 4x4, 0
-		piece	-$80, -8, 4x4, 0
-		piece	-$80, -8, 4x4, 0
-		piece	-$80, -8, 4x4, 0
-		piece	-$80, -8, 4x4, 0
-		piece	-$80, -8, 4x4, 0
-		piece	-$80, -8, 4x4, 0
-		piece	-$80, -8, 4x4, 0
 		endsprite
 		
 frame_psb_tm:	spritemap					; "TM"

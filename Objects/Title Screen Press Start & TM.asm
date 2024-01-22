@@ -2,46 +2,55 @@
 ; Object 0F - "PRESS START BUTTON" and "TM" from title screen
 
 ; spawned by:
-;	GM_Title - frames 0 (PSB), 2 (sprite mask), 3 (TM)
+;	GM_Title - subtypes 0/1
 ; ---------------------------------------------------------------------------
 
 PSBTM:
 		moveq	#0,d0
 		move.b	ost_routine(a0),d0
 		move.w	PSB_Index(pc,d0.w),d1
-		jsr	PSB_Index(pc,d1.w)
-		bra.w	DisplaySprite
+		jmp	PSB_Index(pc,d1.w)
 ; ===========================================================================
 PSB_Index:	index *,,2
 		ptr PSB_Main
 		ptr PSB_Animate
-		ptr PSB_Exit
+		ptr PSB_Display
+		
+PSB_Types:	dc.w screen_left+80, screen_top+176		; x/y position
+		dc.w tile_Kos_TitleFg				; tile setting
+		dc.b id_frame_psb_blank, id_PSB_Animate		; frame, routine
+		dc.b id_ani_psb_flash				; animation
+		even
+	PSB_Types_size:
+		
+		dc.w screen_left+240, screen_top+120
+		dc.w tile_Kos_TitleTM+tile_pal2
+		dc.b id_frame_psb_tm, id_PSB_Display
+		dc.b 0
+		even
 ; ===========================================================================
 
 PSB_Main:	; Routine 0
-		addq.b	#2,ost_routine(a0)			; goto PSB_Animate next
-		move.w	#screen_left+80,ost_x_pos(a0)
-		move.w	#screen_top+176,ost_y_screen(a0)
 		move.l	#Map_PSB,ost_mappings(a0)
-		move.w	#tile_Kos_TitleFg,ost_tile(a0)
-		cmpi.b	#id_frame_psb_mask,ost_frame(a0)	; is object the sprite mask or "TM"?
-		bcs.s	PSB_Animate				; if not, branch
-
-		addq.b	#2,ost_routine(a0)			; goto PSB_Exit next
-		cmpi.b	#id_frame_psb_tm,ost_frame(a0)		; is the object "TM"?
-		bne.s	PSB_Exit				; if not, branch
-
-		move.w	#tile_Kos_TitleTM+tile_pal2,ost_tile(a0) ; "TM" specific code
-		move.w	#screen_left+240,ost_x_pos(a0)
-		move.w	#screen_top+120,ost_y_screen(a0)
-
-PSB_Exit:	; Routine 4
-		rts	
+		moveq	#0,d0
+		move.b	ost_subtype(a0),d0
+		mulu.w	#PSB_Types_size-PSB_Types,d0
+		lea	PSB_Types(pc,d0.w),a2
+		move.w	(a2)+,ost_x_pos(a0)
+		move.w	(a2)+,ost_y_screen(a0)
+		move.w	(a2)+,ost_tile(a0)
+		move.b	(a2)+,ost_frame(a0)
+		move.b	(a2)+,ost_routine(a0)
+		move.b	(a2)+,ost_anim(a0)
+		rts
 ; ===========================================================================
 
 PSB_Animate:	; Routine 2
 		lea	Ani_PSB(pc),a1
-		bra.w	AnimateSprite				; "PRESS START" is animated
+		bsr.w	AnimateSprite				; "PRESS START" is animated
+
+PSB_Display:	; Routine 4
+		bra.w	DisplaySprite
 
 ; ---------------------------------------------------------------------------
 ; Animation script

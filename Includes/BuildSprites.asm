@@ -14,6 +14,11 @@ BuildSprites:
 		lea	(v_camera_y_pos).w,a5			; get address for camera y position
 		lea	(v_sprite_buffer).w,a2			; set address for sprite table - $280 bytes, copied to VRAM at VBlank
 		moveq	#0,d5
+		move.b	(v_spritemask_height).w,d0
+		beq.s	.no_mask				; branch if spritemask isn't defined
+		bsr.w	BuildSpr_Mask				; draw spritemask
+		
+	.no_mask:
 		lea	(v_sprite_queue).w,a4			; address of sprite queue - $400 bytes, 8 sections of $80 bytes (1 word for count, $3F words for OST addresses)
 		moveq	#countof_priority-1,d7			; there are 8 priority levels
 
@@ -340,5 +345,54 @@ BuildSpr_Sub:
 		subq.w	#6,a2					; undo this subsprite
 		subq.b	#1,d5					; decrement sprite counter
 		dbf	d1,BuildSpr_Sub				; next sprite piece
+		rts
+; ===========================================================================
+
+BuildSpr_Mask:
+		andi.w	#$FF,d0					; d0 = height
+		moveq	#0,d1
+		move.b	(v_spritemask_pos).w,d1
+		addi.w	#screen_top,d1				; d1 = y position
+		cmpi.w	#32,d0
+		bhi.s	.over_32				; branch if height is > 32px
+		move.w	d1,(a2)+				; y pos
+		move.b	#sprite1x4,(a2)+			; sprite size
+		addq.b	#1,d5					; increment sprite counter
+		move.b	d5,(a2)+				; link to next sprite
+		move.l	#1,(a2)+				; VRAM setting & x pos
+		subi.w	#32,d0
+		add.w	d0,d1
+		move.w	d1,(a2)+
+		move.b	#sprite1x4,(a2)+
+		addq.b	#1,d5
+		move.b	d5,(a2)+
+		move.l	#0,(a2)+
+		rts
+		
+	.over_32:
+		move.w	d0,d2
+		lsr.w	#5,d2					; divide by 32 (discard remainder)
+		subq.w	#1,d2					; minus 1 for loops
+		
+	.loop:
+		bsr.s	.mask_32
+		addi.w	#32,d1					; next sprite is 32px lower
+		dbf	d2,.loop				; repeat for all 32px blocks
+		
+		andi.w	#$1F,d0					; d0 = remaining height
+		subi.w	#32,d0
+		add.w	d0,d1
+		
+	.mask_32:
+		move.w	d1,(a2)+				; y pos
+		move.b	#sprite1x4,(a2)+			; sprite size
+		addq.b	#1,d5					; increment sprite counter
+		move.b	d5,(a2)+				; link to next sprite
+		move.l	#1,(a2)+				; VRAM setting & x pos
+		move.w	d1,(a2)+
+		move.b	#sprite1x4,(a2)+
+		addq.b	#1,d5
+		move.b	d5,(a2)+
+		move.l	#0,(a2)+
 		rts
 		

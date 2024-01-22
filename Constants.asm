@@ -16,6 +16,7 @@ sizeof_priority:	equ $80					; size of one priority section in sprite queue
 countof_priority:	equ 7					; number of priority levels
 sizeof_dma:		equ 14					; size of one DMA command
 countof_dma:		equ 28					; number of DMA slots in queue
+sizeof_slowplc_buffer:	equ $1000				; size of buffer for SlowPLC
 
 level_max_width:	equ $40
 level_max_height:	equ 8

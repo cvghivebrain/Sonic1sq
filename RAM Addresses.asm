@@ -57,6 +57,8 @@ v_vdp_hint_line:		equ __rs-1			; screen line where water starts and palette is c
 				rsblock vblankstuff		; cleared by GM_Level, GM_Ending
 v_vblank_routine:		rs.b 1				; VBlank routine counter
 v_spritecount:			rs.b 1				; number of sprites on-screen
+v_spritemask_height:		rs.b 1				; height of spritemask in pixels
+v_spritemask_pos:		rs.b 1				; position of spritemask from top of screen
 v_palcycle_num:			rs.w 1				; palette cycling - current index number
 v_palcycle_time:		rs.w 1				; palette cycling - time until the next change
 f_sega_pal_next:		equ __rs-1			; flag set when Sega stripe animation is complete
@@ -249,13 +251,13 @@ v_shoes:			rs.w 1				; time left for speed shoes
 v_sprite_buffer:		rs.b sizeof_vram_sprites	; sprite table ($280 bytes)
 				rsblockend sprites
 				rsblock pal
-v_pal_dry:			rs.w countof_color*4		; main palette
+v_pal_dry:			rs.w countof_color*countof_pal	; main palette
 				rsblockend pal
 v_pal_dry_line1:		equ v_pal_dry
 v_pal_dry_line2:		equ v_pal_dry+sizeof_pal	; 2nd palette line
 v_pal_dry_line3:		equ v_pal_dry+(sizeof_pal*2)	; 3rd palette line
 v_pal_dry_line4:		equ v_pal_dry+(sizeof_pal*3)	; 4th palette line
-v_pal_water:			rs.w countof_color*4		; main underwater palette
+v_pal_water:			rs.w countof_color*countof_pal	; main underwater palette
 v_pal_water_line1:		equ v_pal_water
 v_pal_water_line2:		equ v_pal_water+sizeof_pal	; 2nd palette line
 v_pal_water_line3:		equ v_pal_water+(sizeof_pal*2)	; 3rd palette line
@@ -265,7 +267,7 @@ v_pal_water_final:		rs.w countof_color*countof_pal	; underwater palette after br
 				rsalign 2
 v_respawn_list:			rs.b $100			; object state list (2 bytes for counter; 1 byte each for up to $FE objects)
 v_slowplc_ptr:			rs.l 1				; pointer to current SlowPLC (0 if not running)
-v_slowplc_buffer:		rs.b $1000			; buffer for SlowPLC decompression
+v_slowplc_buffer:		rs.b sizeof_slowplc_buffer	; buffer for SlowPLC decompression
 
 				rsalign 4
 v_stack:			rs.l $40			; stack ($100 bytes)
