@@ -23,7 +23,7 @@ PSB_Types:	dc.w screen_left+80, screen_top+176		; x/y position
 		even
 	PSB_Types_size:
 		
-		dc.w screen_left+240, screen_top+120
+		dc.w screen_left+240, screen_top+128
 		dc.w tile_Kos_TitleTM+tile_pal2
 		dc.b id_frame_psb_tm, id_PSB_Display
 		dc.b 0

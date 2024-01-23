@@ -45,6 +45,7 @@ TSon_Move:	; Routine 4
 		cmpi.w	#screen_top+22,ost_y_screen(a0)		; has Sonic reached final position?
 		bgt.w	DisplaySprite				; if not, branch
 		addq.b	#2,ost_routine(a0)			; goto TSon_Animate next
+		move.b	#18,(v_spritemask_height).w
 
 TSon_Animate:	; Routine 6
 		shortcut

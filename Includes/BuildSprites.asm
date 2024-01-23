@@ -349,19 +349,20 @@ BuildSpr_Sub:
 ; ===========================================================================
 
 BuildSpr_Mask:
-		andi.w	#$FF,d0					; d0 = height
+		andi.w	#$FF,d0					; d0 = height of whole spritemask
+		moveq	#32,d3					; d3 = height of 1x4 sprite
 		moveq	#0,d1
 		move.b	(v_spritemask_pos).w,d1
 		addi.w	#screen_top,d1				; d1 = y position
-		cmpi.w	#32,d0
+		cmp.w	d3,d0
 		bhi.s	.over_32				; branch if height is > 32px
 		move.w	d1,(a2)+				; y pos
 		move.b	#sprite1x4,(a2)+			; sprite size
 		addq.b	#1,d5					; increment sprite counter
 		move.b	d5,(a2)+				; link to next sprite
 		move.l	#1,(a2)+				; VRAM setting & x pos
-		subi.w	#32,d0
-		add.w	d0,d1
+		sub.w	d3,d0
+		add.w	d0,d1					; masking sprites should partially overlap
 		move.w	d1,(a2)+
 		move.b	#sprite1x4,(a2)+
 		addq.b	#1,d5
@@ -376,11 +377,11 @@ BuildSpr_Mask:
 		
 	.loop:
 		bsr.s	.mask_32
-		addi.w	#32,d1					; next sprite is 32px lower
+		add.w	d3,d1					; next sprite is 32px lower
 		dbf	d2,.loop				; repeat for all 32px blocks
 		
 		andi.w	#$1F,d0					; d0 = remaining height
-		subi.w	#32,d0
+		sub.w	d3,d0
 		add.w	d0,d1
 		
 	.mask_32:

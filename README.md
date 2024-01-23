@@ -20,6 +20,7 @@ _Sonic 1-squared_ is an enhanced version of the original _Sonic the Hedgehog_ ga
 * Palette cycling uses a script.
 * Water palettes are generated in-game by the `WaterFilter` subroutine, instead of being hardcoded.
 * Fading to black/white is controlled by a brightness variable, and no longer requires a "next" palette. This simplifies loading new palettes.
+* Sprites can be hidden with the variables `v_spritemask_height` and `v_spritemask_pos`.
 
 ## Objects
 * Modified the way animation works to save 2 bytes in RAM per object. The high bit of `ost_anim` now serves as an update flag instead of `ost_anim_restart`.

@@ -75,7 +75,7 @@ GM_Title:
 		bne.s	.no_slots
 		move.l	#TitleSonic,ost_id(a1)			; load big Sonic object
 		move.b	#104,(v_spritemask_pos).w
-		move.b	#64,(v_spritemask_height).w
+		move.b	#80,(v_spritemask_height).w
 
 		jsr	FindFreeInert
 		bne.s	.no_slots
