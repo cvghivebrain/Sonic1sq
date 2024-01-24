@@ -10,27 +10,26 @@ Map_BossBlock:	index *
 		
 frame_bblock_wholeblock:
 		spritemap
-		piece	-$10, -$10, 4x2, $71
-		piece	-$10, 0, 4x2, $79
+		piece	-$10, -$10, 4x2, $51
+		piece	-$10, 0, 4x2, $59
 		endsprite
 		
 frame_bblock_topleft:
 		spritemap
-		piece	-8, -8, 2x2, $71
+		piece	-8, -8, 2x2, $51
 		endsprite
 		
 frame_bblock_topright:
 		spritemap
-		piece	-8, -8, 2x2, $75
+		piece	-8, -8, 2x2, $55
 		endsprite
 		
 frame_bblock_bottomleft:
 		spritemap
-		piece	-8, -8, 2x2, $79
+		piece	-8, -8, 2x2, $59
 		endsprite
 		
 frame_bblock_bottomright:
 		spritemap
-		piece	-8, -8, 2x2, $7D
+		piece	-8, -8, 2x2, $5D
 		endsprite
-		even

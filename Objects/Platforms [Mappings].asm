@@ -31,9 +31,9 @@ frame_plat_large:
 		endsprite
 
 frame_plat_syz:	spritemap
-		piece	-$20, -$A, 3x4, $49
-		piece	-8, -$A, 2x4, $51
-		piece	8, -$A, 3x4, $55
+		piece	-$20, -$A, 3x4, $29
+		piece	-8, -$A, 2x4, $31
+		piece	8, -$A, 3x4, $35
 		endsprite
 
 frame_plat_slz:	spritemap

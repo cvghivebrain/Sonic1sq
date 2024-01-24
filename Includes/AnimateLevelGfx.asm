@@ -59,7 +59,7 @@ AniArt_GHZ_Script:
 		dc.l .small_flower
 	.waterfall:
 		dc.w 2						; frame count
-		set_dma_dest $6F00				; VRAM destination
+		set_dma_dest $6D80				; VRAM destination
 		set_dma_size 8*sizeof_cell			; size
 		dc.w 5						; duration
 		set_dma_src Art_GhzWater			; ROM source
@@ -67,7 +67,7 @@ AniArt_GHZ_Script:
 		set_dma_src Art_GhzWater+(8*sizeof_cell)
 	.big_flower:
 		dc.w 2
-		set_dma_dest $6B80
+		set_dma_dest $6A00
 		set_dma_size 16*sizeof_cell
 		dc.w 15
 		set_dma_src Art_GhzFlower1
@@ -75,7 +75,7 @@ AniArt_GHZ_Script:
 		set_dma_src Art_GhzFlower1+(16*sizeof_cell)
 	.small_flower:
 		dc.w 4
-		set_dma_dest $6D80
+		set_dma_dest $6C00
 		set_dma_size 12*sizeof_cell
 		dc.w $7F
 		set_dma_src Art_GhzFlower2
@@ -233,7 +233,7 @@ AniArt_Ending_Script:
 		dc.l .round_flower2
 	.big_flower1:
 		dc.w 2
-		set_dma_dest $6B80
+		set_dma_dest $6A00
 		set_dma_size 16*sizeof_cell
 		dc.w 7
 		set_dma_src Art_GhzFlower1
@@ -241,7 +241,7 @@ AniArt_Ending_Script:
 		set_dma_src Art_GhzFlower1+(16*sizeof_cell)
 	.big_flower2:
 		dc.w 2
-		set_dma_dest $7200
+		set_dma_dest $7080
 		set_dma_size 16*sizeof_cell
 		dc.w 7
 		set_dma_src Art_EndFlowers
@@ -249,7 +249,7 @@ AniArt_Ending_Script:
 		set_dma_src Art_EndFlowers+(16*sizeof_cell)
 	.small_flower:
 		dc.w 4
-		set_dma_dest $6D80
+		set_dma_dest $6C00
 		set_dma_size 12*sizeof_cell
 		dc.w 21
 		set_dma_src Art_GhzFlower2
@@ -261,7 +261,7 @@ AniArt_Ending_Script:
 		set_dma_src Art_GhzFlower2+(12*sizeof_cell)
 	.round_flower1:
 		dc.w 4
-		set_dma_dest $7000
+		set_dma_dest $6E80
 		set_dma_size 16*sizeof_cell
 		dc.w 14
 		set_dma_src Art_EndFlowers+$400
@@ -273,7 +273,7 @@ AniArt_Ending_Script:
 		set_dma_src Art_EndFlowers+(16*sizeof_cell)+$400
 	.round_flower2:
 		dc.w 4
-		set_dma_dest $6800
+		set_dma_dest $6680
 		set_dma_size 16*sizeof_cell
 		dc.w 11
 		set_dma_src Art_EndFlowers+$400
