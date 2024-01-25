@@ -24,14 +24,13 @@ Pyl_Main:	; Routine 0
 
 Pyl_Display:	; Routine 2
 		shortcut
-		move.l	(v_camera_x_pos).w,d1			; get camera x pos (in high word)
-		add.l	d1,d1					; double it
-		swap	d1					; move into low word
+		move.w	(v_camera_x_pos).w,d1			; get camera x pos
+		add.w	d1,d1
 		neg.w	d1					; invert
+		andi.w	#$1FF,d1
 		move.w	d1,ost_x_pos(a0)			; update x position of pylon
-		move.l	(v_camera_y_pos).w,d1
-		add.l	d1,d1
-		swap	d1
+		move.w	(v_camera_y_pos).w,d1
+		add.w	d1,d1
 		andi.w	#$3F,d1
 		neg.w	d1
 		addi.w	#$100,d1

@@ -392,6 +392,7 @@ LZWind_Data:	dc.w $A80, $300, $C10,  $380			; act 1 values (set 1)
 ; ---------------------------------------------------------------------------
 
 LZWaterSlides:
+		rts						; disable until I come up with a better system
 		lea	(v_ost_player).w,a1
 		btst	#status_air_bit,ost_status(a1)		; is Sonic in air?
 		bne.s	.sonic_in_air				; branch if Sonic is in air
