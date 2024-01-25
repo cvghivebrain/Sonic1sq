@@ -67,7 +67,7 @@ Bump_Hit:
 		addq.b	#1,d2					; increment counter
 		move.b	d2,ost_bump_count(a0)			; update counter
 		moveq	#1,d0
-		jsr	(AddPoints).l				; add 10 to score
+		jsr	(AddPoints).w				; add 10 to score
 		bsr.w	FindFreeObj
 		bne.s	.skip_points
 		move.l	#Points,ost_id(a1)			; load points object

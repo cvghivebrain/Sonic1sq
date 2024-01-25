@@ -3,7 +3,7 @@
 ; ---------------------------------------------------------------------------
 
 VBlank:
-		movem.l	d0-a6,-(sp)				; save all registers to stack
+		pushr	d0-a6					; save all registers to stack
 		tst.b	(v_vblank_routine).w			; is routine number 0?
 		beq.s	VBlank_Lag				; if yes, branch
 		lea	(vdp_control_port).l,a6
@@ -29,7 +29,7 @@ VBlank_Music:
 
 VBlank_Exit:
 		addq.l	#1,(v_vblank_counter).w			; increment frame counter
-		movem.l	(sp)+,d0-a6				; restore all registers from stack
+		popr	d0-a6					; restore all registers from stack
 		rte						; end of VBlank
 ; ===========================================================================
 VBlank_Index:	index *,,2
@@ -89,7 +89,7 @@ VBlank_Sega_SkipLoad:
 		subq.w	#1,(v_countdown).w			; decrement timer
 
 	.end:
-		rts	
+		rts
 ; ===========================================================================
 
 ; 4 - GM_Title> Tit_MainLoop, LevelSelect, GotoDemo; GM_Credits> Cred_WaitLoop, TryAg_MainLoop
@@ -135,17 +135,16 @@ VBlank_Level:
 		cmpi.b	#96,(v_vdp_hint_line).w			; is HBlank set to run on line 96 or below? (42% of the way down the screen)
 		bhs.s	DrawTiles_LevelGfx_HUD_PLC		; if yes, branch
 		move.b	#1,(f_hblank_run_snd).w			; set flag to run sound driver on HBlank
-		addq.l	#4,sp
+		addq.l	#4,sp					; don't play sound from VBlank
 		bra.w	VBlank_Exit
 
 ; ---------------------------------------------------------------------------
-; Subroutine to	update fg/bg, run tile animations, HUD and and decompress up
-; to 3 cells of Nemesis graphics
+; Subroutine to	update fg/bg, run tile animations
 ; ---------------------------------------------------------------------------
 
 DrawTiles_LevelGfx_HUD_PLC:
 		bsr.w	DrawTilesWhenMoving			; display new tiles if camera has moved
-		jsr	(AnimateLevelGfx).l			; update animated level graphics
+		bsr.w	AnimateLevelGfx				; update animated level graphics
 		tst.w	(v_countdown).w
 		beq.w	.end
 		subq.w	#1,(v_countdown).w			; decrement timer
@@ -192,7 +191,7 @@ VBlank_Ending:
 		movem.l	(v_fg_redraw_direction).w,d0-d1		; copy all fg/bg redraw direction flags to d0-d1
 		movem.l	d0-d1,(v_fg_redraw_direction_copy).w	; create duplicates in RAM
 		bsr.w	DrawTilesWhenMoving			; display new tiles if camera has moved
-		jsr	(AnimateLevelGfx).l			; update animated level graphics
+		bsr.w	AnimateLevelGfx				; update animated level graphics
 		rts	
 ; ===========================================================================
 
@@ -277,10 +276,10 @@ ApplyBrightness:
 		clr.b	(f_brightness_update).w			; clear update flag
 		tst.b	(v_gamemode).w
 		bmi.w	ApplyBrightness_KeepSonic		; branch if title card is shown
-		move.w	#(countof_color*countof_pal)-1,d0	; number of colours to copy
+		moveq	#(countof_color*countof_pal)-1,d0	; number of colours to copy
 		tst.b	(f_water_enable).w
 		beq.s	.no_water				; branch if not in water level
-		move.w	#(countof_color*countof_pal*2)-1,d0	; also do underwater palette
+		moveq	#(countof_color*countof_pal*2)-1,d0	; also do underwater palette
 		
 	.no_water:
 		lea	(v_pal_dry).w,a0
@@ -301,19 +300,19 @@ ApplyBrightness_Run:
 		move.w	(a0)+,d2
 		move.w	d2,d3
 		lsl.w	#3,d3
-		and.w	#$F0,d3					; read red value
+		andi.w	#$F0,d3					; read red value
 		add.w	d1,d3
 		move.b	(a2,d3.w),d3				; get new red value
 		
 		move.w	d2,d4
 		lsr.w	#1,d4
-		and.w	#$F0,d4					; read green value
+		andi.w	#$F0,d4					; read green value
 		add.w	d1,d4
 		move.b	(a3,d4.w),d4				; get new green value
 		
 		move.w	d2,d5
 		lsr.w	#5,d5
-		and.w	#$F0,d5					; read blue value
+		andi.w	#$F0,d5					; read blue value
 		add.w	d1,d5
 		move.b	(a4,d5.w),d5				; get new blue value
 		
@@ -394,16 +393,16 @@ DarkLevels_Blue:
 ApplyBrightness_KeepSonic:
 		lea	(v_pal_dry).w,a0
 		lea	(v_pal_dry_final).w,a1
-		move.w	#(countof_color/2)-1,d0			; do first palette line only
+		moveq	#(countof_color/2)-1,d0			; do first palette line only
 		
 	.loop:
 		move.l	(a0)+,(a1)+				; copy palette without changing brightness
 		dbf	d0,.loop
 		
-		move.w	#(countof_color*3)-1,d0			; remaining 3 palettes
+		moveq	#(countof_color*3)-1,d0			; remaining 3 palettes
 		tst.b	(f_water_enable).w
 		beq.s	.no_water				; branch if not in water level
-		move.w	#(countof_color*7)-1,d0			; also do underwater palette
+		moveq	#(countof_color*7)-1,d0			; also do underwater palette
 		
 	.no_water:
 		bra.w	ApplyBrightness_Run
@@ -417,7 +416,7 @@ HBlank:
 		tst.w	(f_hblank_pal_change).w			; is palette set to change during HBlank?
 		beq.s	.nochg					; if not, branch
 		move.w	#0,(f_hblank_pal_change).w
-		movem.l	a0-a1,-(sp)				; save a0-a1 to stack
+		pushr	a0-a1					; save a0-a1 to stack
 		lea	(vdp_data_port).l,a1
 		lea	(v_pal_water).w,a0			; get palette from RAM
 		tst.b	(v_brightness).w
@@ -430,7 +429,7 @@ HBlank:
 		move.l	(a0)+,(a1)				; copy palette to CRAM
 		endr
 		move.w	#vdp_hint_counter+223,4(a1)		; reset HBlank register
-		movem.l	(sp)+,a0-a1				; restore a0-a1 from stack
+		popr	a0-a1					; restore a0-a1 from stack
 		tst.b	(f_hblank_run_snd).w			; is flag set to update sound & some graphics during HBlank?
 		bne.s	.update_hblank				; if yes, branch
 
@@ -441,8 +440,8 @@ HBlank:
 ; The following only runs during a level and HBlank is set to run on line 96 or below
 .update_hblank:
 		clr.b	(f_hblank_run_snd).w
-		movem.l	d0-a6,-(sp)				; save registers to stack
+		pushr	d0-a6					; save registers to stack
 		bsr.w	DrawTiles_LevelGfx_HUD_PLC		; display new tiles, update animated gfx, update HUD, decompress 3 cells of Nemesis gfx
 		jsr	(UpdateSound).l				; update audio
-		movem.l	(sp)+,d0-a6				; restore registers from stack
+		popr	d0-a6					; restore registers from stack
 		rte						; end of HBlank

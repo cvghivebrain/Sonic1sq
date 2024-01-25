@@ -155,7 +155,7 @@ BSLZ_Update_SkipPos:
 
 .beaten:
 		moveq	#100,d0
-		bsr.w	AddPoints				; give Sonic 1000 points
+		jsr	(AddPoints).w				; give Sonic 1000 points
 		move.b	#6,ost_mode(a0)
 		move.b	#120,ost_boss_wait_time(a0)		; set timer to 2 seconds
 		clr.w	ost_x_vel(a0)

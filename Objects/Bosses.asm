@@ -152,7 +152,7 @@ Boss_Move:	; Routine 4
 		
 	.beaten:
 		moveq	#100,d0
-		bsr.w	AddPoints				; give Sonic 1000 points
+		jsr	(AddPoints).w				; give Sonic 1000 points
 		addq.b	#2,ost_routine(a0)			; goto Boss_Explode next
 		move.w	#179,ost_boss2_time(a0)			; set timer to 3 seconds
 		move.w	#0,ost_x_vel(a0)

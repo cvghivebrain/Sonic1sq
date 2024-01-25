@@ -124,7 +124,7 @@ BLZ_Update_SkipPos:
 
 .beaten:
 		moveq	#100,d0
-		bsr.w	AddPoints				; give Sonic 1000 points
+		jsr	(AddPoints).w				; give Sonic 1000 points
 		move.b	#1,ost_boss_mode(a0)			; set beaten flag
 		rts	
 ; ===========================================================================

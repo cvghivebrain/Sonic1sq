@@ -239,7 +239,7 @@ BFZ_Eggman_Crush:
 
 .beaten:
 		moveq	#100,d0
-		bsr.w	AddPoints				; give Sonic 1000 points
+		jsr	(AddPoints).w				; give Sonic 1000 points
 		move.b	#id_BFZ_Eggman_Fall,ost_fz_mode(a0)	; goto BFZ_Eggman_Fall next
 		move.w	#$25C0,ost_x_pos(a0)			; move Eggman outside arena to the right
 		move.w	#$53C,ost_y_pos(a0)

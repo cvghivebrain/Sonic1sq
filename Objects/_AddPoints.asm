@@ -10,7 +10,7 @@
 
 ; usage:
 ;		moveq	#100,d0
-;		bsr.w	AddPoints				; give Sonic 1000 points
+;		jsr	(AddPoints).w				; give Sonic 1000 points
 ; ---------------------------------------------------------------------------
 
 AddPoints:

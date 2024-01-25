@@ -190,7 +190,7 @@ Has_Bonus:	; Routine $E
 
 .add_bonus:
 		move.b	#1,(f_pass_bonus_update).w		; set flag to update
-		jsr	(AddPoints).l				; add d0 to score and update counter
+		jsr	(AddPoints).w				; add d0 to score and update counter
 		move.b	(v_vblank_counter_byte).w,d0		; get byte that increments every frame
 		andi.b	#3,d0					; read bits 0-1
 		bne.s	.exit					; branch if either are set

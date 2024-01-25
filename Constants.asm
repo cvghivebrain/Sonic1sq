@@ -3,7 +3,7 @@
 ; ---------------------------------------------------------------------------
 
 sizeof_256x256:		equ $200				; size of one 256x256 tile
-countof_256x256:	equ $52					; max number of 256x256 tiles
+countof_256x256:	equ $50					; max number of 256x256 tiles
 sizeof_256x256_all:	equ sizeof_256x256*countof_256x256	; size of all 256x256 tiles ($A400 bytes)
 sizeof_16x16:		equ 8					; size of one 16x16 tile
 countof_16x16:		equ $300				; max number of 16x16 tiles

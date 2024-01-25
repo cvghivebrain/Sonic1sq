@@ -124,9 +124,8 @@ GameInit:
 		move.b	#id_Sega,(v_gamemode).w			; set Game Mode to Sega Screen
 
 MainGameLoop:
-		moveq	#0,d0
 		move.b	(v_gamemode).w,d0			; load gamemode
-		and.b	#$7F,d0					; ignore high bit
+		andi.w	#$7F,d0					; ignore high bit
 		add.w	d0,d0
 		add.w	d0,d0					; multiply by 4
 		movea.l	GameModeArray(pc,d0.w),a1		; get pointer
@@ -159,9 +158,20 @@ id_Credits:	equ id_GM_Credits
 id_HiddenCredits: equ id_GM_HiddenCredits
 id_TryAgain:	equ id_GM_TryAgain
 ; ===========================================================================
-
-		incfile	Kos_Text,"Graphics Kosinski\Level Select & Debug Text",kos
-
+		include	"Includes\GM_Sega.asm"
+Pal_Sega1:	incbin	"Palettes\Sega - Stripe.bin"
+Pal_Sega2:	incbin	"Palettes\Sega - All.bin"
+		include "Includes\GM_Title.asm"
+		include "Includes\GM_Level.asm"
+		include "Includes\GM_Special.asm"
+Pal_SSCyc1:	incbin	"Palettes\Cycle - Special Stage 1.bin"
+Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
+		include "Includes\GM_Continue.asm"
+		include "Includes\GM_Ending.asm"
+		include "Includes\GM_Credits.asm"
+		include "Includes\GM_TryAgain.asm"
+		include "Includes\GM_HiddenCredits.asm"
+		
 		include	"Includes\VBlank & HBlank.asm"
 		include	"Includes\JoypadInit & ReadJoypads.asm"
 		include	"Includes\VDPSetupGame.asm"
@@ -169,119 +179,41 @@ id_TryAgain:	equ id_GM_TryAgain
 		include	"sound\PlaySound + DacDriverLoad.asm"
 		include	"Includes\PauseGame.asm"
 		include	"Includes\LoadTilemap.asm"
-
 		include "DMA & PLCs\DMA.asm"
-
 		include "Includes\Kosinski Decompression.asm"
+		include "Includes\AnimateLevelGfx.asm"
 
-; ---------------------------------------------------------------------------
-; Palette data & routines
-; ---------------------------------------------------------------------------
-		include "Includes\PaletteCycle.asm"
-Pal_TitleCyc:	incbin	"Palettes\Cycle - Title Screen Water.bin"
-Pal_GHZCyc:	incbin	"Palettes\Cycle - GHZ.bin"
-Pal_LZCyc1:	incbin	"Palettes\Cycle - LZ Waterfall.bin"
-Pal_LZCyc2:	incbin	"Palettes\Cycle - LZ Conveyor Belt.bin"
-Pal_LZCyc3:	incbin	"Palettes\Cycle - LZ Conveyor Belt Underwater.bin"
-Pal_SBZ3Cyc1:	incbin	"Palettes\Cycle - SBZ3 Waterfall.bin"
-Pal_SLZCyc:	incbin	"Palettes\Cycle - SLZ.bin"
-Pal_SYZCyc1:	incbin	"Palettes\Cycle - SYZ1.bin"
-Pal_SYZCyc2:	incbin	"Palettes\Cycle - SYZ2.bin"
-Pal_SBZCyc1:	incbin	"Palettes\Cycle - SBZ 1.bin"
-Pal_SBZCyc2:	incbin	"Palettes\Cycle - SBZ 2.bin"
-Pal_SBZCyc3:	incbin	"Palettes\Cycle - SBZ 3.bin"
-Pal_SBZCyc4:	incbin	"Palettes\Cycle - SBZ 4.bin"
-Pal_SBZCyc5:	incbin	"Palettes\Cycle - SBZ 5.bin"
-Pal_SBZCyc6:	incbin	"Palettes\Cycle - SBZ 6.bin"
-Pal_SBZCyc7:	incbin	"Palettes\Cycle - SBZ 7.bin"
-Pal_SBZCyc8:	incbin	"Palettes\Cycle - SBZ 8.bin"
-Pal_SBZCyc9:	incbin	"Palettes\Cycle - SBZ 9.bin"
-Pal_SBZCyc10:	incbin	"Palettes\Cycle - SBZ 10.bin"
+		include	"Includes\PaletteCycle.asm"
 		include	"Includes\PaletteFadeIn, PaletteFadeOut & PaletteWhiteOut.asm"
-		include	"Includes\GM_Sega.asm"
-Pal_Sega1:	incbin	"Palettes\Sega - Stripe.bin"
-Pal_Sega2:	incbin	"Palettes\Sega - All.bin"
 		include "Includes\PalLoad & PalPointers.asm"
-		incfile	Pal_SegaBG,"Palettes\Sega Background",bin
-		incfile	Pal_HidCred,"Palettes\Hidden Credits",bin
-		incfile	Pal_Title,"Palettes\Title Screen",bin
-		incfile	Pal_LevelSel,"Palettes\Level Select",bin
-		incfile	Pal_Sonic,"Palettes\Sonic",bin
-		incfile	Pal_SonicRed,"Palettes\Sonic Red",bin
-		incfile	Pal_SonicYellow,"Palettes\Sonic Yellow",bin
-		incfile	Pal_GHZ,"Palettes\Green Hill Zone",bin
-		incfile	Pal_LZ,"Palettes\Labyrinth Zone",bin
-		incfile	Pal_MZ,"Palettes\Marble Zone",bin
-		incfile	Pal_SLZ,"Palettes\Star Light Zone",bin
-		incfile	Pal_SYZ,"Palettes\Spring Yard Zone",bin
-		incfile	Pal_SBZ1,"Palettes\SBZ Act 1",bin
-		incfile	Pal_SBZ2,"Palettes\SBZ Act 2",bin
-		incfile	Pal_Special,"Palettes\Special Stage",bin
-		incfile	Pal_SBZ3,"Palettes\SBZ Act 3",bin
-		incfile	Pal_SSResult,"Palettes\Special Stage Results",bin
-		incfile	Pal_Continue,"Palettes\Special Stage Continue Bonus",bin
-		incfile	Pal_Ending,"Palettes\Ending",bin
-
-		include "Includes\WaitForVBlank.asm"
-		include "Objects\_RandomNumber.asm"
-		include "Objects\_CalcSine & CalcAngle.asm"
-		include "Includes\GM_Title.asm"
-		include "Includes\GM_HiddenCredits.asm"
-
-		include "Includes\GM_Level.asm"
 		include "Includes\LZWaterFeatures.asm"
-
+		include "Includes\WaitForVBlank.asm"
 		include "Includes\MoveSonicInDemo & DemoRecorder.asm"
 		include "Includes\OscillateNumInit & OscillateNumDo.asm"
 		include "Includes\SynchroAnimate.asm"
+		include	"Includes\LevelParameterLoad.asm"
+		include	"Includes\DeformLayers.asm"
+		include	"Includes\DrawTilesWhenMoving, DrawTilesAtStart & DrawChunks.asm"
+		include "Includes\LevelDataLoad, LevelLayoutLoad & LevelHeaders.asm"
+		include "Includes\DynamicLevelEvents.asm"
+		include "Includes\ExecuteObjects.asm"
+		include "Includes\BuildSprites.asm"
+		include "Includes\ObjPosLoad.asm"
 
-; ---------------------------------------------------------------------------
-; Demo data
-; ---------------------------------------------------------------------------
-		incfile	Demo_GHZ,"Demos\Intro - GHZ",bin
-		incfile	Demo_MZ,"Demos\Intro - MZ",bin
-		incfile	Demo_SYZ,"Demos\Intro - SYZ",bin
-		incfile	Demo_SS,"Demos\Intro - Special Stage",bin
-		incfile	Demo_EndGHZ1,"Demos\Ending - GHZ1",bin
-		incfile	Demo_EndMZ,"Demos\Ending - MZ",bin
-		incfile	Demo_EndSYZ,"Demos\Ending - SYZ",bin
-		incfile	Demo_EndLZ,"Demos\Ending - LZ",bin
-		incfile	Demo_EndSLZ,"Demos\Ending - SLZ",bin
-		incfile	Demo_EndSBZ1,"Demos\Ending - SBZ1",bin
-		incfile	Demo_EndSBZ2,"Demos\Ending - SBZ2",bin
-		incfile	Demo_EndGHZ2,"Demos\Ending - GHZ2",bin
+		include "Objects\_RandomNumber.asm"
+		include "Objects\_CalcSine & CalcAngle.asm"
+		include "Objects\_AddPoints.asm"
 
-		include "Includes\GM_Special.asm"
-
-Pal_SSCyc1:	incbin	"Palettes\Cycle - Special Stage 1.bin"
-		even
-Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
-		even
-
-		include "Includes\GM_Continue.asm"
-
+		include	"Zones & Characters.asm"
+		
 		include "Objects\Continue Screen Items.asm"	; ContScrItem
 		include "Objects\Continue Screen Sonic.asm"	; ContSonic
-
-		include "Includes\GM_Ending.asm"
 
 		include "Objects\Ending Sonic.asm"		; EndSonic
 		include "Objects\Ending Chaos Emeralds.asm"	; EndChaos
 		include "Objects\Ending StH Text.asm"		; EndSTH
-
-		include "Includes\GM_Credits.asm"
-		include "Includes\GM_TryAgain.asm"
-
 		include "Objects\Ending Eggman Try Again.asm"	; EndEggman
 		include "Objects\Ending Chaos Emeralds Try Again.asm" ; TryChaos
-
-		include	"Includes\LevelParameterLoad.asm"
-		include	"Includes\DeformLayers.asm"
-		include	"Includes\DrawTilesWhenMoving, DrawTilesAtStart & DrawChunks.asm"
-
-		include	"Zones & Characters.asm"
-		include "Includes\LevelDataLoad, LevelLayoutLoad & LevelHeaders.asm"
-		include "Includes\DynamicLevelEvents.asm"
 
 		include "Objects\GHZ Bridge.asm"		; Bridge
 		include "Objects\GHZ, MZ & SLZ Swinging Platforms, SBZ Ball on Chain.asm" ; SwingingPlatform
@@ -358,16 +290,11 @@ Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 		include "Objects\GHZ & SLZ Smashable Walls.asm"	; SmashWall
 		include "Objects\_Shatter & Crumble.asm"
 
-		include "Includes\ExecuteObjects.asm"
-
 		include "Objects\_ObjectFall & SpeedToPos.asm"
 		include "Objects\_DisplaySprite.asm"
 		include "Objects\_DeleteObject & DeleteChild.asm"
-
-		include "Includes\BuildSprites.asm"
 		include "Objects\_CheckOffScreen.asm"
 
-		include "Includes\ObjPosLoad.asm"
 		include "Objects\_FindFreeObj & FindNextFreeObj.asm"
 		include "Objects\_FindNearestObj.asm"
 
@@ -522,18 +449,12 @@ Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 		include "Objects\SBZ2 Eggman.asm"		; ScrapEggman
 
 		include "Objects\FZ Boss.asm"			; BossFinal
-
 		include "Objects\FZ Cylinders.asm"		; EggmanCylinder
-
 		include "Objects\FZ Plasma Balls.asm"		; BossPlasma
 
 		include "Objects\Prison Capsule.asm"		; Prison
 
 		include "Objects\Special Stage Sonic.asm"	; SonicSpecial
-
-		include "Includes\AnimateLevelGfx.asm"
-
-		include "Objects\_AddPoints.asm"
 
 ; ---------------------------------------------------------------------------
 ; Uncompressed graphics	- HUD and lives counter
@@ -555,6 +476,7 @@ Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 		incfile	Kos_TitleSonic,"Graphics Kosinski\Title Screen Sonic",kos
 		incfile	Kos_TitleTM,"Graphics Kosinski\Title Screen TM",kos
 		incfile	Kos_JapNames,"Graphics Kosinski\Hidden Japanese Credits",kos
+		incfile	Kos_Text,"Graphics Kosinski\Level Select Text",kos
 
 		include "Objects\Sonic [Mappings].asm"		; Map_Sonic
 		include "Objects\Sonic DPLCs.asm"		; SonicDynPLC
@@ -1247,6 +1169,65 @@ ObjPosSBZPlatform_Index:
 		include	"Object Placement\Ending.asm"
 ObjPos_Null:	endobj
 
+; ---------------------------------------------------------------------------
+; Palettes
+; ---------------------------------------------------------------------------
+		incfile	Pal_SegaBG,"Palettes\Sega Background",bin
+		incfile	Pal_HidCred,"Palettes\Hidden Credits",bin
+		incfile	Pal_Title,"Palettes\Title Screen",bin
+		incfile	Pal_LevelSel,"Palettes\Level Select",bin
+		incfile	Pal_Sonic,"Palettes\Sonic",bin
+		incfile	Pal_SonicRed,"Palettes\Sonic Red",bin
+		incfile	Pal_SonicYellow,"Palettes\Sonic Yellow",bin
+		incfile	Pal_GHZ,"Palettes\Green Hill Zone",bin
+		incfile	Pal_LZ,"Palettes\Labyrinth Zone",bin
+		incfile	Pal_MZ,"Palettes\Marble Zone",bin
+		incfile	Pal_SLZ,"Palettes\Star Light Zone",bin
+		incfile	Pal_SYZ,"Palettes\Spring Yard Zone",bin
+		incfile	Pal_SBZ1,"Palettes\SBZ Act 1",bin
+		incfile	Pal_SBZ2,"Palettes\SBZ Act 2",bin
+		incfile	Pal_Special,"Palettes\Special Stage",bin
+		incfile	Pal_SBZ3,"Palettes\SBZ Act 3",bin
+		incfile	Pal_SSResult,"Palettes\Special Stage Results",bin
+		incfile	Pal_Continue,"Palettes\Special Stage Continue Bonus",bin
+		incfile	Pal_Ending,"Palettes\Ending",bin
+		
+		incfile	Pal_TitleCyc,"Palettes\Cycle - Title Screen Water",bin
+		incfile	Pal_GHZCyc,"Palettes\Cycle - GHZ",bin
+		incfile	Pal_LZCyc1,"Palettes\Cycle - LZ Waterfall",bin
+		incfile	Pal_LZCyc2,"Palettes\Cycle - LZ Conveyor Belt",bin
+		incfile	Pal_LZCyc3,"Palettes\Cycle - LZ Conveyor Belt Underwater",bin
+		incfile	Pal_SBZ3Cyc1,"Palettes\Cycle - SBZ3 Waterfall",bin
+		incfile	Pal_SLZCyc,"Palettes\Cycle - SLZ",bin
+		incfile	Pal_SYZCyc1,"Palettes\Cycle - SYZ1",bin
+		incfile	Pal_SYZCyc2,"Palettes\Cycle - SYZ2",bin
+		incfile	Pal_SBZCyc1,"Palettes\Cycle - SBZ 1",bin
+		incfile	Pal_SBZCyc2,"Palettes\Cycle - SBZ 2",bin
+		incfile	Pal_SBZCyc3,"Palettes\Cycle - SBZ 3",bin
+		incfile	Pal_SBZCyc4,"Palettes\Cycle - SBZ 4",bin
+		incfile	Pal_SBZCyc5,"Palettes\Cycle - SBZ 5",bin
+		incfile	Pal_SBZCyc6,"Palettes\Cycle - SBZ 6",bin
+		incfile	Pal_SBZCyc7,"Palettes\Cycle - SBZ 7",bin
+		incfile	Pal_SBZCyc8,"Palettes\Cycle - SBZ 8",bin
+		incfile	Pal_SBZCyc9,"Palettes\Cycle - SBZ 9",bin
+		incfile	Pal_SBZCyc10,"Palettes\Cycle - SBZ 10",bin
+
+; ---------------------------------------------------------------------------
+; Demo data
+; ---------------------------------------------------------------------------
+		incfile	Demo_GHZ,"Demos\Intro - GHZ",bin
+		incfile	Demo_MZ,"Demos\Intro - MZ",bin
+		incfile	Demo_SYZ,"Demos\Intro - SYZ",bin
+		incfile	Demo_SS,"Demos\Intro - Special Stage",bin
+		incfile	Demo_EndGHZ1,"Demos\Ending - GHZ1",bin
+		incfile	Demo_EndMZ,"Demos\Ending - MZ",bin
+		incfile	Demo_EndSYZ,"Demos\Ending - SYZ",bin
+		incfile	Demo_EndLZ,"Demos\Ending - LZ",bin
+		incfile	Demo_EndSLZ,"Demos\Ending - SLZ",bin
+		incfile	Demo_EndSBZ1,"Demos\Ending - SBZ1",bin
+		incfile	Demo_EndSBZ2,"Demos\Ending - SBZ2",bin
+		incfile	Demo_EndGHZ2,"Demos\Ending - GHZ2",bin
+		
 ; ---------------------------------------------------------------------------
 ; Sound driver data
 ; ---------------------------------------------------------------------------

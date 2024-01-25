@@ -122,7 +122,7 @@ BGHZ_Update:
 
 .beaten:
 		moveq	#100,d0
-		bsr.w	AddPoints				; give Sonic 1000 points
+		jsr	(AddPoints).w				; give Sonic 1000 points
 		move.b	#id_BGHZ_Explode,ost_mode(a0)
 		move.w	#179,ost_boss_wait_time(a0)		; set timer to 3 seconds
 		rts

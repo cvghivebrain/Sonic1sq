@@ -49,7 +49,7 @@ Bonus_Main:	; Routine 0
 		add.w	d0,d0
 		lea	Bonus_Points(pc,d0.w),a2
 		move.w	(a2)+,d0				; load bonus points from array
-		jsr	(AddPoints).l				; add points and update HUD
+		jsr	(AddPoints).w				; add points and update HUD
 		move.w	(a2),ost_frame_hi(a0)
 		move.w	#119,ost_bonus_wait_time(a0)		; set display time to 2 seconds
 		play.w	1, jsr, sfx_Bonus			; play bonus sound

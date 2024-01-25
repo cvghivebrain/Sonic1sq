@@ -74,7 +74,7 @@ Smab_Points:
 		add.w	d2,d2
 		lea	Smab_PointList(pc,d2.w),a2
 		move.w	(a2)+,d0				; get points amount from list
-		jsr	(AddPoints).l				; give points
+		jsr	(AddPoints).w				; give points
 		move.w	(a2),ost_frame_hi(a1)
 		
 	.fail:
