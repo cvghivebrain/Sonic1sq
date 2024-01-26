@@ -18,7 +18,7 @@ LevelLayoutLoad:
 		lea	(v_level_layout).w,a3			; RAM address for level layout
 		moveq	#0,d1
 		bsr.w	LevelLayoutLoad2			; load level layout into RAM
-		lea	(v_level_layout+level_max_width).w,a3	; RAM address for background layout
+		lea	(v_bg_layout).w,a3			; RAM address for background layout
 		moveq	#2,d1
 
 ; "LevelLayoutLoad2" is	run twice - for	the level and the background

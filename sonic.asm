@@ -456,9 +456,6 @@ Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 
 		include "Objects\Special Stage Sonic.asm"	; SonicSpecial
 
-; ---------------------------------------------------------------------------
-; Uncompressed graphics	- HUD and lives counter
-; ---------------------------------------------------------------------------
 		include "Objects\_DebugMode.asm"
 
 		include "Objects\Title Cards.asm"		; TitleCard
@@ -960,7 +957,7 @@ Level_SLZ_unused:	dc.b 0,	0, 0, 0
 
 Level_SYZ1:	incbin	"Level Layouts\syz1.bin"
 		even
-Level_SYZ_bg:	incbin	"Level Layouts\syzbg (JP1).bin"
+Level_SYZ_bg:	incbin	"Level Layouts\syzbg.bin"
 		even
 Level_SYZ1_unused:	dc.b 0,	0, 0, 0
 Level_SYZ2:	incbin	"Level Layouts\syz2.bin"

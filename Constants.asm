@@ -18,10 +18,14 @@ sizeof_dma:		equ 14					; size of one DMA command
 countof_dma:		equ 28					; number of DMA slots in queue
 sizeof_slowplc_buffer:	equ $1000				; size of buffer for SlowPLC
 
-level_max_width:	equ $40
+level_max_width:	equ $80
 level_max_height:	equ 8
-sizeof_levelrow:	equ level_max_width*2			; level row, followed by background row
-sizeof_level:		equ sizeof_levelrow*level_max_height	; includes background in $40 byte alternating strips
+sizeof_levelrow:	equ level_max_width
+sizeof_level:		equ sizeof_levelrow*level_max_height
+bg_max_width:		equ $80
+bg_max_height:		equ 8
+sizeof_bgrow:		equ bg_max_width
+sizeof_bg:		equ sizeof_bgrow*bg_max_height
 
 screen_width:		equ 320
 screen_height:		equ 224

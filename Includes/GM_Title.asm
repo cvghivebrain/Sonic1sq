@@ -53,7 +53,7 @@ GM_Title:
 		bsr.w	ClearScreen
 		lea	(vdp_control_port).l,a6
 		lea	(v_bg1_x_pos).w,a3
-		lea	(v_level_layout+level_max_width).w,a4	; background layout start address ($FFFFA440)
+		lea	(v_bg_layout).w,a4			; background layout start address
 		move.w	#draw_bg,d2
 		bsr.w	DrawChunks				; draw background
 

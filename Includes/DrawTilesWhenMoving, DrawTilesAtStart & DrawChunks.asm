@@ -12,7 +12,7 @@ DrawTilesWhenMoving_BGOnly:
 		lea	(vdp_control_port).l,a6
 		lea	(v_bg1_redraw_direction).w,a2
 		lea	(v_bg1_x_pos).w,a3
-		lea	(v_level_layout+level_max_width).w,a4	; first row of bg layout (fg/bg are stored in alternating rows)
+		lea	(v_bg_layout).w,a4			; first row of bg layout
 		move.w	#draw_bg,d2				; value added to base VRAM address to get bg nametable
 		bsr.w	DrawBGScrollBlock1
 		lea	(v_bg2_redraw_direction).w,a2
@@ -26,7 +26,7 @@ DrawTilesWhenMoving:
 		; Background
 		lea	(v_bg1_redraw_direction_copy).w,a2
 		lea	(v_bg1_x_pos_copy).w,a3
-		lea	(v_level_layout+level_max_width).w,a4	; first row of bg layout
+		lea	(v_bg_layout).w,a4			; first row of bg layout
 		move.w	#draw_bg,d2				; value added to base VRAM address to get bg nametable
 		bsr.w	DrawBGScrollBlock1
 		lea	(v_bg2_redraw_direction_copy).w,a2
@@ -647,7 +647,7 @@ DrawTilesAtStart:
 		move.w	#draw_fg,d2
 		bsr.s	DrawChunks
 		lea	(v_bg1_x_pos).w,a3
-		lea	(v_level_layout+level_max_width).w,a4
+		lea	(v_bg_layout).w,a4
 		move.w	#draw_bg,d2
 		tst.b	(v_zone).w
 		beq.w	DrawTilesAtStart_GHZ			; branch if GHZ
