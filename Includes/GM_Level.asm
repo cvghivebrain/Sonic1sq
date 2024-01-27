@@ -82,7 +82,6 @@ Level_Skip_TtlCard:
 		bsr.w	LevelParameterLoad			; load level boundaries and start positions
 		bsr.w	DeformLayers
 		bset	#redraw_left_bit,(v_fg_redraw_direction).w
-		bsr.w	LevelDataLoad				; load block mappings and palettes
 		bsr.w	DrawTilesAtStart
 		jsr	(ConvertCollisionArray).l
 		bsr.w	LZWaterFeatures

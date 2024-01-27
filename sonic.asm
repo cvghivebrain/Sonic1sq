@@ -182,6 +182,7 @@ Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 		include "DMA & PLCs\DMA.asm"
 		include "Includes\Kosinski Decompression.asm"
 		include "Includes\AnimateLevelGfx.asm"
+		include "Includes\HiveDec.asm"
 
 		include	"Includes\PaletteCycle.asm"
 		include	"Includes\PaletteFadeIn, PaletteFadeOut & PaletteWhiteOut.asm"
@@ -194,7 +195,6 @@ Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 		include	"Includes\LevelParameterLoad.asm"
 		include	"Includes\DeformLayers.asm"
 		include	"Includes\DrawTilesWhenMoving, DrawTilesAtStart & DrawChunks.asm"
-		include "Includes\LevelDataLoad, LevelLayoutLoad & LevelHeaders.asm"
 		include "Includes\DynamicLevelEvents.asm"
 		include "Includes\ExecuteObjects.asm"
 		include "Includes\BuildSprites.asm"
@@ -776,212 +776,6 @@ Col_SBZ:	incbin	"Collision\SBZ.bin"			; SBZ index
 		incfile	Art_MzLava2,"Graphics\MZ Lava",bin,dma_safe
 		incfile	Art_MzTorch,"Graphics\MZ Background Torch",bin,dma_safe
 		incfile	Art_SbzSmoke,"Graphics\SBZ Background Smoke",bin,dma_safe
-
-; ---------------------------------------------------------------------------
-; Level	layout index
-; ---------------------------------------------------------------------------
-Level_Index:	index *
-		; GHZ
-		ptr Level_GHZ1
-		ptr Level_GHZ_bg
-		ptr Level_GHZ1_unused
-
-		ptr Level_GHZ2
-		ptr Level_GHZ_bg
-		ptr Level_GHZ2_unused
-
-		ptr Level_GHZ3
-		ptr Level_GHZ_bg
-		ptr Level_GHZ3_unused
-
-		ptr Level_GHZ4_unused
-		ptr Level_GHZ4_unused
-		ptr Level_GHZ4_unused
-
-		; LZ
-		ptr Level_LZ1
-		ptr Level_LZ_bg
-		ptr Level_LZ1_unused
-
-		ptr Level_LZ2
-		ptr Level_LZ_bg
-		ptr Level_LZ2_unused
-
-		ptr Level_LZ3
-		ptr Level_LZ_bg
-		ptr Level_LZ3_unused
-
-		ptr Level_SBZ3
-		ptr Level_LZ_bg
-		ptr Level_SBZ3_unused
-
-		; MZ
-		ptr Level_MZ1
-		ptr Level_MZ1bg
-		ptr Level_MZ1
-
-		ptr Level_MZ2
-		ptr Level_MZ2bg
-		ptr Level_MZ2_unused
-
-		ptr Level_MZ3
-		ptr Level_MZ3bg
-		ptr Level_MZ3_unused
-
-		ptr Level_MZ4_unused
-		ptr Level_MZ4_unused
-		ptr Level_MZ4_unused
-
-		; SLZ
-		ptr Level_SLZ1
-		ptr Level_SLZ_bg
-		ptr Level_SLZ_unused
-
-		ptr Level_SLZ2
-		ptr Level_SLZ_bg
-		ptr Level_SLZ_unused
-
-		ptr Level_SLZ3
-		ptr Level_SLZ_bg
-		ptr Level_SLZ_unused
-
-		ptr Level_SLZ_unused
-		ptr Level_SLZ_unused
-		ptr Level_SLZ_unused
-
-		; SYZ
-		ptr Level_SYZ1
-		ptr Level_SYZ_bg
-		ptr Level_SYZ1_unused
-
-		ptr Level_SYZ2
-		ptr Level_SYZ_bg
-		ptr Level_SYZ2_unused
-
-		ptr Level_SYZ3
-		ptr Level_SYZ_bg
-		ptr Level_SYZ3_unused
-
-		ptr Level_SYZ4_unused
-		ptr Level_SYZ4_unused
-		ptr Level_SYZ4_unused
-
-		; SBZ
-		ptr Level_SBZ1
-		ptr Level_SBZ1bg
-		ptr Level_SBZ1bg
-
-		ptr Level_SBZ2
-		ptr Level_SBZ2bg
-		ptr Level_SBZ2bg
-
-		; FZ
-		ptr Level_SBZ2
-		ptr Level_SBZ2bg
-		ptr Level_SBZ2_unused
-
-		ptr Level_SBZ4_unused
-		ptr Level_SBZ4_unused
-		ptr Level_SBZ4_unused
-
-		; Ending
-		ptr Level_End
-		ptr Level_GHZ_bg
-		ptr Level_End_unused
-
-		ptr Level_End
-		ptr Level_GHZ_bg
-		ptr Level_End_unused
-
-		ptr Level_End_unused
-		ptr Level_End_unused
-		ptr Level_End_unused
-
-		ptr Level_End_unused
-		ptr Level_End_unused
-		ptr Level_End_unused
-
-Level_GHZ1:	incbin	"Level Layouts\ghz1.bin"
-		even
-Level_GHZ1_unused:	dc.b 0,	0, 0, 0
-Level_GHZ2:	incbin	"Level Layouts\ghz2.bin"
-		even
-Level_GHZ2_unused:	dc.b 0,	0, 0, 0
-Level_GHZ3:	incbin	"Level Layouts\ghz3.bin"
-		even
-Level_GHZ_bg:	incbin	"Level Layouts\ghzbg.bin"
-		even
-Level_GHZ3_unused:	dc.b 0,	0, 0, 0
-Level_GHZ4_unused:	dc.b 0,	0, 0, 0
-
-Level_LZ1:	incbin	"Level Layouts\lz1.bin"
-		even
-Level_LZ_bg:	incbin	"Level Layouts\lzbg.bin"
-		even
-Level_LZ1_unused:	dc.b 0,	0, 0, 0
-Level_LZ2:	incbin	"Level Layouts\lz2.bin"
-		even
-Level_LZ2_unused:	dc.b 0,	0, 0, 0
-Level_LZ3:	incbin	"Level Layouts\lz3.bin"
-		even
-Level_LZ3_unused:	dc.b 0,	0, 0, 0
-Level_SBZ3:	incbin	"Level Layouts\sbz3.bin"
-		even
-Level_SBZ3_unused:	dc.b 0,	0, 0, 0
-
-Level_MZ1:	incbin	"Level Layouts\mz1.bin"
-		even
-Level_MZ1bg:	incbin	"Level Layouts\mz1bg.bin"
-		even
-Level_MZ2:	incbin	"Level Layouts\mz2.bin"
-		even
-Level_MZ2bg:	incbin	"Level Layouts\mz2bg.bin"
-		even
-Level_MZ2_unused:	dc.b 0,	0, 0, 0
-Level_MZ3:	incbin	"Level Layouts\mz3.bin"
-		even
-Level_MZ3bg:	incbin	"Level Layouts\mz3bg.bin"
-		even
-Level_MZ3_unused:	dc.b 0,	0, 0, 0
-Level_MZ4_unused:	dc.b 0,	0, 0, 0
-
-Level_SLZ1:	incbin	"Level Layouts\slz1.bin"
-		even
-Level_SLZ_bg:	incbin	"Level Layouts\slzbg.bin"
-		even
-Level_SLZ2:	incbin	"Level Layouts\slz2.bin"
-		even
-Level_SLZ3:	incbin	"Level Layouts\slz3.bin"
-		even
-Level_SLZ_unused:	dc.b 0,	0, 0, 0
-
-Level_SYZ1:	incbin	"Level Layouts\syz1.bin"
-		even
-Level_SYZ_bg:	incbin	"Level Layouts\syzbg.bin"
-		even
-Level_SYZ1_unused:	dc.b 0,	0, 0, 0
-Level_SYZ2:	incbin	"Level Layouts\syz2.bin"
-		even
-Level_SYZ2_unused:	dc.b 0,	0, 0, 0
-Level_SYZ3:	incbin	"Level Layouts\syz3.bin"
-		even
-Level_SYZ3_unused:	dc.b 0,	0, 0, 0
-Level_SYZ4_unused:	dc.b 0,	0, 0, 0
-
-Level_SBZ1:	incbin	"Level Layouts\sbz1.bin"
-		even
-Level_SBZ1bg:	incbin	"Level Layouts\sbz1bg.bin"
-		even
-Level_SBZ2:	incbin	"Level Layouts\sbz2.bin"
-		even
-Level_SBZ2bg:	incbin	"Level Layouts\sbz2bg.bin"
-		even
-Level_SBZ2_unused:	dc.b 0,	0, 0, 0
-Level_SBZ4_unused:	dc.b 0,	0, 0, 0
-Level_End:	incbin	"Level Layouts\ending.bin"
-		even
-Level_End_unused:	dc.b 0,	0, 0, 0
-
 		incfile	Art_BigRing,"Graphics\Giant Ring",bin,dma_safe
 
 		include "DMA & PLCs\KosPLC.asm"
@@ -1118,6 +912,38 @@ Level_End_unused:	dc.b 0,	0, 0, 0
 		include "Objects\Unused Special Stage Warp [Mappings].asm" ; Map_Vanish
 		include "Objects\Credits & Sonic Team Presents [Mappings].asm" ; Map_Cred
 
+; ---------------------------------------------------------------------------
+; Level	layouts
+; ---------------------------------------------------------------------------
+		incfile	Level_GHZ1,"Level Layouts\ghz1",hrl
+		incfile	Level_GHZ2,"Level Layouts\ghz2",hrl
+		incfile	Level_GHZ3,"Level Layouts\ghz3",hrl
+		incfile	Level_GHZ_bg,"Level Layouts\ghzbg",hrl
+		incfile	Level_LZ1,"Level Layouts\lz1",hrl
+		incfile	Level_LZ_bg,"Level Layouts\lzbg",hrl
+		incfile	Level_LZ2,"Level Layouts\lz2",hrl
+		incfile	Level_LZ3,"Level Layouts\lz3",hrl
+		incfile	Level_SBZ3,"Level Layouts\sbz3",hrl
+		incfile	Level_MZ1,"Level Layouts\mz1",hrl
+		incfile	Level_MZ1_bg,"Level Layouts\mz1bg",hrl
+		incfile	Level_MZ2,"Level Layouts\mz2",hrl
+		incfile	Level_MZ2_bg,"Level Layouts\mz2bg",hrl
+		incfile	Level_MZ3,"Level Layouts\mz3",hrl
+		incfile	Level_MZ3_bg,"Level Layouts\mz3bg",hrl
+		incfile	Level_SLZ1,"Level Layouts\slz1",hrl
+		incfile	Level_SLZ_bg,"Level Layouts\slzbg",hrl
+		incfile	Level_SLZ2,"Level Layouts\slz2",hrl
+		incfile	Level_SLZ3,"Level Layouts\slz3",hrl
+		incfile	Level_SYZ1,"Level Layouts\syz1",hrl
+		incfile	Level_SYZ_bg,"Level Layouts\syzbg",hrl
+		incfile	Level_SYZ2,"Level Layouts\syz2",hrl
+		incfile	Level_SYZ3,"Level Layouts\syz3",hrl
+		incfile	Level_SBZ1,"Level Layouts\sbz1",hrl
+		incfile	Level_SBZ1_bg,"Level Layouts\sbz1bg",hrl
+		incfile	Level_SBZ2,"Level Layouts\sbz2",hrl
+		incfile	Level_SBZ2_bg,"Level Layouts\sbz2bg",hrl
+		incfile	Level_End,"Level Layouts\ending",hrl
+		
 ; ---------------------------------------------------------------------------
 ; Object position index
 ; ---------------------------------------------------------------------------

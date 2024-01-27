@@ -59,6 +59,19 @@ LoadPerZone:
 
 		movea.l	(a4)+,a1				; get pointer for OPL list
 		move.l	(a1,d4.w),(v_opl_data_ptr).w		; get pointer for actual OPL data
+		
+		movea.l	(a4)+,a1				; get pointer for level layout list
+		movea.l	(a1,d4.w),a1				; get pointer for actual level layout
+		lea	(v_level_layout).w,a2
+		pushr	d1/a4
+		bsr.w	HiveDec					; load level layout
+		popr	d1/a4
+		movea.l	(a4)+,a1				; get pointer for bg layout list
+		movea.l	(a1,d4.w),a1				; get pointer for actual bg layout
+		lea	(v_bg_layout).w,a2
+		pushr	d1/a4
+		bsr.w	HiveDec					; load bg layout
+		popr	d1/a4
 
 		movea.l	(a4)+,a1				; get pointer for music list
 		move.b	(a1,d1.w),(v_bgm).w			; set music id
@@ -120,6 +133,8 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Filter_LZ				; water filter id list (act specific)
 		dc.l Zone_WHeight_LZ				; water height list (act specific)
 		dc.l Zone_OPL_GHZ				; object position list (act specific)
+		dc.l Zone_Layout_GHZ				; level layout list (act specific)
+		dc.l Zone_BG_GHZ				; bg layout list (act specific)
 		dc.l Zone_Music_GHZ				; background music id list (act specific)
 		dc.l AniArt_GHZ					; animated level art routine
 		dc.l Zone_Bound_GHZ				; level boundary list (act specific)
@@ -146,6 +161,8 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Filter_LZ
 		dc.l Zone_WHeight_LZ
 		dc.l Zone_OPL_LZ
+		dc.l Zone_Layout_LZ
+		dc.l Zone_BG_LZ
 		dc.l Zone_Music_LZ
 		dc.l AniArt_none
 		dc.l Zone_Bound_LZ
@@ -171,6 +188,8 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Filter_LZ
 		dc.l Zone_WHeight_LZ
 		dc.l Zone_OPL_MZ
+		dc.l Zone_Layout_MZ
+		dc.l Zone_BG_MZ
 		dc.l Zone_Music_MZ
 		dc.l AniArt_MZ
 		dc.l Zone_Bound_MZ
@@ -196,6 +215,8 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Filter_LZ
 		dc.l Zone_WHeight_LZ
 		dc.l Zone_OPL_SLZ
+		dc.l Zone_Layout_SLZ
+		dc.l Zone_BG_SLZ
 		dc.l Zone_Music_SLZ
 		dc.l AniArt_none
 		dc.l Zone_Bound_SLZ
@@ -221,6 +242,8 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Filter_LZ
 		dc.l Zone_WHeight_LZ
 		dc.l Zone_OPL_SYZ
+		dc.l Zone_Layout_SYZ
+		dc.l Zone_BG_SYZ
 		dc.l Zone_Music_SYZ
 		dc.l AniArt_none
 		dc.l Zone_Bound_SYZ
@@ -246,6 +269,8 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Filter_LZ
 		dc.l Zone_WHeight_LZ
 		dc.l Zone_OPL_SBZ
+		dc.l Zone_Layout_SBZ
+		dc.l Zone_BG_SBZ
 		dc.l Zone_Music_SBZ
 		dc.l AniArt_SBZ
 		dc.l Zone_Bound_SBZ
@@ -271,6 +296,8 @@ ZoneDefs:	; Green Hill Zone
 		dc.l Zone_Filter_LZ
 		dc.l Zone_WHeight_LZ
 		dc.l Zone_OPL_End
+		dc.l Zone_Layout_End
+		dc.l Zone_BG_End
 		dc.l Zone_Music_End
 		dc.l AniArt_Ending
 		dc.l Zone_Bound_End
@@ -344,6 +371,26 @@ Zone_OPL_LZ:	dc.l ObjPos_LZ1,ObjPos_LZ2,ObjPos_LZ3,ObjPos_SBZ3
 Zone_OPL_SLZ:	dc.l ObjPos_SLZ1,ObjPos_SLZ2,ObjPos_SLZ3
 Zone_OPL_SBZ:	dc.l ObjPos_SBZ1,ObjPos_SBZ2,ObjPos_FZ
 Zone_OPL_End:	dc.l ObjPos_Ending,ObjPos_Ending
+
+; ---------------------------------------------------------------------------
+; Level layout list pointers
+; ---------------------------------------------------------------------------
+
+Zone_Layout_GHZ:	dc.l Level_GHZ1,Level_GHZ2,Level_GHZ3
+Zone_Layout_MZ:		dc.l Level_MZ1,Level_MZ2,Level_MZ3
+Zone_Layout_SYZ:	dc.l Level_SYZ1,Level_SYZ2,Level_SYZ3
+Zone_Layout_LZ:		dc.l Level_LZ1,Level_LZ2,Level_LZ3,Level_SBZ3
+Zone_Layout_SLZ:	dc.l Level_SLZ1,Level_SLZ2,Level_SLZ3
+Zone_Layout_SBZ:	dc.l Level_SBZ1,Level_SBZ2,Level_SBZ2
+Zone_Layout_End:	dc.l Level_End,Level_End
+
+Zone_BG_GHZ:		dc.l Level_GHZ_bg,Level_GHZ_bg,Level_GHZ_bg
+Zone_BG_MZ:		dc.l Level_MZ1_bg,Level_MZ2_bg,Level_MZ3_bg
+Zone_BG_SYZ:		dc.l Level_SYZ_bg,Level_SYZ_bg,Level_SYZ_bg
+Zone_BG_LZ:		dc.l Level_LZ_bg,Level_LZ_bg,Level_LZ_bg,Level_LZ_bg
+Zone_BG_SLZ:		dc.l Level_SLZ_bg,Level_SLZ_bg,Level_SLZ_bg
+Zone_BG_SBZ:		dc.l Level_SBZ1_bg,Level_SBZ2_bg,Level_SBZ2_bg
+Zone_BG_End:		dc.l Level_GHZ_bg,Level_GHZ_bg
 
 ; ---------------------------------------------------------------------------
 ; Background music ids

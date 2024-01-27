@@ -48,7 +48,9 @@ GM_Title:
 		bsr.w	LoadPerZone				; this must go after KosPLC
 		bsr.w	LevelParameterLoad			; set level boundaries and Sonic's start position
 		bsr.w	DeformLayers
-		bsr.w	LevelLayoutLoad				; load GHZ1 level layout including background
+		lea	Level_GHZ_bg,a1
+		lea	(v_bg_layout).w,a2
+		bsr.w	HiveDec					; load GHZ background
 		disable_ints
 		bsr.w	ClearScreen
 		lea	(vdp_control_port).l,a6
