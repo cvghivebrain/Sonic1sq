@@ -7,20 +7,20 @@
 DeformLayers:
 		tst.b	(f_disable_scrolling).w			; is scrolling disabled?
 		beq.s	.bgscroll				; if not, branch
-		rts	
+		rts
 ; ===========================================================================
 
 	.bgscroll:
-		clr.w	(v_fg_redraw_direction).w		; clear all redraw flags
-		clr.w	(v_bg1_redraw_direction).w
-		clr.w	(v_bg2_redraw_direction).w
-		clr.w	(v_bg3_redraw_direction).w
+		moveq	#0,d0
+		move.w	d0,(v_fg_redraw_direction).w		; clear all redraw flags
+		move.l	d0,(v_bg1_redraw_direction).w		; (also clears v_bg2_redraw_direction)
+		move.w	d0,(v_bg3_redraw_direction).w
 		bsr.w	UpdateCamera_X				; update camera position & redraw flags
 		bsr.w	UpdateCamera_Y
 		bsr.w	DynamicLevelEvents			; update level boundaries, load bosses etc.
 		move.w	(v_camera_y_pos).w,(v_fg_y_pos_vsram).w	; v_fg_y_pos_vsram is sent to VSRAM during VBlank
 		move.w	(v_bg1_y_pos).w,(v_bg_y_pos_vsram).w
-		
+
 		movea.l	(v_deformlayer_ptr).w,a1
 		jmp	(a1)
 
@@ -75,7 +75,7 @@ Deform_GHZ:
 		move.w	(v_bgscroll_buffer).w,d0		; get autoscroll position of upper cloud
 		add.w	(v_bg3_x_pos).w,d0			; add current bg position
 		neg.w	d0					; reverse
-		move.w	#32-1,d1
+		moveq	#32-1,d1
 		sub.w	d4,d1
 		bcs.s	.gotoCloud2
 	.cloudLoop1:						; upper cloud (32px)
@@ -86,7 +86,7 @@ Deform_GHZ:
 		move.w	(v_bgscroll_buffer+4).w,d0		; get autoscroll position of middle cloud
 		add.w	(v_bg3_x_pos).w,d0			; add current bg position
 		neg.w	d0					; reverse
-		move.w	#16-1,d1
+		moveq	#16-1,d1
 	.cloudLoop2:						; middle cloud (16px)
 		move.l	d0,(a1)+				; write to v_hscroll_buffer
 		dbf	d1,.cloudLoop2
@@ -94,13 +94,13 @@ Deform_GHZ:
 		move.w	(v_bgscroll_buffer+8).w,d0		; get autoscroll position of lower cloud
 		add.w	(v_bg3_x_pos).w,d0			; add current bg position
 		neg.w	d0					; reverse
-		move.w	#16-1,d1
+		moveq	#16-1,d1
 	.cloudLoop3:						; lower cloud (16px)
 		move.l	d0,(a1)+				; write to v_hscroll_buffer
 		dbf	d1,.cloudLoop3
 
 		; mountains
-		move.w	#48-1,d1
+		moveq	#48-1,d1
 		move.w	(v_bg3_x_pos).w,d0
 		neg.w	d0
 	.mountainLoop:						; distant mountains (48px)
@@ -108,7 +108,7 @@ Deform_GHZ:
 		dbf	d1,.mountainLoop
 
 		; hills and waterfalls
-		move.w	#40-1,d1
+		moveq	#40-1,d1
 		move.w	(v_bg2_x_pos).w,d0
 		neg.w	d0
 	.hillLoop:						; hills & waterfalls (40px)
@@ -126,7 +126,7 @@ Deform_GHZ:
 		asl.l	#8,d2
 		moveq	#0,d3
 		move.w	d0,d3
-		move.w	#72-1,d1
+		moveq	#72-1,d1
 		add.w	d4,d1
 	.waterLoop:
 		move.w	d3,d0
@@ -182,7 +182,7 @@ Deform_LZ:
 		move.w	(v_camera_y_pos).w,d5
 
 		; write normal scroll before meeting water position
-	.normalLoop:		
+	.normalLoop:
 		cmp.w	d4,d5					; is current scanline at or below actual water y pos?
 		bge.s	.underwaterLoop				; if yes, branch
 		move.l	d0,(a1)+				; write to v_hscroll_buffer without ripple effect
@@ -284,8 +284,8 @@ Deform_MZ:
 		moveq	#0,d3
 		move.w	d2,d3
 		asr.w	#1,d3
-		move.w	#4,d1
-	.cloudLoop:		
+		moveq	#5-1,d1
+	.cloudLoop:
 		move.w	d3,(a1)+
 		swap	d3
 		add.l	d0,d3
@@ -294,22 +294,22 @@ Deform_MZ:
 
 		move.w	(v_bg3_x_pos).w,d0
 		neg.w	d0
-		move.w	#1,d1
-	.mountainLoop:		
+		moveq	#2-1,d1
+	.mountainLoop:
 		move.w	d0,(a1)+
 		dbf	d1,.mountainLoop
 
 		move.w	(v_bg2_x_pos).w,d0
 		neg.w	d0
-		move.w	#8,d1
-	.bushLoop:		
+		moveq	#9-1,d1
+	.bushLoop:
 		move.w	d0,(a1)+
 		dbf	d1,.bushLoop
 
 		move.w	(v_bg1_x_pos).w,d0
 		neg.w	d0
-		move.w	#$F,d1
-	.interiorLoop:		
+		moveq	#16-1,d1
+	.interiorLoop:
 		move.w	d0,(a1)+
 		dbf	d1,.interiorLoop
 
@@ -354,8 +354,8 @@ Deform_SLZ_2:
 		asl.l	#8,d0
 		moveq	#0,d3
 		move.w	d2,d3
-		move.w	#28-1,d1
-	.starLoop:		
+		moveq	#28-1,d1
+	.starLoop:
 		move.w	d3,(a1)+
 		swap	d3
 		add.l	d0,d3
@@ -367,21 +367,21 @@ Deform_SLZ_2:
 		move.w	d0,d1
 		asr.w	#1,d1
 		add.w	d1,d0
-		move.w	#4,d1
+		moveq	#5-1,d1
 	.buildingLoop1:						; distant black buildings
 		move.w	d0,(a1)+
 		dbf	d1,.buildingLoop1
 
 		move.w	d2,d0
 		asr.w	#2,d0
-		move.w	#4,d1
+		moveq	#5-1,d1
 	.buildingLoop2:						; closer buildings
 		move.w	d0,(a1)+
 		dbf	d1,.buildingLoop2
 
 		move.w	d2,d0
 		asr.w	#1,d0
-		move.w	#30-1,d1
+		moveq	#30-1,d1
 	.bottomLoop:						; bottom part of background
 		move.w	d0,(a1)+
 		dbf	d1,.bottomLoop
@@ -407,7 +407,7 @@ Deform_SLZ_2:
 
 UpdateHscrollBuffer:
 		lea	(v_hscroll_buffer).w,a1
-		move.w	#$E,d1
+		moveq	#15-1,d1
 		move.w	(v_camera_x_pos).w,d0			; get camera x pos
 		neg.w	d0					; make negative
 		swap	d0					; move to high word
@@ -455,8 +455,8 @@ Deform_SYZ:
 		moveq	#0,d3
 		move.w	d2,d3
 		asr.w	#1,d3
-		move.w	#7,d1
-	.cloudLoop:		
+		moveq	#8-1,d1
+	.cloudLoop:
 		move.w	d3,(a1)+
 		swap	d3
 		add.l	d0,d3
@@ -465,15 +465,15 @@ Deform_SYZ:
 
 		move.w	d2,d0
 		asr.w	#3,d0
-		move.w	#4,d1
-	.mountainLoop:		
+		moveq	#5-1,d1
+	.mountainLoop:
 		move.w	d0,(a1)+
 		dbf	d1,.mountainLoop
 
 		move.w	d2,d0
 		asr.w	#2,d0
-		move.w	#5,d1
-	.buildingLoop:		
+		moveq	#6-1,d1
+	.buildingLoop:
 		move.w	d0,(a1)+
 		dbf	d1,.buildingLoop
 
@@ -490,8 +490,8 @@ Deform_SYZ:
 		moveq	#0,d3
 		move.w	d2,d3
 		asr.w	#1,d3
-		move.w	#$D,d1
-	.bushLoop:		
+		moveq	#14-1,d1
+	.bushLoop:
 		move.w	d3,(a1)+
 		swap	d3
 		add.l	d0,d3
@@ -568,8 +568,8 @@ Deform_SBZ1:
 		asl.l	#8,d0
 		moveq	#0,d3
 		move.w	d2,d3
-		move.w	#3,d1
-	.cloudLoop:		
+		moveq	#4-1,d1
+	.cloudLoop:
 		move.w	d3,(a1)+
 		swap	d3
 		add.l	d0,d3
@@ -578,21 +578,21 @@ Deform_SBZ1:
 
 		move.w	(v_bg3_x_pos).w,d0
 		neg.w	d0
-		move.w	#9,d1
+		moveq	#10-1,d1
 	.buildingLoop1:						; distant brown buildings
 		move.w	d0,(a1)+
 		dbf	d1,.buildingLoop1
 
 		move.w	(v_bg2_x_pos).w,d0
 		neg.w	d0
-		move.w	#6,d1
+		moveq	#7-1,d1
 	.buildingLoop2:						; upper black buildings
 		move.w	d0,(a1)+
 		dbf	d1,.buildingLoop2
 
 		move.w	(v_bg1_x_pos).w,d0
 		neg.w	d0
-		move.w	#$A,d1
+		moveq	#11-1,d1
 	.buildingLoop3:						; lower black buildings
 		move.w	d0,(a1)+
 		dbf	d1,.buildingLoop3
@@ -607,7 +607,7 @@ Deform_SBZ1:
 Deform_SBZ2:
 		; plain background deformation
 		move.w	(v_camera_x_diff).w,d4
-		ext.l	d4		
+		ext.l	d4
 		asl.l	#6,d4
 		move.w	(v_camera_y_diff).w,d5
 		ext.l	d5
@@ -617,13 +617,13 @@ Deform_SBZ2:
 
 		; copy fg & bg x position to hscroll table
 		lea	(v_hscroll_buffer).w,a1
-		move.w	#223,d1
+		move.w	#224-1,d1
 		move.w	(v_camera_x_pos).w,d0
 		neg.w	d0
 		swap	d0
 		move.w	(v_bg1_x_pos).w,d0
 		neg.w	d0
-	.loop_hscroll:		
+	.loop_hscroll:
 		move.l	d0,(a1)+
 		dbf	d1,.loop_hscroll
 		rts
@@ -648,7 +648,7 @@ UpdateCamera_X:
 		bpl.s	.scrollRight
 
 		bset	#redraw_left_bit,(v_fg_redraw_direction).w ; screen moves backward
-		rts	
+		rts
 
 	.scrollRight:
 		bset	#redraw_right_bit,(v_fg_redraw_direction).w ; screen moves forward
@@ -665,7 +665,7 @@ UCX_Camera:
 		subi.w	#16,d0					; is distance more than 160px?
 		bcc.s	UCX_AheadOfMid				; if yes, branch
 		clr.w	(v_camera_x_diff).w			; no camera movement
-		rts	
+		rts
 ; ===========================================================================
 
 UCX_AheadOfMid:
@@ -685,7 +685,7 @@ UCX_SetScreen:
 		asl.w	#8,d1					; move into high byte (multiply by $100)
 		move.w	d0,(v_camera_x_pos).w			; set new screen position
 		move.w	d1,(v_camera_x_diff).w			; set distance for camera movement
-		rts	
+		rts
 ; ===========================================================================
 
 UCX_BehindMid:
@@ -708,7 +708,7 @@ AutoScroll:
 		bra.s	UCX_BehindMid
 
 	.forwards:
-		move.w	#2,d0
+		moveq	#2,d0
 		bra.s	UCX_AheadOfMid
 
 ; ---------------------------------------------------------------------------
@@ -747,7 +747,7 @@ UpdateCamera_Y:
 
 .no_change:
 		clr.w	(v_camera_y_diff).w			; no camera movement
-		rts	
+		rts
 ; ===========================================================================
 
 UCY_OutsideMid_Ground:
@@ -863,7 +863,7 @@ UCY_SetScreen:
 		sub.w	d4,d0
 		bpl.s	.scrollBottom
 		bset	#redraw_top_bit,(v_fg_redraw_direction).w
-		rts	
+		rts
 ; ===========================================================================
 
 	.scrollBottom:

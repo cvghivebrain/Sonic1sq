@@ -16,7 +16,7 @@ DoorH_Index:	index *,,2
 		ptr DoorH_Solid
 		ptr DoorH_ChkBtn
 		ptr DoorH_Move
-		
+
 		rsobj LabyrinthDoorH
 ost_doorh_x_start:	rs.w 1					; initial x pos
 ost_doorh_x_open:	rs.w 1					; open x pos
@@ -34,12 +34,12 @@ DoorH_Main:	; Routine 0
 		move.b	#16,ost_height(a0)
 		move.w	ost_x_pos(a0),ost_doorh_x_start(a0)
 		move.w	#128,d1
-		
+
 		btst	#status_xflip_bit,ost_status(a0)
 		beq.s	.no_xflip				; branch if not xflipped
 		add.w	#128,ost_x_pos(a0)			; move into open position
 		move.w	#-128,d1
-		
+
 	.no_xflip:
 		bsr.w	GetState
 		bne.s	DoorH_Solid				; branch if already opened
@@ -62,7 +62,7 @@ DoorH_ChkBtn:	; Routine 4
 		bsr.w	SaveState
 		beq.s	.not_found				; branch if not in respawn table
 		bset	#0,(a2)					; remember door state
-		
+
 	.not_found:
 		addq.b	#2,ost_routine(a0)			; goto DoorH_Move next
 
@@ -72,18 +72,18 @@ DoorH_Move:	; Routine 6
 		beq.s	.no_xflip				; branch if not xflipped
 		cmp.w	ost_doorh_x_open(a0),d0
 		bge.s	.fully_open				; branch if door is fully open
-		addi.w	#2,d0					; move right 2px
+		addq.w	#2,d0					; move right 2px
 		move.w	d0,ost_x_pos(a0)			; update x pos
 		bra.s	DoorH_Solid
-		
+
 	.no_xflip:
 		cmp.w	ost_doorh_x_open(a0),d0
 		ble.s	.fully_open				; branch if door is fully open
-		subi.w	#2,d0					; move left 2px
+		subq.w	#2,d0					; move left 2px
 		move.w	d0,ost_x_pos(a0)			; update x pos
 		bra.s	DoorH_Solid
-		
+
 	.fully_open:
 		move.b	#id_DoorH_Solid,ost_routine(a0)		; goto DoorH_Solid next
 		bra.s	DoorH_Solid
-		
+

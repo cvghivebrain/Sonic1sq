@@ -37,7 +37,7 @@ Gar_Main:	; Routine 0
 		move.b	#$10,ost_displaywidth(a0)
 		move.b	ost_subtype(a0),d0			; get object type
 		andi.w	#$F,d0					; read only the	low nybble
-		addi.b	#1,d0
+		addq.b	#1,d0
 		mulu.w	#30,d0
 		move.b	d0,ost_gar_time_master(a0)		; set fireball spit rate
 		move.b	ost_gar_time_master(a0),ost_anim_time(a0)

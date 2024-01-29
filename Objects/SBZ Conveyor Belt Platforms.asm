@@ -88,7 +88,7 @@ ost_spinc_corner_count:	equ __rs-1				; total number of corners +1, times 4
 ; ===========================================================================
 
 SpinCP_Main:	; Routine 0
-		addi.b	#2,ost_routine(a0)			; goto SpinCP_Solid next
+		addq.b	#2,ost_routine(a0)			; goto SpinCP_Solid next
 		move.l	#Map_Spin,ost_mappings(a0)
 		move.w	#tile_Kos_SpinPlatform,ost_tile(a0)
 		move.b	#$10,ost_displaywidth(a0)

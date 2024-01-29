@@ -114,7 +114,7 @@ Overlay_Sonic:	; Routine 2
 		cmpi.b	#id_Duck,ost_anim(a1)
 		bne.s	Overlay_ShowBox				; branch if Sonic isn't ducking
 		moveq	#6,d5					; hitbox is 6px lower
-		subi.b	#6,d0					; smaller hitbox when ducking
+		subq.b	#6,d0					; smaller hitbox when ducking
 		
 Overlay_ShowBox:
 		move.w	#5,(a2)
