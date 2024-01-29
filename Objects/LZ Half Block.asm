@@ -63,7 +63,7 @@ HBlock_Move:	; Routine 6
 		move.w	ost_x_pos(a0),ost_x_prev(a0)
 		btst	#status_xflip_bit,ost_status(a0)
 		beq.s	.noxflip				; branch if not xflipped
-		subi.w	#1,ost_x_pos(a0)			; move 1px left
+		subq.w	#1,ost_x_pos(a0)			; move 1px left
 		bsr.w	SolidObject_TopOnly
 		bsr.w	FindWallLeftObj
 		tst.w	d1
@@ -71,7 +71,7 @@ HBlock_Move:	; Routine 6
 		bra.w	DespawnQuick
 		
 	.noxflip:
-		addi.w	#1,ost_x_pos(a0)			; move 1px right
+		addq.w	#1,ost_x_pos(a0)			; move 1px right
 		bsr.w	SolidObject_TopOnly
 		bsr.w	FindWallRightObj
 		tst.w	d1

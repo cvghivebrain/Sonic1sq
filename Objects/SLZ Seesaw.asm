@@ -44,7 +44,7 @@ See_Main:	; Routine 0
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		addi.w	#$28,ost_x_pos(a1)			; move spikeball to right side
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
-		subi.w	#8,ost_y_pos(a1)
+		subq.w	#8,ost_y_pos(a1)
 		move.b	ost_status(a0),ost_status(a1)
 		move.l	#Map_SSawBall,ost_mappings(a1)
 		move.w	#tile_Kos_SlzSpike,ost_tile(a1)
@@ -155,7 +155,7 @@ See_BallAir:	; Routine 6
 		subq.b	#2,ost_routine(a0)			; goto See_Ball next
 		move.w	ost_x_pos(a1),ost_x_pos(a0)
 		move.w	ost_y_pos(a1),ost_y_pos(a0)		; reset position to match seesaw
-		subi.w	#8,ost_y_pos(a0)
+		subq.w	#8,ost_y_pos(a0)
 		move.b	#id_frame_seesaw_sloping_leftup,ost_frame(a1)
 		cmpi.b	#1,ost_subtype(a0)
 		beq.s	.from_left				; branch if spikeball is coming from the left side

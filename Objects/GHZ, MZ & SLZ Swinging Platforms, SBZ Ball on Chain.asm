@@ -161,7 +161,7 @@ Swing_Main:	; Routine 0
 		bsr.w	FindFreeSub				; find free subsprite table
 		bne.s	Swing_Anchor
 		move.w	d1,(a1)+				; write subsprite count
-		subi.b	#1,d1					; subtract 1 for loops
+		subq.b	#1,d1					; subtract 1 for loops
 	.loop:
 		move.w	#sprite2x2,(a1)+			; write y pos (blank) & sprite size
 		move.w	ost_tile(a0),d0				; tile setting from anchor

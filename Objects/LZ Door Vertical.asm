@@ -71,7 +71,7 @@ DoorV_Move:	; Routine 6
 		move.w	ost_y_pos(a0),d0
 		cmp.w	ost_doorv_y_start(a0),d0
 		ble.s	.fully_open				; branch if door is fully open
-		subi.w	#2,d0					; move up 2px
+		subq.w	#2,d0					; move up 2px
 		move.w	d0,ost_y_pos(a0)			; update y pos
 		bra.s	DoorV_Solid
 		

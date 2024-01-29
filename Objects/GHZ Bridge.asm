@@ -41,7 +41,7 @@ Bri_Main:	; Routine 0
 		
 		sub.w	ost_x_pos(a0),d1
 		neg.w	d1					; d1 = x pos of left edge
-		addi.w	#8,d1
+		addq.w	#8,d1
 		subq.b	#1,d2
 		move.b	d2,ost_bridge_last_log(a0)		; save id of rightmost log
 		moveq	#0,d3

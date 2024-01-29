@@ -48,7 +48,7 @@ BBlock_Main:	; Routine 0
 		move.w	#$582,ost_y_pos(a1)
 		move.b	d4,ost_subtype(a1)			; blocks have subtypes 0-9
 		move.b	d4,ost_bblock_mode(a1)
-		addi.w	#1,d4					; increment subtype
+		addq.w	#1,d4					; increment subtype
 		addi.w	#$20,d5					; +32px for next x position
 		addq.b	#2,ost_routine(a1)			; goto BBlock_Action next
 		dbf	d6,.loop				; repeat sequence 9 more times

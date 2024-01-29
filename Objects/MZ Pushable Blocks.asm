@@ -83,7 +83,7 @@ PushB_Action:	; Routine 2
 		jsr	FindFloorObj
 		tst.w	d1
 		beq.w	DespawnObject				; branch if block is touching the floor
-		addi.b	#2,ost_routine(a0)			; goto PushB_Drop next
+		addq.b	#2,ost_routine(a0)			; goto PushB_Drop next
 		move.b	ost_pblock_pushed(a0),d0
 		ext.w	d0
 		add.w	d0,ost_x_pos(a0)			; align with edge if pushed
@@ -94,7 +94,7 @@ PushB_Drop:	; Routine 4
 		;bsr.w	SolidObject
 		bsr.w	PushB_ChkStomp
 		bne.s	.gravity				; branch if block isn't on stomper
-		subi.b	#2,ost_routine(a0)			; goto PushB_Action next
+		subq.b	#2,ost_routine(a0)			; goto PushB_Action next
 		bra.w	DespawnObject
 		
 	.gravity:
@@ -104,7 +104,7 @@ PushB_Drop:	; Routine 4
 		bpl.w	DespawnObject				; branch if block hasn't reached floor
 		add.w	d1,ost_y_pos(a0)			; align to floor
 		clr.w	ost_y_vel(a0)				; stop falling
-		subi.b	#2,ost_routine(a0)			; goto PushB_Action next
+		subq.b	#2,ost_routine(a0)			; goto PushB_Action next
 		move.w	(a3),d0					; get 16x16 tile the block is on
 		andi.w	#$3FF,d0
 		cmpi.w	#$16A,d0				; is it block $16A+ (lava)?
@@ -163,7 +163,7 @@ PushB_WaitJump:	; Routine $A
 		cmpi.b	#id_Fount_Make,ost_routine(a1)
 		bne.w	PushB_Move				; branch if geyser is inactive
 		move.w	#-$580,ost_y_vel(a0)			; make block jump
-		addi.b	#2,ost_routine(a0)			; goto PushB_Jump next
+		addq.b	#2,ost_routine(a0)			; goto PushB_Jump next
 		clr.w	ost_linked(a0)
 		bra.w	PushB_Move
 ; ===========================================================================
@@ -284,7 +284,7 @@ PushB_ChkGeyser:
 		lea	GeyserList(pc,d0.w),a2			; read from relevant list of x coords
 		move.w	(a2)+,d1				; get count of x coords
 		beq.s	.exit					; branch if 0
-		subi.w	#1,d1					; subtract 1 for loops
+		subq.w	#1,d1					; subtract 1 for loops
 		
 	.loop:
 		move.w	(a2)+,d0

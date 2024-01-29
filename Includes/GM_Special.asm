@@ -229,7 +229,7 @@ PalCycle_SS:
 		mulu.w	#3,d0
 		lea	(a2,d0.w),a2				; jump to mappings source address
 		jsr	(AddDMA).w				; add mappings to DMA queue
-		suba.l	#6,a2					; jump back to same mappings
+		subq.l	#6,a2					; jump back to same mappings
 		add.l	#$800<<16,d1				; add $800 to VRAM address
 		jsr	(AddDMA).w				; add mappings to DMA queue again
 
