@@ -5,7 +5,8 @@ for %%f in ("256x256 Mappings\*.unc") do "mdcomp\kosplus" "%%f" "256x256 Mapping
 for %%f in ("Graphics Kosinski\*.bin") do "mdcomp\kosplus" "%%f" "Graphics Kosinski\%%~nf.kos"
 for %%f in ("Other Kosinski\*.bin") do "mdcomp\kosplus" "%%f" "Other Kosinski\%%~nf.kos"
 
-for %%f in ("Level Layouts\*.unc") do "mdcomp\hiverle" "%%f" "Level Layouts\%%~nf.hrl"
+for %%f in ("Graphics Moduled\*.bin") do "mdcomp\Modulise" "mdcomp\kosplus.exe" $1000 "%%f" "Graphics Moduled\%%~nf.kpm"
+for %%f in ("Level Layouts\*.unc") do "mdcomp\HiveRLE" "%%f" "Level Layouts\%%~nf.hrl"
 
 rem assemble final rom
 IF EXIST s1built.bin move /Y s1built.bin s1built.prev.bin >NUL

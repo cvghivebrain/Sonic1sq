@@ -13,7 +13,6 @@ UncPLC:
 		lea	UncLoadCues(pc,d0.w),a2			; jump to relevant UPLC
 		move.w	(a2)+,d2				; get length of UPLC
 		bmi.s	.exit					; branch if empty
-		moveq	#-1,d0					; d0 = $FFFFFFFF
 
 	.loop:
 		move.l	(a2)+,d1				; get destination VRAM address
@@ -21,7 +20,7 @@ UncPLC:
 		move.w	(a2)+,d1				; get tile setting
 		move.w	(a2)+,d0				; get RAM address to save tile setting
 		beq.s	.skip_tileram				; branch if tile setting shouldn't be saved
-		movea.l	d0,a3
+		movea.w	d0,a3
 		move.w	d1,(a3)					; save tile setting to RAM
 	
 	.skip_tileram:

@@ -268,6 +268,7 @@ v_pal_water_final:		rs.w countof_color*countof_pal	; underwater palette after br
 				rsalign 2
 v_respawn_list:			rs.b $100			; object state list (2 bytes for counter; 1 byte each for up to $FE objects)
 v_slowplc_ptr:			rs.l 1				; pointer to current SlowPLC (0 if not running)
+v_slowplc_module:		rs.w 1				; current module for SlowPLC
 v_slowplc_buffer:		rs.b sizeof_slowplc_buffer	; buffer for SlowPLC decompression
 
 				rsalign 4

@@ -43,9 +43,10 @@ GM_Title:
 		move.w	#id_GHZ_act1,(v_zone).w			; set level to GHZ act 1 (0000)
 		move.w	#0,(v_palcycle_time).w			; disable palette cycling
 		bsr.w	PaletteFadeOut				; fade out "SONIC TEAM PRESENTS" screen to black
-		moveq	#id_KPLC_Title,d0
-		jsr	KosPLC
-		bsr.w	LoadPerZone				; this must go after KosPLC
+		moveq	#id_SPLC_Title,d0
+		jsr	SlowPLC
+		jsr	ProcessSlowPLC_All			; load title screen gfx
+		bsr.w	LoadPerZone
 		bsr.w	LevelParameterLoad			; set level boundaries and Sonic's start position
 		bsr.w	DeformLayers
 		lea	Level_GHZ_bg,a1

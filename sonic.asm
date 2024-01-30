@@ -469,11 +469,11 @@ Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 		incfile	KosMap_SegaLogoBG,"Other Kosinski\Sega Logo BG",kos
 		incfile	KosMap_Title,"Other Kosinski\Title Screen",kos
 		incfile	KosMap_JapNames,"Other Kosinski\Hidden Japanese Credits",kos
-		incfile	Kos_TitleFg,"Graphics Kosinski\Title Screen Foreground",kos
-		incfile	Kos_TitleSonic,"Graphics Kosinski\Title Screen Sonic",kos
-		incfile	Kos_TitleTM,"Graphics Kosinski\Title Screen TM",kos
+		incfile	Kos_TitleFg,"Graphics Moduled\Title Screen Foreground",kpm
+		incfile	Kos_TitleSonic,"Graphics Moduled\Title Screen Sonic",kpm
+		incfile	Kos_TitleTM,"Graphics Moduled\Title Screen TM",kpm
 		incfile	Kos_JapNames,"Graphics Kosinski\Hidden Japanese Credits",kos
-		incfile	Kos_Text,"Graphics Kosinski\Level Select Text",kos
+		incfile	Kos_Text,"Graphics Moduled\Level Select Text",kpm
 
 		include "Objects\Sonic [Mappings].asm"		; Map_Sonic
 		include "Objects\Sonic DPLCs.asm"		; SonicDynPLC
@@ -684,6 +684,7 @@ Art_Sonic:	incbin	"Graphics\Sonic.bin"			; Sonic
 ; Compressed graphics - primary patterns and block mappings
 ; ---------------------------------------------------------------------------
 		incfile	Kos_GHZ_1st,"Graphics Kosinski\GHZ Main",kos
+		incfile	Kos_GHZ_1st_,"Graphics Moduled\GHZ Main",kpm
 		incfile	Kos_GHZ_2nd,"Graphics Kosinski\GHZ Main2",kos
 		incfile	Kos_MZ,"Graphics Kosinski\MZ Main",kos
 		incfile	Kos_SYZ,"Graphics Kosinski\SYZ Main",kos

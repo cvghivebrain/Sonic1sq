@@ -85,7 +85,6 @@ KosLoadCues:
 		ptr KPLC_SBZ
 		ptr KPLC_SBZ3
 		ptr KPLC_FZ
-		ptr KPLC_Title
 		ptr KPLC_End
 		ptr KPLC_HiddenCredits
 		ptr KPLC_Sega
@@ -270,15 +269,6 @@ KPLC_End:	kplcheader
 		kplc Kos_EndFlower
 		kplc Kos_EndEm,v_tile_emeralds
 		kplc Kos_EndSonic
-	.end:
-		set_dma_size last_vram
-
-KPLC_Title:	kplcheader
-		kplc Kos_GHZ_1st
-		kplc Kos_TitleFg
-		kplc Kos_TitleSonic
-		kplc Kos_TitleTM
-		kplc Kos_Text
 	.end:
 		set_dma_size last_vram
 
