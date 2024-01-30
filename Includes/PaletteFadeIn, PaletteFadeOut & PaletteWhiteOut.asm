@@ -7,14 +7,14 @@ PaletteFadeIn:
 		beq.s	.exit					; branch if at default brightness
 		bmi.s	.increase				; branch if < 0
 		
-		sub.w	#1,(v_brightness).w			; decrease brightness
+		subq.w	#1,(v_brightness).w			; decrease brightness
 		move.b	#1,(f_brightness_update).w		; set flag to update
 		move.b	#id_VBlank_Fade,(v_vblank_routine).w
 		bsr.w	WaitForVBlank				; wait for frame to end
 		bra.s	PaletteFadeIn
 		
 	.increase:
-		add.w	#1,(v_brightness).w			; increase brightness
+		addq.w	#1,(v_brightness).w			; increase brightness
 		move.b	#1,(f_brightness_update).w		; set flag to update
 		move.b	#id_VBlank_Fade,(v_vblank_routine).w
 		bsr.w	WaitForVBlank				; wait for frame to end
@@ -28,9 +28,9 @@ PaletteFadeIn:
 ; ---------------------------------------------------------------------------
 
 PaletteFadeOut:
-		cmp.w	#-brightness_range,(v_brightness).w
+		cmpi.w	#-brightness_range,(v_brightness).w
 		beq.s	.exit					; branch if at minimum brightness
-		sub.w	#1,(v_brightness).w			; decrease brightness
+		subq.w	#1,(v_brightness).w			; decrease brightness
 		move.b	#1,(f_brightness_update).w		; set flag to update
 		move.b	#id_VBlank_Fade,(v_vblank_routine).w
 		bsr.w	WaitForVBlank				; wait for frame to end
@@ -44,9 +44,9 @@ PaletteFadeOut:
 ; ---------------------------------------------------------------------------
 
 PaletteWhiteOut:
-		cmp.w	#brightness_range,(v_brightness).w
+		cmpi.w	#brightness_range,(v_brightness).w
 		beq.s	.exit					; branch if at maximum brightness
-		add.w	#1,(v_brightness).w			; increase brightness
+		addq.w	#1,(v_brightness).w			; increase brightness
 		move.b	#1,(f_brightness_update).w		; set flag to update
 		move.b	#id_VBlank_Fade,(v_vblank_routine).w
 		bsr.w	WaitForVBlank				; wait for frame to end
@@ -60,9 +60,9 @@ PaletteWhiteOut:
 ; ---------------------------------------------------------------------------
 
 Darken:
-		cmp.w	#-brightness_range,(v_brightness).w	; is brightness at minimum?
+		cmpi.w	#-brightness_range,(v_brightness).w	; is brightness at minimum?
 		beq.s	.exit					; branch if yes
-		sub.w	#1,(v_brightness).w			; increase brightness
+		subq.w	#1,(v_brightness).w			; increase brightness
 		move.b	#1,(f_brightness_update).w		; set flag to update
 		
 	.exit:
@@ -73,9 +73,9 @@ Darken:
 ; ---------------------------------------------------------------------------
 
 Brighten:
-		cmp.w	#brightness_range,(v_brightness).w	; is brightness at maximum?
+		cmpi.w	#brightness_range,(v_brightness).w	; is brightness at maximum?
 		beq.s	.exit					; branch if yes
-		add.w	#1,(v_brightness).w			; increase brightness
+		addq.w	#1,(v_brightness).w			; increase brightness
 		move.b	#1,(f_brightness_update).w		; set flag to update
 		
 	.exit:

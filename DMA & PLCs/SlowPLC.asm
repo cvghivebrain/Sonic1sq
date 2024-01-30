@@ -12,8 +12,8 @@ ProcessSlowPLC:
 		move.l	(a3)+,d0
 		bmi.s	.end_of_splc				; branch if SlowPLC is finished
 		movea.l	d0,a5					; get gfx source address
-		move.w	(v_slowplc_module).w,d0			; current module index
-		move.w	d0,d3
+		move.w	(v_slowplc_module).w,d3			; current module index
+		move.w	d3,d0
 		add.w	d0,d0
 		addq.w	#2,d0
 		move.w	(a5,d0.w),d0				; read pointer from header
@@ -34,31 +34,29 @@ ProcessSlowPLC:
 		lsl.l	#2,d1					; move top 2 bits into hi word
 		lsr.w	#2,d1					; return other bits to correct position
 		swap	d1					; swap hi/low words
-		addi.l	#$40000080,d1				; set VRAM write
+		ori.l	#$40000080,d1				; set VRAM write
 		lea	SPLC_Src(pc),a2				; get RAM buffer address
 		jmp	(AddDMA).w				; DMA gfx to VRAM on next VBlank
 		
 	.last_module:
-		move.w	#0,(v_slowplc_module).w			; reset module counter
+		moveq	#0,d2
+		move.w	d2,(v_slowplc_module).w			; reset module counter
 		move.w	d3,d0
 		add.w	d0,d0
 		addq.w	#4,d0
-		moveq	#0,d2
 		move.w	(a5,d0.w),d2				; read size of last module from header
-		lsr.w	#1,d2					; divide by 2
-		lsl.l	#8,d2
+		lsl.l	#7,d2
 		lsr.w	#8,d2
-		addi.l	#$94009300,d2				; set DMA length
+		ori.l	#$94009300,d2				; set DMA length
 		bsr.s	.dma_dest				; set DMA destination & add to queue
 		
-		move.w	(a3)+,d1				; get tile setting
 		move.w	(a3)+,d0				; get RAM address to save tile setting
 		beq.s	.no_tile				; branch if tile setting shouldn't be saved
-		movea.l	d0,a3
-		move.w	d1,(a3)					; save tile setting to RAM
+		movea.w	d0,a2
+		move.w	(a3)+,(a2)				; save tile setting to RAM
 		
 	.no_tile:
-		moveq	#10,d0
+		moveq	#sizeof_SPLC,d0
 		add.l	d0,(a4)					; next SlowPLC on next frame
 		
 	.exit:
@@ -113,12 +111,13 @@ splcheader:	macro *,vram
 splc:		macro gfx,tileram
 		dc.l \gfx					; source in ROM
 		dc.w last_vram					; destination in VRAM
-		dc.w last_vram/sizeof_cell			; tile setting
 		if narg=1
 		dc.w 0
 		else
 		dc.w tileram&$FFFF				; RAM address to store tile setting
 		endc
+		dc.w last_vram/sizeof_cell			; tile setting
+		
 		if ~def(tile_\gfx)
 		tile_\gfx: equ last_vram/sizeof_cell		; remember tile setting for gfx
 		else
@@ -137,6 +136,7 @@ SlowLoadCues:
 		
 SPLC_Title:	splcheader 0
 		splc Kos_GHZ_1st_
+sizeof_SPLC:	equ *-SPLC_Title
 		splc Kos_TitleFg
 		splc Kos_TitleSonic
 		splc Kos_TitleTM
