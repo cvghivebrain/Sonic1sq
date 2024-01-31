@@ -86,8 +86,6 @@ KosLoadCues:
 		ptr KPLC_SBZ3
 		ptr KPLC_FZ
 		ptr KPLC_End
-		ptr KPLC_HiddenCredits
-		ptr KPLC_Sega
 		ptr KPLC_Special
 		ptr KPLC_TryAgain
 
@@ -269,16 +267,6 @@ KPLC_End:	kplcheader
 		kplc Kos_EndFlower
 		kplc Kos_EndEm,v_tile_emeralds
 		kplc Kos_EndSonic
-	.end:
-		set_dma_size last_vram
-
-KPLC_HiddenCredits:	kplcheader
-		kplc Kos_JapNames
-	.end:
-		set_dma_size last_vram
-
-KPLC_Sega:	kplcheader
-		kplc Kos_SegaLogo
 	.end:
 		set_dma_size last_vram
 

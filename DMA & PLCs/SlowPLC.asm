@@ -133,6 +133,8 @@ splc:		macro gfx,tileram
 SlowLoadCues:
 		index *
 		ptr SPLC_Title
+		ptr SPLC_HiddenCredits
+		ptr SPLC_Sega
 		
 SPLC_Title:	splcheader 0
 		splc Kos_GHZ_1st_
@@ -142,4 +144,11 @@ sizeof_SPLC:	equ *-SPLC_Title
 		splc Kos_TitleTM
 		splc Kos_Text
 		dc.w -1
-		
+
+SPLC_HiddenCredits:	splcheader 0
+		splc Kos_JapNames
+		dc.w -1
+
+SPLC_Sega:	splcheader 0
+		splc Kos_SegaLogo
+		dc.w -1

@@ -72,8 +72,8 @@ GM_Demo:
 Level_TtlCardLoop:
 		move.b	#id_VBlank_TitleCard,(v_vblank_routine).w
 		bsr.w	WaitForVBlank_CPU
-		jsr	(ExecuteObjects).l
-		jsr	(BuildSprites).l
+		bsr.w	ExecuteObjects
+		bsr.w	BuildSprites
 		move.b	(v_titlecard_loaded).w,d0
 		cmp.b	(v_titlecard_state).w,d0
 		bne.s	Level_TtlCardLoop			; branch if title card is still moving
@@ -83,7 +83,6 @@ Level_Skip_TtlCard:
 		bsr.w	DeformLayers
 		bset	#redraw_left_bit,(v_fg_redraw_direction).w
 		bsr.w	DrawTilesAtStart
-		jsr	(ConvertCollisionArray).l
 		bsr.w	LZWaterFeatures
 		bsr.w	LoadPerCharacter
 		bsr.w	WaterFilter
@@ -126,9 +125,9 @@ Level_Skip_TtlCard:
 		move.w	d0,(v_debug_active).w
 		move.w	d0,(f_restart).w
 		move.w	d0,(v_frame_counter).w
-		jsr	(ObjPosLoad).l
-		jsr	(ExecuteObjects).l
-		jsr	(BuildSprites).l
+		bsr.w	ObjPosLoad
+		bsr.w	ExecuteObjects
+		bsr.w	BuildSprites
 		bsr.w	OscillateNumInit
 
 		move.w	#0,(v_demo_input_counter).w
@@ -175,7 +174,7 @@ Level_MainLoop:
 		addq.w	#1,(v_frame_counter).w			; increment level timer
 		bsr.w	MoveSonicInDemo
 		bsr.w	LZWaterFeatures
-		jsr	(ExecuteObjects).l
+		bsr.w	ExecuteObjects
 		jsr	ProcessSlowPLC
 		tst.w	(f_restart).w				; is level restart flag set?
 		bne.w	GM_Level				; if yes, branch
@@ -188,8 +187,8 @@ Level_MainLoop:
 		bsr.w	DeformLayers
 
 	.skip_scroll:
-		jsr	(BuildSprites).l			; create sprite table
-		jsr	(ObjPosLoad).l				; load objects for level
+		bsr.w	BuildSprites				; create sprite table
+		bsr.w	ObjPosLoad				; load objects for level
 		bsr.w	PaletteCycle
 		bsr.w	OscillateNumDo				; update oscillatory values for objects
 		bsr.w	SynchroAnimate				; update values for synchronised object animations
@@ -229,9 +228,9 @@ Level_Demo:
 		move.b	#id_VBlank_Level,(v_vblank_routine).w
 		bsr.w	WaitForVBlank
 		bsr.w	MoveSonicInDemo
-		jsr	(ExecuteObjects).l
-		jsr	(BuildSprites).l
-		jsr	(ObjPosLoad).l
+		bsr.w	ExecuteObjects
+		bsr.w	BuildSprites
+		bsr.w	ObjPosLoad
 		subq.w	#1,(v_palfade_time).w			; decrement time until next palette update
 		bpl.s	.wait					; branch if positive
 		move.w	#2,(v_palfade_time).w			; set timer to 2 frames

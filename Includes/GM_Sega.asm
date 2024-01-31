@@ -23,8 +23,9 @@ GM_Sega:
 		disable_ints
 		disable_display
 		bsr.w	ClearScreen
-		moveq	#id_KPLC_Sega,d0
-		jsr	KosPLC
+		moveq	#id_SPLC_Sega,d0
+		jsr	SlowPLC
+		jsr	ProcessSlowPLC_All			; load gfx
 
 		lea	($FF0000).l,a1				; RAM buffer
 		lea	(KosMap_SegaLogo).l,a0			; Sega logo mappings

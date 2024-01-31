@@ -29,8 +29,8 @@ GM_Title:
 		bsr.w	PalLoad					; palette will be shown after fading in
 		jsr	FindFreeInert
 		move.l	#CreditsText,ost_id(a1)			; load "SONIC TEAM PRESENTS" object
-		jsr	(ExecuteObjects).l
-		jsr	(BuildSprites).l
+		bsr.w	ExecuteObjects
+		bsr.w	BuildSprites
 		bsr.w	PaletteFadeIn				; fade in to "SONIC TEAM PRESENTS" screen from black
 		moveq	#id_VBlank_Title,d1
 		move.w	#60,d0
@@ -91,9 +91,9 @@ GM_Title:
 		move.b	#1,ost_subtype(a1)
 
 	.no_slots:
-		jsr	(ExecuteObjects).l
+		bsr.w	ExecuteObjects
 		bsr.w	DeformLayers
-		jsr	(BuildSprites).l
+		bsr.w	BuildSprites
 		move.w	#0,(v_title_d_count).w			; reset d-pad counter
 		enable_display
 		bsr.w	PaletteFadeIn				; fade in to title screen from black
@@ -105,9 +105,9 @@ GM_Title:
 Title_MainLoop:
 		move.b	#id_VBlank_Title,(v_vblank_routine).w
 		bsr.w	WaitForVBlank
-		jsr	(ExecuteObjects).l			; run all objects
+		bsr.w	ExecuteObjects				; run all objects
 		bsr.w	DeformLayers				; scroll background
-		jsr	(BuildSprites).l			; create sprite table
+		bsr.w	BuildSprites				; create sprite table
 		bsr.w	PCycle_Title				; animate water palette
 		addq.w	#2,(v_ost_player+ost_x_pos).w		; move dummy object 2px to the right (there is no actual object loaded)
 		bsr.s	Title_Dpad
@@ -488,7 +488,7 @@ LevSel_Sound:
 
 PlayDemo:
 		play.b	1, jsr, cmd_Fade			; fade out music
-		jsr	LoadPerDemo
+		bsr.w	LoadPerDemo
 		addq.w	#1,(v_demo_num).w			; add 1 to demo number
 		cmpi.w	#countof_demo,(v_demo_num).w		; is demo number less than 4?
 		blo.s	.demo_0_to_3				; if yes, branch

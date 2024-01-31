@@ -181,9 +181,9 @@ Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 		include	"Includes\LoadTilemap.asm"
 		include "DMA & PLCs\DMA.asm"
 		include "Includes\Kosinski Decompression.asm"
-		include "Includes\AnimateLevelGfx.asm"
 		include "Includes\HiveDec.asm"
 
+		include	"Zones & Characters.asm"
 		include	"Includes\PaletteCycle.asm"
 		include	"Includes\PaletteFadeIn, PaletteFadeOut & PaletteWhiteOut.asm"
 		include "Includes\PalLoad & PalPointers.asm"
@@ -199,12 +199,13 @@ Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 		include "Includes\ExecuteObjects.asm"
 		include "Includes\BuildSprites.asm"
 		include "Includes\ObjPosLoad.asm"
+		include "Includes\AnimateLevelGfx.asm"
+		
+startof_obj:	equ *
 
 		include "Objects\_RandomNumber.asm"
 		include "Objects\_CalcSine & CalcAngle.asm"
 		include "Objects\_AddPoints.asm"
-
-		include	"Zones & Characters.asm"
 		
 		include "Objects\Continue Screen Items.asm"	; ContScrItem
 		include "Objects\Continue Screen Sonic.asm"	; ContSonic
@@ -400,8 +401,6 @@ Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 
 		include "Objects\_FindNearestTile, FindFloor & FindWall.asm"
 
-		include	"Includes\ConvertCollisionArray.asm"
-
 		include "Objects\_FindFloorObj, FindWallRightObj, FindCeilingObj & FindWallLeftObj.asm"
 
 		include "Objects\SBZ Rotating Disc Junction.asm" ; Junction
@@ -463,8 +462,18 @@ Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 		include "Objects\Title Cards Sonic Has Passed.asm" ; HasPassedCard
 		include "Objects\Special Stage Results.asm"	; SSResult
 		include "Objects\Special Stage Results Chaos Emeralds.asm" ; SSRChaos
+		
+		inform	0,"Object code occupies $%h bytes ($%h-$%h).",*-startof_obj,startof_obj,*
 
-		incfile	Kos_SegaLogo,"Graphics Kosinski\Sega Logo",kos
+		include "Objects\Sonic [Mappings].asm"		; Map_Sonic
+		include "Objects\Sonic DPLCs.asm"		; SonicDynPLC
+
+		include "Objects\Special Stage Walls [Mappings].asm" ; Map_SSWalls
+
+; ---------------------------------------------------------------------------
+; Compressed graphics - title screen
+; ---------------------------------------------------------------------------
+		incfile	Kos_SegaLogo,"Graphics Moduled\Sega Logo",kpm
 		incfile	KosMap_SegaLogo,"Other Kosinski\Sega Logo",kos
 		incfile	KosMap_SegaLogoBG,"Other Kosinski\Sega Logo BG",kos
 		incfile	KosMap_Title,"Other Kosinski\Title Screen",kos
@@ -472,12 +481,8 @@ Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 		incfile	Kos_TitleFg,"Graphics Moduled\Title Screen Foreground",kpm
 		incfile	Kos_TitleSonic,"Graphics Moduled\Title Screen Sonic",kpm
 		incfile	Kos_TitleTM,"Graphics Moduled\Title Screen TM",kpm
-		incfile	Kos_JapNames,"Graphics Kosinski\Hidden Japanese Credits",kos
+		incfile	Kos_JapNames,"Graphics Moduled\Hidden Japanese Credits",kpm
 		incfile	Kos_Text,"Graphics Moduled\Level Select Text",kpm
-
-		include "Objects\Sonic [Mappings].asm"		; Map_Sonic
-		include "Objects\Sonic DPLCs.asm"		; SonicDynPLC
-
 ; ---------------------------------------------------------------------------
 ; Uncompressed graphics	- Sonic
 ; ---------------------------------------------------------------------------
@@ -488,9 +493,6 @@ Art_Sonic:	incbin	"Graphics\Sonic.bin"			; Sonic
 ; ---------------------------------------------------------------------------
 		incfile Art_Warp,"Graphics\Unused - Special Stage Warp",bin,dma_safe
 		incfile Art_Goggles,"Graphics\Unused - Goggles",bin,dma_safe
-
-		include "Objects\Special Stage Walls [Mappings].asm" ; Map_SSWalls
-
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - special stage
 ; ---------------------------------------------------------------------------
