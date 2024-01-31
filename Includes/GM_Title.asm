@@ -44,8 +44,7 @@ GM_Title:
 		move.w	#0,(v_palcycle_time).w			; disable palette cycling
 		bsr.w	PaletteFadeOut				; fade out "SONIC TEAM PRESENTS" screen to black
 		moveq	#id_SPLC_Title,d0
-		jsr	SlowPLC
-		jsr	ProcessSlowPLC_All			; load title screen gfx
+		jsr	SlowPLC_Now				; load title screen gfx
 		bsr.w	LoadPerZone
 		bsr.w	LevelParameterLoad			; set level boundaries and Sonic's start position
 		bsr.w	DeformLayers
@@ -165,8 +164,7 @@ LevSel_Init:
 		disable_ints
 
 		locVRAM	vram_bg,d0
-		move.l	#sizeof_vram_bg,d1
-		moveq	#0,d2
+		set_dma_fill_size	sizeof_vram_bg,d1
 		bsr.w	ClearVRAM				; clear bg nametable (in VRAM)
 
 		bsr.w	LevSel_Display

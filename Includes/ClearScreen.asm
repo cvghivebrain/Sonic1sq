@@ -10,16 +10,15 @@
 
 ClearScreen:
 		locVRAM	vram_fg,d0
-		move.l	#sizeof_vram_fg-1,d1
-		moveq	#0,d2
+		set_dma_fill_size	sizeof_vram_fg,d1
 		bsr.w	ClearVRAM
 
 		locVRAM	vram_bg,d0
-		move.l	#sizeof_vram_bg-1,d1
-		moveq	#0,d2
+		set_dma_fill_size	sizeof_vram_bg,d1
 		bsr.w	ClearVRAM
 		
-		clr.l	(v_fg_y_pos_vsram).w
+		move.l	d2,(v_fg_y_pos_vsram).w
+		move.b	d2,(v_spritemask_height).w
 
 		lea	(v_sprite_buffer).w,a1
 		move.w	#loops_to_clear_sprites,d1
@@ -50,30 +49,26 @@ ClearRAM:
 
 ; input:
 ;	d0.l = VRAM address to start clearing (as VDP instruction)
-;	d1.l = bytes to clear
-;	d2.l = byte value to fill with (usually 0)
+;	d1.l = bytes to clear (as VDP instruction)
 
 ; output:
 ;	a6 = vdp_control_port ($C00004)
 
-;	uses d1.l, d2.w
+;	uses d0.w, d2.l
 ; ---------------------------------------------------------------------------
 
 ClearVRAM:
 		lea	(vdp_control_port).l,a6
 		move.w	#vdp_auto_inc+1,(a6)			; set VDP increment to 1 byte
-		lsl.l	#8,d1					; move high byte into high word
-		lsr.w	#8,d1					; move low byte back
-		add.l	#$94009300,d1				; apply VDP registers
-		move.l	d1,(a6)
+		move.l	d1,(a6)					; set DMA size
 		move.w	#$9780,(a6)				; set DMA mode to fill
 		add.w	#$80,d0
 		move.l	d0,(a6)
-		lsl.w	#8,d2					; move fill value to high byte
+		moveq	#0,d2					; fill value
 		move.w	d2,-4(a6)
 	.wait_for_dma:
-		move.w	(a6),d1					; get status register
-		btst	#dma_status_bit,d1			; is DMA in progress?
+		move.w	(a6),d0					; get status register
+		btst	#dma_status_bit,d0			; is DMA in progress?
 		bne.s	.wait_for_dma				; if yes, branch
 		move.w	#vdp_auto_inc+2,(a6)			; set VDP increment to 2 bytes
 		rts

@@ -18,8 +18,7 @@ GM_Special:
 		enable_ints
 
 		locVRAM	$5000,d0				; VRAM address
-		move.l	#$6FFF,d1				; bytes to clear
-		moveq	#0,d2					; value to clear with
+		set_dma_fill_size	$6FFF,d1		; bytes to clear
 		bsr.w	ClearVRAM
 
 		bsr.w	SS_BGLoad

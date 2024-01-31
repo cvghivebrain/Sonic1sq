@@ -6,7 +6,10 @@
 
 ProcessSlowPLC:
 		tst.l	(v_slowplc_ptr).w
-		beq.s	.exit					; branch if SlowPLC isn't active
+		bne.s	ProcessSlowPLC_SkipChk			; branch if SlowPLC is active
+		rts
+		
+ProcessSlowPLC_SkipChk:
 		lea	(v_slowplc_ptr).w,a4
 		movea.l	(a4),a3					; a3 = current SlowPLC
 		move.l	(a3)+,d0
@@ -58,8 +61,6 @@ ProcessSlowPLC:
 	.no_tile:
 		moveq	#sizeof_SPLC,d0
 		add.l	d0,(a4)					; next SlowPLC on next frame
-		
-	.exit:
 		rts
 		
 	.end_of_splc:
@@ -71,16 +72,22 @@ ProcessSlowPLC:
 SPLC_Src:	set_dma_src v_slowplc_buffer
 
 ; ---------------------------------------------------------------------------
-; Subroutine to process all SlowPLCs while still playing music
+; Subroutine to process all SlowPLCs without stopping music (game is otherwise frozen)
+
+; input:
+;	d0.w = SPLC index id
 ; ---------------------------------------------------------------------------
 
-ProcessSlowPLC_All:
+SlowPLC_Now:
+		bsr.s	SlowPLC
+		
+	.loop:
 		tst.l	(v_slowplc_ptr).w
 		beq.s	.exit					; branch if SlowPLCs are complete
-		bsr.w	ProcessSlowPLC
+		bsr.w	ProcessSlowPLC_SkipChk
 		move.b	#id_VBlank_Fade,(v_vblank_routine).w	
 		jsr	WaitForVBlank				; wait for frame to end
-		bra.s	ProcessSlowPLC_All
+		bra.s	.loop
 		
 	.exit:
 		rts
