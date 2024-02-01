@@ -9,8 +9,7 @@ EndEggman:
 		moveq	#0,d0
 		move.b	ost_routine(a0),d0
 		move.w	EEgg_Index(pc,d0.w),d1
-		jsr	EEgg_Index(pc,d1.w)
-		jmp	(DisplaySprite).l
+		jmp	EEgg_Index(pc,d1.w)
 ; ===========================================================================
 EEgg_Index:	index *,,2
 		ptr EEgg_Main
@@ -40,7 +39,8 @@ EEgg_Main:	; Routine 0
 EEgg_Animate:	; Routine 2
 		shortcut
 		lea	Ani_EEgg(pc),a1
-		jmp	(AnimateSprite).l
+		jsr	(AnimateSprite).l
+		jmp	(DisplaySprite).l
 
 ; ---------------------------------------------------------------------------
 ; Animation script

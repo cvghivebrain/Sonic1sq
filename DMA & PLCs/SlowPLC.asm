@@ -140,11 +140,22 @@ splc:		macro gfx,tileram
 SlowLoadCues:
 		index *
 		ptr SPLC_Title
-		ptr SPLC_HiddenCredits
 		ptr SPLC_Sega
+		ptr SPLC_HiddenCredits
+		ptr SPLC_GHZ
+		ptr SPLC_MZ
+		ptr SPLC_SYZ
+		ptr SPLC_LZ
+		ptr SPLC_SLZ
+		ptr SPLC_SBZ
+		ptr SPLC_SBZ3
+		ptr SPLC_FZ
+		ptr SPLC_End
+		ptr SPLC_TryAgain
+		ptr SPLC_Special
 		
 SPLC_Title:	splcheader 0
-		splc Kos_GHZ_1st_
+		splc Kos_GHZ_1st
 sizeof_SPLC:	equ *-SPLC_Title
 		splc Kos_TitleFg
 		splc Kos_TitleSonic
@@ -152,10 +163,211 @@ sizeof_SPLC:	equ *-SPLC_Title
 		splc Kos_Text
 		dc.w -1
 
+SPLC_Sega:	splcheader 0
+		splc Kos_SegaLogo
+		dc.w -1
+
 SPLC_HiddenCredits:	splcheader 0
 		splc Kos_JapNames
 		dc.w -1
+		
+SPLC_GHZ:	splcheader 0
+		splc Kos_GHZ_1st
+		splc Kos_GHZ_2nd
+		splc Kos_GhzEdgeWall
+		splc Kos_Swing,v_tile_swing
+		splc Kos_Bridge
+		splc Kos_SpikePole
+		splc Kos_PurpleRock
+		splc Kos_Crabmeat,v_tile_crabmeat
+		splc Kos_Buzz,v_tile_buzzbomber
+		splc Kos_Chopper,v_tile_chopper
+		splc Kos_Newtron,v_tile_newtron
+		splc Kos_Motobug,v_tile_motobug
+		splc Kos_GhzSmashWall,v_tile_wall
+		splc Kos_Lamp,v_tile_lamppost
+		splc Kos_Points,v_tile_points
+		splc Kos_Ring,v_tile_rings
+		splc Kos_Spikes,v_tile_spikes
+		splc Kos_HSpring,v_tile_hspring
+		splc Kos_VSpring,v_tile_vspring
+		dc.w -1
 
-SPLC_Sega:	splcheader 0
-		splc Kos_SegaLogo
+SPLC_MZ:	splcheader 0
+		splc Kos_MZ
+		splc Kos_MzBlock,v_tile_floor
+		splc Kos_Swing,v_tile_swing
+		splc Kos_MzMetal
+		splc Kos_Fireball,v_tile_fireball
+		splc Kos_MzGlass
+		splc Kos_Lava
+		splc Kos_Buzz,v_tile_buzzbomber
+		splc Kos_Batbrain,v_tile_batbrain
+		splc Kos_Cater,v_tile_caterkiller
+		splc Kos_Splats,v_tile_splats
+		splc Kos_MzButton,v_tile_button
+		splc Kos_Lamp,v_tile_lamppost
+		splc Kos_Points,v_tile_points
+		splc Kos_Ring,v_tile_rings
+		splc Kos_Spikes,v_tile_spikes
+		splc Kos_HSpring,v_tile_hspring
+		splc Kos_VSpring,v_tile_vspring
+		dc.w -1
+
+SPLC_SYZ:	splcheader 0
+		splc Kos_SYZ
+		splc Kos_Bumper,v_tile_bumper
+		splc Kos_BigSpike,v_tile_spikeball
+		splc Kos_SmallSpike,v_tile_spikechain
+		splc Kos_Button,v_tile_button
+		splc Kos_Crabmeat,v_tile_crabmeat
+		splc Kos_Buzz,v_tile_buzzbomber
+		splc Kos_Yadrin,v_tile_yadrin
+		splc Kos_Roller,v_tile_roller
+		splc Kos_Lamp,v_tile_lamppost
+		splc Kos_Points,v_tile_points
+		splc Kos_Ring,v_tile_rings
+		splc Kos_Spikes,v_tile_spikes
+		splc Kos_HSpring,v_tile_hspring
+		splc Kos_VSpring,v_tile_vspring
+		dc.w -1
+
+SPLC_LZ:	splcheader 0
+		SPLC_LZ_common:	macro				; these gfx are also used in SBZ3
+		splc Kos_LZ
+		splc Kos_LzBlock
+		splc Kos_Splash
+		splc Kos_Water
+		splc Kos_Gargoyle
+		splc Kos_LzSpikeBall,v_tile_spikechain
+		splc Kos_FlapDoor
+		splc Kos_Bubbles,v_tile_bubbles
+		splc Kos_LzHalfBlock
+		splc Kos_LzDoorV
+		splc Kos_Harpoon
+		splc Kos_LzDoorH
+		splc Kos_LzPlatform
+		endm
+		SPLC_LZ_common
+		splc Kos_LzPole
+		splc Kos_LzWheel
+		splc Kos_Cork
+		splc Kos_Burrobot,v_tile_burrobot
+		splc Kos_Orbinaut,v_tile_orbinaut
+		splc Kos_Jaws,v_tile_jaws
+		splc Kos_Button,v_tile_button
+		splc Kos_Lamp,v_tile_lamppost
+		splc Kos_Points,v_tile_points
+		splc Kos_Ring,v_tile_rings
+		splc Kos_Spikes,v_tile_spikes
+		splc Kos_HSpring,v_tile_hspring
+		splc Kos_VSpring,v_tile_vspring
+		dc.w -1
+
+SPLC_SLZ:	splcheader 0
+		splc Kos_SLZ
+		splc Kos_Seesaw
+		splc Kos_SlzSpike
+		splc Kos_Bomb,v_tile_bomb
+		splc Kos_Fan
+		splc Kos_Pylon
+		splc Kos_SlzSwing,v_tile_swing
+		splc Kos_SlzCannon
+		splc Kos_Orbinaut,v_tile_orbinaut
+		splc Kos_Fireball,v_tile_fireball
+		splc Kos_SlzBlock,v_tile_floor
+		splc Kos_SlzWall,v_tile_wall
+		splc Kos_Lamp,v_tile_lamppost
+		splc Kos_Points,v_tile_points
+		splc Kos_Ring,v_tile_rings
+		splc Kos_Spikes,v_tile_spikes
+		splc Kos_HSpring,v_tile_hspring
+		splc Kos_VSpring,v_tile_vspring
+		dc.w -1
+
+SPLC_SBZ:	splcheader 0
+		splc Kos_SBZ
+		splc Kos_Button,v_tile_button
+		splc Kos_SbzBlock
+		splc Kos_Stomper
+		splc Kos_SbzDoorV
+		splc Kos_Girder
+		splc Kos_SbzDisc
+		splc Kos_SbzJunction
+		splc Kos_BigSpike,v_tile_spikeball
+		splc Kos_Cutter
+		splc Kos_FlamePipe
+		splc Kos_SbzFloor,v_tile_floor
+		splc Kos_SlideFloor
+		splc Kos_SbzDoorH
+		splc Kos_Electric
+		splc Kos_TrapDoor
+		splc Kos_SpinPlatform
+		splc Kos_BallHog,v_tile_ballhog
+		splc Kos_Cater,v_tile_caterkiller
+		splc Kos_Bomb,v_tile_bomb
+		splc Kos_Lamp,v_tile_lamppost
+		splc Kos_Points,v_tile_points
+		splc Kos_Ring,v_tile_rings
+		splc Kos_Spikes,v_tile_spikes
+		splc Kos_HSpring,v_tile_hspring
+		splc Kos_VSpring,v_tile_vspring
+		dc.w -1
+
+SPLC_SBZ3:	splcheader 0
+		SPLC_LZ_common					; same as LZ
+		splc Kos_Sbz3HugeDoor
+		splc Kos_Burrobot,v_tile_burrobot
+		splc Kos_Orbinaut,v_tile_orbinaut
+		splc Kos_Jaws,v_tile_jaws
+		splc Kos_Button,v_tile_button
+		splc Kos_Lamp,v_tile_lamppost
+		splc Kos_Points,v_tile_points
+		splc Kos_Ring,v_tile_rings
+		splc Kos_Spikes,v_tile_spikes
+		splc Kos_HSpring,v_tile_hspring
+		splc Kos_VSpring,v_tile_vspring
+		dc.w -1
+
+SPLC_FZ:	splcheader 0
+		splc Kos_SBZ
+		splc Kos_FzBoss
+		splc Kos_FzEggman
+		dc.w -1
+
+SPLC_End:	splcheader 0
+		splc Kos_GHZ_1st
+		splc Kos_GHZ_2nd
+		splc Kos_EndFlower
+		splc Kos_EndEm,v_tile_emeralds
+		splc Kos_EndSonic
+		dc.w -1
+
+SPLC_TryAgain:	splcheader 0
+		splc Kos_TryAgain
+		splc Kos_EndEm,v_tile_emeralds
+		dc.w -1
+
+SPLC_Special:	splcheader 0
+		splc Kos_SSBgCloud
+		splc Kos_SSBgFish
+		splc Kos_SSWalls
+		splc Kos_Bumper
+		splc Kos_SSGOAL
+		splc Kos_SSUpDown
+		splc Kos_SSRBlock
+		splc Kos_SS1UpBlock
+		splc Kos_SSEmStars
+		splc Kos_SSRedWhite
+		splc Kos_SSGhost
+		splc Kos_SSWBlock
+		splc Kos_SSGlass
+		splc Kos_SSEmerald
+		splc Kos_SSZone1
+		splc Kos_SSZone2
+		splc Kos_SSZone3
+		splc Kos_SSZone4
+		splc Kos_SSZone5
+		splc Kos_SSZone6
+		splc Kos_Ring
 		dc.w -1

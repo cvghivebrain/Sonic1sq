@@ -18,8 +18,8 @@ GM_TryAgain:
 		move.w	#loops_to_clear_ost,d1
 		bsr.w	ClearRAM
 
-		moveq	#id_KPLC_TryAgain,d0
-		jsr	KosPLC					; load "TRY AGAIN"/"END" gfx
+		moveq	#id_SPLC_TryAgain,d0
+		jsr	SlowPLC_Now				; load "TRY AGAIN"/"END" gfx
 
 		lea	(v_pal_dry).w,a1
 		move.w	#loops_to_clear_pal,d1

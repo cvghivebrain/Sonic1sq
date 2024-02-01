@@ -22,8 +22,8 @@ GM_Special:
 		bsr.w	ClearVRAM
 
 		bsr.w	SS_BGLoad
-		moveq	#id_KPLC_Special,d0
-		jsr	KosPLC					; load special stage gfx
+		moveq	#id_SPLC_Special,d0
+		jsr	SlowPLC_Now				; load special stage gfx
 
 		lea	(v_ost_all).w,a1			; RAM address to start clearing
 		move.w	#loops_to_clear_ost,d1			; size of RAM block to clear
@@ -45,7 +45,7 @@ GM_Special:
 		clr.w	(f_restart).w
 		moveq	#id_Pal_Special,d0
 		bsr.w	PalLoad					; load special stage palette
-		bsr.w	SS_Load				; load SS layout data
+		bsr.w	SS_Load					; load SS layout data
 		move.l	#0,(v_camera_x_pos).w
 		move.l	#0,(v_camera_y_pos).w
 		jsr	LoadPerCharacter
@@ -1119,3 +1119,6 @@ SS_Item_Glass6:	ss_sprite Map_SS_Glass,tile_Kos_SSGlass+tile_pal4,0 ; $4C
 SS_Item_Glass7:	ss_sprite Map_SS_Glass,tile_Kos_SSGlass+tile_pal2,0 ; $4D
 SS_Item_Glass8:	ss_sprite Map_SS_Glass,tile_Kos_SSGlass+tile_pal3,0 ; $4E
 	SS_ItemIndex_end:
+	
+tile_Kos_Bumper_KPLC_Special: equ 0
+tile_Kos_Ring_KPLC_Special: equ 0

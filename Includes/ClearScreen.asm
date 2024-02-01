@@ -62,7 +62,7 @@ ClearVRAM:
 		move.w	#vdp_auto_inc+1,(a6)			; set VDP increment to 1 byte
 		move.l	d1,(a6)					; set DMA size
 		move.w	#$9780,(a6)				; set DMA mode to fill
-		add.w	#$80,d0
+		ori.b	#$80,d0
 		move.l	d0,(a6)
 		moveq	#0,d2					; fill value
 		move.w	d2,-4(a6)

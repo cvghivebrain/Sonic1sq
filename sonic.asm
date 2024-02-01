@@ -499,119 +499,119 @@ Art_Sonic:	incbin	"Graphics\Sonic.bin"			; Sonic
 		incfile	UncMap_FishBirds,"Misc Data\SS Fish Birds",bin,dma_safe
 		incfile	KosMap_SSBubbles,"Other Kosinski\SS Bubbles",kos
 		incfile	KosMap_SSClouds,"Other Kosinski\SS Clouds",kos
-		incfile Kos_SSWalls,"Graphics Kosinski\Special Stage Walls",kos
-		incfile Kos_SSBgFish,"Graphics Kosinski\Special Stage Birds & Fish",kos
-		incfile Kos_SSBgCloud,"Graphics Kosinski\Special Stage Clouds",kos
-		incfile Kos_SSGOAL,"Graphics Kosinski\Special Stage GOAL",kos
-		incfile Kos_SSRBlock,"Graphics Kosinski\Special Stage R",kos
-		incfile Kos_SS1UpBlock,"Graphics Kosinski\Special Stage 1UP",kos
-		incfile Kos_SSEmStars,"Graphics Kosinski\Special Stage Emerald Twinkle",kos
-		incfile Kos_SSRedWhite,"Graphics Kosinski\Special Stage Red-White",kos
-		incfile Kos_SSZone1,"Graphics Kosinski\Special Stage ZONE1",kos
-		incfile Kos_SSZone2,"Graphics Kosinski\Special Stage ZONE2",kos
-		incfile Kos_SSZone3,"Graphics Kosinski\Special Stage ZONE3",kos
-		incfile Kos_SSZone4,"Graphics Kosinski\Special Stage ZONE4",kos
-		incfile Kos_SSZone5,"Graphics Kosinski\Special Stage ZONE5",kos
-		incfile Kos_SSZone6,"Graphics Kosinski\Special Stage ZONE6",kos
-		incfile Kos_SSUpDown,"Graphics Kosinski\Special Stage UP-DOWN",kos
-		incfile Kos_SSEmerald,"Graphics Kosinski\Special Stage Emeralds",kos
-		incfile Kos_SSGhost,"Graphics Kosinski\Special Stage Ghost",kos
-		incfile Kos_SSWBlock,"Graphics Kosinski\Special Stage W",kos
-		incfile Kos_SSGlass,"Graphics Kosinski\Special Stage Glass",kos
+		incfile Kos_SSWalls,"Graphics Moduled\Special Stage Walls",kpm
+		incfile Kos_SSBgFish,"Graphics Moduled\Special Stage Birds & Fish",kpm
+		incfile Kos_SSBgCloud,"Graphics Moduled\Special Stage Clouds",kpm
+		incfile Kos_SSGOAL,"Graphics Moduled\Special Stage GOAL",kpm
+		incfile Kos_SSRBlock,"Graphics Moduled\Special Stage R",kpm
+		incfile Kos_SS1UpBlock,"Graphics Moduled\Special Stage 1UP",kpm
+		incfile Kos_SSEmStars,"Graphics Moduled\Special Stage Emerald Twinkle",kpm
+		incfile Kos_SSRedWhite,"Graphics Moduled\Special Stage Red-White",kpm
+		incfile Kos_SSZone1,"Graphics Moduled\Special Stage ZONE1",kpm
+		incfile Kos_SSZone2,"Graphics Moduled\Special Stage ZONE2",kpm
+		incfile Kos_SSZone3,"Graphics Moduled\Special Stage ZONE3",kpm
+		incfile Kos_SSZone4,"Graphics Moduled\Special Stage ZONE4",kpm
+		incfile Kos_SSZone5,"Graphics Moduled\Special Stage ZONE5",kpm
+		incfile Kos_SSZone6,"Graphics Moduled\Special Stage ZONE6",kpm
+		incfile Kos_SSUpDown,"Graphics Moduled\Special Stage UP-DOWN",kpm
+		incfile Kos_SSEmerald,"Graphics Moduled\Special Stage Emeralds",kpm
+		incfile Kos_SSGhost,"Graphics Moduled\Special Stage Ghost",kpm
+		incfile Kos_SSWBlock,"Graphics Moduled\Special Stage W",kpm
+		incfile Kos_SSGlass,"Graphics Moduled\Special Stage Glass",kpm
 		incfile Art_ResultEm,"Graphics\Special Stage Result Emeralds",bin,dma_safe
 		incfile Art_ResultCont,"Graphics\Special Stage Result Continue",bin,dma_safe
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - GHZ stuff
 ; ---------------------------------------------------------------------------
-		incfile Kos_Swing,"Graphics Kosinski\GHZ Swinging Platform",kos
-		incfile Kos_Bridge,"Graphics Kosinski\GHZ Bridge",kos
+		incfile Kos_Swing,"Graphics Moduled\GHZ Swinging Platform",kpm
+		incfile Kos_Bridge,"Graphics Moduled\GHZ Bridge",kpm
 		incfile Art_Ball,"Graphics\GHZ Giant Ball",bin,dma_safe
-		incfile Kos_Spikes,"Graphics Kosinski\Spikes",kos
-		incfile Kos_SpikePole,"Graphics Kosinski\GHZ Spiked Helix Pole",kos
-		incfile Kos_PurpleRock,"Graphics Kosinski\GHZ Purple Rock",kos
-		incfile Kos_GhzSmashWall,"Graphics Kosinski\GHZ Smashable Wall",kos
-		incfile Kos_GhzEdgeWall,"Graphics Kosinski\GHZ Walls",kos
+		incfile Kos_Spikes,"Graphics Moduled\Spikes",kpm
+		incfile Kos_SpikePole,"Graphics Moduled\GHZ Spiked Helix Pole",kpm
+		incfile Kos_PurpleRock,"Graphics Moduled\GHZ Purple Rock",kpm
+		incfile Kos_GhzSmashWall,"Graphics Moduled\GHZ Smashable Wall",kpm
+		incfile Kos_GhzEdgeWall,"Graphics Moduled\GHZ Walls",kpm
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - LZ stuff
 ; ---------------------------------------------------------------------------
-		incfile Kos_Water,"Graphics Kosinski\LZ Water Surface",kos
-		incfile Kos_Splash,"Graphics Kosinski\LZ Waterfall & Splashes",kos
-		incfile Kos_LzSpikeBall,"Graphics Kosinski\LZ Spiked Ball & Chain",kos
-		incfile Kos_FlapDoor,"Graphics Kosinski\LZ Flapping Door",kos
-		incfile Kos_Bubbles,"Graphics Kosinski\LZ Bubbles & Countdown",kos
-		incfile Kos_LzHalfBlock,"Graphics Kosinski\LZ 32x16 Block",kos
-		incfile Kos_LzDoorV,"Graphics Kosinski\LZ Vertical Door",kos
-		incfile Kos_Harpoon,"Graphics Kosinski\LZ Harpoon",kos
-		incfile Kos_LzPole,"Graphics Kosinski\LZ Breakable Pole",kos
-		incfile Kos_LzDoorH,"Graphics Kosinski\LZ Horizontal Door",kos
-		incfile Kos_LzWheel,"Graphics Kosinski\LZ Wheel",kos
-		incfile Kos_Gargoyle,"Graphics Kosinski\LZ Gargoyle & Fireball",kos
-		incfile Kos_LzPlatform,"Graphics Kosinski\LZ Rising Platform",kos
-		incfile Kos_Cork,"Graphics Kosinski\LZ Cork",kos
-		incfile Kos_LzBlock,"Graphics Kosinski\LZ 32x32 Block",kos
-		incfile Kos_Sbz3HugeDoor,"Graphics Kosinski\SBZ3 Huge Sliding Door",kos
+		incfile Kos_Water,"Graphics Moduled\LZ Water Surface",kpm
+		incfile Kos_Splash,"Graphics Moduled\LZ Waterfall & Splashes",kpm
+		incfile Kos_LzSpikeBall,"Graphics Moduled\LZ Spiked Ball & Chain",kpm
+		incfile Kos_FlapDoor,"Graphics Moduled\LZ Flapping Door",kpm
+		incfile Kos_Bubbles,"Graphics Moduled\LZ Bubbles & Countdown",kpm
+		incfile Kos_LzHalfBlock,"Graphics Moduled\LZ 32x16 Block",kpm
+		incfile Kos_LzDoorV,"Graphics Moduled\LZ Vertical Door",kpm
+		incfile Kos_Harpoon,"Graphics Moduled\LZ Harpoon",kpm
+		incfile Kos_LzPole,"Graphics Moduled\LZ Breakable Pole",kpm
+		incfile Kos_LzDoorH,"Graphics Moduled\LZ Horizontal Door",kpm
+		incfile Kos_LzWheel,"Graphics Moduled\LZ Wheel",kpm
+		incfile Kos_Gargoyle,"Graphics Moduled\LZ Gargoyle & Fireball",kpm
+		incfile Kos_LzPlatform,"Graphics Moduled\LZ Rising Platform",kpm
+		incfile Kos_Cork,"Graphics Moduled\LZ Cork",kpm
+		incfile Kos_LzBlock,"Graphics Moduled\LZ 32x32 Block",kpm
+		incfile Kos_Sbz3HugeDoor,"Graphics Moduled\SBZ3 Huge Sliding Door",kpm
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - MZ stuff
 ; ---------------------------------------------------------------------------
-		incfile Kos_MzMetal,"Graphics Kosinski\MZ Metal Blocks",kos
-		incfile Kos_MzButton,"Graphics Kosinski\MZ Button",kos
-		incfile Kos_MzGlass,"Graphics Kosinski\MZ Green Glass Block",kos
-		incfile Kos_Fireball,"Graphics Kosinski\Fireballs",kos
-		incfile Kos_Lava,"Graphics Kosinski\MZ Lava",kos
-		incfile Kos_MzBlock,"Graphics Kosinski\MZ Green Pushable Block",kos
+		incfile Kos_MzMetal,"Graphics Moduled\MZ Metal Blocks",kpm
+		incfile Kos_MzButton,"Graphics Moduled\MZ Button",kpm
+		incfile Kos_MzGlass,"Graphics Moduled\MZ Green Glass Block",kpm
+		incfile Kos_Fireball,"Graphics Moduled\Fireballs",kpm
+		incfile Kos_Lava,"Graphics Moduled\MZ Lava",kpm
+		incfile Kos_MzBlock,"Graphics Moduled\MZ Green Pushable Block",kpm
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - SLZ stuff
 ; ---------------------------------------------------------------------------
-		incfile Kos_Seesaw,"Graphics Kosinski\SLZ Seesaw",kos
-		incfile Kos_SlzSpike,"Graphics Kosinski\SLZ Little Spikeball",kos
-		incfile Kos_Fan,"Graphics Kosinski\SLZ Fan",kos
-		incfile Kos_SlzWall,"Graphics Kosinski\SLZ Breakable Wall",kos
-		incfile Kos_Pylon,"Graphics Kosinski\SLZ Pylon",kos
-		incfile Kos_SlzSwing,"Graphics Kosinski\SLZ Swinging Platform",kos
-		incfile Kos_SlzBlock,"Graphics Kosinski\SLZ 32x32 Block",kos
-		incfile Kos_SlzCannon,"Graphics Kosinski\SLZ Cannon",kos
+		incfile Kos_Seesaw,"Graphics Moduled\SLZ Seesaw",kpm
+		incfile Kos_SlzSpike,"Graphics Moduled\SLZ Little Spikeball",kpm
+		incfile Kos_Fan,"Graphics Moduled\SLZ Fan",kpm
+		incfile Kos_SlzWall,"Graphics Moduled\SLZ Breakable Wall",kpm
+		incfile Kos_Pylon,"Graphics Moduled\SLZ Pylon",kpm
+		incfile Kos_SlzSwing,"Graphics Moduled\SLZ Swinging Platform",kpm
+		incfile Kos_SlzBlock,"Graphics Moduled\SLZ 32x32 Block",kpm
+		incfile Kos_SlzCannon,"Graphics Moduled\SLZ Cannon",kpm
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - SYZ stuff
 ; ---------------------------------------------------------------------------
-		incfile Kos_Bumper,"Graphics Kosinski\SYZ Bumper",kos
-		incfile Kos_SmallSpike,"Graphics Kosinski\SYZ Small Spikeball",kos
-		incfile Kos_Button,"Graphics Kosinski\Button",kos
-		incfile Kos_BigSpike,"Graphics Kosinski\SYZ Large Spikeball",kos
+		incfile Kos_Bumper,"Graphics Moduled\SYZ Bumper",kpm
+		incfile Kos_SmallSpike,"Graphics Moduled\SYZ Small Spikeball",kpm
+		incfile Kos_Button,"Graphics Moduled\Button",kpm
+		incfile Kos_BigSpike,"Graphics Moduled\SYZ Large Spikeball",kpm
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - SBZ stuff
 ; ---------------------------------------------------------------------------
-		incfile Kos_SbzDisc,"Graphics Kosinski\SBZ Running Disc",kos
-		incfile Kos_SbzJunction,"Graphics Kosinski\SBZ Junction Wheel",kos
-		incfile Kos_Cutter,"Graphics Kosinski\SBZ Pizza Cutter",kos
-		incfile Kos_Stomper,"Graphics Kosinski\SBZ Stomper",kos
-		incfile Kos_SpinPlatform,"Graphics Kosinski\SBZ Spinning Platform",kos
-		incfile Kos_TrapDoor,"Graphics Kosinski\SBZ Trapdoor",kos
-		incfile Kos_SbzFloor,"Graphics Kosinski\SBZ Collapsing Floor",kos
-		incfile Kos_Electric,"Graphics Kosinski\SBZ Electrocuter",kos
-		incfile Kos_SbzBlock,"Graphics Kosinski\SBZ Vanishing Block",kos
-		incfile Kos_FlamePipe,"Graphics Kosinski\SBZ Flaming Pipe",kos
-		incfile Kos_SbzDoorV,"Graphics Kosinski\SBZ Small Vertical Door",kos
-		incfile Kos_SlideFloor,"Graphics Kosinski\SBZ Sliding Floor Trap",kos
-		incfile Kos_SbzDoorH,"Graphics Kosinski\SBZ Large Horizontal Door",kos
-		incfile Kos_Girder,"Graphics Kosinski\SBZ Crushing Girder",kos
+		incfile Kos_SbzDisc,"Graphics Moduled\SBZ Running Disc",kpm
+		incfile Kos_SbzJunction,"Graphics Moduled\SBZ Junction Wheel",kpm
+		incfile Kos_Cutter,"Graphics Moduled\SBZ Pizza Cutter",kpm
+		incfile Kos_Stomper,"Graphics Moduled\SBZ Stomper",kpm
+		incfile Kos_SpinPlatform,"Graphics Moduled\SBZ Spinning Platform",kpm
+		incfile Kos_TrapDoor,"Graphics Moduled\SBZ Trapdoor",kpm
+		incfile Kos_SbzFloor,"Graphics Moduled\SBZ Collapsing Floor",kpm
+		incfile Kos_Electric,"Graphics Moduled\SBZ Electrocuter",kpm
+		incfile Kos_SbzBlock,"Graphics Moduled\SBZ Vanishing Block",kpm
+		incfile Kos_FlamePipe,"Graphics Moduled\SBZ Flaming Pipe",kpm
+		incfile Kos_SbzDoorV,"Graphics Moduled\SBZ Small Vertical Door",kpm
+		incfile Kos_SlideFloor,"Graphics Moduled\SBZ Sliding Floor Trap",kpm
+		incfile Kos_SbzDoorH,"Graphics Moduled\SBZ Large Horizontal Door",kpm
+		incfile Kos_Girder,"Graphics Moduled\SBZ Crushing Girder",kpm
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - enemies
 ; ---------------------------------------------------------------------------
-		incfile Kos_BallHog,"Graphics Kosinski\Ball Hog",kos
-		incfile Kos_Crabmeat,"Graphics Kosinski\Crabmeat",kos
-		incfile Kos_Buzz,"Graphics Kosinski\Buzz Bomber",kos
-		incfile Kos_Burrobot,"Graphics Kosinski\Burrobot",kos
-		incfile Kos_Chopper,"Graphics Kosinski\Chopper",kos
-		incfile Kos_Jaws,"Graphics Kosinski\Jaws",kos
-		incfile Kos_Roller,"Graphics Kosinski\Roller",kos
-		incfile Kos_Motobug,"Graphics Kosinski\Motobug",kos
-		incfile Kos_Newtron,"Graphics Kosinski\Newtron",kos
-		incfile Kos_Yadrin,"Graphics Kosinski\Yadrin",kos
-		incfile Kos_Batbrain,"Graphics Kosinski\Batbrain",kos
-		incfile Kos_Bomb,"Graphics Kosinski\Bomb Enemy",kos
-		incfile Kos_Orbinaut,"Graphics Kosinski\Orbinaut",kos
-		incfile Kos_Cater,"Graphics Kosinski\Caterkiller",kos
-		incfile Kos_Splats,"Graphics Kosinski\Splats",kos
+		incfile Kos_BallHog,"Graphics Moduled\Ball Hog",kpm
+		incfile Kos_Crabmeat,"Graphics Moduled\Crabmeat",kpm
+		incfile Kos_Buzz,"Graphics Moduled\Buzz Bomber",kpm
+		incfile Kos_Burrobot,"Graphics Moduled\Burrobot",kpm
+		incfile Kos_Chopper,"Graphics Moduled\Chopper",kpm
+		incfile Kos_Jaws,"Graphics Moduled\Jaws",kpm
+		incfile Kos_Roller,"Graphics Moduled\Roller",kpm
+		incfile Kos_Motobug,"Graphics Moduled\Motobug",kpm
+		incfile Kos_Newtron,"Graphics Moduled\Newtron",kpm
+		incfile Kos_Yadrin,"Graphics Moduled\Yadrin",kpm
+		incfile Kos_Batbrain,"Graphics Moduled\Batbrain",kpm
+		incfile Kos_Bomb,"Graphics Moduled\Bomb Enemy",kpm
+		incfile Kos_Orbinaut,"Graphics Moduled\Orbinaut",kpm
+		incfile Kos_Cater,"Graphics Moduled\Caterkiller",kpm
+		incfile Kos_Splats,"Graphics Moduled\Splats",kpm
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - various
 ; ---------------------------------------------------------------------------
@@ -647,7 +647,7 @@ Art_Sonic:	incbin	"Graphics\Sonic.bin"			; Sonic
 		incfile	Art_LivesNums,"Graphics\Lives Counter Numbers",bin,dma_safe
 		incfile	Art_Red99,"Graphics\Red 99",bin,dma_safe
 		incfile	Art_Overlay,"Graphics\Debug Overlay",bin,dma_safe
-		incfile Kos_Ring,"Graphics Kosinski\Rings",kos
+		incfile Kos_Ring,"Graphics Moduled\Rings",kpm
 		incfile Art_Shield,"Graphics\Shield",bin,dma_safe
 		incfile Art_Stars,"Graphics\Invincibility",bin,dma_safe
 		incfile Art_Monitors,"Graphics\Monitors",bin,dma_safe
@@ -659,12 +659,12 @@ Art_Sonic:	incbin	"Graphics\Sonic.bin"			; Sonic
 		incfile Art_GogglesIcon,"Graphics\Monitor Contents - Goggles",bin,dma_safe
 		incfile Art_ShoeIcon,"Graphics\Monitor Contents - Shoes",bin,dma_safe
 		incfile Art_Explode,"Graphics\Explosion",bin,dma_safe
-		incfile Kos_Points,"Graphics Kosinski\Points",kos
+		incfile Kos_Points,"Graphics Moduled\Points",kpm
 		incfile Art_GameOver,"Graphics\Game Over",bin,dma_safe
-		incfile Kos_HSpring,"Graphics Kosinski\Spring Horizontal",kos
-		incfile Kos_VSpring,"Graphics Kosinski\Spring Vertical",kos
+		incfile Kos_HSpring,"Graphics Moduled\Spring Horizontal",kpm
+		incfile Kos_VSpring,"Graphics Moduled\Spring Vertical",kpm
 		incfile Art_Signpost,"Graphics\Signpost",bin,dma_safe
-		incfile Kos_Lamp,"Graphics Kosinski\Lamppost",kos
+		incfile Kos_Lamp,"Graphics Moduled\Lamppost",kpm
 		incfile Art_BigFlash,"Graphics\Giant Ring Flash",bin,dma_safe
 		incfile Art_Bonus,"Graphics\Hidden Bonuses",bin,dma_safe
 ; ---------------------------------------------------------------------------
@@ -685,14 +685,13 @@ Art_Sonic:	incbin	"Graphics\Sonic.bin"			; Sonic
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - primary patterns and block mappings
 ; ---------------------------------------------------------------------------
-		incfile	Kos_GHZ_1st,"Graphics Kosinski\GHZ Main",kos
-		incfile	Kos_GHZ_1st_,"Graphics Moduled\GHZ Main",kpm
-		incfile	Kos_GHZ_2nd,"Graphics Kosinski\GHZ Main2",kos
-		incfile	Kos_MZ,"Graphics Kosinski\MZ Main",kos
-		incfile	Kos_SYZ,"Graphics Kosinski\SYZ Main",kos
-		incfile	Kos_LZ,"Graphics Kosinski\LZ Main",kos
-		incfile	Kos_SLZ,"Graphics Kosinski\SLZ Main",kos
-		incfile	Kos_SBZ,"Graphics Kosinski\SBZ Main",kos
+		incfile	Kos_GHZ_1st,"Graphics Moduled\GHZ Main",kpm
+		incfile	Kos_GHZ_2nd,"Graphics Moduled\GHZ Main2",kpm
+		incfile	Kos_MZ,"Graphics Moduled\MZ Main",kpm
+		incfile	Kos_SYZ,"Graphics Moduled\SYZ Main",kpm
+		incfile	Kos_LZ,"Graphics Moduled\LZ Main",kpm
+		incfile	Kos_SLZ,"Graphics Moduled\SLZ Main",kpm
+		incfile	Kos_SBZ,"Graphics Moduled\SBZ Main",kpm
 Blk16_GHZ:	incbin	"16x16 Mappings\GHZ.bin"
 		even
 Blk256_GHZ:	incbin	"256x256 Mappings\GHZ.kos"
@@ -729,14 +728,14 @@ Blk256_SBZ:	incbin	"256x256 Mappings\SBZ.kos"
 		incfile Art_Prison,"Graphics\Prison Capsule",bin,dma_safe
 		incfile Art_PrisonBroken,"Graphics\Prison Capsule Broken",bin,dma_safe
 		incfile Art_Sbz2Eggman,"Graphics\Boss - Eggman in SBZ2 & FZ",bin,dma_safe
-		incfile Kos_FzBoss,"Graphics Kosinski\Boss - Final Zone",kos
-		incfile Kos_FzEggman,"Graphics Kosinski\Boss - Eggman after FZ Fight",kos
+		incfile Kos_FzBoss,"Graphics Moduled\Boss - Final Zone",kpm
+		incfile Kos_FzEggman,"Graphics Moduled\Boss - Eggman after FZ Fight",kpm
 		incfile Art_Exhaust,"Graphics\Boss - Exhaust Flame",bin,dma_safe
 		incfile Art_Face,"Graphics\Boss - Face",bin,dma_safe
-		incfile Kos_EndEm,"Graphics Kosinski\Ending - Emeralds",kos
-		incfile Kos_EndSonic,"Graphics Kosinski\Ending - Sonic",kos
-		incfile Kos_TryAgain,"Graphics Kosinski\Ending - Try Again",kos
-		incfile Kos_EndFlower,"Graphics Kosinski\Ending - Flowers",kos
+		incfile Kos_EndEm,"Graphics Moduled\Ending - Emeralds",kpm
+		incfile Kos_EndSonic,"Graphics Moduled\Ending - Sonic",kpm
+		incfile Kos_TryAgain,"Graphics Moduled\Ending - Try Again",kpm
+		incfile Kos_EndFlower,"Graphics Moduled\Ending - Flowers",kpm
 		incfile Art_CreditText,"Graphics\Ending - Credits",bin,dma_safe
 		incfile Art_EndStH,"Graphics\Ending - StH Logo",bin,dma_safe
 ; ---------------------------------------------------------------------------
@@ -781,7 +780,6 @@ Col_SBZ:	incbin	"Collision\SBZ.bin"			; SBZ index
 		incfile	Art_SbzSmoke,"Graphics\SBZ Background Smoke",bin,dma_safe
 		incfile	Art_BigRing,"Graphics\Giant Ring",bin,dma_safe
 
-		include "DMA & PLCs\KosPLC.asm"
 		include "DMA & PLCs\UncPLC.asm"
 		include "DMA & PLCs\SlowPLC.asm"
 		include "Objects\GHZ Giant Ball [Mappings].asm"	; Map_GBall
