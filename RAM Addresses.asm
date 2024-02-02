@@ -20,6 +20,7 @@ v_sprite_queue:			rs.b sizeof_priority*countof_priority ; sprite display queue, 
 v_subsprite_queue:		rs.b sizeof_subsprite*countof_subsprite
 v_sonic_gfx_buffer:		rs.b sizeof_vram_sonic		; buffered Sonic graphics ($17 cells) ($2E0 bytes)
 v_sonic_pos_tracker:		rs.l $40			; earlier position tracking list for Sonic, used by invincibility stars ($100 bytes)
+v_demo_rec:			rs.b sizeof_demo_rec		; demo recorder ($200 bytes)
 				rsblock hscroll
 v_hscroll_buffer:		rs.b sizeof_vram_hscroll+$80	; scrolling table data ($380 bytes)
 				rsblockend hscroll

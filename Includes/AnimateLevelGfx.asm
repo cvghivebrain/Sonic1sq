@@ -1,15 +1,15 @@
 ; ---------------------------------------------------------------------------
 ; Subroutine to	load uncompressed gfx for level animations & giant ring
 
-;	uses d0.l, d1.l, d2.l, d3.l, a1, a2, a3, a4
+;	uses d0.l, d1.l, d2.l, d3.l, d4.w, a1, a2, a3, a4
 ; ---------------------------------------------------------------------------
 
 AnimateLevelGfx:
 		tst.w	(f_pause).w				; is the game paused?
 		bne.s	.exit					; if yes, branch
-		tst.l	(v_aniart_ptr).w
+		move.l	(v_aniart_ptr).w,d0
 		beq.s	.exit					; branch if pointer is empty
-		movea.l	(v_aniart_ptr).w,a1
+		movea.l	d0,a1
 		jmp	(a1)
 
 	.exit:
@@ -23,17 +23,15 @@ AniArt_GHZ:
 		lea	AniArt_GHZ_Script(pc),a3
 
 AniArt_Run:
-		moveq	#0,d4
 		lea	(v_levelani_0_frame).w,a4
 		move.w	(a3)+,d4				; get script count
 
 	.loop:
 		movea.l	(a3)+,a2				; get script address
-		sub.w	#1,2(a4)				; decrement timer
+		subq.w	#1,2(a4)				; decrement timer
 		bpl.s	.next					; branch if time remains
 
-		add.w	#1,(a4)					; increment frame number
-		moveq	#0,d3
+		addq.w	#1,(a4)					; increment frame number
 		move.w	(a2)+,d3				; get frame count
 		cmp.w	(a4),d3					; compare frame number with max
 		bne.s	.valid_frame				; branch if valid
@@ -43,7 +41,7 @@ AniArt_Run:
 		move.l	(a2)+,d2				; get size
 		move.w	(a4),d3
 		lsl.w	#3,d3					; multiply frame number by 8
-		adda.l	d3,a2					; jump to duration for relevant frame
+		adda.w	d3,a2					; jump to duration for relevant frame
 		move.w	(a2)+,2(a4)				; reset timer
 		jsr	(AddDMA).w				; add to DMA queue
 
@@ -130,17 +128,14 @@ tilecount:	= 4						; 4 per column, 16 total
 		bpl.s	.exit					; branch if not -1
 
 		move.w	#1,(v_levelani_2_time).w		; time between each gfx change
-		moveq	#0,d0
 		move.w	(v_levelani_0_frame).w,d0		; get surface lava frame number
 		lea	(Art_MzLava2).l,a4			; magma gfx
 		ror.w	#7,d0					; multiply frame num by $200
 		adda.w	d0,a4					; jump to appropriate tile
 		locVRAM	$53A0
 		moveq	#0,d3
-		move.w	(v_levelani_2_frame).w,d3
-		addq.w	#1,(v_levelani_2_frame).w		; increment frame counter (unused)
 		move.b	(v_oscillating_0_to_40).w,d3		; get oscillating value
-		move.w	#4-1,d2					; number of columns of tiles
+		moveq	#4-1,d2					; number of columns of tiles
 
 	.loop:
 		move.w	d3,d0
@@ -150,7 +145,7 @@ tilecount:	= 4						; 4 per column, 16 total
 		move.w	(a3,d0.w),d0
 		lea	(a3,d0.w),a3
 		movea.l	a4,a1					; a1 = magma gfx
-		move.w	#((tilecount*sizeof_cell)/4)-1,d1	; $1F
+		moveq	#((tilecount*sizeof_cell)/4)-1,d1	; $1F
 		jsr	(a3)					; copy gfx to VRAM
 		addq.w	#4,d3					; increment initial oscillating value
 		dbf	d2,.loop				; repeat 3 times
@@ -299,7 +294,7 @@ AniArt_none:
 ;	a1 = address of magma gfx (stored as 32x32 image)
 ;	a2 = vdp_data_port ($C00000)
 
-;	uses d0.l
+;	uses d0.l, a1
 ; ---------------------------------------------------------------------------
 
 AniArt_MZ_Magma_Index:

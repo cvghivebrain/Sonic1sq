@@ -5,9 +5,9 @@
 ; ---------------------------------------------------------------------------
 
 DynamicLevelEvents:
-		tst.l	(v_dle_ptr).w
+		move.l	(v_dle_ptr).w,d0
 		beq.s	.keep_boundary				; branch if pointer is empty
-		movea.l	(v_dle_ptr).w,a1
+		movea.l	d0,a1
 		jsr	(a1)					; update v_boundary_bottom_next if needed
 		moveq	#2,d2
 		move.w	(v_boundary_right_next).w,d1

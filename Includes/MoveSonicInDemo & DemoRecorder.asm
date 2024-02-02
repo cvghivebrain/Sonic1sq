@@ -1,7 +1,7 @@
 ; ---------------------------------------------------------------------------
 ; Subroutine to	move Sonic in demo mode
 
-;	uses d0, d1, d2, a0, a1
+;	uses d0.w, d1.b, a0, a1
 ; ---------------------------------------------------------------------------
 
 MoveSonicInDemo:
@@ -23,8 +23,6 @@ MoveSonicInDemo:
 		move.b	(a1),d0					; get joypad state from demo
 		lea	(v_joypad_hold_actual).w,a0		; (a0) = actual joypad state
 		move.b	d0,d1
-		moveq	#0,d2
-		eor.b	d2,d0
 		move.b	d1,(a0)+				; force demo input
 		and.b	d1,d0
 		move.b	d0,(a0)+
@@ -39,24 +37,27 @@ MoveSonicInDemo:
 ; ---------------------------------------------------------------------------
 ; Unused subroutine for recording a demo
 
-;	uses d0, a1
+;	uses d0.w, a1, a2
 ; ---------------------------------------------------------------------------
 
 DemoRecorder:
-		lea	($80000).l,a1				; memory address to record demo to
-		move.w	(v_demo_input_counter).w,d0		; get number of inputs so far
-		adda.w	d0,a1					; jump to last position in recorded data
+		lea	(v_demo_rec).w,a1			; memory address to record demo to
+		lea	(v_demo_input_counter).w,a2		; get number of inputs so far
+		cmpi.w	#sizeof_demo_rec*2,(a2)
+		beq.s	.exit					; branch if recorder is full
+		adda.w	(a2),a1					; jump to last position in recorded data
 		move.b	(v_joypad_hold_actual).w,d0		; get joypad input state
 		cmp.b	(a1),d0					; is joypad input same as last frame?
 		bne.s	.next					; if not, branch
 		addq.b	#1,1(a1)				; increment time for current input
 		cmpi.b	#$FF,1(a1)				; has input timer hit 255 (maximum)?
 		beq.s	.next					; if yes, branch
+		
+	.exit:
 		rts	
 
 	.next:
 		move.b	d0,2(a1)				; write new input state
 		move.b	#0,3(a1)				; set time to 0
 		addq.w	#2,(v_demo_input_counter).w		; increment counter
-		andi.w	#$3FF,(v_demo_input_counter).w		; counter stops at $200 inputs
 		rts

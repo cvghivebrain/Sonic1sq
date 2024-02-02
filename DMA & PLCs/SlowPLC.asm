@@ -86,7 +86,7 @@ SlowPLC_Now:
 		beq.s	.exit					; branch if SlowPLCs are complete
 		bsr.w	ProcessSlowPLC_SkipChk
 		move.b	#id_VBlank_Fade,(v_vblank_routine).w	
-		jsr	WaitForVBlank				; wait for frame to end
+		jsr	(WaitForVBlank).w			; wait for frame to end
 		bra.s	.loop
 		
 	.exit:
@@ -98,15 +98,17 @@ SlowPLC_Now:
 ; input:
 ;	d0.w = SPLC index id
 
-;	uses d0.w, d1.l
+;	uses d0.w
 ; ---------------------------------------------------------------------------
 
 SlowPLC:
+		tst.l	(v_slowplc_ptr).w
+		bne.s	.exit					; branch if SlowPLC is already occupied
 		add.w	d0,d0
-		moveq	#0,d1
-		move.w	SlowLoadCues(pc,d0.w),d1
-		addi.l	#SlowLoadCues,d1
-		move.l	d1,(v_slowplc_ptr).w			; save address
+		add.w	d0,d0
+		move.l	SlowLoadCues(pc,d0.w),(v_slowplc_ptr).w	; save address
+		
+	.exit:
 		rts
 
 splcheader:	macro *,vram
@@ -138,7 +140,7 @@ splc:		macro gfx,tileram
 ; ---------------------------------------------------------------------------
 
 SlowLoadCues:
-		index *
+		index.l 0
 		ptr SPLC_Title
 		ptr SPLC_Sega
 		ptr SPLC_HiddenCredits

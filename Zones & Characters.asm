@@ -528,11 +528,10 @@ Zone_Deform_End:	dc.l Deform_GHZ,Deform_GHZ
 ; ---------------------------------------------------------------------------
 
 LoadPerCharacter:
-		moveq	#0,d0
 		move.w	(v_character1).w,d0			; get character number
 		mulu.w	#CharDefs_size-CharDefs,d0		; get offset for character
 		lea	CharDefs(pc),a4
-		adda.l	d0,a4					; jump to relevant character data
+		adda.w	d0,a4					; jump to relevant character data
 
 		move.l	(a4),(v_ost_player).w			; load player object
 		move.l	(a4)+,(v_player1_ptr).w			; save pointer to player object
@@ -619,11 +618,10 @@ CharDefs:
 ; ---------------------------------------------------------------------------
 
 LoadPerDemo:
-		moveq	#0,d0
 		move.w	(v_demo_num).w,d0			; get demo number
 		mulu.w	#DemoDefs_size-DemoDefs,d0		; get offset for particular demo
 		lea	DemoDefs(pc),a4
-		adda.l	d0,a4					; jump to relevant demo data
+		adda.w	d0,a4					; jump to relevant demo data
 
 		move.w	(a4)+,d0				; get zone number
 		move.b	d0,(v_zone).w

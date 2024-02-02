@@ -17,6 +17,7 @@ countof_priority:	equ 7					; number of priority levels
 sizeof_dma:		equ 14					; size of one DMA command
 countof_dma:		equ 28					; number of DMA slots in queue
 sizeof_slowplc_buffer:	equ $1000				; size of buffer for SlowPLC
+sizeof_demo_rec:	equ $200				; size of demo recorder
 
 level_max_width:	equ $80
 level_max_height:	equ 8
