@@ -100,6 +100,7 @@ v_boundary_bottom:		equ __rs-2			; bottom level boundary
 v_camera_x_diff:		rs.w 1				; camera x position change since last frame * $100
 v_camera_y_diff:		rs.w 1				; camera y position change since last frame * $100
 v_camera_y_shift:		rs.w 1				; camera y position shift when Sonic looks up/down - $60 = default; $C8 = look up; 8 = look down
+v_dle_section:			rs.w 1				; dynamic level event - section counter
 v_dle_routine:			rs.b 1				; dynamic level event - routine counter
 f_disable_scrolling:		rs.b 1				; flag set to disable all scrolling and LZ water features
 v_fg_x_redraw_flag:		rs.w 1				; $10 when foreground camera x has moved 16 pixels and needs redrawing

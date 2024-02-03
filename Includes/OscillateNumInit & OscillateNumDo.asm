@@ -1,12 +1,12 @@
 ; ---------------------------------------------------------------------------
 ; Subroutine to initialise oscillating numbers
 
-;	uses d1, a1, a2
+;	uses d1.l, a1, a2
 ; ---------------------------------------------------------------------------
 
 OscillateNumInit:
 		lea	(v_oscillating_direction).w,a1
-		lea	(.baselines).l,a2
+		lea	.baselines(pc),a2
 		moveq	#((.end-.baselines)/2)-1,d1
 
 	.loop:

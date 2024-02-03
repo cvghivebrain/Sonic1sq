@@ -41,10 +41,10 @@ MoveSonicInDemo:
 ; ---------------------------------------------------------------------------
 
 DemoRecorder:
-		lea	(v_demo_rec).w,a1			; memory address to record demo to
 		lea	(v_demo_input_counter).w,a2		; get number of inputs so far
 		cmpi.w	#sizeof_demo_rec*2,(a2)
 		beq.s	.exit					; branch if recorder is full
+		lea	(v_demo_rec).w,a1			; memory address to record demo to
 		adda.w	(a2),a1					; jump to last position in recorded data
 		move.b	(v_joypad_hold_actual).w,d0		; get joypad input state
 		cmp.b	(a1),d0					; is joypad input same as last frame?

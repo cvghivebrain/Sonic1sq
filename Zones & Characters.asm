@@ -493,11 +493,11 @@ Zone_Card_SBZ:	dc.w id_CardSet_SBZ,1,id_UPLC_SBZCard,0
 
 Zone_DLE_GHZ:	dc.l DLE_GHZ1,DLE_GHZ2,DLE_GHZ3
 Zone_DLE_MZ:	dc.l DLE_MZ1,DLE_MZ2,DLE_MZ3
-Zone_DLE_SYZ:	dc.l DLE_SYZ1,DLE_SYZ2,DLE_SYZ3
-Zone_DLE_LZ:	dc.l DLE_LZ12,DLE_LZ12,DLE_LZ3,DLE_SBZ3
-Zone_DLE_SLZ:	dc.l DLE_SLZ12,DLE_SLZ12,DLE_SLZ3
+Zone_DLE_SYZ:	dc.l 0,DLE_SYZ2,DLE_SYZ3
+Zone_DLE_LZ:	dc.l 0,0,DLE_LZ3,DLE_SBZ3
+Zone_DLE_SLZ:	dc.l 0,0,DLE_SLZ3
 Zone_DLE_SBZ:	dc.l DLE_SBZ1,DLE_SBZ2,DLE_FZ
-Zone_DLE_End:	dc.l DLE_Ending,DLE_Ending
+Zone_DLE_End:	dc.l 0,0
 
 ; ---------------------------------------------------------------------------
 ; Next level list

@@ -10,17 +10,6 @@ DynamicLevelEvents:
 		movea.l	d0,a1
 		jsr	(a1)					; update v_boundary_bottom_next if needed
 		moveq	#2,d2
-		move.w	(v_boundary_right_next).w,d1
-		sub.w	(v_boundary_right).w,d1
-		beq.s	.keep_right				; branch if right boundary is unchanged
-		bpl.s	.move_right				; branch if new boundary is right of current one
-		neg.w	d2
-
-	.move_right:
-		add.w	d2,(v_boundary_right).w			; update boundary
-
-	.keep_right:
-		moveq	#2,d2
 		move.w	(v_boundary_bottom_next).w,d1		; new boundary y pos is written here
 		sub.w	(v_boundary_bottom).w,d1
 		beq.s	.keep_boundary				; branch if boundary is where it should be
@@ -38,6 +27,17 @@ DynamicLevelEvents:
 		move.b	#1,(f_boundary_bottom_change).w
 
 	.keep_boundary:
+		moveq	#2,d2
+		move.w	(v_boundary_right_next).w,d1
+		sub.w	(v_boundary_right).w,d1
+		beq.s	.keep_right				; branch if right boundary is unchanged
+		bpl.s	.move_right				; branch if new boundary is right of current one
+		neg.w	d2
+
+	.move_right:
+		add.w	d2,(v_boundary_right).w			; update boundary
+
+	.keep_right:
 		rts
 ; ===========================================================================
 
@@ -53,7 +53,7 @@ DynamicLevelEvents:
 	.down_2px:
 		add.w	d2,(v_boundary_bottom).w		; move boundary down 2px (or 8px)
 		move.b	#1,(f_boundary_bottom_change).w
-		rts
+		bra.s	.keep_boundary
 
 ; ---------------------------------------------------------------------------
 ; Green	Hill Zone dynamic level events
@@ -71,13 +71,12 @@ DLE_GHZ1:
 ; output:
 ;	d0.w = v_camera_x_pos
 
-;	uses d0.l, a1
+;	uses d0.w, a1
 ; ---------------------------------------------------------------------------
 
 DLE_BoundaryUpdate:
-		moveq	#0,d0
-		move.b	(v_dle_routine).w,d0
-		adda.l	d0,a1					; jump to current section
+		move.w	(v_dle_section).w,d0
+		adda.w	d0,a1					; jump to current section
 		move.w	(v_camera_x_pos).w,d0
 		cmp.w	(a1),d0
 		bcs.s	.prev_sect				; branch if camera is left of section
@@ -86,13 +85,13 @@ DLE_BoundaryUpdate:
 		rts
 
 	.prev_sect:
-		subq.b	#6,(v_dle_routine).w
+		subq.w	#6,(v_dle_section).w
 		move.w	-4(a1),(v_boundary_top).w
 		move.w	-2(a1),(v_boundary_bottom_next).w
 		rts
 
 	.next_sect:
-		addq.b	#6,(v_dle_routine).w
+		addq.w	#6,(v_dle_section).w
 		move.w	8(a1),(v_boundary_top).w
 		move.w	10(a1),(v_boundary_bottom_next).w
 		rts
@@ -127,10 +126,6 @@ DLE_GHZ3_Sect:	dc.w 0, 0, $300
 ; ---------------------------------------------------------------------------
 ; Labyrinth Zone dynamic level events
 ; ---------------------------------------------------------------------------
-
-DLE_LZ12:
-		rts						; no events for acts 1/2
-; ===========================================================================
 
 DLE_LZ3:
 		tst.b	(v_button_state+$F).w			; has switch $F	been pressed?
@@ -355,10 +350,6 @@ DLE_MZ3_End:
 ; Star Light Zone dynamic level events
 ; ---------------------------------------------------------------------------
 
-DLE_SLZ12:
-		rts						; no events for acts 1/2
-; ===========================================================================
-
 DLE_SLZ3:
 		moveq	#0,d0
 		move.b	(v_dle_routine).w,d0
@@ -409,10 +400,6 @@ DLE_SLZ3_End:
 ; ---------------------------------------------------------------------------
 ; Spring Yard Zone dynamic level events
 ; ---------------------------------------------------------------------------
-
-DLE_SYZ1:
-		rts						; no events for act 1
-; ===========================================================================
 
 DLE_SYZ2:
 		move.w	#$520,(v_boundary_bottom_next).w
@@ -612,10 +599,3 @@ DLE_FZ_Wait:
 
 DLE_FZ_End:
 		bra.s	DLE_SBZ2_SetBoundary			; allow scrolling right
-
-; ---------------------------------------------------------------------------
-; Ending sequence dynamic level events (empty)
-; ---------------------------------------------------------------------------
-
-DLE_Ending:
-		rts
