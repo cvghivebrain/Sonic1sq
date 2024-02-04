@@ -39,6 +39,8 @@ GRing_Main:	; Routine 0
 ; ===========================================================================
 
 GRing_Animate:	; Routine 2
+		tst.b	ost_render(a0)
+		bpl.w	DespawnQuick				; branch if not visible
 		lea	Ani_BigRing(pc),a1
 		bsr.w	AnimateSprite
 		set_dma_dest vram_giantring,d1			; set VRAM address to write gfx

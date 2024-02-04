@@ -50,18 +50,18 @@ draw_bg:		equ $4000+(vram_bg-draw_base)		; VRAM write command + bg nametable add
 
 vram_ball:		equ $6640				; GHZ ball graphics
 vram_continue:		equ $A000				; continue screen graphics
-vram_bonus:		equ $A200				; hidden bonus graphics
 vram_boss:		equ $A200				; boss ship graphics
 vram_shield:		equ $A800				; shield graphics (up to $AC80)
+vram_bonus:		equ $AC80				; hidden bonus graphics
 vram_exhaust:		equ $AC80				; boss exhaust flame graphics
 vram_face:		equ $AE40				; boss face graphics
 vram_weapon:		equ $B0A0				; boss weapon graphics
 vram_overlay:		equ $B200				; debug overlay - Sonic's x/y pos
 vram_overlay2:		equ $B300				; debug overlay - object's x/y pos
 vram_credits:		equ $B400				; credits font graphics
+vram_signpost:		equ $BC00				; signpost graphics
 vram_monitors:		equ $D000				; monitor graphics
-vram_signpost:		equ $D000				; signpost graphics
-vram_giantring:		equ $D340				; giant ring graphics
+vram_giantring:		equ $D000				; giant ring graphics
 vram_animals:		equ $F400				; animal graphics
 vram_lifeicon:		equ $FA80				; life icon graphics
 vram_overlay3:		equ $FF80				; debug overlay - hitbox corner and centre dot

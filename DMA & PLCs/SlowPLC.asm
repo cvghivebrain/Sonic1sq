@@ -135,6 +135,9 @@ splc:		macro gfx,tileram
 		last_vram: = last_vram+sizeof_\gfx		; update last_vram for next item
 		endm
 		
+vramusage:	macros
+		inform	0,"\1 uses $%h bytes of VRAM.",last_vram
+		
 ; ---------------------------------------------------------------------------
 ; Pattern load cues
 ; ---------------------------------------------------------------------------
@@ -194,6 +197,7 @@ SPLC_GHZ:	splcheader 0
 		splc Kos_HSpring,v_tile_hspring
 		splc Kos_VSpring,v_tile_vspring
 		dc.w -1
+		vramusage GHZ
 
 SPLC_MZ:	splcheader 0
 		splc Kos_MZ
@@ -215,6 +219,7 @@ SPLC_MZ:	splcheader 0
 		splc Kos_HSpring,v_tile_hspring
 		splc Kos_VSpring,v_tile_vspring
 		dc.w -1
+		vramusage MZ
 
 SPLC_SYZ:	splcheader 0
 		splc Kos_SYZ
@@ -233,6 +238,7 @@ SPLC_SYZ:	splcheader 0
 		splc Kos_HSpring,v_tile_hspring
 		splc Kos_VSpring,v_tile_vspring
 		dc.w -1
+		vramusage SYZ
 
 SPLC_LZ:	splcheader 0
 		SPLC_LZ_common:	macro				; these gfx are also used in SBZ3
@@ -265,6 +271,7 @@ SPLC_LZ:	splcheader 0
 		splc Kos_HSpring,v_tile_hspring
 		splc Kos_VSpring,v_tile_vspring
 		dc.w -1
+		vramusage LZ
 
 SPLC_SLZ:	splcheader 0
 		splc Kos_SLZ
@@ -286,6 +293,7 @@ SPLC_SLZ:	splcheader 0
 		splc Kos_HSpring,v_tile_hspring
 		splc Kos_VSpring,v_tile_vspring
 		dc.w -1
+		vramusage SLZ
 
 SPLC_SBZ:	splcheader 0
 		splc Kos_SBZ
@@ -315,6 +323,7 @@ SPLC_SBZ:	splcheader 0
 		splc Kos_HSpring,v_tile_hspring
 		splc Kos_VSpring,v_tile_vspring
 		dc.w -1
+		vramusage SBZ
 
 SPLC_SBZ3:	splcheader 0
 		SPLC_LZ_common					; same as LZ
@@ -330,12 +339,14 @@ SPLC_SBZ3:	splcheader 0
 		splc Kos_HSpring,v_tile_hspring
 		splc Kos_VSpring,v_tile_vspring
 		dc.w -1
+		vramusage SBZ3
 
 SPLC_FZ:	splcheader 0
 		splc Kos_SBZ
 		splc Kos_FzBoss
 		splc Kos_FzEggman
 		dc.w -1
+		vramusage FZ
 
 SPLC_End:	splcheader 0
 		splc Kos_GHZ_1st
@@ -344,6 +355,7 @@ SPLC_End:	splcheader 0
 		splc Kos_EndEm,v_tile_emeralds
 		splc Kos_EndSonic
 		dc.w -1
+		vramusage Ending
 
 SPLC_TryAgain:	splcheader 0
 		splc Kos_TryAgain
@@ -373,3 +385,4 @@ SPLC_Special:	splcheader 0
 		splc Kos_SSZone6
 		splc Kos_Ring
 		dc.w -1
+		vramusage SS
