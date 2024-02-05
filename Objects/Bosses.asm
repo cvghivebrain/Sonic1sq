@@ -30,11 +30,13 @@ ost_boss2_y_normal:	rs.l 1					; y position without wobble
 ost_boss2_time:		rs.w 1					; time until next action
 ost_boss2_cam_start:	equ ost_boss2_time			; camera x pos where boss activates
 ost_boss2_wobble:	rs.b 1					; wobble counter
-ost_boss2_laugh:	rs.b 1					; flag set when Eggman laughs
+ost_boss2_flags:	rs.b 1					; flag bitfield from Boss_MoveList
 		rsobjend
 		
 Boss_CamXPos:	dc.w $2960					; camera x pos where the boss becomes active
+		dc.w $17F0
 Boss_InitMode:	dc.b (Boss_MoveGHZ-Boss_MoveList)/sizeof_bmove	; initial mode for each boss
+		dc.b (Boss_MoveMZ-Boss_MoveList)/sizeof_bmove
 		even
 		
 bmove:		macro xvel,yvel,time,loadobj,xflip,next
@@ -45,12 +47,16 @@ bmove:		macro xvel,yvel,time,loadobj,xflip,next
 		
 bmove_xflip_bit:	equ 0
 bmove_laugh_bit:	equ 1
+bmove_nowobble_bit:	equ 2
+bmove_freezehit_bit:	equ 3
 bmove_xflip:		equ 1<<bmove_xflip_bit
 bmove_laugh:		equ 1<<bmove_laugh_bit
-sizeof_bmove:		equ 12
+bmove_nowobble:		equ 1<<bmove_nowobble_bit
+bmove_freezehit:	equ 1<<bmove_freezehit_bit
 
 Boss_MoveList:	; x speed, y speed, duration, object to load, flags, value to add to mode
 Boss_MoveGHZ:	bmove 0, $100, $B8, 0, 0, 1
+sizeof_bmove:	equ *-Boss_MoveGHZ
 		bmove -$100, -$40, $60, 0, 0, 1
 		bmove 0, 0, 128, BossBall, bmove_laugh, 1
 		bmove -$40, 0, 128, 0, 0, 1
@@ -58,6 +64,17 @@ Boss_MoveGHZ:	bmove 0, $100, $B8, 0, 0, 1
 		bmove $100, 0, 63, 0, bmove_xflip, 1
 		bmove 0, 0, 63, 0, 0, 1
 		bmove -$100, 0, 63, 0, 0, -3
+		
+Boss_MoveMZ:	bmove -$100, 0, $E0, 0, 0, 1
+		bmove 0, 0, 15, 0, bmove_nowobble, 1
+		bmove -$200, $40, 72, 0, bmove_nowobble+bmove_freezehit, 1
+		bmove -$200, -$40, 40, 0, bmove_nowobble+bmove_freezehit, 1
+		bmove 0, -$40, 32, 0, bmove_nowobble, 1
+		bmove 0, 0, 80, 0, bmove_xflip+bmove_nowobble+bmove_laugh, 1
+		bmove $200, $40, 72, 0, bmove_xflip+bmove_nowobble+bmove_freezehit, 1
+		bmove $200, -$40, 40, 0, bmove_xflip+bmove_nowobble+bmove_freezehit, 1
+		bmove 0, -$40, 32, 0, bmove_xflip+bmove_nowobble, 1
+		bmove 0, 0, 80, 0, bmove_nowobble+bmove_laugh, -7
 ; ===========================================================================
 
 Boss_Main:	; Routine 0
@@ -70,7 +87,7 @@ Boss_Main:	; Routine 0
 		move.b	#id_React_Boss,ost_col_type(a0)
 		move.b	#24,ost_col_width(a0)
 		move.b	#24,ost_col_height(a0)
-		move.b	#hitcount_ghz,ost_col_property(a0)	; set number of hits to 8
+		move.b	#hitcount_ghz+4,ost_col_property(a0)	; set number of hits to 8
 		move.w	ost_y_pos(a0),ost_boss2_y_normal(a0)
 		clr.b	(v_boss_flash).w
 		move.b	ost_subtype(a0),d0
@@ -122,9 +139,16 @@ Boss_Wait:	; Routine 2
 Boss_Move:	; Routine 4
 		subq.w	#1,ost_boss2_time(a0)			; decrement timer
 		bpl.s	.continue				; branch if time remains
-		bsr.s	Boss_SetMode
+		bsr.w	Boss_SetMode
 		
 	.continue:
+		move.b	ost_boss2_flags(a0),d2
+		btst	#bmove_freezehit_bit,d2
+		beq.s	.nofreezehit				; branch if freeze on hit flag isn't set
+		cmpi.b	#$18,(v_boss_flash).w
+		bcc.s	.skip_wobble				; branch if boss was recently hit
+		
+	.nofreezehit:
 		update_x_pos
 		move.w	ost_y_vel(a0),d0			; load vertical speed
 		ext.l	d0
@@ -132,12 +156,22 @@ Boss_Move:	; Routine 4
 		add.l	d0,ost_boss2_y_normal(a0)		; update y position
 		
 		move.b	ost_boss2_wobble(a0),d0			; get wobble byte
+		btst	#bmove_nowobble_bit,d2
+		beq.s	.wobble					; branch if wobble is enabled
+		move.b	d0,d1
+		andi.b	#$7F,d1
+		bne.s	.wobble					; continue wobble until it evens out
+		move.w	ost_boss2_y_normal(a0),ost_y_pos(a0)	; update y pos
+		bra.s	.skip_wobble
+		
+	.wobble:
 		jsr	(CalcSine).w				; convert to sine
 		asr.w	#6,d0					; divide by 64
 		add.w	ost_boss2_y_normal(a0),d0		; add y pos
 		move.w	d0,ost_y_pos(a0)			; update actual y pos
 		addq.b	#2,ost_boss2_wobble(a0)			; increment wobble (wraps to 0 after $FE)
 		
+	.skip_wobble:
 		tst.b	ost_status(a0)
 		bmi.s	.beaten					; branch if boss has been beaten
 		tst.b	ost_col_type(a0)
@@ -182,20 +216,14 @@ Boss_SetMode:
 	.skip_object:
 		move.b	(a2)+,d0				; get flags
 		bclr	#render_xflip_bit,ost_render(a0)	; assume facing left
-		bclr	#status_xflip_bit,ost_status(a0)
-		move.b	#0,ost_boss2_laugh(a0)			; assume not laughing
-		
+		bclr	#status_xflip_bit,ost_status(a0)		
 		btst	#bmove_xflip_bit,d0
 		beq.s	.noflip					; branch if xflip bit isn't set
 		bset	#render_xflip_bit,ost_render(a0)	; face right
 		bset	#status_xflip_bit,ost_status(a0)
 		
 	.noflip:
-		btst	#bmove_laugh_bit,d0
-		beq.s	.nolaugh				; branch if laughing bit isn't set
-		move.b	#1,ost_boss2_laugh(a0)			; Eggman laughs
-		
-	.nolaugh:
+		move.b	d0,ost_boss2_flags(a0)			; save flags
 		move.b	(a2)+,d0
 		add.b	d0,ost_mode(a0)				; next mode
 		rts
@@ -317,7 +345,7 @@ BossCockpit:
 		move.b	ost_render(a1),ost_render(a0)
 		cmpi.b	#id_Sonic_Hurt,(v_ost_player+ost_routine).w
 		bcc.s	.laugh					; branch if Sonic is hit
-		tst.b	ost_boss2_laugh(a1)
+		btst	#bmove_laugh_bit,ost_boss2_flags(a1)
 		bne.s	.laugh					; branch if boss is set to laugh
 		cmpi.b	#id_Boss_Explode,ost_routine(a1)
 		beq.s	.hit					; branch if boss is exploding

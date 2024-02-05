@@ -303,6 +303,7 @@ DebugList_MZ:
 		dbheader
 		dbitem	Rings, Map_Ring, 0, 0, id_frame_ring_front, v_tile_rings, tile_pal2
 		dbitem	Monitor, Map_Monitor, type_monitor_rings, 0, id_frame_monitor_static0, tile_Art_Monitors, 0
+		dbitem	Boss, Map_Bosses, $81, 0, id_frame_boss_ship, tile_Art_Eggman, 0
 		dbitem	BuzzBomber, Map_Buzz, 0, 0, id_frame_buzz_fly1, v_tile_buzzbomber, 0
 		dbitem	Batbrain, Map_Bat, 0, 0, id_frame_bat_hanging, v_tile_batbrain, 0
 		dbitem	Caterkiller, Map_Cat, 0, 0, id_frame_cat_head1, v_tile_caterkiller, tile_pal2

@@ -17,7 +17,6 @@ v_kosplc_buffer_end:		equ __rs			; KosPLC shouldn't overwrite the sprite queue o
 		rsset $FFFF8000					; addresses after this point must be over $8000
 		endc
 v_sprite_queue:			rs.b sizeof_priority*countof_priority ; sprite display queue, first section is highest priority ($400 bytes; 8 sections of $80 bytes)
-v_subsprite_queue:		rs.b sizeof_subsprite*countof_subsprite
 v_sonic_gfx_buffer:		rs.b sizeof_vram_sonic		; buffered Sonic graphics ($17 cells) ($2E0 bytes)
 v_sonic_pos_tracker:		rs.l $40			; earlier position tracking list for Sonic, used by invincibility stars ($100 bytes)
 v_demo_rec:			rs.b sizeof_demo_rec		; demo recorder ($200 bytes)
@@ -31,6 +30,7 @@ v_ost_all:			rs.b sizeof_ost*countof_ost	; object variable space ($40 bytes per 
 	v_ost_level_obj:	equ v_ost_all+(sizeof_ost*countof_ost_inert) ; level object variable space ($1800 bytes)
 v_ost_end:			equ __rs
 v_ost_final:			equ v_ost_end-sizeof_ost
+v_subsprite_queue:		rs.b sizeof_subsprite*countof_subsprite
 				rsblockend ost
 
 v_snddriver_ram:		rs.b v_snddriver_size		; start of RAM for the sound driver data ($5C0 bytes)
