@@ -65,7 +65,7 @@ sizeof_bmove:	equ *-Boss_MoveGHZ
 		bmove 0, 0, 63, 0, 0, 1
 		bmove -$100, 0, 63, 0, 0, -3
 		
-Boss_MoveMZ:	bmove -$100, 0, $E0, 0, 0, 1
+Boss_MoveMZ:	bmove -$100, 0, $E0, BossNozzle, 0, 1
 		bmove 0, 0, 15, 0, bmove_nowobble, 1
 		bmove -$200, $40, 72, 0, bmove_nowobble+bmove_freezehit, 1
 		bmove -$200, -$40, 40, 0, bmove_nowobble+bmove_freezehit, 1
@@ -87,7 +87,7 @@ Boss_Main:	; Routine 0
 		move.b	#id_React_Boss,ost_col_type(a0)
 		move.b	#24,ost_col_width(a0)
 		move.b	#24,ost_col_height(a0)
-		move.b	#hitcount_ghz+4,ost_col_property(a0)	; set number of hits to 8
+		move.b	#hitcount_ghz,ost_col_property(a0)	; set number of hits to 8
 		move.w	ost_y_pos(a0),ost_boss2_y_normal(a0)
 		clr.b	(v_boss_flash).w
 		move.b	ost_subtype(a0),d0
@@ -381,3 +381,27 @@ BossCockpit:
 		moveq	#id_ani_face_defeat,d0
 		bra.s	.animate
 		
+; ---------------------------------------------------------------------------
+; Boss MZ/SLZ nozzles
+
+; spawned by:
+;	Boss
+; ---------------------------------------------------------------------------
+
+BossNozzle:
+		move.l	#Map_BossItems,ost_mappings(a0)
+		move.w	#(vram_weapon/sizeof_cell)+tile_pal2,ost_tile(a0)
+		move.b	#render_rel,ost_render(a0)
+		move.b	#8,ost_displaywidth(a0)
+		move.b	#priority_2,ost_priority(a0)
+		move.b	#id_frame_boss_pipe,ost_frame(a0)
+		moveq	#id_UPLC_MZPipe,d0
+		jsr	UncPLC					; load gfx
+		
+		shortcut
+		getparent					; a1 = OST of boss ship
+		move.w	ost_x_pos(a1),ost_x_pos(a0)
+		move.w	ost_y_pos(a1),ost_y_pos(a0)
+		move.b	ost_status(a1),ost_status(a0)
+		move.b	ost_render(a1),ost_render(a0)
+		jmp	DisplaySprite
