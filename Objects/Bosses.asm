@@ -70,11 +70,11 @@ Boss_MoveMZ:	bmove -$100, 0, $E0, BossNozzle, 0, 1
 		bmove -$200, $40, 72, 0, bmove_nowobble+bmove_freezehit, 1
 		bmove -$200, -$40, 40, 0, bmove_nowobble+bmove_freezehit, 1
 		bmove 0, -$40, 32, 0, bmove_nowobble, 1
-		bmove 0, 0, 80, 0, bmove_xflip+bmove_nowobble+bmove_laugh, 1
+		bmove 0, 0, 80, BossFire, bmove_xflip+bmove_nowobble+bmove_laugh, 1
 		bmove $200, $40, 72, 0, bmove_xflip+bmove_nowobble+bmove_freezehit, 1
 		bmove $200, -$40, 40, 0, bmove_xflip+bmove_nowobble+bmove_freezehit, 1
 		bmove 0, -$40, 32, 0, bmove_xflip+bmove_nowobble, 1
-		bmove 0, 0, 80, 0, bmove_nowobble+bmove_laugh, -7
+		bmove 0, 0, 80, BossFire, bmove_nowobble+bmove_laugh, -7
 ; ===========================================================================
 
 Boss_Main:	; Routine 0
