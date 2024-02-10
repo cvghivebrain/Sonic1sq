@@ -156,7 +156,7 @@ Anim_Flag_WalkRun:
 		move.b	(a2,d0.w),d0				; get animation for specified angle
 		bpl.s	.noinvert				; branch if invert flag is not set
 		ori.b	#render_xflip+render_yflip,ost_render(a0) ; x/yflip sprite
-		and.b	#$7F,d0					; remove invert flag
+		andi.b	#$7F,d0					; remove invert flag
 	.noinvert:
 		eor.b	d2,ost_render(a0)			; apply xflip from status
 

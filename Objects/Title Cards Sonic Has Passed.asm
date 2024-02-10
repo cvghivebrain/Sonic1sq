@@ -43,9 +43,9 @@ Has_Main:	; Routine 0
 		add.w	(v_haspassed_uplc).w,d0
 		jsr	UncPLC					; load title card patterns
 		move.w	(v_titlecard_act).w,d0
-		sub.w	#2,d0
+		subq.w	#2,d0
 		bcs.s	.keep_act				; branch if act is 0 or 1
-		add.w	#id_UPLC_Act2Card,d0
+		addi.w	#id_UPLC_Act2Card,d0
 		jsr	UncPLC					; load act 2/3 gfx
 		
 	.keep_act:
@@ -64,16 +64,16 @@ Has_Main:	; Routine 0
 		move.b	#id_Has_WaitEnter,ost_routine(a1)
 		move.l	#Map_Has,ost_mappings(a1)
 		move.w	(v_tile_bonus).w,ost_tile(a1)
-		add.w	#tile_hi,ost_tile(a1)
+		addi.w	#tile_hi,ost_tile(a1)
 		move.b	#render_abs,ost_render(a1)
 		move.b	#priority_0,ost_priority(a1)
 		move.b	d1,ost_frame(a1)			; use frames 2, 1 and 0
 		move.w	#screen_right,ost_x_pos(a1)
 		move.w	#screen_left+80,ost_has_x_stop(a1)	; x pos when text stops on screen
 		move.w	d2,ost_y_screen(a1)
-		add.w	#16,d2					; spacing between lines of text
+		addi.w	#16,d2					; spacing between lines of text
 		move.w	d3,ost_has_time(a1)
-		add.w	#2,d3					; 2 frame delay between each line
+		addq.w	#2,d3					; 2 frame delay between each line
 		dbf	d1,.loop
 		
 		jsr	FindFreeInert
@@ -94,18 +94,18 @@ Has_Main:	; Routine 0
 Has_WaitEnter:	; Routine 2
 		subq.w	#1,ost_has_time(a0)			; decrement timer
 		bpl.s	.wait					; branch if time remains
-		add.b	#2,ost_routine(a0)			; goto Has_Enter next
+		addq.b	#2,ost_routine(a0)			; goto Has_Enter next
 		
 	.wait:
 		rts
 		
 Has_Enter:	; Routine 4
 		move.w	ost_x_pos(a0),d0
-		sub.w	#16,d0					; move 16px left
+		subi.w	#16,d0					; move 16px left
 		move.w	ost_has_x_stop(a0),d1
 		cmp.w	d0,d1
 		bcs.s	.not_at_stop				; branch if not at target x pos
-		add.b	#2,ost_routine(a0)			; goto Has_Display next
+		addq.b	#2,ost_routine(a0)			; goto Has_Display next
 		move.w	d1,d0					; snap to target
 		
 	.not_at_stop:
@@ -148,7 +148,7 @@ Has_WaitBonus:	; Routine $C
 		clr.b	(f_pass_bonus_update).w			; clear time/ring bonus update flag
 		subq.w	#1,ost_has_time(a0)			; decrement timer
 		bpl.s	.wait					; branch if time remains
-		add.b	#2,ost_routine(a0)			; goto Has_Bonus next
+		addq.b	#2,ost_routine(a0)			; goto Has_Bonus next
 		
 	.wait:
 		rts
@@ -172,7 +172,7 @@ Has_Bonus:	; Routine $E
 		tst.w	d0					; is there any bonus?
 		bne.s	.add_bonus				; if yes, branch
 		play.w	1, jsr, sfx_Register			; play "ker-ching" sound
-		add.b	#2,ost_routine(a0)			; goto Has_Finish next
+		addq.b	#2,ost_routine(a0)			; goto Has_Finish next
 		move.w	#180,ost_has_time(a0)			; set time delay to 3 seconds
 		rts
 		

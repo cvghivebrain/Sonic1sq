@@ -43,7 +43,7 @@ But_Main:	; Routine 0
 		btst	#type_button_pal3_bit,ost_subtype(a0)	; is subtype +$10?
 		beq.s	.not_marble				; if not, branch
 
-		add.w	#tile_pal3,ost_tile(a0)			; use different palette line
+		addi.w	#tile_pal3,ost_tile(a0)			; use different palette line
 
 	.not_marble:
 		move.b	#render_rel,ost_render(a0)

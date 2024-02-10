@@ -44,7 +44,7 @@ Cat_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Cat_Head next
 		move.l	#Map_Cat,ost_mappings(a0)
 		move.w	(v_tile_caterkiller).w,ost_tile(a0)
-		add.w	#tile_pal2,ost_tile(a0)
+		addi.w	#tile_pal2,ost_tile(a0)
 		move.b	ost_status(a0),ost_render(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#priority_4,ost_priority(a0)

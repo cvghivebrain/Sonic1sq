@@ -61,7 +61,7 @@ LoadPerZone:
 
 		movea.l	(a4)+,a1				; get pointer for OPL list
 		move.l	(a1,d4.w),(v_opl_data_ptr).w		; get pointer for actual OPL data
-		
+
 		movea.l	(a4)+,a1				; get pointer for level layout list
 		movea.l	(a1,d4.w),a1				; get pointer for actual level layout
 		lea	(v_level_layout).w,a2
@@ -535,11 +535,11 @@ LoadPerCharacter:
 
 		move.l	(a4),(v_ost_player).w			; load player object
 		move.l	(a4)+,(v_player1_ptr).w			; save pointer to player object
-		cmp.b	#id_Special,(v_gamemode).w
+		cmpi.b	#id_Special,(v_gamemode).w
 		bne.s	.not_special				; branch if not on Special Stage
 		move.l	(a4),(v_ost_player).w			; load Special Stage player object
 	.not_special:
-		lea	4(a4),a4
+		addq.w	#4,a4
 
 		move.w	(a4)+,d0
 		bmi.s	.skip_pal

@@ -11,7 +11,7 @@ shortcut:	macro
 	.shortcut_here\@:
 		endc
 		endm
-		
+
 ; ---------------------------------------------------------------------------
 ; Save the parent OST address to ost_parent in a child object
 
@@ -22,9 +22,8 @@ shortcut:	macro
 ;		saveparent					; use after creating a new object
 ; ---------------------------------------------------------------------------
 
-saveparent:	macro
+saveparent:	macros
 		move.w	a0,ost_parent(a1)
-		endm
 
 ; ---------------------------------------------------------------------------
 ; Set a1 as the parent object
@@ -38,7 +37,7 @@ getparent:	macro
 		endc
 		movea.w	ost_parent(a0),\rg
 		endm
-		
+
 ; ---------------------------------------------------------------------------
 ; Set a1 as linked object
 ; ---------------------------------------------------------------------------
@@ -51,7 +50,7 @@ getlinked:	macro
 		endc
 		movea.w	ost_linked(a0),\rg
 		endm
-		
+
 ; ---------------------------------------------------------------------------
 ; Set a1 as Sonic
 ; ---------------------------------------------------------------------------
@@ -63,7 +62,7 @@ getsonic:	macro
 		lea	(v_ost_player).w,a1			; set a1 as Sonic
 		endc
 		endm
-		
+
 ; ---------------------------------------------------------------------------
 ; Set a2 as subsprite table
 ; ---------------------------------------------------------------------------
@@ -76,7 +75,7 @@ getsubsprite:	macro
 		endc
 		movea.w	ost_subsprite(a0),\rg
 		endm
-		
+
 ; ---------------------------------------------------------------------------
 ; Convert speed to position (speed of $100 will move an object 1px per frame)
 
@@ -101,7 +100,7 @@ update_xy_pos:	macro
 		update_x_pos
 		update_y_pos
 		endm
-		
+
 ; ---------------------------------------------------------------------------
 ; Convert speed to position and apply gravity
 
@@ -119,7 +118,7 @@ update_y_fall:	macro
 		addi.w	#$38,ost_y_vel(a0)			; increase falling speed
 		endc
 		endm
-		
+
 update_xy_fall:	macro
 		update_x_pos
 		update_y_pos
@@ -129,7 +128,7 @@ update_xy_fall:	macro
 		addi.w	#$38,ost_y_vel(a0)			; increase falling speed
 		endc
 		endm
-		
+
 ; ---------------------------------------------------------------------------
 ; Get distance between two objects (a0 and a1)
 
@@ -144,7 +143,7 @@ range_x_quick:	macro
 		move.w	ost_x_pos(a1),d0
 		sub.w	ost_x_pos(a0),d0			; d0 = x dist (-ve if Sonic is to the left)
 		endm
-		
+
 range_y_quick:	macro
 		move.w	ost_y_pos(a1),d2
 		sub.w	ost_y_pos(a0),d2			; d2 = y dist (-ve if Sonic is above)
@@ -154,7 +153,7 @@ range_x:	macro
 		range_x_quick					; d0 = x dist (-ve if Sonic is to the left)
 		mvabs.w	d0,d1					; make d1 +ve
 		endm
-		
+
 range_y:	macro
 		range_y_quick					; d2 = y dist (-ve if Sonic is above)
 		mvabs.w	d2,d3					; make d3 +ve
@@ -215,7 +214,7 @@ range_x_exact:	macro
 		move.b	ost_width(a0),d4
 		sub.w	d4,d1					; d1 = x dist between hitbox edges (-ve if overlapping)
 		endm
-		
+
 range_x_sonic:	macro
 		range_x
 		moveq	#0,d4
@@ -226,7 +225,7 @@ range_x_sonic:	macro
 		sub.w	d4,d1					; d1 = x dist between hitbox edges (-ve if overlapping)
 		add.w	d0,d4					; d4 = Sonic's x pos relative to left edge
 		endm
-		
+
 range_x_sonic0:	macro						; as above, but ignoring Sonic's width
 		range_x
 		moveq	#0,d4
@@ -234,7 +233,7 @@ range_x_sonic0:	macro						; as above, but ignoring Sonic's width
 		sub.w	d4,d1					; d1 = x dist between Sonic's x pos and object hitbox edge (-ve if overlapping)
 		add.w	d0,d4					; d4 = Sonic's x pos relative to left edge
 		endm
-		
+
 range_y_exact:	macro
 		range_y
 		moveq	#0,d5
@@ -244,7 +243,7 @@ range_y_exact:	macro
 		addq.b	#1,d5
 		sub.w	d5,d3					; d3 = y dist between hitbox edges (-ve if overlapping)
 		endm
-		
+
 ; ---------------------------------------------------------------------------
 ; Set the animation id of an object to d0 (do nothing if it's the same as d0)
 
@@ -311,7 +310,7 @@ toggleframe:	macro
 		bchg	#0,ost_frame(a0)			; toggle between frame 0 and 1
 		endc
 		endm
-		
+
 ; ---------------------------------------------------------------------------
 ; Multiply a number by 60
 
@@ -328,4 +327,4 @@ mul60:		macro
 		add.w	\2,\2
 		sub.w	\2,\1
 		endm
-		
+

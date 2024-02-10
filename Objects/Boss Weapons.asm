@@ -76,9 +76,9 @@ Weapon_Spike:	; Routine 4
 		bne.s	.exit					; branch if boss isn't attacking
 		cmpi.b	#id_BSYZ_BreakBlock,ost_subtype(a3)
 		beq.s	.retract				; branch if boss is breaking block
-		cmp.w	#$94,ost_weapon_y_diff(a0)
+		cmpi.w	#$94,ost_weapon_y_diff(a0)
 		bge.s	.exit					; branch if spike is fully extended
-		add.w	#7,ost_weapon_y_diff(a0)
+		addq.w	#7,ost_weapon_y_diff(a0)
 		move.b	#id_React_Hurt,ost_col_type(a0)		; make spike harmful
 		move.b	#4,ost_col_width(a0)
 		move.b	#16,ost_col_height(a0)
@@ -91,7 +91,7 @@ Weapon_Spike:	; Routine 4
 		bpl.s	.exit					; branch if boss is shaking
 		tst.w	ost_weapon_y_diff(a0)
 		bmi.s	.gone					; branch if spike is fully retracted
-		sub.w	#5,ost_weapon_y_diff(a0)
+		subq.w	#5,ost_weapon_y_diff(a0)
 		rts
 		
 	.gone:

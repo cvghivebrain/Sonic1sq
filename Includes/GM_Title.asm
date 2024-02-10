@@ -22,7 +22,7 @@ GM_Title:
 		bsr.w	ClearRAM				; fill OST with 0
 
 		lea	(v_pal_dry).w,a1
-		move.w	#loops_to_clear_pal,d1
+		moveq	#loops_to_clear_pal,d1
 		bsr.w	ClearRAM
 
 		moveq	#id_Pal_Sonic,d0			; load Sonic's palette
@@ -33,18 +33,19 @@ GM_Title:
 		bsr.w	BuildSprites
 		bsr.w	PaletteFadeIn				; fade in to "SONIC TEAM PRESENTS" screen from black
 		moveq	#id_VBlank_Title,d1
-		move.w	#60,d0
+		moveq	#60,d0
 		bsr.w	WaitLoop				; freeze for 1 second
 		disable_ints
 
-		move.b	#0,(v_last_lamppost).w			; clear lamppost counter
-		move.w	#0,(v_debug_active).w			; disable debug item placement mode
-		move.w	#0,(v_demo_mode).w			; disable debug mode
+		moveq	#0,d0
+		move.b	d0,(v_last_lamppost).w			; clear lamppost counter
+		move.w	d0,(v_debug_active).w			; disable debug item placement mode
+		move.w	d0,(v_demo_mode).w			; disable debug mode
 		move.w	#id_GHZ_act1,(v_zone).w			; set level to GHZ act 1 (0000)
-		move.w	#0,(v_palcycle_time).w			; disable palette cycling
+		move.w	d0,(v_palcycle_time).w			; disable palette cycling
 		bsr.w	PaletteFadeOut				; fade out "SONIC TEAM PRESENTS" screen to black
 		moveq	#id_SPLC_Title,d0
-		jsr	SlowPLC_Now				; load title screen gfx
+		jsr	SlowPLC_Now			; load title screen gfx
 		bsr.w	LoadPerZone
 		bsr.w	LevelParameterLoad			; set level boundaries and Sonic's start position
 		bsr.w	DeformLayers
@@ -70,7 +71,7 @@ GM_Title:
 		moveq	#id_Pal_Title,d0			; load title screen palette
 		bsr.w	PalLoad
 		play.b	1, jsr, mus_TitleScreen			; play title screen music
-		move.b	#0,(f_debug_enable).w			; disable debug mode
+		clr.b	(f_debug_enable).w			; disable debug mode
 		move.w	#406,(v_countdown).w			; run title screen for 406 frames
 
 		jsr	FindFreeInert
@@ -93,7 +94,7 @@ GM_Title:
 		bsr.w	ExecuteObjects
 		bsr.w	DeformLayers
 		bsr.w	BuildSprites
-		move.w	#0,(v_title_d_count).w			; reset d-pad counter
+		clr.w	(v_title_d_count).w			; reset d-pad counter
 		enable_display
 		bsr.w	PaletteFadeIn				; fade in to title screen from black
 
@@ -160,7 +161,7 @@ LevSel_Init:
 		move.w	#loops_to_clear_hscroll,d1
 		bsr.w	ClearRAM				; clear hscroll buffer (in RAM)
 
-		move.l	#0,(v_fg_y_pos_vsram).w
+		clr.l	(v_fg_y_pos_vsram).w
 		disable_ints
 
 		locVRAM	vram_bg,d0
@@ -251,62 +252,62 @@ LevSel_Hold:
 		rts
 
 LevSel_Down:
-		add.w	#1,d0					; goto next item
-		cmp.w	#linecount,d0
+		addq.w	#1,d0					; goto next item
+		cmpi.w	#linecount,d0
 		bne.s	.exit					; branch if item is valid
 		moveq	#0,d0					; jump to start after last item
 	.exit:
 		rts
 
 LevSel_Up:
-		sub.w	#1,d0					; goto previous item
+		subq.w	#1,d0					; goto previous item
 		bpl.s	.exit					; branch if item is valid
-		move.w	#linecount-1,d0				; jump to end before first item
+		moveq	#linecount-1,d0				; jump to end before first item
 	.exit:
 		rts
 
 LevSel_Right:
-		cmp.w	#linesound,d0
+		cmpi.w	#linesound,d0
 		bne.s	.not_soundtest				; branch if not on sound test
-		add.w	#1,(v_levelselect_sound).w		; increment sound test
-		cmp.w	#$50,(v_levelselect_sound).w
+		addq.w	#1,(v_levelselect_sound).w		; increment sound test
+		cmpi.w	#$50,(v_levelselect_sound).w
 		bne.s	.exit					; branch if valid
-		move.w	#0,(v_levelselect_sound).w		; reset to 0 if above max
+		clr.w	(v_levelselect_sound).w		; reset to 0 if above max
 		bra.s	.exit
 	.not_soundtest:
-		cmp.w	#linecharsel,d0
+		cmpi.w	#linecharsel,d0
 		bne.s	.not_charsel				; branch if not on character select
-		add.w	#1,(v_character1).w			; increment character select
-		cmp.w	#3,(v_character1).w
+		addq.w	#1,(v_character1).w			; increment character select
+		cmpi.w	#3,(v_character1).w
 		bne.s	.exit					; branch if valid
-		move.w	#0,(v_character1).w			; reset to 0 if above max
+		clr.w	(v_character1).w			; reset to 0 if above max
 		bra.s	.exit
 	.not_charsel:
-		add.w	#linecolumn,d0				; goto next column
-		cmp.w	#linecount,d0
+		addi.w	#linecolumn,d0				; goto next column
+		cmpi.w	#linecount,d0
 		blt.s	.exit					; branch if item is valid
-		sub.w	#linecolumn,d0				; undo
+		subi.w	#linecolumn,d0				; undo
 	.exit:
 		rts
 
 LevSel_Left:
-		cmp.w	#linesound,d0
+		cmpi.w	#linesound,d0
 		bne.s	.not_soundtest				; branch if not on sound test
-		sub.w	#1,(v_levelselect_sound).w		; increment sound test
+		subq.w	#1,(v_levelselect_sound).w		; increment sound test
 		bpl.s	.exit					; branch if valid
 		move.w	#$4F,(v_levelselect_sound).w		; jump to $4F if below 0
 		bra.s	.exit
 	.not_soundtest:
-		cmp.w	#linecharsel,d0
+		cmpi.w	#linecharsel,d0
 		bne.s	.not_charsel				; branch if not on character select
-		sub.w	#1,(v_character1).w			; increment character select
+		subq.w	#1,(v_character1).w			; increment character select
 		bpl.s	.exit					; branch if valid
 		move.w	#2,(v_character1).w			; jump to 2 if below 0
 		bra.s	.exit
 	.not_charsel:
-		sub.w	#linecolumn,d0				; goto previous column
+		subi.w	#linecolumn,d0				; goto previous column
 		bpl.s	.exit					; branch if item is valid
-		add.w	#linecolumn,d0				; undo
+		addi.w	#linecolumn,d0				; undo
 	.exit:
 		rts
 
@@ -316,20 +317,20 @@ LevSel_Display:
 		lea	(vdp_control_port).l,a6
 		locVRAM	vram_bg+linestart,d3
 		move.l	d3,d4
-		move.w	#linecount-1,d0
+		moveq	#linecount-1,d0
 		moveq	#0,d5
 		moveq	#0,d6
 
 	.loop:
 		move.l	d3,(a6)
 		bsr.w	LevSel_Line				; draw line of text
-		lea	6(a1),a1				; next string
+		addq.w	#6,a1				; next string
 		addi.l	#sizeof_vram_row<<16,d3			; jump to next line in nametable
-		add.w	#1,d5					; count line number in current column
-		add.w	#1,d6					; count line number overall
-		cmp.w	#linecolumn,d5
+		addq.w	#1,d5					; count line number in current column
+		addq.w	#1,d6					; count line number overall
+		cmpi.w	#linecolumn,d5
 		bne.s	.not_last				; branch if not last line in column
-		add.l	#(columnwidth*2)<<16,d4			; jump to next column
+		addi.l	#(columnwidth*2)<<16,d4			; jump to next column
 		move.l	d4,d3					; update drawing position
 		moveq	#0,d5
 
@@ -338,42 +339,42 @@ LevSel_Display:
 		rts
 
 LevSel_Line:
-		move.w	#linesize-1,d1
+		moveq	#linesize-1,d1
 
 	.loop:
 		moveq	#0,d2
 		move.b	(a1)+,d2				; get character
-		cmp.w	#linesound,d6				; d6 = current line being drawn
+		cmpi.w	#linesound,d6				; d6 = current line being drawn
 		bne.s	.not_soundtest				; branch if not the sound test
-		cmp.w	#1,d1
+		cmpi.w	#1,d1
 		bgt.s	.not_soundtest				; branch if not the last 2 characters on the line
 		move.w	(v_levelselect_sound).w,d2		; get current sound test
-		add.b	#$80,d2
+		addi.b	#$80,d2
 		lsl.w	#2,d1					; multiply character number by 4 (so it's either 4 or 0)
 		lsr.b	d1,d2					; move high nybble to low if d1 is 4
-		and.b	#$F,d2					; read single nybble
-		add.b	#$30,d2					; convert to character
+		andi.b	#$F,d2					; read single nybble
+		addi.b	#$30,d2					; convert to character
 		lsr.w	#2,d1					; restore d1
 
 	.not_soundtest:
-		cmp.w	#linecharsel,d6				; d6 = current line being drawn
+		cmpi.w	#linecharsel,d6				; d6 = current line being drawn
 		bne.s	.not_charsel				; branch if not the character select
-		cmp.w	#charselsize-1,d1
+		cmpi.w	#charselsize-1,d1
 		bgt.s	.not_charsel				; branch if not the last 8 characters on the line
 		move.w	(v_character1).w,d2			; get character id
 		lsl.w	#3,d2					; multiply by 8
-		sub.w	#charselsize-1,d1
+		subi.w	#charselsize-1,d1
 		neg.w	d1					; invert value d1
 		add.w	d1,d2					; add d1
 		neg.w	d1
-		add.w	#charselsize-1,d1			; restore d1
+		addi.w	#charselsize-1,d1			; restore d1
 		move.b	(a2,d2.w),d2				; get character
 
 	.not_charsel:
-		add.w	#tile_Kos_Text+tile_pal4+tile_hi-$20,d2	; convert to tile
+		addi.w	#tile_Kos_Text+tile_pal4+tile_hi-$20,d2	; convert to tile
 		cmp.w	(v_levelselect_item).w,d6		; d6 = current line being drawn
 		bne.s	.unselected				; branch if line is not selected
-		sub.w	#$2000,d2				; use yellow text
+		subi.w	#$2000,d2				; use yellow text
 
 	.unselected:
 		move.w	d2,-4(a6)				; write to nametable in VRAM
@@ -387,13 +388,13 @@ LevSel_Select:
 		lea	LevSel_Strings(pc),a1
 		move.w	(v_levelselect_item).w,d1
 		mulu.w	#linesize+6,d1
-		add.w	#linesize,d1
+		addi.w	#linesize,d1
 		lea	(a1,d1.w),a1				; jump to data after string for current line
 		move.w	(a1)+,d2				; get item type
 		add.w	d2,d2
 		move.w	LevSel_Index(pc,d2.w),d2
 		jsr	LevSel_Index(pc,d2.w)
-		cmp.w	#linesound,(v_levelselect_item).w
+		cmpi.w	#linesound,(v_levelselect_item).w
 		beq.s	.nothing				; don't exit if on the sound test
 		moveq	#1,d0					; set flag to exit level select
 		rts
@@ -468,10 +469,10 @@ LevSel_Credits:
 LevSel_Sound:
 		btst.b	#bitA,(v_joypad_press_actual).w		; is button A pressed?
 		beq.s	.play					; branch if not
-		add.w	#$10,(v_levelselect_sound).w		; skip $10
-		cmp.w	#$4F,(v_levelselect_sound).w
+		addi.w	#$10,(v_levelselect_sound).w		; skip $10
+		cmpi.w	#$4F,(v_levelselect_sound).w
 		ble.s	.exit					; branch if valid
-		move.w	#0,(v_levelselect_sound).w		; reset to 0
+		clr.w	(v_levelselect_sound).w		; reset to 0
 	.exit:
 		bra.w	LevSel_Display				; update number
 
@@ -490,7 +491,7 @@ PlayDemo:
 		addq.w	#1,(v_demo_num).w			; add 1 to demo number
 		cmpi.w	#countof_demo,(v_demo_num).w		; is demo number less than 4?
 		blo.s	.demo_0_to_3				; if yes, branch
-		move.w	#0,(v_demo_num).w			; reset demo number to 0
+		clr.w	(v_demo_num).w			; reset demo number to 0
 
 	.demo_0_to_3:
 		move.w	#1,(v_demo_mode).w			; turn demo mode on

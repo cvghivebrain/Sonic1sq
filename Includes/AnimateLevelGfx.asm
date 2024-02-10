@@ -46,7 +46,7 @@ AniArt_Run:
 		jsr	(AddDMA).w				; add to DMA queue
 
 	.next:
-		lea	4(a4),a4				; next time/frame counter in RAM
+		addq.w	#4,a4				; next time/frame counter in RAM
 		dbf	d4,.loop				; repeat for all scripts
 		rts
 

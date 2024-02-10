@@ -46,7 +46,7 @@ Burro_ChkSonic:	; Routine $A
 		bcc.w	DespawnObject				; branch if Sonic is > $60px away
 		range_y_quick
 		bpl.w	DespawnObject				; branch if Sonic is below
-		cmp.w	#-$80,d2
+		cmpi.w	#-$80,d2
 		blt.w	DespawnObject				; branch if Sonic is > $80px above
 		tst.w	(v_debug_active).w
 		bne.w	DespawnObject				; branch if debug mode is on

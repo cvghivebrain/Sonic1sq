@@ -141,7 +141,7 @@ index:		macro
 		else
 		index_width: equs "\0"
 		endc
-		
+
 		if strcmp("\index_width","b")
 		index_width_int: = 1
 		elseif strcmp("\index_width","w")
@@ -151,7 +151,7 @@ index:		macro
 		else
 		fail
 		endc
-		
+
 		if strlen("\2")=0				; check if first pointer id is defined
 		ptr_id: = 0					; use 0 by default
 		else
@@ -162,13 +162,13 @@ index:		macro
 		else
 		ptr_id_inc: = \3
 		endc
-		
+
 		tmp_array: equs "empty"				; clear tmp_array
 
 		popo
 		list
 		endm
-	
+
 ; ---------------------------------------------------------------------------
 ; Create a mirrored pointer index. Used to keep Sonic's mappings & DPLC
 ; indexes aligned.
@@ -212,11 +212,11 @@ ptr:		macro
 		else
 		dc.\index_width \1-index_start
 		endc
-		
+
 		if ~def(prefix_id)
 		prefix_id: equs "id_"
 		endc
-		
+
 		if instr("\1",".")=1				; check if pointer is local
 		else
 			if ~def(\prefix_id\\1)
@@ -225,7 +225,7 @@ ptr:		macro
 			\prefix_id\\1_\$ptr_id: equ ptr_id	; if id already exists, append number
 			endc
 		endc
-		
+
 		if strlen("\2")=0				; check if label should be stored
 		else
 			if strcmp("\tmp_array","empty")
@@ -235,7 +235,7 @@ ptr:		macro
 			endc
 		\2: equs tmp_array
 		endc
-		
+
 		ptr_id: = ptr_id+ptr_id_inc			; increment id
 
 		popo
@@ -264,7 +264,7 @@ locVRAM:	macro loc,controlport
 dma:		macro source,length,dest1,dest2
 		dma_type: = $4000
 		dma_type2: = $80
-		
+
 		if strcmp("\dest1","cram")
 		dma_type: = $C000
 			ifarg \dest2
@@ -282,7 +282,7 @@ dma:		macro source,length,dest1,dest2
 		else
 		dma_dest: = \dest1
 		endc
-		
+
 		lea	(vdp_control_port).l,a6
 		move.l	#$94000000+(((\length>>1)&$FF00)<<8)+$9300+((\length>>1)&$FF),(a6)
 		move.l	#$96000000+(((\source>>1)&$FF00)<<8)+$9500+((\source>>1)&$FF),(a6)
@@ -396,7 +396,7 @@ piece:		macro
 		else
 			sprite_tile: = \4
 		endc
-		
+
 		sprite_xflip: = 0
 		sprite_yflip: = 0
 		sprite_hi: = 0
@@ -418,7 +418,7 @@ piece:		macro
 			endc
 		shift
 		endr
-		
+
 		dc.w (sprite_tile+sprite_xflip+sprite_yflip+sprite_hi+sprite_pal)&$FFFF
 		dc.w sprite_xpos
 		endm
@@ -453,7 +453,7 @@ objpos:		macro xpos,ypos,id,subtype
 		shift
 		endr
 		endc
-		
+
 		dc.b obj_rem+obj_xflip+obj_yflip, obj_sub\@
 		dc.l obj_id
 		endm
@@ -595,16 +595,15 @@ evenr:		macro
 		exg	d0,\1
 		btst	#0,d0
 		beq.s	.already_even\@				; branch if already even
-		add.l	#1,d0					; skip odd byte
+		addq.l	#1,d0					; skip odd byte
 	.already_even\@:
 		exg	d0,\1
 		endm
-		
+
 ; ---------------------------------------------------------------------------
 ; Don't return to previous code from subroutine
 ; ---------------------------------------------------------------------------
 
-noreturn:	macro
-		addq.l	#4,sp					; skip last location in stack
-		endm
-		
+noreturn:	macros
+		addq.w	#4,sp					; skip last location in stack
+

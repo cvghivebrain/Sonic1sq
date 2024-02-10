@@ -23,7 +23,7 @@ Bat_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Bat_Hang next
 		move.l	#Map_Bat,ost_mappings(a0)
 		move.w	(v_tile_batbrain).w,ost_tile(a0)
-		add.w	#tile_hi,ost_tile(a0)
+		addi.w	#tile_hi,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#$C,ost_height(a0)
 		move.b	#priority_2,ost_priority(a0)
@@ -36,7 +36,7 @@ Bat_Hang:	; Routine 2
 		getsonic					; a1 = OST of Sonic
 		range_y_quick
 		bmi.w	DespawnObject				; branch if Sonic is above
-		cmp.w	#128,d2
+		cmpi.w	#128,d2
 		bge.w	DespawnObject				; branch if > 128px below
 		range_x_test	128
 		bcc.w	DespawnObject				; branch if > 128px away
@@ -57,7 +57,7 @@ Bat_Drop:	; Routine 4
 		getsonic					; a1 = OST of Sonic
 		range_y_quick
 		bmi.s	.chkdel					; branch if Sonic is above
-		cmp.w	#16,d2
+		cmpi.w	#16,d2
 		bcc.w	DespawnObject				; branch if > 16px below
 		move.w	#$100,d1				; batbrain will fly right
 		btst	#status_xflip_bit,ost_status(a0)

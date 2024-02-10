@@ -102,7 +102,7 @@ TCha_Arc:	; Routine 6
 		bsr.s	TCha_Update				; update position
 		move.b	ost_angle(a0),d0
 		beq.s	.stopmoving
-		cmp.b	#$80,d0
+		cmpi.b	#$80,d0
 		bne.s	.keepmoving				; branch if emerald has been caught
 		
 	.stopmoving:

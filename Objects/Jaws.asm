@@ -25,7 +25,7 @@ Jaws_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Jaws_Turn next
 		move.l	#Map_Jaws,ost_mappings(a0)
 		move.w	(v_tile_jaws).w,ost_tile(a0)
-		add.w	#tile_pal2,ost_tile(a0)
+		addi.w	#tile_pal2,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#id_React_Enemy,ost_col_type(a0)
 		move.b	#16,ost_col_width(a0)

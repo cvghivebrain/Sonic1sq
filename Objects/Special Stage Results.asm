@@ -81,7 +81,7 @@ SSR_Main:	; Routine 0
 		move.b	#id_Has_WaitEnter,ost_routine(a1)
 		move.l	#Map_Has,ost_mappings(a1)
 		move.w	(v_tile_bonus).w,ost_tile(a1)
-		add.w	#tile_hi,ost_tile(a1)
+		addi.w	#tile_hi,ost_tile(a1)
 		move.b	#render_abs,ost_render(a1)
 		move.b	#priority_0,ost_priority(a1)
 		move.b	d1,ost_frame(a1)
@@ -91,9 +91,9 @@ SSR_Main:	; Routine 0
 		move.w	#screen_right,ost_x_pos(a1)
 		move.w	#screen_left+80,ost_has_x_stop(a1)	; x pos when text stops on screen
 		move.w	d2,ost_y_screen(a1)
-		add.w	#16,d2					; spacing between lines of text
+		addi.w	#16,d2					; spacing between lines of text
 		move.w	d3,ost_has_time(a1)
-		add.w	#2,d3					; 2 frame delay between each line
+		addq.w	#2,d3					; 2 frame delay between each line
 		dbf	d1,.loop
 		
 		cmpi.w	#rings_for_continue,(v_rings).w
@@ -103,7 +103,7 @@ SSR_Main:	; Routine 0
 		move.b	#id_Has_WaitEnter,ost_routine(a1)
 		move.l	#Map_Has,ost_mappings(a1)
 		move.w	(v_tile_bonus).w,ost_tile(a1)
-		add.w	#tile_hi,ost_tile(a1)
+		addi.w	#tile_hi,ost_tile(a1)
 		move.b	#render_abs,ost_render(a1)
 		move.b	#priority_0,ost_priority(a1)
 		move.b	#id_frame_has_continue,ost_frame(a1)
@@ -136,7 +136,7 @@ SSR_WaitBonus:	; Routine 2
 		clr.b	(f_pass_bonus_update).w			; clear ring bonus update flag
 		subq.w	#1,ost_ssr_time(a0)			; decrement timer
 		bpl.s	.wait					; branch if time remains
-		add.b	#2,ost_routine(a0)			; goto SSR_Bonus next
+		addq.b	#2,ost_routine(a0)			; goto SSR_Bonus next
 		
 	.wait:
 		rts
@@ -154,7 +154,7 @@ SSR_Bonus:	; Routine 4
 		tst.w	d0					; is there any bonus?
 		bne.s	.add_bonus				; if yes, branch
 		play.w	1, jsr, sfx_Register			; play "ker-ching" sound
-		add.b	#2,ost_routine(a0)			; goto SSR_Finish next
+		addq.b	#2,ost_routine(a0)			; goto SSR_Finish next
 		move.w	#180,ost_ssr_time(a0)			; set time delay to 3 seconds
 		cmpi.w	#rings_for_continue,(v_rings).w
 		bcs.s	.exit					; branch if you have under 50 rings

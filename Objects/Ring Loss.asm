@@ -56,7 +56,7 @@ RLoss_Count:	; Routine 0
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		move.l	#Map_Ring,ost_mappings(a1)
 		move.w	(v_tile_rings).w,ost_tile(a1)
-		add.w	#tile_pal2,ost_tile(a1)
+		addi.w	#tile_pal2,ost_tile(a1)
 		move.b	#render_rel,ost_render(a1)
 		move.b	#priority_3,ost_priority(a1)
 		move.b	#id_React_Ring,ost_col_type(a1)		; goto RLoss_Collect when touched

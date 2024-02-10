@@ -101,7 +101,7 @@ Ring_Main:	; Routine 0
 		move.w	d3,ost_y_pos(a1)			; set y position based on d3
 		move.l	#Map_Ring,ost_mappings(a1)
 		move.w	(v_tile_rings).w,ost_tile(a1)
-		add.w	#tile_pal2,ost_tile(a1)
+		addi.w	#tile_pal2,ost_tile(a1)
 		move.b	#render_rel,ost_render(a1)
 		move.b	#priority_2,ost_priority(a1)
 		move.b	#id_React_Ring,ost_col_type(a1)		; goto Ring_Collect when touched

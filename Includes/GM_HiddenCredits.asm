@@ -23,7 +23,7 @@ GM_HiddenCredits:
 		locVRAM	vram_fg,d0				; foreground, x=0, y=0
 		moveq	#$28,d1					; width
 		moveq	#$1C,d2					; height
-		move.w	#0,d3					; tile setting
+		moveq	#0,d3					; tile setting
 		bsr.w	LoadTilemap
 
 		lea	(v_pal_dry).w,a1

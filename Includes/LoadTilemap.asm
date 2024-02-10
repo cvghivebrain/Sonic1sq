@@ -30,7 +30,7 @@ LoadTilemap:
 		add.w	d3,d4					; apply tile setting
 		move.w	d4,(a2)					; write value to nametable
 		dbf	d5,.loop_cell				; next tile
-		add.l	#sizeof_vram_row<<16,d0			; goto next line (add $800000)
+		addi.l	#sizeof_vram_row<<16,d0			; goto next line (add $800000)
 		dbf	d2,.loop_row				; next line
 		rts
 		

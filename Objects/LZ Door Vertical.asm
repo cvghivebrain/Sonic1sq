@@ -39,7 +39,7 @@ DoorV_Main:	; Routine 0
 		bsr.w	GetState
 		bne.s	DoorV_Solid				; branch if already opened
 		move.w	ost_y_pos(a0),ost_doorv_y_start(a0)	; copy open position
-		add.w	#64,ost_y_pos(a0)			; move into closed position
+		addi.w	#64,ost_y_pos(a0)			; move into closed position
 		addq.b	#2,ost_routine(a0)			; goto DoorV_ChkBtn next
 
 DoorV_Solid:	; Routine 2

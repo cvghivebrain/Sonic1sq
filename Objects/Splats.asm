@@ -21,7 +21,7 @@ Splats_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Splats_ChkDist next
 		move.l	#Map_Splats,ost_mappings(a0)
 		move.w	(v_tile_splats).w,ost_tile(a0)
-		add.w	#tile_pal2,ost_tile(a0)
+		addi.w	#tile_pal2,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#priority_4,ost_priority(a0)
 		move.b	#$C,ost_displaywidth(a0)

@@ -65,7 +65,7 @@ Cred_TryAgain:
 
 EndDemoSetup:
 		move.w	(v_credits_num).w,d0			; get credits id
-		add.w	#countof_demo,d0			; convert to demo id
+		addq.w	#countof_demo,d0			; convert to demo id
 		move.w	d0,(v_demo_num).w
 		jsr	LoadPerDemo
 		addq.w	#1,(v_credits_num).w			; increment credits number

@@ -46,7 +46,7 @@ Newt_Main:	; Routine 0
 		move.b	ost_subtype(a0),d0
 		btst	#type_newt_pal2_bit,d0
 		beq.s	.keep_pal
-		add.w	#tile_pal2,ost_tile(a0)
+		addi.w	#tile_pal2,ost_tile(a0)
 		
 	.keep_pal:
 		move.b	#render_rel,ost_render(a0)
