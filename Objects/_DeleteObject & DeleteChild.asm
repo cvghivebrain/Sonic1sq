@@ -17,6 +17,8 @@
 
 DeleteObject:
 		movea.l	a0,a1					; move current OST address to a1
+		
+DeleteObject2:
 		moveq	#0,d0
 		rept sizeof_ost/4
 		move.l	d0,(a1)+
@@ -27,10 +29,7 @@ DeleteChild:							; child objects are already in (a1)
 DeleteParent:
 		move.w	a1,d0
 		beq.s	.exit					; branch if no OST was defined
-		moveq	#0,d0
-		rept sizeof_ost/4
-		move.l	d0,(a1)+
-		endr
+		bra.s	DeleteObject2
 		
 	.exit:
 		rts

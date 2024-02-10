@@ -71,7 +71,7 @@ FindFreeFinal:
 ; output:
 ;	a1 = address of free OST slot
 
-;	uses d0.w
+;	uses d0.l
 
 ; usage:
 ;		bsr.w	FindNextFreeObj
@@ -80,20 +80,19 @@ FindFreeFinal:
 ; ---------------------------------------------------------------------------
 
 FindNextFreeObj:
-		movea.l	a0,a1					; address of OST of current object
-		move.w	#v_ost_end&$FFFF,d0			; end of OSTs
-		sub.w	a0,d0					; d0 = space between current OST and end
-		lsr.w	#6,d0					; divide by $40
-		subq.w	#1,d0
-		bcs.s	.use_current				; branch if current OST is final
-
+		lea	sizeof_ost(a0),a1			; a1 = OST after current one
+		
 	.loop:
+		cmpa.w	#v_ost_end&$FFFF,a1
+		beq.s	.fail					; branch if at end of OSTs
 		tst.l	ost_id(a1)				; is OST slot empty?
 		beq.s	.found					; if yes, branch
 		lea	sizeof_ost(a1),a1			; goto next OST
-		dbf	d0,.loop				; repeat until end of OSTs
-
-	.use_current:
+		bra.s	.loop					; repeat until end of OSTs
+		
+	.fail:
+		moveq	#1,d0
+		
 	.found:
 		rts
 
