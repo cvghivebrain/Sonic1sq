@@ -295,8 +295,8 @@ startof_obj:	equ *
 		include "Objects\_DisplaySprite.asm"
 		include "Objects\_DeleteObject & DeleteChild.asm"
 		include "Objects\_CheckOffScreen.asm"
-
 		include "Objects\_FindFreeObj & FindNextFreeObj.asm"
+		include "Objects\_CloneObject & RunLast.asm"
 		include "Objects\_FindNearestObj.asm"
 
 		include "Objects\Springs.asm"			; Springs

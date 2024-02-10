@@ -98,20 +98,6 @@ FindNextFreeObj:
 		rts
 
 ; ---------------------------------------------------------------------------
-; Subroutine to move the current object to the last available OST slot
-
-;	uses d0.l, a1, a2
-; ---------------------------------------------------------------------------
-
-RunLast:
-		bsr.s	FindFreeFinal				; a1 = new OST slot
-		movea.l	a0,a2
-		rept sizeof_ost/4
-		move.l	(a2)+,(a1)+				; copy contents of OST to new slot
-		endr
-		bra.w	DeleteObject				; delete original
-
-; ---------------------------------------------------------------------------
 ; Subroutine to find a free subsprite slot
 
 ; output:

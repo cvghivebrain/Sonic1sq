@@ -20,8 +20,8 @@ BFire_Index:	index *,,2
 
 		rsobj BossFire
 ost_bfire_x_start:	rs.w 1					; original x position
+ost_bfire_x_last:	rs.w 1					; x position where last static flame spawned
 ost_bfire_wait_time:	rs.b 1					; time to wait between events
-ost_bfire_fire_flag:	rs.b 1					; flag set when temp fire is spawned
 		rsobjend
 ; ===========================================================================
 
@@ -68,10 +68,14 @@ BFire_Fall:	; Routine 4
 		bsr.w	FindFloorObj
 		tst.w	d1					; has fireball hit the floor?
 		bpl.s	BFire_Display				; if not, branch
+		add.w	d1,ost_y_pos(a0)			; snap to floor
 		addq.b	#2,ost_routine(a0)			; goto BFire_Slide next
 		move.w	#$A0,ost_x_vel(a0)			; move right
 		move.w	#0,ost_y_vel(a0)
 		move.w	ost_x_pos(a0),ost_bfire_x_start(a0)
+		jsr	CloneObject				; create clone
+		move.w	ost_x_pos(a0),ost_bfire_x_last(a1)	; don't let the clone create static fire
+		neg.w	ost_x_vel(a1)				; move left
 		bra.s	BFire_Display
 ; ===========================================================================
 		
@@ -80,21 +84,18 @@ BFire_Slide:	; Routine 6
 		sub.w	ost_x_pos(a0),d0
 		andi.w	#$F,d0
 		bne.s	.skip_fire				; branch if not aligned to 16px
-		tst.b	ost_bfire_fire_flag(a0)
-		bne.s	.skip_fire				; branch if fire spawned last frame
-		move.b	#1,ost_bfire_fire_flag(a0)		; prevent fire spawning next frame
+		move.w	ost_x_pos(a0),d1
+		cmp.w	ost_bfire_x_last(a0),d1
+		beq.s	.skip_fire				; branch if fire already spawned at this x pos
+		move.w	d1,ost_bfire_x_last(a0)			; prevent fire spawning here again
 		jsr	(FindNextFreeObj).l			; find free OST slot
-		bne.s	.update_pos				; branch if not found
+		bne.s	.skip_fire				; branch if not found
 		move.l	#TempFire,ost_id(a1)			; load stationary fireball object
-		move.w	ost_x_pos(a0),ost_x_pos(a1)
+		move.w	d1,ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		move.w	a1,ost_linked(a0)			; link to moving fireball
-		bra.s	.update_pos
 		
 	.skip_fire:
-		move.b	#0,ost_bfire_fire_flag(a0)		; allow fire to spawn next frame
-		
-	.update_pos:
 		update_x_pos
 		bsr.w	FindFloorObj				; find floor at current position
 		cmpi.w	#-8,d1
@@ -120,7 +121,6 @@ BFire_Ledge:	; Routine 8
 ; ---------------------------------------------------------------------------
 
 TempFire:
-		subq.w	#4,ost_y_pos(a0)
 		move.l	#Map_Fire,ost_mappings(a0)
 		move.w	(v_tile_fireball).w,ost_tile(a0)
 		move.b	#render_rel+render_onscreen,ost_render(a0)
