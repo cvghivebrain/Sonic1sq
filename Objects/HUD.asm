@@ -220,11 +220,11 @@ HUD_TimeCount:	; Routine $A
 		cmpi.b	#60,d0
 		bne.s	.update_time				; branch if frame counter is below 60
 		move.b	#0,d0					; reset frame counter
-		add.w	#$100,d0				; increment seconds counter
+		addi.w	#$100,d0				; increment seconds counter
 		cmpi.w	#60<<8,d0
 		bne.s	.update_time				; branch if seconds counter is below 60
 		move.w	#0,d0					; reset seconds counter
-		add.l	#$10000,d0				; increment minutes counter
+		addi.l	#$10000,d0				; increment minutes counter
 		cmpi.l	#10<<16,d0
 		beq.w	HUD_TimeOver				; branch if counter hits 10 minutes
 		
@@ -284,18 +284,18 @@ HUD_ShowLong:
 		moveq	#-1,d2
 	.loop_digit6:
 		addq.b	#1,d2					; increment digit counter
-		sub.l	#100000,d0				; decrement highest digit
+		subi.l	#100000,d0				; decrement highest digit
 		bcc.s	.loop_digit6				; branch if +ve
-		add.l	#100000,d0				; restore to +ve
+		addi.l	#100000,d0				; restore to +ve
 		move.b	d2,-2(a4)				; set highest digit
 		
 	.skip_digit6:
 		moveq	#-1,d2
 	.loop_digit5:
 		addq.b	#1,d2					; increment digit counter
-		sub.l	#10000,d0				; decrement 5th digit
+		subi.l	#10000,d0				; decrement 5th digit
 		bcc.s	.loop_digit5				; branch if +ve
-		add.l	#10000,d0				; restore to +ve
+		addi.l	#10000,d0				; restore to +ve
 		move.b	d2,-1(a4)				; set 5th digit
 		
 	.skip_digit5:
@@ -315,7 +315,7 @@ HUD_ShowLong:
 		move.b	-(a4),d0				; get digit
 	.hide_digit:
 		bsr.w	HUD_ShowDigit				; load digit gfx
-		sub.l	#$400000,d1				; go back 2 tiles in VRAM
+		subi.l	#$400000,d1				; go back 2 tiles in VRAM
 		dbf	d4,.loop				; repeat for all digits
 		
 	.exit:
@@ -384,14 +384,14 @@ HUD_ShowByte:
 		lea	HUD_ByteGfxIndex(pc,d3.w),a2
 		set_dma_size	sizeof_cell,d2			; set size to 1 cell
 		jsr	(AddDMA).w				; load high digit
-		add.l	#$200000,d1				; next tile in VRAM
+		addi.l	#$200000,d1				; next tile in VRAM
 		
 		move.b	d0,d3
 		andi.b	#$F,d3					; read low nybble of byte
 		lsl.b	#3,d3					; multiply by 8
 		lea	HUD_ByteGfxIndex(pc,d3.w),a2
 		jsr	(AddDMA).w				; load low digit
-		add.l	#$200000,d1				; next tile in VRAM
+		addi.l	#$200000,d1				; next tile in VRAM
 		rts
 		
 HUD_ByteGfxIndex:

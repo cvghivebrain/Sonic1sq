@@ -40,7 +40,7 @@ SDoorH_Main:	; Routine 0
 		
 		btst	#status_xflip_bit,ost_status(a0)
 		beq.s	SDoorH_ChkBtn				; branch if not xflipped
-		sub.w	#128,ost_x_pos(a0)			; starts in left position
+		subi.w	#128,ost_x_pos(a0)			; starts in left position
 
 SDoorH_ChkBtn:	; Routine 2
 		lea	(v_button_state).w,a2

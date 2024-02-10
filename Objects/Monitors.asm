@@ -55,7 +55,7 @@ Mon_Main:	; Routine 0
 ; ===========================================================================
 
 	.not_broken:
-		cmp.b	#type_monitor_1up,ost_subtype(a0)
+		cmpi.b	#type_monitor_1up,ost_subtype(a0)
 		bne.s	.not_1up				; branch if monitor isn't a 1-up
 		move.b	#id_ani_monitor_sonic,ost_anim(a0)	; use 1-up animation
 		bra.s	Mon_Solid				; skip slot check
@@ -99,7 +99,7 @@ Mon_Break:	; Routine 4
 		move.b	ost_subtype(a0),ost_subtype(a1)		; inherit subtype
 		move.b	ost_monitor_slot(a0),ost_pow_slot(a1)
 		move.b	#id_frame_monitor_static1,ost_frame(a1)	; use static icon by default
-		cmp.b	#type_monitor_1up,ost_subtype(a0)
+		cmpi.b	#type_monitor_1up,ost_subtype(a0)
 		bne.s	.not_1up				; branch if not 1-up
 		move.b	#id_frame_monitor_sonic,ost_frame(a1)	; use 1-up icon instead
 
@@ -172,7 +172,7 @@ Mon_Solid_Detect:
 		bne.w	Sol_Stand				; branch if Sonic is already standing on object
 		getsonic
 		range_x_sonic					; get distances between Sonic (a1) and object (a0)
-		cmp.w	#0,d1
+		tst.w	d1
 		bgt.w	Sol_None				; branch if outside x hitbox
 		range_y_exact
 		bpl.w	Sol_None				; branch if outside y hitbox

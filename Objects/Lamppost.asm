@@ -103,7 +103,7 @@ Lamp_Red:	; Routine 4
 Lamp_Twirl:	; Routine 6
 		shortcut
 		move.w	ost_lamp_twirl_count(a0),d0
-		add.w	#4,d0					; increment counter
+		addq.w	#4,d0					; increment counter
 		cmpi.w	#32*4,d0
 		bne.s	.keep_twirling				; keep twirling until finished
 		getparent					; a1 = OST of actual lamppost

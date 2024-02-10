@@ -37,7 +37,7 @@ DoorH_Main:	; Routine 0
 
 		btst	#status_xflip_bit,ost_status(a0)
 		beq.s	.no_xflip				; branch if not xflipped
-		add.w	#128,ost_x_pos(a0)			; move into open position
+		addi.w	#128,ost_x_pos(a0)			; move into open position
 		move.w	#-128,d1
 
 	.no_xflip:

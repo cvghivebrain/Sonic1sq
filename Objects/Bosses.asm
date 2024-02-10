@@ -32,19 +32,19 @@ ost_boss2_cam_start:	equ ost_boss2_time			; camera x pos where boss activates
 ost_boss2_wobble:	rs.b 1					; wobble counter
 ost_boss2_flags:	rs.b 1					; flag bitfield from Boss_MoveList
 		rsobjend
-		
+
 Boss_CamXPos:	dc.w $2960					; camera x pos where the boss becomes active
 		dc.w $17F0
 Boss_InitMode:	dc.b (Boss_MoveGHZ-Boss_MoveList)/sizeof_bmove	; initial mode for each boss
 		dc.b (Boss_MoveMZ-Boss_MoveList)/sizeof_bmove
 		even
-		
+
 bmove:		macro xvel,yvel,time,loadobj,xflip,next
 		dc.w xvel, yvel, time
 		dc.l loadobj
 		dc.b xflip, next
 		endm
-		
+
 bmove_xflip_bit:	equ 0
 bmove_laugh_bit:	equ 1
 bmove_nowobble_bit:	equ 2
@@ -64,7 +64,7 @@ sizeof_bmove:	equ *-Boss_MoveGHZ
 		bmove $100, 0, 63, 0, bmove_xflip, 1
 		bmove 0, 0, 63, 0, 0, 1
 		bmove -$100, 0, 63, 0, 0, -3
-		
+
 Boss_MoveMZ:	bmove -$100, 0, $E0, BossNozzle, 0, 1
 		bmove 0, 0, 15, 0, bmove_nowobble, 1
 		bmove -$200, $40, 72, 0, bmove_nowobble+bmove_freezehit, 1
@@ -102,7 +102,7 @@ Boss_Main:	; Routine 0
 		play.w	0, jsr, mus_Boss			; play boss music
 		move.b	#1,(f_boss_loaded).w			; lock screen
 		move.w	(v_camera_x_pos).w,(v_boundary_left).w	; set boundary to current position
-		
+
 	.ignore_cam:
 		moveq	#id_UPLC_Boss,d0
 		jsr	UncPLC
@@ -120,7 +120,7 @@ Boss_Wait:	; Routine 2
 		cmp.w	(v_camera_x_pos).w,d0
 		bls.s	.activate				; branch if camera reaches position
 		jmp	DisplaySprite
-		
+
 	.activate:
 		tst.b	ost_subtype(a0)
 		bmi.s	.keep_boundaries			; branch if high bit of subtype is set
@@ -128,33 +128,33 @@ Boss_Wait:	; Routine 2
 		move.w	d0,(v_boundary_left).w			; set boundary to current position
 		move.w	d0,(v_boundary_right).w			; lock screen
 		move.w	d0,(v_boundary_right_next).w
-		
+
 	.keep_boundaries:
 		addq.b	#2,ost_routine(a0)			; goto Boss_Move next
 		bsr.w	Boss_SetMode
 		jmp	DisplaySprite
-		
+
 ; ===========================================================================
 
 Boss_Move:	; Routine 4
 		subq.w	#1,ost_boss2_time(a0)			; decrement timer
 		bpl.s	.continue				; branch if time remains
 		bsr.w	Boss_SetMode
-		
+
 	.continue:
 		move.b	ost_boss2_flags(a0),d2
 		btst	#bmove_freezehit_bit,d2
 		beq.s	.nofreezehit				; branch if freeze on hit flag isn't set
 		cmpi.b	#$18,(v_boss_flash).w
 		bcc.s	.skip_wobble				; branch if boss was recently hit
-		
+
 	.nofreezehit:
 		update_x_pos
 		move.w	ost_y_vel(a0),d0			; load vertical speed
 		ext.l	d0
 		asl.l	#8,d0					; multiply speed by $100
 		add.l	d0,ost_boss2_y_normal(a0)		; update y position
-		
+
 		move.b	ost_boss2_wobble(a0),d0			; get wobble byte
 		btst	#bmove_nowobble_bit,d2
 		beq.s	.wobble					; branch if wobble is enabled
@@ -163,14 +163,14 @@ Boss_Move:	; Routine 4
 		bne.s	.wobble					; continue wobble until it evens out
 		move.w	ost_boss2_y_normal(a0),ost_y_pos(a0)	; update y pos
 		bra.s	.skip_wobble
-		
+
 	.wobble:
 		jsr	(CalcSine).w				; convert to sine
 		asr.w	#6,d0					; divide by 64
 		add.w	ost_boss2_y_normal(a0),d0		; add y pos
 		move.w	d0,ost_y_pos(a0)			; update actual y pos
 		addq.b	#2,ost_boss2_wobble(a0)			; increment wobble (wraps to 0 after $FE)
-		
+
 	.skip_wobble:
 		tst.b	ost_status(a0)
 		bmi.s	.beaten					; branch if boss has been beaten
@@ -180,10 +180,10 @@ Boss_Move:	; Routine 4
 		subq.b	#1,(v_boss_flash).w			; decrement flash counter
 		bne.s	.no_flash				; branch if not 0
 		move.b	#id_React_Boss,ost_col_type(a0)		; enable boss collision again
-		
+
 	.no_flash:
 		jmp	DisplaySprite
-		
+
 	.beaten:
 		moveq	#100,d0
 		jsr	(AddPoints).w				; give Sonic 1000 points
@@ -212,16 +212,16 @@ Boss_SetMode:
 		bne.s	.skip_object				; branch if not found
 		move.l	d1,ost_id(a1)				; load object
 		saveparent
-		
+
 	.skip_object:
 		move.b	(a2)+,d0				; get flags
 		bclr	#render_xflip_bit,ost_render(a0)	; assume facing left
-		bclr	#status_xflip_bit,ost_status(a0)		
+		bclr	#status_xflip_bit,ost_status(a0)
 		btst	#bmove_xflip_bit,d0
 		beq.s	.noflip					; branch if xflip bit isn't set
 		bset	#render_xflip_bit,ost_render(a0)	; face right
 		bset	#status_xflip_bit,ost_status(a0)
-		
+
 	.noflip:
 		move.b	d0,ost_boss2_flags(a0)			; save flags
 		move.b	(a2)+,d0
@@ -236,7 +236,7 @@ Boss_Explode:	; Routine 6
 		moveq	#7,d1
 		bsr.w	Exploding				; create explosions every 8th frame
 		jmp	DisplaySprite
-		
+
 	.done:
 		move.w	#38,ost_boss2_time(a0)			; set timer to 0.6 seconds
 		addq.b	#2,ost_routine(a0)			; goto Boss_Drop next
@@ -249,7 +249,7 @@ Boss_Drop:	; Routine 8
 		beq.s	.stop_falling				; branch if timer hits 0
 		update_y_fall	$18				; update position & apply gravity
 		jmp	DisplaySprite
-		
+
 	.stop_falling:
 		clr.w	ost_y_vel(a0)				; stop falling
 		move.w	#56,ost_boss2_time(a0)			; set timer to 1 second
@@ -261,14 +261,14 @@ Boss_Recover:	; Routine $A
 		cmpi.w	#8,ost_boss2_time(a0)
 		bls.s	.skip_rising				; branch if timer is <= 8
 		update_y_fall	-8				; update position & rise faster
-		
+
 	.skip_rising:
 		jmp	DisplaySprite
-		
+
 	.escape:
 		addq.b	#2,ost_routine(a0)			; goto Boss_Escape next
 		move.b	(v_bgm).w,d0
-		jsr	PlaySound0				; play level music
+		jsr	(PlaySound0).w				; play level music
 		move.w	#$400,ost_x_vel(a0)			; move ship right
 		move.w	#-$40,ost_y_vel(a0)			; move ship upwards
 
@@ -279,10 +279,10 @@ Boss_Escape:	; Routine $C
 		tst.b	ost_render(a0)
 		bpl.s	.delete					; branch if off screen
 		jmp	DisplaySprite
-		
+
 	.delete:
 		jmp	DeleteFamily				; delete ship, cockpit & flame objects
-		
+
 ; ---------------------------------------------------------------------------
 ; Boss exhaust flame
 
@@ -297,7 +297,7 @@ BossExhaust:
 		move.b	#$20,ost_displaywidth(a0)
 		move.b	#priority_3,ost_priority(a0)
 		move.b	#id_ani_exhaust_flame1,ost_anim(a0)
-		
+
 		shortcut
 		getparent					; a1 = OST of boss ship
 		tst.w	ost_x_vel(a1)
@@ -308,7 +308,7 @@ BossExhaust:
 		bne.s	.skip_chk				; branch if not escaping
 		move.b	#id_ani_exhaust_bigflame,ost_anim(a0)	; use big flame
 		move.b	#1,ost_subtype(a0)			; don't check again
-		
+
 	.skip_chk:
 		move.w	ost_x_pos(a1),ost_x_pos(a0)
 		move.w	ost_y_pos(a1),ost_y_pos(a0)
@@ -319,7 +319,7 @@ BossExhaust:
 		set_dma_dest vram_exhaust,d1			; set VRAM address to write gfx
 		jsr	DPLCSprite				; write gfx if frame has changed
 		jmp	DisplaySprite
-		
+
 	.hide:
 		rts
 
@@ -336,7 +336,7 @@ BossCockpit:
 		move.b	#render_rel,ost_render(a0)
 		move.b	#$20,ost_displaywidth(a0)
 		move.b	#priority_3,ost_priority(a0)
-		
+
 		shortcut
 		getparent					; a1 = OST of boss ship
 		move.w	ost_x_pos(a1),ost_x_pos(a0)
@@ -356,7 +356,7 @@ BossCockpit:
 		tst.b	(v_boss_flash).w
 		bne.s	.hit					; branch if boss is flashing
 		moveq	#id_ani_face_face1,d0
-		
+
 	.animate:
 		set_anim					; update animation if different from last frame
 		lea	Ani_Face,a1
@@ -364,23 +364,23 @@ BossCockpit:
 		set_dma_dest vram_face,d1			; set VRAM address to write gfx
 		jsr	DPLCSprite				; write gfx if frame has changed
 		jmp	DisplaySprite
-		
+
 	.hit:
 		moveq	#id_ani_face_hit,d0
 		bra.s	.animate
-		
+
 	.laugh:
 		moveq	#id_ani_face_laugh,d0
 		bra.s	.animate
-		
+
 	.panic:
 		moveq	#id_ani_face_panic,d0
 		bra.s	.animate
-		
+
 	.defeat:
 		moveq	#id_ani_face_defeat,d0
 		bra.s	.animate
-		
+
 ; ---------------------------------------------------------------------------
 ; Boss MZ/SLZ nozzles
 
@@ -397,7 +397,7 @@ BossNozzle:
 		move.b	#id_frame_boss_pipe,ost_frame(a0)
 		moveq	#id_UPLC_MZPipe,d0
 		jsr	UncPLC					; load gfx
-		
+
 		shortcut
 		getparent					; a1 = OST of boss ship
 		move.w	ost_x_pos(a1),ost_x_pos(a0)

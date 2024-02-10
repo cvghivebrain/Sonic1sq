@@ -229,7 +229,7 @@ PalCycle_SS:
 		lea	(a2,d0.w),a2				; jump to mappings source address
 		jsr	(AddDMA).w				; add mappings to DMA queue
 		subq.l	#6,a2					; jump back to same mappings
-		add.l	#$800<<16,d1				; add $800 to VRAM address
+		addi.l	#$800<<16,d1				; add $800 to VRAM address
 		jsr	(AddDMA).w				; add mappings to DMA queue again
 
 		move.w	#$8400,d0				; VDP register - bg nametable address
@@ -975,7 +975,7 @@ SS_Load:
 
 	.ss_valid:
 		move.l	(v_emeralds).w,d1
-		cmp.l	#emerald_all,d1				; do you have all emeralds?
+		cmpi.l	#emerald_all,d1				; do you have all emeralds?
 		beq.s	SS_LoadData				; if yes, branch
 		btst	d0,d1					; check if emerald has been collected for specific level
 		bne.s	SS_Load					; branch if yes (increment level counter until uncollected emerald is found)
@@ -1119,6 +1119,6 @@ SS_Item_Glass6:	ss_sprite Map_SS_Glass,tile_Kos_SSGlass+tile_pal4,0 ; $4C
 SS_Item_Glass7:	ss_sprite Map_SS_Glass,tile_Kos_SSGlass+tile_pal2,0 ; $4D
 SS_Item_Glass8:	ss_sprite Map_SS_Glass,tile_Kos_SSGlass+tile_pal3,0 ; $4E
 	SS_ItemIndex_end:
-	
+
 tile_Kos_Bumper_KPLC_Special: equ 0
 tile_Kos_Ring_KPLC_Special: equ 0

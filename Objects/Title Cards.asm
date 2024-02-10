@@ -163,9 +163,9 @@ Card_Main:	; Routine 0
 		move.w	(v_titlecard_uplc).w,d0
 		jsr	UncPLC					; load title card gfx
 		move.w	(v_titlecard_act).w,d0
-		sub.w	#2,d0
+		subq.w	#2,d0
 		bcs.s	.keep_act				; branch if act is 0 or 1
-		add.w	#id_UPLC_Act2Card,d0
+		addi.w	#id_UPLC_Act2Card,d0
 		jsr	UncPLC					; load act 2/3 gfx
 		
 	.keep_act:
@@ -195,7 +195,7 @@ Card_Load:
 		move.l	(a2)+,ost_card_x_speed2(a1)		; set x/y speed for leaving screen
 		movea.l	(a2)+,a3
 		move.w	(a3),ost_tile(a1)
-		add.w	#tile_hi,ost_tile(a1)
+		addi.w	#tile_hi,ost_tile(a1)
 		move.w	(a2)+,d0
 		move.b	d0,ost_displaywidth(a1)
 		move.b	#render_abs,ost_render(a1)
@@ -213,7 +213,7 @@ Card_WaitEnter:	; Routine 2
 	.flag_set:
 		subq.w	#1,ost_card_time(a0)			; decrement timer
 		bpl.s	.wait					; branch if time remains
-		add.b	#2,ost_routine(a0)			; goto Card_Enter next
+		addq.b	#2,ost_routine(a0)			; goto Card_Enter next
 		
 	.wait:
 		rts
@@ -251,7 +251,7 @@ Card_Enter:	; Routine 4
 		bne.s	.not_at_stop				; branch if not at stop x/y pos
 		move.w	ost_card_x_stop(a0),ost_x_pos(a0)
 		move.w	ost_card_y_stop(a0),ost_y_screen(a0)	; force precise x/y pos
-		add.b	#2,ost_routine(a0)			; goto Card_WaitLeave next
+		addq.b	#2,ost_routine(a0)			; goto Card_WaitLeave next
 		addq.b	#1,(v_titlecard_state).w
 		
 	.not_at_stop:
@@ -265,7 +265,7 @@ Card_WaitLeave:	; Routine 6
 		bne.s	.wait					; branch if on "Sonic Has Passed" card
 		subq.w	#1,ost_card_time2(a0)			; decrement timer
 		bpl.s	.wait					; branch if time remains
-		add.b	#2,ost_routine(a0)			; goto Card_Leave next
+		addq.b	#2,ost_routine(a0)			; goto Card_Leave next
 		
 	.wait:
 		jmp	DisplaySprite

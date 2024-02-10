@@ -49,7 +49,7 @@ Orb_Main:	; Routine 0
 		move.b	ost_subtype(a0),d4
 		btst	#type_orbinaut_pal2_bit,d4		; check if low bit of subtype is set
 		beq.s	.use_pal1				; if not, branch
-		add.w	#tile_pal2,ost_tile(a0)			; use palette 2
+		addi.w	#tile_pal2,ost_tile(a0)			; use palette 2
 
 	.use_pal1:
 		ori.b	#render_rel,ost_render(a0)

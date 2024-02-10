@@ -101,7 +101,7 @@ Bub_Big2:	; Routine 8
 		bcc.w	DespawnQuick
 		range_y_quick
 		bmi.w	DespawnQuick				; branch if Sonic is above bubble
-		cmp.w	#16,d2
+		cmpi.w	#16,d2
 		bcc.w	DespawnQuick
 
 		bsr.w	ResumeMusic				; cancel countdown music & reset air

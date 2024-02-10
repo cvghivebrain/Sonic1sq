@@ -64,13 +64,13 @@ WaterFilter:
 		move.b	(v_waterfilter_id).w,d0			; get filter id
 		add.w	d0,d0					; multiply by 2
 		move.w	Filter_Index(pc,d0.w),d0
-		
+
 		moveq	#0,d3
 		move.w	#(countof_color*countof_pal)-1,d1
 		lea	(v_pal_dry).w,a0
 		lea	(v_pal_water).w,a1
 		lea	Filter_KeepList(pc),a2
-		
+
 	.loop:
 		move.w	(a0)+,d2				; get colour
 		tst.b	(a2,d3.w)				; check keeplist
@@ -78,10 +78,10 @@ WaterFilter:
 		jsr	Filter_Index(pc,d0.w)
 	.keepcolour:
 		move.w	d2,(a1)+				; write colour
-		add.w	#1,d3					; increment counter
+		addq.w	#1,d3					; increment counter
 		dbf	d1,.loop				; repeat for all colours
 		rts
-		
+
 ; ---------------------------------------------------------------------------
 ; Functions applied to each colour
 
@@ -92,15 +92,15 @@ WaterFilter:
 Filter_Index:	index *
 		ptr Filter_LZ
 		ptr Filter_SBZ3
-		
+
 Filter_LZ:
-		and.w	#$CE2,d2				; remove most red & some blue
+		andi.w	#$CE2,d2				; remove most red & some blue
 		rts
-		
+
 Filter_SBZ3:
-		and.w	#$E0E,d2				; remove green
+		andi.w	#$E0E,d2				; remove green
 		rts
-		
+
 ; ---------------------------------------------------------------------------
 ; Array listing which colours are filtered and which are kept
 ; ---------------------------------------------------------------------------
@@ -111,4 +111,4 @@ Filter_KeepList:
 		dc.b 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 		dc.b 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 		even
-		
+

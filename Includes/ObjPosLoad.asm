@@ -52,7 +52,7 @@ OPL_Init:
 		addq.b	#1,(a2)					; increment respawn list counter
 
 	.no_respawn:
-		add.w	#10,a0					; goto next object in objpos list
+		addi.w	#10,a0					; goto next object in objpos list
 		bra.s	.loop_find_right_init			; loop until object is found within window
 ; ===========================================================================
 
@@ -70,7 +70,7 @@ OPL_Init:
 		addq.b	#1,1(a2)				; increment second respawn list counter
 
 	.no_respawn2:
-		add.w	#10,a0					; goto next object in objpos list
+		addi.w	#10,a0					; goto next object in objpos list
 		bra.s	.loop_find_left_init			; loop until object is found within window
 ; ===========================================================================
 
@@ -96,7 +96,7 @@ OPL_MovedLeft:
 .loop_find_left:
 		cmp.w	-10(a0),d6				; read objpos backwards
 		bge.s	.found_left				; branch if object is outside spawn window
-		sub.w	#10,a0					; update pointer
+		subi.w	#10,a0					; update pointer
 		tst.b	4(a0)					; 4(a0) = remember state flag
 		bpl.s	.no_respawn				; branch if no remember flag found
 		subq.b	#1,1(a2)				; decrement second respawn list counter
@@ -105,7 +105,7 @@ OPL_MovedLeft:
 	.no_respawn:
 		bsr.w	OPL_SpawnObj				; check respawn flag and spawn object
 		bne.s	.fail					; branch if spawn fails
-		sub.w	#10,a0					; goto previous object in objpos list
+		subi.w	#10,a0					; goto previous object in objpos list
 		bra.s	.loop_find_left				; loop until object is found within window
 ; ===========================================================================
 
@@ -115,7 +115,7 @@ OPL_MovedLeft:
 		addq.b	#1,1(a2)
 
 	.no_respawn2:
-		add.w	#10,a0
+		addi.w	#10,a0
 
 .found_left:
 		move.l	a0,(v_opl_ptr_left).w			; save pointer for objpos
@@ -130,7 +130,7 @@ OPL_MovedLeft:
 		subq.b	#1,(a2)					; decrement respawn list counter
 
 	.no_respawn3:
-		sub.w	#10,a0					; goto previous object in objpos list
+		subi.w	#10,a0					; goto previous object in objpos list
 		bra.s	.loop_find_right
 ; ===========================================================================
 
@@ -170,7 +170,7 @@ OPL_MovedRight:
 		addq.b	#1,1(a2)
 
 	.no_respawn2:
-		add.w	#10,a0
+		addi.w	#10,a0
 		bra.s	.loop_find_left
 ; ===========================================================================
 
@@ -200,7 +200,7 @@ OPL_SpawnObj:
 		bpl.s	OPL_MakeItem				; if not, branch
 		bset	#7,2(a2,d2.w)				; set flag so it isn't loaded more than once
 		beq.s	OPL_MakeItem				; branch if object hasn't already been destroyed
-		add.w	#10,a0					; goto next object in objpos list
+		addi.w	#10,a0					; goto next object in objpos list
 		moveq	#0,d0
 		rts	
 ; ===========================================================================
