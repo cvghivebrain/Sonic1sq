@@ -103,6 +103,7 @@ ObjPos_MZ1:
 		objpos $0ED0,$0530,MarbleBrick,type_brick_wobbles
 		objpos $0ED8,$0348,Rings,$40,rem
 		objpos $0EF0,$0530,MarbleBrick,type_brick_falls
+		objpos $0EF8,$03A0,EventGate,type_egate_vert+32,xflip
 		objpos $0F20,$03D8,LargeGrass,type_grass_narrow+type_grass_3
 		objpos $0F50,$0530,MarbleBrick,type_brick_falls
 		objpos $0F60,$0398,LargeGrass,type_grass_narrow+type_grass_still

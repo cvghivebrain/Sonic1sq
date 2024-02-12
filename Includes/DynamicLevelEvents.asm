@@ -183,62 +183,22 @@ DLE_SBZ3:
 DLE_MZ1:
 		moveq	#0,d0
 		move.b	(v_dle_routine).w,d0
-		move.w	DLE_MZ1_Index(pc,d0.w),d0
-		jmp	DLE_MZ1_Index(pc,d0.w)
-; ===========================================================================
-DLE_MZ1_Index:	index *
-		ptr DLE_MZ1_0
-		ptr DLE_MZ1_2
-		ptr DLE_MZ1_4
-		ptr DLE_MZ1_6
-; ===========================================================================
+		move.w	DLE_MZ1_Sect(pc,d0.w),d0
+		lea	DLE_MZ1_Sect(pc,d0.w),a1
+		bra.w	DLE_BoundaryUpdate
+		
+DLE_MZ1_Sect:	index *
+		ptr DLE_MZ1_Sect_0
+		ptr DLE_MZ1_Sect_2
 
-DLE_MZ1_0:
-		move.w	#$1D0,(v_boundary_bottom_next).w
-		cmpi.w	#$700,(v_camera_x_pos).w
-		bcs.s	.exit					; branch if camera is left of $700
+DLE_MZ1_Sect_0:	dc.w 0, 0, $1D0
+		dc.w $700, 0, $220
+		dc.w $D00, 0, $340
+		dc.w -1
 
-		move.w	#$220,(v_boundary_bottom_next).w
-		cmpi.w	#$D00,(v_camera_x_pos).w
-		bcs.s	.exit					; branch if camera is left of $D00
-
-		move.w	#$340,(v_boundary_bottom_next).w
-		cmpi.w	#$340,(v_camera_y_pos).w
-		bcs.s	.exit					; branch if camera is above $340
-
-		addq.b	#2,(v_dle_routine).w			; goto DLE_MZ1_2 next
-
-	.exit:
-		rts
-; ===========================================================================
-
-DLE_MZ1_2:
-		cmpi.w	#$340,(v_camera_y_pos).w
-		bcc.s	.next					; branch if camera is below $340
-
-		subq.b	#2,(v_dle_routine).w			; goto DLE_MZ1_0 next
-		rts
-; ===========================================================================
-
-.next:
-		move.w	#0,(v_boundary_top).w
-		cmpi.w	#$E00,(v_camera_x_pos).w
-		bcc.s	.exit					; branch if camera is right of $E00
-
-		move.w	#$340,(v_boundary_top).w
-		move.w	#$340,(v_boundary_bottom_next).w
-		cmpi.w	#$A90,(v_camera_x_pos).w
-		bcc.s	.exit					; branch if camera is right of $A90
-
-		move.w	#$500,(v_boundary_bottom_next).w
-		cmpi.w	#$370,(v_camera_y_pos).w
-		bcs.s	.exit					; branch if camera is above $370
-
-		addq.b	#2,(v_dle_routine).w			; goto DLE_MZ1_4 next
-
-	.exit:
-		rts
-; ===========================================================================
+DLE_MZ1_Sect_2:	dc.w 0, 0, $500
+		dc.w $A90, $340, $340
+		dc.w -1
 
 DLE_MZ1_4:
 		cmpi.w	#$370,(v_camera_y_pos).w

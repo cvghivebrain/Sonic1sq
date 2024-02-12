@@ -592,12 +592,11 @@ sbabs:		macro
 ; ---------------------------------------------------------------------------
 
 evenr:		macro
-		exg	d0,\1
-		btst	#0,d0
+		move.b	\1,d0					; get low byte of address
+		andi.b	#1,d0					; check lowest bit for odd/even
 		beq.s	.already_even\@				; branch if already even
-		addq.l	#1,d0					; skip odd byte
+		addq.w	#1,\1					; skip odd byte
 	.already_even\@:
-		exg	d0,\1
 		endm
 
 ; ---------------------------------------------------------------------------

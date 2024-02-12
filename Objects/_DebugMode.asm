@@ -16,10 +16,10 @@ Debug_Index:	index *,,2
 
 Debug_Main:	; Routine 0
 		addq.b	#2,(v_debug_active_hi).w
-		move.w	(v_boundary_top).w,(v_boundary_top_debugcopy).w ; buffer level top boundary
-		move.w	(v_boundary_bottom_next).w,(v_boundary_bottom_debugcopy).w ; buffer level bottom boundary
-		move.w	#0,(v_boundary_top).w
-		move.w	#$720,(v_boundary_bottom_next).w	; set new boundaries
+		;move.w	(v_boundary_top).w,(v_boundary_top_debugcopy).w ; buffer level top boundary
+		;move.w	(v_boundary_bottom_next).w,(v_boundary_bottom_debugcopy).w ; buffer level bottom boundary
+		;move.w	#0,(v_boundary_top).w
+		;move.w	#$720,(v_boundary_bottom_next).w	; set new boundaries
 		andi.w	#$7FF,ost_y_pos(a0)
 		andi.w	#$7FF,(v_camera_y_pos).w
 		andi.w	#$3FF,(v_bg1_y_pos).w
@@ -249,8 +249,8 @@ Debug_Restore:
 		move.b	d0,ost_anim(a0)
 		move.w	d0,ost_x_sub(a0)
 		move.w	d0,ost_y_sub(a0)
-		move.w	(v_boundary_top_debugcopy).w,(v_boundary_top).w ; restore level boundaries
-		move.w	(v_boundary_bottom_debugcopy).w,(v_boundary_bottom_next).w
+		;move.w	(v_boundary_top_debugcopy).w,(v_boundary_top).w ; restore level boundaries
+		;move.w	(v_boundary_bottom_debugcopy).w,(v_boundary_bottom_next).w
 		cmpi.b	#id_Special,(v_gamemode).w
 		bne.s	.exit					; branch if not in the special stage
 
