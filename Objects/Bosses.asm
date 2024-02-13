@@ -34,7 +34,7 @@ ost_boss2_flags:	rs.b 1					; flag bitfield from Boss_MoveList
 		rsobjend
 
 Boss_CamXPos:	dc.w $2960					; camera x pos where the boss becomes active
-		dc.w $17F0
+		dc.w $1800
 Boss_InitMode:	dc.b (Boss_MoveGHZ-Boss_MoveList)/sizeof_bmove	; initial mode for each boss
 		dc.b (Boss_MoveMZ-Boss_MoveList)/sizeof_bmove
 		even

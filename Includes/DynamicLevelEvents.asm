@@ -190,6 +190,8 @@ DLE_MZ1:
 DLE_MZ1_Sect:	index *
 		ptr DLE_MZ1_Sect_0
 		ptr DLE_MZ1_Sect_2
+		ptr DLE_MZ1_Sect_4
+		ptr DLE_MZ1_Sect_6
 
 DLE_MZ1_Sect_0:	dc.w 0, 0, $1D0
 		dc.w $700, 0, $220
@@ -200,110 +202,32 @@ DLE_MZ1_Sect_2:	dc.w 0, 0, $500
 		dc.w $A90, $340, $340
 		dc.w -1
 
-DLE_MZ1_4:
-		cmpi.w	#$370,(v_camera_y_pos).w
-		bcc.s	.next					; branch if camera is below $370
+DLE_MZ1_Sect_4:	dc.w 0, 0, $500
+		dc.w $B80, $500, $500
+		dc.w $E70, 0, $500
+		dc.w -1
 
-		subq.b	#2,(v_dle_routine).w			; goto DLE_MZ1_2 next
-		rts
-; ===========================================================================
-
-.next:
-		cmpi.w	#$500,(v_camera_y_pos).w
-		bcs.s	.exit					; branch if camera is above $500
-		cmpi.w	#$B80,(v_camera_x_pos).w
-		bcs.s	.exit					; branch if camera is left of $B80
-		move.w	#$500,(v_boundary_top).w
-		addq.b	#2,(v_dle_routine).w			; goto DLE_MZ1_6 next
-
-	.exit:
-		rts
-; ===========================================================================
-
-DLE_MZ1_6:
-		cmpi.w	#$B80,(v_camera_x_pos).w
-		bcc.s	.skip_mid				; branch if camera is right of $B80
-
-		cmpi.w	#$340,(v_boundary_top).w
-		beq.s	.exit					; branch if top boundary is set for middle section
-
-		subq.w	#2,(v_boundary_top).w			; move top boundary up 2px
-		rts
-	.skip_mid:
-		cmpi.w	#$500,(v_boundary_top).w
-		beq.s	.skip_btm				; branch if top boundary is set for bottom section
-
-		cmpi.w	#$500,(v_camera_y_pos).w
-		bcs.s	.exit					; branch if camera is above $500
-
-		move.w	#$500,(v_boundary_top).w
-	.skip_btm:
-
-		cmpi.w	#$E70,(v_camera_x_pos).w
-		bcs.s	.exit					; branch if camera is left of $E70
-
-		move.w	#0,(v_boundary_top).w
-		move.w	#$500,(v_boundary_bottom_next).w
-		cmpi.w	#$1430,(v_camera_x_pos).w
-		bcs.s	.exit					; branch if camera is left of $1430
-
-		move.w	#$210,(v_boundary_bottom_next).w
-
-	.exit:
-		rts
+DLE_MZ1_Sect_6:	dc.w 0, 0, $500
+		dc.w $1430, 0, $210
+		dc.w -1
 ; ===========================================================================
 
 DLE_MZ2:
-		move.w	#$520,(v_boundary_bottom_next).w
-		cmpi.w	#$1700,(v_camera_x_pos).w
-		bcs.s	.exit					; branch if camera is left of $1700
+		lea	DLE_MZ2_Sect(pc),a1
+		bra.w	DLE_BoundaryUpdate
 
-		move.w	#$200,(v_boundary_bottom_next).w
-
-	.exit:
-		rts
+DLE_MZ2_Sect:	dc.w 0, 0, $520
+		dc.w $1700, 0, $200
+		dc.w -1
 ; ===========================================================================
 
 DLE_MZ3:
-		moveq	#0,d0
-		move.b	(v_dle_routine).w,d0
-		move.w	DLE_MZ3_Index(pc,d0.w),d0
-		jmp	DLE_MZ3_Index(pc,d0.w)
-; ===========================================================================
-DLE_MZ3_Index:	index *
-		ptr DLE_MZ3_Boss
-		ptr DLE_MZ3_End
-; ===========================================================================
+		lea	DLE_MZ3_Sect(pc),a1
+		bra.w	DLE_BoundaryUpdate
 
-DLE_MZ3_Boss:
-		move.w	#$720,(v_boundary_bottom_next).w
-		cmpi.w	#$1560,(v_camera_x_pos).w
-		bcs.s	.exit					; branch if camera is left of $1560
-
-		move.w	#$210,(v_boundary_bottom_next).w
-		cmpi.w	#$17F0,(v_camera_x_pos).w
-		bcs.s	.exit					; branch if camera is left of $17F0
-
-		bsr.w	FindFreeObj				; find free OST slot
-		bne.s	.fail					; branch if not found
-		move.l	#BossMarble,ost_id(a1)			; load MZ boss object
-		move.w	#$19F0,ost_x_pos(a1)
-		move.w	#$22C,ost_y_pos(a1)
-
-	.fail:
-		play.w	0, jsr, mus_Boss			; play boss music
-		move.b	#1,(f_boss_loaded).w			; lock screen
-		addq.b	#2,(v_dle_routine).w			; goto DLE_MZ3_End next
-		rts
-; ===========================================================================
-
-.exit:
-		rts
-; ===========================================================================
-
-DLE_MZ3_End:
-		move.w	(v_camera_x_pos).w,(v_boundary_left).w	; set boundary to current position
-		rts
+DLE_MZ3_Sect:	dc.w 0, 0, $720
+		dc.w $1560, 0, $210
+		dc.w -1
 
 ; ---------------------------------------------------------------------------
 ; Star Light Zone dynamic level events
