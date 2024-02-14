@@ -23,22 +23,25 @@ Debug_Main:	; Routine 0
 		andi.w	#$7FF,ost_y_pos(a0)
 		andi.w	#$7FF,(v_camera_y_pos).w
 		andi.w	#$3FF,(v_bg1_y_pos).w
-		andi.b	#$FF-render_xflip-render_yflip,ost_render(a0)
-		bclr	#status_platform_bit,ost_status(a0)
-		move.b	#0,ost_anim(a0)
-		move.w	#0,ost_inertia(a0)
-		move.w	#0,ost_x_vel(a0)
-		move.w	#0,ost_y_vel(a0)
+		moveq	#0,d0
+		move.b	d0,ost_status(a0)
+		move.b	d0,ost_anim(a0)
+		move.w	d0,ost_inertia(a0)
+		move.w	d0,ost_x_vel(a0)
+		move.w	d0,ost_y_vel(a0)
 		movea.l	(v_debug_ptr).w,a2
 		move.w	(v_debug_item_index).w,d0
 		movea.l	a0,a3
 		
 Debug_GetFrame:
-		move.l	4(a2,d0.w),ost_mappings(a3)		; load mappings for item
 		move.b	9(a2,d0.w),d1
 		andi.b	#status_xflip+status_yflip,d1
 		andi.b	#$FF-render_xflip-render_yflip,ost_render(a3)
 		or.b	d1,ost_render(a3)			; load x/yflip for item
+		or.b	d1,ost_status(a3)
+		
+Debug_GetFrame_SkipStatus:
+		move.l	4(a2,d0.w),ost_mappings(a3)		; load mappings for item
 		move.w	10(a2,d0.w),ost_frame_hi(a3)		; load frame number for item
 		move.l	12(a2,d0.w),d1				; load VRAM setting
 		bpl.s	.not_ram				; branch if not a RAM address
@@ -137,7 +140,21 @@ Debug_ChgItem:
 		btst	#bitL,d1
 		bne.s	.left					; branch if left is pressed
 		btst	#bitR,d1
-		beq.s	.exit					; branch if right isn't pressed
+		bne.s	.right					; branch if right is pressed
+		btst	#bitUp,d1
+		bne.s	.up					; branch if up is pressed
+		btst	#bitDn,d1
+		beq.s	.exit					; branch if down isn't pressed
+		
+.down:
+		bchg	#status_xflip_bit,ost_status(a0)
+		bchg	#status_xflip_bit,ost_render(a0)	; toggle xflip
+		bra.s	.blip
+		
+.up:
+		bchg	#status_yflip_bit,ost_status(a0)
+		bchg	#status_yflip_bit,ost_render(a0)	; toggle yflip
+		bra.s	.blip
 
 .right:
 		move.w	(v_debug_item_index).w,d0
@@ -163,6 +180,8 @@ Debug_ChgItem:
 		move.w	d0,(v_debug_item_index).w
 		movea.l	a0,a3
 		bsr.w	Debug_GetFrame
+		
+	.blip:
 		play.w	1, jmp, sfx_Switch			; play sound
 
 	.exit:
@@ -227,9 +246,13 @@ Debug_Create:
 		move.w	(v_debug_item_index).w,d0
 		move.l	(a2,d0.w),ost_id(a1)			; create object
 		move.b	8(a2,d0.w),ost_subtype(a1)
-		move.b	9(a2,d0.w),ost_status(a1)
+		move.b	9(a2,d0.w),d1
+		andi.b	#$FF-status_xflip-status_yflip,d1
+		or.b	ost_status(a0),d1			; use x/yflip from Sonic
+		move.b	d1,ost_status(a1)
+		move.b	ost_render(a0),ost_render(a1)
 		movea.l	a1,a3
-		bsr.w	Debug_GetFrame				; get mappings, frame & tile setting
+		bsr.w	Debug_GetFrame_SkipStatus		; get mappings, frame & tile setting
 		play.w	1, jmp, sfx_ActionBlock			; play sound
 		
 	.exit:
@@ -247,8 +270,10 @@ Debug_Restore:
 		move.l	#Map_Sonic,ost_mappings(a0)
 		move.w	#tile_sonic,ost_tile(a0)
 		move.b	d0,ost_anim(a0)
+		move.b	d0,ost_anim_frame(a0)
 		move.w	d0,ost_x_sub(a0)
 		move.w	d0,ost_y_sub(a0)
+		move.w	#id_frame_walk13,ost_frame_hi(a0)
 		;move.w	(v_boundary_top_debugcopy).w,(v_boundary_top).w ; restore level boundaries
 		;move.w	(v_boundary_bottom_debugcopy).w,(v_boundary_bottom_next).w
 		cmpi.b	#id_Special,(v_gamemode).w

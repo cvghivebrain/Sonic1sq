@@ -39,7 +39,7 @@ _Sonic 1-squared_ is an enhanced version of the original _Sonic the Hedgehog_ ga
 * Debug mode has been rewritten with more features, including info overlays for Sonic and the nearest object (similar to those in the [Sonic Physics Guide](http://info.sonicretro.org/Sonic_Physics_Guide)). The controls are as follows:
   * B - Toggle between Sonic and object.
   * C (as object) - Place an object.
-  * Hold A (as object) - Select an object with left/right. The previous and next objects are now visible.
+  * Hold A (as object) - Select an object with left/right. The previous and next objects are now visible. Toggle x/yflip with down/up respectively.
   * X - Target overlay to current nearest object. This is not automatically updated until the targeted object despawns.
   * Y - Toggle between displaying x/y position, x/y speed and angle/routine numbers.
   * Z - Toggle between displaying actual width/height and hitbox width/height.

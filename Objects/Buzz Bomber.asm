@@ -36,10 +36,11 @@ Buzz_Main:	; Routine 0
 		move.b	#12,ost_col_height(a0)
 		move.b	#$18,ost_displaywidth(a0)
 		move.b	#id_frame_buzz_fly3,ost_frame(a0)	; use frame with exhaust flame
-		move.w	#$400,ost_x_vel(a0)			; move Buzz Bomber to the right
+		move.w	#-$400,ost_x_vel(a0)			; move Buzz Bomber to the left
 		btst	#status_xflip_bit,ost_status(a0)
-		bne.s	Buzz_Fly				; branch if facing right
-		neg.w	ost_x_vel(a0)				; move Buzz Bomber to the left
+		beq.s	Buzz_Fly				; branch if facing left
+		neg.w	ost_x_vel(a0)				; move Buzz Bomber to the right
+		bset	#render_xflip_bit,ost_render(a0)
 
 Buzz_Fly:	; Routine 2
 		toggleframe	1				; animate
@@ -77,6 +78,7 @@ Buzz_Wait:	; Routine 4
 	.noflip:
 		add.w	d0,ost_x_pos(a1)
 		move.b	ost_status(a0),ost_status(a1)
+		move.b	ost_render(a0),ost_render(a1)
 		move.w	#14,ost_missile_wait_time(a1)
 		saveparent
 
