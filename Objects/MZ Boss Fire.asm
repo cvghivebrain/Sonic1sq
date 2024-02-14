@@ -111,7 +111,26 @@ BFire_Slide:	; Routine 6
 		
 BFire_Ledge:	; Routine 8
 		update_xy_fall	$24				; update position & apply gravity
-		bra.w	BFire_Display
+		tst.b	ost_render(a0)
+		bmi.w	BFire_Display2				; branch if fireball is visible
+		tst.w	ost_linked(a0)
+		beq.s	.delete					; branch if no static fireball was spawned
+		getlinked					; a1 = OST of last static fireball
+		cmpi.b	#id_ani_gfire_collide,ost_anim(a1)
+		bne.s	.return					; branch if static fireball isn't vanishing
+		
+	.delete:
+		jmp	DeleteObject				; delete if off screen & static fireball is done
+		
+	.return:
+		addq.b	#1,ost_subtype(a0)			; increment return counter
+		cmpi.b	#3,ost_subtype(a0)
+		beq.s	.delete					; delete after returning twice
+		subq.b	#2,ost_routine(a0)			; goto BFire_Slide next
+		move.w	ost_x_pos(a1),ost_x_pos(a0)
+		move.w	ost_y_pos(a1),ost_y_pos(a0)		; jump back to position of static fireball
+		move.w	#0,ost_y_vel(a0)			; stop falling
+		bra.w	BFire_Display2
 		
 ; ---------------------------------------------------------------------------
 ; Stationary fireball that vanishes
