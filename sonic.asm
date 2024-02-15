@@ -420,7 +420,6 @@ startof_obj:	equ *
 		include "Objects\SBZ Teleporter.asm"		; Teleport
 
 		include "Objects\Caterkiller.asm"		; Caterkiller
-
 		include "Objects\Splats.asm"			; Splats
 
 		include "Objects\Lamppost.asm"			; Lamppost
@@ -467,6 +466,7 @@ startof_obj:	equ *
 
 		include "Objects\Sonic [Mappings].asm"		; Map_Sonic
 		include "Objects\Sonic DPLCs.asm"		; SonicDynPLC
+		include "Objects\_DebugMode [Lists].asm"
 
 		include "Objects\Special Stage Walls [Mappings].asm" ; Map_SSWalls
 

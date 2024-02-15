@@ -82,8 +82,8 @@ FireMakerBoss:
 		movea.w	d0,a1
 		cmpi.l	#Boss,ost_id(a1)
 		bne.w	DeleteObject				; branch if boss despawned
-		btst	#bmove_freezehit_bit,ost_boss2_flags(a1)
-		beq.w	DespawnQuick_NoDisplay			; branch if not moving left/right
+		btst	#bmove_hazard_bit,ost_boss2_flags(a1)
+		beq.w	DespawnQuick_NoDisplay			; branch if hazard flag isn't set
 		
 		subq.b	#1,ost_anim_time(a0)			; decrement timer
 		bne.w	DespawnQuick_NoDisplay			; branch if time remains
@@ -94,7 +94,7 @@ FireMakerBoss:
 		jsr	(RandomNumber).w
 		andi.w	#$3F,d0
 		andi.w	#$F,d1
-		add.w	d1,d0
+		add.w	d1,d0					; random value 0-$4E
 		add.w	ost_x_pos(a0),d0
 		move.w	d0,ost_x_pos(a1)			; randomise x pos
 		move.w	ost_y_pos(a0),ost_y_pos(a1)

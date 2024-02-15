@@ -39,20 +39,22 @@ Boss_InitMode:	dc.b (Boss_MoveGHZ-Boss_MoveList)/sizeof_bmove	; initial mode for
 		dc.b (Boss_MoveMZ-Boss_MoveList)/sizeof_bmove
 		even
 
-bmove:		macro xvel,yvel,time,loadobj,xflip,next
+bmove:		macro xvel,yvel,time,loadobj,flags,next
 		dc.w xvel, yvel, time
 		dc.l loadobj
-		dc.b xflip, next
+		dc.b flags, next
 		endm
 
 bmove_xflip_bit:	equ 0
 bmove_laugh_bit:	equ 1
 bmove_nowobble_bit:	equ 2
 bmove_freezehit_bit:	equ 3
-bmove_xflip:		equ 1<<bmove_xflip_bit
-bmove_laugh:		equ 1<<bmove_laugh_bit
-bmove_nowobble:		equ 1<<bmove_nowobble_bit
-bmove_freezehit:	equ 1<<bmove_freezehit_bit
+bmove_hazard_bit:	equ 4
+bmove_xflip:		equ 1<<bmove_xflip_bit			; boss faces right
+bmove_laugh:		equ 1<<bmove_laugh_bit			; boss laughs
+bmove_nowobble:		equ 1<<bmove_nowobble_bit		; boss doesn't wobble
+bmove_freezehit:	equ 1<<bmove_freezehit_bit		; boss freezes when hit
+bmove_hazard:		equ 1<<bmove_hazard_bit			; hazards activate
 
 Boss_MoveList:	; x speed, y speed, duration, object to load, flags, value to add to mode
 Boss_MoveGHZ:	bmove 0, $100, $B8, 0, 0, 1
@@ -67,12 +69,12 @@ sizeof_bmove:	equ *-Boss_MoveGHZ
 
 Boss_MoveMZ:	bmove -$100, 0, $E0, BossNozzle, 0, 1
 		bmove 0, 0, 15, 0, bmove_nowobble, 1
-		bmove -$200, $40, 72, 0, bmove_nowobble+bmove_freezehit, 1
-		bmove -$200, -$40, 40, 0, bmove_nowobble+bmove_freezehit, 1
+		bmove -$200, $40, 72, 0, bmove_nowobble+bmove_freezehit+bmove_hazard, 1
+		bmove -$200, -$40, 40, 0, bmove_nowobble+bmove_freezehit+bmove_hazard, 1
 		bmove 0, -$40, 32, 0, bmove_nowobble, 1
 		bmove 0, 0, 80, BossFire, bmove_xflip+bmove_nowobble+bmove_laugh, 1
-		bmove $200, $40, 72, 0, bmove_xflip+bmove_nowobble+bmove_freezehit, 1
-		bmove $200, -$40, 40, 0, bmove_xflip+bmove_nowobble+bmove_freezehit, 1
+		bmove $200, $40, 72, 0, bmove_xflip+bmove_nowobble+bmove_freezehit+bmove_hazard, 1
+		bmove $200, -$40, 40, 0, bmove_xflip+bmove_nowobble+bmove_freezehit+bmove_hazard, 1
 		bmove 0, -$40, 32, 0, bmove_xflip+bmove_nowobble, 1
 		bmove 0, 0, 80, BossFire, bmove_nowobble+bmove_laugh, -7
 ; ===========================================================================
