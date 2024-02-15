@@ -438,7 +438,6 @@ startof_obj:	equ *
 		include "Objects\_Exploding.asm"
 
 		include "Objects\LZ Boss.asm"			; BossLabyrinth
-		include "Objects\MZ Boss.asm"			; BossMarble
 		include "Objects\MZ Boss Fire.asm"		; BossFire
 		include "Objects\SLZ Boss.asm"			; BossStarLight
 		include "Objects\SLZ Boss Spikeballs.asm"	; BossSpikeball

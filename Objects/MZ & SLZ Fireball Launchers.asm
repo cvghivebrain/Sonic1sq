@@ -1,5 +1,5 @@
 ; ---------------------------------------------------------------------------
-; Object 13 - fireball maker (MZ, SLZ)
+; Object 13 - fireball launcher (MZ, SLZ)
 
 ; spawned by:
 ;	ObjPos_MZ1, ObjPos_MZ2, ObjPos_MZ3
@@ -53,7 +53,7 @@ FireM_Main:	; Routine 0
 FireM_MakeFire:	; Routine 2
 		shortcut
 		subq.b	#1,ost_anim_time(a0)			; decrement timer
-		bne.w	DespawnQuick_NoDisplay			; if time remains, branch
+		bne.w	DespawnQuick_NoDisplay			; branch if time remains
 		move.b	ost_firem_time_master(a0),ost_anim_time(a0) ; reset time delay
 		bsr.w	CheckOffScreen				; is object on-screen?
 		bne.w	DespawnQuick_NoDisplay			; if not, branch
@@ -65,3 +65,47 @@ FireM_MakeFire:	; Routine 2
 		move.b	ost_subtype(a0),ost_subtype(a1)		; subtype = speed/direction
 		move.b	ost_status(a0),ost_status(a1)
 		bra.w	DespawnQuick_NoDisplay
+
+; ---------------------------------------------------------------------------
+; Fireball launcher at MZ boss (MZ)
+
+; spawned by:
+;	ObjPos_MZ3
+; ---------------------------------------------------------------------------
+
+FireMakerBoss:
+		bsr.s	FireM_Random
+		
+		shortcut
+		move.w	(v_boss_ost_ptr).w,d0
+		beq.w	DespawnQuick_NoDisplay			; branch if no boss loaded
+		movea.w	d0,a1
+		cmpi.l	#Boss,ost_id(a1)
+		bne.w	DeleteObject				; branch if boss despawned
+		btst	#bmove_freezehit_bit,ost_boss2_flags(a1)
+		beq.w	DespawnQuick_NoDisplay			; branch if not moving left/right
+		
+		subq.b	#1,ost_anim_time(a0)			; decrement timer
+		bne.w	DespawnQuick_NoDisplay			; branch if time remains
+		bsr.w	FindFreeObj				; find free OST slot
+		bne.w	DespawnQuick_NoDisplay			; branch if not found
+		move.l	#FireBall,ost_id(a1)			; load fireball object
+		move.b	#type_fire_gravity+4,ost_subtype(a1)	; set gravity & speed
+		jsr	(RandomNumber).w
+		andi.w	#$3F,d0
+		andi.w	#$F,d1
+		add.w	d1,d0
+		add.w	ost_x_pos(a0),d0
+		move.w	d0,ost_x_pos(a1)			; randomise x pos
+		move.w	ost_y_pos(a0),ost_y_pos(a1)
+		move.b	#priority_5,ost_priority(a1)
+		
+		bsr.s	FireM_Random
+		bra.w	DespawnQuick_NoDisplay
+		
+FireM_Random:
+		jsr	(RandomNumber).w
+		andi.b	#$1F,d0
+		addi.b	#$40,d0
+		move.b	d0,ost_anim_time(a0)			; set new timer (random value 64-95)
+		rts

@@ -2,7 +2,7 @@
 ; Bosses
 
 ; spawned by:
-;	ObjPos_GHZ3
+;	ObjPos_GHZ3, ObjPos_MZ3
 
 ; subtypes:
 ;	%ITTTTTTT
@@ -78,6 +78,7 @@ Boss_MoveMZ:	bmove -$100, 0, $E0, BossNozzle, 0, 1
 ; ===========================================================================
 
 Boss_Main:	; Routine 0
+		move.w	a0,(v_boss_ost_ptr).w
 		addq.b	#2,ost_routine(a0)			; goto Boss_Wait next
 		move.l	#Map_Bosses,ost_mappings(a0)
 		move.w	#tile_Art_Eggman,ost_tile(a0)
@@ -191,6 +192,7 @@ Boss_Move:	; Routine 4
 		move.w	#179,ost_boss2_time(a0)			; set timer to 3 seconds
 		move.w	#0,ost_x_vel(a0)
 		move.w	#0,ost_y_vel(a0)
+		move.b	#0,ost_boss2_flags(a0)
 		jmp	DisplaySprite
 
 ; ---------------------------------------------------------------------------

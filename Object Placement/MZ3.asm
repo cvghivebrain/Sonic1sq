@@ -232,6 +232,7 @@ ObjPos_MZ3:
 		objpos $1640,$0268,Lamppost,$02,rem
 		
 		objpos $17C0,$02F8,LavaTag,$01
+		objpos $1878,$02E8,FireMakerBoss,0
 		objpos $18A0,$02F8,LavaTag,$01
 		objpos $19F0,$022C,Boss,1,rem
 		objpos $1A00,$02A1,Prison,$00

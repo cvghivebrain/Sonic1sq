@@ -25,7 +25,6 @@ FBall_Index:	index *,,2
 
 		rsobj Fireballs
 ost_fireball_y_start:	rs.w 1					; original y position
-ost_fireball_mz_boss:	rs.b 1					; set to $FF if spawned by MZ boss
 		rsobjend
 ; ===========================================================================
 
@@ -36,30 +35,28 @@ FBall_Main:	; Routine 0
 		move.l	#Map_Fire,ost_mappings(a0)
 		move.w	(v_tile_fireball).w,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
+		tst.b	ost_priority(a0)
+		bne.s	.keep_priority				; branch if priority was set
 		move.b	#priority_3,ost_priority(a0)
+		
+	.keep_priority:
 		move.b	#id_React_Hurt,ost_col_type(a0)
 		move.b	#8,ost_col_width(a0)
 		move.b	#8,ost_col_height(a0)
 		move.w	ost_y_pos(a0),ost_fireball_y_start(a0)
-		tst.b	ost_fireball_mz_boss(a0)		; was fireball spawned by MZ boss?
-		beq.s	.speed					; if not, branch
-		move.b	#priority_5,ost_priority(a0)		; use lower sprite priority
-
-	.speed:
 		move.b	ost_subtype(a0),d0
 		move.b	d0,d1
 		andi.w	#%00000111,d0				; read bits 0-2
 		lsl.w	#8,d0					; multiply by $100
-		neg.w	d0					; move up or left by default
 		andi.b	#type_fire_gravity+type_fire_horizontal,d1 ; read only bits 6-7
 		lsr.b	#5,d1
 		move.b	d1,ost_mode(a0)				; save gravity/direction settings
 		move.b	ost_status(a0),d1
 		andi.b	#status_xflip+status_yflip,d1		; read xflip/yflip from status
-		beq.s	.noflip					; branch if neither are set
-		neg.w	d0					; move down or right instead
+		bne.s	.flipped				; branch if either are set
+		neg.w	d0					; move up or left (down or right if flipped)
 		
-	.noflip:
+	.flipped:
 		move.w	d0,ost_y_vel(a0)			; set object speed (vertical)
 		move.b	#8,ost_displaywidth(a0)
 		btst	#type_fire_horizontal_bit,ost_subtype(a0) ; is fireball horizontal?
