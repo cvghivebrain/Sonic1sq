@@ -65,6 +65,7 @@ Sol_OffScreen:
 Sol_Above:
 		tst.w	ost_y_vel(a1)
 		bmi.s	Sol_None				; branch if Sonic is moving up
+		move.b	d4,ost_solid_x_pos(a1)			; save x pos of Sonic on object
 		add.w	d3,ost_y_pos(a1)			; snap to hitbox
 		move.w	ost_y_vel(a1),ost_sonic_impact(a1)	; copy Sonic's y speed
 		move.w	#0,ost_y_vel(a1)			; stop Sonic falling
@@ -133,26 +134,35 @@ Sol_Stand:
 		btst	#status_air_bit,ost_status(a1)
 		bne.s	Sol_Stand_Leave				; branch if Sonic jumps
 		range_x_sonic
+		
+Sol_Stand2:
+		move.b	d4,ost_solid_x_pos(a1)			; save x pos of Sonic on object
 		tst	d1
 		bpl.s	Sol_Stand_Leave				; branch if Sonic is outside left/right edges
 
-		range_y_exact
-		add.w	d3,ost_y_pos(a1)			; align Sonic with top of object
+		move.w	ost_y_pos(a0),d3
+		moveq	#0,d5
+		move.b	ost_height(a0),d5
+		add.b	ost_height(a1),d5
+		sub.w	d5,d3
+		move.w	d3,ost_y_pos(a1)			; align Sonic with top of object
 		move.w	ost_x_prev(a0),d2
-		beq.s	.skip_x					; branch if previous x pos is unused
-		neg.w	d2
-		add.w	ost_x_pos(a0),d2			; subtract previous x pos for distance in pixels moved (+ve if moved right)
+		beq.s	.skip_x_prev				; branch if previous x pos is unused
+		sub.w	ost_x_pos(a0),d2			; subtract previous x pos for distance in pixels moved (-ve if moved right)
 		clr.w	ost_x_prev(a0)
-		add.w	d2,ost_x_pos(a1)			; update Sonic's x position
+		sub.w	d2,ost_x_pos(a1)			; update Sonic's x position
 
-	.skip_x:
+	.skip_x_prev:
 		moveq	#solid_top,d1				; set collision flag to top
 		rts
 
 Sol_Stand_Leave:
 		bclr	#status_platform_bit,ost_status(a1)	; clear Sonic's standing flag
 		bclr	#status_platform_bit,ost_status(a0)	; clear object's standing flag
-		clr.b	ost_mode(a0)
+		moveq	#0,d0
+		move.b	d0,ost_mode(a0)
+		move.b	d0,ost_solid_x_pos(a0)
+		move.b	d0,ost_solid_y_pos(a0)
 		moveq	#solid_none,d1
 		rts
 
@@ -161,21 +171,7 @@ Sol_Stand_TopOnly:
 		btst	#status_air_bit,ost_status(a1)
 		bne.s	Sol_Stand_Leave				; branch if Sonic jumps
 		range_x_sonic0
-		tst	d1
-		bpl.s	Sol_Stand_Leave				; branch if Sonic is outside left/right edges
-
-		range_y_exact
-		add.w	d3,ost_y_pos(a1)			; align Sonic with top of object
-		move.w	ost_x_prev(a0),d2
-		beq.s	.skip_x					; branch if previous x pos is unused
-		neg.w	d2
-		add.w	ost_x_pos(a0),d2			; subtract previous x pos for distance in pixels moved (+ve if moved right)
-		clr.w	ost_x_prev(a0)
-		add.w	d2,ost_x_pos(a1)			; update Sonic's x position
-
-	.skip_x:
-		moveq	#solid_top,d1				; set collision flag to top
-		rts
+		bra.s	Sol_Stand2
 
 Sol_Stand_SkipRange:
 		btst	#status_air_bit,ost_status(a1)

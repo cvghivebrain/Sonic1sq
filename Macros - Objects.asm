@@ -224,6 +224,9 @@ range_x_sonic:	macro
 		addq.b	#1,d4
 		sub.w	d4,d1					; d1 = x dist between hitbox edges (-ve if overlapping)
 		add.w	d0,d4					; d4 = Sonic's x pos relative to left edge
+		bpl.s	.keep_pos\@				; branch if +ve
+		moveq	#0,d4
+	.keep_pos\@:
 		endm
 
 range_x_sonic0:	macro						; as above, but ignoring Sonic's width

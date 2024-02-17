@@ -387,9 +387,7 @@ endsprite:	macro
 
 piece:		macro
 		dc.b \2						; ypos
-		sprite_width:	substr	1,1,"\3"
-		sprite_height:	substr	3,3,"\3"
-		dc.b ((sprite_width-1)<<2)+sprite_height-1
+		dc.b sprite\3\					; sprite size (e.g. sprite1x1 = 0)
 		sprite_xpos: = \1
 		if \4<0						; is tile index negative?
 			sprite_tile: = $10000+(\4)		; convert signed to unsigned
