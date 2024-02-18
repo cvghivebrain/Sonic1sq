@@ -26,9 +26,9 @@ SolidObject_SkipRender:
 		bne.s	Sol_None				; branch if debug mode is in use
 
 SolidObject_SkipRenderDebug:
+		getsonic
 		tst.b	ost_mode(a0)
 		bne.w	Sol_Stand				; branch if Sonic is already standing on object
-		getsonic
 		range_x_sonic					; get distances between Sonic (a1) and object (a0)
 		cmpi.w	#0,d1
 		bgt.s	Sol_None				; branch if outside x hitbox
@@ -65,7 +65,7 @@ Sol_OffScreen:
 Sol_Above:
 		tst.w	ost_y_vel(a1)
 		bmi.s	Sol_None				; branch if Sonic is moving up
-		move.b	d4,ost_solid_x_pos(a1)			; save x pos of Sonic on object
+		move.b	d4,ost_solid_x_pos(a0)			; save x pos of Sonic on object
 		add.w	d3,ost_y_pos(a1)			; snap to hitbox
 		move.w	ost_y_vel(a1),ost_sonic_impact(a1)	; copy Sonic's y speed
 		move.w	#0,ost_y_vel(a1)			; stop Sonic falling
@@ -130,22 +130,24 @@ Sol_Side:
 		rts
 
 Sol_Stand:
-		getsonic
 		btst	#status_air_bit,ost_status(a1)
 		bne.s	Sol_Stand_Leave				; branch if Sonic jumps
 		range_x_sonic
 		
 Sol_Stand2:
-		move.b	d4,ost_solid_x_pos(a1)			; save x pos of Sonic on object
+		move.b	d4,ost_solid_x_pos(a0)			; save x pos of Sonic on object
 		tst	d1
 		bpl.s	Sol_Stand_Leave				; branch if Sonic is outside left/right edges
 
-		move.w	ost_y_pos(a0),d3
 		moveq	#0,d5
 		move.b	ost_height(a0),d5
+		
+Sol_Stand_Moving:
+		move.w	ost_y_pos(a0),d3
 		add.b	ost_height(a1),d5
 		sub.w	d5,d3
 		move.w	d3,ost_y_pos(a1)			; align Sonic with top of object
+		
 		move.w	ost_x_prev(a0),d2
 		beq.s	.skip_x_prev				; branch if previous x pos is unused
 		sub.w	ost_x_pos(a0),d2			; subtract previous x pos for distance in pixels moved (-ve if moved right)
@@ -167,29 +169,10 @@ Sol_Stand_Leave:
 		rts
 
 Sol_Stand_TopOnly:
-		getsonic
 		btst	#status_air_bit,ost_status(a1)
 		bne.s	Sol_Stand_Leave				; branch if Sonic jumps
 		range_x_sonic0
 		bra.s	Sol_Stand2
-
-Sol_Stand_SkipRange:
-		btst	#status_air_bit,ost_status(a1)
-		bne.s	Sol_Stand_Leave				; branch if Sonic jumps
-		tst	d1
-		bpl.w	Sol_Stand_Leave				; branch if Sonic is outside left/right edges
-
-		add.w	d3,ost_y_pos(a1)			; align Sonic with top of object
-		move.w	ost_x_prev(a0),d2
-		beq.s	.skip_x					; branch if previous x pos is unused
-		neg.w	d2
-		add.w	ost_x_pos(a0),d2			; subtract previous x pos for distance in pixels moved (+ve if moved right)
-		clr.w	ost_x_prev(a0)
-		add.w	d2,ost_x_pos(a1)			; update Sonic's x position
-
-	.skip_x:
-		moveq	#solid_top,d1				; set collision flag to top
-		rts
 
 Sol_Kill:
 		jmp	ObjectKillSonic				; Sonic dies
@@ -243,9 +226,9 @@ SolidObject_TopOnly_SkipRender:
 		bne.w	Sol_OffScreen				; branch if debug mode is in use
 
 SolidObject_TopOnly_SkipRenderDebug:
+		getsonic
 		tst.b	ost_mode(a0)
 		bne.w	Sol_Stand_TopOnly			; branch if Sonic is already standing on object
-		getsonic
 		range_x_sonic0					; get distances between Sonic (a1) and object (a0)
 		tst.w	d1
 		bgt.s	.exit					; branch if outside x hitbox
@@ -294,8 +277,10 @@ SolidObject_Heightmap:
 		bne.w	Sol_None				; branch if debug mode is in use
 
 		getsonic
+		tst.b	ost_mode(a0)
+		bne.s	Sol_Stand_Heightmap			; branch if Sonic is already standing on object
 		range_x_sonic					; get distances between Sonic (a1) and object (a0)
-		cmpi.w	#0,d1
+		tst.w	d1
 		bgt.w	Sol_None				; branch if outside x hitbox
 
 		moveq	#0,d5
@@ -308,25 +293,20 @@ SolidObject_Heightmap:
 
 	.use_heightmap:
 		neg.w	d3					; make d3 +ve
-		tst.w	d4
-		bmi.s	.left_edge				; branch if outside left edge (d5 stays 0)
 		move.w	d4,d5					; d5 = x pos on object
 		lsr.w	d6,d5					; reduce precision
-
-	.left_edge:
 		move.b	(a2,d5.w),d5				; get height byte from heightmap
 		andi.w	#$FF,d5
+		move.b	d5,ost_solid_y_pos(a0)			; save height
 
 	.skip_heightmap:
 		sub.w	d5,d3
 		move.b	ost_height(a1),d5
 		sub.w	d5,d3					; d3 = y dist between hitbox edges (-ve if overlapping)
-		subq.w	#1,d3
-
-		tst.b	ost_mode(a0)
-		bne.w	Sol_Stand_SkipRange			; branch if Sonic is already standing on object
+		
 		tst.w	d3
 		bpl.w	Sol_None				; branch if outside y hitbox
+		
 		cmp.w	d1,d3
 		blt.w	Sol_Side				; branch if Sonic is to the side
 		tst.w	d2
@@ -334,6 +314,27 @@ SolidObject_Heightmap:
 		cmpi.w	#-1,d1
 		bge.w	Sol_None				; branch if Sonic is below, but within 1px of the sides
 		bra.w	Sol_Below
+		
+Sol_Stand_Heightmap:
+		btst	#status_air_bit,ost_status(a1)
+		bne.w	Sol_Stand_Leave				; branch if Sonic jumps
+		tst.w	ost_x_vel(a1)
+		bne.s	.moving					; branch if Sonic is moving
+		moveq	#0,d5
+		move.b	ost_solid_y_pos(a0),d5
+		bra.w	Sol_Stand_Moving
+		
+	.moving:
+		range_x_sonic
+		move.b	d4,ost_solid_x_pos(a0)			; save x pos of Sonic on object
+		tst	d1
+		bpl.w	Sol_Stand_Leave				; branch if Sonic is outside left/right edges
+		move.w	d4,d5					; d5 = x pos on object
+		lsr.w	d6,d5					; reduce precision
+		move.b	(a2,d5.w),d5				; get height byte from heightmap
+		andi.w	#$FF,d5
+		move.b	d5,ost_solid_y_pos(a0)			; save height
+		bra.w	Sol_Stand_Moving
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to make an object solid, top only
@@ -357,6 +358,8 @@ SolidObject_TopOnly_Heightmap:
 		bne.s	.exit					; branch if debug mode is in use
 
 		getsonic
+		tst.b	ost_mode(a0)
+		bne.s	Sol_Stand_TopOnly_Heightmap		; branch if Sonic is already standing on object
 		range_x_sonic0
 		tst.w	d1
 		bgt.s	.exit					; branch if outside x hitbox
@@ -367,28 +370,22 @@ SolidObject_TopOnly_Heightmap:
 		bpl.s	.exit					; branch if Sonic is below
 		move.w	d2,d3
 		neg.w	d3					; make d3 +ve
-		tst.w	d4
-		bmi.s	.left_edge				; branch if outside left edge (d5 stays 0)
 		move.w	d4,d5					; d5 = x pos on object
 		lsr.w	d6,d5					; reduce precision
-
-	.left_edge:
 		move.b	(a2,d5.w),d5				; get height byte from heightmap
 		andi.w	#$FF,d5
+		move.b	d5,ost_solid_y_pos(a0)			; save height
 		sub.w	d5,d3
 		move.b	ost_height(a1),d5
 		sub.w	d5,d3					; d3 = y dist between hitbox edges (-ve if overlapping)
-		subq.w	#1,d3
-
-		tst.b	ost_mode(a0)
-		bne.w	Sol_Stand_SkipRange			; branch if Sonic is already standing on object
+		
 		tst.w	d3
 		bpl.s	.exit					; branch if outside y hitbox
 
 		moveq	#-8,d5
 		cmpi.w	#$800,ost_y_vel(a1)
 		blt.s	.slow_fall				; branch if Sonic isn't falling fast
-		subq.w	#8,d5					; 16px tolerance
+		moveq	#-16,d5					; 16px tolerance
 
 	.slow_fall:
 		cmp.w	d5,d3
@@ -397,6 +394,27 @@ SolidObject_TopOnly_Heightmap:
 	.exit:
 		moveq	#solid_none,d1				; set collision flag to none
 		rts
+		
+Sol_Stand_TopOnly_Heightmap:
+		btst	#status_air_bit,ost_status(a1)
+		bne.w	Sol_Stand_Leave				; branch if Sonic jumps
+		tst.w	ost_x_vel(a1)
+		bne.s	.moving					; branch if Sonic is moving
+		moveq	#0,d5
+		move.b	ost_solid_y_pos(a0),d5
+		bra.w	Sol_Stand_Moving
+		
+	.moving:
+		range_x_sonic0
+		move.b	d4,ost_solid_x_pos(a0)			; save x pos of Sonic on object
+		tst	d1
+		bpl.w	Sol_Stand_Leave				; branch if Sonic is outside left/right edges
+		move.w	d4,d5					; d5 = x pos on object
+		lsr.w	d6,d5					; reduce precision
+		move.b	(a2,d5.w),d5				; get height byte from heightmap
+		andi.w	#$FF,d5
+		move.b	d5,ost_solid_y_pos(a0)			; save height
+		bra.w	Sol_Stand_Moving
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to cancel a solid object
