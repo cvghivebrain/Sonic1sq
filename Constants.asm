@@ -4,7 +4,7 @@
 
 sizeof_256x256:		equ $200				; size of one 256x256 tile
 countof_256x256:	equ $50					; max number of 256x256 tiles
-sizeof_256x256_all:	equ sizeof_256x256*countof_256x256	; size of all 256x256 tiles ($A400 bytes)
+sizeof_256x256_all:	equ sizeof_256x256*countof_256x256	; size of all 256x256 tiles ($A000 bytes)
 sizeof_16x16:		equ 8					; size of one 16x16 tile
 countof_16x16:		equ $300				; max number of 16x16 tiles
 sizeof_16x16_all:	equ sizeof_16x16*countof_16x16		; size of all 16x16 tiles ($1800 bytes)
@@ -259,8 +259,6 @@ solid_right_bit:		equ 3
 
 ; General gameplay
 lives_start:			equ 3				; lives at start of game
-rings_for_life:			equ 100				; rings needed for first extra life
-rings_for_life2:		equ 200				; rings needed for second extra life
 rings_for_special_stage:	equ 50				; rings needed for special stage giant ring to appear
 rings_for_continue:		equ 5				; rings needed for continue in special stage
 rings_from_monitor:		equ 10				; rings given by ring monitor

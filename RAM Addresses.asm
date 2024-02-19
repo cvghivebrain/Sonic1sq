@@ -7,12 +7,11 @@
 
 ; Major data blocks:
 
-v_256x256_tiles:		equ   $FF0000			; 256x256 tile mappings ($A400 bytes)
+v_256x256_tiles:		equ   $FF0000			; 256x256 tile mappings ($A000 bytes)
 				rsset $FFFF0000+sizeof_256x256_all
 v_level_layout:			rs.b sizeof_level		; level layout ($400 bytes)
 v_bg_layout:			rs.b sizeof_bg			; background layout ($400 bytes)
 v_bgscroll_buffer:		rs.b $200			; background scroll buffer
-v_kosplc_buffer_end:		equ __rs			; KosPLC shouldn't overwrite the sprite queue or it'll cause problems
 		if __rs&$FFFF < $8000
 		rsset $FFFF8000					; addresses after this point must be over $8000
 		endc

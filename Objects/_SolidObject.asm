@@ -320,6 +320,8 @@ Sol_Stand_Heightmap:
 		bne.w	Sol_Stand_Leave				; branch if Sonic jumps
 		tst.w	ost_x_vel(a1)
 		bne.s	.moving					; branch if Sonic is moving
+		moveq	#0,d4
+		move.b	ost_solid_x_pos(a0),d4
 		moveq	#0,d5
 		move.b	ost_solid_y_pos(a0),d5
 		bra.w	Sol_Stand_Moving
@@ -400,6 +402,8 @@ Sol_Stand_TopOnly_Heightmap:
 		bne.w	Sol_Stand_Leave				; branch if Sonic jumps
 		tst.w	ost_x_vel(a1)
 		bne.s	.moving					; branch if Sonic is moving
+		moveq	#0,d4
+		move.b	ost_solid_x_pos(a0),d4
 		moveq	#0,d5
 		move.b	ost_solid_y_pos(a0),d5
 		bra.w	Sol_Stand_Moving
