@@ -46,16 +46,8 @@ TSwi_Info_2:	; SLZ loops (left-down)
 TSwi_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto TSwi_Detect next
 		move.w	ost_x_pos(a0),d0
-		andi.w	#$FF00,d0				; x pos of left edge of tile
-		move.w	d0,d2
 		move.w	ost_y_pos(a0),d1
-		andi.w	#$FF00,d1				; y pos of top edge of tile
-		move.w	d1,d3
-		lsr.w	#8,d0
-		lsr.w	#1,d1
-		add.w	d1,d0					; d0 = position within layout
-		lea	(v_level_layout).w,a2
-		adda.w	d0,a2					; jump to RAM address for specific tile within layout
+		bsr.w	PosToChunk				; get chunk id from position
 		move.l	a2,ost_tswi_tile_ptr(a0)		; save pointer
 		
 		moveq	#0,d0
@@ -70,13 +62,14 @@ TSwi_Main:	; Routine 0
 		bsr.w	FindNextFreeObj
 		bne.s	TSwi_Detect
 		move.l	#TileSwitchHotspot,ost_id(a1)		; load hotspot object
-		moveq	#0,d0
+		move.w	ost_x_pos(a0),d0
+		andi.w	#$FF00,d0				; x pos of left edge of chunk
 		move.b	(a2)+,d0
 		move.w	d0,ost_x_pos(a1)
-		add.w	d2,ost_x_pos(a1)
+		move.w	ost_y_pos(a0),d0
+		andi.w	#$FF00,d0				; y pos of top edge of chunk
 		move.b	(a2)+,d0
 		move.w	d0,ost_y_pos(a1)
-		add.w	d3,ost_y_pos(a1)
 		move.b	d4,ost_tswi_tile_default(a1)
 		move.b	d5,ost_tswi_tile_alt(a1)
 		move.l	ost_tswi_tile_ptr(a0),ost_tswi_tile_ptr(a1)

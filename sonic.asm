@@ -376,6 +376,8 @@ startof_obj:	equ *
 		include "Objects\Bomb Enemy.asm"		; Bomb
 
 		include "Objects\Orbinaut.asm"			; Orbinaut
+		
+		include "Objects\_PosToChunk.asm"
 
 		include "Objects\LZ Harpoon.asm"		; Harpoon
 		include "Objects\LZ Blocks.asm"			; LabyrinthBlock
