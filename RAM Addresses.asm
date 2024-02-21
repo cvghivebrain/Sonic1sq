@@ -248,6 +248,7 @@ v_slzboss_seesaws:		rs.w 3				; OST addresses of 3 seesaws at SLZ boss
 v_nearest_obj:			rs.w 1				; address of OST of nearest object, as found by FindNearestSonic
 v_invincibility:		rs.w 1				; time left for invincibility
 v_shoes:			rs.w 1				; time left for speed shoes
+f_128x128_mode:			rs.b 1				; flag set for 128x128 level chunks
 				rsblockend levelinfo
 
 				rsblock sprites

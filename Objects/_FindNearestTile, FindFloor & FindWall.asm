@@ -47,10 +47,10 @@ FindNearestTile:
 		rts
 
 TileOffsetList:
-		c: = -$200
+		c: = -sizeof_256x256
 		rept countof_256x256+1
 		dc.w c
-		c: = c+$200
+		c: = c+sizeof_256x256
 		endr
 ; ---------------------------------------------------------------------------
 ; Subroutine to	find the floor
