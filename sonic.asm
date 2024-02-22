@@ -327,10 +327,10 @@ startof_obj:	equ *
 		include "Objects\Moto Bug.asm"			; MotoBug
 
 		include "Objects\Yadrin.asm"			; Yadrin
-		include "Objects\_DespawnObject & CheckActive.asm"
 
 		include "Objects\_SolidObject.asm"
 		include "Objects\_SkipMappings.asm"
+		include "Objects\_DespawnObject & CheckActive.asm"
 
 		include "Objects\MZ Smashable Green Block.asm"	; SmashBlock
 
@@ -377,7 +377,7 @@ startof_obj:	equ *
 
 		include "Objects\Orbinaut.asm"			; Orbinaut
 		
-		include "Objects\_PosToChunk.asm"
+		include "Objects\_PosToChunk & PosToTile.asm"
 
 		include "Objects\LZ Harpoon.asm"		; Harpoon
 		include "Objects\LZ Blocks.asm"			; LabyrinthBlock

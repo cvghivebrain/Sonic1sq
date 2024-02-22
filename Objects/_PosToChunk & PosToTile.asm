@@ -63,10 +63,13 @@ PosToChunk_128:
 ;		ost_x_pos(a0),d0
 ;		ost_y_pos(a0),d1
 ;		bsr.w	PosToTile
-;		move.w	(a3),d0
+;		move.w	(a3),d2
 ; ---------------------------------------------------------------------------
 
 PosToTile:
+		tst.b	(f_128x128_mode).w
+		bne.w	PosToTile_128				; branch if in 128x128 mode
+		
 		bsr.s	PosToChunk_SkipChk
 		move.b	(a2),d2					; get 256x256 chunk id
 		beq.s	.chunk0					; branch if 0
@@ -98,4 +101,33 @@ ChunkList:
 		rept countof_256x256+1
 		dc.w c
 		c: = c+sizeof_256x256
+		endr
+		
+PosToTile_128:
+		bsr.w	PosToChunk_128
+		move.b	(a2),d2					; get 128x128 chunk id
+		
+		moveq	#-1,d4					; d4 = $FFFFFFFF
+		add.w	d2,d2
+		move.w	ChunkList_128(pc,d2.w),d4		; get RAM address of specific 128x128 chunk
+		
+		move.w	d0,d2					; copy x/y pos
+		move.w	d1,d3
+		
+		andi.w	#$70,d2					; d2 = x pos within chunk
+		lsr.w	#2,d2					; d2 = x pos / tiles per row (8) * bytes per tile (2)
+		add.w	d2,d4					; add to base address
+		
+		andi.w	#$70,d3					; d3 = y pos within chunk
+		add.w	d3,d3					; d3 = y pos / tiles per row (8) * bytes per row (16)
+		add.w	d3,d4					; add to base address
+		
+		movea.l	d4,a3					; RAM address for 16x16 tile within 128x128 mappings
+		rts
+
+ChunkList_128:
+		c: = 0
+		rept countof_128x128
+		dc.w c
+		c: = c+sizeof_128x128
 		endr
