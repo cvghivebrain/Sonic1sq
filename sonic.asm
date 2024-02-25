@@ -378,6 +378,7 @@ startof_obj:	equ *
 		include "Objects\Orbinaut.asm"			; Orbinaut
 		
 		include "Objects\_PosToChunk & PosToTile.asm"
+		include "Objects\_FloorDist.asm"
 
 		include "Objects\LZ Harpoon.asm"		; Harpoon
 		include "Objects\LZ Blocks.asm"			; LabyrinthBlock
@@ -401,12 +402,12 @@ startof_obj:	equ *
 		include "Objects\Unused Special Stage Warp.asm"	; VanishSonic
 		include "Objects\LZ Water Splash.asm"		; Splash
 		include "Objects\LZ Water Surface.asm"		; WaterSurface
+		include "Objects\SBZ Rotating Disc Junction.asm" ; Junction
 
 		include "Objects\_FindNearestTile, FindFloor & FindWall.asm"
 
 		include "Objects\_FindFloorObj, FindWallRightObj, FindCeilingObj & FindWallLeftObj.asm"
 
-		include "Objects\SBZ Rotating Disc Junction.asm" ; Junction
 		include "Objects\SBZ Running Disc.asm"		; RunningDisc
 		include "Objects\SBZ Conveyor Belt.asm"		; Conveyor
 		include "Objects\SBZ Spinning Platforms.asm"	; SpinPlatform
