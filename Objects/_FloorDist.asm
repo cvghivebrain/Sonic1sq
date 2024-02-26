@@ -119,6 +119,8 @@ FloorAngle:
 		beq.s	.exit					; branch if 0
 		lea	(AngleMap).l,a4
 		move.b	(a4,d3.w),d3				; get collision angle value
+		btst	#0,d3
+		bne.s	.snap					; branch if snap bit is set
 		btst	#tilemap_xflip_bit,d4
 		beq.s	.no_xflip				; branch if not xflipped
 		neg.b	d3					; xflip angle
@@ -132,6 +134,10 @@ FloorAngle:
 
 	.exit:
 		rts
+		
+	.snap:
+		moveq	#0,d3					; snap to flat floor
+		rts
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to snap a new object to the floor
@@ -140,10 +146,7 @@ FloorAngle:
 ; ---------------------------------------------------------------------------
 
 SnapFloor:
-		move.w	ost_x_pos(a0),d0
-		moveq	#0,d1
-		move.b	ost_height(a0),d1
-		add.w	ost_y_pos(a0),d1			; d1 = y pos of bottom of object
+		getpos_bottom					; d0 = x pos; d1 = y pos of bottom of object
 		moveq	#5,d6					; check up to 6 tiles
 		bsr.w	FloorDist
 		cmpi.w	#16*6,d5

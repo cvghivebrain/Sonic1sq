@@ -331,3 +331,82 @@ mul60:		macro
 		sub.w	\2,\1
 		endm
 
+; ---------------------------------------------------------------------------
+; Copy x/y position of object to d0/d1
+; ---------------------------------------------------------------------------
+
+getpos:		macro
+		move.w	ost_x_pos(a0),d0
+		move.w	ost_y_pos(a0),d1
+		endm
+
+getpos_bottom:	macro
+		move.w	ost_x_pos(a0),d0
+		moveq	#0,d1
+		move.b	ost_height(a0),d1
+		add.w	ost_y_pos(a0),d1
+		endm
+
+getpos_top:	macro
+		move.w	ost_x_pos(a0),d0
+		moveq	#0,d1
+		move.b	ost_height(a0),d1
+		neg.w	d1
+		add.w	ost_y_pos(a0),d1
+		endm
+
+getpos_right:	macro
+		moveq	#0,d0
+		move.b	ost_width(a0),d0
+		add.w	ost_x_pos(a0),d0
+		move.w	ost_y_pos(a0),d1
+		endm
+
+getpos_left:	macro
+		moveq	#0,d0
+		move.b	ost_width(a0),d0
+		neg.w	d0
+		add.w	ost_x_pos(a0),d0
+		move.w	ost_y_pos(a0),d1
+		endm
+
+getpos_bottomright:	macro
+		moveq	#0,d0
+		move.b	ost_width(a0),d0
+		add.w	ost_x_pos(a0),d0
+		moveq	#0,d1
+		move.b	ost_height(a0),d1
+		add.w	ost_y_pos(a0),d1
+		endm
+
+getpos_bottomleft:	macro
+		moveq	#0,d0
+		move.b	ost_width(a0),d0
+		neg.w	d0
+		add.w	ost_x_pos(a0),d0
+		moveq	#0,d1
+		move.b	ost_height(a0),d1
+		add.w	ost_y_pos(a0),d1
+		endm
+
+getpos_topright:	macro
+		moveq	#0,d0
+		move.b	ost_width(a0),d0
+		add.w	ost_x_pos(a0),d0
+		moveq	#0,d1
+		move.b	ost_height(a0),d1
+		neg.w	d1
+		add.w	ost_y_pos(a0),d1
+		endm
+
+getpos_topleft:	macro
+		moveq	#0,d0
+		move.b	ost_width(a0),d0
+		neg.w	d0
+		add.w	ost_x_pos(a0),d0
+		moveq	#0,d1
+		move.b	ost_height(a0),d1
+		neg.w	d1
+		add.w	ost_y_pos(a0),d1
+		endm
+		
