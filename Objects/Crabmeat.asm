@@ -64,18 +64,12 @@ Crab_Move:	; Routine 2
 		update_x_pos					; update position
 		btst	#0,(v_vblank_counter_byte).w
 		bne.s	.findfloor_here				; branch on odd frames
-		
-		move.w	ost_x_pos(a0),d3
-		addi.w	#$10,d3					; find floor 16px to the right
-		btst	#status_xflip_bit,ost_status(a0)
-		bne.s	.noflip
-		subi.w	#$20,d3					; find floor 16px to the left
-
-	.noflip:
-		jsr	(FindFloorObj2).l
-		cmpi.w	#-8,d1					; is there a wall ahead?
+		getpos_bottomforward				; d0 = x pos of left/right side; d1 = y pos of bottom
+		moveq	#1,d6
+		jsr	FloorDist
+		cmpi.w	#-8,d5					; is there a wall ahead?
 		blt.s	.halt					; if yes, branch
-		cmpi.w	#$C,d1					; is there a drop ahead?
+		cmpi.w	#$C,d5					; is there a drop ahead?
 		bge.s	.halt					; if yes, branch
 		lea	Ani_Crab(pc),a1
 		bsr.w	AnimateSprite				; animate
@@ -83,8 +77,10 @@ Crab_Move:	; Routine 2
 ; ===========================================================================
 
 .findfloor_here:
-		jsr	(FindFloorObj).l			; find floor at current position
-		add.w	d1,ost_y_pos(a0)			; snap to floor
+		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		moveq	#1,d6
+		jsr	FloorDist
+		add.w	d5,ost_y_pos(a0)			; snap to floor
 		;move.b	d3,ost_angle(a0)			; update angle
 		tst.b	ost_subtype(a0)
 		bmi.s	.noslope				; don't check for slope
@@ -92,6 +88,7 @@ Crab_Move:	; Routine 2
 		move.b	ost_anim(a0),d0
 		move.b	ost_status(a0),d1
 		andi.b	#$FC,d0					; assume floor is flat
+		jsr	FloorAngle
 		addq.b	#6,d3
 		cmpi.b	#12,d3
 		bcs.s	.flat					; branch if floor is flat(ish)

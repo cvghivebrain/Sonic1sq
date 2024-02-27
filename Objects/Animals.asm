@@ -115,10 +115,12 @@ Anml_Drop:	; Routine 4
 	.display:
 		update_y_fall					; make object fall and update its position
 		bmi.w	DisplaySprite				; branch if still moving upwards
-		jsr	(FindFloorObj).l
-		tst.w	d1					; has object hit the floor?
+		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		moveq	#1,d6
+		jsr	FloorDist
+		tst.w	d5					; has object hit the floor?
 		bpl.w	DisplaySprite				; if not, branch
-		add.w	d1,ost_y_pos(a0)			; align to floor
+		add.w	d5,ost_y_pos(a0)			; align to floor
 		move.w	ost_animal_y_vel(a0),ost_y_vel(a0)	; reset speed
 		move.b	#id_frame_animal1_flap2,ost_frame(a0)	; use flapping frame
 		move.b	ost_animal_type(a0),ost_routine(a0)	; goto relevant routine next
@@ -139,10 +141,12 @@ Anml_Mammal:	; Routine 6
 		bmi.s	.chkdel					; branch if moving upwards
 
 		move.b	#id_frame_animal1_flap1,ost_frame(a0)
-		jsr	(FindFloorObj).l
-		tst.w	d1					; has object hit the floor?
+		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		moveq	#1,d6
+		jsr	FloorDist
+		tst.w	d5					; has object hit the floor?
 		bpl.s	.chkdel					; if not, branch
-		add.w	d1,ost_y_pos(a0)			; align to floor
+		add.w	d5,ost_y_pos(a0)			; align to floor
 		move.w	ost_animal_y_vel(a0),ost_y_vel(a0)	; reset y speed
 
 	.chkdel:
@@ -157,10 +161,12 @@ Anml_Bird:	; Routine 8
 		update_xy_fall	$18				; update object position & apply gravity
 		bmi.s	.animate				; branch if moving upwards
 
-		jsr	(FindFloorObj).l
-		tst.w	d1					; has object hit the floor?
+		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		moveq	#1,d6
+		jsr	FloorDist
+		tst.w	d5					; has object hit the floor?
 		bpl.s	.animate				; if not, branch
-		add.w	d1,ost_y_pos(a0)			; align to floor
+		add.w	d5,ost_y_pos(a0)			; align to floor
 		move.w	ost_animal_y_vel(a0),ost_y_vel(a0)	; reset y speed
 
 	.animate:
@@ -353,10 +359,12 @@ AnmlE_Stay:	; Routine $A
 		bmi.w	DespawnQuick				; branch if moving upwards
 
 		move.b	#id_frame_animal1_flap1,ost_frame(a0)
-		jsr	(FindFloorObj).l
-		tst.w	d1					; has object hit the floor?
+		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		moveq	#1,d6
+		jsr	FloorDist
+		tst.w	d5					; has object hit the floor?
 		bpl.w	DespawnQuick				; if not, branch
-		add.w	d1,ost_y_pos(a0)			; align to floor
+		add.w	d5,ost_y_pos(a0)			; align to floor
 		move.w	ost_animal_y_vel(a0),ost_y_vel(a0)	; reset y speed
 		neg.w	ost_x_vel(a0)				; reverse direction
 		bchg	#render_xflip_bit,ost_render(a0)
@@ -371,8 +379,10 @@ AnmlE_Chicken:	; Routine $C
 		update_xy_fall	$18				; update object position & apply gravity
 		bmi.w	AnmlE_Flicky_Animate			; branch if moving upwards
 
-		jsr	(FindFloorObj).l
-		tst.w	d1					; has object hit the floor?
+		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		moveq	#1,d6
+		jsr	FloorDist
+		tst.w	d5					; has object hit the floor?
 		bpl.w	AnmlE_Flicky_Animate			; if not, branch
 		not.b	ost_animal_direction(a0)		; change direction flag
 		bne.s	.no_flip				; branch if 1
@@ -380,7 +390,7 @@ AnmlE_Chicken:	; Routine $C
 		bchg	#render_xflip_bit,ost_render(a0)
 
 	.no_flip:
-		add.w	d1,ost_y_pos(a0)			; align to floor
+		add.w	d5,ost_y_pos(a0)			; align to floor
 		move.w	ost_animal_y_vel(a0),ost_y_vel(a0)	; reset y speed
 		bra.w	AnmlE_Flicky_Animate
 ; ===========================================================================
@@ -395,8 +405,10 @@ AnmlE_Squirrel:	; Routine $E
 		bmi.w	DespawnQuick				; branch if moving upwards
 
 		move.b	#id_frame_animal1_flap1,ost_frame(a0)
-		jsr	(FindFloorObj).l
-		tst.w	d1					; has object hit the floor?
+		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		moveq	#1,d6
+		jsr	FloorDist
+		tst.w	d5					; has object hit the floor?
 		bpl.w	DespawnQuick				; if not, branch
 		not.b	ost_animal_direction(a0)		; change direction flag
 		bne.s	.no_flip				; branch if 1
@@ -404,7 +416,7 @@ AnmlE_Squirrel:	; Routine $E
 		bchg	#render_xflip_bit,ost_render(a0)
 
 	.no_flip:
-		add.w	d1,ost_y_pos(a0)			; align to floor
+		add.w	d5,ost_y_pos(a0)			; align to floor
 		move.w	ost_animal_y_vel(a0),ost_y_vel(a0)	; reset y speed
 		bra.w	DespawnQuick
 
@@ -427,10 +439,12 @@ AnmlE_FaceSonic:
 ; ---------------------------------------------------------------------------
 
 AnmlE_ChkFloor:
-		jsr	(FindFloorObj).l
-		tst.w	d1					; has object hit the floor?
+		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		moveq	#1,d6
+		jsr	FloorDist
+		tst.w	d5					; has object hit the floor?
 		bpl.s	.exit					; if not, branch
-		add.w	d1,ost_y_pos(a0)			; align to floor
+		add.w	d5,ost_y_pos(a0)			; align to floor
 		move.w	ost_animal_y_vel(a0),ost_y_vel(a0)	; reset y speed
 		
 	.exit:

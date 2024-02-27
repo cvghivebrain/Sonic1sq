@@ -127,8 +127,10 @@ FBall_Type_Vert:
 		rts	
 		
 	.down:
-		bsr.w	FindFloorObj
-		tst.w	d1					; distance to floor
+		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		moveq	#1,d6
+		bsr.w	FloorDist
+		tst.w	d5					; distance to floor
 		bpl.s	.no_ceiling				; branch if > 0
 		move.b	#id_FBall_Collide,ost_routine(a0)	; goto FBall_Collide next
 		move.b	#id_frame_fire_vertcollide,ost_frame(a0)

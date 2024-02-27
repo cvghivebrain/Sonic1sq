@@ -27,18 +27,15 @@ ost_cat_turned:		equ ost_cat_counter			; flag set when segment has recently chan
 		rsobjend
 ; ===========================================================================
 
-Cat_Fall:
+Cat_Deleted:
 		rts	
 ; ===========================================================================
 
 Cat_Main:	; Routine 0
 		move.b	#7,ost_height(a0)
 		move.b	#8,ost_width(a0)
-		update_y_fall					; apply gravity and update position
-		bsr.w	FindFloorObj
-		tst.w	d1					; has caterkiller hit floor?
-		bpl.s	Cat_Fall				; if not, branch
-		add.w	d1,ost_y_pos(a0)			; align to floor
+		bsr.w	SnapFloor				; align to floor
+		beq.s	Cat_Deleted				; branch if floor not found
 		move.w	ost_y_pos(a0),ost_cat_y_start(a0)
 		clr.w	ost_y_vel(a0)
 		addq.b	#2,ost_routine(a0)			; goto Cat_Head next
@@ -152,12 +149,14 @@ Cat_Drop:
 	.update_counter:
 		move.b	d0,ost_cat_counter(a0)
 		update_x_pos
-		bsr.w	FindFloorObj
-		cmpi.w	#-8,d1
+		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		moveq	#1,d6
+		bsr.w	FloorDist
+		cmpi.w	#-8,d5
 		blt.s	.turn_around				; branch if > 8px below floor
-		cmpi.w	#$C,d1
+		cmpi.w	#$C,d5
 		bge.s	.turn_around				; branch if > 11px above floor (also detects a ledge)
-		add.w	d1,ost_y_pos(a0)			; align to floor
+		add.w	d5,ost_y_pos(a0)			; align to floor
 		bra.w	DespawnFamily
 		
 	.turn_around:
@@ -234,12 +233,14 @@ Cat_Seg_Move:
 		move.b	ost_height(a1),ost_height(a0)		; copy height from head
 		
 	.not_middle_seg:
-		bsr.w	FindFloorObj
-		cmpi.w	#-8,d1
+		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		moveq	#1,d6
+		bsr.w	FloorDist
+		cmpi.w	#-8,d5
 		blt.s	.skip_floor				; branch if > 8px below floor
-		cmpi.w	#$C,d1
+		cmpi.w	#$C,d5
 		bge.s	.skip_floor				; branch if > 11px above floor (also detects a ledge)
-		add.w	d1,ost_y_pos(a0)			; align to floor
+		add.w	d5,ost_y_pos(a0)			; align to floor
 		
 	.skip_floor:
 		jmp	DisplaySprite
@@ -308,10 +309,12 @@ Cat_FragSpeed:	dc.w -$180, $180, $200				; segment x speed
 Cat_Fragment:
 		update_xy_fall					; apply gravity & update position
 		bmi.s	.nocollide				; branch if moving upwards
-		bsr.w	FindFloorObj
-		tst.w	d1					; has object hit floor?
+		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		moveq	#1,d6
+		bsr.w	FloorDist
+		tst.w	d5					; has object hit floor?
 		bpl.s	.nocollide				; if not, branch
-		add.w	d1,ost_y_pos(a0)			; align to floor
+		add.w	d5,ost_y_pos(a0)			; align to floor
 		move.w	#-$400,ost_y_vel(a0)			; bounce
 
 	.nocollide:

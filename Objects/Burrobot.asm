@@ -86,15 +86,10 @@ Burro_Move:	; Routine 4
 		update_x_pos					; update position
 		bchg	#0,ost_burro_findfloor_flag(a0)		; change floor flag
 		bne.s	.find_floor				; branch if it was 1
-		move.w	ost_x_pos(a0),d3
-		addi.w	#12,d3					; find floor to the right
-		btst	#status_xflip_bit,ost_status(a0)	; is burrobot xflipped?
-		bne.s	.is_flipped				; if yes, branch
-		subi.w	#24,d3					; find floor to the left
-
-	.is_flipped:
-		jsr	(FindFloorObj2).l			; find floor to left or right
-		cmpi.w	#12,d1					; is floor 12 or more px away?
+		getpos_bottomforward				; d0 = x pos of left/right side; d1 = y pos of bottom
+		moveq	#1,d6
+		jsr	FloorDist
+		cmpi.w	#12,d5					; is floor > 12px away? (finds a wall or drop)
 		bge.s	Burro_Move_Turn				; if yes, branch
 		lea	Ani_Burro(pc),a1
 		bsr.w	AnimateSprite
@@ -102,8 +97,10 @@ Burro_Move:	; Routine 4
 ; ===========================================================================
 
 .find_floor:
-		jsr	(FindFloorObj).l
-		add.w	d1,ost_y_pos(a0)			; align to floor
+		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		moveq	#1,d6
+		jsr	FloorDist
+		add.w	d5,ost_y_pos(a0)			; align to floor
 		lea	Ani_Burro(pc),a1
 		bsr.w	AnimateSprite
 		bra.w	DespawnObject
@@ -140,10 +137,12 @@ Burro_Jump:	; Routine 6
 
 Burro_Fall:	; Routine 8
 		update_xy_fall	$18				; update position & apply gravity
-		jsr	(FindFloorObj).l
-		tst.w	d1					; has burrobot hit the floor?
+		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		moveq	#1,d6
+		jsr	FloorDist
+		tst.w	d5					; has burrobot hit the floor?
 		bpl.w	DespawnObject				; if not, branch
-		add.w	d1,ost_y_pos(a0)			; align to floor
+		add.w	d5,ost_y_pos(a0)			; align to floor
 		move.w	#0,ost_y_vel(a0)			; stop falling
 		move.b	#id_ani_burro_walk2,ost_anim(a0)
 		move.w	#255,ost_burro_turn_time(a0)		; time until turn (4.2ish seconds)

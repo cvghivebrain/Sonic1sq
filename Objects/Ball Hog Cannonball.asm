@@ -48,13 +48,15 @@ Cbal_Bounce:	; Routine 2
 		shortcut
 		update_xy_fall					; update position & apply gravity
 		bmi.s	Cbal_ChkExplode				; branch if moving up
-		jsr	(FindFloorObj).l
-		tst.w	d1					; has ball hit the floor?
+		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		moveq	#1,d6
+		jsr	FloorDist
+		tst.w	d5					; has ball hit the floor?
 		bpl.s	Cbal_ChkExplode				; if not, branch
 
-		add.w	d1,ost_y_pos(a0)			; align to floor
+		add.w	d5,ost_y_pos(a0)			; align to floor
 		move.w	ost_ball_bounce(a0),ost_y_vel(a0)	; bounce
-		tst.b	d3					; test floor angle
+		jsr	FloorAngle				; d3 = floor angle
 		beq.s	Cbal_ChkExplode				; branch if perfectly flat
 		bmi.s	.down_left				; branch if sloping up-right or down-left
 

@@ -389,6 +389,20 @@ getpos_bottomleft:	macro
 		add.w	ost_y_pos(a0),d1
 		endm
 
+getpos_bottomforward:	macro
+		moveq	#0,d0
+		move.b	ost_width(a0),d0
+		tst.w	ost_x_vel(a0)
+		bpl.s	.right\@				; branch if moving right
+		neg.w	d0
+		
+	.right\@:
+		add.w	ost_x_pos(a0),d0
+		moveq	#0,d1
+		move.b	ost_height(a0),d1
+		add.w	ost_y_pos(a0),d1
+		endm
+
 getpos_topright:	macro
 		moveq	#0,d0
 		move.b	ost_width(a0),d0
