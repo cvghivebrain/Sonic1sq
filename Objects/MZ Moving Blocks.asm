@@ -146,10 +146,12 @@ MBlock_RightDrop_Now:
 ; Type 6
 MBlock_Drop_Now:
 		update_y_fall	$18				; make the platform fall
-		bsr.w	FindFloorObj
-		tst.w	d1					; has platform hit the floor?
+		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		moveq	#1,d6
+		bsr.w	FloorDist
+		tst.w	d5					; has platform hit the floor?
 		bpl.s	.keep_falling				; if not, branch
-		add.w	d1,ost_y_pos(a0)			; align to floor
+		add.w	d5,ost_y_pos(a0)			; align to floor
 		clr.w	ost_y_vel(a0)				; stop platform	falling
 		clr.b	ost_subtype(a0)				; change to type 00 (non-moving)
 

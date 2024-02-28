@@ -100,16 +100,17 @@ Brick_Wobbles:
 ; Type 3
 Brick_FallNow:
 		update_y_fall	$18				; update position & apply gravity
-		bsr.w	FindFloorObj
-		tst.w	d1					; has the block	hit the	floor?
+		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		moveq	#1,d6
+		bsr.w	FloorDist
+		tst.w	d5					; has the block	hit the	floor?
 		bpl.s	.exit					; if not, branch
-		add.w	d1,ost_y_pos(a0)			; align to floor
+		add.w	d5,ost_y_pos(a0)			; align to floor
 		clr.w	ost_y_vel(a0)				; stop the block falling
 		move.w	ost_y_pos(a0),ost_brick_y_start(a0)
 		move.b	#id_Brick_Still,ost_brick_type(a0)	; don't wobble
-		move.w	(a3),d0					; get 16x16 tile id the block is sitting on
-		andi.w	#$3FF,d0
-		cmpi.w	#$16A,d0				; is the 16x16 tile it's landed on lava?
+		andi.w	#$3FF,d4
+		cmpi.w	#$16A,d4				; is the 16x16 tile it's landed on lava?
 		bcs.s	.exit					; if not, branch
 		btst	#type_brick_nowobble_bit,ost_subtype(a0)
 		bne.s	.exit					; branch if set not to wobble on lava

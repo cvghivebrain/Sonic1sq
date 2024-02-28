@@ -1,44 +1,4 @@
 ; ---------------------------------------------------------------------------
-; Subroutine to find the distance of an object to the floor
-
-; Runs FindFloor without the need for inputs, taking inputs from local OST variables
-
-; input:
-;	d3.w = x position of object (FindFloorObj2 only)
-
-; output:
-;	d1.w = distance to the floor
-;	d3.b = floor angle
-;	a3 = address within 256x256 mappings where object is standing
-;	(a3).w = 16x16 tile number, x/yflip, solidness
-;	(a4).b = floor angle
-
-;	uses d0.w, d2.w, d4.w, d5.l, d6.w
-; ---------------------------------------------------------------------------
-
-FindFloorObj:
-		move.w	ost_x_pos(a0),d3
-
-
-FindFloorObj2:
-		move.w	ost_y_pos(a0),d2
-		moveq	#0,d0
-		move.b	ost_height(a0),d0
-		ext.w	d0
-		add.w	d0,d2					; d2 = y pos of bottom edge
-		move.w	#0,d6
-		moveq	#tilemap_solid_top_bit,d5		; bit to test for solidness
-		lea	(v_angle_right).w,a4			; write angle here
-		bsr.w	FindFloor
-		btst	#0,d3					; is angle snap bit set?
-		beq.s	.no_snap
-		move.b	#0,d3					; snap to flat floor
-
-	.no_snap:
-		addq.w	#1,d1
-		rts
-
-; ---------------------------------------------------------------------------
 ; Subroutine to find the distance of an object to the wall to its right
 
 ; Runs FindWall without the need for inputs, taking inputs from local OST variables

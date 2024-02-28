@@ -84,10 +84,13 @@ RLoss_Bounce:	; Routine 2
 		andi.b	#3,d0					; read only bits 0-1
 		bne.s	.chkdel					; branch if either are set
 
-		jsr	(FindFloorObj).l			; find floor every 4th frame
-		tst.w	d1					; has ring hit the floor?
+		getpos						; d0 = x pos; d1 = y pos
+		addq.w	#6,d1					; add height for y pos of bottom
+		moveq	#1,d6
+		jsr	FloorDist				; find floor every 4th frame
+		tst.w	d5					; has ring hit the floor?
 		bpl.s	.chkdel					; if not, branch
-		add.w	d1,ost_y_pos(a0)			; align to floor
+		add.w	d5,ost_y_pos(a0)			; align to floor
 		move.w	ost_y_vel(a0),d0
 		asr.w	#2,d0
 		sub.w	d0,ost_y_vel(a0)			; reduce y speed by 25%

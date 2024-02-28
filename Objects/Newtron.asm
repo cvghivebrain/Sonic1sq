@@ -141,11 +141,13 @@ Newt_Drop2:	; Routine $12
 		
 	.falling:
 		update_y_fall					; update position & apply gravity
-		bsr.w	FindFloorObj
-		tst.w	d1					; has newtron hit the floor?
+		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		moveq	#1,d6
+		bsr.w	FloorDist
+		tst.w	d5					; has newtron hit the floor?
 		bpl.w	DespawnObject				; if not, branch
 
-		add.w	d1,ost_y_pos(a0)			; align to floor
+		add.w	d5,ost_y_pos(a0)			; align to floor
 		move.w	#0,ost_y_vel(a0)			; stop newtron falling
 		addq.b	#2,ost_routine(a0)			; goto Newt_Floor next
 		move.b	#id_ani_newt_fly1,ost_anim(a0)
@@ -162,12 +164,14 @@ Newt_Drop2:	; Routine $12
 
 Newt_Floor:	; Routine $14
 		update_x_pos					; update position
-		bsr.w	FindFloorObj
-		cmpi.w	#-8,d1
+		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		moveq	#1,d6
+		bsr.w	FloorDist
+		cmpi.w	#-8,d5
 		blt.s	Newt_FlyAway				; branch if more than 8px below floor
-		cmpi.w	#$C,d1
+		cmpi.w	#$C,d5
 		bge.s	Newt_FlyAway				; branch if more than 11px above floor (also detects a ledge)
-		add.w	d1,ost_y_pos(a0)			; align to floor
+		add.w	d5,ost_y_pos(a0)			; align to floor
 		lea	Ani_Newt(pc),a1
 		bsr.w	AnimateSprite
 		bra.w	DespawnObject

@@ -322,8 +322,10 @@ Sonic_Move:
 ; ===========================================================================
 
 Sonic_Balance:
-		jsr	(FindFloorObj).l
-		cmpi.w	#$C,d1
+		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		moveq	#1,d6
+		jsr	FloorDist
+		cmpi.w	#$C,d5
 		blt.s	Sonic_LookUp				; branch if drop is not found
 		cmpi.b	#3,ost_sonic_angle_right(a0)		; check for edge to the right
 		bne.s	Sonic_BalLeftChk			; branch if not found

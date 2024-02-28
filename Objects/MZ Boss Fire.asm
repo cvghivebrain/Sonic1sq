@@ -65,10 +65,12 @@ BFire_Display2:
 		
 BFire_Fall:	; Routine 4
 		update_y_fall	$18				; update position & apply gravity
-		bsr.w	FindFloorObj
-		tst.w	d1					; has fireball hit the floor?
+		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		moveq	#1,d6
+		bsr.w	FloorDist
+		tst.w	d5					; has fireball hit the floor?
 		bpl.s	BFire_Display				; if not, branch
-		add.w	d1,ost_y_pos(a0)			; snap to floor
+		add.w	d5,ost_y_pos(a0)			; snap to floor
 		addq.b	#2,ost_routine(a0)			; goto BFire_Slide next
 		move.w	#$A0,ost_x_vel(a0)			; move right
 		move.w	#0,ost_y_vel(a0)
@@ -97,12 +99,14 @@ BFire_Slide:	; Routine 6
 		
 	.skip_fire:
 		update_x_pos
-		bsr.w	FindFloorObj				; find floor at current position
-		cmpi.w	#-8,d1
+		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		moveq	#1,d6
+		bsr.w	FloorDist
+		cmpi.w	#-8,d5
 		blt.s	.wall					; branch if wall is found
-		cmpi.w	#$C,d1
+		cmpi.w	#$C,d5
 		bge.s	.drop					; branch if ledge is found
-		add.w	d1,ost_y_pos(a0)			; snap to floor
+		add.w	d5,ost_y_pos(a0)			; snap to floor
 		bra.w	BFire_Display
 		
 	.wall:

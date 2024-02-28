@@ -81,8 +81,10 @@ Glass_Main:	; Routine 0
 		saveparent
 		
 	.fail:
-		jsr	(FindFloorObj).l
-		tst.w	d1
+		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		moveq	#1,d6
+		jsr	FloorDist
+		tst.w	d5
 		bpl.s	.not_in_floor				; branch if block doesn't start in floor
 		move.b	#1,ost_glass_in_floor(a0)		; remember that it did
 		
@@ -133,10 +135,12 @@ Glass_JumpDrop:	; Routine 6
 	.not_stopped:
 		tst.b	ost_glass_in_floor(a0)
 		bne.s	.solid					; branch if block started in floor
-		jsr	(FindFloorObj).l
-		tst.w	d1					; has block hit the floor?
+		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		moveq	#1,d6
+		jsr	FloorDist
+		tst.w	d5					; has block hit the floor?
 		bpl.s	.solid					; if not, branch
-		add.w	d1,ost_y_pos(a0)			; align to floor
+		add.w	d5,ost_y_pos(a0)			; align to floor
 		move.b	#id_Glass_Stop,ost_routine(a0)		; goto Glass_Stop next
 		
 	.solid:
@@ -161,10 +165,12 @@ Glass_Drop:	; Routine $A
 		addq.w	#2,ost_y_pos(a0)			; move down 2px
 		tst.b	ost_glass_in_floor(a0)
 		bne.s	.solid					; branch if block started in floor
-		jsr	(FindFloorObj).l
-		tst.w	d1					; has block hit the floor?
+		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		moveq	#1,d6
+		jsr	FloorDist
+		tst.w	d5					; has block hit the floor?
 		bpl.s	.solid					; if not, branch
-		add.w	d1,ost_y_pos(a0)			; align to floor
+		add.w	d5,ost_y_pos(a0)			; align to floor
 		move.b	#id_Glass_Stop,ost_routine(a0)		; goto Glass_Stop next
 		
 	.solid:

@@ -54,10 +54,12 @@ Splats_Move:	; Routine 4
 		tst.w	ost_y_vel(a0)
 		bmi.s	.chk_walls				; branch if Splats is moving up
 		move.b	#id_frame_splats_fall,ost_frame(a0)
-		bsr.w	FindFloorObj
-		tst.w	d1
+		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		moveq	#1,d6
+		bsr.w	FloorDist
+		tst.w	d5
 		bpl.s	.chk_walls				; branch if Splats is above the floor
-		add.w	d1,ost_y_pos(a0)			; align to floor
+		add.w	d5,ost_y_pos(a0)			; align to floor
 		move.w	#-$400,ost_y_vel(a0)			; bounce
 
 	.chk_walls:

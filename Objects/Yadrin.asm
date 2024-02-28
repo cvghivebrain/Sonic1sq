@@ -43,12 +43,14 @@ Yad_Main:	; Routine 0
 
 Yad_Walk:	; Routine 2
 		update_x_pos					; move left or right
-		bsr.w	FindFloorObj
-		cmpi.w	#-8,d1
+		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		moveq	#1,d6
+		bsr.w	FloorDist
+		cmpi.w	#-8,d5
 		blt.s	.stop_now				; branch if > 8px below floor
-		cmpi.w	#$C,d1
+		cmpi.w	#$C,d5
 		bge.s	.stop_now				; branch if > 11px above floor (also detects a ledge)
-		add.w	d1,ost_y_pos(a0)			; align to floor
+		add.w	d5,ost_y_pos(a0)			; align to floor
 		
 		move.w	(v_frame_counter).w,d0			; get word that increments every frame
 		add.w	d7,d0					; add OST id (so that multiple yadrins don't do wall check on the same frame)

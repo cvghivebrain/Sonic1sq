@@ -78,11 +78,12 @@ LBlk_Solid:
 
 LBlk_Fall:	; Routine 4
 		update_y_fall	8				; update position & apply gravity
-		bsr.w	FindFloorObj
-		tst.w	d1					; has block hit the floor?
+		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		moveq	#1,d6
+		bsr.w	FloorDist
+		tst.w	d5					; has block hit the floor?
 		bpl.s	LBlk_Solid				; if not, branch
-		addq.w	#1,d1
-		add.w	d1,ost_y_pos(a0)			; align to floor
+		add.w	d5,ost_y_pos(a0)			; align to floor
 		clr.w	ost_y_vel(a0)				; stop when it touches the floor
 		addq.b	#2,ost_routine(a0)			; goto LBlk_Stop next
 		bsr.w	SolidObject

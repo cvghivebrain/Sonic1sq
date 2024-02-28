@@ -86,10 +86,12 @@ HBlock_Move:	; Routine 6
 HBlock_Drop:	; Routine 8
 		update_y_fall	$18				; update position & apply gravity
 		bsr.w	SolidObject_TopOnly
-		bsr.w	FindFloorObj
-		tst.w	d1					; has platform hit the floor?
+		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		moveq	#1,d6
+		bsr.w	FloorDist
+		tst.w	d5					; has platform hit the floor?
 		bpl.w	DespawnQuick				; if not, branch
-		add.w	d1,ost_y_pos(a0)			; align to floor
+		add.w	d5,ost_y_pos(a0)			; align to floor
 		clr.w	ost_y_vel(a0)				; stop platform	falling
 		addq.b	#2,ost_routine(a0)			; goto HBlock_Stop next
 		bra.w	DespawnQuick

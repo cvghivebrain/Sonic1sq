@@ -80,8 +80,10 @@ PushB_Action:	; Routine 2
 		bmi.w	DespawnObject				; branch if subtype is +$80 (no gravity)
 		bsr.w	PushB_ChkStomp
 		beq.w	DespawnObject				; branch if block is on stomper
-		jsr	FindFloorObj
-		tst.w	d1
+		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		moveq	#0,d6
+		jsr	FloorDist
+		tst.w	d5
 		beq.w	DespawnObject				; branch if block is touching the floor
 		addq.b	#2,ost_routine(a0)			; goto PushB_Drop next
 		move.b	ost_pblock_pushed(a0),d0
@@ -99,15 +101,16 @@ PushB_Drop:	; Routine 4
 		
 	.gravity:
 		update_xy_fall	$18				; update position & apply gravity
-		jsr	FindFloorObj
-		tst.w	d1
+		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		moveq	#1,d6
+		jsr	FloorDist
+		tst.w	d5
 		bpl.w	DespawnObject				; branch if block hasn't reached floor
-		add.w	d1,ost_y_pos(a0)			; align to floor
+		add.w	d5,ost_y_pos(a0)			; align to floor
 		clr.w	ost_y_vel(a0)				; stop falling
 		subq.b	#2,ost_routine(a0)			; goto PushB_Action next
-		move.w	(a3),d0					; get 16x16 tile the block is on
-		andi.w	#$3FF,d0
-		cmpi.w	#$16A,d0				; is it block $16A+ (lava)?
+		andi.w	#$3FF,d4
+		cmpi.w	#$16A,d4				; is it block $16A+ (lava)?
 		bcs.w	DespawnObject				; branch if not lava
 		move.b	#id_PushB_Lava,ost_routine(a0)		; goto PushB_Lava next
 		move.b	ost_pblock_pushed(a0),d0
@@ -172,15 +175,16 @@ PushB_Jump:	; Routine $C
 		move.w	ost_x_pos(a0),ost_x_prev(a0)
 		update_xy_fall	$18				; update position & apply gravity
 		bsr.w	SolidObject
-		jsr	FindFloorObj
-		tst.w	d1
+		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		moveq	#1,d6
+		jsr	FloorDist
+		tst.w	d5
 		bpl.w	DespawnObject				; branch if block hasn't reached floor
-		add.w	d1,ost_y_pos(a0)			; align to floor
+		add.w	d5,ost_y_pos(a0)			; align to floor
 		clr.w	ost_y_vel(a0)				; stop falling
 		move.b	#id_PushB_Action,ost_routine(a0)	; goto PushB_Action next
-		move.w	(a3),d0					; get 16x16 tile the block is on
-		andi.w	#$3FF,d0
-		cmpi.w	#$16A,d0				; is it block $16A+ (lava)?
+		andi.w	#$3FF,d4
+		cmpi.w	#$16A,d4				; is it block $16A+ (lava)?
 		bcs.w	DespawnObject				; branch if not lava
 		move.b	#id_PushB_Lava,ost_routine(a0)		; goto PushB_Lava next
 		bra.w	DespawnObject

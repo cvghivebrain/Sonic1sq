@@ -46,12 +46,14 @@ Moto_Walk:	; Routine 2
 		bsr.w	AnimateSprite
 		update_x_pos					; move left/right
 		
-		jsr	FindFloorObj				; find floor at current position
-		cmpi.w	#-8,d1
+		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		moveq	#1,d6
+		jsr	FloorDist
+		cmpi.w	#-8,d5
 		blt.s	.stop_here
-		cmpi.w	#$C,d1
+		cmpi.w	#$C,d5
 		bge.s	.stop_here				; branch if more than 11px above or 8px below floor
-		add.w	d1,ost_y_pos(a0)			; snap to floor
+		add.w	d5,ost_y_pos(a0)			; snap to floor
 		
 		subq.b	#1,ost_moto_smoke_time(a0)		; decrement time between smoke puffs
 		bpl.w	DespawnObject				; branch if time remains

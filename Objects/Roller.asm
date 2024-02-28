@@ -82,12 +82,14 @@ Roll_Roll:	; Routine 4
 		bra.w	DespawnObject
 
 	.skip_stop:
-		bsr.w	FindFloorObj
-		cmpi.w	#-8,d1
+		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		moveq	#1,d6
+		bsr.w	FloorDist
+		cmpi.w	#-8,d5
 		blt.s	.jump					; branch if more than 8px below floor
-		cmpi.w	#$C,d1
+		cmpi.w	#$C,d5
 		bge.s	.jump					; branch if more than 11px above floor (also detects a ledge)
-		add.w	d1,ost_y_pos(a0)			; align to floor
+		add.w	d5,ost_y_pos(a0)			; align to floor
 		bra.w	DespawnObject
 		
 	.jump:
@@ -101,10 +103,12 @@ Roll_Jump:	; Routine 6
 		bsr.w	AnimateSprite
 		update_xy_fall					; apply gravity & update position
 		bmi.w	DespawnObject				; branch if moving upwards
-		bsr.w	FindFloorObj
-		tst.w	d1					; has roller hit the floor?
+		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		moveq	#1,d6
+		bsr.w	FloorDist
+		tst.w	d5					; has roller hit the floor?
 		bpl.w	DespawnObject				; if not, branch
-		add.w	d1,ost_y_pos(a0)			; align to floor
+		add.w	d5,ost_y_pos(a0)			; align to floor
 		move.b	#id_Roll_Roll,ost_routine(a0)		; goto Roll_Roll next
 		move.w	#0,ost_y_vel(a0)			; stop falling
 		bra.w	DespawnObject

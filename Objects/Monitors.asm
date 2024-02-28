@@ -146,10 +146,12 @@ Mon_AniBreak:	; Routine 8
 
 Mon_Drop:	; Routine 6
 		update_y_fall					; apply gravity and update position
-		jsr	(FindFloorObj).l
-		tst.w	d1					; has monitor hit the floor?
+		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		moveq	#1,d6
+		jsr	FloorDist
+		tst.w	d5					; has monitor hit the floor?
 		bpl.s	Mon_Animate				; if not, branch
-		add.w	d1,ost_y_pos(a0)			; align to floor
+		add.w	d5,ost_y_pos(a0)			; align to floor
 		clr.w	ost_y_vel(a0)				; stop moving
 		move.b	#id_Mon_Solid,ost_routine(a0)		; goto Mon_Solid next
 		bra.s	Mon_Animate
