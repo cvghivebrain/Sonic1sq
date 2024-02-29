@@ -20,6 +20,8 @@ Moto_Index:	index *,,2
 ost_moto_wait_time:	rs.w 1					; time delay before changing direction (2 bytes)
 ost_moto_smoke_time:	rs.b 1					; time delay between smoke puffs
 		rsobjend
+		
+motobug_height:	equ $E
 ; ===========================================================================
 
 Moto_Main:	; Routine 0
@@ -28,7 +30,7 @@ Moto_Main:	; Routine 0
 		move.b	#render_rel,ost_render(a0)
 		move.b	#priority_4,ost_priority(a0)
 		move.b	#$14,ost_displaywidth(a0)
-		move.b	#$E,ost_height(a0)
+		move.b	#motobug_height,ost_height(a0)
 		move.b	#8,ost_width(a0)
 		move.b	#id_React_Enemy,ost_col_type(a0)
 		move.b	#20,ost_col_width(a0)
@@ -46,7 +48,7 @@ Moto_Walk:	; Routine 2
 		bsr.w	AnimateSprite
 		update_x_pos					; move left/right
 		
-		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		getpos_bottom motobug_height			; d0 = x pos; d1 = y pos of bottom
 		moveq	#1,d6
 		jsr	FloorDist
 		cmpi.w	#-8,d5

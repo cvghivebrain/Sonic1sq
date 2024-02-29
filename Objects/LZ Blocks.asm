@@ -33,6 +33,8 @@ LBlk_Types:	dc.w tile_Kos_LzDoorH+tile_pal3			; tile setting
 		dc.b id_frame_lblock_sinkblock, id_LBlk_Action	; frame, routine
 		dc.w tile_Kos_LzBlock+tile_pal3
 		dc.b id_frame_lblock_block, id_LBlk_Stop
+		
+lblock_height:	equ 16
 ; ===========================================================================
 
 LBlk_Main:	; Routine 0
@@ -41,7 +43,7 @@ LBlk_Main:	; Routine 0
 		move.b	#priority_3,ost_priority(a0)
 		move.b	#16,ost_displaywidth(a0)
 		move.b	#16,ost_width(a0)
-		move.b	#16,ost_height(a0)
+		move.b	#lblock_height,ost_height(a0)
 		move.w	ost_y_pos(a0),ost_lblock_y_pos(a0)
 		move.b	ost_subtype(a0),d0
 		andi.b	#$F,d0					; read low nybble of subtype
@@ -78,7 +80,7 @@ LBlk_Solid:
 
 LBlk_Fall:	; Routine 4
 		update_y_fall	8				; update position & apply gravity
-		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		getpos_bottom lblock_height			; d0 = x pos; d1 = y pos of bottom
 		moveq	#1,d6
 		bsr.w	FloorDist
 		tst.w	d5					; has block hit the floor?

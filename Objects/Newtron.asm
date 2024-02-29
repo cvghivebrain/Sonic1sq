@@ -37,6 +37,8 @@ Newt_Index:	index *,,2
 		ptr Newt_Drop
 		ptr Newt_Drop2
 		ptr Newt_Floor
+		
+newtron_height:	equ 16
 ; ===========================================================================
 
 Newt_Main:	; Routine 0
@@ -55,7 +57,7 @@ Newt_Main:	; Routine 0
 		btst	#type_newt_missile_bit,d0
 		bne.s	Newt_Range				; branch if newtron is green missile-firing type
 		
-		move.b	#$10,ost_height(a0)
+		move.b	#newtron_height,ost_height(a0)
 		move.b	#8,ost_width(a0)
 		move.b	#id_Newt_Range2,ost_routine(a0)		; goto Newt_Range2 next
 
@@ -141,7 +143,7 @@ Newt_Drop2:	; Routine $12
 		
 	.falling:
 		update_y_fall					; update position & apply gravity
-		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		getpos_bottom newtron_height			; d0 = x pos; d1 = y pos of bottom
 		moveq	#1,d6
 		bsr.w	FloorDist
 		tst.w	d5					; has newtron hit the floor?
@@ -164,7 +166,7 @@ Newt_Drop2:	; Routine $12
 
 Newt_Floor:	; Routine $14
 		update_x_pos					; update position
-		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		getpos_bottom newtron_height			; d0 = x pos; d1 = y pos of bottom
 		moveq	#1,d6
 		bsr.w	FloorDist
 		cmpi.w	#-8,d5

@@ -15,6 +15,8 @@ Splats_Index:	index *,,2
 		ptr Splats_Main
 		ptr Splats_ChkDist
 		ptr Splats_Move
+		
+splats_height:	equ $14
 ; ---------------------------------------------------------------------------
 
 Splats_Main:	; Routine 0
@@ -26,7 +28,7 @@ Splats_Main:	; Routine 0
 		move.b	#priority_4,ost_priority(a0)
 		move.b	#$C,ost_displaywidth(a0)
 		move.b	#$C,ost_width(a0)
-		move.b	#$14,ost_height(a0)
+		move.b	#splats_height,ost_height(a0)
 		move.b	#id_React_Enemy,ost_col_type(a0)
 		move.b	#12,ost_col_width(a0)
 		move.b	#20,ost_col_height(a0)
@@ -54,7 +56,7 @@ Splats_Move:	; Routine 4
 		tst.w	ost_y_vel(a0)
 		bmi.s	.chk_walls				; branch if Splats is moving up
 		move.b	#id_frame_splats_fall,ost_frame(a0)
-		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		getpos_bottom splats_height			; d0 = x pos; d1 = y pos of bottom
 		moveq	#1,d6
 		bsr.w	FloorDist
 		tst.w	d5

@@ -24,6 +24,8 @@ HBlock_Index:	index *,,2
 		ptr HBlock_Move
 		ptr HBlock_Drop
 		ptr HBlock_Stop
+		
+hblock_height:	equ 8
 ; ===========================================================================
 
 HBlock_Main:	; Routine 0
@@ -32,7 +34,7 @@ HBlock_Main:	; Routine 0
 		move.w	#tile_Kos_LzHalfBlock+tile_pal3,ost_tile(a0)
 		move.b	#16,ost_displaywidth(a0)
 		move.b	#16,ost_width(a0)
-		move.b	#8,ost_height(a0)
+		move.b	#hblock_height,ost_height(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#priority_4,ost_priority(a0)
 		btst	#4,ost_subtype(a0)
@@ -86,7 +88,7 @@ HBlock_Move:	; Routine 6
 HBlock_Drop:	; Routine 8
 		update_y_fall	$18				; update position & apply gravity
 		bsr.w	SolidObject_TopOnly
-		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		getpos_bottom hblock_height			; d0 = x pos; d1 = y pos of bottom
 		moveq	#1,d6
 		bsr.w	FloorDist
 		tst.w	d5					; has platform hit the floor?

@@ -18,6 +18,9 @@ RLoss_Index:	index *,,2
 		ptr RLoss_Collect
 		ptr RLoss_Sparkle
 		ptr RLoss_Delete
+		
+ringloss_width:	equ 8
+ringloss_height:	equ 8
 
 RLoss_VelTable:	dc.w   -$C4,  -$3EC,    $C4,  -$3EC,  -$238,  -$350,   $238,  -$350
 		dc.w  -$350,  -$238,   $350,  -$238,  -$3EC,   -$C4,   $3EC,   -$C4
@@ -50,8 +53,8 @@ RLoss_Count:	; Routine 0
 .makerings:
 		move.l	#RingLoss,ost_id(a1)			; load bouncing ring object
 		addq.b	#2,ost_routine(a1)			; goto RLoss_Bounce next
-		move.b	#8,ost_height(a1)
-		move.b	#8,ost_width(a1)
+		move.b	#ringloss_height,ost_height(a1)
+		move.b	#ringloss_width,ost_width(a1)
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		move.l	#Map_Ring,ost_mappings(a1)
@@ -84,8 +87,7 @@ RLoss_Bounce:	; Routine 2
 		andi.b	#3,d0					; read only bits 0-1
 		bne.s	.chkdel					; branch if either are set
 
-		getpos						; d0 = x pos; d1 = y pos
-		addq.w	#6,d1					; add height for y pos of bottom
+		getpos_bottom ringloss_height			; d0 = x pos; d1 = y pos of bottom
 		moveq	#1,d6
 		jsr	FloorDist				; find floor every 4th frame
 		tst.w	d5					; has ring hit the floor?

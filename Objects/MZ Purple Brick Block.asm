@@ -33,6 +33,8 @@ Brick_Index:	index *,,2
 ost_brick_y_start:	rs.w 1					; original y position (2 bytes)
 ost_brick_type:		rs.b 1					; type id
 		rsobjend
+		
+brick_height:	equ 16
 ; ===========================================================================
 
 Brick_Main:	; Routine 0
@@ -43,7 +45,7 @@ Brick_Main:	; Routine 0
 		move.b	#priority_3,ost_priority(a0)
 		move.b	#$10,ost_displaywidth(a0)
 		move.b	#$10,ost_width(a0)
-		move.b	#$10,ost_height(a0)
+		move.b	#brick_height,ost_height(a0)
 		move.w	ost_y_pos(a0),ost_brick_y_start(a0)
 		move.b	ost_subtype(a0),d0			; get object type
 		andi.b	#7,d0					; read only bits 0-2
@@ -100,7 +102,7 @@ Brick_Wobbles:
 ; Type 3
 Brick_FallNow:
 		update_y_fall	$18				; update position & apply gravity
-		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		getpos_bottom brick_height			; d0 = x pos; d1 = y pos of bottom
 		moveq	#1,d6
 		bsr.w	FloorDist
 		tst.w	d5					; has the block	hit the	floor?

@@ -19,6 +19,8 @@ Cbal_Index:	index *,,2
 ost_ball_time:		rs.w 1					; time until the cannonball explodes
 ost_ball_bounce:	rs.w 1					; bounce y speed
 		rsobjend
+		
+cannonball_height:	equ 6
 ; ===========================================================================
 
 Cbal_Main:	; Routine 0
@@ -31,7 +33,7 @@ Cbal_Main:	; Routine 0
 		move.b	#priority_3,ost_priority(a0)
 		move.b	#id_React_Hurt,ost_col_type(a0)
 		move.b	#6,ost_col_width(a0)
-		move.b	#6,ost_col_height(a0)
+		move.b	#cannonball_height,ost_col_height(a0)
 		move.b	#8,ost_displaywidth(a0)
 		move.b	ost_subtype(a0),d0			; move subtype to d0
 		move.w	d0,d1
@@ -48,7 +50,7 @@ Cbal_Bounce:	; Routine 2
 		shortcut
 		update_xy_fall					; update position & apply gravity
 		bmi.s	Cbal_ChkExplode				; branch if moving up
-		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		getpos_bottom cannonball_height			; d0 = x pos; d1 = y pos of bottom
 		moveq	#1,d6
 		jsr	FloorDist
 		tst.w	d5					; has ball hit the floor?

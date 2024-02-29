@@ -14,6 +14,8 @@ Cork:
 Cork_Index:	index *,,2
 		ptr Cork_Main
 		ptr Cork_Action
+		
+cork_height:	equ 16
 ; ===========================================================================
 
 Cork_Main:	; Routine 0
@@ -24,7 +26,7 @@ Cork_Main:	; Routine 0
 		move.b	#priority_3,ost_priority(a0)
 		move.b	#16,ost_displaywidth(a0)
 		move.b	#16,ost_width(a0)
-		move.b	#16,ost_height(a0)
+		move.b	#cork_height,ost_height(a0)
 		
 Cork_Action:	; Routine 2
 		shortcut
@@ -62,7 +64,7 @@ Cork_Float:
 
 	.near_surface2:
 		add.w	d0,ost_y_pos(a0)			; make the block sink
-		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		getpos_bottom cork_height			; d0 = x pos; d1 = y pos of bottom
 		moveq	#1,d6
 		bsr.w	FloorDist
 		tst.w	d5					; has block hit the floor?

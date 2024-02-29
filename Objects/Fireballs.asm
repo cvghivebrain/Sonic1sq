@@ -26,12 +26,15 @@ FBall_Index:	index *,,2
 		rsobj Fireballs
 ost_fireball_y_start:	rs.w 1					; original y position
 		rsobjend
+		
+fire_width:	equ 8
+fire_height:	equ 8
 ; ===========================================================================
 
 FBall_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto FBall_Action next
-		move.b	#8,ost_height(a0)
-		move.b	#8,ost_width(a0)
+		move.b	#fire_height,ost_height(a0)
+		move.b	#fire_width,ost_width(a0)
 		move.l	#Map_Fire,ost_mappings(a0)
 		move.w	(v_tile_fireball).w,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
@@ -127,7 +130,7 @@ FBall_Type_Vert:
 		rts	
 		
 	.down:
-		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		getpos_bottom fire_height			; d0 = x pos; d1 = y pos of bottom
 		moveq	#1,d6
 		bsr.w	FloorDist
 		tst.w	d5					; distance to floor

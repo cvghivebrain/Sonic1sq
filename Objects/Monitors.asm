@@ -34,11 +34,13 @@ Mon_Index:	index *,,2
 		rsobj Monitor
 ost_monitor_slot:	rs.b 1					; slot used by monitor (0-7; -1 if none)
 		rsobjend
+		
+monitor_height:	equ $E
 ; ===========================================================================
 
 Mon_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Mon_Solid next
-		move.b	#$E,ost_height(a0)
+		move.b	#monitor_height,ost_height(a0)
 		move.b	#$E,ost_width(a0)
 		move.l	#Map_Monitor,ost_mappings(a0)
 		move.w	#tile_Art_Monitors,ost_tile(a0)
@@ -146,7 +148,7 @@ Mon_AniBreak:	; Routine 8
 
 Mon_Drop:	; Routine 6
 		update_y_fall					; apply gravity and update position
-		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		getpos_bottom monitor_height			; d0 = x pos; d1 = y pos of bottom
 		moveq	#1,d6
 		jsr	FloorDist
 		tst.w	d5					; has monitor hit the floor?

@@ -25,6 +25,8 @@ ost_cat_wait_time:	rs.b 1					; time to wait between actions
 ost_cat_counter:	rs.b 1					; frame counter when rising or falling
 ost_cat_turned:		equ ost_cat_counter			; flag set when segment has recently changed direction
 		rsobjend
+		
+cat_height:	equ 7
 ; ===========================================================================
 
 Cat_Deleted:
@@ -32,7 +34,7 @@ Cat_Deleted:
 ; ===========================================================================
 
 Cat_Main:	; Routine 0
-		move.b	#7,ost_height(a0)
+		move.b	#cat_height,ost_height(a0)
 		move.b	#8,ost_width(a0)
 		bsr.w	SnapFloor				; align to floor
 		beq.s	Cat_Deleted				; branch if floor not found
@@ -72,7 +74,7 @@ Cat_Main:	; Routine 0
 		move.w	ost_tile(a0),ost_tile(a1)
 		move.b	#priority_5,ost_priority(a1)
 		move.b	#8,ost_displaywidth(a1)
-		move.b	#7,ost_height(a1)
+		move.b	#cat_height,ost_height(a1)
 		move.b	#8,ost_width(a1)
 		move.b	#id_React_Hurt,ost_col_type(a1)
 		move.b	#8,ost_col_width(a1)
@@ -107,7 +109,7 @@ Cat_Rise:
 		moveq	#0,d1
 		move.b	ost_cat_counter(a0),d0
 		move.b	Cat_Rise_Dist(pc,d0.w),d1		; get distance to move up
-		move.b	#7,ost_height(a0)
+		move.b	#cat_height,ost_height(a0)
 		add.b	d1,ost_height(a0)			; set height to match current state
 		neg.w	d1
 		add.w	ost_cat_y_start(a0),d1			; subtract from initial y pos
@@ -166,7 +168,8 @@ Cat_Drop:
 		move.w	ost_x_pos(a0),ost_cat_x_edge(a0)	; save x pos of ledge/wall
 		bra.w	DespawnFamily
 		
-Cat_Heights:	dc.b 7+7, 7+7, 7+7, 7+6, 7+6, 7+5, 7+4, 7+4, 7+3, 7+2, 7+1, 7+1, 7+0, 7+0, 7+0, 7+0
+Cat_Heights:	dc.b cat_height+7, cat_height+7, cat_height+7, cat_height+6, cat_height+6, cat_height+5, cat_height+4, cat_height+4
+		dc.b cat_height+3, cat_height+2, cat_height+1, cat_height+1, cat_height+0, cat_height+0, cat_height+0, cat_height+0
 	Cat_Heights_size:
 		even
 ; ===========================================================================
@@ -182,6 +185,7 @@ Cat_Wait2:
 
 Cat_Split:
 		move.l	#Cat_Fragment,ost_id(a0)		; change object to bouncing fragment
+		move.b	#cat_height,ost_height(a0)
 		move.w	#-$200,d0
 		btst	#status_xflip_bit,ost_render(a0)
 		beq.s	.no_xflip
@@ -286,6 +290,7 @@ Cat_Seg_Wait:
 
 Cat_Seg_Split:
 		move.l	#Cat_Fragment,ost_id(a0)		; change object to bouncing fragment
+		move.b	#cat_height,ost_height(a0)
 		move.b	ost_subtype(a0),d0
 		move.w	Cat_FragSpeed(pc,d0.w),d0		; get x speed from list
 		btst	#status_xflip_bit,ost_render(a1)
@@ -309,7 +314,7 @@ Cat_FragSpeed:	dc.w -$180, $180, $200				; segment x speed
 Cat_Fragment:
 		update_xy_fall					; apply gravity & update position
 		bmi.s	.nocollide				; branch if moving upwards
-		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		getpos_bottom cat_height			; d0 = x pos; d1 = y pos of bottom
 		moveq	#1,d6
 		bsr.w	FloorDist
 		tst.w	d5					; has object hit floor?

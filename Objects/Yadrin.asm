@@ -19,10 +19,12 @@ Yad_Index:	index *,,2
 		rsobj Yadrin
 ost_yadrin_wait_time:	rs.w 1					; time to wait before changing direction
 		rsobjend
+		
+yadrin_height:	equ $11
 ; ===========================================================================
 
 Yad_Main:	; Routine 0
-		move.b	#$11,ost_height(a0)
+		move.b	#yadrin_height,ost_height(a0)
 		move.b	#$14,ost_width(a0)
 		move.l	#Map_Yad,ost_mappings(a0)
 		move.w	(v_tile_yadrin).w,ost_tile(a0)
@@ -43,7 +45,7 @@ Yad_Main:	; Routine 0
 
 Yad_Walk:	; Routine 2
 		update_x_pos					; move left or right
-		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		getpos_bottom yadrin_height			; d0 = x pos; d1 = y pos of bottom
 		moveq	#1,d6
 		bsr.w	FloorDist
 		cmpi.w	#-8,d5

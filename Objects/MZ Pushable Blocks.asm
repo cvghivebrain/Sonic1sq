@@ -40,11 +40,13 @@ ost_pblock_time:	rs.w 1					; event timer
 ost_pblock_pushed:	rs.b 1					; 0 = not pushed; -16 = pushed left; 16 = pushed right
 ost_pblock_stompchk:	rs.b 1					; flag set when check for stomper has been performed
 		rsobjend
+		
+pblock_height:	equ 16
 ; ===========================================================================
 
 PushB_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto PushB_Action next
-		move.b	#16,ost_height(a0)
+		move.b	#pblock_height,ost_height(a0)
 		move.l	#Map_Push,ost_mappings(a0)
 		move.w	#tile_Kos_MzBlock+tile_pal3,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
@@ -80,7 +82,7 @@ PushB_Action:	; Routine 2
 		bmi.w	DespawnObject				; branch if subtype is +$80 (no gravity)
 		bsr.w	PushB_ChkStomp
 		beq.w	DespawnObject				; branch if block is on stomper
-		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		getpos_bottom pblock_height			; d0 = x pos; d1 = y pos of bottom
 		moveq	#0,d6
 		jsr	FloorDist
 		tst.w	d5
@@ -101,7 +103,7 @@ PushB_Drop:	; Routine 4
 		
 	.gravity:
 		update_xy_fall	$18				; update position & apply gravity
-		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		getpos_bottom pblock_height			; d0 = x pos; d1 = y pos of bottom
 		moveq	#1,d6
 		jsr	FloorDist
 		tst.w	d5
@@ -175,7 +177,7 @@ PushB_Jump:	; Routine $C
 		move.w	ost_x_pos(a0),ost_x_prev(a0)
 		update_xy_fall	$18				; update position & apply gravity
 		bsr.w	SolidObject
-		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		getpos_bottom pblock_height			; d0 = x pos; d1 = y pos of bottom
 		moveq	#1,d6
 		jsr	FloorDist
 		tst.w	d5

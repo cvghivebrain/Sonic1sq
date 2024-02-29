@@ -30,8 +30,8 @@ BFire_Main:	; Routine 0
 		move.w	ost_x_pos(a1),ost_x_pos(a0)
 		move.w	ost_y_pos(a1),ost_y_pos(a0)
 		addi.w	#$18,ost_y_pos(a0)
-		move.b	#8,ost_height(a0)
-		move.b	#8,ost_width(a0)
+		move.b	#fire_height,ost_height(a0)
+		move.b	#fire_width,ost_width(a0)
 		move.l	#Map_Fire,ost_mappings(a0)
 		move.w	(v_tile_fireball).w,ost_tile(a0)
 		move.b	#render_rel+render_onscreen,ost_render(a0)
@@ -65,7 +65,7 @@ BFire_Display2:
 		
 BFire_Fall:	; Routine 4
 		update_y_fall	$18				; update position & apply gravity
-		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		getpos_bottom fire_height			; d0 = x pos; d1 = y pos of bottom
 		moveq	#1,d6
 		bsr.w	FloorDist
 		tst.w	d5					; has fireball hit the floor?
@@ -99,7 +99,7 @@ BFire_Slide:	; Routine 6
 		
 	.skip_fire:
 		update_x_pos
-		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		getpos_bottom fire_height			; d0 = x pos; d1 = y pos of bottom
 		moveq	#1,d6
 		bsr.w	FloorDist
 		cmpi.w	#-8,d5

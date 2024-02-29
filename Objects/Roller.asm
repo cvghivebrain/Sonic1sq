@@ -24,6 +24,8 @@ Roll_Index:	index *,,2
 ost_roller_open_time:	rs.w 1					; time roller stays open for
 ost_roller_stopped:	rs.b 1					; flag set when roller has stopped in front of Sonic
 		rsobjend
+		
+roller_height:	equ $E
 ; ===========================================================================
 
 Roll_Main:	; Routine 0
@@ -33,7 +35,7 @@ Roll_Main:	; Routine 0
 		move.b	#render_rel+render_onscreen,ost_render(a0)
 		move.b	#priority_4,ost_priority(a0)
 		move.b	#$10,ost_displaywidth(a0)
-		move.b	#$E,ost_height(a0)
+		move.b	#roller_height,ost_height(a0)
 		move.b	#8,ost_width(a0)
 		move.b	#14,ost_col_width(a0)
 		move.b	#14,ost_col_height(a0)
@@ -82,7 +84,7 @@ Roll_Roll:	; Routine 4
 		bra.w	DespawnObject
 
 	.skip_stop:
-		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		getpos_bottom roller_height			; d0 = x pos; d1 = y pos of bottom
 		moveq	#1,d6
 		bsr.w	FloorDist
 		cmpi.w	#-8,d5
@@ -103,7 +105,7 @@ Roll_Jump:	; Routine 6
 		bsr.w	AnimateSprite
 		update_xy_fall					; apply gravity & update position
 		bmi.w	DespawnObject				; branch if moving upwards
-		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		getpos_bottom roller_height			; d0 = x pos; d1 = y pos of bottom
 		moveq	#1,d6
 		bsr.w	FloorDist
 		tst.w	d5					; has roller hit the floor?

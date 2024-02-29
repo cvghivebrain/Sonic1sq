@@ -23,11 +23,14 @@ Burro_Index:	index *,,2
 ost_burro_turn_time:		rs.w 1				; time between direction changes (2 bytes)
 ost_burro_findfloor_flag:	rs.b 1				; flag set every other frame to detect edge of floor
 		rsobjend
+		
+burro_width:	equ 8
+burro_height:	equ $13
 ; ===========================================================================
 
 Burro_Main:	; Routine 0
-		move.b	#$13,ost_height(a0)
-		move.b	#8,ost_width(a0)
+		move.b	#burro_height,ost_height(a0)
+		move.b	#burro_width,ost_width(a0)
 		move.l	#Map_Burro,ost_mappings(a0)
 		move.w	(v_tile_burrobot).w,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
@@ -86,7 +89,7 @@ Burro_Move:	; Routine 4
 		update_x_pos					; update position
 		bchg	#0,ost_burro_findfloor_flag(a0)		; change floor flag
 		bne.s	.find_floor				; branch if it was 1
-		getpos_bottomforward				; d0 = x pos of left/right side; d1 = y pos of bottom
+		getpos_bottomforward burro_width,burro_height	; d0 = x pos of left/right side; d1 = y pos of bottom
 		moveq	#1,d6
 		jsr	FloorDist
 		cmpi.w	#12,d5					; is floor > 12px away? (finds a wall or drop)
@@ -97,7 +100,7 @@ Burro_Move:	; Routine 4
 ; ===========================================================================
 
 .find_floor:
-		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		getpos_bottom burro_height			; d0 = x pos; d1 = y pos of bottom
 		moveq	#1,d6
 		jsr	FloorDist
 		add.w	d5,ost_y_pos(a0)			; align to floor
@@ -137,7 +140,7 @@ Burro_Jump:	; Routine 6
 
 Burro_Fall:	; Routine 8
 		update_xy_fall	$18				; update position & apply gravity
-		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		getpos_bottom burro_height			; d0 = x pos; d1 = y pos of bottom
 		moveq	#1,d6
 		jsr	FloorDist
 		tst.w	d5					; has burrobot hit the floor?

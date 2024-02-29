@@ -28,13 +28,16 @@ ost_crab_time:		rs.w 1					; time until next action
 ost_crab_walk_time:	rs.w 1					; time spent walking
 		rsobjend
 		
+crab_width:	equ 8
+crab_height:	equ $10
+		
 Crab_Settings:	dc.w 127, 128					; walk time (in frames), walk speed
 ; ===========================================================================
 
 Crab_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Crab_Move next
-		move.b	#$10,ost_height(a0)
-		move.b	#8,ost_width(a0)
+		move.b	#crab_height,ost_height(a0)
+		move.b	#crab_width,ost_width(a0)
 		move.l	#Map_Crab,ost_mappings(a0)
 		move.w	(v_tile_crabmeat).w,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
@@ -64,7 +67,7 @@ Crab_Move:	; Routine 2
 		update_x_pos					; update position
 		btst	#0,(v_vblank_counter_byte).w
 		bne.s	.findfloor_here				; branch on odd frames
-		getpos_bottomforward				; d0 = x pos of left/right side; d1 = y pos of bottom
+		getpos_bottomforward crab_width,crab_height	; d0 = x pos of left/right side; d1 = y pos of bottom
 		moveq	#1,d6
 		jsr	FloorDist
 		cmpi.w	#-8,d5					; is there a wall ahead?
@@ -77,11 +80,10 @@ Crab_Move:	; Routine 2
 ; ===========================================================================
 
 .findfloor_here:
-		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		getpos_bottom crab_height			; d0 = x pos; d1 = y pos of bottom
 		moveq	#1,d6
 		jsr	FloorDist
 		add.w	d5,ost_y_pos(a0)			; snap to floor
-		;move.b	d3,ost_angle(a0)			; update angle
 		tst.b	ost_subtype(a0)
 		bmi.s	.noslope				; don't check for slope
 		

@@ -26,6 +26,8 @@ id_Pig:		equ 4
 id_Flicky:	equ 5
 id_Squirrel:	equ 6
 
+animal_height:	equ 12
+
 Anml_Settings:	dc.w -$200, -$400				; type 0 - rabbit, GHZ/SBZ
 		dc.l Map_Animal1
 		dc.l v_tile_animal1
@@ -96,7 +98,7 @@ Anml_Main:	; Routine 0
 		move.b	#render_rel+render_xflip+render_onscreen,ost_render(a0)
 		move.b	#priority_6,ost_priority(a0)
 		move.b	#8,ost_displaywidth(a0)
-		move.b	#$C,ost_height(a0)
+		move.b	#animal_height,ost_height(a0)
 		move.b	#7,ost_anim_time(a0)
 		move.b	#id_frame_animal1_drop,ost_frame(a0)	; use "dropping" frame
 		move.w	#-$400,ost_y_vel(a0)
@@ -115,7 +117,7 @@ Anml_Drop:	; Routine 4
 	.display:
 		update_y_fall					; make object fall and update its position
 		bmi.w	DisplaySprite				; branch if still moving upwards
-		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		getpos_bottom animal_height			; d0 = x pos; d1 = y pos of bottom
 		moveq	#1,d6
 		jsr	FloorDist
 		tst.w	d5					; has object hit the floor?
@@ -141,7 +143,7 @@ Anml_Mammal:	; Routine 6
 		bmi.s	.chkdel					; branch if moving upwards
 
 		move.b	#id_frame_animal1_flap1,ost_frame(a0)
-		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		getpos_bottom animal_height			; d0 = x pos; d1 = y pos of bottom
 		moveq	#1,d6
 		jsr	FloorDist
 		tst.w	d5					; has object hit the floor?
@@ -161,7 +163,7 @@ Anml_Bird:	; Routine 8
 		update_xy_fall	$18				; update object position & apply gravity
 		bmi.s	.animate				; branch if moving upwards
 
-		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		getpos_bottom animal_height			; d0 = x pos; d1 = y pos of bottom
 		moveq	#1,d6
 		jsr	FloorDist
 		tst.w	d5					; has object hit the floor?
@@ -290,7 +292,7 @@ AnmlE_Main:	; Routine 0
 		move.l	(a2)+,ost_mappings(a0)			; get mappings pointer
 		move.w	(a2)+,ost_tile(a0)			; get VRAM tile number
 		move.b	(a2)+,ost_routine(a0)
-		move.b	#$C,ost_height(a0)
+		move.b	#animal_height,ost_height(a0)
 		move.b	#render_rel,ost_render(a0)
 		bset	#render_xflip_bit,ost_render(a0)
 		move.b	#priority_6,ost_priority(a0)
@@ -359,7 +361,7 @@ AnmlE_Stay:	; Routine $A
 		bmi.w	DespawnQuick				; branch if moving upwards
 
 		move.b	#id_frame_animal1_flap1,ost_frame(a0)
-		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		getpos_bottom animal_height			; d0 = x pos; d1 = y pos of bottom
 		moveq	#1,d6
 		jsr	FloorDist
 		tst.w	d5					; has object hit the floor?
@@ -379,7 +381,7 @@ AnmlE_Chicken:	; Routine $C
 		update_xy_fall	$18				; update object position & apply gravity
 		bmi.w	AnmlE_Flicky_Animate			; branch if moving upwards
 
-		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		getpos_bottom animal_height			; d0 = x pos; d1 = y pos of bottom
 		moveq	#1,d6
 		jsr	FloorDist
 		tst.w	d5					; has object hit the floor?
@@ -405,7 +407,7 @@ AnmlE_Squirrel:	; Routine $E
 		bmi.w	DespawnQuick				; branch if moving upwards
 
 		move.b	#id_frame_animal1_flap1,ost_frame(a0)
-		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		getpos_bottom animal_height			; d0 = x pos; d1 = y pos of bottom
 		moveq	#1,d6
 		jsr	FloorDist
 		tst.w	d5					; has object hit the floor?
@@ -439,7 +441,7 @@ AnmlE_FaceSonic:
 ; ---------------------------------------------------------------------------
 
 AnmlE_ChkFloor:
-		getpos_bottom					; d0 = x pos; d1 = y pos of bottom
+		getpos_bottom animal_height			; d0 = x pos; d1 = y pos of bottom
 		moveq	#1,d6
 		jsr	FloorDist
 		tst.w	d5					; has object hit the floor?
