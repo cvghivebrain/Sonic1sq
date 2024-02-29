@@ -222,7 +222,7 @@ Sonic_Mode_Normal:
 		bsr.w	Sonic_Move
 		bsr.w	Sonic_Roll
 		bsr.w	Sonic_LevelBound
-		jsr	(SpeedToPos).l
+		update_xy_pos
 		bsr.w	Sonic_AnglePos
 		bsr.w	Sonic_SlopeRepel
 		rts
@@ -232,7 +232,7 @@ Sonic_Mode_Air:
 		bsr.w	Sonic_JumpHeight
 		bsr.w	Sonic_JumpDirection
 		bsr.w	Sonic_LevelBound
-		jsr	(ObjectFall).l
+		update_xy_fall					; update position & apply gravity
 		btst	#status_underwater_bit,ost_status(a0)	; is Sonic underwater?
 		beq.s	.notwater				; if not, branch
 		subi.w	#sonic_buoyancy,ost_y_vel(a0)		; apply upward force
@@ -248,7 +248,7 @@ Sonic_Mode_Roll:
 		bsr.w	Sonic_RollRepel
 		bsr.w	Sonic_RollSpeed
 		bsr.w	Sonic_LevelBound
-		jsr	(SpeedToPos).l
+		update_xy_pos
 		bsr.w	Sonic_AnglePos
 		bsr.w	Sonic_SlopeRepel
 		rts
@@ -258,7 +258,7 @@ Sonic_Mode_Jump:
 		bsr.w	Sonic_JumpHeight
 		bsr.w	Sonic_JumpDirection
 		bsr.w	Sonic_LevelBound
-		jsr	(ObjectFall).l
+		update_xy_fall					; update position & apply gravity
 		btst	#status_underwater_bit,ost_status(a0)	; is Sonic underwater?
 		beq.s	.notwater				; if not, branch
 		subi.w	#sonic_buoyancy,ost_y_vel(a0)		; apply upward force
@@ -752,25 +752,6 @@ Sonic_JumpDirection:
 		move.w	d0,ost_x_vel(a0)			; apply air drag
 
 .exit:
-		rts
-
-; ---------------------------------------------------------------------------
-; Unused subroutine to squash Sonic against the ceiling
-; ---------------------------------------------------------------------------
-
-		move.b	ost_angle(a0),d0
-		addi.b	#$20,d0
-		andi.b	#$C0,d0
-		bne.s	.dont_squash				; branch if Sonic is running on a wall or ceiling
-		bsr.w	Sonic_FindCeiling
-		tst.w	d1
-		bpl.s	.dont_squash				; branch if there's space between Sonic and the ceiling
-		move.w	#0,ost_inertia(a0)			; stop Sonic moving
-		move.w	#0,ost_x_vel(a0)
-		move.w	#0,ost_y_vel(a0)
-		move.b	#id_Warp3,ost_anim(a0)			; use "warping" animation
-
-	.dont_squash:
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -1319,8 +1300,7 @@ Sonic_ResetOnFloor:
 ; ---------------------------------------------------------------------------
 
 Sonic_Hurt:	; Routine 4
-		jsr	(SpeedToPos).l				; update position
-		addi.w	#$30,ost_y_vel(a0)			; apply gravity
+		update_xy_fall $30				; update position & apply gravity
 		btst	#status_underwater_bit,ost_status(a0)
 		beq.s	.not_underwater				; branch if Sonic isn't underwater
 		subi.w	#$20,ost_y_vel(a0)			; apply less gravity (net $10)
@@ -1362,7 +1342,7 @@ Sonic_HurtStop:
 
 Sonic_Death:	; Routine 6
 		bsr.w	GameOver
-		jsr	(ObjectFall).l				; apply gravity and update position
+		update_xy_fall					; update position & apply gravity
 		bsr.w	Sonic_RecordPosition
 		bsr.w	Sonic_Animate
 		bsr.w	Sonic_LoadGfx
@@ -1691,49 +1671,7 @@ Sonic_AnglePos:
 ; ===========================================================================
 
 Sonic_BelowFloor:
-		rts
-
-; ===========================================================================
-		move.l	ost_x_pos(a0),d2
-		move.w	ost_x_vel(a0),d0
-		ext.l	d0
-		asl.l	#8,d0
-		sub.l	d0,d2
-		move.l	d2,ost_x_pos(a0)
-		move.w	#$38,d0
-		ext.l	d0
-		asl.l	#8,d0
-		sub.l	d0,d3
-		move.l	d3,ost_y_pos(a0)
-		rts
-; ===========================================================================
-
 Sonic_InsideWall:
-		rts
-; ===========================================================================
-		move.l	ost_y_pos(a0),d3
-		move.w	ost_y_vel(a0),d0
-		subi.w	#$38,d0
-		move.w	d0,ost_y_vel(a0)
-		ext.l	d0
-		asl.l	#8,d0
-		sub.l	d0,d3
-		move.l	d3,ost_y_pos(a0)
-		rts
-		rts
-; ===========================================================================
-		move.l	ost_x_pos(a0),d2
-		move.l	ost_y_pos(a0),d3
-		move.w	ost_x_vel(a0),d0
-		ext.l	d0
-		asl.l	#8,d0
-		sub.l	d0,d2
-		move.w	ost_y_vel(a0),d0
-		ext.l	d0
-		asl.l	#8,d0
-		sub.l	d0,d3
-		move.l	d2,ost_x_pos(a0)
-		move.l	d3,ost_y_pos(a0)
 		rts
 
 ; ---------------------------------------------------------------------------

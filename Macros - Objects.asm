@@ -342,12 +342,8 @@ getpos:		macro
 
 getpos_y:	macro
 		ifarg \1
-		move.w	ost_y_pos(a0),d1
-			if \1<8
-			\2\q.w	#\1,d1
-			else
-			\2\i.w	#\1,d1
-			endc
+		moveq	#\1,d1
+		add.w	ost_y_pos(a0),d1
 		else
 		moveq	#0,d1
 		move.b	ost_height(a0),d1
@@ -357,22 +353,18 @@ getpos_y:	macro
 
 getpos_bottom:	macro
 		move.w	ost_x_pos(a0),d0
-		getpos_y \1,axd
+		getpos_y \1
 		endm
 
 getpos_top:	macro
 		move.w	ost_x_pos(a0),d0
-		getpos_y \1,sxb
+		getpos_y -\1
 		endm
 
 getpos_x:	macro
 		ifarg \1
-		move.w	ost_x_pos(a0),d0
-			if \1<8
-			\2\q.w	#\1,d0
-			else
-			\2\i.w	#\1,d0
-			endc
+		moveq	#\1,d0
+		add.w	ost_x_pos(a0),d0
 		else
 		moveq	#0,d0
 		move.b	ost_width(a0),d0
@@ -381,41 +373,33 @@ getpos_x:	macro
 		endm
 
 getpos_right:	macro
-		getpos_x \1,axd
+		getpos_x \1
 		move.w	ost_y_pos(a0),d1
 		endm
 
 getpos_left:	macro
-		getpos_x \1,sxb
+		getpos_x -\1
 		move.w	ost_y_pos(a0),d1
 		endm
 
 getpos_bottomright:	macro
-		getpos_x \1,axd
-		getpos_y \2,axd
+		getpos_x \1
+		getpos_y \2
 		endm
 
 getpos_bottomleft:	macro
-		getpos_x \1,sxb
-		getpos_y \2,axd
+		getpos_x -\1
+		getpos_y \2
 		endm
 
 getpos_bottomforward:	macro
 		ifarg \1
-		move.w	ost_x_pos(a0),d0
-			if \1<8
-			addq.w	#\1,d0
-			else
-			addi.w	#\1,d0
-			endc
+		moveq	#\1,d0
 		tst.w	ost_x_vel(a0)
 		bpl.s	.right\@				; branch if moving right
-			if \1*2<8
-			subq.w	#\1*2,d0
-			else
-			subi.w	#\1*2,d0
-			endc
+		moveq	#-\1,d0
 	.right\@:
+		add.w	ost_x_pos(a0),d0
 		else
 		moveq	#0,d0
 		move.b	ost_width(a0),d0
@@ -425,16 +409,16 @@ getpos_bottomforward:	macro
 	.right\@:
 		add.w	ost_x_pos(a0),d0
 		endc
-		getpos_y \2,axd
+		getpos_y \2
 		endm
 
 getpos_topright:	macro
-		getpos_x \1,axd
-		getpos_y \2,sxb
+		getpos_x \1
+		getpos_y -\2
 		endm
 
 getpos_topleft:	macro
-		getpos_x \1,sxb
-		getpos_y \2,sxb
+		getpos_x -\1
+		getpos_y -\2
 		endm
 		
