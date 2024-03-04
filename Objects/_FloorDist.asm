@@ -121,8 +121,6 @@ FloorAngle:
 		beq.s	.exit					; branch if 0
 		lea	(AngleMap).l,a4
 		move.b	(a4,d3.w),d3				; get collision angle value
-		btst	#0,d3
-		bne.s	.snap					; branch if snap bit is set
 		btst	#tilemap_xflip_bit,d4
 		beq.s	.no_xflip				; branch if not xflipped
 		neg.b	d3					; xflip angle
@@ -135,10 +133,13 @@ FloorAngle:
 		subi.b	#$40,d3					; yflip angle
 
 	.exit:
+		btst	#0,d3
+		bne.s	.snap					; branch if snap bit is set
 		rts
 		
 	.snap:
-		moveq	#0,d3					; snap to flat floor
+		addi.b	#$20,d3
+		andi.b	#$C0,d3					; snap to 90 degree angle
 		rts
 
 ; ---------------------------------------------------------------------------

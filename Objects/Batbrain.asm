@@ -17,6 +17,8 @@ Bat_Index:	index *,,2
 		ptr Bat_Drop
 		ptr Bat_Flap
 		ptr Bat_FlyUp
+		
+bat_height:	equ $C
 ; ===========================================================================
 
 Bat_Main:	; Routine 0
@@ -25,7 +27,7 @@ Bat_Main:	; Routine 0
 		move.w	(v_tile_batbrain).w,ost_tile(a0)
 		addi.w	#tile_hi,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
-		move.b	#$C,ost_height(a0)
+		move.b	#bat_height,ost_height(a0)
 		move.b	#priority_2,ost_priority(a0)
 		move.b	#id_React_Enemy,ost_col_type(a0)
 		move.b	#8,ost_col_width(a0)
@@ -100,10 +102,12 @@ Bat_Flap:	; Routine 6
 
 Bat_FlyUp:	; Routine 8
 		update_xy_fall	-$18				; make batbrain fly upwards
-		bsr.w	FindCeilingObj
-		tst.w	d1					; has batbrain hit the ceiling?
+		getpos_top bat_height				; d0 = x pos; d1 = y pos of top
+		moveq	#1,d6
+		bsr.w	CeilingDist
+		tst.w	d5					; has batbrain hit the ceiling?
 		bpl.w	DespawnObject				; if not, branch
-		sub.w	d1,ost_y_pos(a0)			; align to ceiling
+		sub.w	d5,ost_y_pos(a0)			; align to ceiling
 		andi.w	#$FFF8,ost_x_pos(a0)			; snap to tile
 		clr.w	ost_x_vel(a0)				; stop batbrain moving
 		clr.w	ost_y_vel(a0)

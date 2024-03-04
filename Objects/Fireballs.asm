@@ -77,10 +77,7 @@ FBall_Action:	; Routine 2
 		moveq	#0,d0
 		move.b	ost_mode(a0),d0
 		move.w	FBall_TypeIndex(pc,d0.w),d1
-		jsr	FBall_TypeIndex(pc,d1.w)		; update speed & check for wall collision
-		lea	Ani_Fire(pc),a1
-		bsr.w	AnimateSprite
-		bra.w	DespawnQuick
+		jmp	FBall_TypeIndex(pc,d1.w)		; update speed & check for wall collision
 ; ===========================================================================
 FBall_TypeIndex:index *
 		ptr FBall_Type_Vert
@@ -101,7 +98,9 @@ FBall_Type_VertGrav:
 		bset	#status_yflip_bit,ost_status(a0)	; face down
 
 	.upwards:
-		rts	
+		lea	Ani_Fire(pc),a1
+		bsr.w	AnimateSprite
+		bra.w	DespawnQuick
 ; ===========================================================================
 
 FBall_Type_HoriGrav:
@@ -111,23 +110,29 @@ FBall_Type_HoriGrav:
 
 	.keep_falling:
 		update_xy_fall	$18				; update position and apply gravity
-		rts	
+		lea	Ani_Fire(pc),a1
+		bsr.w	AnimateSprite
+		bra.w	DespawnQuick
 ; ===========================================================================
 
 FBall_Type_Vert:
-		btst	#status_yflip_bit,ost_status(a0)
-		bne.s	.down					; branch if fireball should move down
+		tst.w	ost_y_vel(a0)
+		bpl.s	.down					; branch if fireball should move down
 		
-		bsr.w	FindCeilingObj
-		tst.w	d1					; distance to ceiling
+		getpos_top fire_height				; d0 = x pos; d1 = y pos of top
+		moveq	#1,d6
+		bsr.w	CeilingDist
+		tst.w	d5					; distance to ceiling
 		bpl.s	.no_ceiling				; branch if > 0
 		move.b	#id_FBall_Collide,ost_routine(a0)	; goto FBall_Collide next
 		move.b	#id_frame_fire_vertcollide,ost_frame(a0)
-		rts
+		bra.w	DespawnQuick
 
 	.no_ceiling:
 		update_y_pos
-		rts	
+		lea	Ani_Fire(pc),a1
+		bsr.w	AnimateSprite
+		bra.w	DespawnQuick
 		
 	.down:
 		getpos_bottom fire_height			; d0 = x pos; d1 = y pos of bottom
@@ -137,23 +142,25 @@ FBall_Type_Vert:
 		bpl.s	.no_ceiling				; branch if > 0
 		move.b	#id_FBall_Collide,ost_routine(a0)	; goto FBall_Collide next
 		move.b	#id_frame_fire_vertcollide,ost_frame(a0)
-		rts	
+		bra.w	DespawnQuick
 ; ===========================================================================
 
 FBall_Type_Hori:
-		btst	#status_xflip_bit,ost_status(a0)
-		bne.s	.right					; branch if fireball is moving right
+		tst.w	ost_x_vel(a0)
+		bpl.s	.right					; branch if fireball is moving right
 		
 		bsr.w	FindWallLeftObj
 		tst.w	d1					; distance to wall
 		bpl.s	.no_wall				; branch if > 0
 		move.b	#id_FBall_Collide,ost_routine(a0)	; goto FBall_Collide next
 		move.b	#id_frame_fire_horicollide,ost_frame(a0)
-		rts
+		bra.w	DespawnQuick
 
 	.no_wall:
 		update_x_pos
-		rts
+		lea	Ani_Fire(pc),a1
+		bsr.w	AnimateSprite
+		bra.w	DespawnQuick
 		
 	.right:
 		bsr.w	FindWallRightObj
@@ -161,7 +168,7 @@ FBall_Type_Hori:
 		bpl.s	.no_wall				; branch if > 0
 		move.b	#id_FBall_Collide,ost_routine(a0)	; goto FBall_Collide next
 		move.b	#id_frame_fire_horicollide,ost_frame(a0)
-		rts
+		bra.w	DespawnQuick
 ; ===========================================================================
 
 FBall_Collide:	; Routine 6
