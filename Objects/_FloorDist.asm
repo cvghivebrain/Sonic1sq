@@ -29,7 +29,7 @@ FloorDist:
 		
 	.loop:
 		bsr.w	PosToTile				; (a3).w = 16x16 tile id
-		move.w	(a3),d4					; d4 = tile id with flags
+		move.w	(a3),d4					; d4 = tile id with flags  256: 0SSY X0II IIII IIII; 128: SSTT YXII IIII IIII
 		btst	#tilemap_solid_top_bit,d4
 		beq.s	.chk_below				; branch if tile isn't top solid
 		move.w	d4,d2
@@ -58,9 +58,16 @@ FloorDist:
 		
 	.noyflip:
 		cmpi.w	#16,d3
-		bcs.s	.height_ok				; branch if height is between 0 and 15
+		bcs.s	.height_ok				; branch if height is between 1 and 15
+		moveq	#16,d3					; force height to be 16px (was already -ve or 16)
 		tst.w	d5
-		beq.s	.chk_above				; branch if this is the first tile
+		bgt.s	.height_ok				; branch if previously checked below (object is above floor)
+		
+	.chk_above:
+		subi.w	#16,d1					; 16px above
+		subi.w	#16,d5					; 16px -ve distance
+		dbf	d6,.loop				; check tile above this one
+		rts
 		
 	.height_ok:
 		move.w	d1,d2					; copy y pos
@@ -79,16 +86,11 @@ FloorDist:
 		dbf	d6,.loop				; check tile below this one
 		rts
 		
-	.chk_above:
-		subi.w	#16,d1					; 16px above
-		subi.w	#16,d5					; 16px -ve distance
-		dbf	d6,.loop				; check tile above this one
-		rts
-		
 	.under_floor:
-		move.w	d1,d5					; copy y pos
-		andi.w	#$F,d5					; get y pos within 16x16 tile
-		neg.w	d5					; object is < 16px under floor
+		move.w	d1,d3					; copy y pos
+		andi.w	#$F,d3					; get y pos within 16x16 tile
+		sub.w	d3,d5					; object is < 16px under floor
+		addi.w	#16,d5
 		rts
 		
 ; ---------------------------------------------------------------------------

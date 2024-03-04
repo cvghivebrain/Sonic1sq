@@ -92,7 +92,7 @@ piece_size:		rs.b 1
 piece_tile:		rs.w 1
 piece_x_pos:		rs.w 1
 sizeof_piece:		equ __rs
-sizeof_subsprite:	equ (sizeof_piece*8)+2
+sizeof_subsprite:	equ (sizeof_piece*12)+2
 countof_subsprite:	equ 8
 subcount:		equ 0
 sub0:			equ 2
@@ -103,6 +103,10 @@ sub4:			equ (sizeof_piece*4)+2
 sub5:			equ (sizeof_piece*5)+2
 sub6:			equ (sizeof_piece*6)+2
 sub7:			equ (sizeof_piece*7)+2
+sub8:			equ (sizeof_piece*8)+2
+sub9:			equ (sizeof_piece*9)+2
+sub10:			equ (sizeof_piece*10)+2
+sub11:			equ (sizeof_piece*11)+2
 
 sprite1x1:		equ 0
 sprite1x2:		equ 1

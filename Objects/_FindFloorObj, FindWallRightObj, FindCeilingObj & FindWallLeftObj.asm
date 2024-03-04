@@ -63,15 +63,6 @@ FindCeilingObj:
 
 	.no_snap:
 		rts
-		
-SnapCeiling:
-		bsr.s	FindCeilingObj
-		tst.w	d1
-		bpl.s	.exit					; branch if not touching the ceiling
-		sub.w	d1,ost_y_pos(a0)			; align to ceiling
-		
-	.exit:
-		rts
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to find the distance of an object to the wall to its left

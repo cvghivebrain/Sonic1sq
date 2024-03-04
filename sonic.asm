@@ -379,6 +379,7 @@ startof_obj:	equ *
 		
 		include "Objects\_PosToChunk & PosToTile.asm"
 		include "Objects\_FloorDist.asm"
+		include "Objects\_CeilingDist.asm"
 
 		include "Objects\LZ Harpoon.asm"		; Harpoon
 		include "Objects\LZ Blocks.asm"			; LabyrinthBlock

@@ -341,7 +341,7 @@ getpos:		macro
 		endm
 
 getpos_y:	macro
-		ifarg \1
+		if (strlen("\1")>0)&(~strcmp("\1","-"))
 		moveq	#\1,d1
 		add.w	ost_y_pos(a0),d1
 		else
@@ -362,7 +362,7 @@ getpos_top:	macro
 		endm
 
 getpos_x:	macro
-		ifarg \1
+		if (strlen("\1")>0)&(~strcmp("\1","-"))
 		moveq	#\1,d0
 		add.w	ost_x_pos(a0),d0
 		else

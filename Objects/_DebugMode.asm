@@ -57,8 +57,8 @@ Debug_GetFrame_SkipStatus:
 Debug_Action:	; Routine 2
 		move.w	ost_x_pos(a0),d0
 		move.w	ost_y_pos(a0),d1
-		moveq	#1,d6
-		bsr.w	FloorDist
+		moveq	#3,d6
+		bsr.w	CeilingDist
 		move.w	d5,ost_angle(a0)
 		movea.l	(v_debug_ptr).w,a2
 		bsr.s	Debug_Control
