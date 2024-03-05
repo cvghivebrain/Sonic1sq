@@ -51,10 +51,12 @@ Cork_Float:
 
 	.near_surface:
 		add.w	d0,ost_y_pos(a0)			; make the block rise
-		bsr.w	FindCeilingObj
-		tst.w	d1					; has block hit the ceiling?
+		getpos_top cork_height				; d0 = x pos; d1 = y pos of top
+		moveq	#1,d6
+		bsr.w	CeilingDist
+		tst.w	d5					; has block hit the ceiling?
 		bpl.s	.exit					; if not, branch
-		sub.w	d1,ost_y_pos(a0)			; stop block
+		sub.w	d5,ost_y_pos(a0)			; stop block
 		rts
 
 .fall:

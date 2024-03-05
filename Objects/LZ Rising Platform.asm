@@ -21,6 +21,8 @@ LPlat_Index:	index *,,2
 ost_lplat_y_pos:	rs.w 1					; y pos without sink
 ost_lplat_wait_time:	rs.w 1					; time delay
 		rsobjend
+		
+lplat_height:	equ 12
 ; ===========================================================================
 
 LPlat_Main:	; Routine 0
@@ -31,7 +33,7 @@ LPlat_Main:	; Routine 0
 		move.b	#priority_3,ost_priority(a0)
 		move.b	#32,ost_displaywidth(a0)
 		move.b	#32,ost_width(a0)
-		move.b	#12,ost_height(a0)
+		move.b	#lplat_height,ost_height(a0)
 		move.w	ost_y_pos(a0),ost_lplat_y_pos(a0)
 		
 LPlat_Action:	; Routine 2
@@ -61,10 +63,12 @@ LPlat_Rise:	; Routine 4
 		add.l	d0,ost_lplat_y_pos(a0)			; update y position
 		
 		subq.w	#8,ost_y_vel(a0)			; make block rise
-		bsr.w	FindCeilingObj
-		tst.w	d1					; has block hit the ceiling?
+		getpos_top lplat_height				; d0 = x pos; d1 = y pos of top
+		moveq	#1,d6
+		bsr.w	CeilingDist
+		tst.w	d5					; has block hit the ceiling?
 		bpl.s	LPlat_Update				; if not, branch
-		sub.w	d1,ost_lplat_y_pos(a0)			; align to ceiling
+		sub.w	d5,ost_lplat_y_pos(a0)			; align to ceiling
 		clr.w	ost_y_vel(a0)				; stop when it touches the ceiling
 		addq.b	#2,ost_routine(a0)			; goto LPlat_Stop next
 		bra.s	LPlat_Update
