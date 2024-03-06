@@ -380,6 +380,8 @@ startof_obj:	equ *
 		include "Objects\_PosToChunk & PosToTile.asm"
 		include "Objects\_FloorDist.asm"
 		include "Objects\_CeilingDist.asm"
+		include "Objects\_WallRightDist.asm"
+		include "Objects\_WallLeftDist.asm"
 
 		include "Objects\LZ Harpoon.asm"		; Harpoon
 		include "Objects\LZ Blocks.asm"			; LabyrinthBlock
@@ -400,7 +402,7 @@ startof_obj:	equ *
 		include "Objects\LZ Door Horizontal.asm"	; LabyrinthDoorH
 
 		include "Objects\Shield & Invincibility.asm"	; ShieldItem
-		include "Objects\Unused Special Stage Warp.asm"	; VanishSonic
+		;include "Objects\Unused Special Stage Warp.asm"	; VanishSonic
 		include "Objects\LZ Water Splash.asm"		; Splash
 		include "Objects\LZ Water Surface.asm"		; WaterSurface
 		include "Objects\SBZ Rotating Disc Junction.asm" ; Junction
