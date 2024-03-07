@@ -20,12 +20,13 @@ Yad_Index:	index *,,2
 ost_yadrin_wait_time:	rs.w 1					; time to wait before changing direction
 		rsobjend
 		
+yadrin_width:	equ $14
 yadrin_height:	equ $11
 ; ===========================================================================
 
 Yad_Main:	; Routine 0
 		move.b	#yadrin_height,ost_height(a0)
-		move.b	#$14,ost_width(a0)
+		move.b	#yadrin_width,ost_width(a0)
 		move.l	#Map_Yad,ost_mappings(a0)
 		move.w	(v_tile_yadrin).w,ost_tile(a0)
 		addi.w	#tile_pal2,ost_tile(a0)
@@ -60,13 +61,17 @@ Yad_Walk:	; Routine 2
 		bne.s	.skip_wall				; branch if either are set
 		tst.w	ost_x_vel(a0)				; is yadrin moving to the left?
 		bmi.s	.moving_left				; if yes, branch
-		bsr.w	FindWallRightObj
-		tst.w	d1					; has yadrin hit wall to the right?
+		getpos_right yadrin_width			; d0 = x pos of right; d1 = y pos
+		moveq	#1,d6
+		bsr.w	WallRightDist
+		tst.w	d5					; has yadrin hit wall to the right?
 		bmi.s	.stop_now				; if yes, branch
 		bra.s	.skip_wall
 	.moving_left:
-		bsr.w	FindWallLeftObj
-		tst.w	d1					; has yadrin hit wall to the left?
+		getpos_left yadrin_width			; d0 = x pos of left; d1 = y pos
+		moveq	#1,d6
+		bsr.w	WallLeftDist
+		tst.w	d5					; has yadrin hit wall to the left?
 		bmi.s	.stop_now				; if yes, branch
 		
 	.skip_wall:

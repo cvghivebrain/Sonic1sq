@@ -97,13 +97,17 @@ GarFire:
 		update_x_pos					; update position
 		tst.w	ost_x_vel(a0)
 		bpl.s	.isright				; branch if moving right
-		bsr.w	FindWallLeftObj
-		tst.w	d1
+		getpos_left 8					; d0 = x pos of left; d1 = y pos
+		moveq	#1,d6
+		bsr.w	WallLeftDist
+		tst.w	d5
 		bmi.w	DeleteObject				; delete if the	fireball hits a	wall to the left
 		bra.w	DespawnQuick
 
 	.isright:
-		bsr.w	FindWallRightObj
-		tst.w	d1
+		getpos_right 8					; d0 = x pos of right; d1 = y pos
+		moveq	#1,d6
+		bsr.w	WallRightDist
+		tst.w	d5
 		bmi.w	DeleteObject				; delete if the	fireball hits a	wall to the right
 		bra.w	DespawnQuick

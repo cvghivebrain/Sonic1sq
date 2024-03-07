@@ -16,6 +16,7 @@ Splats_Index:	index *,,2
 		ptr Splats_ChkDist
 		ptr Splats_Move
 		
+splats_width:	equ $C
 splats_height:	equ $14
 ; ---------------------------------------------------------------------------
 
@@ -87,8 +88,10 @@ Splats_ChkWalls:
 		bne.s	.no_wall				; branch if not on specific frame
 		tst.w	ost_x_vel(a0)
 		bmi.s	.moving_left				; branch if Splats is moving left
-		bsr.w	FindWallRightObj
-		tst.w	d1
+		getpos_right splats_width			; d0 = x pos of right; d1 = y pos
+		moveq	#1,d6
+		bsr.w	WallRightDist
+		tst.w	d5
 		bpl.s	.no_wall				; branch if Splats hasn't hit wall
 
 .found_wall:
@@ -97,8 +100,10 @@ Splats_ChkWalls:
 ; ---------------------------------------------------------------------------
 
 .moving_left:
-		bsr.w	FindWallLeftObj
-		tst.w	d1
+		getpos_left splats_width			; d0 = x pos of left; d1 = y pos
+		moveq	#1,d6
+		bsr.w	WallLeftDist
+		tst.w	d5
 		bmi.s	.found_wall
 
 .no_wall:

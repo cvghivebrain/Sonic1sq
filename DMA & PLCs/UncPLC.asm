@@ -96,7 +96,6 @@ UncLoadCues:
 		ptr UPLC_SSRSonic
 		ptr UPLC_SSRKetchup
 		ptr UPLC_SSRMustard
-		ptr UPLC_Warp
 		ptr UPLC_Credits
 		ptr UPLC_TryAgain
 		ptr UPLC_SonicIcon
@@ -255,10 +254,6 @@ UPLC_SSRMustard:	uplcheader $B000
 		uplc Art_TitleCardBonus,v_tile_bonus
 		uplc Art_ResultCont
 		uplc_letters GOTHEMALUSRD
-	.end:
-
-UPLC_Warp:	uplcheader vram_shield
-		uplc Art_Warp
 	.end:
 
 UPLC_Credits:	uplcheader $20

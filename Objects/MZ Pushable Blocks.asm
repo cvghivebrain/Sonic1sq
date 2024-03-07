@@ -131,14 +131,18 @@ PushB_Move:
 		bsr.w	SolidObject
 		tst.w	ost_x_vel(a0)
 		bmi.s	.moving_left				; branch if moving left
-		jsr	FindWallRightObj
+		getpos_right					; d0 = x pos of right; d1 = y pos
+		moveq	#1,d6
+		bsr.w	WallRightDist
 		bra.s	.hit_wall
 		
 	.moving_left:
-		jsr	FindWallLeftObj
+		getpos_left					; d0 = x pos of left; d1 = y pos
+		moveq	#1,d6
+		bsr.w	WallLeftDist
 		
 	.hit_wall:
-		tst.w	d1
+		tst.w	d5
 		bne.w	DespawnObject				; branch if not at wall
 		move.b	#id_PushB_Sink,ost_routine(a0)		; goto PushB_Sink next
 		clr.w	ost_x_vel(a0)				; stop moving
@@ -161,7 +165,7 @@ PushB_WaitJump:	; Routine $A
 		tst.w	ost_linked(a0)
 		bne.s	.geyser_found				; branch if geyser object exists
 		move.b	#id_PushB_Lava,ost_routine(a0)		; goto PushB_Lava next
-		bra.s	PushB_Lava
+		bra.w	PushB_Lava
 		
 	.geyser_found:
 		getlinked					; a1 = OST of geyser
@@ -198,7 +202,7 @@ PushB_Jump:	; Routine $C
 PushB_Pushing:
 		clr.b	ost_pblock_pushed(a0)
 		subq.w	#1,ost_pblock_time(a0)			; decrement timer
-		bpl.s	.exit					; branch if time remains
+		bpl.w	.exit					; branch if time remains
 		btst	#status_pushing_bit,ost_status(a1)
 		beq.s	.push_reset				; branch if Sonic isn't pushing anything
 		cmpi.b	#id_Walk,ost_anim(a1)
@@ -209,8 +213,10 @@ PushB_Pushing:
 		beq.s	.push_left				; branch if pushing left side
 		
 	.push_right:
-		jsr	FindWallLeftObj
-		tst.w	d1
+		getpos_left					; d0 = x pos of left; d1 = y pos
+		moveq	#1,d6
+		bsr.w	WallLeftDist
+		tst.w	d5
 		beq.s	.exit					; branch if block is against wall
 		subq.w	#1,ost_x_pos(a1)			; Sonic moves left
 	.push_right2:
@@ -220,8 +226,10 @@ PushB_Pushing:
 		bra.s	.push_reset
 		
 	.push_left:
-		jsr	FindWallRightObj
-		tst.w	d1
+		getpos_right					; d0 = x pos of right; d1 = y pos
+		moveq	#1,d6
+		bsr.w	WallRightDist
+		tst.w	d5
 		beq.s	.exit					; branch if block is against wall
 		addq.w	#1,ost_x_pos(a1)			; Sonic moves right
 	.push_left2:

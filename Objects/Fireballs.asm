@@ -149,8 +149,10 @@ FBall_Type_Hori:
 		tst.w	ost_x_vel(a0)
 		bpl.s	.right					; branch if fireball is moving right
 		
-		bsr.w	FindWallLeftObj
-		tst.w	d1					; distance to wall
+		getpos_left fire_width				; d0 = x pos of left; d1 = y pos
+		moveq	#1,d6
+		bsr.w	WallLeftDist
+		tst.w	d5					; distance to wall
 		bpl.s	.no_wall				; branch if > 0
 		move.b	#id_FBall_Collide,ost_routine(a0)	; goto FBall_Collide next
 		move.b	#id_frame_fire_horicollide,ost_frame(a0)
@@ -163,8 +165,10 @@ FBall_Type_Hori:
 		bra.w	DespawnQuick
 		
 	.right:
-		bsr.w	FindWallRightObj
-		tst.w	d1					; distance to wall
+		getpos_right fire_width				; d0 = x pos of right; d1 = y pos
+		moveq	#1,d6
+		bsr.w	WallRightDist
+		tst.w	d5					; distance to wall
 		bpl.s	.no_wall				; branch if > 0
 		move.b	#id_FBall_Collide,ost_routine(a0)	; goto FBall_Collide next
 		move.b	#id_frame_fire_horicollide,ost_frame(a0)

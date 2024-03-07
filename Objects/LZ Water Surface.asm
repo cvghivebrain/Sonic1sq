@@ -40,14 +40,14 @@ Surf_Action:	; Routine 2
 		move.w	(v_water_height_actual).w,ost_y_pos(a0)	; match y position to water height
 		lea	Ani_Surf(pc),a1
 		jsr	AnimateSprite
-		bra.w	DisplaySprite
+		jmp	DisplaySprite
 ; ===========================================================================
 		
 Surf_Pause:
 		move.b	#id_frame_surf_paused1,ost_frame(a0)
 		move.w	(v_camera_x_pos).w,ost_x_pos(a0)
 		move.w	(v_water_height_actual).w,ost_y_pos(a0)
-		bra.w	DisplaySprite
+		jmp	DisplaySprite
 		
 ; ---------------------------------------------------------------------------
 ; Animation script

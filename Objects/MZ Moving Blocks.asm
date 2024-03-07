@@ -117,8 +117,10 @@ MBlock_RightDrop:
 
 ; Type 3
 MBlock_Right_Now:
-		bsr.w	FindWallRightObj
-		tst.w	d1					; has the platform hit a wall?
+		getpos_right					; d0 = x pos of right; d1 = y pos
+		moveq	#1,d6
+		bsr.w	WallRightDist
+		tst.w	d5					; has the platform hit a wall?
 		bmi.s	.hit_wall				; if yes, branch
 		addq.w	#1,ost_x_pos(a0)			; move platform to the right
 		move.w	ost_x_pos(a0),ost_mblock_x_start(a0)
@@ -131,8 +133,10 @@ MBlock_Right_Now:
 
 ; Type 5
 MBlock_RightDrop_Now:
-		bsr.w	FindWallRightObj
-		tst.w	d1					; has the platform hit a wall?
+		getpos_right					; d0 = x pos of right; d1 = y pos
+		moveq	#1,d6
+		bsr.w	WallRightDist
+		tst.w	d5					; has the platform hit a wall?
 		bmi.s	.hit_wall				; if yes, branch
 		addq.w	#1,ost_x_pos(a0)			; move platform to the right
 		move.w	ost_x_pos(a0),ost_mblock_x_start(a0)

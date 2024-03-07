@@ -25,6 +25,7 @@ HBlock_Index:	index *,,2
 		ptr HBlock_Drop
 		ptr HBlock_Stop
 		
+hblock_width:	equ 16
 hblock_height:	equ 8
 ; ===========================================================================
 
@@ -33,7 +34,7 @@ HBlock_Main:	; Routine 0
 		move.l	#Map_MBlockLZ,ost_mappings(a0)
 		move.w	#tile_Kos_LzHalfBlock+tile_pal3,ost_tile(a0)
 		move.b	#16,ost_displaywidth(a0)
-		move.b	#16,ost_width(a0)
+		move.b	#hblock_width,ost_width(a0)
 		move.b	#hblock_height,ost_height(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#priority_4,ost_priority(a0)
@@ -67,16 +68,20 @@ HBlock_Move:	; Routine 6
 		beq.s	.noxflip				; branch if not xflipped
 		subq.w	#1,ost_x_pos(a0)			; move 1px left
 		bsr.w	SolidObject_TopOnly
-		bsr.w	FindWallLeftObj
-		tst.w	d1
+		getpos_left hblock_width			; d0 = x pos of left; d1 = y pos
+		moveq	#1,d6
+		bsr.w	WallLeftDist
+		tst.w	d5
 		bmi.s	.hit_wall				; branch if block hits wall
 		bra.w	DespawnQuick
 		
 	.noxflip:
 		addq.w	#1,ost_x_pos(a0)			; move 1px right
 		bsr.w	SolidObject_TopOnly
-		bsr.w	FindWallRightObj
-		tst.w	d1
+		getpos_right hblock_width			; d0 = x pos of right; d1 = y pos
+		moveq	#1,d6
+		bsr.w	WallRightDist
+		tst.w	d5
 		bmi.s	.hit_wall				; branch if block hits wall
 		bra.w	DespawnQuick
 		

@@ -402,14 +402,11 @@ startof_obj:	equ *
 		include "Objects\LZ Door Horizontal.asm"	; LabyrinthDoorH
 
 		include "Objects\Shield & Invincibility.asm"	; ShieldItem
-		;include "Objects\Unused Special Stage Warp.asm"	; VanishSonic
 		include "Objects\LZ Water Splash.asm"		; Splash
 		include "Objects\LZ Water Surface.asm"		; WaterSurface
 		include "Objects\SBZ Rotating Disc Junction.asm" ; Junction
 
 		include "Objects\_FindNearestTile, FindFloor & FindWall.asm"
-
-		include "Objects\_FindFloorObj, FindWallRightObj, FindCeilingObj & FindWallLeftObj.asm"
 
 		include "Objects\SBZ Running Disc.asm"		; RunningDisc
 		include "Objects\SBZ Conveyor Belt.asm"		; Conveyor
@@ -497,7 +494,6 @@ Art_Sonic:	incbin	"Graphics\Sonic.bin"			; Sonic
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - various
 ; ---------------------------------------------------------------------------
-		incfile Art_Warp,"Graphics\Unused - Special Stage Warp",bin,dma_safe
 		incfile Art_Goggles,"Graphics\Unused - Goggles",bin,dma_safe
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - special stage
@@ -916,7 +912,6 @@ Col_SBZ:	incbin	"Collision\SBZ.bin"			; SBZ index
 		include "Objects\Special Stage Up [Mappings].asm" ; Map_SS_Up
 		include "Objects\Special Stage Down [Mappings].asm" ; Map_SS_Down
 		include "Objects\Special Stage Chaos Emeralds [Mappings].asm" ; Map_SS_Chaos1, Map_SS_Chaos2 & Map_SS_Chaos3
-		include "Objects\Unused Special Stage Warp [Mappings].asm" ; Map_Vanish
 		include "Objects\Credits & Sonic Team Presents [Mappings].asm" ; Map_Cred
 
 ; ---------------------------------------------------------------------------
