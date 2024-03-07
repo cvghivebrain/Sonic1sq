@@ -83,10 +83,14 @@ PushB_Action:	; Routine 2
 		bsr.w	PushB_ChkStomp
 		beq.w	DespawnObject				; branch if block is on stomper
 		getpos_bottom pblock_height			; d0 = x pos; d1 = y pos of bottom
-		moveq	#0,d6
+		moveq	#1,d6
 		jsr	FloorDist
-		tst.w	d5
-		beq.w	DespawnObject				; branch if block is touching the floor
+		cmpi.w	#8,d5
+		bge.s	.drop					; branch if 8px above ground or more
+		add.w	d5,ost_y_pos(a0)			; align to floor
+		bra.w	DespawnObject
+		
+	.drop:
 		addq.b	#2,ost_routine(a0)			; goto PushB_Drop next
 		move.b	ost_pblock_pushed(a0),d0
 		ext.w	d0

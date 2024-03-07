@@ -341,12 +341,24 @@ getpos:		macro
 		endm
 
 getpos_y:	macro
-		if (strlen("\1")>0)&(~strcmp("\1","-"))
+		ifarg \1
 		moveq	#\1,d1
 		add.w	ost_y_pos(a0),d1
 		else
 		moveq	#0,d1
 		move.b	ost_height(a0),d1
+		add.w	ost_y_pos(a0),d1
+		endc
+		endm
+
+getpos_y_neg:	macro
+		ifarg \1
+		moveq	#-\1,d1
+		add.w	ost_y_pos(a0),d1
+		else
+		moveq	#0,d1
+		move.b	ost_height(a0),d1
+		neg.w	d1
 		add.w	ost_y_pos(a0),d1
 		endc
 		endm
@@ -358,16 +370,28 @@ getpos_bottom:	macro
 
 getpos_top:	macro
 		move.w	ost_x_pos(a0),d0
-		getpos_y -\1
+		getpos_y_neg \1
 		endm
 
 getpos_x:	macro
-		if (strlen("\1")>0)&(~strcmp("\1","-"))
+		ifarg \1
 		moveq	#\1,d0
 		add.w	ost_x_pos(a0),d0
 		else
 		moveq	#0,d0
 		move.b	ost_width(a0),d0
+		add.w	ost_x_pos(a0),d0
+		endc
+		endm
+
+getpos_x_neg:	macro
+		ifarg \1
+		moveq	#-\1,d0
+		add.w	ost_x_pos(a0),d0
+		else
+		moveq	#0,d0
+		move.b	ost_width(a0),d0
+		neg.w	d0
 		add.w	ost_x_pos(a0),d0
 		endc
 		endm
@@ -378,7 +402,7 @@ getpos_right:	macro
 		endm
 
 getpos_left:	macro
-		getpos_x -\1
+		getpos_x_neg \1
 		move.w	ost_y_pos(a0),d1
 		endm
 
@@ -388,7 +412,7 @@ getpos_bottomright:	macro
 		endm
 
 getpos_bottomleft:	macro
-		getpos_x -\1
+		getpos_x_neg \1
 		getpos_y \2
 		endm
 
@@ -414,11 +438,11 @@ getpos_bottomforward:	macro
 
 getpos_topright:	macro
 		getpos_x \1
-		getpos_y -\2
+		getpos_y_neg \2
 		endm
 
 getpos_topleft:	macro
-		getpos_x -\1
-		getpos_y -\2
+		getpos_x_neg \1
+		getpos_y_neg \2
 		endm
 		
