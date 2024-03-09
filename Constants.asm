@@ -378,12 +378,16 @@ ost_sonic_restart_time:	rs.w 1					; time until level restarts
 ost_sonic_lock_time:	rs.w 1					; time left for locked controls, e.g. after hitting a spring
 ost_sonic_angle_right:	rs.b 1					; angle of floor on Sonic's right side
 ost_sonic_angle_left:	rs.b 1					; angle of floor on Sonic's left side
-ost_sonic_sbz_disc:	rs.b 1					; 1 if Sonic is stuck to SBZ disc
 ost_sonic_anim_next:	rs.b 1					; next animation
 ost_sonic_jumpmask:	rs.b 1					; bitmask for buttons which trigger jump
 ost_sonic_jump:		rs.b 1					; 1 if Sonic is jumping
 ost_sonic_on_obj:	equ ost_parent				; OST index of object Sonic stands on (2 bytes)
 ost_sonic_impact:	equ ost_col_type			; copy of ost_y_vel when Sonic lands on a solid object (2 bytes)
+ost_sonic_flags:	equ ost_mode				; bitfield of various flags
+	flags_stuck_bit:	equ 0
+	flags_forceroll_bit:	equ 1
+	flags_stuck:		equ 1<<flags_stuck_bit		; Sonic is stuck to SBZ disc
+	flags_forceroll:	equ 1<<flags_forceroll_bit	; Sonic is forced to roll
 		rsobjend
 
 ; Object variables used by bosses

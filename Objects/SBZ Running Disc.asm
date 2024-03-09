@@ -111,7 +111,7 @@ Disc_Detect:
 .not_on_disc:
 		tst.b	ost_disc_init_flag(a0)			; was Sonic on the disc last frame?
 		beq.s	.skip_clear				; if not, branch
-		clr.b	ost_sonic_sbz_disc(a1)
+		bclr	#flags_stuck_bit,ost_sonic_flags(a1)
 		clr.b	ost_disc_init_flag(a0)
 
 	.skip_clear:
@@ -129,7 +129,7 @@ Disc_Inertia:
 	.jumping:
 		bclr	#status_pushing_bit,ost_status(a1)
 		move.b	#id_Run,ost_sonic_anim_next(a1)		; use running animation
-		move.b	#1,ost_sonic_sbz_disc(a1)		; keep Sonic stuck to disc until he jumps
+		bset	#flags_stuck_bit,ost_sonic_flags(a1)	; keep Sonic stuck to disc until he jumps
 
 	.skip_init:
 		move.w	ost_inertia(a1),d0

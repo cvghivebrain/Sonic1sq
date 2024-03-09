@@ -84,9 +84,10 @@ Sonic_Control:	; Routine 2
 		jsr	(ReactToItem).l				; run collisions with enemies or anything that uses ost_col_type
 
 	.no_collision:
-		;bsr.w	Sonic_LoopPlane				; move Sonic to correct plane when in a GHZ/SLZ loop
-		bsr.w	Sonic_LoadGfx				; load new gfx when Sonic's frame changes
-		rts
+		btst	#flags_forceroll_bit,ost_sonic_flags(a0)
+		beq.w	Sonic_LoadGfx				; branch if not forced to roll
+		bsr.w	Sonic_ChkRoll				; make Sonic roll
+		bra.w	Sonic_LoadGfx				; load new gfx when Sonic's frame changes
 
 ; ===========================================================================
 Sonic_Modes:	index *,,2
@@ -887,7 +888,7 @@ Sonic_Jump:
 		bclr	#status_pushing_bit,ost_status(a0)
 		addq.l	#4,sp
 		move.b	#1,ost_sonic_jump(a0)
-		clr.b	ost_sonic_sbz_disc(a0)
+		bclr	#flags_stuck_bit,ost_sonic_flags(a0)
 		play.w	1, jsr, sfx_Jump			; play jumping sound
 		move.b	(v_player1_height).w,ost_height(a0)
 		move.b	(v_player1_width).w,ost_width(a0)
@@ -1011,7 +1012,7 @@ Sonic_RollRepel:
 
 Sonic_SlopeRepel:
 		nop
-		tst.b	ost_sonic_sbz_disc(a0)			; is Sonic on a SBZ disc?
+		btst	#flags_stuck_bit,ost_sonic_flags(a0)	; is Sonic on a SBZ disc?
 		bne.s	.exit					; if yes, branch
 		tst.w	ost_sonic_lock_time(a0)			; are controls temporarily locked?
 		bne.s	.locked					; if yes, branch
@@ -1414,86 +1415,6 @@ Sonic_ResetLevel:
 		rts
 
 ; ---------------------------------------------------------------------------
-; Subroutine to	update Sonic's plane setting when in a loop (GHZ/SLZ)
-; ---------------------------------------------------------------------------
-
-Sonic_LoopPlane:
-		cmpi.b	#id_SLZ,(v_zone).w			; is level SLZ ?
-		beq.s	.isstarlight				; if yes, branch
-		tst.b	(v_zone).w				; is level GHZ ?
-		bne.w	.noloops				; if not, branch
-
-	.isstarlight:
-		move.w	ost_y_pos(a0),d0
-		lsr.w	#1,d0					; divide y pos by 2 (because layout alternates between level and bg lines)
-		andi.w	#$380,d0				; read only high byte of y pos (because each level tile is 256px tall)
-		move.b	ost_x_pos(a0),d1
-		andi.w	#$7F,d1					; read only low byte of x pos
-		add.w	d1,d0					; combine for position within layout
-		lea	(v_level_layout).w,a1
-		move.b	(a1,d0.w),d1				; d1 is	the 256x256 tile Sonic is currently on
-
-		cmp.b	(v_256x256_with_tunnel_1).w,d1		; is Sonic on a "roll tunnel" tile?
-		beq.w	Sonic_ChkRoll				; if yes, branch
-		cmp.b	(v_256x256_with_tunnel_2).w,d1
-		beq.w	Sonic_ChkRoll
-
-		cmp.b	(v_256x256_with_loop_1).w,d1		; is Sonic on a loop tile?
-		beq.s	.chkifleft				; if yes, branch
-		cmp.b	(v_256x256_with_loop_2).w,d1
-		beq.s	.chkifinair
-		bclr	#render_behind_bit,ost_render(a0)	; return Sonic to high plane
-		rts
-; ===========================================================================
-
-.chkifinair:
-		btst	#status_air_bit,ost_status(a0)		; is Sonic in the air?
-		beq.s	.chkifleft				; if not, branch
-
-		bclr	#render_behind_bit,ost_render(a0)	; return Sonic to high plane
-		rts
-; ===========================================================================
-
-.chkifleft:
-		move.w	ost_x_pos(a0),d2
-		cmpi.b	#$2C,d2
-		bcc.s	.chkifright				; branch if Sonic is > 44px from left edge of tile
-
-		bclr	#render_behind_bit,ost_render(a0)	; return Sonic to high plane
-		rts
-; ===========================================================================
-
-.chkifright:
-		cmpi.b	#$E0,d2
-		bcs.s	.chkangle1				; branch if Sonic is > 32px from right edge of tile
-
-		bset	#render_behind_bit,ost_render(a0)	; send Sonic to low plane
-		rts
-; ===========================================================================
-
-.chkangle1:
-		btst	#render_behind_bit,ost_render(a0)	; is Sonic on low plane?
-		bne.s	.chkangle2				; if yes, branch
-
-		move.b	ost_angle(a0),d1
-		beq.s	.done
-		cmpi.b	#$80,d1
-		bhi.s	.done					; branch if Sonic is on right surface of loop
-		bset	#render_behind_bit,ost_render(a0)	; send Sonic to low plane
-		rts
-; ===========================================================================
-
-.chkangle2:
-		move.b	ost_angle(a0),d1
-		cmpi.b	#$80,d1
-		bls.s	.done					; branch if Sonic is on left surface of loop
-		bclr	#render_behind_bit,ost_render(a0)	; send Sonic to high plane
-
-.noloops:
-.done:
-		rts
-
-; ---------------------------------------------------------------------------
 ; Subroutine to	animate	Sonic's sprites
 ; ---------------------------------------------------------------------------
 
@@ -1662,7 +1583,7 @@ Sonic_AnglePos:
 ; ===========================================================================
 
 .in_air:
-		tst.b	ost_sonic_sbz_disc(a0)
+		btst	#flags_stuck_bit,ost_sonic_flags(a0)
 		bne.s	.on_disc				; branch if Sonic is on a SBZ disc
 		bset	#status_air_bit,ost_status(a0)
 		bclr	#status_pushing_bit,ost_status(a0)
@@ -1764,7 +1685,7 @@ Sonic_WalkVertR:
 ; ===========================================================================
 
 .in_air:
-		tst.b	ost_sonic_sbz_disc(a0)
+		btst	#flags_stuck_bit,ost_sonic_flags(a0)
 		bne.s	.on_disc				; branch if Sonic is on a SBZ disc
 		bset	#status_air_bit,ost_status(a0)
 		bclr	#status_pushing_bit,ost_status(a0)
@@ -1829,7 +1750,7 @@ Sonic_WalkCeiling:
 ; ===========================================================================
 
 .in_air:
-		tst.b	ost_sonic_sbz_disc(a0)
+		btst	#flags_stuck_bit,ost_sonic_flags(a0)
 		bne.s	.on_disc				; branch if Sonic is on a SBZ disc
 		bset	#status_air_bit,ost_status(a0)
 		bclr	#status_pushing_bit,ost_status(a0)
@@ -1894,7 +1815,7 @@ Sonic_WalkVertL:
 ; ===========================================================================
 
 .in_air:
-		tst.b	ost_sonic_sbz_disc(a0)
+		btst	#flags_stuck_bit,ost_sonic_flags(a0)
 		bne.s	.on_disc				; branch if Sonic is on a SBZ disc
 		bset	#status_air_bit,ost_status(a0)
 		bclr	#status_pushing_bit,ost_status(a0)

@@ -208,10 +208,6 @@ f_boss_loaded:			rs.b 1				; flag set when a boss is loaded
 v_boss_flash:			rs.b 1				; number of times the boss should flash
 v_digit_buffer:			rs.b 6				; decimal digit buffer for score counter
 v_monitor_slots:		rs.w 8				; available monitor slots
-v_256x256_with_loop_1:		rs.l 1				; 256x256 level tile which contains a loop (GHZ/SLZ)
-v_256x256_with_loop_2:		equ __rs-3			; 256x256 level tile which contains a loop (GHZ/SLZ)
-v_256x256_with_tunnel_1:	equ __rs-2			; 256x256 level tile which contains a roll tunnel (GHZ)
-v_256x256_with_tunnel_2:	equ __rs-1			; 256x256 level tile which contains a roll tunnel (GHZ)
 v_levelani_0_frame:		rs.w 1				; level graphics animation 0 - current frame
 v_levelani_0_time:		rs.w 1				; level graphics animation 0 - time until next frame
 v_levelani_1_frame:		rs.w 1				; level graphics animation 1 - current frame
