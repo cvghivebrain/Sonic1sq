@@ -104,8 +104,8 @@ Sonic_Display:
 		move.w	ost_sonic_flash_time(a0),d0		; is Sonic flashing?
 		beq.s	.display				; if not, branch
 		subq.w	#1,ost_sonic_flash_time(a0)		; decrement timer
-		lsr.w	#3,d0					; are any of bits 0-2 set?
-		bcc.s	.chkinvincible				; if not, branch (Sonic is invisible every 8th frame)
+		andi.w	#3,d0					; are any of bits 0-2 set?
+		beq.s	.chkinvincible				; if not, branch (Sonic is invisible every 8th frame)
 
 	.display:
 		jsr	(DisplaySprite).l

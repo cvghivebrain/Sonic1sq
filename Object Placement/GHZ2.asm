@@ -231,9 +231,11 @@ ObjPos_GHZ2:
 		objpos $1BA0,$0310,Newtron,type_newt_blue+$20,rem
 		objpos $1BDC,$0372,Spikes,type_spike_3upwide+type_spike_still
 		objpos $1C08,$0200,EdgeWalls,type_edge_light
+		objpos $1C08,$0270,RollTunnel,0
 		objpos $1C90,$03F0,BuzzBomber,$00,rem
 		objpos $1CA0,$0470,CollapseLedge,type_ledge_left,rem
 		objpos $1CE0,$03E0,BuzzBomber,$00,rem
+		objpos $1CF8,$0370,RollTunnel,0,xflip
 		objpos $1D38,$0428,Springs,type_spring_red+type_spring_right,xflip
 		objpos $1DA0,$0407,Monitor,type_monitor_rings,rem
 		objpos $1DE4,$0403,Spikes,type_spike_3up+type_spike_still

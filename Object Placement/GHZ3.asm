@@ -68,6 +68,7 @@ ObjPos_GHZ3:
 		objpos $09D0,$0278,Scenery,type_scen_stump
 		objpos $0A08,$02C0,EdgeWalls,type_edge_light
 		objpos $0A08,$02F0,EdgeWalls,type_edge_light
+		objpos $0A08,$0370,RollTunnel,0
 		objpos $0B00,$026B,Lamppost,$01,rem
 		objpos $0B24,$0220,Monitor,type_monitor_shoes,rem
 		objpos $0B38,$0272,Rings,$10,rem
@@ -78,6 +79,7 @@ ObjPos_GHZ3:
 		objpos $0BB0,$02A0,Rings,$10,rem
 		objpos $0BD0,$01C8,BasicPlatform,type_plat_sideways
 		objpos $0BDA,$02AD,Rings,$10,rem
+		objpos $0BF8,$0570,RollTunnel,0,xflip
 		objpos $0C09,$02B3,Rings,$10,rem
 		objpos $0C10,$0102,Monitor,type_monitor_rings,rem
 		objpos $0C38,$0570,Rings,$16,rem
@@ -103,6 +105,7 @@ ObjPos_GHZ3:
 		objpos $0E08,$01B0,EdgeWalls,type_edge_light
 		objpos $0E08,$01F0,EdgeWalls,type_edge_light
 		objpos $0E08,$0230,EdgeWalls,type_edge_light
+		objpos $0E08,$0270,RollTunnel,0
 		objpos $0E20,$0520,Crabmeat,$00,rem
 		objpos $0E84,$0040,Monitor,type_monitor_rings,rem
 		objpos $0EA0,$04C0,Newtron,type_newt_blue+$20,rem
@@ -113,6 +116,7 @@ ObjPos_GHZ3:
 		objpos $0EF8,$0160,EdgeWalls,type_edge_dark
 		objpos $0EF8,$01A0,EdgeWalls,type_edge_dark
 		objpos $0EF8,$01E0,EdgeWalls,type_edge_dark
+		objpos $0EF8,$0370,RollTunnel,0,xflip
 		objpos $0F48,$0490,Rings,$42,rem
 		objpos $0F48,$0505,PurpleRock,$00
 		objpos $0F60,$04B0,Newtron,type_newt_blue+$20,rem

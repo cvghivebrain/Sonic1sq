@@ -120,6 +120,7 @@ ObjPos_GHZ1:
 		objpos $17E0,$0174,Rings,$10,rem
 		objpos $1808,$01C0,EdgeWalls,type_edge_light
 		objpos $1808,$01F0,EdgeWalls,type_edge_light
+		objpos $1808,$0270,RollTunnel,0
 		objpos $180C,$0174,Rings,$10,rem
 		objpos $1820,$0074,Rings,$16,rem
 		objpos $183C,$0176,Rings,$10,rem
@@ -128,6 +129,7 @@ ObjPos_GHZ1:
 		objpos $189C,$017A,Rings,$10,rem
 		objpos $18C8,$0074,Rings,$16,rem
 		objpos $18CC,$0174,Rings,$10,rem
+		objpos $18F8,$0370,RollTunnel,0,xflip
 		objpos $18FC,$0174,Rings,$10,rem
 		objpos $1900,$0140,Newtron,type_newt_blue+$20,xflip,rem
 		objpos $192C,$0175,Rings,$10,rem
@@ -140,10 +142,14 @@ ObjPos_GHZ1:
 		objpos $198C,$017B,Rings,$10,rem
 		objpos $19BC,$0176,Rings,$10,rem
 		objpos $19EC,$0174,Rings,$10,rem
+		objpos $1A08,$0170,RollTunnel,0
+		objpos $1A08,$0370,RollTunnel,0
 		objpos $1AF8,$00C0,EdgeWalls,type_edge_dark
 		objpos $1AF8,$00E0,EdgeWalls,type_edge_dark
+		objpos $1AF8,$0270,RollTunnel,0,xflip
 		objpos $1AF8,$02B0,EdgeWalls,type_edge_dark
 		objpos $1AF8,$02F0,EdgeWalls,type_edge_dark
+		objpos $1AF8,$0470,RollTunnel,0,xflip
 		objpos $1B60,$0088,BasicPlatform,type_plat_falls
 		objpos $1B70,$0288,BasicPlatform,type_plat_falls
 		objpos $1BA0,$00C8,BasicPlatform,type_plat_falls

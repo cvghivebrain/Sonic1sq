@@ -225,7 +225,7 @@ startof_obj:	equ *
 		include "Objects\MZ, SLZ & SBZ Collapsing Floors.asm" ; CollapseFloor
 		incfile	Ledge_SlopeData,"Collision\GHZ Collapsing Ledge Heightmap",bin
 		incfile	Ledge_SlopeData_Flip,"Collision\GHZ Collapsing Ledge Heightmap (Flipped)",bin
-
+		include "Objects\GHZ Roll Tunnel.asm"		; RollTunnel
 		include "Objects\GHZ Bridge Stump & SLZ Fireball Launcher.asm" ; Scenery
 
 		include "Objects\Unused Switch.asm"		; MagicSwitch
