@@ -277,8 +277,8 @@ Sonic_Move:
 		move.w	(v_sonic_max_speed).w,d6
 		move.w	(v_sonic_acceleration).w,d5
 		move.w	(v_sonic_deceleration).w,d4
-		tst.b	(f_jump_only).w
-		bne.w	Sonic_InertiaLR
+		btst	#flags_jumponly_bit,ost_sonic_flags(a0)
+		bne.w	Sonic_InertiaLR				; branch if d-pad is disabled
 		tst.w	ost_sonic_lock_time(a0)			; are controls locked?
 		bne.w	Sonic_ResetScr				; if yes, branch
 		btst	#bitL,(v_joypad_hold).w			; is left being pressed?
@@ -569,7 +569,7 @@ Sonic_RollSpeed:
 		asr.w	#1,d5
 		move.w	(v_sonic_deceleration).w,d4
 		asr.w	#2,d4
-		tst.b	(f_jump_only).w				; are controls except jump locked?
+		btst	#flags_jumponly_bit,ost_sonic_flags(a0)	; are controls except jump locked?
 		bne.w	.update_speed				; if yes, branch
 		tst.w	ost_sonic_lock_time(a0)			; are controls temporarily locked?
 		bne.s	.notright				; is yes, branch
@@ -814,7 +814,7 @@ Sonic_LevelBound:
 ; ---------------------------------------------------------------------------
 
 Sonic_Roll:
-		tst.b	(f_jump_only).w				; are controls except jump locked?
+		btst	#flags_jumponly_bit,ost_sonic_flags(a0)	; are controls except jump locked?
 		bne.s	.noroll					; if yes, branch
 		move.w	ost_inertia(a0),d0
 		bpl.s	.inertia_pos

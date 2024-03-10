@@ -386,8 +386,10 @@ ost_sonic_impact:	equ ost_col_type			; copy of ost_y_vel when Sonic lands on a s
 ost_sonic_flags:	equ ost_mode				; bitfield of various flags
 	flags_stuck_bit:	equ 0
 	flags_forceroll_bit:	equ 1
+	flags_jumponly_bit:	equ 2
 	flags_stuck:		equ 1<<flags_stuck_bit		; Sonic is stuck to SBZ disc
 	flags_forceroll:	equ 1<<flags_forceroll_bit	; Sonic is forced to roll
+	flags_jumponly:		equ 1<<flags_jumponly_bit	; disable d-pad controls (jump only)
 		rsobjend
 
 ; Object variables used by bosses

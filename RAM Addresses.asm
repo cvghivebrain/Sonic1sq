@@ -224,9 +224,8 @@ f_convey_reverse:		rs.b 1				; flag set to reverse conveyor belts in LZ/SBZ
 f_water_tunnel_now:		rs.b 1				; flag set when Sonic is in a LZ water tunnel
 v_lock_multi:			rs.b 1				; +1 = lock controls, lock Sonic's position & animation; +$80 = no collision with objects
 f_water_tunnel_disable:		rs.b 1				; flag set to disable LZ water tunnels
-f_jump_only:			rs.b 1				; flag set to lock controls except jumping
 v_sbz3pillar_status:		rs.b 1				; 0 = default; 1 = moving; 2 = in final position
-v_yarddoor_status:		equ v_sbz3pillar_status
+v_syzdoor_status:		equ v_sbz3pillar_status
 f_lock_controls:		rs.b 1				; flag set to lock player controls
 f_giantring_collected:		rs.b 1				; flag set when Sonic collects a giant ring
 v_enemy_combo:			rs.w 1				; number of enemies/blocks broken in a row, times 2

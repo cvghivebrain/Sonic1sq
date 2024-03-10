@@ -69,7 +69,7 @@ YDoor_WaitBtn:	; Routine 2
 		bmi.s	.chk_stopped				; branch if bit 7 of subtype is set
 		cmpi.b	#id_YDoor_FarRight,ost_ydoor_routine(a0)
 		bne.s	.allow_respawn				; branch if not the block that moves far right
-		tst.b	(v_yarddoor_status).w
+		tst.b	(v_syzdoor_status).w
 		bne.w	DeleteObject				; branch if block is already moving/has moved
 		
 	.allow_respawn:
@@ -85,7 +85,7 @@ YDoor_WaitBtn:	; Routine 2
 		bra.w	DespawnQuick
 		
 	.chk_stopped:
-		cmpi.b	#2,(v_yarddoor_status).w
+		cmpi.b	#2,(v_syzdoor_status).w
 		beq.w	YDoor_StopNow				; branch if block is in final position
 		bra.w	DeleteObject
 ; ===========================================================================
@@ -135,7 +135,7 @@ YDoor_Right:	; Routine $A
 ; ===========================================================================
 
 YDoor_FarRight:	; Routine $C
-		move.b	#1,(v_yarddoor_status).w
+		move.b	#1,(v_syzdoor_status).w
 		shortcut
 		move.w	ost_x_pos(a0),ost_x_prev(a0)
 		addq.w	#1,ost_x_pos(a0)			; move right 1px
@@ -146,7 +146,7 @@ YDoor_FarRight:	; Routine $C
 		bra.w	DisplaySprite				; don't despawn until it stops
 		
 	.stop_now:
-		move.b	#2,(v_yarddoor_status).w
+		move.b	#2,(v_syzdoor_status).w
 		shortcut					; always return to this location
 		bsr.w	SolidObject
 		bra.w	DespawnQuick

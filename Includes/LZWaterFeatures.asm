@@ -414,10 +414,10 @@ LZWaterSlides:
 		beq.s	LZSlide_Move				; branch when match found
 
 	.sonic_in_air:
-		tst.b	(f_jump_only).w
+		btst	#flags_jumponly_bit,ost_sonic_flags(a1)
 		beq.s	.not_locked				; branch if controls aren't locked
 		move.w	#5,ost_sonic_lock_time(a1)		; lock controls for 5 more frames
-		clr.b	(f_jump_only).w				; unlock controls
+		bclr	#flags_jumponly_bit,ost_sonic_flags(a1)	; unlock controls
 
 	.not_locked:
 		rts
@@ -438,7 +438,7 @@ LZSlide_Move:
 	.face_right:
 		clr.b	ost_inertia+1(a1)			; round inertia down to nearest $100
 		move.b	#id_WaterSlide,ost_anim(a1)		; use Sonic's "sliding" animation
-		move.b	#1,(f_jump_only).w			; lock controls (except jumping)
+		bset	#flags_jumponly_bit,ost_sonic_flags(a1)	; lock controls (except jumping)
 		move.b	(v_vblank_counter_byte).w,d0		; get byte that increments every frame
 		andi.b	#$1F,d0					; read only bits 0-4
 		bne.s	.skip_sound				; branch if any are set
