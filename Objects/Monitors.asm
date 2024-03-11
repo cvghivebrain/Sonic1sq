@@ -68,7 +68,7 @@ Mon_Main:	; Routine 0
 Mon_Solid:	; Routine 2
 		bsr.w	Mon_Solid_Detect
 		cmpi.b	#solid_bottom,d1
-		beq.s	.drop					; branch if hit from bottom
+		beq.s	.bottom					; branch if hit from bottom
 		cmpi.b	#4,ost_mode(a0)
 		beq.s	.break					; branch if monitor was jumped on
 		andi.b	#solid_left+solid_right,d1
@@ -85,7 +85,13 @@ Mon_Solid:	; Routine 2
 		addq.b	#2,ost_routine(a0)			; goto Mon_Break next
 		bra.w	Mon_Animate
 
-	.drop:
+	.bottom:
+		getpos_bottom monitor_height			; d0 = x pos; d1 = y pos of bottom
+		moveq	#1,d6
+		jsr	FloorDist
+		cmpi.w	#4,d5
+		blt.s	.break					; branch if monitor is on the ground
+		neg.w	ost_y_vel(a1)				; reverse Sonic's y speed
 		move.w	#-$180,ost_y_vel(a0)			; move monitor upwards
 		move.b	#id_Mon_Drop,ost_routine(a0)		; goto Mon_Drop next
 		bra.w	Mon_Animate
@@ -188,7 +194,6 @@ Mon_Solid_Detect:
 		bmi.s	.above					; branch if Sonic is above
 
 		sub.w	d3,ost_y_pos(a1)			; snap to hitbox
-		neg.w	ost_y_vel(a1)				; stop Sonic moving up
 		moveq	#solid_bottom,d1			; set collision flag to bottom
 		rts
 

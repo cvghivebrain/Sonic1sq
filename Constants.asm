@@ -214,7 +214,7 @@ sonic_deceleration_water:	equ sonic_deceleration/2
 sonic_max_speed_shoes:		equ sonic_max_speed*2		; with speed shoes
 sonic_acceleration_shoes:	equ sonic_acceleration*2
 sonic_deceleration_shoes:	equ sonic_deceleration
-sonic_min_speed_roll:		equ $80				; speed required to trigger roll
+sonic_min_speed_roll:		equ $100			; speed required to trigger roll
 sonic_min_speed_slope:		equ $280			; speed required to overcome gravity on steep slopes
 sonic_jump_power:		equ $680			; initial jump power
 sonic_jump_power_water:		equ $380			; initial jump power underwater

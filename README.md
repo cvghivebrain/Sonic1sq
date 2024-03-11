@@ -34,6 +34,7 @@ _Sonic 1-squared_ is an enhanced version of the original _Sonic the Hedgehog_ ga
 * `ost_status` now includes `status_pointy_bit` for spikes and similar objects. It causes a different sound to play when Sonic is harmed by the object.
 * `ost_subsprite` contains the address of a subsprite table. Subsprites are additional sprite pieces that are not part of the object's mappings. Call `FindFreeSub` to assign a subsprite table to the current object, and `getsubsprite` to set that table as `a2`. Subsprites use the same format as sprite mappings, except the VRAM setting is absolute instead of relative to `ost_tile`.
 * Monitor icons load only as needed, allowing for up to 256 unique monitor types (with a maximum of 8 loaded at any one time).
+* Monitors can be broken from below if they are already on the ground.
 * Each title card has its own PLC, so only letters that are used need to be loaded. Title cards are automatically centered by the `autocard` macro. Title card mappings are also automated, and can use sprite mappings more efficiently by joining two letters together as a single sprite.
 * GHZ/SLZ loops use an object instead of being hard-coded. The object reads Sonic's position within the loop and updates the level layout accordingly.
 * Debug mode has been rewritten with more features, including info overlays for Sonic and the nearest object (similar to those in the [Sonic Physics Guide](http://info.sonicretro.org/Sonic_Physics_Guide)). The controls are as follows:
@@ -45,9 +46,14 @@ _Sonic 1-squared_ is an enhanced version of the original _Sonic the Hedgehog_ ga
   * Z - Toggle between displaying actual width/height and hitbox width/height.
   * Mode - Toggle hide all overlays. Overlays use approximately 5% of available CPU cycles, so hiding them provides a more accurate reading of CPU usage.
 
+## Sonic
+* Sonic ducks when down is pressed if he's moving slowly.
+
 ## Bugfixes
 * Spikes no longer kill Sonic immediately after losing rings. Add $80 to the subtype to restore the original lethal behaviour.
-* Mirrored sprites are no longer misaligned by 1 pixel. This was most obvious when pushing a wall to the left.
+* Mirrored sprites are no longer misaligned by 1 pixel. This was most obvious when pushing a wall to the left. (TODO)
+* Scrolling to the left is limited to 16 pixels per frame, as it previously was only when scrolling right.
+* Sonic is no longer killed by the screen not scrolling down fast enough. This was a problem on the S-tunnels in Green Hill Zone.
 
 # Credits
 * [flamewing](https://github.com/flamewing) for [mdcomp](https://github.com/flamewing/mdcomp).

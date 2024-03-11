@@ -819,20 +819,17 @@ Sonic_LevelBound:
 ; ---------------------------------------------------------------------------
 
 Sonic_Roll:
-		btst	#flags_jumponly_bit,ost_sonic_flags(a0)	; are controls except jump locked?
-		bne.s	.noroll					; if yes, branch
-		move.w	ost_inertia(a0),d0
-		bpl.s	.inertia_pos
-		neg.w	d0					; make inertia positive
-
-	.inertia_pos:
-		cmpi.w	#sonic_min_speed_roll,d0		; is Sonic moving at $80 speed or faster?
-		bcs.s	.noroll					; if not, branch
+		btst	#flags_jumponly_bit,ost_sonic_flags(a0)
+		bne.s	.noroll					; branch if controls except jump are locked
 		move.b	(v_joypad_hold).w,d0
-		andi.b	#btnL+btnR,d0				; is left/right	being pressed?
-		bne.s	.noroll					; if yes, branch
-		btst	#bitDn,(v_joypad_hold).w		; is down being pressed?
-		bne.s	Sonic_ChkRoll				; if yes, branch
+		btst	#bitDn,d0
+		beq.s	.noroll					; branch if down isn't pressed
+		andi.b	#btnL+btnR,d0
+		bne.s	.noroll					; branch if left/right is pressed
+		mvabs.w	ost_inertia(a0),d0			; get inertia (absolute +ve)
+		cmpi.w	#sonic_min_speed_roll,d0
+		bhi.s	Sonic_ChkRoll				; branch if Sonic is moving at roll threshold speed
+		move.b	#id_Duck,ost_anim(a0)			; use ducking animation
 
 	.noroll:
 		rts
