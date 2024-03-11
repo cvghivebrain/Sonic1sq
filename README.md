@@ -37,6 +37,7 @@ _Sonic 1-squared_ is an enhanced version of the original _Sonic the Hedgehog_ ga
 * Monitors can be broken from below if they are already on the ground.
 * Each title card has its own PLC, so only letters that are used need to be loaded. Title cards are automatically centered by the `autocard` macro. Title card mappings are also automated, and can use sprite mappings more efficiently by joining two letters together as a single sprite.
 * GHZ/SLZ loops use an object instead of being hard-coded. The object reads Sonic's position within the loop and updates the level layout accordingly.
+* Pushable blocks can be moved by standing on top of them and pushing against a wall. The player can use this to retrieve a block that's stuck next to a wall.
 * Debug mode has been rewritten with more features, including info overlays for Sonic and the nearest object (similar to those in the [Sonic Physics Guide](http://info.sonicretro.org/Sonic_Physics_Guide)). The controls are as follows:
   * B - Toggle between Sonic and object.
   * C (as object) - Place an object.
@@ -51,7 +52,7 @@ _Sonic 1-squared_ is an enhanced version of the original _Sonic the Hedgehog_ ga
 
 ## Bugfixes
 * Spikes no longer kill Sonic immediately after losing rings. Add $80 to the subtype to restore the original lethal behaviour.
-* Mirrored sprites are no longer misaligned by 1 pixel. This was most obvious when pushing a wall to the left. (TODO)
+* Sonic's mirrored sprites are no longer misaligned by 1 pixel. This was most obvious when pushing a wall to the left.
 * Scrolling to the left is limited to 16 pixels per frame, as it previously was only when scrolling right.
 * Sonic is no longer killed by the screen not scrolling down fast enough. This was a problem on the S-tunnels in Green Hill Zone.
 

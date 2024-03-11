@@ -192,6 +192,11 @@ BuildSpr_FlipX:
 		neg.w	d0					; negate it
 		add.b	d4,d4
 		sub.w	BuildSpr_FlipX_Shift(pc,d4.w),d0	; calculate flipped position by size
+		btst	#render_xshift_bit,ost_render(a0)
+		beq.s	.noshift				; branch if xflip shift flag is clear
+		addq.w	#1,d0
+		
+	.noshift:
 		add.w	d3,d0
 		move.w	d0,d4
 		subi.w	#screen_left-32,d4
@@ -288,6 +293,11 @@ BuildSpr_FlipXY:
 		move.w	(a1)+,d0				; calculate flipped x
 		neg.w	d0
 		sub.w	BuildSpr_FlipX_Shift(pc,d4.w),d0	; calculate flipped position by size
+		btst	#render_xshift_bit,ost_render(a0)
+		beq.s	.noshift				; branch if xflip shift flag is clear
+		addq.w	#1,d0
+		
+	.noshift:
 		add.w	d3,d0
 		move.w	d0,d4
 		subi.w	#screen_left-32,d4
