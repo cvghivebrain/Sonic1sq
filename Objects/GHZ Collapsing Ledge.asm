@@ -40,7 +40,6 @@ Ledge_Main:	; Routine 0
 		tst.b	ost_subtype(a0)
 		beq.s	Ledge_Solid
 		move.l	#Ledge_SlopeData_Flip,ost_ledge_heightmap(a0) ; heightmap xflipped
-		subq.w	#1,ost_x_pos(a0)
 
 Ledge_Solid:	; Routine 2
 		moveq	#1,d6					; 1 byte in heightmap = 2px

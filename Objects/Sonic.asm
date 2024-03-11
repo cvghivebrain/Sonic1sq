@@ -781,8 +781,13 @@ Sonic_LevelBound:
 		bls.s	.sides					; if yes, branch
 
 	.chkbottom:
-		move.w	(v_boundary_bottom).w,d0
-		addi.w	#224,d0
+		move.w	(v_boundary_bottom_next).w,d0
+                cmp.w   (v_boundary_bottom).w,d0
+                bcc.s   .use_next_boundary		        ; branch if screen is moving down to next boundary
+                move.w  (v_boundary_bottom).w,d0		; use actual boundary instead
+		
+	.use_next_boundary:
+		addi.w	#screen_height,d0
 		cmp.w	ost_y_pos(a0),d0			; has Sonic touched the bottom boundary?
 		blt.s	.bottom					; if yes, branch
 		rts

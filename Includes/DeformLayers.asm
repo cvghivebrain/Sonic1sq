@@ -661,9 +661,9 @@ UCX_Camera:
 		move.w	(v_ost_player+ost_x_pos).w,d0
 		sub.w	(v_camera_x_pos).w,d0			; d0 = Sonic's distance from left edge of screen
 		subi.w	#144,d0					; is distance less than 144px?
-		bcs.s	UCX_BehindMid				; if yes, branch
+		bmi.s	UCX_BehindMid				; if yes, branch
 		subi.w	#16,d0					; is distance more than 160px?
-		bcc.s	UCX_AheadOfMid				; if yes, branch
+		bpl.s	UCX_AheadOfMid				; if yes, branch
 		clr.w	(v_camera_x_diff).w			; no camera movement
 		rts
 ; ===========================================================================
@@ -671,7 +671,7 @@ UCX_Camera:
 UCX_AheadOfMid:
 		cmpi.w	#16,d0					; is Sonic within 16px of middle area?
 		bcs.s	.within_16				; if yes, branch
-		move.w	#16,d0					; set to 16 if greater
+		moveq	#16,d0					; set to 16 if greater
 
 	.within_16:
 		add.w	(v_camera_x_pos).w,d0			; d0 = new camera x pos
@@ -689,27 +689,16 @@ UCX_SetScreen:
 ; ===========================================================================
 
 UCX_BehindMid:
+		cmpi.w	#-16,d0					; is Sonic within 16px of middle area?
+		bcc.s	.within_16				; if yes, branch
+		moveq	#-16,d0					; set to 16 if greater
+
+	.within_16:
 		add.w	(v_camera_x_pos).w,d0			; d0 = new camera x pos
 		cmp.w	(v_boundary_left).w,d0			; is camera within boundary?
 		bgt.s	UCX_SetScreen				; if yes, branch
 		move.w	(v_boundary_left).w,d0			; stop camera moving outside boundary
 		bra.s	UCX_SetScreen
-
-; ---------------------------------------------------------------------------
-; Unused subroutine to scroll the level horizontally at a fixed rate
-
-;	uses d0
-; ---------------------------------------------------------------------------
-
-AutoScroll:
-		tst.w	d0
-		bpl.s	.forwards
-		move.w	#-2,d0
-		bra.s	UCX_BehindMid
-
-	.forwards:
-		moveq	#2,d0
-		bra.s	UCX_AheadOfMid
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	update camera and redraw flags as Sonic moves vertically
