@@ -272,16 +272,12 @@ startof_obj:	equ *
 		incfile	LGrass_Coll_Wide,"Collision\MZ Grass Platforms Heightmap (Wide)",bin
 		incfile LGrass_Coll_Sloped,"Collision\MZ Grass Platforms Heightmap (Sloped)",bin
 		include "Objects\MZ Burning Grass.asm"		; GrassFire
-
 		include "Objects\MZ Green Glass Blocks.asm"	; GlassBlock
-
 		include "Objects\MZ Chain Stompers.asm"		; ChainStomp
 		include "Objects\MZ Unused Sideways Stomper.asm" ; SideStomp
-
-		include "Objects\Button.asm"			; Button
-
 		include "Objects\MZ Pushable Blocks.asm"	; PushBlock
 
+		include "Objects\Button.asm"			; Button
 		include "Objects\Spikes.asm"			; Spikes
 
 		include "Objects\GHZ Purple Rock.asm"		; PurpleRock

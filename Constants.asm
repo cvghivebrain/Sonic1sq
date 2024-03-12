@@ -334,7 +334,7 @@ ost_render:		rs.b 1					; bitfield for x/y flip, display mode
 	render_bg:		equ 1<<render_bg_bit		; align to background
 	render_useheight:	equ 1<<render_useheight_bit	; use ost_height to decide if object is on screen, otherwise height is assumed to be $20 (used for large objects)
 	render_rawmap:		equ 1<<render_rawmap_bit	; sprites use raw mappings - i.e. object consists of a single sprite instead of multipart sprite mappings (e.g. broken block fragments)
-	render_xshift:		equ 1<<render_xshift_bit	; object is shifted by 1px when xflipped
+	render_xshift:		equ 1<<render_xshift_bit	; object sprites are shifted by 1px when xflipped
 	render_onscreen:	equ 1<<render_onscreen_bit	; object is on screen
 ost_height:		rs.b 1					; height/2
 ost_width:		rs.b 1					; width/2
