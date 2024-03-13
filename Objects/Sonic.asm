@@ -302,9 +302,7 @@ Sonic_Move:
 		btst	#status_platform_bit,ost_status(a0)	; is Sonic on a platform?
 		beq.s	Sonic_Balance				; if not, branch
 
-		moveq	#-1,d0
-		move.w	ost_sonic_on_obj(a0),d0			; get OST of platform or object
-		movea.l	d0,a1					; a1 = actual address of OST of object being stood on
+		movea.w	ost_sonic_on_obj(a0),a1			; get OST of platform or object
 		tst.b	ost_status(a1)				; has object been broken?
 		bmi.s	Sonic_LookUp				; if yes, branch
 
@@ -333,7 +331,8 @@ Sonic_Balance:
 
 	Sonic_BalRight:
 		bclr	#status_xflip_bit,ost_status(a0)
-		bra.s	Sonic_DoBal
+		move.b	#id_Balance,ost_anim(a0)		; use "balancing" animation
+		bra.s	Sonic_ResetScr
 ; ===========================================================================
 
 	Sonic_BalLeftChk:
@@ -342,8 +341,6 @@ Sonic_Balance:
 
 	Sonic_BalLeft:
 		bset	#status_xflip_bit,ost_status(a0)
-
-	Sonic_DoBal:
 		move.b	#id_Balance,ost_anim(a0)		; use "balancing" animation
 		bra.s	Sonic_ResetScr
 ; ===========================================================================
@@ -1076,15 +1073,20 @@ Sonic_JumpAngle:
 Sonic_JumpCollision:
 		move.w	ost_x_vel(a0),d1
 		move.w	ost_y_vel(a0),d2
-		jsr	(CalcAngle).w				; convert x/y speed to angle of direction
-		subi.b	#$20,d0
-		andi.b	#$C0,d0
-		cmpi.b	#$40,d0
-		beq.w	Sonic_JumpCollision_Left		; branch if Sonic is moving left +-45 degrees
-		cmpi.b	#$80,d0
-		beq.w	Sonic_JumpCollision_Up			; branch if Sonic is moving up +-45 degrees
-		cmpi.b	#$C0,d0
-		beq.w	Sonic_JumpCollision_Right		; branch if Sonic is moving right +-45 degrees
+                bpl.s	.down				; branch if moving down
+                cmp.w	d1,d2
+                bgt.w	Sonic_JumpCollision_Left	; branch if moving left
+                neg.w	d1
+                cmp.w	d1,d2
+                bge.w	Sonic_JumpCollision_Right	; branch if moving right
+                bra.w	Sonic_JumpCollision_Up		; moving upwards
+ 
+	.down:
+                cmp.w	d1,d2
+                blt.w	Sonic_JumpCollision_Right	; branch if moving right
+                neg.w	d1
+                cmp.w	d1,d2
+                ble.w	Sonic_JumpCollision_Left	; branch if moving left
 
 		; Sonic is moving down +-45 degrees
 		bsr.w	Sonic_FindWallLeft_Quick_UsePos
