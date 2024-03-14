@@ -303,7 +303,8 @@ ost_x_vel:		rs.l 1					; x-axis velocity
 ost_y_vel:		equ ost_x_vel+2				; y-axis velocity
 ost_inertia:		rs.w 1					; potential speed
 ost_x_prev:		equ ost_inertia				; previous x position
-ost_angle:		rs.w 1					; angle of floor or rotation - 0 = flat; $40 = vertical left; $80 = ceiling; $C0 = vertical right
+ost_angle:		rs.w 1					; angle of floor or rotation (some objects use 2 bytes for higher precision)
+ost_anglesnap:		equ ost_angle+1				; angle snapped to nearest 90 degrees - 0 = flat; $40 = vertical left; $80 = ceiling; $C0 = vertical right
 ost_frame_hi:		rs.w 1					; current frame displayed
 ost_frame:		equ ost_frame_hi+1
 ost_parent:		rs.w 1					; address of OST of parent object

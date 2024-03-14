@@ -101,7 +101,8 @@ FloorDist:
 ;	a4 = address of collision index for this level
 
 ; output:
-;	d3.b = angle
+;	d2.b = angle
+;	d3.b = angle snapped to nearest 90 degrees
 
 ;	uses d2.w, d3.l, a4
 
@@ -133,13 +134,15 @@ FloorAngle:
 		subi.b	#$40,d3					; yflip angle
 
 	.exit:
-		btst	#0,d3
+		move.w	d3,d2
+		addi.b	#$20,d3
+		andi.b	#$C0,d3					; snap to 90 degree angle
+		btst	#0,d2
 		bne.s	.snap					; branch if snap bit is set
 		rts
 		
 	.snap:
-		addi.b	#$20,d3
-		andi.b	#$C0,d3					; snap to 90 degree angle
+		move.b	d3,d2
 		rts
 
 ; ---------------------------------------------------------------------------

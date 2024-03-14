@@ -68,9 +68,10 @@ Sol_Above:
 		move.b	d4,ost_solid_x_pos(a0)			; save x pos of Sonic on object
 		add.w	d3,ost_y_pos(a1)			; snap to hitbox
 		move.w	ost_y_vel(a1),ost_sonic_impact(a1)	; copy Sonic's y speed
-		move.w	#0,ost_y_vel(a1)			; stop Sonic falling
+		moveq	#0,d1
+		move.w	d1,ost_y_vel(a1)			; stop Sonic falling
+		move.w	d1,ost_angle(a1)			; clear Sonic's angle
 		move.w	ost_x_vel(a1),ost_inertia(a1)
-		move.b	#0,ost_angle(a1)			; clear Sonic's angle
 		move.b	#2,ost_mode(a0)				; set flag - Sonic is on the object
 		cmpi.b	#id_Roll,ost_anim(a1)
 		bne.s	.not_rolling				; branch if Sonic wasn't rolling/jumping

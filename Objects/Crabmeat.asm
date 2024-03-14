@@ -91,11 +91,11 @@ Crab_Move:	; Routine 2
 		move.b	ost_status(a0),d1
 		andi.b	#$FC,d0					; assume floor is flat
 		jsr	FloorAngle
-		addq.b	#6,d3
-		cmpi.b	#12,d3
+		addq.b	#6,d2
+		cmpi.b	#12,d2
 		bcs.s	.flat					; branch if floor is flat(ish)
 		addq.b	#1,d0					; floor isn't flat
-		tst.b	d3
+		tst.b	d2
 		bmi.s	.upright				; branch if floor slopes up-right
 		andi.b	#status_xflip,d1
 		bne.s	.flat

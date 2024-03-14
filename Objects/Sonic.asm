@@ -225,8 +225,7 @@ Sonic_Mode_Normal:
 		bsr.w	Sonic_LevelBound
 		update_xy_pos
 		bsr.w	Sonic_AnglePos
-		bsr.w	Sonic_SlopeRepel
-		rts
+		bra.w	Sonic_SlopeRepel
 ; ===========================================================================
 
 Sonic_Mode_Air:
@@ -240,8 +239,7 @@ Sonic_Mode_Air:
 
 	.notwater:
 		bsr.w	Sonic_JumpAngle
-		bsr.w	Sonic_JumpCollision
-		rts
+		bra.w	Sonic_JumpCollision
 ; ===========================================================================
 
 Sonic_Mode_Roll:
@@ -251,8 +249,7 @@ Sonic_Mode_Roll:
 		bsr.w	Sonic_LevelBound
 		update_xy_pos
 		bsr.w	Sonic_AnglePos
-		bsr.w	Sonic_SlopeRepel
-		rts
+		bra.w	Sonic_SlopeRepel
 ; ===========================================================================
 
 Sonic_Mode_Jump:
@@ -265,9 +262,8 @@ Sonic_Mode_Jump:
 		subi.w	#sonic_buoyancy,ost_y_vel(a0)		; apply upward force
 
 	.notwater:
-		bsr.w	Sonic_JumpAngle
-		bsr.w	Sonic_JumpCollision
-		rts
+		;bsr.w	Sonic_JumpAngle
+		bra.w	Sonic_JumpCollision
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	make Sonic walk/run
@@ -1043,27 +1039,16 @@ Sonic_SlopeRepel:
 ; ---------------------------------------------------------------------------
 
 Sonic_JumpAngle:
-		move.b	ost_angle(a0),d0			; get Sonic's angle
+		tst.b	ost_angle(a0)
 		beq.s	.exit					; branch if 0
 		bpl.s	.angle_pos				; branch if 1-$7F
+		addq.b	#2,ost_angle(a0)
+		
+	.exit:
+		rts
 
-		addq.b	#2,d0					; increase angle
-		bcc.s	.angle_neg				; branch if $80-$FF
-		moveq	#0,d0					; reset to 0
-
-	.angle_neg:
-		bra.s	.update
-; ===========================================================================
-
-.angle_pos:
-		subq.b	#2,d0					; decrease angle
-		bcc.s	.update					; branch if 0-$7F
-		moveq	#0,d0					; reset to 0
-
-.update:
-		move.b	d0,ost_angle(a0)			; update angle
-
-.exit:
+	.angle_pos:
+		subq.b	#2,ost_angle(a0)
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -1324,7 +1309,7 @@ Sonic_Hurt:	; Routine 4
 
 Sonic_HurtStop:
 		move.w	(v_boundary_bottom).w,d0
-		addi.w	#224,d0
+		addi.w	#screen_height,d0
 		cmp.w	ost_y_pos(a0),d0
 		bcs.w	SelfKillSonic				; branch if Sonic falls below level boundary
 		bsr.w	Sonic_JumpCollision			; floor/wall collision
@@ -1359,7 +1344,7 @@ Sonic_Death:	; Routine 6
 
 GameOver:
 		move.w	(v_boundary_bottom).w,d0
-		addi.w	#224+32,d0
+		addi.w	#screen_height+32,d0
 		cmp.w	ost_y_pos(a0),d0			; has Sonic fallen more than 32px off screen after dying
 		bcc.w	.exit					; if not, branch
 		move.w	#-$38,ost_y_vel(a0)

@@ -56,7 +56,6 @@ Plat_Main:	; Routine 0
 		move.w	ost_y_pos(a0),ost_plat_y_pos(a0)
 		move.w	ost_y_pos(a0),ost_plat_y_start(a0)
 		move.w	ost_x_pos(a0),ost_plat_x_start(a0)
-		move.w	#$80,ost_angle(a0)
 		move.b	ost_subtype(a0),d0
 		move.b	d0,d1
 		lsr.b	#4,d0					; read high nybble

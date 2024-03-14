@@ -58,7 +58,8 @@ Cbal_Bounce:	; Routine 2
 
 		add.w	d5,ost_y_pos(a0)			; align to floor
 		move.w	ost_ball_bounce(a0),ost_y_vel(a0)	; bounce
-		jsr	FloorAngle				; d3 = floor angle
+		jsr	FloorAngle				; d2 = floor angle
+		tst.b	d2
 		beq.s	Cbal_ChkExplode				; branch if perfectly flat
 		bmi.s	.down_left				; branch if sloping up-right or down-left
 
