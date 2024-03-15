@@ -112,6 +112,8 @@ FloorDist:
 ;		moveq	#1,d6
 ;		bsr.w	FloorDist
 ;		bsr.w	FloorAngle
+;		move.b	d2,ost_angle(a0)
+;		move.b	d3,ost_anglesnap(a0)
 ; ---------------------------------------------------------------------------
 
 FloorAngle:

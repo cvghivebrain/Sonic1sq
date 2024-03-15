@@ -258,10 +258,8 @@ Sonic_Mode_Jump:
 		bsr.w	Sonic_LevelBound
 		update_xy_fall					; update position & apply gravity
 		btst	#status_underwater_bit,ost_status(a0)	; is Sonic underwater?
-		beq.s	.notwater				; if not, branch
+		beq.w	Sonic_JumpCollision			; if not, branch
 		subi.w	#sonic_buoyancy,ost_y_vel(a0)		; apply upward force
-
-	.notwater:
 		;bsr.w	Sonic_JumpAngle
 		bra.w	Sonic_JumpCollision
 
@@ -381,7 +379,7 @@ Sonic_Inertia:
 		bmi.s	.inertia_neg				; if negative, branch
 		sub.w	d5,d0					; subtract acceleration
 		bcc.s	.inertia_not_0				; branch if inertia is larger
-		move.w	#0,d0
+		moveq	#0,d0
 
 	.inertia_not_0:
 		move.w	d0,ost_inertia(a0)			; update inertia
@@ -391,7 +389,7 @@ Sonic_Inertia:
 	.inertia_neg:
 		add.w	d5,d0
 		bcc.s	.inertia_not_0_
-		move.w	#0,d0
+		moveq	#0,d0
 
 	.inertia_not_0_:
 		move.w	d0,ost_inertia(a0)			; update inertia
@@ -408,17 +406,14 @@ Sonic_InertiaLR:
 
 Sonic_StopAtWall:
 		move.b	ost_angle(a0),d0
-		addi.b	#$40,d0
-		bmi.s	.exit					; branch if angle is $40-$BF
-		move.b	#$40,d1					; d1 = 90-degree clockwise rotation
-		tst.w	ost_inertia(a0)				; get inertia
-		beq.s	.exit					; branch if 0
+		addi.b	#$40,d0					; d0 = angle with clockwise 90-degree rotation
+		bmi.s	.exit					; branch if angle was $40-$BF (upper semicircle of angles)
+		tst.w	ost_inertia(a0)
+		beq.s	.exit					; branch if inertia is 0
 		bmi.s	.neginertia				; branch if negative
-		neg.w	d1					; d1 = 90-degree anticlockwise rotation
+		subi.b	#$80,d0					; d0 = angle with anticlockwise 90-degree rotation
 
 	.neginertia:
-		move.b	ost_angle(a0),d0
-		add.b	d1,d0					; d0 = angle with 90-degree rotation
 		move.w	d0,-(sp)				; store in stack
 		bsr.w	Sonic_CalcRoomAhead			; get distance to wall ahead
 		move.w	(sp)+,d0				; restore from stack

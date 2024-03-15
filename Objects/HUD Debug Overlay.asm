@@ -141,8 +141,12 @@ Overlay_ShowDigits:
 		beq.s	.skip_word1				; branch if value hasn't changed
 		move.w	d0,ost_overlay_x_prev(a0)
 		bsr.w	HUD_ShowWord				; show object's x pos
+		bra.s	.next_word
 		
 	.skip_word1:
+		addi.l	#$800000,d1				; next word in VRAM
+		
+	.next_word:
 		move.w	(a3)+,d0				; get OST variable
 		move.w	(a1,d0.w),d0				; get value from OST
 		cmp.w	ost_overlay_y_prev(a0),d0
