@@ -398,8 +398,8 @@ startof_obj:	equ *
 		include "Objects\LZ Door Horizontal.asm"	; LabyrinthDoorH
 
 		include "Objects\Shield & Invincibility.asm"	; ShieldItem
-		include "Objects\LZ Water Splash.asm"		; Splash
 		include "Objects\LZ Water Surface.asm"		; WaterSurface
+		include "Objects\LZ Water Splash.asm"		; Splash
 		include "Objects\SBZ Rotating Disc Junction.asm" ; Junction
 
 		include "Objects\_FindNearestTile, FindFloor & FindWall.asm"

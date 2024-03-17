@@ -31,12 +31,12 @@ Spla_Display:	; Routine 2
 		move.w	(v_water_height_actual).w,ost_y_pos(a0)	; copy y position from water height
 		lea	Ani_Splash(pc),a1
 		jsr	AnimateSprite				; animate and goto Spla_Delete when finished
-		bra.w	DisplaySprite
+		jmp	DisplaySprite
 ; ===========================================================================
 
 Spla_Delete:	; Routine 4
 		clr.b	(f_splash).w				; allow future splashes
-		bra.w	DeleteObject				; delete when animation	is complete
+		jmp	DeleteObject				; delete when animation	is complete
 
 ; ---------------------------------------------------------------------------
 ; Animation script
