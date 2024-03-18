@@ -58,7 +58,6 @@ Bump_Hit:
 		bset	#status_air_bit,ost_status(a1)
 		bclr	#status_rolljump_bit,ost_status(a1)
 		bclr	#status_pushing_bit,ost_status(a1)
-		clr.b	ost_sonic_jump(a1)
 		move.b	#id_ani_bump_bumped,ost_anim(a0)	; use "hit" animation
 		play.w	1, jsr, sfx_Bumper			; play bumper sound
 		move.b	ost_bump_count(a0),d2

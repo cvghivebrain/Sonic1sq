@@ -229,7 +229,11 @@ Sonic_Mode_Normal:
 ; ===========================================================================
 
 Sonic_Mode_Air:
-		bsr.w	Sonic_JumpHeight
+		cmpi.w	#-$FC0,ost_y_vel(a0)
+		bge.s	.below_max
+		move.w	#-$FC0,ost_y_vel(a0)			; cap upward speed
+
+	.below_max:
 		bsr.w	Sonic_JumpDirection
 		bsr.w	Sonic_LevelBound
 		update_xy_fall					; update position & apply gravity
@@ -993,7 +997,6 @@ Sonic_Jump:
 		bset	#status_air_bit,ost_status(a0)
 		bclr	#status_pushing_bit,ost_status(a0)
 		addq.l	#4,sp					; return to earlier position in Sonic_Control
-		move.b	#1,ost_sonic_jump(a0)
 		bclr	#flags_stuck_bit,ost_sonic_flags(a0)
 		play.w	1, jsr, sfx_Jump			; play jumping sound
 		bset	#status_jump_bit,ost_status(a0)
@@ -1017,8 +1020,6 @@ Sonic_Jump:
 ; ---------------------------------------------------------------------------
 
 Sonic_JumpHeight:
-		tst.b	ost_sonic_jump(a0)			; is Sonic jumping?
-		beq.s	.not_jumping				; if not, branch
 		move.w	#-sonic_jump_release,d1			; jump power after A/B/C is released
 		btst	#status_underwater_bit,ost_status(a0)	; is Sonic underwater?
 		beq.s	.not_underwater				; if not, branch
@@ -1033,15 +1034,6 @@ Sonic_JumpHeight:
 		move.w	d1,ost_y_vel(a0)			; update y speed with smaller jump power
 
 	.keep_speed:
-		rts
-; ===========================================================================
-
-.not_jumping:							; unused?
-		cmpi.w	#-$FC0,ost_y_vel(a0)
-		bge.s	.below_max
-		move.w	#-$FC0,ost_y_vel(a0)
-
-	.below_max:
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -1389,7 +1381,6 @@ Sonic_ResetOnFloor:
 		sub.w	d0,ost_y_pos(a0)
 
 	.no_jump:
-		move.b	#0,ost_sonic_jump(a0)
 		move.w	#0,(v_enemy_combo).w			; reset counter for points for breaking multiple enemies
 		rts
 

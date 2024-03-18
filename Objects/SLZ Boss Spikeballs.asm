@@ -303,7 +303,6 @@ BSpike_Update:
 	.not_flat:
 		bset	#status_air_bit,ost_status(a2)
 		bclr	#status_platform_bit,ost_status(a2)
-		clr.b	ost_sonic_jump(a2)
 		move.l	a0,-(sp)				; save spikeball OST address to stack
 		lea	(a2),a0					; pretend Sonic is current object
 		jsr	(Sonic_ChkRoll).l			; allow Sonic to bounce-roll off seesaw

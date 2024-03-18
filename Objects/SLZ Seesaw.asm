@@ -221,7 +221,6 @@ See_BallAir:	; Routine 8
 		move.w	d0,ost_y_vel(a2)
 		bset	#status_air_bit,ost_status(a2)
 		bclr	#status_platform_bit,ost_status(a2)
-		clr.b	ost_sonic_jump(a2)
 		move.b	#id_Spring,ost_anim(a2)			; Sonic uses spring animation
 		move.b	#id_Sonic_Control,ost_routine(a2)
 		play.w	1, jsr, sfx_Spring			; play spring sound
