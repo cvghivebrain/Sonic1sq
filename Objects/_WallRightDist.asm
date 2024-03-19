@@ -15,7 +15,7 @@
 ;	(a3).w = 16x16 tile id & flags
 ;	a4 = address of collision index for this level
 
-;	uses d1.w, d2.l, d3.l, d4.l, d5.l, d6.w, a5
+;	uses d0.w, d2.l, d3.l, d4.l, d5.l, d6.w, a5
 
 ; usage:
 ;		ost_x_pos(a0),d0
