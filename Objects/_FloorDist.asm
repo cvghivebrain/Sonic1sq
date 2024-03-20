@@ -102,9 +102,8 @@ FloorDist:
 
 ; output:
 ;	d2.b = angle
-;	d3.b = angle snapped to nearest 90 degrees
 
-;	uses d2.w, d3.l, a4
+;	uses d2.l, a4
 
 ; usage:
 ;		ost_x_pos(a0),d0
@@ -113,38 +112,34 @@ FloorDist:
 ;		bsr.w	FloorDist
 ;		bsr.w	FloorAngle
 ;		move.b	d2,ost_angle(a0)
-;		move.b	d3,ost_anglesnap(a0)
 ; ---------------------------------------------------------------------------
 
 FloorAngle:
 		move.w	d4,d2
 		andi.w	#$7FF,d2				; 16x16 tile id only
-		moveq	#0,d3
-		move.b	(a4,d2.w),d3				; get collision id
+		moveq	#0,d2
+		move.b	(a4,d2.w),d2				; get collision id
 		beq.s	.exit					; branch if 0
 		lea	(AngleMap).l,a4
-		move.b	(a4,d3.w),d3				; get collision angle value
+		move.b	(a4,d2.w),d2				; get collision angle value
 		btst	#tilemap_xflip_bit,d4
 		beq.s	.no_xflip				; branch if not xflipped
-		neg.b	d3					; xflip angle
+		neg.b	d2					; xflip angle
 
 	.no_xflip:
 		btst	#tilemap_yflip_bit,d4
-		beq.s	.exit					; branch if not yflipped
-		addi.b	#$40,d3
-		neg.b	d3
-		subi.b	#$40,d3					; yflip angle
+		beq.s	.no_yflip				; branch if not yflipped
+		addi.b	#$40,d2
+		neg.b	d2
+		subi.b	#$40,d2					; yflip angle
 
-	.exit:
-		move.w	d3,d2
-		addi.b	#$20,d3
-		andi.b	#$C0,d3					; snap to 90 degree angle
+	.no_yflip:
 		btst	#0,d2
-		bne.s	.snap					; branch if snap bit is set
-		rts
+		beq.s	.exit					; branch if snap bit isn't set
+		addi.b	#$20,d2
+		andi.b	#$C0,d2					; snap to 90 degree angle
 		
-	.snap:
-		move.b	d3,d2
+	.exit:
 		rts
 
 ; ---------------------------------------------------------------------------

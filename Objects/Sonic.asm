@@ -1385,19 +1385,8 @@ Sonic_JumpCollision_Right:
 ; ---------------------------------------------------------------------------
 
 Sonic_ResetOnFloor:
-		btst	#status_rolljump_bit,ost_status(a0)	; is Sonic jumping while rolling?
-		beq.s	.no_rolljump				; if not, branch
-		nop
-		nop
-		nop
-
-	.no_rolljump:
-		bclr	#status_pushing_bit,ost_status(a0)
-		bclr	#status_air_bit,ost_status(a0)
-		bclr	#status_rolljump_bit,ost_status(a0)
 		btst	#status_jump_bit,ost_status(a0)		; is Sonic jumping/rolling?
 		beq.s	.no_jump				; if not, branch
-		bclr	#status_jump_bit,ost_status(a0)
 		move.b	(v_player1_height).w,ost_height(a0)
 		move.b	(v_player1_width).w,ost_width(a0)
 		move.b	#id_Walk,ost_anim(a0)			; use running/walking animation
@@ -1405,7 +1394,8 @@ Sonic_ResetOnFloor:
 		sub.w	d0,ost_y_pos(a0)
 
 	.no_jump:
-		move.w	#0,(v_enemy_combo).w			; reset counter for points for breaking multiple enemies
+		andi.b	#$FF-status_pushing-status_air-status_rolljump-status_jump,ost_status(a0) ; clear some status flags
+		clr.w	(v_enemy_combo).w			; reset counter for points for breaking multiple enemies
 		rts
 
 ; ---------------------------------------------------------------------------
@@ -1470,13 +1460,12 @@ GameOver:
 		addi.w	#screen_height+32,d0
 		cmp.w	ost_y_pos(a0),d0			; has Sonic fallen more than 32px off screen after dying
 		bcc.w	.exit					; if not, branch
-		move.w	#-$38,ost_y_vel(a0)
 		addq.b	#2,ost_routine(a0)			; goto Sonic_ResetLevel next
 		clr.b	(f_hud_time_update).w			; stop time counter
 		addq.b	#1,(f_hud_lives_update).w		; update lives counter
 		subq.b	#1,(v_lives).w				; subtract 1 from number of lives
 		bne.s	.lives_remain				; branch if some lives are remaining
-		move.w	#0,ost_sonic_restart_time(a0)
+		clr.w	ost_sonic_restart_time(a0)
 		bsr.w	FindFreeInert
 		bne.s	.fail
 		move.l	#GameOverCard,ost_id(a1)		; load GAME object
@@ -1496,7 +1485,7 @@ GameOver:
 		move.w	#60,ost_sonic_restart_time(a0)		; set time delay to 1 second
 		tst.b	(f_time_over).w				; is TIME OVER tag set?
 		beq.s	.exit					; if not, branch
-		move.w	#0,ost_sonic_restart_time(a0)
+		clr.w	ost_sonic_restart_time(a0)
 		bsr.w	FindFreeInert
 		bne.s	.music_gfx
 		move.l	#GameOverCard,ost_id(a1)		; load TIME object
@@ -1533,15 +1522,14 @@ Sonic_ResetLevel:
 Sonic_Animate:
 		lea	Ani_Sonic(pc),a1
 		movea.l	a1,a2
-		moveq	#0,d0
 		moveq	#status_xflip,d2
 		move.b	ost_anim(a0),d0
 		cmp.b	ost_sonic_anim_next(a0),d0		; is animation set to restart?
 		beq.w	Anim_Run				; if not, branch
 
 		move.b	d0,ost_sonic_anim_next(a0)		; set to "no restart"
-		move.b	#0,ost_anim_frame(a0)			; reset animation
-		move.b	#0,ost_anim_time(a0)			; reset frame duration
+		clr.b	ost_anim_frame(a0)			; reset animation
+		clr.b	ost_anim_time(a0)			; reset frame duration
 		bra.w	Anim_Run
 
 ; ---------------------------------------------------------------------------
@@ -1939,6 +1927,7 @@ Sonic_WalkVertL:
 
 ; output:
 ;	d2.b = angle on shortest side
+;	d3.b = angle on shortest side snapped to 90 degrees
 ;	d4.w = longest distance to floor (-ve if below floor)
 ;	d5.w = shortest distance to floor (-ve if below floor)
 ;	a2 = address within level layout
@@ -1963,11 +1952,14 @@ Sonic_Floor:
 		move.b	d2,(v_angle_right).w
 		move.w	a6,d4					; retrieve left dist
 		cmp.w	d4,d5
-		ble.s	.no_swap				; branch if d4 > d5 (right dist is shorter)
+		ble.s	.use_right				; branch if d4 > d5 (right dist is shorter)
 		exg	d4,d5					; use left dist
 		move.b	(v_angle_left).w,d2			; use left angle
 		
-	.no_swap:
+	.use_right:
+		move.b	d2,d3
+		addi.b	#$20,d3
+		andi.b	#$C0,d3					; snap to 90 degree angle
 		rts
 		
 ; ---------------------------------------------------------------------------
@@ -1988,9 +1980,12 @@ Sonic_Ceiling:
 		move.b	d2,(v_angle_right).w
 		move.w	a6,d4					; retrieve left dist
 		cmp.w	d4,d5
-		ble.s	.no_swap				; branch if d4 > d5 (right dist is shorter)
+		ble.s	.use_right				; branch if d4 > d5 (right dist is shorter)
 		exg	d4,d5					; use left dist
 		move.b	(v_angle_left).w,d2			; use left angle
 		
-	.no_swap:
+	.use_right:
+		move.b	d2,d3
+		addi.b	#$20,d3
+		andi.b	#$C0,d3					; snap to 90 degree angle
 		rts
