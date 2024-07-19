@@ -2,9 +2,9 @@
 ; Subroutines to load palette immediately
 
 ; input:
-;	d0 = index number for palette
+;	d0.w = index number for palette
 
-;	uses d0, a1, a2, a3
+;	uses d0.w, a1, a2, a3
 ; ---------------------------------------------------------------------------
 
 PalLoad:
@@ -56,7 +56,11 @@ PalPointers:
 ; ---------------------------------------------------------------------------
 ; Subroutine to generate water palette at the start of a level
 
-;	uses d0, d1, d2, d3, a0, a1, a2
+; input:
+;	d1.w = number of colours to process
+;	a0 = address of first colour in palette to process (v_pal_dry for all)
+
+;	uses d0.l, d1.w, d2.w, d3.l, a0, a1, a2
 ; ---------------------------------------------------------------------------
 
 WaterFilter:
@@ -65,11 +69,11 @@ WaterFilter:
 		add.w	d0,d0					; multiply by 2
 		move.w	Filter_Index(pc,d0.w),d0
 
-		moveq	#0,d3
-		move.w	#(countof_color*countof_pal)-1,d1
-		lea	(v_pal_dry).w,a0
-		lea	(v_pal_water).w,a1
+		subq.w	#1,d1					; subtract 1 for loops
+		bmi.s	.exit					; branch if it was 0
+		lea	v_pal_water-v_pal_dry(a0),a1		; a1 = address of water palette
 		lea	Filter_KeepList(pc),a2
+		moveq	#0,d3
 
 	.loop:
 		move.w	(a0)+,d2				; get colour
@@ -80,13 +84,18 @@ WaterFilter:
 		move.w	d2,(a1)+				; write colour
 		addq.w	#1,d3					; increment counter
 		dbf	d1,.loop				; repeat for all colours
+		
+	.exit:
 		rts
 
 ; ---------------------------------------------------------------------------
 ; Functions applied to each colour
 
 ; input:
-;	d2 = single colour
+;	d2.w = single colour
+
+; output:
+;	d2.w = updated colour
 ; ---------------------------------------------------------------------------
 
 Filter_Index:	index *

@@ -85,7 +85,9 @@ Level_Skip_TtlCard:
 		bsr.w	DrawTilesAtStart
 		bsr.w	LZWaterFeatures
 		bsr.w	LoadPerCharacter
-		bsr.w	WaterFilter
+		move.w	#countof_color*countof_pal,d1
+		lea	(v_pal_dry).w,a0
+		bsr.w	WaterFilter				; auto generate water palette
 		tst.w	(v_demo_mode).w				; is this an ending demo?
 		bmi.s	.skip_hud				; if yes, branch
 		jsr	FindFreeInert
