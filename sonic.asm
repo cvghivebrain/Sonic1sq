@@ -187,6 +187,7 @@ Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 		include	"Includes\PaletteCycle.asm"
 		include	"Includes\PaletteFadeIn, PaletteFadeOut & PaletteWhiteOut.asm"
 		include "Includes\PalLoad & PalPointers.asm"
+		include "Includes\WaterFilter.asm"
 		include "Includes\LZWaterFeatures.asm"
 		include "Includes\WaitForVBlank.asm"
 		include "Includes\MoveSonicInDemo & DemoRecorder.asm"
@@ -1017,7 +1018,6 @@ ObjPos_Null:	endobj
 		incfile	Pal_GHZCyc,"Palettes\Cycle - GHZ",bin
 		incfile	Pal_LZCyc1,"Palettes\Cycle - LZ Waterfall",bin
 		incfile	Pal_LZCyc2,"Palettes\Cycle - LZ Conveyor Belt",bin
-		incfile	Pal_LZCyc3,"Palettes\Cycle - LZ Conveyor Belt Underwater",bin
 		incfile	Pal_SBZ3Cyc1,"Palettes\Cycle - SBZ3 Waterfall",bin
 		incfile	Pal_SLZCyc,"Palettes\Cycle - SLZ",bin
 		incfile	Pal_SYZCyc1,"Palettes\Cycle - SYZ1",bin
