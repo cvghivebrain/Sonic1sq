@@ -2,6 +2,7 @@
 ; Subroutine to generate water palette at the start of a level
 
 ; input:
+;	d1.w = offset within palette (WaterFilter_SkipOffset only; a4 still needed)
 ;	d4.w = number of colours to process
 ;	a4.w = address of palette to process (e.g. v_pal_dry_line1)
 
@@ -9,6 +10,10 @@
 ; ---------------------------------------------------------------------------
 
 WaterFilter:
+		move.w	a4,d1					; copy palette address
+		subi.w	#(v_pal_dry&$FFFF),d1			; d1 = offset within palette
+		
+WaterFilter_SkipOffset:
 		moveq	#0,d5
 		move.b	(v_waterfilter_id).w,d5			; get filter id
 		add.w	d5,d5					; multiply by 2
@@ -17,8 +22,6 @@ WaterFilter:
 		subq.w	#1,d4					; subtract 1 for loops
 		bmi.s	.exit					; branch if it was 0
 		lea	v_pal_water-v_pal_dry(a4),a5		; a5 = address of water palette
-		move.w	a4,d1
-		subi.w	#(v_pal_dry&$FFFF),d1			; d1 = offset within palette
 		lea	Filter_KeepList(pc,d1.w),a6		; jump to relevant position within keeplist
 
 	.loop:

@@ -27,10 +27,11 @@ pcyclescript:	macro time,frames,colours,flags,source,dest
 		dc.w flags
 		dc.w frames*colours*2
 		dc.l source
+		dc.w (dest)&$FFFF
 		dc.w ((dest)&$FFFF)-(v_pal_dry&$FFFF)
 		endm
 		
-sizeof_pcycle:	equ 14
+sizeof_pcycle:	equ 16
 
 pcycle_reversible_bit:	equ 0
 pcycle_water_bit:	equ 1
@@ -91,19 +92,26 @@ PCycle_Run:
 		movea.l	(a0)+,a2				; palette source
 		adda.w	(a1)+,a2				; jump to current position in source
 		movea.w	(a0)+,a3				; palette destination
-		adda.w	#v_pal_dry,a3
-		move.w	a3,a4					; copy palette address for WaterFilter
-		move.w	d3,d4					; copy colour count for WaterFilter
+		move.w	(a0)+,d1				; offset within palette
+		btst	#pcycle_water_bit,d2
+		bne.s	.use_water				; branch if water flag is set
 		subq.w	#1,d3					; colour count -1 for loops
 		
 	.loop_colour:
 		move.w	(a2)+,(a3)+				; copy colour
 		dbf	d3,.loop_colour				; repeat for number of colours
-		btst	#pcycle_water_bit,d2
-		beq.s	.no_water				; branch if water flag isn't set
-		bsr.w	WaterFilter				; create underwater counterparts for altered colours
+		dbf	d0,.loop				; repeat for all scripts
+		rts
 		
-	.no_water:
+	.use_water:
+		move.w	a3,a4					; copy palette address for WaterFilter
+		move.w	d3,d4					; copy colour count for WaterFilter
+		subq.w	#1,d3					; colour count -1 for loops
+		
+	.loop_colour2:
+		move.w	(a2)+,(a3)+				; copy colour
+		dbf	d3,.loop_colour2			; repeat for number of colours
+		bsr.w	WaterFilter_SkipOffset			; create underwater counterparts for altered colours
 		dbf	d0,.loop				; repeat for all scripts
 		rts
 		
