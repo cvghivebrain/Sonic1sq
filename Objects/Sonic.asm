@@ -1528,53 +1528,20 @@ Sonic_Animate:
 ; ---------------------------------------------------------------------------
 
 Sonic_LoadGfx:
-		moveq	#0,d0
-		move.b	ost_frame(a0),d0			; load frame number
+		move.w	ost_frame_hi(a0),d0			; load frame number
 		cmp.b	(v_sonic_last_frame_id).w,d0		; has frame changed?
-		beq.s	.nochange				; if not, branch
-
+		beq.s	.exit					; if not, branch
 		move.b	d0,(v_sonic_last_frame_id).w
-		lea	(SonicDynPLC).l,a2			; load PLC script
-		add.w	d0,d0
-		adda.w	(a2,d0.w),a2
-		moveq	#0,d1
-		move.b	(a2)+,d1				; read "number of entries" value
-		subq.b	#1,d1					; minus 1 for number of loops
-		bmi.s	.nochange				; if zero, branch
-		lea	(v_sonic_gfx_buffer).w,a3		; RAM address to write gfx
-
-	.loop_entry:
-		moveq	#0,d2
-		move.b	(a2)+,d2				; get 1st byte of entry
-		move.w	d2,d0
-		lsr.b	#4,d0					; read high nybble of byte (number of tiles)
-		lsl.w	#8,d2					; move 1st byte into high byte
-		move.b	(a2)+,d2				; get 2nd byte
-		lsl.w	#5,d2					; multiply by 32 (also clears high nybble)
-		lea	(Art_Sonic).l,a1
-		adda.l	d2,a1					; jump to relevant gfx
-
-	.loop_tile:
-		movem.l	(a1)+,d2-d6/a4-a6			; copy tile to registers
-		movem.l	d2-d6/a4-a6,(a3)			; copy registers to RAM
-		lea	sizeof_cell(a3),a3			; next tile
-		dbf	d0,.loop_tile				; repeat for number of tiles
-
-		dbf	d1,.loop_entry				; repeat for number of entries
-		lea	DMA_Sonic(pc),a2
-		move.l	(a2)+,d1
-		move.l	(a2)+,d2
-		jsr	(AddDMA).w
-
-	.nochange:
+		lea	Ani_Sonic(pc),a1
+		set_dma_dest vram_sonic,d1			; set VRAM address to write gfx
+		movea.l	ost_mappings(a0),a2			; get mappings pointer
+		bsr.w	SkipMappings				; jump to data after mappings (where DPLCs are stored)
+		tst.w	d0
+		beq.s	.exit					; branch if mappings contained 0 pieces (i.e. blank)
+		jmp	(AddDMA2).w				; add to DMA queue
+		
+	.exit:
 		rts
-
-DMA_Sonic:
-		dc.l $40000080+((vram_sonic&$3FFF)<<16)+((vram_sonic&$C000)>>14)
-		dc.l $93009400+(((sizeof_vram_sonic>>1)&$FF)<<16)+(((sizeof_vram_sonic>>1)&$FF00)>>8)
-		dc.w $9500+((v_sonic_gfx_buffer>>1)&$FF)
-		dc.w $9600+(((v_sonic_gfx_buffer>>1)&$FF00)>>8)
-		dc.w $9700+(((v_sonic_gfx_buffer>>1)&$7F0000)>>16)
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	change Sonic's angle & position as he walks along the floor

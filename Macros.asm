@@ -334,7 +334,11 @@ set_dma_fill_size:	macro
 ; ---------------------------------------------------------------------------
 
 dplcinit:	macro
+		if def(\1)
 		dplc_base: = \1
+		else
+		dplc_base: = 0
+		endc
 		endm
 
 dplc:		macro src,size

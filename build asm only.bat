@@ -1,5 +1,7 @@
 @echo off
 
+HiveMapExport.exe "Graphics Sonic\Sonic.ini" "Graphics Sonic"
+
 rem assemble final rom
 IF EXIST s1built.bin move /Y s1built.bin s1built.prev.bin >NUL
 axm68k /m /k /p /o oz+ sonic.asm, s1built.bin >errors.txt, sonic1.sym, sonic.lst

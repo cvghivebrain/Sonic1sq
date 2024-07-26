@@ -8,6 +8,8 @@ for %%f in ("Other Kosinski\*.bin") do "mdcomp\kosplus" "%%f" "Other Kosinski\%%
 for %%f in ("Graphics Moduled\*.bin") do "mdcomp\Modulise" "mdcomp\kosplus.exe" $1000 "%%f" "Graphics Moduled\%%~nf.kpm"
 for %%f in ("Level Layouts\*.unc") do "mdcomp\HiveRLE" "%%f" "Level Layouts\%%~nf.hrl"
 
+HiveMapExport.exe "Graphics Sonic\Sonic.ini" "Graphics Sonic"
+
 rem assemble final rom
 IF EXIST s1built.bin move /Y s1built.bin s1built.prev.bin >NUL
 axm68k /m /k /p /o oz+ sonic.asm, s1built.bin >errors.txt, sonic1.sym, sonic.lst

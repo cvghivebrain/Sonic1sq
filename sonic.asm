@@ -464,8 +464,6 @@ startof_obj:	equ *
 		
 		inform	0,"Object code occupies $%h bytes ($%h-$%h).",*-startof_obj,startof_obj,*
 
-		include "Objects\Sonic [Mappings].asm"		; Map_Sonic
-		include "Objects\Sonic DPLCs.asm"		; SonicDynPLC
 		include "Objects\_DebugMode [Lists].asm"
 
 		include "Objects\Special Stage Walls [Mappings].asm" ; Map_SSWalls
@@ -486,8 +484,8 @@ startof_obj:	equ *
 ; ---------------------------------------------------------------------------
 ; Uncompressed graphics	- Sonic
 ; ---------------------------------------------------------------------------
-Art_Sonic:	incbin	"Graphics\Sonic.bin"			; Sonic
-		even
+		include	"Graphics Sonic\Sonic graphics list.asm"
+		include "Graphics Sonic\Sonic [Mappings].asm"	; Map_Sonic
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - various
 ; ---------------------------------------------------------------------------
