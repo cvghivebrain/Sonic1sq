@@ -15,7 +15,7 @@ v_bgscroll_buffer:		rs.b $200			; background scroll buffer
 		if __rs&$FFFF < $8000
 		rsset $FFFF8000					; addresses after this point must be over $8000
 		endc
-v_sprite_queue:			rs.b sizeof_priority*countof_priority ; sprite display queue, first section is highest priority ($400 bytes; 8 sections of $80 bytes)
+v_sprite_queue:			rs.b sizeof_priority*countof_priority ; sprite display queue, first section is highest priority ($380 bytes; 7 sections of $80 bytes)
 v_sonic_pos_tracker:		rs.l $40			; earlier position tracking list for Sonic, used by invincibility stars ($100 bytes)
 v_demo_rec:			rs.b sizeof_demo_rec		; demo recorder ($200 bytes)
 				rsblock hscroll
@@ -270,7 +270,7 @@ v_slowplc_buffer:		rs.b sizeof_slowplc_buffer	; buffer for SlowPLC decompression
 
 				rsalign 4
 v_stack:			rs.l $40			; stack ($100 bytes)
-v_stack_pointer:		rs.w 1				; initial stack pointer - items are added to the stack backwards from this address
+v_stack_pointer:		equ __rs			; initial stack pointer - items are added to the stack backwards from this address
 
 v_keep_after_reset:		equ v_stack_pointer		; everything after this address is kept in RAM after a soft reset
 

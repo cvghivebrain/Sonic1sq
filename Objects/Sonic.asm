@@ -1519,8 +1519,9 @@ Sonic_Animate:
 		beq.w	Anim_Run				; if not, branch
 
 		move.b	d0,ost_sonic_anim_next(a0)		; set to "no restart"
-		move.b	#0,ost_anim_frame(a0)			; reset animation
-		move.b	#0,ost_anim_time(a0)			; reset frame duration
+		moveq	#0,d1
+		move.b	d1,ost_anim_frame(a0)			; reset animation
+		move.b	d1,ost_anim_time(a0)			; reset frame duration
 		bra.w	Anim_Run
 
 ; ---------------------------------------------------------------------------
@@ -1562,33 +1563,19 @@ Sonic_AnglePos:
 		move.b	d0,(v_angle_left).w
 		move.b	ost_angle(a0),d0			; get last angle
 		addi.b	#$20,d0
-		bpl.s	.floor_or_left				; branch if angle is (generally) flat or left vertical
-		move.b	ost_angle(a0),d0
-		bpl.s	.angle_pos				; branch if angle is between $60 and $7F
-		subq.b	#1,d0					; subtract 1 if $80-$DF
-
-	.angle_pos:
-		addi.b	#$20,d0					; d0 = angle + ($1F or $20)
-		bra.s	.chk_surface
+		andi.b	#$C0,d0					; read only bits 6-7 of angle
+		rol.b	#3,d0
+		move.w	Sonic_WalkIndex(pc,d0.w),d0
+		jmp	Sonic_WalkIndex(pc,d0.w)
+; ===========================================================================
+Sonic_WalkIndex:	index *,,2
+		ptr Sonic_WalkFloor
+		ptr Sonic_WalkVertL
+		ptr Sonic_WalkCeiling
+		ptr Sonic_WalkVertR
 ; ===========================================================================
 
-.floor_or_left:
-		move.b	ost_angle(a0),d0
-		bpl.s	.angle_pos_				; branch if angle is between 0 and $60
-		addq.b	#1,d0					; add 1 if $E0-$FF
-
-	.angle_pos_:
-		addi.b	#$1F,d0					; d0 = angle + ($1F or $20)
-
-.chk_surface:
-		andi.b	#$C0,d0					; read only bits 6-7 of angle
-		cmpi.b	#$40,d0
-		beq.w	Sonic_WalkVertL				; branch if on left vertical
-		cmpi.b	#$80,d0
-		beq.w	Sonic_WalkCeiling			; branch if on ceiling
-		cmpi.b	#$C0,d0
-		beq.w	Sonic_WalkVertR				; branch if on right vertical
-
+Sonic_WalkFloor:
 		move.w	ost_y_pos(a0),d2
 		move.w	ost_x_pos(a0),d3
 		moveq	#0,d0
@@ -1985,3 +1972,72 @@ Sonic_FindCeiling:
 
 		move.b	#$80,d2
 		bra.w	Sonic_FindSmaller			; make d1 the smaller distance
+
+; ---------------------------------------------------------------------------
+; Subroutine to	find distance to floor to left/right of Sonic
+
+; output:
+;	d2.b = angle on shortest side
+;	d3.b = angle on shortest side snapped to 90 degrees
+;	d4.w = longest distance to floor (-ve if below floor)
+;	d5.w = shortest distance to floor (-ve if below floor)
+;	a2 = address within level layout
+;	(a2).b = 256x256 chunk id
+;	a3 = address within 256x256 mappings
+;	(a3).w = 16x16 tile id & flags
+
+;	uses d1.w, d2.l, d3.l, d4.l, d5.l, d6.w, a4, a5, a6
+; ---------------------------------------------------------------------------
+
+Sonic_Floor:
+		getpos_bottomleft				; d0 = x pos; d1 = y pos
+		moveq	#1,d6
+		jsr	FloorDist				; d5 = dist to floor on left side
+		movea.w	d5,a6					; save to a6
+		jsr	FloorAngle
+		move.b	d2,(v_angle_left).w
+		getpos_bottomright				; d0 = x pos; d1 = y pos
+		moveq	#1,d6
+		jsr	FloorDist				; d5 = dist to floor on right side
+		jsr	FloorAngle
+		move.b	d2,(v_angle_right).w
+		move.w	a6,d4					; retrieve left dist
+		cmp.w	d4,d5
+		ble.s	.use_right				; branch if d4 > d5 (right dist is shorter)
+		exg	d4,d5					; use left dist
+		move.b	(v_angle_left).w,d2			; use left angle
+		
+	.use_right:
+		move.b	d2,d3
+		addi.b	#$20,d3
+		andi.b	#$C0,d3					; snap to 90 degree angle
+		rts
+		
+; ---------------------------------------------------------------------------
+; As above, but for the ceiling
+; ---------------------------------------------------------------------------
+
+Sonic_Ceiling:
+		getpos_topleft					; d0 = x pos; d1 = y pos
+		moveq	#1,d6
+		jsr	CeilingDist				; d5 = dist to ceiling on left side
+		movea.w	d5,a6					; save to a6
+		jsr	FloorAngle
+		move.b	d2,(v_angle_left).w
+		getpos_topright					; d0 = x pos; d1 = y pos
+		moveq	#1,d6
+		jsr	CeilingDist				; d5 = dist to ceiling on right side
+		jsr	FloorAngle
+		move.b	d2,(v_angle_right).w
+		move.w	a6,d4					; retrieve left dist
+		cmp.w	d4,d5
+		ble.s	.use_right				; branch if d4 > d5 (right dist is shorter)
+		exg	d4,d5					; use left dist
+		move.b	(v_angle_left).w,d2			; use left angle
+		
+	.use_right:
+		move.b	d2,d3
+		addi.b	#$20,d3
+		andi.b	#$C0,d3					; snap to 90 degree angle
+		rts
+		
