@@ -173,6 +173,7 @@ Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 		include "Includes\GM_HiddenCredits.asm"
 		
 		include	"Includes\VBlank & HBlank.asm"
+		include	"Includes\ApplyBrightness.asm"
 		include	"Includes\JoypadInit & ReadJoypads.asm"
 		include	"Includes\VDPSetupGame.asm"
 		include	"Includes\ClearScreen.asm"

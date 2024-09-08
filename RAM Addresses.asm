@@ -411,7 +411,6 @@ v_demo_ptr:			rs.l 1				; pointer for demo data
 v_demo_x_start:			rs.l 1				; Sonic's starting x pos
 v_demo_y_start:			equ __rs-2			; Sonic's starting y pos
 v_brightness:			rs.w 1				; 0 = normal; -15 = black; 15 = white
-f_brightness_update:		rs.b 1				; flag set to update brightness
 v_credits_num:			rs.w 1				; credits index number
 f_credits_started:		rs.b 1				; flag set when credits have started
 v_console_region:		rs.b 1				; Mega Drive console type - 0 = JP; $80 = US/EU; +0 = NTSC; +$40 = PAL
