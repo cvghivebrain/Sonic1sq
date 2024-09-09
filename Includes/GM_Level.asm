@@ -65,7 +65,7 @@ GM_Demo:
 		bmi.s	Level_Skip_TtlCard			; if yes, branch
 		jsr	FindFreeInert
 		move.l	#TitleCard,ost_id(a1)			; load title card object
-		jsr	(ApplyBrightness).w			; show Sonic/title card palette
+		jsr	(ApplyBrightness_KeepSonic).w		; show Sonic/title card palette while remaining palettes are black
 		move.b	(v_bgm).w,d0
 		jsr	(PlaySound0).w				; play music
 

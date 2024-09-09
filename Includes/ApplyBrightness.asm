@@ -1,5 +1,11 @@
 ; ---------------------------------------------------------------------------
 ; Subroutine to create palette with brightness applied
+
+;	uses d0.l, d1.w, d2.w, d3.w, d4.w, a1, a2, a3, a4, a5
+
+; usage:
+;	move.b	#-8,(v_brightness).w				; set brightness to 50% (min -15; max 15)
+;	jsr	ApplyBrightness					; update palette
 ; ---------------------------------------------------------------------------
 
 ApplyBrightness:
@@ -11,45 +17,43 @@ ApplyBrightness:
 		moveq	#(countof_color*countof_pal*2)-1,d0	; also do underwater palette
 		
 	.no_water:
-		lea	(v_pal_dry).w,a0
-		lea	(v_pal_dry_final).w,a1
+		lea	(v_pal_dry).w,a1
+		lea	(v_pal_dry_final).w,a2
 		
 ApplyBrightness_Run:
-		lea	BrightLevels_Red(pc),a2
-		lea	BrightLevels_Green(pc),a3
-		lea	BrightLevels_Blue(pc),a4
+		lea	BrightLevels_Red(pc),a3
+		lea	BrightLevels_Green(pc),a4
+		lea	BrightLevels_Blue(pc),a5
 		move.w	(v_brightness).w,d1
 		bpl.s	.loop					; branch if brightness is > 0
-		lea	DarkLevels_Red(pc),a2
-		lea	DarkLevels_Green(pc),a3
-		lea	DarkLevels_Blue(pc),a4
+		lea	DarkLevels_Red(pc),a3
+		lea	DarkLevels_Green(pc),a4
+		lea	DarkLevels_Blue(pc),a5
 		neg.w	d1
 		
 	.loop:
-		move.w	(a0)+,d2
-		move.w	d2,d3
+		move.b	(a1)+,d4
+		lsl.w	#3,d4
+		andi.w	#$F0,d4					; read blue value
+		add.w	d1,d4
+		move.b	(a5,d4.w),d4				; get new blue value
+		
+		move.b	(a1)+,d2
+		move.b	d2,d3
 		lsl.w	#3,d3
 		andi.w	#$F0,d3					; read red value
 		add.w	d1,d3
-		move.b	(a2,d3.w),d3				; get new red value
+		move.b	(a3,d3.w),d3				; get new red value
 		
-		move.w	d2,d4
-		lsr.w	#1,d4
-		andi.w	#$F0,d4					; read green value
-		add.w	d1,d4
-		move.b	(a3,d4.w),d4				; get new green value
+		lsr.w	#1,d2
+		andi.w	#$F0,d2					; read green value
+		add.w	d1,d2
+		move.b	(a4,d2.w),d2				; get new green value
 		
-		move.w	d2,d5
-		lsr.w	#5,d5
-		andi.w	#$F0,d5					; read blue value
-		add.w	d1,d5
-		move.b	(a4,d5.w),d5				; get new blue value
+		or.b	d2,d3					; make low byte of colour (green/red)
 		
-		lsl.b	#4,d4
-		or.b	d4,d3					; make low byte of colour (green/red)
-		
-		move.b	d5,(a1)+				; write blue
-		move.b	d3,(a1)+				; write green/red
+		move.b	d4,(a2)+				; write blue
+		move.b	d3,(a2)+				; write green/red
 		dbf	d0,.loop				; repeat for all colours
 		rts
 		
@@ -76,25 +80,25 @@ DarkLevels_Red:
 		even
 		
 BrightLevels_Green:
-		hex	000002020404060608080a0a0c0c0e0e
-		hex	02020404060608080a0a0c0c0e0e0e0e
-		hex	0404060608080a0a0c0c0e0e0e0e0e0e
-		hex	060608080a0a0c0c0e0e0e0e0e0e0e0e
-		hex	08080a0a0c0c0e0e0e0e0e0e0e0e0e0e
-		hex	0a0a0c0c0e0e0e0e0e0e0e0e0e0e0e0e
-		hex	0c0c0e0e0e0e0e0e0e0e0e0e0e0e0e0e
-		hex	0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e
+		hex	00002020404060608080a0a0c0c0e0e0
+		hex	2020404060608080a0a0c0c0e0e0e0e0
+		hex	404060608080a0a0c0c0e0e0e0e0e0e0
+		hex	60608080a0a0c0c0e0e0e0e0e0e0e0e0
+		hex	8080a0a0c0c0e0e0e0e0e0e0e0e0e0e0
+		hex	a0a0c0c0e0e0e0e0e0e0e0e0e0e0e0e0
+		hex	c0c0e0e0e0e0e0e0e0e0e0e0e0e0e0e0
+		hex	e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0
 		even
 		
 DarkLevels_Green:
 		hex	00000000000000000000000000000000
-		hex	02020000000000000000000000000000
-		hex	04040202000000000000000000000000
-		hex	06060404020200000000000000000000
-		hex	08080606040402020000000000000000
-		hex	0a0a0808060604040202000000000000
-		hex	0c0c0a0a080806060404020200000000
-		hex	0e0e0c0c0a0a08080606040402020000
+		hex	20200000000000000000000000000000
+		hex	40402020000000000000000000000000
+		hex	60604040202000000000000000000000
+		hex	80806060404020200000000000000000
+		hex	a0a08080606040402020000000000000
+		hex	c0c0a0a0808060604040202000000000
+		hex	e0e0c0c0a0a080806060404020200000
 		even
 		
 BrightLevels_Blue:
@@ -120,12 +124,12 @@ DarkLevels_Blue:
 		even
 
 ApplyBrightness_KeepSonic:
-		lea	(v_pal_dry).w,a0
-		lea	(v_pal_dry_final).w,a1
+		lea	(v_pal_dry).w,a1
+		lea	(v_pal_dry_final).w,a2
 		moveq	#(countof_color/2)-1,d0			; do first palette line only
 		
 	.loop:
-		move.l	(a0)+,(a1)+				; copy palette without changing brightness
+		move.l	(a1)+,(a2)+				; copy palette without changing brightness
 		dbf	d0,.loop
 		
 		moveq	#(countof_color*3)-1,d0			; remaining 3 palettes
