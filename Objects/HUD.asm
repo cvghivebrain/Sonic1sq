@@ -213,7 +213,7 @@ HUD_DigitGfxIndex:
 HUD_TimeCount:	; Routine $A
 		tst.b	(f_hud_time_update).w
 		beq.s	.exit					; branch if time counter is flagged to stop
-		tst.w	(f_pause).w
+		tst.b	(f_pause).w
 		bne.s	.exit					; branch if game is paused
 		move.l	(v_time).w,d0
 		addq.b	#1,d0					; increment frame counter

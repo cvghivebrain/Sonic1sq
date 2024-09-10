@@ -5,7 +5,7 @@
 ; ---------------------------------------------------------------------------
 
 AnimateLevelGfx:
-		tst.w	(f_pause).w				; is the game paused?
+		tst.b	(f_pause).w				; is the game paused?
 		bne.s	.exit					; if yes, branch
 		move.l	(v_aniart_ptr).w,d0
 		beq.s	.exit					; branch if pointer is empty

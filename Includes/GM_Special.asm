@@ -201,7 +201,7 @@ SS_BGLoad:
 ; ---------------------------------------------------------------------------
 
 PalCycle_SS:
-		tst.w	(f_pause).w				; is game paused?
+		tst.b	(f_pause).w				; is game paused?
 		bne.w	.exit					; if yes, branch
 		subq.w	#1,(v_palcycle_ss_time).w		; decrement timer
 		bpl.w	.exit					; branch if time remains

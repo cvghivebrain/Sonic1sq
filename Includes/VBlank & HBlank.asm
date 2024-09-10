@@ -19,7 +19,7 @@ VBlank:
 	.notPAL:
 		move.b	(v_vblank_routine).w,d0			; get routine number
 		move.b	#id_VBlank_Lag,(v_vblank_routine).w	; reset to 0
-		move.w	#1,(f_hblank_pal_change).w		; set flag to let HBlank know a frame has finished
+		move.b	#1,(f_hblank_pal_change).w		; set flag to let HBlank know a frame has finished
 		andi.w	#$3E,d0
 		move.w	VBlank_Index(pc,d0.w),d0
 		jsr	VBlank_Index(pc,d0.w)			; jsr to relevant VBlank routine
@@ -68,7 +68,7 @@ VBlank_Lag:
 		dbf	d0,.waitPAL
 
 	.notPAL:
-		move.w	#1,(f_hblank_pal_change).w		; set flag to let HBlank know a frame has finished
+		move.b	#1,(f_hblank_pal_change).w		; set flag to let HBlank know a frame has finished
 		stopZ80
 		waitZ80
 		dma	Art_Red99,(sizeof_cell*2),$DF40
@@ -269,9 +269,9 @@ UpdatePalette:
 
 HBlank:
 		disable_ints
-		tst.w	(f_hblank_pal_change).w			; is palette set to change during HBlank?
+		tst.b	(f_hblank_pal_change).w			; is palette set to change during HBlank?
 		beq.s	.nochg					; if not, branch
-		move.w	#0,(f_hblank_pal_change).w
+		clr.b	(f_hblank_pal_change).w
 		pushr	a0-a1					; save a0-a1 to stack
 		lea	(vdp_data_port).l,a1
 		lea	(v_pal_water).w,a0			; get palette from RAM

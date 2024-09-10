@@ -63,9 +63,9 @@ v_palcycle_num:			rs.w 1				; palette cycling - current index number
 v_palcycle_time:		rs.w 1				; palette cycling - time until the next change
 f_sega_pal_next:		equ __rs-1			; flag set when Sega stripe animation is complete
 v_random:			rs.l 1				; pseudo random number generator result
-f_pause:			rs.w 1				; flag set to pause the game
 v_vdp_dma_buffer:		rs.w 1				; VDP DMA command buffer
-f_hblank_pal_change:		rs.w 1				; flag set to change palette during HBlank (0000 = no; 0001 = change)
+f_pause:			rs.b 1				; flag set to pause the game
+f_hblank_pal_change:		rs.b 1				; flag set to change palette during HBlank (0000 = no; 0001 = change)
 v_water_height_actual:		rs.w 1				; water height, actual
 v_water_height_normal:		rs.w 1				; water height, ignoring wobble
 v_water_height_next:		rs.w 1				; water height, next target
