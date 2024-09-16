@@ -79,7 +79,7 @@ getsubsprite:	macro
 ; ---------------------------------------------------------------------------
 ; Convert speed to position (speed of $100 will move an object 1px per frame)
 
-;	uses d0.l
+;	uses d0.l, d1.l
 ; ---------------------------------------------------------------------------
 
 update_x_pos:	macro
@@ -97,8 +97,11 @@ update_y_pos:	macro
 		endm
 
 update_xy_pos:	macro
-		update_x_pos
-		update_y_pos
+		movem.w	ost_x_vel(a0),d0/d1			; load horizontal & vertical speed
+		lsl.l	#8,d0					; multiply x speed by $100
+		add.l	d0,ost_x_pos(a0)			; update x position
+		lsl.l	#8,d1					; multiply y speed by $100
+		add.l	d1,ost_y_pos(a0)			; update y position
 		endm
 
 ; ---------------------------------------------------------------------------
@@ -107,7 +110,7 @@ update_xy_pos:	macro
 ; input:
 ;	\1 = gravity (default $38)
 
-;	uses d0.l
+;	uses d0.l, d1.l
 ; ---------------------------------------------------------------------------
 
 update_y_fall:	macro
@@ -120,8 +123,7 @@ update_y_fall:	macro
 		endm
 
 update_xy_fall:	macro
-		update_x_pos
-		update_y_pos
+		update_xy_pos
 		ifarg \1
 		addi.w	#\1,ost_y_vel(a0)			; increase falling speed
 		else
