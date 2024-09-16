@@ -38,8 +38,7 @@ BuildSprites:
 		beq.w	.abs_screen_coords			; branch if render_abs
 
 		; check object is visible
-		moveq	#0,d0
-		move.b	ost_displaywidth(a0),d0
+		move.w	ost_displaywidth_hi(a0),d0
 		move.w	ost_x_pos(a0),d1
 		sub.w	(a3),d1					; d1 = object x pos on screen (-ve if left of screen)
 		move.w	d1,d3

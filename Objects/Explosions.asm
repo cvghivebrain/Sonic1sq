@@ -34,7 +34,7 @@ ExItem_Animal:	; Routine 0
 		move.l	#Points,ost_id(a1)			; load points object
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
-		move.w	ost_subtype(a0),d0
+		move.b	ost_subtype(a0),d0
 		lsr.w	#1,d0
 		move.b	d0,ost_frame(a1)
 

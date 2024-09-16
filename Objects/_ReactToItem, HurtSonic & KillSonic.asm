@@ -126,7 +126,7 @@ React_Enemy_Break:
 		moveq	#Enemy_Points_end-Enemy_Points-2,d0	; max bonus is #6 (1000 points)
 
 	.bonusokay:
-		move.w	d0,ost_subtype(a1)			; set frame for points object (spawned by animal object)
+		move.b	d0,ost_subtype(a1)			; set frame for points object (spawned by animal object)
 		move.w	Enemy_Points(pc,d0.w),d0
 		cmpi.w	#combo_max,(v_enemy_combo).w		; have 16 enemies been destroyed?
 		bcs.s	.lessthan16				; if not, branch
