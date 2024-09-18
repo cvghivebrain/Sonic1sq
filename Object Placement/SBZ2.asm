@@ -35,7 +35,7 @@ ObjPos_SBZ2:
 		objpos $03B8,$0504,Rings,$12,rem
 		objpos $03DB,$0390,Flamethrower,$43,yflip
 		objpos $03E0,$0668,Button,$00
-		objpos $03F8,$0180,AutoDoor,$00,xflip
+		objpos $03F8,$0180,AutoDoor,type_autodoor_right,xflip
 		objpos $0415,$0186,Flamethrower,$43
 		objpos $0420,$07E8,Electro,$08
 		objpos $0438,$0544,Rings,$12,rem
@@ -149,7 +149,7 @@ ObjPos_SBZ2:
 		objpos $0BB0,$03B0,RunningDisc,$40
 		objpos $0BC4,$0301,Monitor,type_monitor_shield,rem
 		objpos $0BD0,$06A8,VanishPlatform,$C0
-		objpos $0BF8,$0180,AutoDoor,$00
+		objpos $0BF8,$0180,AutoDoor,type_autodoor_left
 		objpos $0C00,$07E8,Electro,$04
 		objpos $0C10,$06A8,VanishPlatform,$00
 		objpos $0C20,$00A8,CollapseFloor,$01
@@ -252,7 +252,7 @@ ObjPos_SBZ2:
 		objpos $1476,$0190,Flamethrower,$43,yflip
 		objpos $1490,$01D0,Invisibarrier,$15
 		objpos $14C1,$01FC,ScrapDoorH,3
-		objpos $14F8,$0480,AutoDoor,$00
+		objpos $14F8,$0480,AutoDoor,type_autodoor_left
 		objpos $1520,$028C,BallHog,$38,xflip,rem
 		objpos $1520,$038C,BallHog,$38,xflip,rem
 		objpos $1530,$0048,Rings,$12,rem
@@ -267,8 +267,8 @@ ObjPos_SBZ2:
 		objpos $1618,$01B4,Rings,$12,rem
 		objpos $16AC,$042C,BallHog,$38,rem
 		objpos $16B0,$0530,Caterkiller,$00,rem
-		objpos $16F8,$0420,AutoDoor,$00,xflip
-		objpos $16F8,$0520,AutoDoor,$00
+		objpos $16F8,$0420,AutoDoor,type_autodoor_right,xflip
+		objpos $16F8,$0520,AutoDoor,type_autodoor_left
 		objpos $1770,$0368,SwingingPlatform,$36
 		objpos $1790,$010C,BallHog,$38,rem
 		objpos $1790,$030C,BallHog,$38,rem
@@ -282,7 +282,7 @@ ObjPos_SBZ2:
 		objpos $1AC0,$04E0,SwingingPlatform,$37
 		objpos $1BC0,$0500,SwingingPlatform,$37
 		objpos $1CC0,$0520,SwingingPlatform,$37
-		objpos $1CF8,$0480,AutoDoor,$00
+		objpos $1CF8,$0480,AutoDoor,type_autodoor_left
 		
 		objpos $1EE0,$05A4,Signpost,$00
 		objpos $2010,$5D0,FalseFloor,0,rem

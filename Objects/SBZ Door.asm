@@ -3,6 +3,17 @@
 
 ; spawned by:
 ;	ObjPos_SBZ1, ObjPos_SBZ2
+
+; subtypes:
+;	%000000RL
+;	R - 1 to open from right side
+;	L - 1 to open from left side
+		
+type_autodoor_left_bit:		equ 0
+type_autodoor_right_bit:	equ 1
+type_autodoor_left:		equ 1<<type_autodoor_left_bit	; opens from left
+type_autodoor_right:		equ 1<<type_autodoor_right_bit	; opens from right
+type_autodoor_both:		equ type_autodoor_left+type_autodoor_right
 ; ---------------------------------------------------------------------------
 
 AutoDoor:
@@ -32,15 +43,21 @@ ADoor_Main:	; Routine 0
 
 ADoor_WaitOpen:	; Routine 2
 		getsonic					; a1 = OST of Sonic
-		range_x_test	64
+		range_x
+		cmpi.w	#64,d1
 		bcc.w	DespawnQuick				; branch if > 64px away
-		btst.b	#status_xflip_bit,ost_status(a0)
-		beq.s	.no_xflip
-		neg.w	d0
-		
-	.no_xflip:
+		btst.b	#type_autodoor_left_bit,ost_subtype(a0)
+		beq.s	.dont_open_left				; branch if door doesn't open from left
 		tst.w	d0
-		bmi.s	.open_side				; branch if Sonic is on correct side
+		bmi.s	.open_side				; branch if Sonic is on left side
+		
+	.dont_open_left:
+		btst.b	#type_autodoor_right_bit,ost_subtype(a0)
+		beq.s	.dont_open_right			; branch if door doesn't open from right
+		tst.w	d0
+		bpl.s	.open_side				; branch if Sonic is on right side
+		
+	.dont_open_right:
 		bsr.w	SolidObject
 		bra.w	DespawnQuick
 		

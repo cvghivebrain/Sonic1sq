@@ -135,6 +135,7 @@ Debug_ChgItem:
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		add.w	d2,ost_x_pos(a1)			; first object is to the right
 		move.b	#render_rel,ost_render(a1)
+		move.w	#priority_0,ost_priority(a1)
 		neg.w	d2					; second object will be to the left
 		dbf	d1,.loop
 		

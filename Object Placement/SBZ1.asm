@@ -37,7 +37,7 @@ ObjPos_SBZ1:
 		objpos $0700,$05D8,Invisibarrier,$17
 		objpos $0700,$0658,Invisibarrier,$17
 		objpos $0700,$06D8,Invisibarrier,$17
-		objpos $0708,$04AC,AutoDoor,$00
+		objpos $0708,$04AC,AutoDoor,type_autodoor_left
 		objpos $0738,$04AC,Rings,$16,rem
 		objpos $0790,$034C,Caterkiller,$00,rem
 		objpos $07BA,$0787,Flamethrower,$43,yflip
@@ -78,7 +78,7 @@ ObjPos_SBZ1:
 		objpos $0B10,$04F1,Monitor,type_monitor_shield,rem
 		objpos $0B20,$0760,ScrapStomp,type_stomp_fast_short
 		objpos $0B30,$0268,VanishPlatform,$00
-		objpos $0B38,$0680,AutoDoor,$00
+		objpos $0B38,$0680,AutoDoor,type_autodoor_left
 		objpos $0B50,$0508,VanishPlatform,$40
 		objpos $0B50,$0588,VanishPlatform,$C0
 		objpos $0B50,$0608,VanishPlatform,$40
@@ -231,7 +231,7 @@ ObjPos_SBZ1:
 		objpos $1800,$02D8,Invisibarrier,$17
 		objpos $1800,$0358,Invisibarrier,$17
 		objpos $1800,$03D8,Invisibarrier,$17
-		objpos $1808,$0480,AutoDoor,$00
+		objpos $1808,$0480,AutoDoor,type_autodoor_left
 		objpos $1815,$0686,Flamethrower,$43
 		objpos $1828,$0590,Rings,$12,rem
 		objpos $1840,$05AC,Trapdoor,1
@@ -239,7 +239,7 @@ ObjPos_SBZ1:
 		objpos $18C0,$0618,Electro,$08,yflip
 		objpos $18DC,$060D,Rings,$13,rem
 		objpos $1930,$0510,Invisibarrier,$17
-		objpos $1938,$0580,AutoDoor,$00
+		objpos $1938,$0580,AutoDoor,type_autodoor_left
 		objpos $193B,$0646,Flamethrower,$43,xflip
 		objpos $1940,$0618,Electro,$08,yflip
 		objpos $195C,$060D,Rings,$13,rem
@@ -289,13 +289,13 @@ ObjPos_SBZ1:
 		objpos $1C80,$0580,SpinConvey,5,rem
 		objpos $1C90,$04C0,Invisibarrier,$13
 		objpos $1C9C,$0490,Rings,$13,rem
-		objpos $1CF8,$0380,AutoDoor,$00
-		objpos $1CF8,$0480,AutoDoor,$00
+		objpos $1CF8,$0380,AutoDoor,type_autodoor_left
+		objpos $1CF8,$0480,AutoDoor,type_autodoor_left
 		objpos $1D60,$0568,CollapseFloor,$01
 		objpos $1DA0,$0568,CollapseFloor,$01
 		objpos $1DE0,$0568,CollapseFloor,$01
-		objpos $1E18,$03A0,AutoDoor,$00,xflip
-		objpos $1E18,$04A0,AutoDoor,$00,xflip
+		objpos $1E18,$03A0,AutoDoor,type_autodoor_right,xflip
+		objpos $1E18,$04A0,AutoDoor,type_autodoor_right,xflip
 		objpos $1EF0,$04CC,BallHog,$36,xflip,rem
 		objpos $1F90,$030C,BallHog,$36,rem
 		objpos $1FB0,$0511,Monitor,type_monitor_rings,rem
