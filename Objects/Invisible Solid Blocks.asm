@@ -29,6 +29,7 @@ Invis_Main:	; Routine 0
 		move.l	#Map_Invis,ost_mappings(a0)
 		move.w	#tile_Art_Lives+tile_hi,ost_tile(a0)
 		move.b	#render_rel+render_onscreen,ost_render(a0)
+		move.w	#priority_0,ost_priority(a0)
 		move.b	ost_subtype(a0),d0			; get object type
 		move.b	d0,d1
 		andi.w	#$F0,d0					; read only the	high nybble

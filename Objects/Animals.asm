@@ -96,7 +96,7 @@ Anml_Main:	; Routine 0
 		move.w	(a2),ost_tile(a0)			; load VRAM setting
 		move.b	(a1)+,ost_animal_type(a0)		; load routine id
 		move.b	#render_rel+render_xflip+render_onscreen,ost_render(a0)
-		move.b	#priority_6,ost_priority(a0)
+		move.w	#priority_6,ost_priority(a0)
 		move.b	#8,ost_displaywidth(a0)
 		move.b	#animal_height,ost_height(a0)
 		move.b	#7,ost_anim_time(a0)
@@ -128,7 +128,7 @@ Anml_Drop:	; Routine 4
 		move.b	ost_animal_type(a0),ost_routine(a0)	; goto relevant routine next
 		tst.b	(v_boss_status).w
 		beq.w	DisplaySprite				; branch if not at prison capsule
-		move.b	#priority_3,ost_priority(a0)		; make animal appear in front of prison
+		move.w	#priority_3,ost_priority(a0)		; make animal appear in front of prison
 		btst	#4,(v_vblank_counter_byte).w		; check bit that changes every 16 frames
 		beq.w	DisplaySprite				; branch if 0
 		neg.w	ost_x_vel(a0)				; reverse direction
@@ -295,7 +295,7 @@ AnmlE_Main:	; Routine 0
 		move.b	#animal_height,ost_height(a0)
 		move.b	#render_rel,ost_render(a0)
 		bset	#render_xflip_bit,ost_render(a0)
-		move.b	#priority_6,ost_priority(a0)
+		move.w	#priority_6,ost_priority(a0)
 		move.b	#8,ost_displaywidth(a0)
 		move.b	#7,ost_anim_time(a0)
 		bra.w	DisplaySprite

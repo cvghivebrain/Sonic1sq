@@ -34,7 +34,7 @@ Burro_Main:	; Routine 0
 		move.l	#Map_Burro,ost_mappings(a0)
 		move.w	(v_tile_burrobot).w,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
-		move.b	#priority_4,ost_priority(a0)
+		move.w	#priority_4,ost_priority(a0)
 		move.b	#id_React_Enemy,ost_col_type(a0)
 		move.b	#12,ost_col_width(a0)
 		move.b	#18,ost_col_height(a0)

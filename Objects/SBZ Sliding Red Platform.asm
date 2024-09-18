@@ -34,7 +34,7 @@ Slide_Main:	; Routine 0
 		move.b	#$3F,ost_width(a0)
 		move.b	#8,ost_height(a0)
 		move.w	#tile_Kos_SlideFloor+tile_pal3,ost_tile(a0)
-		move.b	#priority_4,ost_priority(a0)
+		move.w	#priority_4,ost_priority(a0)
 		move.w	ost_x_pos(a0),ost_slide_x_start(a0)
 		move.w	#8,ost_slide_speed(a0)
 		btst	#status_xflip_bit,ost_status(a0)

@@ -125,13 +125,13 @@ sprite4x2:		equ $D
 sprite4x3:		equ $E
 sprite4x4:		equ $F
 
-priority_0:		equ 0
-priority_1:		equ 2
-priority_2:		equ 4
-priority_3:		equ 6
-priority_4:		equ 8
-priority_5:		equ $A
-priority_6:		equ $C
+priority_0:		equ v_sprite_queue&$FFFF
+priority_1:		equ priority_0+sizeof_priority
+priority_2:		equ priority_0+(sizeof_priority*2)
+priority_3:		equ priority_0+(sizeof_priority*3)
+priority_4:		equ priority_0+(sizeof_priority*4)
+priority_5:		equ priority_0+(sizeof_priority*5)
+priority_6:		equ priority_0+(sizeof_priority*6)
 
 ; Levels
 id_GHZ:		equ 0
@@ -311,7 +311,7 @@ ost_parent:		rs.w 1					; address of OST of parent object
 ost_linked:		rs.w 1					; address of OST of linked object
 ost_routine:		rs.w 1					; routine number
 ost_mode:		equ ost_routine+1			; secondary routine number
-ost_col_type:		rs.w 1					; collision response type - 0 = none; 1-$3F = enemy; $41-$7F = items; $81-BF = hurts; $C1-$FF = custom
+ost_col_type:		rs.w 1					; collision response type - 0 = none; 2 = enemy; 4 = boss; 6 = ring; 8 = hurts; et al
 ost_col_property:	equ ost_col_type+1			; collision extra property
 ost_sink:		equ ost_col_property			; amount platform has sunk when stood on - 0 is none, $1E is max
 ost_col_width:		rs.w 1					; hitbox width
@@ -321,6 +321,7 @@ ost_solid_y_pos:	equ ost_col_height			; Sonic's y pos on platform with heightmap
 ost_subsprite:		rs.w 1					; pointer to subsprite table
 ost_displaywidth_hi:	rs.w 1					; display width/2
 ost_displaywidth:	equ ost_displaywidth_hi+1
+ost_priority:		rs.w 1					; address of sprite stack priority list
 ost_render:		rs.b 1					; bitfield for x/y flip, display mode
 	render_xflip_bit:	equ 0
 	render_yflip_bit:	equ 1
@@ -341,7 +342,6 @@ ost_render:		rs.b 1					; bitfield for x/y flip, display mode
 	render_onscreen:	equ 1<<render_onscreen_bit	; object is on screen
 ost_height:		rs.b 1					; height/2
 ost_width:		rs.b 1					; width/2
-ost_priority:		rs.b 1					; sprite stack priority - 0 is highest, 7 is lowest
 ost_anim_frame:		rs.b 1					; current frame in animation script
 ost_anim:		rs.b 1					; current animation
 ost_anim_time:		rs.b 1					; time to next frame / general timer
@@ -371,7 +371,7 @@ ost_subtype:		rs.b 1					; object subtype
 ost_name:		rs.b 1					; name string id
 ost_used:		equ __rs				; bytes used by regular OST, everything after this is scratch RAM
 		popo						; restore options
-		inform	0,"0-$%h bytes of OST per object used, leaving $%h bytes of scratch RAM.",__rs-1,sizeof_ost-__rs
+		inform	0,"$%h out of $%h bytes of OST per object used, leaving $%h bytes of scratch RAM.",ost_used,sizeof_ost,sizeof_ost-ost_used
 
 ; Object variables used by Sonic
 		rsobj SonicPlayer

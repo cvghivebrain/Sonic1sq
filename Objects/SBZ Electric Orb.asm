@@ -27,6 +27,7 @@ Elec_Main:	; Routine 0
 		move.l	#Map_Elec,ost_mappings(a0)
 		move.w	#tile_Kos_Electric,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
+		move.w	#priority_0,ost_priority(a0)
 		move.b	#$28,ost_displaywidth(a0)
 		move.b	#72,ost_col_width(a0)
 		move.b	#8,ost_col_height(a0)

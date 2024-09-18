@@ -33,7 +33,7 @@ Pri_Main:	; Routine 0
 		move.b	#$20,ost_displaywidth(a0)
 		move.b	#$20,ost_width(a0)
 		move.b	#$20,ost_height(a0)
-		move.b	#priority_4,ost_priority(a0)
+		move.w	#priority_4,ost_priority(a0)
 		move.b	#id_frame_prison_capsule,ost_frame(a0)
 		moveq	#id_UPLC_Prison,d0
 		jsr	UncPLC					; load prison gfx
@@ -51,7 +51,7 @@ Pri_Main:	; Routine 0
 		move.b	#$C,ost_displaywidth(a1)
 		move.b	#$C,ost_width(a1)
 		move.b	#8,ost_height(a1)
-		move.b	#priority_5,ost_priority(a1)
+		move.w	#priority_5,ost_priority(a1)
 		move.b	#id_frame_prison_switch1,ost_frame(a1)
 
 	.fail:

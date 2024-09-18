@@ -56,7 +56,7 @@ LGrass_Main:	; Routine 0
 		move.l	#Map_LGrass,ost_mappings(a0)
 		move.w	#tile_pal3+tile_hi,ost_tile(a0)
 		move.b	#render_rel+render_useheight,ost_render(a0)
-		move.b	#priority_5,ost_priority(a0)
+		move.w	#priority_5,ost_priority(a0)
 		move.w	ost_y_pos(a0),ost_grass_y_start(a0)
 		move.b	ost_subtype(a0),d0
 		move.b	d0,d1

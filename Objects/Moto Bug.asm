@@ -28,7 +28,7 @@ Moto_Main:	; Routine 0
 		move.l	#Map_Moto,ost_mappings(a0)
 		move.w	(v_tile_motobug).w,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
-		move.b	#priority_4,ost_priority(a0)
+		move.w	#priority_4,ost_priority(a0)
 		move.b	#$14,ost_displaywidth(a0)
 		move.b	#motobug_height,ost_height(a0)
 		move.b	#8,ost_width(a0)
@@ -70,7 +70,7 @@ Moto_Walk:	; Routine 2
 		move.l	ost_mappings(a0),ost_mappings(a1)
 		move.w	ost_tile(a0),ost_tile(a1)
 		move.b	ost_render(a0),ost_render(a1)
-		move.b	#priority_4,ost_priority(a1)
+		move.w	#priority_4,ost_priority(a1)
 		move.b	#4,ost_displaywidth(a1)
 		bra.w	DespawnObject
 		

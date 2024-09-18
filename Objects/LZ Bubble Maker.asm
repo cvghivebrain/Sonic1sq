@@ -36,7 +36,7 @@ BubM_Main:	; Routine 0
 		ori.w	#tile_hi,ost_tile(a0)
 		move.b	#render_onscreen+render_rel,ost_render(a0)
 		move.b	#$10,ost_displaywidth(a0)
-		move.b	#priority_1,ost_priority(a0)
+		move.w	#priority_1,ost_priority(a0)
 		move.b	#id_ani_bubble_bubmaker,ost_anim(a0)
 		move.b	ost_subtype(a0),d0
 		andi.b	#$F,d0					; low nybble of subtype

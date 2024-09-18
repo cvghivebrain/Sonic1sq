@@ -20,7 +20,7 @@ Shi_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Shi_Shield next
 		move.l	#Map_Shield,ost_mappings(a0)
 		move.b	#render_rel,ost_render(a0)
-		move.b	#priority_1,ost_priority(a0)
+		move.w	#priority_1,ost_priority(a0)
 		move.b	#$10,ost_displaywidth(a0)
 		move.w	#vram_shield/sizeof_cell,ost_tile(a0)
 		move.b	#id_ani_shield_0,ost_anim(a0)
@@ -73,7 +73,7 @@ Inv_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Inv_Stars next
 		move.l	#Map_Shield,ost_mappings(a0)
 		move.b	#render_rel,ost_render(a0)
-		move.b	#priority_1,ost_priority(a0)
+		move.w	#priority_1,ost_priority(a0)
 		move.b	#$10,ost_displaywidth(a0)
 		move.w	#vram_shield/sizeof_cell,ost_tile(a0)
 		moveq	#0,d0

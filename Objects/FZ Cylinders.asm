@@ -50,7 +50,7 @@ Cyl_Main:	; Routine 0
 		move.b	#$20,ost_width(a0)
 		move.b	#$20,ost_displaywidth(a0)
 		move.b	#$60,ost_height(a0)
-		move.b	#priority_3,ost_priority(a0)
+		move.w	#priority_3,ost_priority(a0)
 		addq.b	#2,ost_routine(a0)			; goto Cyl_Action next
 
 Cyl_Action:	; Routine 2

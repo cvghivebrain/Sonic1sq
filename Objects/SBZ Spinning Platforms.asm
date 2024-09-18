@@ -46,6 +46,7 @@ Spin_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Spin_Wait next
 		move.l	#Map_Spin,ost_mappings(a0)
 		move.w	#tile_Kos_SpinPlatform,ost_tile(a0)
+		move.w	#priority_0,ost_priority(a0)
 		move.b	#$10,ost_displaywidth(a0)
 		move.b	ost_subtype(a0),d0			; get object type
 		move.w	d0,d1

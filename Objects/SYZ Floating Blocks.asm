@@ -52,7 +52,7 @@ FBlock_Main:	; Routine 0
 		move.l	#Map_FBlock,ost_mappings(a0)
 		move.w	#0+tile_pal3,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
-		move.b	#priority_3,ost_priority(a0)
+		move.w	#priority_3,ost_priority(a0)
 		move.b	ost_subtype(a0),d0			; get subtype
 		move.b	d0,d2
 		lsr.w	#4,d0

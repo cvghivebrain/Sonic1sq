@@ -44,7 +44,7 @@ BSpike_Main:	; Routine 0
 		move.w	#tile_Kos_SlzSpike,ost_tile(a0)
 		move.b	#id_frame_seesaw_silver,ost_frame(a0)
 		ori.b	#render_rel,ost_render(a0)
-		move.b	#priority_4,ost_priority(a0)
+		move.w	#priority_4,ost_priority(a0)
 		move.b	#id_React_Hurt,ost_col_type(a0)
 		move.b	#8,ost_col_width(a0)
 		move.b	#8,ost_col_height(a0)
@@ -351,7 +351,7 @@ BSpike_Explode:	; Routine 8
 		move.l	#BossSpikeball,ost_id(a1)		; load shrapnel object
 		move.b	#id_BSpike_MoveFrag,ost_routine(a1)	; goto BSpike_MoveFrag next
 		move.l	#Map_BSBall,ost_mappings(a1)
-		move.b	#priority_3,ost_priority(a1)
+		move.w	#priority_3,ost_priority(a1)
 		move.w	(v_tile_bomb).w,ost_tile(a1)
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)

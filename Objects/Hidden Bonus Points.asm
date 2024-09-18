@@ -42,7 +42,7 @@ Bonus_Main:	; Routine 0
 		move.l	#Map_Bonus,ost_mappings(a0)
 		move.w	#(vram_bonus/sizeof_cell)+tile_hi,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
-		move.b	#priority_0,ost_priority(a0)
+		move.w	#priority_0,ost_priority(a0)
 		move.b	#$10,ost_displaywidth(a0)
 		moveq	#0,d0
 		move.b	ost_subtype(a0),d0

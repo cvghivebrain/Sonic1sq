@@ -28,7 +28,7 @@ DoorH_Main:	; Routine 0
 		move.l	#Map_DoorH,ost_mappings(a0)
 		move.w	#tile_Kos_LzDoorH+tile_pal3,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
-		move.b	#priority_3,ost_priority(a0)
+		move.w	#priority_3,ost_priority(a0)
 		move.b	#64,ost_displaywidth(a0)
 		move.b	#64,ost_width(a0)
 		move.b	#16,ost_height(a0)

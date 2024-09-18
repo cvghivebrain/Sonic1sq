@@ -87,7 +87,7 @@ CStom_Main:	; Routine 0
 		move.w	#tile_Kos_MzMetal,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.w	ost_y_pos(a0),ost_cstomp_y_start(a0)
-		move.b	#priority_4,ost_priority(a0)
+		move.w	#priority_4,ost_priority(a0)
 		addq.b	#2,ost_routine(a0)			; goto CStom_Block next
 		shortcut	CStom_Block			; go directly there in future
 		
@@ -102,7 +102,7 @@ CStom_Main:	; Routine 0
 		move.w	#tile_Kos_MzMetal,ost_tile(a1)
 		move.b	#id_frame_cstomp_ceiling,ost_frame(a1)
 		move.b	#render_rel,ost_render(a1)
-		move.b	#priority_4,ost_priority(a1)
+		move.w	#priority_4,ost_priority(a1)
 		move.b	#16,ost_displaywidth(a1)
 		saveparent
 		
@@ -117,7 +117,7 @@ CStom_Main:	; Routine 0
 		move.w	#tile_Kos_MzMetal,ost_tile(a1)
 		move.b	#id_frame_cstomp_chain1,ost_frame(a1)
 		move.b	#render_rel+render_useheight,ost_render(a1)
-		move.b	#priority_4,ost_priority(a1)
+		move.w	#priority_4,ost_priority(a1)
 		move.b	#16,ost_displaywidth(a1)
 		move.b	#$80,ost_height(a1)
 		saveparent
@@ -135,7 +135,7 @@ CStom_Main:	; Routine 0
 		move.w	(v_tile_spikes).w,ost_tile(a1)
 		move.b	#id_frame_cstomp_spikes,ost_frame(a1)
 		move.b	#render_rel,ost_render(a1)
-		move.b	#priority_4,ost_priority(a1)
+		move.w	#priority_4,ost_priority(a1)
 		move.b	#48,ost_displaywidth(a1)
 		move.b	#id_React_Hurt,ost_col_type(a1)		; make spikes harmful
 		move.b	#40,ost_col_width(a1)

@@ -45,7 +45,7 @@ Mon_Main:	; Routine 0
 		move.l	#Map_Monitor,ost_mappings(a0)
 		move.w	#tile_Art_Monitors,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
-		move.b	#priority_3,ost_priority(a0)
+		move.w	#priority_3,ost_priority(a0)
 		move.b	#$F,ost_displaywidth(a0)
 		move.b	#-1,ost_monitor_slot(a0)		; assume there are no free slots
 		bsr.w	GetState

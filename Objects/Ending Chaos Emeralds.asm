@@ -51,7 +51,7 @@ ECha_CreateEms:
 		move.l	#Map_ECha,ost_mappings(a1)
 		move.w	(v_tile_emeralds).w,ost_tile(a1)
 		move.b	#render_rel,ost_render(a1)
-		move.b	#priority_1,ost_priority(a1)
+		move.w	#priority_1,ost_priority(a1)
 		move.w	ost_x_pos(a0),ost_echaos_x_start(a1)
 		move.w	ost_y_pos(a0),ost_echaos_y_start(a1)
 		move.w	ost_parent(a0),ost_parent(a1)

@@ -38,7 +38,7 @@ SSS_Main:	; Routine 0
 		move.l	#Map_Sonic,ost_mappings(a0)
 		move.w	#tile_sonic,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
-		move.b	#priority_0,ost_priority(a0)
+		move.w	#priority_0,ost_priority(a0)
 		move.b	#id_Roll,ost_anim(a0)
 		bset	#status_jump_bit,ost_status(a0)
 		bset	#status_air_bit,ost_status(a0)

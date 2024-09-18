@@ -35,7 +35,7 @@ Pillar_Main:	; Routine 0
 		move.w	#tile_Kos_Sbz3HugeDoor+tile_pal3,ost_tile(a0)
 		move.l	#Map_Pillar,ost_mappings(a0)
 		ori.b	#render_rel+render_useheight,ost_render(a0)
-		move.b	#priority_4,ost_priority(a0)
+		move.w	#priority_4,ost_priority(a0)
 		tst.b	ost_subtype(a0)
 		bmi.s	Pillar_Final				; branch if object is the final version
 		tst.b	(v_sbz3pillar_status).w

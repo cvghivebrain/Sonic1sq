@@ -48,7 +48,7 @@ SStom_Main:	; Routine 0
 		move.b	d0,ost_render(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#$20,ost_displaywidth(a0)
-		move.b	#priority_3,ost_priority(a0)
+		move.w	#priority_3,ost_priority(a0)
 		addq.b	#2,ost_routine(a0)			; goto SStom_Base next
 		move.b	ost_subtype(a0),d0
 		andi.w	#%00110000,d0
@@ -68,7 +68,7 @@ SStom_Main:	; Routine 0
 		move.w	ost_tile(a0),ost_tile(a1)
 		move.b	ost_status(a0),ost_status(a1)
 		move.b	ost_render(a0),ost_render(a1)
-		move.b	#priority_4,ost_priority(a1)
+		move.w	#priority_4,ost_priority(a1)
 		move.b	(a2)+,ost_frame(a1)
 		move.b	(a2)+,ost_displaywidth(a1)
 		saveparent

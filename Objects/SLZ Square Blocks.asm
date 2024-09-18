@@ -47,7 +47,7 @@ SBlock_Main:	; Routine 0
 		move.l	#Map_SBlock,ost_mappings(a0)
 		move.w	#0+tile_pal3,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
-		move.b	#priority_3,ost_priority(a0)
+		move.w	#priority_3,ost_priority(a0)
 		moveq	#0,d0
 		move.b	ost_subtype(a0),d0			; get subtype (1-4)
 		move.b	d0,d1
@@ -65,7 +65,7 @@ SBlock_Main:	; Routine 0
 		move.l	ost_mappings(a0),ost_mappings(a1)
 		move.w	ost_tile(a0),ost_tile(a1)
 		move.b	ost_render(a0),ost_render(a1)
-		move.b	ost_priority(a0),ost_priority(a1)
+		move.w	ost_priority(a0),ost_priority(a1)
 		move.w	ost_x_pos(a0),ost_sblock_x_start(a1)
 		move.w	ost_y_pos(a0),ost_sblock_y_start(a1)
 		move.b	#16,ost_displaywidth(a1)

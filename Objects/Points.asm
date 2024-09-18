@@ -22,7 +22,7 @@ Poi_Main:	; Routine 0
 		move.w	(v_tile_points).w,ost_tile(a0)
 		addi.w	#tile_pal2,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
-		move.b	#priority_1,ost_priority(a0)
+		move.w	#priority_1,ost_priority(a0)
 		move.b	#8,ost_displaywidth(a0)
 		move.w	#-$300,ost_y_vel(a0)			; move object upwards
 

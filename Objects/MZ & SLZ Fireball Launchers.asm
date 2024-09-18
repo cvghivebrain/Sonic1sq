@@ -98,7 +98,7 @@ FireMakerBoss:
 		add.w	ost_x_pos(a0),d0
 		move.w	d0,ost_x_pos(a1)			; randomise x pos
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
-		move.b	#priority_5,ost_priority(a1)
+		move.w	#priority_5,ost_priority(a1)
 		
 		bsr.s	FireM_Random
 		bra.w	DespawnQuick_NoDisplay

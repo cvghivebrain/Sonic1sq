@@ -27,6 +27,7 @@ CSI_Main:	; Routine 0
 		move.w	#(vram_continue/sizeof_cell)+tile_hi,ost_tile(a0)
 		move.b	#id_frame_cont_text,ost_frame(a0)
 		move.b	#render_abs,ost_render(a0)
+		move.w	#priority_0,ost_priority(a0)
 		move.b	#$3C,ost_displaywidth(a0)
 		move.w	#screen_left+160,ost_x_pos(a0)
 		move.w	#screen_top+64,ost_y_screen(a0)
@@ -39,7 +40,7 @@ CSI_Main:	; Routine 0
 		move.l	#Map_ContScr,ost_mappings(a1)
 		move.w	(v_tile_hud).w,ost_tile(a1)
 		move.b	#render_abs,ost_render(a1)
-		move.b	#priority_0,ost_priority(a1)
+		move.w	#priority_0,ost_priority(a1)
 		move.b	#id_CSI_Counter,ost_routine(a1)
 
 CSI_Display:	; Routine 2
@@ -132,7 +133,7 @@ CSI_Oval:	; Routine $A
 		move.b	#$3C,ost_displaywidth(a0)
 		move.w	#screen_left+160,ost_x_pos(a0)
 		move.w	#screen_top+64,ost_y_screen(a0)
-		move.b	#priority_3,ost_priority(a0)
+		move.w	#priority_3,ost_priority(a0)
 		move.b	#id_frame_cont_oval,ost_frame(a0)
 		move.b	#id_CSI_Display,ost_routine(a0)		; goto CSI_Display next
 		jmp	(DisplaySprite).l

@@ -22,7 +22,7 @@ Rock_Main:	; Routine 0
 		move.w	#tile_Kos_PurpleRock+tile_pal4,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#$13,ost_displaywidth(a0)
-		move.b	#priority_4,ost_priority(a0)
+		move.w	#priority_4,ost_priority(a0)
 		move.b	#16,ost_height(a0)
 		move.b	#16,ost_width(a0)
 

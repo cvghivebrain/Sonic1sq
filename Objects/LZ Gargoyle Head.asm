@@ -33,7 +33,7 @@ Gar_Main:	; Routine 0
 		move.l	#Map_Gar,ost_mappings(a0)
 		move.w	#tile_Kos_Gargoyle+tile_pal3,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
-		move.b	#priority_3,ost_priority(a0)
+		move.w	#priority_3,ost_priority(a0)
 		move.b	#$10,ost_displaywidth(a0)
 		move.b	ost_subtype(a0),d0			; get object type
 		andi.w	#$F,d0					; read only the	low nybble
@@ -83,7 +83,7 @@ GarFire:
 		move.l	#Map_Gar,ost_mappings(a0)
 		move.w	#tile_Kos_Gargoyle,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
-		move.b	#priority_4,ost_priority(a0)
+		move.w	#priority_4,ost_priority(a0)
 		move.b	#id_React_Hurt,ost_col_type(a0)
 		move.b	#4,ost_col_width(a0)
 		move.b	#4,ost_col_height(a0)

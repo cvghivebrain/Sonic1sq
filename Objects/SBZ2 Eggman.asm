@@ -34,7 +34,7 @@ SEgg_Main:	; Routine 0
 		jsr	UncPLC
 		
 		addq.b	#2,ost_routine(a0)			; goto SEgg_Wait next
-		move.b	#priority_3,ost_priority(a0)
+		move.w	#priority_3,ost_priority(a0)
 		move.l	#Map_SEgg,ost_mappings(a0)
 		move.w	#tile_Art_Sbz2Eggman,ost_tile(a0)
 		move.b	#render_rel+render_onscreen,ost_render(a0)
@@ -134,7 +134,7 @@ ScrapButton:
 		move.l	#Map_But,ost_mappings(a0)
 		move.w	(v_tile_button).w,ost_tile(a0)
 		move.b	#render_rel+render_onscreen,ost_render(a0)
-		move.b	#priority_3,ost_priority(a0)
+		move.w	#priority_3,ost_priority(a0)
 		move.b	#$10,ost_displaywidth(a0)
 		move.b	#id_frame_button_up,ost_frame(a0)	; use unpressed frame
 		shortcut

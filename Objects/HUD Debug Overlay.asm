@@ -28,7 +28,7 @@ Overlay_Main:	; Routine 0
 		move.b	#id_frame_hud_debugsonic,ost_frame(a0)
 		move.w	#vram_overlay/sizeof_cell,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
-		move.b	#priority_0,ost_priority(a0)
+		move.w	#priority_0,ost_priority(a0)
 		move.b	#16,ost_displaywidth(a0)
 		moveq	#id_UPLC_Overlay,d0
 		jsr	UncPLC					; load corner & dot gfx
@@ -40,7 +40,7 @@ Overlay_Main:	; Routine 0
 		move.b	ost_frame(a0),ost_frame(a1)
 		move.w	#vram_overlay2/sizeof_cell,ost_tile(a1)
 		move.b	ost_render(a0),ost_render(a1)
-		move.b	ost_priority(a0),ost_priority(a1)
+		move.w	ost_priority(a0),ost_priority(a1)
 		move.b	ost_displaywidth(a0),ost_displaywidth(a1)
 		saveparent
 		

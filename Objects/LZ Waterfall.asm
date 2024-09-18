@@ -26,7 +26,7 @@ Waterfall:
 		move.w	#tile_Kos_Splash+tile_pal3,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#$18,ost_displaywidth(a0)
-		move.b	#priority_1,ost_priority(a0)
+		move.w	#priority_1,ost_priority(a0)
 		move.b	ost_subtype(a0),d0
 		bpl.s	.not_high				; branch if not +$80
 		bset	#tile_hi_bit,ost_tile(a0)
@@ -75,7 +75,7 @@ WFall_Main:	; Routine 0
 		move.w	#tile_Kos_Splash+tile_pal3,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#$18,ost_displaywidth(a0)
-		move.b	#priority_1,ost_priority(a0)
+		move.w	#priority_1,ost_priority(a0)
 		tst.b	ost_subtype(a0)				; get object type
 		bpl.s	WFall_Animate				; branch if $00-$7F
 		bset	#tile_hi_bit,ost_tile(a0)

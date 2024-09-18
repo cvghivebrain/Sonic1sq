@@ -43,7 +43,7 @@ BBlock_Main:	; Routine 0
 		move.b	#$10,ost_displaywidth(a1)
 		move.b	#$10,ost_width(a1)
 		move.b	#$10,ost_height(a1)
-		move.b	#priority_3,ost_priority(a1)
+		move.w	#priority_3,ost_priority(a1)
 		move.w	d5,ost_x_pos(a1)			; set x position
 		move.w	#$582,ost_y_pos(a1)
 		move.b	d4,ost_subtype(a1)			; blocks have subtypes 0-9

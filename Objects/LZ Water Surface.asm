@@ -21,6 +21,7 @@ Surf_Main:	; Routine 0
 		move.l	#Map_Surf,ost_mappings(a0)
 		move.w	#tile_Kos_Water+tile_pal3+tile_hi,ost_tile(a0)
 		move.b	#render_rel+render_onscreen,ost_render(a0)
+		move.w	#priority_0,ost_priority(a0)
 		move.b	#screen_width/2,ost_displaywidth(a0)
 
 Surf_Action:	; Routine 2

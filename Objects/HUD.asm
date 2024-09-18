@@ -35,7 +35,7 @@ HUD_Main:	; Routine 0
 		jsr	UncPLC
 		move.w	(v_tile_hud).w,ost_tile(a0)
 		move.b	#render_abs,ost_render(a0)
-		move.b	#priority_0,ost_priority(a0)
+		move.w	#priority_0,ost_priority(a0)
 		
 		jsr	FindFreeInert
 		move.l	#HUD,ost_id(a1)				; load life icon object
@@ -45,7 +45,7 @@ HUD_Main:	; Routine 0
 		move.b	#id_frame_hud_lifeicon,ost_frame(a1)
 		move.w	#tile_Art_Lives,ost_tile(a1)
 		move.b	#render_abs,ost_render(a1)
-		move.b	#priority_0,ost_priority(a1)
+		move.w	#priority_0,ost_priority(a1)
 		move.b	#id_HUD_LivesCount,ost_routine(a1)
 		move.b	#1,(f_hud_lives_update).w		; set flag to update
 		
@@ -73,7 +73,7 @@ HUD_Main:	; Routine 0
 		move.b	#id_frame_hud_debug,ost_frame(a1)
 		move.w	(v_tile_hud).w,ost_tile(a1)
 		move.b	#render_abs,ost_render(a1)
-		move.b	#priority_0,ost_priority(a1)
+		move.w	#priority_0,ost_priority(a1)
 		move.b	#id_HUD_Debug,ost_routine(a1)
 		move.b	#1,(v_camera_x_diff).w			; force camera x/y update
 		move.b	#1,(v_camera_y_diff).w

@@ -42,6 +42,7 @@ PSB_Main:	; Routine 0
 		move.b	(a2)+,ost_frame(a0)
 		move.b	(a2)+,ost_routine(a0)
 		move.b	(a2)+,ost_anim(a0)
+		move.w	#priority_0,ost_priority(a0)
 		rts
 ; ===========================================================================
 

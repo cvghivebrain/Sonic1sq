@@ -48,7 +48,7 @@ SBall_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto SBall_Move next
 		move.w	(v_tile_spikechain).w,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
-		move.b	#priority_4,ost_priority(a0)
+		move.w	#priority_4,ost_priority(a0)
 		move.b	#8,ost_displaywidth(a0)
 		
 		move.b	ost_subtype(a0),d0
@@ -86,7 +86,7 @@ SBall_Main:	; Routine 0
 		move.l	ost_mappings(a0),ost_mappings(a1)
 		move.w	ost_tile(a0),ost_tile(a1)
 		move.b	ost_render(a0),ost_render(a1)
-		move.b	ost_priority(a0),ost_priority(a1)
+		move.w	ost_priority(a0),ost_priority(a1)
 		move.b	ost_displaywidth(a0),ost_displaywidth(a1)
 		saveparent
 		move.b	(a2),ost_col_type(a1)

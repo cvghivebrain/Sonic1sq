@@ -38,9 +38,9 @@ FBall_Main:	; Routine 0
 		move.l	#Map_Fire,ost_mappings(a0)
 		move.w	(v_tile_fireball).w,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
-		tst.b	ost_priority(a0)
+		tst.w	ost_priority(a0)
 		bne.s	.keep_priority				; branch if priority was set
-		move.b	#priority_3,ost_priority(a0)
+		move.w	#priority_3,ost_priority(a0)
 		
 	.keep_priority:
 		move.b	#id_React_Hurt,ost_col_type(a0)

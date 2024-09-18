@@ -22,7 +22,7 @@ Light_Main:	; Routine 0
 		move.w	#0,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#$10,ost_displaywidth(a0)
-		move.b	#priority_6,ost_priority(a0)
+		move.w	#priority_6,ost_priority(a0)
 
 Light_Animate:	; Routine 2
 		shortcut

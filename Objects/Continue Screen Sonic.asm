@@ -26,7 +26,7 @@ CSon_Main:	; Routine 0
 		move.l	#Map_Sonic,ost_mappings(a0)
 		move.w	#tile_sonic,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
-		move.b	#priority_2,ost_priority(a0)
+		move.w	#priority_2,ost_priority(a0)
 		move.b	#id_Float3,ost_anim(a0)			; use "floating" animation
 		move.w	#$400,ost_y_vel(a0)			; make Sonic fall from above
 

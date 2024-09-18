@@ -41,7 +41,7 @@ Lamp_Main:	; Routine 0
 		move.b	#render_rel+render_useheight,ost_render(a0)
 		move.b	#$2C,ost_height(a0)
 		move.b	#8,ost_displaywidth(a0)
-		move.b	#priority_5,ost_priority(a0)
+		move.w	#priority_5,ost_priority(a0)
 		bsr.w	GetState
 		bne.s	.red					; branch if lamppost has been hit
 
@@ -83,7 +83,7 @@ Lamp_Blue:	; Routine 2
 		move.w	ost_tile(a0),ost_tile(a1)
 		move.b	#render_rel,ost_render(a1)
 		move.b	#8,ost_displaywidth(a1)
-		move.b	#priority_4,ost_priority(a1)
+		move.w	#priority_4,ost_priority(a1)
 		move.b	#id_frame_lamp_redballonly,ost_frame(a1) ; use "ball only" frame
 		saveparent
 

@@ -30,8 +30,8 @@ Scen_Main:	; Routine 0
 		move.w	(a1)+,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.w	(a1)+,ost_frame_hi(a0)
-		move.b	(a1)+,ost_displaywidth(a0)
-		move.b	(a1)+,ost_priority(a0)
+		move.w	(a1)+,ost_displaywidth_hi(a0)
+		move.w	(a1)+,ost_priority(a0)
 
 Scen_ChkDel:	; Routine 2
 		shortcut	DespawnQuick
@@ -42,13 +42,13 @@ Scen_Values:
 Scen_Values_0:	dc.l Map_Scen					; mappings address
 		dc.w tile_Kos_SlzCannon+tile_pal3		; VRAM setting
 		dc.w id_frame_scen_cannon			; frame
-		dc.b 8, priority_2				; width, priority
+		dc.w 8, priority_2				; width, priority
 		even
 		
 Scen_Values_1:	dc.l Map_Bri
 		dc.w tile_Kos_Bridge+tile_pal3
 		dc.w id_frame_bridge_stump
-		dc.b $10, priority_1
+		dc.w $10, priority_1
 		even
 		
 sizeof_Scen_Values:	equ Scen_Values_1-Scen_Values

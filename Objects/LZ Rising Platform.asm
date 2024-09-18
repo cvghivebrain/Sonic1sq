@@ -30,7 +30,7 @@ LPlat_Main:	; Routine 0
 		move.l	#Map_LPlat,ost_mappings(a0)
 		move.w	#tile_Kos_LzPlatform+tile_pal3,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
-		move.b	#priority_3,ost_priority(a0)
+		move.w	#priority_3,ost_priority(a0)
 		move.b	#32,ost_displaywidth(a0)
 		move.b	#32,ost_width(a0)
 		move.b	#lplat_height,ost_height(a0)

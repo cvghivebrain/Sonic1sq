@@ -39,7 +39,7 @@ YPlat_Main:	; Routine 0
 		move.b	(a2)+,ost_frame(a0)
 		move.b	(a2)+,ost_routine(a0)
 		move.w	#tile_Kos_Stomper+tile_pal2,ost_tile(a0)
-		move.b	#priority_4,ost_priority(a0)
+		move.w	#priority_4,ost_priority(a0)
 		move.w	ost_y_pos(a0),ost_yplat_y_start(a0)
 		bra.w	DespawnQuick
 ; ===========================================================================

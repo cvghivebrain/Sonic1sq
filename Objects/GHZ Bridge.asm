@@ -28,7 +28,7 @@ Bri_Main:	; Routine 0
 		move.l	#Map_Bri,ost_mappings(a0)
 		move.w	#tile_Kos_Bridge+tile_pal3,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
-		move.b	#priority_2,ost_priority(a0)
+		move.w	#priority_2,ost_priority(a0)
 		moveq	#0,d1
 		move.b	ost_subtype(a0),d1
 		andi.b	#$F,d1					; read low nybble of subtype
@@ -54,7 +54,7 @@ Bri_Main:	; Routine 0
 		move.w	ost_tile(a0),ost_tile(a1)
 		move.b	ost_render(a0),ost_render(a1)
 		move.b	#8,ost_displaywidth(a1)
-		move.b	#priority_3,ost_priority(a1)
+		move.w	#priority_3,ost_priority(a1)
 		move.w	d1,ost_x_pos(a1)
 		addi.w	#16,d1					; next log will be 16px right
 		move.w	ost_y_pos(a0),ost_y_pos(a1)

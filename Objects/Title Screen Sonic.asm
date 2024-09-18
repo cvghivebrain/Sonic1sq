@@ -28,7 +28,7 @@ TSon_Main:	; Routine 0
 		move.w	#screen_top+94,ost_y_screen(a0)		; position is fixed to screen
 		move.l	#Map_TSon,ost_mappings(a0)
 		move.w	#tile_Kos_TitleSonic+tile_pal2,ost_tile(a0)
-		move.b	#priority_1,ost_priority(a0)
+		move.w	#priority_1,ost_priority(a0)
 		move.b	#29,ost_tson_time(a0)			; set time delay to 0.5 seconds
 
 TSon_Delay:	; Routine 2

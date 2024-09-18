@@ -28,7 +28,7 @@ Bat_Main:	; Routine 0
 		addi.w	#tile_hi,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#bat_height,ost_height(a0)
-		move.b	#priority_2,ost_priority(a0)
+		move.w	#priority_2,ost_priority(a0)
 		move.b	#id_React_Enemy,ost_col_type(a0)
 		move.b	#8,ost_col_width(a0)
 		move.b	#8,ost_col_height(a0)

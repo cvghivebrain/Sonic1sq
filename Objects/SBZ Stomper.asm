@@ -66,7 +66,7 @@ Sto_Main:	; Routine 0
 		move.w	#tile_Kos_Stomper+tile_pal2,ost_tile(a0)
 		move.l	#Map_Stomp,ost_mappings(a0)
 		ori.b	#render_rel,ost_render(a0)
-		move.b	#priority_4,ost_priority(a0)
+		move.w	#priority_4,ost_priority(a0)
 		move.w	(a2)+,ost_stomp_distance(a0)
 		move.w	(a2)+,ost_stomp_drop_master(a0)
 		move.w	(a2)+,ost_stomp_rise_master(a0)

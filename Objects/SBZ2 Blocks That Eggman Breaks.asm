@@ -30,6 +30,7 @@ FFloor_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto FFloor_Solid next
 		move.l	#Map_FFloor,ost_mappings(a0)
 		move.w	#tile_Kos_SbzBlock+tile_pal3,ost_tile(a0)
+		move.w	#priority_0,ost_priority(a0)
 		move.b	#$10,ost_displaywidth(a0)
 		move.b	#$10,ost_width(a0)
 		move.b	#$10,ost_height(a0)
@@ -72,7 +73,7 @@ FFloor_Break:	; Routine 4
 		move.w	ost_tile(a0),ost_tile(a1)
 		move.b	#8,ost_displaywidth(a1)
 		move.b	ost_render(a0),ost_render(a1)
-		move.b	ost_priority(a0),ost_priority(a1)
+		move.w	ost_priority(a0),ost_priority(a1)
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		move.w	(a2)+,ost_y_vel(a1)
