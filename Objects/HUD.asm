@@ -82,6 +82,7 @@ HUD_Main:	; Routine 0
 		move.l	#DebugOverlay,ost_id(a1)		; load overlay object
 
 HUD_Flash:	; Routine 2
+		shortcut
 		moveq	#0,d0
 		btst	#3,(v_frame_counter_low).w		; check bit that changes every 8 frames
 		bne.s	.display				; branch if set
@@ -108,6 +109,7 @@ HUD_Display:	; Routine 4
 ; ===========================================================================
 		
 HUD_LivesCount:	; Routine 6
+		shortcut
 		tst.b	(f_hud_lives_update).w			; does the lives counter need updating?
 		beq.s	HUD_Display				; if not, branch
 		clr.b	(f_hud_lives_update).w
@@ -147,6 +149,7 @@ HUD_LivesGfxIndex:
 		set_dma_src	Art_LivesNums+(sizeof_cell*36),0
 	
 HUD_RingsCount:	; Routine 8
+		shortcut
 		tst.b	(v_hud_rings_update).w			; does the rings counter need updating?
 		beq.w	.exit					; if not, branch
 		clr.b	(v_hud_rings_update).w
@@ -211,6 +214,7 @@ HUD_DigitGfxIndex:
 		
 		
 HUD_TimeCount:	; Routine $A
+		shortcut
 		tst.b	(f_hud_time_update).w
 		beq.s	.exit					; branch if time counter is flagged to stop
 		tst.b	(f_pause).w
@@ -255,6 +259,7 @@ HUD_TimeOver:
 ; ===========================================================================
 		
 HUD_ScoreCount:	; Routine $C
+		shortcut
 		tst.b	(f_hud_score_update).w			; does score counter need updating?
 		beq.w	HUD_Exit				; if not, branch
 		clr.b	(f_hud_score_update).w
@@ -324,6 +329,7 @@ HUD_ShowLong:
 ; ===========================================================================
 
 HUD_Debug:	; Routine $E
+		shortcut
 		moveq	#0,d0
 		move.b	(v_spritecount).w,d0			; get sprite count
 		cmp.b	ost_hud_sprites(a0),d0

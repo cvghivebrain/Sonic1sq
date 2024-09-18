@@ -29,6 +29,7 @@ Debug_Main:	; Routine 0
 		move.w	d0,ost_inertia(a0)
 		move.w	d0,ost_x_vel(a0)
 		move.w	d0,ost_y_vel(a0)
+		bclr	#render_xshift_bit,ost_render(a0)
 		movea.l	(v_debug_ptr).w,a2
 		move.w	(v_debug_item_index).w,d0
 		movea.l	a0,a3
@@ -280,6 +281,8 @@ Debug_Restore:
 		move.w	d0,ost_x_sub(a0)
 		move.w	d0,ost_y_sub(a0)
 		move.w	#id_frame_walk13,ost_frame_hi(a0)
+		bclr	#flags_forceroll_bit,ost_sonic_flags(a0) ; stop Sonic rolling if debug was activated in a roll tunnel
+		bset	#render_xshift_bit,ost_render(a0)
 		;move.w	(v_boundary_top_debugcopy).w,(v_boundary_top).w ; restore level boundaries
 		;move.w	(v_boundary_bottom_debugcopy).w,(v_boundary_bottom_next).w
 		cmpi.b	#id_Special,(v_gamemode).w

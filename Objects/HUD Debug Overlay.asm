@@ -200,15 +200,15 @@ Overlay_MakeBox:
 		
 Overlay_Box_Sprites:
 		dc.b -2, 0					; y pos, size
-		dc.w tile_Art_Overlay+1, -1			; tile setting, x pos
+		dc.w tile_Art_Overlay+1+tile_hi, -1		; tile setting, x pos
 		dc.b 0, 0
-		dc.w tile_Art_Overlay, 0
+		dc.w tile_Art_Overlay+tile_hi, 0
 		dc.b 0, 0
-		dc.w tile_Art_Overlay+tile_xflip, 0
+		dc.w tile_Art_Overlay+tile_xflip+tile_hi, 0
 		dc.b 0, 0
-		dc.w tile_Art_Overlay+tile_yflip, 0
+		dc.w tile_Art_Overlay+tile_yflip+tile_hi, 0
 		dc.b 0, 0
-		dc.w tile_Art_Overlay+tile_xflip+tile_yflip, 0
+		dc.w tile_Art_Overlay+tile_xflip+tile_yflip+tile_hi, 0
 ; ===========================================================================
 
 Overlay_Nearest:
