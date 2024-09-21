@@ -31,14 +31,23 @@ ExecuteObjects:
 		bsr.s	.run_object
 		moveq	#countof_ost_ert-1,d7			; remaining $60 objects are display only
 
-.display_object:
+ExeObj_Display:
 		move.l	ost_id(a0),d0				; load object pointer
-		beq.s	.no_object2				; branch if 0
+		beq.s	.no_object				; branch if 0
 		tst.b	ost_render(a0)
-		bpl.s	.no_object2				; branch if off-screen
+		bpl.s	.no_object				; branch if off-screen
 		bsr.w	DisplaySprite				; display only
 
-	.no_object2:
+	.no_object:
 		lea	sizeof_ost(a0),a0			; next object
-		dbf	d7,.display_object
+		dbf	d7,ExeObj_Display
 		rts
+
+; ---------------------------------------------------------------------------
+; Display objects only without running them
+; ---------------------------------------------------------------------------
+
+ExecuteObjects_DisplayOnly:
+		lea	(v_ost_all).w,a0			; set address for object RAM
+		moveq	#countof_ost-1,d7			; all objects
+		bra.s	ExeObj_Display

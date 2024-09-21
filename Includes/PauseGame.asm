@@ -36,6 +36,8 @@ Pause_Loop:
 		bne.s	Pause_SlowMo				; if yes, branch
 		btst	#bitC,d0				; is button C pressed?
 		bne.s	Pause_SlowMo				; if yes, branch
+		btst	#bitM,(v_joypad_press_actual_xyz).w	; is Mode pressed?
+		bne.s	Pause_Debug				; if yes, branch
 
 	.chk_start:
 		btst	#bitStart,d0				; is Start button pressed?
@@ -52,4 +54,41 @@ Unpause:
 
 Pause_SlowMo:
 		move.b	#$80,(v_snddriver_ram+f_pause_sound).w	; unpause the music
-		rts
+		rts	
+
+; ---------------------------------------------------------------------------
+; Pause debug menu
+; ---------------------------------------------------------------------------
+
+Pause_Debug:
+		locVRAM	vram_fg,d0
+		set_dma_fill_size	sizeof_vram_fg,d1
+		bsr.w	ClearVRAM				; clear fg
+		locVRAM	vram_bg,d0
+		set_dma_fill_size	sizeof_vram_bg,d1
+		bsr.w	ClearVRAM				; clear bg
+		locVRAM	vram_hscroll,d0
+		set_dma_fill_size	sizeof_vram_hscroll,d1
+		bsr.w	ClearVRAM				; clear hscroll table
+		lea	(v_sprite_buffer).w,a1
+		move.w	#loops_to_clear_sprites,d1
+		bsr.w	ClearRAM				; clear sprites
+		
+		moveq	#id_UPLC_PauseDebug,d0
+		jsr	UncPLC					; load debug text gfx on top of HUD gfx
+		
+	Pause_Debug_Loop:
+		move.b	#id_VBlank_PauseDebug,(v_vblank_routine).w
+		bsr.w	WaitForVBlank				; wait for next frame
+		btst	#bitM,(v_joypad_press_actual_xyz).w
+		bne.s	Pause_Debug_Exit			; branch if Mode is pressed
+		bra.s	Pause_Debug_Loop
+
+Pause_Debug_Exit:
+		moveq	#id_UPLC_HUD,d0
+		jsr	UncPLC					; load HUD gfx
+		bsr.w	DrawTilesAtStart			; redraw bg/fg
+		bsr.w	ExecuteObjects_DisplayOnly		; read all objects for display
+		bsr.w	BuildSprites				; redraw sprites
+		bra.w	Pause_Loop				; return to regular pause
+

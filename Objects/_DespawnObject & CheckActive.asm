@@ -121,6 +121,7 @@ DespawnSub:
 ;	uses d1.w
 
 ; usage:
+;		move.w	ost_x_pos(a0),d0
 ;		bsr.w	CheckActive
 ;		bne.w	.offscreen				; branch if outside active area
 ; ---------------------------------------------------------------------------
@@ -154,9 +155,8 @@ GetState:
 		move.b	ost_respawn(a0),d0
 		beq.s	.exit					; branch if object isn't in the respawn table
 		lea	(v_respawn_list+2).w,a2
-		adda.w	d0,a2					; jump to relevant position in respawn table
-		move.b	(a2),d0					; get value
-		andi.b	#$7F,d0					; ignore the already-loaded flag
+		move.b	(a2,d0.w),d0				; get value from relevant position in respawn table
+		andi.w	#$7F,d0					; ignore the already-loaded flag
 		
 	.exit:
 		rts

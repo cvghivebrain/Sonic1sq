@@ -17,10 +17,10 @@ VBlank:
 		dbf	d0,.waitPAL				; wait here in a loop doing nothing for a while...
 
 	.notPAL:
+		moveq	#0,d0
 		move.b	(v_vblank_routine).w,d0			; get routine number
 		move.b	#id_VBlank_Lag,(v_vblank_routine).w	; reset to 0
 		move.b	#1,(f_hblank_pal_change).w		; set flag to let HBlank know a frame has finished
-		andi.w	#$3E,d0
 		move.w	VBlank_Index(pc,d0.w),d0
 		jsr	VBlank_Index(pc,d0.w)			; jsr to relevant VBlank routine
 
@@ -33,22 +33,21 @@ VBlank_Exit:
 		rte						; end of VBlank
 ; ===========================================================================
 VBlank_Index:	index *,,2
-		ptr VBlank_Lag					; 0
-		ptr VBlank_Sega					; 2
-		ptr VBlank_Title				; 4
-		ptr VBlank_06					; 6
-		ptr VBlank_Level				; 8
-		ptr VBlank_Special				; $A
-		ptr VBlank_TitleCard				; $C
-		ptr VBlank_0E					; $E
-		ptr VBlank_Pause				; $10
-		ptr VBlank_Fade					; $12
-		ptr VBlank_Sega_SkipLoad			; $14
-		ptr VBlank_Continue				; $16
-		ptr VBlank_Ending				; $18
+		ptr VBlank_Lag
+		ptr VBlank_Sega
+		ptr VBlank_Title
+		ptr VBlank_Level
+		ptr VBlank_Special
+		ptr VBlank_TitleCard
+		ptr VBlank_Pause
+		ptr VBlank_PauseDebug
+		ptr VBlank_Fade
+		ptr VBlank_Sega_SkipLoad
+		ptr VBlank_Continue
+		ptr VBlank_Ending
 ; ===========================================================================
 
-; 0 - runs when a frame ends before WaitForVBlank triggers (i.e. the game is lagging)
+; runs when a frame ends before WaitForVBlank triggers (i.e. the game is lagging)
 VBlank_Lag:
 		cmpi.b	#$80+id_Level,(v_gamemode).w		; is game on level init sequence?
 		beq.s	.islevel				; if yes, branch
@@ -78,11 +77,11 @@ VBlank_Lag:
 		bra.w	VBlank_Music
 ; ===========================================================================
 
-; 2 - GM_Sega> Sega_WaitPal, Sega_WaitEnd
+; GM_Sega> Sega_WaitPal, Sega_WaitEnd
 VBlank_Sega:
 		bsr.w	ReadPad_Palette_Sprites_HScroll		; read joypad, DMA palettes, sprites and hscroll
 
-; $14 - GM_Sega> Sega_WaitPal (once)
+; GM_Sega> Sega_WaitPal (once)
 VBlank_Sega_SkipLoad:
 		tst.w	(v_countdown).w
 		beq.w	.end
@@ -92,7 +91,7 @@ VBlank_Sega_SkipLoad:
 		rts
 ; ===========================================================================
 
-; 4 - GM_Title> Tit_MainLoop, LevelSelect, GotoDemo; GM_Credits> Cred_WaitLoop, TryAg_MainLoop
+; GM_Title> Tit_MainLoop, LevelSelect, GotoDemo; GM_Credits> Cred_WaitLoop, TryAg_MainLoop
 VBlank_Title:
 		bsr.w	ReadPad_Palette_Sprites_HScroll		; read joypad, DMA palettes, sprites and hscroll
 		bsr.w	DrawTilesWhenMoving_BGOnly		; update background
@@ -102,21 +101,15 @@ VBlank_Title:
 		subq.w	#1,(v_countdown).w			; decrement timer
 
 	.end:
-		rts	
+		rts
 ; ===========================================================================
 
-; 6 - unused
-VBlank_06:
-		bsr.w	ReadPad_Palette_Sprites_HScroll		; read joypad, DMA palettes, sprites and hscroll
-		rts	
-; ===========================================================================
-
-; $10 - PauseGame> Pause_Loop
+; PauseGame> Pause_Loop
 VBlank_Pause:
 		cmpi.b	#id_Special,(v_gamemode).w		; is game on special stage?
 		beq.w	VBlank_Special				; if yes, branch
 
-; 8 - GM_Level> Level_MainLoop, Level_FDLoop, Level_DelayLoop
+; GM_Level> Level_MainLoop, Level_FDLoop, Level_DelayLoop
 VBlank_Level:
 		stopZ80
 		waitZ80
@@ -154,7 +147,7 @@ DrawTiles_LevelGfx_HUD_PLC:
 
 ; ===========================================================================
 
-; $A - GM_Special> SS_MainLoop
+; GM_Special> SS_MainLoop
 VBlank_Special:
 		stopZ80
 		waitZ80
@@ -173,8 +166,8 @@ VBlank_Special:
 		rts	
 ; ===========================================================================
 
-; $C - GM_Level> Level_TtlCardLoop; GM_Special> SS_NormalExit
-; $18 - GM_Ending> End_LoadSonic (once), End_MainLoop
+; GM_Level> Level_TtlCardLoop; GM_Special> SS_NormalExit
+; GM_Ending> End_LoadSonic (once), End_MainLoop
 VBlank_TitleCard:
 VBlank_Ending:
 		stopZ80
@@ -192,21 +185,16 @@ VBlank_Ending:
 		movem.l	d0-d1,(v_fg_redraw_direction_copy).w	; create duplicates in RAM
 		bsr.w	DrawTilesWhenMoving			; display new tiles if camera has moved
 		bsr.w	AnimateLevelGfx				; update animated level graphics
-		rts	
+		rts
 ; ===========================================================================
 
-; $E - unused
-VBlank_0E:
-		rts	
-; ===========================================================================
-
-; $12 - PaletteFadeIn, PaletteWhiteOut, PaletteFadeOut
+; PaletteFadeIn, PaletteWhiteOut, PaletteFadeOut
 VBlank_Fade:
 		bsr.w	ReadPad_Palette_Sprites_HScroll		; read joypad, DMA palettes, sprites and hscroll
 		move.w	(v_vdp_hint_counter).w,(a6)		; set water palette position by sending VDP register $8Axx to control port (vdp_control_port)
 ; ===========================================================================
 
-; $16 - GM_Special> SS_FinLoop; GM_Continue> Cont_MainLoop
+; GM_Special> SS_FinLoop; GM_Continue> Cont_MainLoop
 VBlank_Continue:
 		stopZ80
 		waitZ80
@@ -221,7 +209,19 @@ VBlank_Continue:
 		subq.w	#1,(v_countdown).w			; decrement timer
 
 	.end:
-		rts	
+		rts
+; ===========================================================================
+
+; Pause_Debug
+VBlank_PauseDebug:
+		stopZ80
+		waitZ80
+		bsr.w	ReadJoypads
+		bsr.w	UpdatePalette
+		dma	v_sprite_buffer,sizeof_vram_sprites,vram_sprites
+		bsr.w	ProcessDMA
+		startZ80
+		rts
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to read joypad and DMA palettes, sprite table and hscroll table

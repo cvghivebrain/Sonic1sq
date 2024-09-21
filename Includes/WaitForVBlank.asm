@@ -19,9 +19,9 @@ WaitForVBlank_CPU:
 		pushr.w	(vdp_counter).l
 		moveq	#0,d0
 		popr.b	d0					; get vertical position
-		cmpi.b	#223,d0
+		cmpi.b	#screen_height-1,d0
 		bls.s	.vert_ok				; branch if 223 or less
-		move.b	#223,d0
+		move.b	#screen_height-1,d0
 	.vert_ok:
 		add.w	d0,d0
 		lea	CPUPercent(pc,d0.w),a1			; convert to percentage
@@ -47,10 +47,10 @@ WaitForVBlank:
 
 		i: = 0
 		percent: = 0
-CPUPercent:	rept 224
+CPUPercent:	rept screen_height
 		dc.b (percent/10)*6, (percent%10)*6
 		i: = i+1
-		percent: = (i*100)/224
+		percent: = (i*100)/screen_height
 		endr
 ; ---------------------------------------------------------------------------
 ; Subroutine to	freeze the game for a set time
