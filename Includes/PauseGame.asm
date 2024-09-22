@@ -61,21 +61,20 @@ Pause_SlowMo:
 ; ---------------------------------------------------------------------------
 
 Pause_Debug:
-		locVRAM	vram_fg,d0
-		set_dma_fill_size	sizeof_vram_fg,d1
-		bsr.w	ClearVRAM				; clear fg
-		locVRAM	vram_bg,d0
-		set_dma_fill_size	sizeof_vram_bg,d1
-		bsr.w	ClearVRAM				; clear bg
-		locVRAM	vram_hscroll,d0
-		set_dma_fill_size	sizeof_vram_hscroll,d1
-		bsr.w	ClearVRAM				; clear hscroll table
-		lea	(v_sprite_buffer).w,a1
-		move.w	#loops_to_clear_sprites,d1
-		bsr.w	ClearRAM				; clear sprites
-		
+		bsr.w	ClearVRAM_Tiles				; clear fg/bg
+		bsr.w	ClearVRAM_HScroll			; clear hscroll table
+		bsr.w	ClearRAM_Sprites			; clear sprites
 		moveq	#id_UPLC_PauseDebug,d0
 		jsr	UncPLC					; load debug text gfx on top of HUD gfx
+		moveq	#1,d0					; x pos
+		moveq	#1,d1					; y pos
+		moveq	#0,d2
+		lea	(vdp_data_port).l,a1			; data port
+		lea	Str_DebugMenu(pc),a2			; address of string
+		bsr.w	DrawString
+		addq.b	#2,d1
+		lea	Str_DebugBtns(pc),a2
+		bsr.w	DrawString
 		
 	Pause_Debug_Loop:
 		move.b	#id_VBlank_PauseDebug,(v_vblank_routine).w
@@ -92,3 +91,48 @@ Pause_Debug_Exit:
 		bsr.w	BuildSprites				; redraw sprites
 		bra.w	Pause_Loop				; return to regular pause
 
+; ---------------------------------------------------------------------------
+; Draw string on screen
+
+; input:
+;	d0.w = x pos (1 = 8px)
+;	d1.w = y pos
+;	d2.w = x/y flip or palette setting
+;	a1 = vdp_data_port
+;	a2 = address of string, terminated by 0
+
+;	uses d2.b, d3.l, d4.w, a2
+; ---------------------------------------------------------------------------
+
+DrawString:
+		move.l	#(vram_fg&$3FFF)+((vram_fg&$C000)<<2)+$4000,d3
+		add.w	d0,d3
+		add.w	d0,d3
+		move.w	d1,d4
+		mulu.w	#sizeof_vram_row,d4
+		add.w	d4,d3					; d3 = address within fg table
+		swap	d3					; create VRAM write instruction for VDP
+		move.l	d3,4(a1)				; send to vdp_control_port
+		
+	.loop:
+		move.b	(a2)+,d2				; get char
+		beq.s	.exit					; branch if 0
+		cmpi.b	#$20,d2
+		beq.s	.space					; branch if it's a space
+		move.w	(v_tile_hud).w,d4			; tile address for 0-Z gfx
+		subi.w	#$30,d4					; adjust for ASCII starting at 0
+		add.w	d2,d4					; create final tile
+		move.w	d4,(a1)					; send to vdp_data_port
+		bra.s	.loop					; repeat until 0 is reached
+		
+	.exit:
+		rts
+		
+	.space:
+		move.w	#0,(a1)					; write blank tile
+		bra.s	.loop
+
+Str_DebugMenu:	dc.b "DEBUG MENU",0
+Str_DebugBtns:	dc.b "MODE@ BACK  C@ SELECT",0
+		even
+		

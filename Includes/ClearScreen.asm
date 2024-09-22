@@ -9,22 +9,15 @@
 ; ---------------------------------------------------------------------------
 
 ClearScreen:
-		locVRAM	vram_fg,d0
-		set_dma_fill_size	sizeof_vram_fg,d1
-		bsr.w	ClearVRAM
-
-		locVRAM	vram_bg,d0
-		set_dma_fill_size	sizeof_vram_bg,d1
-		bsr.w	ClearVRAM
+		bsr.w	ClearVRAM_Tiles				; clear fg/bg tiles (also sets d2 to 0)
 		
 		move.l	d2,(v_fg_y_pos_vsram).w
 		move.b	d2,(v_spritemask_height).w
 
-		lea	(v_sprite_buffer).w,a1
-		move.w	#loops_to_clear_sprites,d1
-		bsr.s	ClearRAM				; clear sprite table (in RAM)
-
-		lea	(v_hscroll_buffer).w,a1
+		bsr.s	ClearRAM_Sprites			; clear sprite table (in RAM)
+		
+ClearRAM_HScroll:
+		lea	(v_hscroll_buffer).w,a1			; clear hscroll table (in RAM)
 		move.w	#loops_to_clear_hscroll,d1
 
 ; ---------------------------------------------------------------------------
@@ -43,6 +36,11 @@ ClearRAM:
 		move.l	d0,(a1)+
 		dbf	d1,.loop
 		rts
+		
+ClearRAM_Sprites:
+		lea	(v_sprite_buffer).w,a1
+		move.w	#loops_to_clear_sprites,d1
+		bra.s	ClearRAM
 		
 ; ---------------------------------------------------------------------------
 ; Subroutine to	clear VRAM
@@ -73,3 +71,16 @@ ClearVRAM:
 		move.w	#vdp_auto_inc+2,(a6)			; set VDP increment to 2 bytes
 		rts
 		
+ClearVRAM_Tiles:
+		locVRAM	vram_fg,d0
+		set_dma_fill_size	sizeof_vram_fg,d1
+		bsr.s	ClearVRAM
+
+		locVRAM	vram_bg,d0
+		set_dma_fill_size	sizeof_vram_bg,d1
+		bra.s	ClearVRAM
+		
+ClearVRAM_HScroll:
+		locVRAM	vram_hscroll,d0
+		set_dma_fill_size	sizeof_vram_hscroll,d1
+		bra.s	ClearVRAM
