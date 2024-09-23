@@ -33,8 +33,7 @@ VDPSetupGame:
 		locVRAM	0,d0
 		move.l	#$FFFF,d1
 		moveq	#0,d2
-		bsr.w	ClearVRAM
-		rts
+		jmp	ClearVRAM
 
 ; ===========================================================================
 VDPSetupArray:	dc.w vdp_md_color				; $8004 - normal colour mode

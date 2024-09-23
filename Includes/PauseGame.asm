@@ -84,40 +84,13 @@ Pause_Debug:
 		bsr.w	WaitForVBlank				; wait for next frame
 		btst	#bitM,(v_joypad_press_actual_xyz).w
 		bne.s	Pause_Debug_Exit			; branch if Mode is pressed
-		moveq	#3-1,d1					; number of items in menu -1
-		bsr.s	Pause_Debug_Ctrl			; read control inputs
-		tst.b	d1
+		moveq	#3,d0					; number of items in menu
+		moveq	#3,d1					; number of items per column
+		lea	(v_debugmenu_item).w,a1
+		bsr.w	NavigateMenu				; read control inputs
 		beq.s	Pause_Debug_Loop			; branch if no inputs
 		bsr.w	Pause_Debug_DrawMain			; redraw menu
-		bra.s	Pause_Debug_Loop
-		
-Pause_Debug_Ctrl:
-		move.b	(v_joypad_press_actual).w,d0
-		andi.b	#btnDir,d0
-		beq.s	.no_input				; branch if nothing is pressed
-		btst	#bitUp,d0
-		beq.s	.not_up					; branch if up not pressed
-		subq.w	#1,(v_debugmenu_item).w
-		bpl.s	.yes_input				; branch if valid
-		move.w	d1,(v_debugmenu_item).w			; wrap to end
-		bra.s	.yes_input
-		
-	.not_up:
-		btst	#bitDn,d0
-		beq.s	.no_input				; branch if down not pressed
-		addq.w	#1,(v_debugmenu_item).w
-		cmp.w	(v_debugmenu_item).w,d1
-		bcc.s	.yes_input				; branch if valid
-		clr.w	(v_debugmenu_item).w			; wrap to start
-		
-	.yes_input:
-		moveq	#1,d1					; set flag
-		rts
-	
-	.no_input:
-		moveq	#0,d1					; unset flag
-		rts
-		
+		bra.s	Pause_Debug_Loop		
 
 Pause_Debug_Exit:
 		moveq	#id_UPLC_HUD,d0

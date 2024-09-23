@@ -118,7 +118,7 @@ GameInit:
 		move.l	d0,(a1)+
 		dbf	d1,.loop				; clear RAM up to v_keep_after_reset
 
-		bsr.w	VDPSetupGame				; clear CRAM and set VDP registers
+		jsr	VDPSetupGame				; clear CRAM and set VDP registers
 		bsr.w	DacDriverLoad
 		bsr.w	JoypadInit				; initialise joypads
 		move.b	#id_Sega,(v_gamemode).w			; set Game Mode to Sega Screen
@@ -175,10 +175,10 @@ Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 		include	"Includes\VBlank & HBlank.asm"
 		include	"Includes\ApplyBrightness.asm"
 		include	"Includes\JoypadInit & ReadJoypads.asm"
-		include	"Includes\VDPSetupGame.asm"
 		include	"Includes\ClearScreen.asm"
 		include	"sound\PlaySound + DacDriverLoad.asm"
 		include	"Includes\PauseGame.asm"
+		include	"Includes\NavigateMenu.asm"
 		include	"Includes\LoadTilemap.asm"
 		include "DMA & PLCs\DMA.asm"
 		include "Includes\Kosinski Decompression.asm"
@@ -465,8 +465,8 @@ startof_obj:	equ *
 		
 		inform	0,"Object code occupies $%h bytes ($%h-$%h).",*-startof_obj,startof_obj,*
 
+		include	"Includes\VDPSetupGame.asm"
 		include "Objects\_DebugMode [Lists].asm"
-
 		include "Objects\Special Stage Walls [Mappings].asm" ; Map_SSWalls
 
 ; ---------------------------------------------------------------------------
