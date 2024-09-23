@@ -47,7 +47,7 @@ GM_Ending:
 		bset	#redraw_left_bit,(v_fg_redraw_direction).w
 		enable_ints
 		bsr.w	LevelParameterLoad			; load level boundaries and start positions
-		bsr.w	DrawTilesAtStart
+		jsr	DrawTilesAtStart
 		move.b	(v_bgm).w,d0
 		jsr	(PlaySound0).w				; play music
 		btst	#bitA,(v_joypad_hold_actual).w		; is button A being held?
@@ -147,7 +147,7 @@ End_FlashLoop:
 		lea	(v_camera_x_pos).w,a3
 		lea	(v_level_layout).w,a4
 		move.w	#draw_fg,d2
-		bsr.w	DrawChunks				; redraw level
+		jsr	DrawChunks				; redraw level
 		moveq	#id_Pal_Ending,d0
 		bsr.w	PalLoad					; load ending palette
 		bsr.w	PaletteFadeIn				; fade in from white

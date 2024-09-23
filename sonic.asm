@@ -172,7 +172,6 @@ Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 		include "Includes\GM_TryAgain.asm"
 		include "Includes\GM_HiddenCredits.asm"
 		
-		include	"Includes\VBlank & HBlank.asm"
 		include	"Includes\ApplyBrightness.asm"
 		include	"Includes\JoypadInit & ReadJoypads.asm"
 		include	"Includes\ClearScreen.asm"
@@ -196,12 +195,10 @@ Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 		include "Includes\SynchroAnimate.asm"
 		include	"Includes\LevelParameterLoad.asm"
 		include	"Includes\DeformLayers.asm"
-		include	"Includes\DrawTilesWhenMoving, DrawTilesAtStart & DrawChunks.asm"
 		include "Includes\DynamicLevelEvents.asm"
 		include "Includes\ExecuteObjects.asm"
 		include "Includes\BuildSprites.asm"
 		include "Includes\ObjPosLoad.asm"
-		include "Includes\AnimateLevelGfx.asm"
 		
 startof_obj:	equ *
 
@@ -464,10 +461,6 @@ startof_obj:	equ *
 		include "Objects\Special Stage Results Chaos Emeralds.asm" ; SSRChaos
 		
 		inform	0,"Object code occupies $%h bytes ($%h-$%h).",*-startof_obj,startof_obj,*
-
-		include	"Includes\VDPSetupGame.asm"
-		include "Objects\_DebugMode [Lists].asm"
-		include "Objects\Special Stage Walls [Mappings].asm" ; Map_SSWalls
 
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - title screen
@@ -778,8 +771,11 @@ Col_SBZ:	incbin	"Collision\SBZ.bin"			; SBZ index
 		incfile	Art_SbzSmoke,"Graphics\SBZ Background Smoke",bin,dma_safe
 		incfile	Art_BigRing,"Graphics\Giant Ring",bin,dma_safe
 
+		include	"Includes\VDPSetupGame.asm"
 		include "DMA & PLCs\UncPLC.asm"
 		include "DMA & PLCs\SlowPLC.asm"
+		include "Objects\_DebugMode [Lists].asm"
+		include "Objects\Special Stage Walls [Mappings].asm" ; Map_SSWalls
 		include "Objects\GHZ Giant Ball [Mappings].asm"	; Map_GBall
 		include "Objects\GHZ Bridge [Mappings].asm"	; Map_Bri
 		include "Objects\GHZ & MZ Swinging Platforms [Mappings].asm" ; Map_Swing_GHZ
@@ -1049,8 +1045,11 @@ ObjPos_Null:	endobj
 		incfile	Demo_EndGHZ2,"Demos\Ending - GHZ2",bin
 		
 ; ---------------------------------------------------------------------------
-; Sound driver data
+; VBlank/HBlank
 ; ---------------------------------------------------------------------------
+		include	"Includes\DrawTilesWhenMoving, DrawTilesAtStart & DrawChunks.asm"
+		include	"Includes\VBlank & HBlank.asm"
+		include "Includes\AnimateLevelGfx.asm"
 		include "sound/Sound Data.asm"
 
 ; ---------------------------------------------------------------

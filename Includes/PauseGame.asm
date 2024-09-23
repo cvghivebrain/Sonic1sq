@@ -95,7 +95,7 @@ Pause_Debug:
 Pause_Debug_Exit:
 		moveq	#id_UPLC_HUD,d0
 		jsr	UncPLC					; load HUD gfx
-		bsr.w	DrawTilesAtStart			; redraw bg/fg
+		jsr	DrawTilesAtStart			; redraw bg/fg
 		bsr.w	ExecuteObjects_DisplayOnly		; read all objects for display
 		bsr.w	BuildSprites				; redraw sprites
 		move.w	#cWhite,(v_pal_dry_line2+12).w

@@ -45,7 +45,7 @@ GM_Title:
 		move.w	d0,(v_palcycle_time).w			; disable palette cycling
 		bsr.w	PaletteFadeOut				; fade out "SONIC TEAM PRESENTS" screen to black
 		moveq	#id_SPLC_Title,d0
-		jsr	SlowPLC_Now			; load title screen gfx
+		jsr	SlowPLC_Now				; load title screen gfx
 		bsr.w	LoadPerZone
 		bsr.w	LevelParameterLoad			; set level boundaries and Sonic's start position
 		bsr.w	DeformLayers
@@ -58,7 +58,7 @@ GM_Title:
 		lea	(v_bg1_x_pos).w,a3
 		lea	(v_bg_layout).w,a4			; background layout start address
 		move.w	#draw_bg,d2
-		bsr.w	DrawChunks				; draw background
+		jsr	DrawChunks				; draw background
 
 		lea	($FF0000).l,a1				; RAM buffer
 		lea	(KosMap_Title).l,a0			; title screen mappings

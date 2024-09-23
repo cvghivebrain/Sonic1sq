@@ -95,7 +95,7 @@ VBlank_Sega_SkipLoad:
 VBlank_Title:
 		bsr.w	ReadPad_Palette_Sprites_HScroll		; read joypad, DMA palettes, sprites and hscroll
 		bsr.w	DrawTilesWhenMoving_BGOnly		; update background
-		bsr.w	ProcessDMA
+		jsr	(ProcessDMA).w
 		tst.w	(v_countdown).w
 		beq.w	.end
 		subq.w	#1,(v_countdown).w			; decrement timer
@@ -113,13 +113,13 @@ VBlank_Pause:
 VBlank_Level:
 		stopZ80
 		waitZ80
-		bsr.w	ReadJoypads
+		jsr	(ReadJoypads).w
 		bsr.w	UpdatePalette
 		move.w	(v_vdp_hint_counter).w,(a6)		; set water palette position by sending VDP register $8Axx to control port (vdp_control_port)
 
 		dma	v_hscroll_buffer,sizeof_vram_hscroll,vram_hscroll
 		dma	v_sprite_buffer,sizeof_vram_sprites,vram_sprites
-		bsr.w	ProcessDMA
+		jsr	(ProcessDMA).w
 		startZ80
 		movem.l	(v_camera_x_pos).w,d0-d7		; copy all camera & bg x/y positions to d0-d7
 		movem.l	d0-d7,(v_camera_x_pos_copy).w		; create duplicates in RAM
@@ -151,12 +151,12 @@ DrawTiles_LevelGfx_HUD_PLC:
 VBlank_Special:
 		stopZ80
 		waitZ80
-		bsr.w	ReadJoypads
-		bsr.w	PalCycle_SS				; update cycling palette
+		jsr	(ReadJoypads).w
+		jsr	(PalCycle_SS).w				; update cycling palette
 		bsr.w	UpdatePalette
 		dma	v_sprite_buffer,sizeof_vram_sprites,vram_sprites
 		dma	v_hscroll_buffer,sizeof_vram_hscroll,vram_hscroll
-		bsr.w	ProcessDMA
+		jsr	(ProcessDMA).w
 		startZ80
 		tst.w	(v_countdown).w
 		beq.w	.end
@@ -172,12 +172,12 @@ VBlank_TitleCard:
 VBlank_Ending:
 		stopZ80
 		waitZ80
-		bsr.w	ReadJoypads
+		jsr	(ReadJoypads).w
 		bsr.w	UpdatePalette
 		move.w	(v_vdp_hint_counter).w,(a6)		; set water palette position by sending VDP register $8Axx to control port (vdp_control_port)
 		dma	v_hscroll_buffer,sizeof_vram_hscroll,vram_hscroll
 		dma	v_sprite_buffer,sizeof_vram_sprites,vram_sprites
-		bsr.w	ProcessDMA
+		jsr	(ProcessDMA).w
 		startZ80
 		movem.l	(v_camera_x_pos).w,d0-d7		; copy all camera & bg x/y positions to d0-d7
 		movem.l	d0-d7,(v_camera_x_pos_copy).w		; create duplicates in RAM
@@ -198,11 +198,11 @@ VBlank_Fade:
 VBlank_Continue:
 		stopZ80
 		waitZ80
-		bsr.w	ReadJoypads
+		jsr	(ReadJoypads).w
 		bsr.w	UpdatePalette
 		dma	v_sprite_buffer,sizeof_vram_sprites,vram_sprites
 		dma	v_hscroll_buffer,sizeof_vram_hscroll,vram_hscroll
-		bsr.w	ProcessDMA
+		jsr	(ProcessDMA).w
 		startZ80
 		tst.w	(v_countdown).w
 		beq.w	.end
@@ -216,10 +216,10 @@ VBlank_Continue:
 VBlank_PauseDebug:
 		stopZ80
 		waitZ80
-		bsr.w	ReadJoypads
+		jsr	(ReadJoypads).w
 		bsr.w	UpdatePalette
 		dma	v_sprite_buffer,sizeof_vram_sprites,vram_sprites
-		bsr.w	ProcessDMA
+		jsr	(ProcessDMA).w
 		startZ80
 		rts
 
@@ -230,7 +230,7 @@ VBlank_PauseDebug:
 ReadPad_Palette_Sprites_HScroll:
 		stopZ80
 		waitZ80
-		bsr.w	ReadJoypads
+		jsr	(ReadJoypads).w
 		bsr.s	UpdatePalette
 		dma	v_sprite_buffer,sizeof_vram_sprites,vram_sprites
 		dma	v_hscroll_buffer,sizeof_vram_hscroll,vram_hscroll

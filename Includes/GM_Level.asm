@@ -82,7 +82,7 @@ Level_Skip_TtlCard:
 		bsr.w	LevelParameterLoad			; load level boundaries and start positions
 		bsr.w	DeformLayers
 		bset	#redraw_left_bit,(v_fg_redraw_direction).w
-		bsr.w	DrawTilesAtStart
+		jsr	DrawTilesAtStart
 		bsr.w	LZWaterFeatures
 		bsr.w	LoadPerCharacter
 		move.w	#countof_color*countof_pal,d4		; all colours in palettes
