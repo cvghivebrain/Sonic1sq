@@ -32,6 +32,7 @@ Jaws_Main:	; Routine 0
 		move.b	#12,ost_col_height(a0)
 		move.w	#priority_4,ost_priority(a0)
 		move.b	#$10,ost_displaywidth(a0)
+		move.b	#StrId_Jaws,ost_name(a0)
 		moveq	#0,d0
 		move.b	ost_subtype(a0),d0			; load object subtype number
 		lsl.w	#6,d0					; multiply d0 by 64

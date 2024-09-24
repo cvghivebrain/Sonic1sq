@@ -86,6 +86,7 @@ Boss_Main:	; Routine 0
 		move.w	#tile_Art_Eggman,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#$20,ost_displaywidth(a0)
+		move.b	#StrId_Boss,ost_name(a0)
 		move.w	#priority_3,ost_priority(a0)
 		move.b	#id_React_Boss,ost_col_type(a0)
 		move.b	#24,ost_col_width(a0)
@@ -299,6 +300,7 @@ BossExhaust:
 		move.w	#vram_exhaust/sizeof_cell,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#$20,ost_displaywidth(a0)
+		move.b	#StrId_Boss,ost_name(a0)
 		move.w	#priority_3,ost_priority(a0)
 		move.b	#id_ani_exhaust_flame1,ost_anim(a0)
 
@@ -339,6 +341,7 @@ BossCockpit:
 		move.w	#vram_face/sizeof_cell,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#$20,ost_displaywidth(a0)
+		move.b	#StrId_Boss,ost_name(a0)
 		move.w	#priority_3,ost_priority(a0)
 
 		shortcut
@@ -397,6 +400,7 @@ BossNozzle:
 		move.w	#(vram_weapon/sizeof_cell)+tile_pal2,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#8,ost_displaywidth(a0)
+		move.b	#StrId_Boss,ost_name(a0)
 		move.w	#priority_2,ost_priority(a0)
 		move.b	#id_frame_boss_pipe,ost_frame(a0)
 		moveq	#id_UPLC_MZPipe,d0

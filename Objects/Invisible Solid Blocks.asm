@@ -41,6 +41,7 @@ Invis_Main:	; Routine 0
 		addq.w	#1,d1					; add 1
 		lsl.w	#3,d1					; multiply by 8
 		move.b	d1,ost_height(a0)			; set object height
+		move.b	#StrId_Solid,ost_name(a0)
 		bra.w	RunLast					; always run after other objects
 ; ===========================================================================
 

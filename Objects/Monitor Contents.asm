@@ -27,6 +27,7 @@ Pow_Main:	; Routine 0
 		move.b	#render_rel+render_rawmap,ost_render(a0) ; use raw mappings
 		move.w	#priority_3,ost_priority(a0)
 		move.b	#8,ost_displaywidth(a0)
+		move.b	#StrId_PowerUp,ost_name(a0)
 		move.w	#-$300,ost_y_vel(a0)
 		moveq	#0,d0
 		move.b	ost_frame(a0),d0

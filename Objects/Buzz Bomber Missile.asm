@@ -39,6 +39,7 @@ Msl_Main:	; Routine 0
 		move.b	#render_rel+render_onscreen,ost_render(a0)
 		move.w	#priority_3,ost_priority(a0)
 		move.b	#8,ost_displaywidth(a0)
+		move.b	#StrId_Missile,ost_name(a0)
 		andi.b	#status_xflip+status_yflip,ost_status(a0)
 		move.b	ost_subtype(a0),d0
 		andi.w	#$F,d0

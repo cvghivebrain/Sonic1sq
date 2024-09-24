@@ -19,6 +19,7 @@ WSnd_Index:	index *,,2
 WSnd_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto WSnd_PlaySnd next
 		move.b	#render_rel,ost_render(a0)
+		move.b	#StrId_WaterSound,ost_name(a0)
 
 WSnd_PlaySnd:	; Routine 2
 		shortcut

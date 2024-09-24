@@ -30,6 +30,7 @@ GRing_Main:	; Routine 0
 		move.w	#(vram_giantring/sizeof_cell)+tile_pal2,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#$40,ost_displaywidth(a0)
+		move.b	#StrId_BigRing,ost_name(a0)
 		addq.b	#2,ost_routine(a0)			; goto GRing_Animate next
 		move.w	#priority_2,ost_priority(a0)
 		move.b	#id_React_Ring,ost_col_type(a0)		; when Sonic hits the item, goto GRing_Collect next (see ReactToItem)

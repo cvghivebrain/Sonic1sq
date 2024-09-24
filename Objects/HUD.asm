@@ -31,6 +31,7 @@ HUD_Main:	; Routine 0
 		move.w	#screen_left+16,ost_x_pos(a0)
 		move.w	#screen_top+8,ost_y_screen(a0)
 		move.l	#Map_HUD,ost_mappings(a0)
+		move.b	#StrId_HUD,ost_name(a0)
 		moveq	#id_UPLC_HUD,d0
 		jsr	UncPLC
 		move.w	(v_tile_hud).w,ost_tile(a0)
@@ -42,6 +43,7 @@ HUD_Main:	; Routine 0
 		move.w	#screen_left+16,ost_x_pos(a1)
 		move.w	#screen_top+200,ost_y_screen(a1)
 		move.l	#Map_HUD,ost_mappings(a1)
+		move.b	#StrId_HUD,ost_name(a1)
 		move.b	#id_frame_hud_lifeicon,ost_frame(a1)
 		move.w	#tile_Art_Lives,ost_tile(a1)
 		move.b	#render_abs,ost_render(a1)
@@ -52,16 +54,19 @@ HUD_Main:	; Routine 0
 		jsr	FindFreeInert
 		move.l	#HUD,ost_id(a1)				; load ring number object
 		move.b	#id_HUD_RingsCount,ost_routine(a1)
+		move.b	#StrId_HUD,ost_name(a1)
 		move.b	#1,(v_hud_rings_update).w		; set flag to update
 		
 		jsr	FindFreeInert
 		move.l	#HUD,ost_id(a1)				; load time object
 		move.b	#id_HUD_TimeCount,ost_routine(a1)
+		move.b	#StrId_HUD,ost_name(a1)
 		move.b	#1,(f_hud_time_update).w		; set flag to update
 		
 		jsr	FindFreeInert
 		move.l	#HUD,ost_id(a1)				; load score object
 		move.b	#id_HUD_ScoreCount,ost_routine(a1)
+		move.b	#StrId_HUD,ost_name(a1)
 		
 		tst.w	(f_debug_enable).w
 		beq.s	HUD_Flash				; branch if debug mode is disabled
@@ -75,6 +80,7 @@ HUD_Main:	; Routine 0
 		move.b	#render_abs,ost_render(a1)
 		move.w	#priority_0,ost_priority(a1)
 		move.b	#id_HUD_Debug,ost_routine(a1)
+		move.b	#StrId_Debug,ost_name(a1)
 		move.b	#1,(v_camera_x_diff).w			; force camera x/y update
 		move.b	#1,(v_camera_y_diff).w
 		

@@ -160,6 +160,7 @@ CardSet_FZ:	autocard "FINAL","ZONE",id_frame_card_final,id_frame_card_zone,72,no
 ; ===========================================================================
 
 Card_Main:	; Routine 0
+		move.b	#StrId_TitleCard,ost_name(a0)
 		move.w	(v_titlecard_uplc).w,d0
 		jsr	UncPLC					; load title card gfx
 		move.w	(v_titlecard_act).w,d0
@@ -200,6 +201,7 @@ Card_Load:
 		move.b	d0,ost_displaywidth(a1)
 		move.b	#render_abs,ost_render(a1)
 		move.w	#priority_0,ost_priority(a1)
+		move.b	#StrId_TitleCard,ost_name(a1)
 		dbf	d1,.loop
 		rts
 ; ===========================================================================

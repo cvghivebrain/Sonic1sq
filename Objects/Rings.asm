@@ -108,6 +108,7 @@ Ring_Main:	; Routine 0
 		move.b	#6,ost_col_width(a1)
 		move.b	#6,ost_col_height(a1)
 		move.b	#8,ost_displaywidth(a1)
+		move.b	#StrId_Ring,ost_name(a1)
 		move.b	ost_respawn(a0),ost_respawn(a1)
 		move.b	d1,ost_ring_num(a1)			; ring remembers which one in the current batch it is 
 
@@ -130,6 +131,7 @@ Ring_Animate:	; Routine 2
 
 Ring_Collect:	; Routine 4
 		addq.b	#2,ost_routine(a0)			; goto Ring_Sparkle next
+		move.b	#StrId_Sparkle,ost_name(a0)
 		move.b	#0,ost_col_type(a0)
 		move.w	#priority_1,ost_priority(a0)
 		moveq	#1,d0

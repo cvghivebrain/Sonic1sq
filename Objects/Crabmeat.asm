@@ -46,6 +46,7 @@ Crab_Main:	; Routine 0
 		move.b	#16,ost_col_width(a0)
 		move.b	#16,ost_col_height(a0)
 		move.b	#$15,ost_displaywidth(a0)
+		move.b	#StrId_Crabmeat,ost_name(a0)
 		move.b	ost_subtype(a0),d0
 		andi.w	#$F,d0					; read low nybble of subtype
 		lsl.b	#2,d0					; multiply by 4
@@ -179,6 +180,7 @@ CrabBall:
 		move.b	#6,ost_col_width(a0)
 		move.b	#6,ost_col_height(a0)
 		move.b	#8,ost_displaywidth(a0)
+		move.b	#StrId_Missile,ost_name(a0)
 		move.w	#-$400,ost_y_vel(a0)
 		move.b	#id_frame_crab_ball1,ost_frame(a0)
 

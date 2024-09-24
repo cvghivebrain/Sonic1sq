@@ -35,6 +35,7 @@ GBall_Main:	; Routine 0
 		move.w	#vram_weapon/sizeof_cell,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#8,ost_displaywidth(a0)
+		move.b	#StrId_Boss,ost_name(a0)
 		move.w	#priority_6,ost_priority(a0)
 		moveq	#id_UPLC_GHZAnchor,d0
 		jsr	UncPLC
@@ -48,6 +49,7 @@ GBall_Main:	; Routine 0
 		move.b	#id_frame_ball_check1,ost_frame(a1)
 		move.b	#render_rel,ost_render(a1)
 		move.b	#32,ost_displaywidth(a1)
+		move.b	#StrId_Ball,ost_name(a1)
 		move.w	#priority_5,ost_priority(a1)
 		move.b	#id_React_Hurt,ost_col_type(a1)		; make object hurt Sonic
 		move.b	#20,ost_col_width(a1)
@@ -72,6 +74,7 @@ GBall_Main:	; Routine 0
 		move.b	#id_frame_swing_chain,ost_frame(a1)
 		move.b	#render_rel,ost_render(a1)
 		move.b	#8,ost_displaywidth(a1)
+		move.b	#StrId_Chain,ost_name(a1)
 		move.w	#priority_6,ost_priority(a1)
 		move.b	d2,ost_gball_radius(a1)
 		addi.b	#16,d2					; chain links are 16px apart

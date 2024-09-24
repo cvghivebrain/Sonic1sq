@@ -35,6 +35,7 @@ Roll_Main:	; Routine 0
 		move.b	#render_rel+render_onscreen,ost_render(a0)
 		move.w	#priority_4,ost_priority(a0)
 		move.b	#$10,ost_displaywidth(a0)
+		move.b	#StrId_Roller,ost_name(a0)
 		move.b	#roller_height,ost_height(a0)
 		move.b	#8,ost_width(a0)
 		move.b	#14,ost_col_width(a0)

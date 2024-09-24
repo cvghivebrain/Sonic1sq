@@ -33,6 +33,7 @@ ost_egate_enter_vel:	rs.w 1					; Sonic's speed entering the gate
 
 EGate_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto EGate_Enter next
+		move.b	#StrId_Gate,ost_name(a0)
 		moveq	#8,d1
 		move.b	ost_subtype(a0),d0
 		bpl.s	.vertical				; branch if high bit is 0

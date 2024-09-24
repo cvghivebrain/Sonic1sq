@@ -33,6 +33,7 @@ Ledge_Main:	; Routine 0
 		move.w	#priority_4,ost_priority(a0)
 		move.b	#14,ost_ledge_wait_time(a0)		; set time delay for collapse
 		move.b	#$30,ost_displaywidth(a0)
+		move.b	#StrId_Ledge,ost_name(a0)
 		move.b	#$30,ost_width(a0)
 		move.b	ost_subtype(a0),ost_frame(a0)
 		move.b	#$38,ost_height(a0)

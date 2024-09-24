@@ -39,6 +39,7 @@ Burro_Main:	; Routine 0
 		move.b	#12,ost_col_width(a0)
 		move.b	#18,ost_col_height(a0)
 		move.b	#$C,ost_displaywidth(a0)
+		move.b	#StrId_Burrobot,ost_name(a0)
 		move.b	#id_Burro_ChkSonic,ost_routine(a0)	; goto Burro_ChkSonic next
 		move.b	#id_frame_burro_dig1,ost_frame(a0)
 		

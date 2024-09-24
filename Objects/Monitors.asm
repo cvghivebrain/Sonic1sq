@@ -47,6 +47,7 @@ Mon_Main:	; Routine 0
 		move.b	#render_rel,ost_render(a0)
 		move.w	#priority_3,ost_priority(a0)
 		move.b	#$F,ost_displaywidth(a0)
+		move.b	#StrId_Monitor,ost_name(a0)
 		move.b	#-1,ost_monitor_slot(a0)		; assume there are no free slots
 		bsr.w	GetState
 		andi.b	#1,d0

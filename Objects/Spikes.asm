@@ -66,6 +66,7 @@ Spike_Main:	; Routine 0
 		bset	#status_pointy_bit,ost_status(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.w	#priority_4,ost_priority(a0)
+		move.b	#StrId_Spikes,ost_name(a0)
 		move.b	ost_subtype(a0),d0
 		move.b	d0,d1
 		andi.w	#$70,d0					; read high nybble (excluding high bit)

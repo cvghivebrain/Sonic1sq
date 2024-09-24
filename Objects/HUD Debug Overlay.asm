@@ -30,6 +30,7 @@ Overlay_Main:	; Routine 0
 		move.b	#render_rel,ost_render(a0)
 		move.w	#priority_0,ost_priority(a0)
 		move.b	#16,ost_displaywidth(a0)
+		move.b	#StrId_Debug,ost_name(a0)
 		moveq	#id_UPLC_Overlay,d0
 		jsr	UncPLC					; load corner & dot gfx
 		jsr	FindFreeFinal
@@ -42,6 +43,7 @@ Overlay_Main:	; Routine 0
 		move.b	ost_render(a0),ost_render(a1)
 		move.w	ost_priority(a0),ost_priority(a1)
 		move.b	ost_displaywidth(a0),ost_displaywidth(a1)
+		move.b	#StrId_Debug,ost_name(a1)
 		saveparent
 		
 Overlay_Display:

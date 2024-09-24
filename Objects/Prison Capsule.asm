@@ -31,6 +31,7 @@ Pri_Main:	; Routine 0
 		move.b	#render_rel,ost_render(a0)
 		move.b	#id_Pri_Body,ost_routine(a0)		; goto Pri_Body next
 		move.b	#$20,ost_displaywidth(a0)
+		move.b	#StrId_Prison,ost_name(a0)
 		move.b	#$20,ost_width(a0)
 		move.b	#$20,ost_height(a0)
 		move.w	#priority_4,ost_priority(a0)
@@ -49,6 +50,7 @@ Pri_Main:	; Routine 0
 		move.l	ost_mappings(a0),ost_mappings(a1)
 		move.w	ost_tile(a0),ost_tile(a1)
 		move.b	#$C,ost_displaywidth(a1)
+		move.b	#StrId_Button,ost_name(a1)
 		move.b	#$C,ost_width(a1)
 		move.b	#8,ost_height(a1)
 		move.w	#priority_5,ost_priority(a1)

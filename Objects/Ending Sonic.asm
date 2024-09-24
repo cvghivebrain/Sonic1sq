@@ -43,6 +43,7 @@ ESon_Main2:
 		move.l	#Map_ESon,ost_mappings(a0)
 		move.w	#tile_Kos_EndSonic,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
+		move.b	#StrId_Sonic,ost_name(a0)
 		clr.b	ost_status(a0)
 		move.w	#priority_2,ost_priority(a0)
 		move.w	#id_frame_esonic_hold1,ost_frame_hi(a0)

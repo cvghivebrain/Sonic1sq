@@ -33,6 +33,7 @@ Hog_Main:	; Routine 0
 		move.b	#12,ost_col_width(a0)
 		move.b	#18,ost_col_height(a0)
 		move.b	#$C,ost_displaywidth(a0)
+		move.b	#StrId_BallHog,ost_name(a0)
 		addq.b	#2,ost_routine(a0)			; goto Hog_Action next
 		jmp	SnapFloor				; align to floor
 ; ===========================================================================

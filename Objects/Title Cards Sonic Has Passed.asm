@@ -39,6 +39,7 @@ HasSet_Mustard:	autocard "MUSTARD HAS","PASSED",id_frame_card_mustardhas,id_fram
 ; ===========================================================================
 
 Has_Main:	; Routine 0
+		move.b	#StrId_TitleCard,ost_name(a0)
 		move.b	#1,(v_haspassed_state).w
 		add.w	(v_haspassed_uplc).w,d0
 		jsr	UncPLC					; load title card patterns
@@ -62,6 +63,7 @@ Has_Main:	; Routine 0
 		jsr	FindFreeInert
 		move.l	#HasPassedCard,ost_id(a1)		; load yellow bonus text object
 		move.b	#id_Has_WaitEnter,ost_routine(a1)
+		move.b	#StrId_TitleCard,ost_name(a1)
 		move.l	#Map_Has,ost_mappings(a1)
 		move.w	(v_tile_bonus).w,ost_tile(a1)
 		addi.w	#tile_hi,ost_tile(a1)
@@ -79,14 +81,17 @@ Has_Main:	; Routine 0
 		jsr	FindFreeInert
 		move.l	#HasPassedCard,ost_id(a1)		; load time bonus object
 		move.b	#id_Has_Time,ost_routine(a1)
+		move.b	#StrId_TitleCard,ost_name(a1)
 		
 		jsr	FindFreeInert
 		move.l	#HasPassedCard,ost_id(a1)		; load ring bonus object
 		move.b	#id_Has_Rings,ost_routine(a1)
+		move.b	#StrId_TitleCard,ost_name(a1)
 		
 		jsr	FindFreeInert
 		move.l	#HasPassedCard,ost_id(a1)		; load bonus helper object
 		move.b	#id_Has_WaitBonus,ost_routine(a1)
+		move.b	#StrId_TitleCard,ost_name(a1)
 		move.w	#240,ost_has_time(a1)			; set delay for bonus counting
 		move.b	#1,(f_pass_bonus_update).w		; set flag to update
 		rts

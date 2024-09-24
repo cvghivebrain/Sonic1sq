@@ -34,6 +34,7 @@ Edge_Main:	; Routine 0
 		move.w	#tile_Kos_GhzEdgeWall+tile_pal3,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#8,ost_displaywidth(a0)
+		move.b	#StrId_Wall,ost_name(a0)
 		move.b	#9,ost_width(a0)
 		move.b	#32,ost_height(a0)
 		move.w	#priority_6,ost_priority(a0)

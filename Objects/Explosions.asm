@@ -46,6 +46,7 @@ ExItem_Main:	; Routine 2
 		move.w	#priority_1,ost_priority(a0)
 		move.b	#0,ost_col_type(a0)
 		move.b	#$C,ost_displaywidth(a0)
+		move.b	#StrId_Explosion,ost_name(a0)
 		move.b	#7,ost_anim_time(a0)			; set frame duration to 7 frames
 		move.b	#id_frame_ex_0,ost_frame(a0)
 		play.w	1, jsr, sfx_Break			; play breaking enemy sound
@@ -87,6 +88,7 @@ ExBom_Main:	; Routine 0
 		move.w	#priority_1,ost_priority(a0)
 		move.b	#0,ost_col_type(a0)
 		move.b	#$C,ost_displaywidth(a0)
+		move.b	#StrId_Explosion,ost_name(a0)
 		move.b	#7,ost_anim_time(a0)
 		move.b	#id_frame_ex_0_0,ost_frame(a0)
 		play.w	1, jsr, sfx_Bomb			; play exploding bomb sound

@@ -80,6 +80,7 @@ Spring_Main:	; Routine 0
 		move.l	#Map_Spring,ost_mappings(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.w	#priority_4,ost_priority(a0)
+		move.b	#StrId_Spring,ost_name(a0)
 		move.b	ost_subtype(a0),d0			; get subtype
 		move.l	d0,d1
 		andi.w	#$E,d1					; read only low nybble of subtype (0 or 2)

@@ -64,10 +64,12 @@ Pause_Debug:
 		bsr.w	ClearVRAM_Tiles				; clear fg/bg
 		bsr.w	ClearVRAM_HScroll			; clear hscroll table
 		bsr.w	ClearRAM_Sprites			; clear sprites
+		clr.w	(v_fg_y_pos_vsram).w
 		moveq	#id_UPLC_PauseDebug,d0
 		jsr	UncPLC					; load debug text gfx on top of HUD gfx
 		move.w	#cYellow,(v_pal_dry_line2+12).w		; replace white with yellow in palette line 2
 		
+Pause_Debug_Main:
 		moveq	#1,d0					; x pos
 		moveq	#1,d1					; y pos
 		moveq	#0,d2
@@ -105,6 +107,7 @@ Pause_Debug_Exit:
 		bsr.w	ExecuteObjects_DisplayOnly		; read all objects for display
 		bsr.w	BuildSprites				; redraw sprites
 		move.w	#cWhite,(v_pal_dry_line2+12).w
+		move.w	(v_camera_y_pos).w,(v_fg_y_pos_vsram).w
 		bra.w	Pause_Loop				; return to regular pause
 		
 Pause_Debug_Obj:
@@ -127,10 +130,17 @@ Pause_Debug_Obj:
 		move.w	#countof_ost,d0				; number of items in menu
 		moveq	#24,d1					; number of items per column
 		lea	(v_debugmenu_item).w,a1
+		btst	#bitB,(v_joypad_press_actual).w
+		bne.s	.back
 		bsr.w	NavigateMenu				; read control inputs
 		beq.s	Pause_Debug_Obj_Loop			; branch if no inputs
 		bsr.w	Pause_Debug_DrawObj			; redraw menu
 		bra.s	Pause_Debug_Obj_Loop
+		
+	.back:
+		bsr.w	ClearVRAM_Tiles_FG			; clear fg
+		clr.w	(a1)					; highlight first object in list
+		bra.w	Pause_Debug_Main			; return to main menu
 		
 ; ---------------------------------------------------------------------------
 ; Draw main menu
@@ -219,13 +229,69 @@ objname:	macro txt,name
 		dc.b \txt
 		endm
 	
-Str_None:	dc.b "NONE    "
+Str_None:	dc.b "[       "
 Str_Names:	objname "UNKNOWN ",Unknown
 		objname "SONIC   ",Sonic
 		objname "PLATFORM",Platform
 		objname "RING    ",Ring
+		objname "BIGRING ",BigRing
+		objname "RINGLOSS",RingLoss
+		objname "SPARKLE ",Sparkle
+		objname "BONUS   ",Bonus
+		objname "LAMPPOST",Lamppost
+		objname "SIGNPOST",Signpost
 		objname "SPRING  ",Spring
 		objname "MONITOR ",Monitor
+		objname "POWERUP ",PowerUp
+		objname "SHIELD  ",Shield
+		objname "INVINCIB",Invincible
+		objname "EXPLOSIO",Explosion
+		objname "POINTS  ",Points
+		objname "BUTTON  ",Button
+		objname "SCENERY ",Scenery
+		objname "WATERSND",WaterSound
+		objname "ANIMAL  ",Animal
+		objname "BALLHOG ",BallHog
+		objname "BALL    ",Ball
+		objname "BATBRAIN",Batbrain
+		objname "BOMB    ",Bomb
+		objname "BOMBFUSE",Fuse
+		objname "BOMBFRAG",Frag
+		objname "BURROBOT",Burrobot
+		objname "BUZZBOMB",BuzzBomber
+		objname "MISSILE ",Missile
+		objname "CATERKIL",Caterkiller
+		objname "CATERSEG",CaterSegment
+		objname "CHOPPER ",Chopper
+		objname "CRABMEAT",Crabmeat
+		objname "JAWS    ",Jaws
+		objname "MOTOBUG ",MotoBug
+		objname "SMOKE   ",Smoke
+		objname "NEWTRON ",Newtron
+		objname "ORBINAUT",Orbinaut
+		objname "ORBSPIKE",OrbSpike
+		objname "ROLLER  ",Roller
+		objname "SPLATS  ",Splats
+		objname "YADRIN  ",Yadrin
+		objname "FIREBALL",Fireball
+		objname "SPIKES  ",Spikes
+		objname "BOSS    ",Boss
+		objname "PRISON  ",Prison
+		objname "CYLINDER",Cylinder
+		objname "SMASHWAL",SmashWall
+		objname "CHAIN   ",Chain
+		objname "BRIDGE  ",Bridge
+		objname "LEDGE   ",Ledge
+		objname "ROCK    ",Rock
+		objname "HELIX   ",Helix
+		objname "HELIXSPI",HelixSpike
+		objname "WALL    ",Wall
+		objname "TITLECAR",TitleCard
+		objname "GAMEOVER",GameOver
+		objname "GATE    ",Gate
+		objname "SOLID   ",Solid
+		objname "HUD     ",HUD
+		objname "DEBUG   ",Debug
 
 ; ---------------------------------------------------------------------------
 ; Draw string on screen

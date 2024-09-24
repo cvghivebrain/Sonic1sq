@@ -58,6 +58,7 @@ Orb_Main:	; Routine 0
 		move.b	#8,ost_col_width(a0)
 		move.b	#8,ost_col_height(a0)
 		move.b	#$C,ost_displaywidth(a0)
+		move.b	#StrId_Orbinaut,ost_name(a0)
 		andi.w	#$F0,d4					; read high nybble of subtype
 		lsr.w	#4,d4
 		mulu.w	#6,d4
@@ -85,6 +86,7 @@ Orb_Main:	; Routine 0
 		ori.b	#render_rel,ost_render(a1)
 		move.w	#priority_4,ost_priority(a1)
 		move.b	#8,ost_displaywidth(a1)
+		move.b	#StrId_OrbSpike,ost_name(a1)
 		move.b	#id_frame_orb_spikeball,ost_frame(a1)
 		move.b	#id_React_Hurt,ost_col_type(a1)
 		move.b	#4,ost_col_width(a1)

@@ -24,6 +24,7 @@ RollT_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto RollT_Detect next
 		move.b	#rollt_width,ost_width(a0)
 		move.b	#rollt_height,ost_height(a0)
+		move.b	#StrId_Gate,ost_name(a0)
 
 RollT_Detect:	; Routine 2
 		getsonic					; a1 = OST of Sonic

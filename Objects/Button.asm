@@ -48,6 +48,7 @@ But_Main:	; Routine 0
 	.not_marble:
 		move.b	#render_rel,ost_render(a0)
 		move.b	#$10,ost_displaywidth(a0)
+		move.b	#StrId_Button,ost_name(a0)
 		move.w	#priority_4,ost_priority(a0)
 		addq.w	#3,ost_y_pos(a0)
 		move.b	#$F,ost_width(a0)

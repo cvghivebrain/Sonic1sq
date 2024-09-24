@@ -30,6 +30,7 @@ Moto_Main:	; Routine 0
 		move.b	#render_rel,ost_render(a0)
 		move.w	#priority_4,ost_priority(a0)
 		move.b	#$14,ost_displaywidth(a0)
+		move.b	#StrId_MotoBug,ost_name(a0)
 		move.b	#motobug_height,ost_height(a0)
 		move.b	#8,ost_width(a0)
 		move.b	#id_React_Enemy,ost_col_type(a0)
@@ -72,6 +73,7 @@ Moto_Walk:	; Routine 2
 		move.b	ost_render(a0),ost_render(a1)
 		move.w	#priority_4,ost_priority(a1)
 		move.b	#4,ost_displaywidth(a1)
+		move.b	#StrId_Smoke,ost_name(a1)
 		bra.w	DespawnObject
 		
 	.stop_here:

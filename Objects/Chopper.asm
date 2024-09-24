@@ -39,6 +39,7 @@ Chop_Main:	; Routine 0
 		move.b	#12,ost_col_width(a0)
 		move.b	#16,ost_col_height(a0)
 		move.b	#$10,ost_displaywidth(a0)
+		move.b	#StrId_Chopper,ost_name(a0)
 		move.b	ost_subtype(a0),d0
 		andi.w	#$F,d0					; read low nybble of subtype
 		add.w	d0,d0

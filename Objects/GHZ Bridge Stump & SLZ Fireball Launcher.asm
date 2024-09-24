@@ -32,6 +32,7 @@ Scen_Main:	; Routine 0
 		move.w	(a1)+,ost_frame_hi(a0)
 		move.w	(a1)+,ost_displaywidth_hi(a0)
 		move.w	(a1)+,ost_priority(a0)
+		move.b	#StrId_Scenery,ost_name(a0)
 
 Scen_ChkDel:	; Routine 2
 		shortcut	DespawnQuick

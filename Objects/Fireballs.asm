@@ -37,6 +37,7 @@ FBall_Main:	; Routine 0
 		move.b	#fire_width,ost_width(a0)
 		move.l	#Map_Fire,ost_mappings(a0)
 		move.w	(v_tile_fireball).w,ost_tile(a0)
+		move.b	#StrId_Fireball,ost_name(a0)
 		move.b	#render_rel,ost_render(a0)
 		tst.w	ost_priority(a0)
 		bne.s	.keep_priority				; branch if priority was set

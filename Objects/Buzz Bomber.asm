@@ -35,6 +35,7 @@ Buzz_Main:	; Routine 0
 		move.b	#24,ost_col_width(a0)
 		move.b	#12,ost_col_height(a0)
 		move.b	#$18,ost_displaywidth(a0)
+		move.b	#StrId_BuzzBomber,ost_name(a0)
 		move.b	#id_frame_buzz_fly3,ost_frame(a0)	; use frame with exhaust flame
 		move.w	#-$400,ost_x_vel(a0)			; move Buzz Bomber to the left
 		btst	#status_xflip_bit,ost_status(a0)

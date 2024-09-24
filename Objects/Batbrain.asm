@@ -33,6 +33,7 @@ Bat_Main:	; Routine 0
 		move.b	#8,ost_col_width(a0)
 		move.b	#8,ost_col_height(a0)
 		move.b	#$10,ost_displaywidth(a0)
+		move.b	#StrId_Batbrain,ost_name(a0)
 
 Bat_Hang:	; Routine 2
 		getsonic					; a1 = OST of Sonic

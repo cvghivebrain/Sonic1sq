@@ -45,6 +45,7 @@ TSwi_Info_2:	; SLZ loops (left-down)
 
 TSwi_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto TSwi_Detect next
+		move.b	#StrId_Gate,ost_name(a0)
 		move.w	ost_x_pos(a0),d0
 		move.w	ost_y_pos(a0),d1
 		bsr.w	PosToChunk				; get chunk id from position
@@ -76,6 +77,7 @@ TSwi_Main:	; Routine 0
 		move.b	(a2)+,ost_width(a1)
 		move.b	(a2)+,ost_height(a1)
 		move.b	(a2)+,ost_subtype(a1)
+		move.b	#StrId_Gate,ost_name(a1)
 		saveparent
 		dbf	d1,.loop				; repeat for all hotspots
 

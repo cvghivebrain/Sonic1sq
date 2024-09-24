@@ -33,6 +33,7 @@ Sign_Main:	; Routine 0
 		move.w	#vram_signpost/sizeof_cell,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#$18,ost_displaywidth(a0)
+		move.b	#StrId_Signpost,ost_name(a0)
 		move.w	#priority_4,ost_priority(a0)
 		moveq	#id_UPLC_Bonus,d0
 		jsr	UncPLC					; load hidden bonus gfx
@@ -76,6 +77,7 @@ Sign_Spin:	; Routine 4
 		bne.s	.fail					; branch if not found
 		move.l	#Rings,ost_id(a1)			; load rings object
 		move.b	#id_Ring_Sparkle,ost_routine(a1)	; jump to ring sparkle subroutine
+		move.b	#StrId_Sparkle,ost_name(a1)
 		move.b	(a2)+,d0				; get relative x position
 		ext.w	d0
 		add.w	ost_x_pos(a0),d0			; add to signpost x position

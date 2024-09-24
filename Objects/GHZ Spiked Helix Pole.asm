@@ -28,6 +28,7 @@ Hel_Main:	; Routine 0
 		move.b	#status_pointy,ost_status(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.w	#priority_3,ost_priority(a0)
+		move.b	#StrId_Helix,ost_name(a0)
 		move.l	#HelixSpike,d4
 		moveq	#0,d1
 		move.b	ost_subtype(a0),d1
@@ -56,6 +57,7 @@ Hel_Main:	; Routine 0
 		move.w	#priority_3,ost_priority(a1)
 		move.w	ost_status(a0),ost_status(a1)
 		move.b	#8,ost_displaywidth(a1)
+		move.b	#StrId_HelixSpike,ost_name(a1)
 		move.b	#4,ost_col_width(a1)
 		move.b	#16,ost_col_height(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)

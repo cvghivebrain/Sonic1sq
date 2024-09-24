@@ -66,6 +66,7 @@ RLoss_Count:	; Routine 0
 		move.b	#6,ost_col_width(a1)
 		move.b	#6,ost_col_height(a1)
 		move.b	#8,ost_displaywidth(a1)
+		move.b	#StrId_RingLoss,ost_name(a1)
 		move.b	#255,(v_syncani_3_time).w		; reset deletion/animation timer
 		move.w	(a2)+,ost_x_vel(a1)
 		move.w	(a2)+,ost_y_vel(a1)

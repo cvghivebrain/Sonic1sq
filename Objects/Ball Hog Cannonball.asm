@@ -35,6 +35,7 @@ Cbal_Main:	; Routine 0
 		move.b	#6,ost_col_width(a0)
 		move.b	#cannonball_height,ost_col_height(a0)
 		move.b	#8,ost_displaywidth(a0)
+		move.b	#StrId_Ball,ost_name(a0)
 		move.b	ost_subtype(a0),d0			; move subtype to d0
 		move.w	d0,d1
 		andi.w	#$F,d0					; read low nybble only

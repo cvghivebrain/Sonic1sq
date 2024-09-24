@@ -22,6 +22,7 @@ Shi_Main:	; Routine 0
 		move.b	#render_rel,ost_render(a0)
 		move.w	#priority_1,ost_priority(a0)
 		move.b	#$10,ost_displaywidth(a0)
+		move.b	#StrId_Shield,ost_name(a0)
 		move.w	#vram_shield/sizeof_cell,ost_tile(a0)
 		move.b	#id_ani_shield_0,ost_anim(a0)
 
@@ -75,6 +76,7 @@ Inv_Main:	; Routine 0
 		move.b	#render_rel,ost_render(a0)
 		move.w	#priority_1,ost_priority(a0)
 		move.b	#$10,ost_displaywidth(a0)
+		move.b	#StrId_Invincible,ost_name(a0)
 		move.w	#vram_shield/sizeof_cell,ost_tile(a0)
 		moveq	#0,d0
 		move.b	ost_anim(a0),d0				; get animation id (0 to 3)
