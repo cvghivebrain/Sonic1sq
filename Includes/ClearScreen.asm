@@ -72,12 +72,13 @@ ClearVRAM:
 		rts
 		
 ClearVRAM_Tiles:
-		locVRAM	vram_fg,d0
-		set_dma_fill_size	sizeof_vram_fg,d1
-		bsr.s	ClearVRAM
-
 		locVRAM	vram_bg,d0
 		set_dma_fill_size	sizeof_vram_bg,d1
+		bsr.s	ClearVRAM
+		
+ClearVRAM_Tiles_FG:
+		locVRAM	vram_fg,d0
+		set_dma_fill_size	sizeof_vram_fg,d1
 		bra.s	ClearVRAM
 		
 ClearVRAM_HScroll:
