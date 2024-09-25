@@ -31,6 +31,7 @@ Slide_Main:	; Routine 0
 		move.l	#Map_Slide,ost_mappings(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#$40,ost_displaywidth(a0)
+		move.b	#StrId_Platform,ost_name(a0)
 		move.b	#$3F,ost_width(a0)
 		move.b	#8,ost_height(a0)
 		move.w	#tile_Kos_SlideFloor+tile_pal3,ost_tile(a0)

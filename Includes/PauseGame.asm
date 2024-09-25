@@ -311,6 +311,20 @@ Str_Names:	objname "UNKNOWN ",Unknown
 		objname "PUSHBLOC",PushBlock
 		objname "SMASHBLO",SmashBlock
 		objname "COLLAPSE",CollapseFloor
+		objname "ELECTRO ",Electro
+		objname "FLAMETHR",Flamethrower
+		objname "GIRDER  ",Girder
+		objname "JUNCTION",Junction
+		objname "DISC    ",Disc
+		objname "SAW     ",Saw
+		objname "TELEPORT",Teleport
+		objname "TRAPDOOR",Trapdoor
+		objname "ELEVATOR",Elevator
+		objname "FAN     ",Fan
+		objname "SEESAW  ",Seesaw
+		objname "SPIKEBAL",Spikeball
+		objname "STAIR   ",Stair
+		objname "BUMPER  ",Bumper
 		objname "TITLECAR",TitleCard
 		objname "GAMEOVER",GameOver
 		objname "GATE    ",Gate

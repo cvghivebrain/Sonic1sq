@@ -30,6 +30,7 @@ Conv_Widths:	dc.b 128, 56
 
 Conv_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Conv_Action next
+		move.b	#StrId_Conveyor,ost_name(a0)
 		move.b	#128,ost_width(a0)			; set width to 128px
 		move.b	ost_subtype(a0),d1			; get object type
 		andi.w	#$F,d1					; read only low nybble

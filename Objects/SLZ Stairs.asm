@@ -45,6 +45,7 @@ Stair_Main:	; Routine 0
 		move.b	#render_rel,ost_render(a0)
 		move.w	#priority_3,ost_priority(a0)
 		move.b	#$40,ost_displaywidth(a0)
+		move.b	#StrId_Stair,ost_name(a0)
 		move.b	#$40,ost_width(a0)
 		move.b	#$10,ost_height(a0)
 		move.b	ost_subtype(a0),d0
@@ -80,6 +81,9 @@ Stair_ChkBtm:	; Routine 8
 		move.w	ost_stair_x_start(a0),d0
 		bra.w	DespawnQuick_AltX
 ; ===========================================================================
+		
+Stair_Speeds:	dc.w $100, $C0, $80, $40
+		dc.w $40, $80, $C0, $100
 
 Stair_Jiggle:	; Routine $A
 		lea	Ani_Stair(pc),a1
@@ -123,6 +127,7 @@ Stair_Wait:	; Routine 4
 		move.b	ost_render(a0),ost_render(a1)
 		move.w	ost_priority(a0),ost_priority(a1)
 		move.b	#$10,ost_displaywidth(a1)
+		move.b	#StrId_Stair,ost_name(a1)
 		move.b	#$10,ost_width(a1)
 		move.b	#$10,ost_height(a1)
 		move.b	#id_frame_stair_block,ost_frame(a1)
@@ -133,9 +138,6 @@ Stair_Wait:	; Routine 4
 		bsr.w	SolidObject
 		move.w	ost_stair_x_start(a0),d0
 		bra.w	DespawnQuick_AltX
-		
-Stair_Speeds:	dc.w $100, $C0, $80, $40
-		dc.w $40, $80, $C0, $100
 ; ===========================================================================
 
 Stair_Drop:	; Routine 6

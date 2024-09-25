@@ -40,6 +40,7 @@ Disc_Main:	; Routine 0
 		move.b	#render_rel,ost_render(a0)
 		move.w	#priority_4,ost_priority(a0)
 		move.b	#8,ost_displaywidth(a0)
+		move.b	#StrId_Disc,ost_name(a0)
 		move.w	ost_x_pos(a0),ost_disc_x_start(a0)
 		move.w	ost_y_pos(a0),ost_disc_y_start(a0)
 		move.b	ost_subtype(a0),d0			; get object type

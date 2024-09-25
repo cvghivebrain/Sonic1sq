@@ -61,6 +61,7 @@ Sto_Main:	; Routine 0
 		lsl.w	#3,d0					; multiply by 8
 		lea	Sto_Settings(pc,d0.w),a2		; get variables from list
 		move.b	#28,ost_displaywidth(a0)
+		move.b	#StrId_Stomper,ost_name(a0)
 		move.b	#28,ost_width(a0)
 		move.b	#32,ost_height(a0)
 		move.w	#tile_Kos_Stomper+tile_pal2,ost_tile(a0)

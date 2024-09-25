@@ -41,6 +41,7 @@ BBlock_Main:	; Routine 0
 		move.w	#0+tile_pal3,ost_tile(a1)
 		move.b	#render_rel,ost_render(a1)
 		move.b	#$10,ost_displaywidth(a1)
+		move.b	#StrId_Block,ost_name(a1)
 		move.b	#$10,ost_width(a1)
 		move.b	#$10,ost_height(a1)
 		move.w	#priority_3,ost_priority(a1)

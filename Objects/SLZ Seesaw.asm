@@ -33,6 +33,7 @@ See_Main:	; Routine 0
 		ori.b	#render_rel,ost_render(a0)
 		move.w	#priority_4,ost_priority(a0)
 		move.b	#$30,ost_displaywidth(a0)
+		move.b	#StrId_Seesaw,ost_name(a0)
 		move.b	#$30,ost_width(a0)
 		move.b	#$15,ost_height(a0)
 		tst.b	ost_subtype(a0)
@@ -55,6 +56,7 @@ See_Main:	; Routine 0
 		move.b	#8,ost_col_width(a1)
 		move.b	#8,ost_col_height(a1)
 		move.b	#$C,ost_displaywidth(a1)
+		move.b	#StrId_Spikeball,ost_name(a1)
 		move.b	#id_frame_seesaw_silver,ost_frame(a1)
 		move.b	#2,ost_subtype(a1)
 		saveparent

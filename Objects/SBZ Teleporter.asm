@@ -35,6 +35,7 @@ ost_tele_bump:		equ ost_angle				; counter for initial "bump" when Sonic enters 
 
 Tele_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Tele_Action next
+		move.b	#StrId_Teleport,ost_name(a0)
 		move.b	ost_subtype(a0),d0
 		andi.w	#$F,d0					; read only low nybble
 		add.w	d0,d0

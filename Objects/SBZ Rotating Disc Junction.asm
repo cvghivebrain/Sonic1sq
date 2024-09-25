@@ -33,6 +33,7 @@ Jun_Main:	; Routine 0
 		move.b	#$30,ost_width(a0)
 		move.b	#$30,ost_height(a0)
 		move.b	#$30,ost_displaywidth(a0)
+		move.b	#StrId_Junction,ost_name(a0)
 		move.w	#priority_4,ost_priority(a0)
 		move.b	#1,ost_junc_direction(a0)		; set default direction (anticlockwise)
 		
@@ -47,6 +48,7 @@ Jun_Main:	; Routine 0
 		move.w	ost_tile(a0),ost_tile(a1)
 		ori.b	#render_rel,ost_render(a1)
 		move.b	#$38,ost_displaywidth(a1)
+		move.b	#StrId_Junction,ost_name(a1)
 
 Jun_Action:	; Routine 2
 		bsr.w	Jun_Update				; check if button is pressed and animate the junction

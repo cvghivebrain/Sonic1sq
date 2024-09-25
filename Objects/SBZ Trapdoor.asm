@@ -35,6 +35,7 @@ Trap_Main:	; Routine 0
 		ori.b	#render_rel,ost_render(a0)
 		move.w	#priority_0,ost_priority(a0)
 		move.b	#$80,ost_displaywidth(a0)
+		move.b	#StrId_Trapdoor,ost_name(a0)
 		move.b	#64,ost_width(a0)
 		move.b	#12,ost_height(a0)
 		move.b	ost_subtype(a0),d0			; get subtype

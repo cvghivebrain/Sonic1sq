@@ -48,6 +48,7 @@ YDoor_Main:	; Routine 0
 		move.w	#0+tile_pal3,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.w	#priority_3,ost_priority(a0)
+		move.b	#StrId_Door,ost_name(a0)
 		move.w	ost_x_pos(a0),ost_ydoor_x_start(a0)
 		move.b	ost_subtype(a0),d0			; get subtype
 		move.b	d0,d2

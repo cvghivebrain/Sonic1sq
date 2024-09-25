@@ -28,6 +28,7 @@ Bump_Main:	; Routine 0
 		move.w	(v_tile_bumper).w,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#$10,ost_displaywidth(a0)
+		move.b	#StrId_Bumper,ost_name(a0)
 		move.w	#priority_1,ost_priority(a0)
 		move.b	#id_React_Bumper,ost_col_type(a0)
 		move.b	#8,ost_col_width(a0)

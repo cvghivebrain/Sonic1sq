@@ -30,6 +30,7 @@ ost_pillar_x_dist:	rs.w 1					; x distance moved
 Pillar_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Pillar_Start next
 		move.b	#$80,ost_displaywidth(a0)
+		move.b	#StrId_Door,ost_name(a0)
 		move.b	#$80,ost_width(a0)
 		move.b	#$40,ost_height(a0)
 		move.w	#tile_Kos_Sbz3HugeDoor+tile_pal3,ost_tile(a0)

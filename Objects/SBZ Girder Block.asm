@@ -31,6 +31,7 @@ Gird_Main:	; Routine 0
 		ori.b	#render_rel,ost_render(a0)
 		move.w	#priority_4,ost_priority(a0)
 		move.b	#$60,ost_displaywidth(a0)
+		move.b	#StrId_Girder,ost_name(a0)
 		move.b	#$60,ost_width(a0)
 		move.b	#$18,ost_height(a0)
 		move.w	ost_x_pos(a0),ost_girder_x_start(a0)

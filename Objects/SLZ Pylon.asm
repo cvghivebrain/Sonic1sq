@@ -22,6 +22,7 @@ Pyl_Main:	; Routine 0
 		move.w	#tile_Kos_Pylon+tile_hi,ost_tile(a0)
 		move.w	#priority_0,ost_priority(a0)
 		move.b	#$10,ost_displaywidth(a0)
+		move.b	#StrId_Girder,ost_name(a0)
 
 Pyl_Display:	; Routine 2
 		shortcut

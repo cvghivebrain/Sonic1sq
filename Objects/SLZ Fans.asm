@@ -35,6 +35,7 @@ Fan_Main:	; Routine 0
 		move.w	#tile_Kos_Fan+tile_pal3,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#$10,ost_displaywidth(a0)
+		move.b	#StrId_Fan,ost_name(a0)
 		move.w	#priority_4,ost_priority(a0)
 		moveq	#0,d0
 		move.b	ost_subtype(a0),d0

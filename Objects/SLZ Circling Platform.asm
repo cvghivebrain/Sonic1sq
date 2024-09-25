@@ -28,6 +28,7 @@ Circ_Main:	; Routine 0
 		move.b	#render_rel,ost_render(a0)
 		move.w	#priority_4,ost_priority(a0)
 		move.b	#$18,ost_displaywidth(a0)
+		move.b	#StrId_Platform,ost_name(a0)
 		move.b	#$18,ost_width(a0)
 		move.b	#8,ost_height(a0)
 		move.w	ost_x_pos(a0),ost_circ_x_start(a0)

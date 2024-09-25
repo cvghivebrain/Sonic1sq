@@ -29,6 +29,7 @@ Elec_Main:	; Routine 0
 		ori.b	#render_rel,ost_render(a0)
 		move.w	#priority_0,ost_priority(a0)
 		move.b	#$28,ost_displaywidth(a0)
+		move.b	#StrId_Electro,ost_name(a0)
 		move.b	#72,ost_col_width(a0)
 		move.b	#8,ost_col_height(a0)
 		moveq	#0,d0

@@ -40,6 +40,7 @@ Saw_Main:	; Routine 0
 		move.b	#render_rel,ost_render(a0)
 		move.w	#priority_4,ost_priority(a0)
 		move.b	#$20,ost_displaywidth(a0)
+		move.b	#StrId_Saw,ost_name(a0)
 		move.w	ost_x_pos(a0),ost_saw_x_start(a0)
 		move.w	ost_y_pos(a0),ost_saw_y_start(a0)
 		move.b	#id_React_Hurt,ost_col_type(a0)

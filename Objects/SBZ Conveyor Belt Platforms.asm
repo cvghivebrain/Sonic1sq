@@ -18,6 +18,7 @@ SpinC_Index:	index *,,2
 
 SpinC_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto SpinC_ChkDist next
+		move.b	#StrId_Conveyor,ost_name(a0)
 		move.b	ost_subtype(a0),d0
 		add.w	d0,d0
 		add.w	d0,d0
@@ -92,6 +93,7 @@ SpinCP_Main:	; Routine 0
 		move.l	#Map_Spin,ost_mappings(a0)
 		move.w	#tile_Kos_SpinPlatform,ost_tile(a0)
 		move.b	#$10,ost_displaywidth(a0)
+		move.b	#StrId_Platform,ost_name(a0)
 		move.b	#16,ost_width(a0)
 		move.b	#7,ost_height(a0)
 		ori.b	#render_rel,ost_render(a0)

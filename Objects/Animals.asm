@@ -98,6 +98,7 @@ Anml_Main:	; Routine 0
 		move.b	#render_rel+render_xflip+render_onscreen,ost_render(a0)
 		move.w	#priority_6,ost_priority(a0)
 		move.b	#8,ost_displaywidth(a0)
+		move.b	#StrId_Animal,ost_name(a0)
 		move.b	#animal_height,ost_height(a0)
 		move.b	#7,ost_anim_time(a0)
 		move.b	#id_frame_animal1_drop,ost_frame(a0)	; use "dropping" frame

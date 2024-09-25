@@ -39,6 +39,7 @@ ost_elev_dec_flag:	rs.b 1					; 1 = decelerate
 Elev_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Elev_Solid next
 		move.b	#$28,ost_displaywidth(a0)
+		move.b	#StrId_Elevator,ost_name(a0)
 		move.b	#$28,ost_width(a0)
 		move.b	#8,ost_height(a0)
 		move.b	ost_subtype(a0),d0			; get subtype
@@ -227,6 +228,7 @@ ost_emake_time_master:	rs.w 1					; time between spawns
 
 EMake_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto EMake_Spawn next
+		move.b	#StrId_Elevator,ost_name(a0)
 		moveq	#0,d0
 		moveq	#0,d1
 		move.b	ost_subtype(a0),d0			; get subtype
