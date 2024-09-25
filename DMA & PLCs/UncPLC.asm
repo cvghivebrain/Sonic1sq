@@ -365,6 +365,6 @@ UPLC_Overlay:	uplcheader vram_overlay3
 	.end:
 
 UPLC_PauseDebug:	uplcheader $D900
-		uplc Art_LivesNums,v_tile_hud
+		uplc Art_LivesNums,v_tile_text
 	.end:
 	

@@ -42,6 +42,7 @@ Harp_Main:	; Routine 0
 		ori.b	#render_rel,ost_render(a0)
 		bset	#status_pointy_bit,ost_status(a0)
 		move.w	#priority_4,ost_priority(a0)
+		move.b	#StrId_Harpoon,ost_name(a0)
 		move.b	#id_React_Hurt,ost_col_type(a0)
 		move.b	ost_subtype(a0),d0
 		move.w	d0,d1

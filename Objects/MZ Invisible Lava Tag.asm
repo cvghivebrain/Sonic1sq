@@ -23,6 +23,7 @@ LTag_ColTypes:	dc.b 32, 32					; 0
 
 LTag_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto LTag_ChkDel next
+		move.b	#StrId_Lava,ost_name(a0)
 		move.b	#id_React_Hurt,ost_col_type(a0)
 		moveq	#0,d0
 		move.b	ost_subtype(a0),d0

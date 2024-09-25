@@ -36,6 +36,7 @@ GFire_Main:	; Routine 0
 		move.b	#8,ost_col_width(a0)
 		move.b	#8,ost_col_height(a0)
 		move.b	#8,ost_displaywidth(a0)
+		move.b	#StrId_Fire,ost_name(a0)
 		subq.w	#1,ost_x_pos(a0)
 		play.w	1, jsr, sfx_Burning			; play burning sound
 
@@ -67,6 +68,7 @@ GFire_Spread:	; Routine 2
 		move.b	#8,ost_col_width(a1)
 		move.b	#8,ost_col_height(a1)
 		move.b	#8,ost_displaywidth(a1)
+		move.b	#StrId_Fire,ost_name(a1)
 		move.w	ost_parent(a0),ost_parent(a1)
 		move.b	#id_GFire_Hover,ost_routine(a1)
 		move.w	d2,ost_burn_y_diff(a1)			; save heightmap value

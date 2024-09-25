@@ -23,6 +23,7 @@ Spla_Main:	; Routine 0
 		ori.b	#render_rel,ost_render(a0)
 		move.w	#priority_1,ost_priority(a0)
 		move.b	#$10,ost_displaywidth(a0)
+		move.b	#StrId_Splash,ost_name(a0)
 		move.w	#tile_Kos_Splash+tile_pal3,ost_tile(a0)
 		getsonic					; a1 = OST of Sonic
 		move.w	ost_x_pos(a1),ost_x_pos(a0)		; copy x position from Sonic

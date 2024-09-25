@@ -177,6 +177,7 @@ Pal_SSCyc2:	incbin	"Palettes\Cycle - Special Stage 2.bin"
 		include	"Includes\ClearScreen.asm"
 		include	"sound\PlaySound + DacDriverLoad.asm"
 		include	"Includes\PauseGame.asm"
+		include	"Includes\DrawString.asm"
 		include	"Includes\NavigateMenu.asm"
 		include	"Includes\LoadTilemap.asm"
 		include "DMA & PLCs\DMA.asm"
@@ -267,11 +268,11 @@ startof_obj:	equ *
 
 		include "Objects\Burrobot.asm"			; Burrobot
 
+		include "Objects\MZ Green Glass Blocks.asm"	; GlassBlock
 		include "Objects\MZ Grass Platforms.asm"	; LargeGrass
 		incfile	LGrass_Coll_Wide,"Collision\MZ Grass Platforms Heightmap (Wide)",bin
 		incfile LGrass_Coll_Sloped,"Collision\MZ Grass Platforms Heightmap (Sloped)",bin
 		include "Objects\MZ Burning Grass.asm"		; GrassFire
-		include "Objects\MZ Green Glass Blocks.asm"	; GlassBlock
 		include "Objects\MZ Chain Stompers.asm"		; ChainStomp
 		include "Objects\MZ Unused Sideways Stomper.asm" ; SideStomp
 		include "Objects\MZ Pushable Blocks.asm"	; PushBlock
@@ -287,6 +288,10 @@ startof_obj:	equ *
 		include "Objects\GHZ & SLZ Smashable Walls.asm"	; SmashWall
 		include "Objects\_Shatter & Crumble.asm"
 
+		include "Objects\Springs.asm"			; Springs
+		include "Objects\Newtron.asm"			; Newtron
+		include "Objects\Roller.asm"			; Roller
+
 		include "Objects\_ObjectFall & SpeedToPos.asm"
 		include "Objects\_DisplaySprite.asm"
 		include "Objects\_DeleteObject & DeleteChild.asm"
@@ -294,12 +299,6 @@ startof_obj:	equ *
 		include "Objects\_FindFreeObj & FindNextFreeObj.asm"
 		include "Objects\_CloneObject & RunLast.asm"
 		include "Objects\_FindNearestObj.asm"
-
-		include "Objects\Springs.asm"			; Springs
-
-		include "Objects\Newtron.asm"			; Newtron
-
-		include "Objects\Roller.asm"			; Roller
 
 		include "Objects\MZ & SLZ Fireball Launchers.asm"
 		include "Objects\Fireballs.asm"			; FireBall
@@ -396,8 +395,8 @@ startof_obj:	equ *
 		include "Objects\LZ Door Vertical.asm"		; LabyrinthDoorV
 		include "Objects\LZ Door Horizontal.asm"	; LabyrinthDoorH
 
-		include "Objects\Shield & Invincibility.asm"	; ShieldItem
 		include "Objects\LZ Water Surface.asm"		; WaterSurface
+		include "Objects\Shield & Invincibility.asm"	; ShieldItem
 		include "Objects\LZ Water Splash.asm"		; Splash
 		include "Objects\SBZ Rotating Disc Junction.asm" ; Junction
 

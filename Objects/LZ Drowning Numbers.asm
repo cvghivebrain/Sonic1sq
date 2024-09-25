@@ -27,6 +27,7 @@ ost_drown_restart_time:	rs.w 1					; time to restart after Sonic drowns (2 bytes
 
 Drown_Main:	; Routine 0
 		shortcut
+		move.b	#StrId_Drown,ost_name(a0)
 		tst.w	(v_debug_active).w
 		bne.s	.exit					; branch if debug mode is in use
 		getsonic
@@ -206,6 +207,7 @@ Drown_NumWait:	; Routine 2
 		ori.w	#tile_hi,ost_tile(a0)
 		move.b	#render_rel+render_onscreen,ost_render(a0)
 		move.b	#4,ost_displaywidth(a0)
+		move.b	#StrId_Drown,ost_name(a0)
 		move.w	#priority_1,ost_priority(a0)
 		move.w	#-$88,ost_y_vel(a0)
 		moveq	#6,d0					; 6 pixels to right

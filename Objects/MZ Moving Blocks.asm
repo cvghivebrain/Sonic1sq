@@ -53,6 +53,7 @@ MBlock_Main:	; Routine 0
 		move.w	#tile_Kos_MzBlock+tile_pal3,ost_tile(a0)
 		move.b	#8,ost_height(a0)
 		move.w	#priority_4,ost_priority(a0)
+		move.b	#StrId_Block,ost_name(a0)
 		move.w	ost_x_pos(a0),ost_mblock_x_start(a0)
 		andi.b	#$F,d2
 		add.b	d2,d2

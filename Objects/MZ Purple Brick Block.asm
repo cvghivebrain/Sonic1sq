@@ -44,6 +44,7 @@ Brick_Main:	; Routine 0
 		move.b	#render_rel,ost_render(a0)
 		move.w	#priority_3,ost_priority(a0)
 		move.b	#$10,ost_displaywidth(a0)
+		move.b	#StrId_Block,ost_name(a0)
 		move.b	#$10,ost_width(a0)
 		move.b	#brick_height,ost_height(a0)
 		move.w	ost_y_pos(a0),ost_brick_y_start(a0)

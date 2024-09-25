@@ -156,6 +156,7 @@ v_haspassed_state:		rs.b 1				; state of "Sonic Has Passed" title card (1 = load
 f_hide_hud:			rs.b 1				; flag set to hide the HUD
 v_animal_type:			rs.w 1				; ids for animal types in current zone (1 byte per animal)
 v_tile_hud:			rs.w 1
+v_tile_text:			equ v_tile_hud
 v_tile_swing:			rs.w 1
 v_tile_wall:			rs.w 1
 v_tile_floor:			rs.w 1

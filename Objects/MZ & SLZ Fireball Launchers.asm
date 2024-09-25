@@ -41,6 +41,7 @@ ost_firem_time_master:	rs.b 1
 ; ===========================================================================
 
 FireM_Main:	; Routine 0
+		move.b	#StrId_FireMaker,ost_name(a0)
 		addq.b	#2,ost_routine(a0)			; goto FireM_MakeFire next
 		move.b	ost_subtype(a0),d0
 		andi.w	#%00111000,d0				; read bits for firing rate

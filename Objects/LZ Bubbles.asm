@@ -47,6 +47,7 @@ Bub_Main:	; Routine 0
 		ori.w	#tile_hi,ost_tile(a0)
 		move.b	#render_onscreen+render_rel,ost_render(a0)
 		move.w	#priority_1,ost_priority(a0)
+		move.b	#StrId_Bubble,ost_name(a0)
 		move.w	#-$88,ost_y_vel(a0)
 		move.b	ost_subtype(a0),d0
 		andi.w	#$F,d0					; read low nybble of subtype

@@ -32,6 +32,7 @@ LPlat_Main:	; Routine 0
 		move.b	#render_rel,ost_render(a0)
 		move.w	#priority_3,ost_priority(a0)
 		move.b	#32,ost_displaywidth(a0)
+		move.b	#StrId_Platform,ost_name(a0)
 		move.b	#32,ost_width(a0)
 		move.b	#lplat_height,ost_height(a0)
 		move.w	ost_y_pos(a0),ost_lplat_y_pos(a0)

@@ -35,6 +35,7 @@ ost_lcon_button:	rs.b 1					; button id that controls reverse direction
 
 LCon_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto LCon_Action next
+		move.b	#StrId_Conveyor,ost_name(a0)
 		move.b	ost_subtype(a0),d0
 		move.b	d0,d1
 		andi.b	#$F,d0					; read low nybble of subtype
@@ -137,6 +138,7 @@ LConP_Main:	; Routine 0
 		move.w	#tile_Kos_LzWheel+tile_pal3,ost_tile(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#$10,ost_displaywidth(a0)
+		move.b	#StrId_Platform,ost_name(a0)
 		move.b	#$10,ost_width(a0)
 		move.b	#8,ost_height(a0)
 		move.w	#priority_4,ost_priority(a0)

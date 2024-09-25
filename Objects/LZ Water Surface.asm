@@ -23,6 +23,7 @@ Surf_Main:	; Routine 0
 		move.b	#render_rel+render_onscreen,ost_render(a0)
 		move.w	#priority_0,ost_priority(a0)
 		move.b	#screen_width/2,ost_displaywidth(a0)
+		move.b	#StrId_WaterSurface,ost_name(a0)
 
 Surf_Action:	; Routine 2
 		shortcut

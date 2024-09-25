@@ -30,6 +30,7 @@ DoorH_Main:	; Routine 0
 		move.b	#render_rel,ost_render(a0)
 		move.w	#priority_3,ost_priority(a0)
 		move.b	#64,ost_displaywidth(a0)
+		move.b	#StrId_Door,ost_name(a0)
 		move.b	#64,ost_width(a0)
 		move.b	#16,ost_height(a0)
 		move.w	ost_x_pos(a0),ost_doorh_x_start(a0)

@@ -51,6 +51,7 @@ PushB_Main:	; Routine 0
 		move.w	#tile_Kos_MzBlock+tile_pal3,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.w	#priority_3,ost_priority(a0)
+		move.b	#StrId_PushBlock,ost_name(a0)
 		move.b	ost_subtype(a0),d0			; get subtype
 		andi.w	#$F,d0					; read low nybble
 		beq.s	.type0					; branch if 0

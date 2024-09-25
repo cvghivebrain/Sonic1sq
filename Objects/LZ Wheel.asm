@@ -21,6 +21,7 @@ Whee_Main:	; Routine 0
 		move.l	#Map_LConv,ost_mappings(a0)
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#$10,ost_displaywidth(a0)
+		move.b	#StrId_Scenery,ost_name(a0)
 		move.w	#tile_Kos_LzWheel,ost_tile(a0)
 		move.w	#priority_1,ost_priority(a0)
 		

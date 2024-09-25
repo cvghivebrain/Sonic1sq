@@ -29,6 +29,7 @@ Pole_Main:	; Routine 0
 		move.w	#tile_Kos_LzPole+tile_pal3,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.b	#8,ost_displaywidth(a0)
+		move.b	#StrId_Pole,ost_name(a0)
 		move.w	#priority_4,ost_priority(a0)
 		move.b	#id_React_Routine,ost_col_type(a0)
 		move.b	#4,ost_col_width(a0)

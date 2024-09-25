@@ -37,6 +37,7 @@ ost_lfall_y_dist:	rs.w 1					; y dist to drop from
 
 LFall_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto LFall_Action next
+		move.b	#StrId_LavaFall,ost_name(a0)
 		move.b	ost_subtype(a0),d0
 		move.w	d0,d1
 		andi.w	#$F,d0
@@ -71,6 +72,7 @@ LFall_Action:	; Routine 2
 		move.b	#status_yflip,ost_status(a1)
 		move.w	#priority_0,ost_priority(a1)
 		move.b	#$20,ost_displaywidth(a1)
+		move.b	#StrId_LavaFall,ost_name(a1)
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		move.w	ost_y_pos(a0),ost_lfall_y_stop(a1)
@@ -87,6 +89,7 @@ LFall_Action:	; Routine 2
 		move.b	#render_rel+render_useheight,ost_render(a1)
 		move.w	#priority_1,ost_priority(a1)
 		move.b	#$20,ost_displaywidth(a1)
+		move.b	#StrId_LavaFall,ost_name(a1)
 		move.b	#$80,ost_height(a1)
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a2),ost_y_pos(a1)
@@ -106,6 +109,7 @@ LFall_Action:	; Routine 2
 		move.b	#render_rel,ost_render(a1)
 		move.w	#priority_0,ost_priority(a1)
 		move.b	#$20,ost_displaywidth(a1)
+		move.b	#StrId_LavaFall,ost_name(a1)
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a2),ost_y_pos(a1)
 		subi.w	#$E0,ost_y_pos(a1)

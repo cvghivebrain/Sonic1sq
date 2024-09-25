@@ -25,6 +25,7 @@ Cork_Main:	; Routine 0
 		move.b	#render_rel,ost_render(a0)
 		move.w	#priority_3,ost_priority(a0)
 		move.b	#16,ost_displaywidth(a0)
+		move.b	#StrId_Cork,ost_name(a0)
 		move.b	#16,ost_width(a0)
 		move.b	#cork_height,ost_height(a0)
 		

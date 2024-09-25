@@ -32,6 +32,7 @@ Fount_Main:	; Routine 0
 		move.b	#render_rel,ost_render(a0)
 		move.w	#priority_1,ost_priority(a0)
 		move.b	#$38,ost_displaywidth(a0)
+		move.b	#StrId_LavaFountain,ost_name(a0)
 
 Fount_Animate:	; Routine 2
 Fount_Wait:	; Routine 6
@@ -51,6 +52,7 @@ Fount_Make:	; Routine 4
 		move.b	ost_render(a0),ost_render(a1)
 		move.w	ost_priority(a0),ost_priority(a1)
 		move.b	#$20,ost_displaywidth(a1)
+		move.b	#StrId_LavaFountain,ost_name(a1)
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		move.w	ost_y_pos(a0),ost_fount_y_start(a1)
@@ -77,7 +79,8 @@ Fount_Top:	; Routine $A
 		bset	#render_useheight_bit,ost_render(a1)
 		move.b	#$80,ost_height(a1)
 		move.w	ost_priority(a0),ost_priority(a1)
-		move.b	#$20,ost_displaywidth(a0)
+		move.b	#$20,ost_displaywidth(a1)
+		move.b	#StrId_LavaFountain,ost_name(a1)
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		addi.w	#96,ost_y_pos(a1)			; 96px below top
