@@ -100,7 +100,7 @@ DrawHexString:
 DrawHexString_SkipVDP:						; jump here to draw directly after previous string
 		moveq	#8,d3
 		sub.w	d6,d3
-		lsl.w	#3,d3
+		lsl.w	#2,d3
 		lsl.l	d3,d5					; move first digit to high nybble
 		subq.w	#1,d6					; subtract 1 for loops
 		bmi.s	.exit					; branch if 0
@@ -112,7 +112,7 @@ DrawHexString_SkipVDP:						; jump here to draw directly after previous string
 		move.w	(v_tile_text).w,d4			; tile address for 0-Z gfx
 		add.w	d2,d4					; create final tile
 		move.w	d4,(a1)					; send to vdp_data_port
-		dbf.s	d6,.loop				; repeat for all digits
+		dbf	d6,.loop				; repeat for all digits
 		
 	.exit:
 		rts

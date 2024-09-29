@@ -122,7 +122,7 @@ Bom_Explode:	; Routine 6
 		move.b	ost_render(a0),ost_render(a1)
 		move.w	#priority_3,ost_priority(a1)
 		move.b	#4,ost_displaywidth(a1)
-		move.b	#StrId_Frag,ost_name(a1)
+		move.b	#StrId_BombFrag,ost_name(a1)
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		move.b	#id_frame_bomb_shrapnel1,ost_frame(a1)

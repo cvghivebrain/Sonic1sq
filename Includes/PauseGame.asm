@@ -70,6 +70,7 @@ Pause_Debug:
 		move.w	#cYellow,(v_pal_dry_line2+12).w		; replace white with yellow in palette line 2
 		
 Pause_Debug_Main:
+		clr.w	(v_debugmenu_item).w			; highlight first object in list
 		moveq	#1,d0					; x pos
 		moveq	#1,d1					; y pos
 		moveq	#0,d2
@@ -109,10 +110,16 @@ Pause_Debug_Exit:
 		move.w	#cWhite,(v_pal_dry_line2+12).w
 		move.w	(v_camera_y_pos).w,(v_fg_y_pos_vsram).w
 		bra.w	Pause_Loop				; return to regular pause
-		
+
+; ---------------------------------------------------------------------------
+; Pause debug menu - object selector
+; ---------------------------------------------------------------------------
+
 Pause_Debug_Obj:
+		clr.w	(v_debugmenu_item).w			; highlight first object in list
+		
+Pause_Debug_Obj_KeepPos:
 		bsr.w	ClearVRAM_Tiles_FG			; clear fg
-		clr.w	(a1)					; highlight first object in list
 		moveq	#1,d0					; x pos
 		moveq	#1,d1					; y pos
 		moveq	#0,d2
@@ -127,11 +134,15 @@ Pause_Debug_Obj:
 	Pause_Debug_Obj_Loop:
 		move.b	#id_VBlank_PauseDebug,(v_vblank_routine).w
 		bsr.w	WaitForVBlank				; wait for next frame
+		btst	#bitM,(v_joypad_press_actual_xyz).w
+		bne.w	Pause_Debug_Exit			; branch if Mode is pressed
 		move.w	#countof_ost,d0				; number of items in menu
 		moveq	#24,d1					; number of items per column
 		lea	(v_debugmenu_item).w,a1
 		btst	#bitB,(v_joypad_press_actual).w
-		bne.s	.back
+		bne.s	.back					; branch if B is pressed
+		btst	#bitC,(v_joypad_press_actual).w
+		bne.s	Pause_Debug_ObjView			; branch if C is pressed
 		bsr.w	NavigateMenu				; read control inputs
 		beq.s	Pause_Debug_Obj_Loop			; branch if no inputs
 		bsr.w	Pause_Debug_DrawObj			; redraw menu
@@ -139,8 +150,161 @@ Pause_Debug_Obj:
 		
 	.back:
 		bsr.w	ClearVRAM_Tiles_FG			; clear fg
-		clr.w	(a1)					; highlight first object in list
+		clr.w	(v_debugmenu_item).w			; highlight first object in list
 		bra.w	Pause_Debug_Main			; return to main menu
+		
+Str_ObjMenu:	dc.b "OBJECT VIEWER",0
+Str_ObjBtns:	dc.b "A@ DELETE  B@ BACK  C@ SELECT",0
+Str_ObjBtns2:	dc.b "B@ BACK",0
+		even
+		
+; ---------------------------------------------------------------------------
+; Pause debug menu - object viewer
+; ---------------------------------------------------------------------------
+
+Pause_Debug_ObjView:
+		bsr.w	ClearVRAM_Tiles_FG			; clear fg
+		lea	(v_ost_all).w,a0
+		move.w	(v_debugmenu_item).w,d0			; get selected item num
+		mulu.w	#sizeof_ost,d0
+		lea	(a0,d0.w),a0				; jump to OST of highlighted object
+		
+		moveq	#1,d0					; x pos
+		moveq	#1,d1					; y pos
+		moveq	#0,d2
+		lea	(vdp_data_port).l,a1			; data port
+		lea	Str_ObjMenu(pc),a2			; address of string
+		bsr.w	DrawString
+		addq.b	#2,d1
+		lea	Str_ObjBtns2(pc),a2
+		bsr.w	DrawString
+		addq.b	#3,d1
+		lea	Str_ObjName(pc),a2
+		bsr.w	DrawString
+		moveq	#0,d3
+		move.b	ost_name(a0),d3				; get name of object
+		lsl.w	#3,d3					; multiply by 8
+		lea	Str_Names,a2
+		lea	(a2,d3.w),a2				; address of string in table
+		bsr.w	DrawString8_SkipVDP			; draw name of object
+		
+show_ost:	macro str,ost,len
+		lea	\str(pc),a2
+		bsr.w	DrawString
+		if (len=2)|(len=1)
+		move.b	\ost(a0),d5
+		elseif len=4
+		move.w	\ost(a0),d5
+		elseif (len=6)|(len=8)
+		move.l	\ost(a0),d5
+		endc
+		moveq	#len,d6
+		bsr.w	DrawHexString_SkipVDP
+		endm
+		
+		addq.b	#1,d1
+		show_ost Str_ObjPtr,ost_id,6
+		
+		addq.b	#2,d1
+		show_ost Str_ObjMap,ost_mappings,6
+		addq.b	#1,d1
+		show_ost Str_ObjTile,ost_tile,4
+		addq.b	#1,d1
+		show_ost Str_ObjFrame,ost_frame_hi,4
+		addq.b	#1,d1
+		show_ost Str_ObjAnim,ost_anim,2
+		addq.b	#1,d1
+		show_ost Str_ObjAnim2,ost_anim_frame,2
+		addq.b	#1,d1
+		show_ost Str_ObjAnim3,ost_anim_time,2
+		addq.b	#1,d1
+		show_ost Str_ObjSubsp,ost_subsprite,4
+		addq.b	#1,d1
+		show_ost Str_ObjPri,ost_priority,4
+		addq.b	#1,d1
+		show_ost Str_ObjDispw,ost_displaywidth_hi,4
+		addq.b	#1,d1
+		show_ost Str_ObjRender,ost_render,2
+		
+		addq.b	#2,d1
+		show_ost Str_ObjX,ost_x_pos,8
+		addq.b	#1,d1
+		show_ost Str_ObjY,ost_y_pos,8
+		addq.b	#1,d1
+		show_ost Str_ObjXvel,ost_x_vel,4
+		addq.b	#1,d1
+		show_ost Str_ObjYvel,ost_y_vel,4
+		addq.b	#1,d1
+		show_ost Str_ObjInertia,ost_inertia,4
+		addq.b	#1,d1
+		show_ost Str_ObjAngle,ost_angle,4
+		
+		moveq	#21,d0					; x pos (second column)
+		moveq	#6,d1					; y pos
+		show_ost Str_ObjRout,ost_routine,2
+		addq.b	#1,d1
+		show_ost Str_ObjMode,ost_mode,2
+		addq.b	#1,d1
+		show_ost Str_ObjStatus,ost_mode,2
+		addq.b	#1,d1
+		show_ost Str_ObjRespawn,ost_mode,2
+		addq.b	#1,d1
+		show_ost Str_ObjType,ost_mode,2
+		addq.b	#2,d1
+		show_ost Str_ObjW,ost_width,2
+		addq.b	#1,d1
+		show_ost Str_ObjH,ost_height,2
+		addq.b	#1,d1
+		show_ost Str_ObjCol,ost_col_type,4
+		addq.b	#1,d1
+		show_ost Str_ObjColw,ost_col_width,2
+		addq.b	#1,d1
+		show_ost Str_ObjColh,ost_col_height,2
+		addq.b	#2,d1
+		show_ost Str_ObjParent,ost_parent,4
+		addq.b	#1,d1
+		show_ost Str_ObjLinked,ost_linked,4
+		
+	Pause_Debug_ObjView_Loop:
+		move.b	#id_VBlank_PauseDebug,(v_vblank_routine).w
+		bsr.w	WaitForVBlank				; wait for next frame
+		btst	#bitM,(v_joypad_press_actual_xyz).w
+		bne.w	Pause_Debug_Exit			; branch if Mode is pressed
+		btst	#bitB,(v_joypad_press_actual).w
+		bne.w	Pause_Debug_Obj_KeepPos			; branch if B is pressed
+		bra.s	Pause_Debug_ObjView_Loop
+		
+Str_ObjName:	dc.b "NAME@ ",0
+Str_ObjPtr:	dc.b "POINTER@ ",0
+Str_ObjMap:	dc.b "MAPPINGS@ ",0
+Str_ObjTile:	dc.b "TILE@ ",0
+Str_ObjFrame:	dc.b "FRAME@ ",0
+Str_ObjAnim:	dc.b "ANIM ID@ ",0
+Str_ObjAnim2:	dc.b "ANIM FRAME@ ",0
+Str_ObjAnim3:	dc.b "ANIM TIME@ ",0
+Str_ObjSubsp:	dc.b "SUBSPRITES@ ",0
+Str_ObjPri:	dc.b "PRIORITY@ ",0
+Str_ObjDispw:	dc.b "DISP WIDTH@ ",0
+Str_ObjRender:	dc.b "RENDER@ ",0
+Str_ObjX:	dc.b "X POS@ ",0
+Str_ObjY:	dc.b "Y POS@ ",0
+Str_ObjXvel:	dc.b "X VEL@ ",0
+Str_ObjYvel:	dc.b "Y VEL@ ",0
+Str_ObjInertia:	dc.b "INERTIA@ ",0
+Str_ObjAngle:	dc.b "ANGLE@ ",0
+Str_ObjRout:	dc.b "ROUTINE@ ",0
+Str_ObjMode:	dc.b "MODE@ ",0
+Str_ObjStatus:	dc.b "STATUS@ ",0
+Str_ObjRespawn:	dc.b "RESPAWN@ ",0
+Str_ObjType:	dc.b "TYPE@ ",0
+Str_ObjW:	dc.b "WIDTH@ ",0
+Str_ObjH:	dc.b "HEIGHT@ ",0
+Str_ObjCol:	dc.b "COL TYPE@ ",0
+Str_ObjColw:	dc.b "COL WIDTH@ ",0
+Str_ObjColh:	dc.b "COL HEIGHT@ ",0
+Str_ObjParent:	dc.b "PARENT@ ",0
+Str_ObjLinked:	dc.b "LINKED@ ",0
+		even
 		
 ; ---------------------------------------------------------------------------
 ; Draw main menu
@@ -172,12 +336,10 @@ Str_DebugBtns:	dc.b "MODE@ BACK  C@ SELECT",0
 Str_Main1:	dc.b "OBJECT VIEWER",0
 Str_Main2:	dc.b "VRAM VIEWER",0
 Str_Main3:	dc.b "SOMETHING ELSE",0
-Str_ObjMenu:	dc.b "OBJECT VIEWER",0
-Str_ObjBtns:	dc.b "A@ DELETE  B@ BACK  C@ SELECT",0
 		even
 
 ; ---------------------------------------------------------------------------
-; Draw object viewer
+; Draw object selector
 ; ---------------------------------------------------------------------------
 
 Pause_Debug_DrawObj:
@@ -257,7 +419,7 @@ Str_Names:	objname "UNKNOWN ",Unknown
 		objname "BATBRAIN",Batbrain
 		objname "BOMB    ",Bomb
 		objname "BOMBFUSE",Fuse
-		objname "BOMBFRAG",Frag
+		objname "BOMBFRAG",BombFrag
 		objname "BURROBOT",Burrobot
 		objname "BUZZBOMB",BuzzBomber
 		objname "MISSILE ",Missile
@@ -285,6 +447,7 @@ Str_Names:	objname "UNKNOWN ",Unknown
 		objname "CHAIN   ",Chain
 		objname "BRIDGE  ",Bridge
 		objname "LEDGE   ",Ledge
+		objname "FRAG    ",Frag
 		objname "ROCK    ",Rock
 		objname "HELIX   ",Helix
 		objname "HELIXSPI",HelixSpike
