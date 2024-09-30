@@ -139,12 +139,23 @@ Pause_Debug_Obj_KeepPos:
 		move.w	#countof_ost,d0				; number of items in menu
 		moveq	#24,d1					; number of items per column
 		lea	(v_debugmenu_item).w,a1
+		btst	#bitA,(v_joypad_press_actual).w
+		bne.s	.delete					; branch if A is pressed
 		btst	#bitB,(v_joypad_press_actual).w
 		bne.s	.back					; branch if B is pressed
 		btst	#bitC,(v_joypad_press_actual).w
 		bne.s	Pause_Debug_ObjView			; branch if C is pressed
 		bsr.w	NavigateMenu				; read control inputs
 		beq.s	Pause_Debug_Obj_Loop			; branch if no inputs
+		bsr.w	Pause_Debug_DrawObj			; redraw menu
+		bra.s	Pause_Debug_Obj_Loop
+		
+	.delete:
+		move.w	(a1),d0
+		mulu.w	#sizeof_ost,d0
+		addi.w	#v_ost_all&$FFFF,d0
+		move.w	d0,a0					; a0 = address of selected object
+		jsr	DeleteFamily				; delete object and children
 		bsr.w	Pause_Debug_DrawObj			; redraw menu
 		bra.s	Pause_Debug_Obj_Loop
 		
@@ -164,10 +175,10 @@ Str_ObjBtns2:	dc.b "B@ BACK  C@ GOTO PARENT",0
 
 Pause_Debug_ObjView:
 		bsr.w	ClearVRAM_Tiles_FG			; clear fg
-		lea	(v_ost_all).w,a0
 		move.w	(v_debugmenu_item).w,d0			; get selected item num
 		mulu.w	#sizeof_ost,d0
-		lea	(a0,d0.w),a0				; jump to OST of highlighted object
+		addi.w	#v_ost_all&$FFFF,d0
+		move.w	d0,a0					; a0 = address of selected object
 		
 		moveq	#1,d0					; x pos
 		moveq	#1,d1					; y pos
