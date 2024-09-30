@@ -155,7 +155,7 @@ Pause_Debug_Obj_KeepPos:
 		
 Str_ObjMenu:	dc.b "OBJECT VIEWER",0
 Str_ObjBtns:	dc.b "A@ DELETE  B@ BACK  C@ SELECT",0
-Str_ObjBtns2:	dc.b "B@ BACK",0
+Str_ObjBtns2:	dc.b "B@ BACK  C@ GOTO PARENT",0
 		even
 		
 ; ---------------------------------------------------------------------------
@@ -271,8 +271,21 @@ show_ost:	macro str,ost,len
 		btst	#bitM,(v_joypad_press_actual_xyz).w
 		bne.w	Pause_Debug_Exit			; branch if Mode is pressed
 		btst	#bitB,(v_joypad_press_actual).w
-		bne.w	Pause_Debug_Obj_KeepPos			; branch if B is pressed
+		bne.s	.back					; branch if B is pressed
+		btst	#bitC,(v_joypad_press_actual).w
+		bne.s	.parent					; branch if C is pressed
 		bra.s	Pause_Debug_ObjView_Loop
+		
+	.back:
+		bra.w	Pause_Debug_Obj_KeepPos
+		
+	.parent:
+		move.w	ost_parent(a0),d0
+		beq.s	Pause_Debug_ObjView_Loop		; branch if no parent set
+		subi.w	#v_ost_all&$FFFF,d0
+		divu.w	#sizeof_ost,d0				; get OST number for parent
+		move.w	d0,(v_debugmenu_item).w			; goto parent next
+		bra.w	Pause_Debug_ObjView			; redraw screen
 		
 Str_ObjName:	dc.b "NAME@ ",0
 Str_ObjPtr:	dc.b "POINTER@ ",0
@@ -385,112 +398,5 @@ Pause_Debug_DrawObj:
 		lea	sizeof_ost(a0),a0			; next object
 		dbf	d6,.loop
 		rts
-	
-objname:	macro txt,name
-		StrId_\name: equ (*-Str_Names)/8
-		dc.b \txt
-		endm
-	
+
 Str_None:	dc.b "[       "
-Str_Names:	objname "UNKNOWN ",Unknown
-		objname "SONIC   ",Sonic
-		objname "PLATFORM",Platform
-		objname "RING    ",Ring
-		objname "BIGRING ",BigRing
-		objname "RINGLOSS",RingLoss
-		objname "SPARKLE ",Sparkle
-		objname "BONUS   ",Bonus
-		objname "LAMPPOST",Lamppost
-		objname "SIGNPOST",Signpost
-		objname "SPRING  ",Spring
-		objname "MONITOR ",Monitor
-		objname "POWERUP ",PowerUp
-		objname "SHIELD  ",Shield
-		objname "INVINCIB",Invincible
-		objname "EXPLOSIO",Explosion
-		objname "POINTS  ",Points
-		objname "BUTTON  ",Button
-		objname "SCENERY ",Scenery
-		objname "WATERSND",WaterSound
-		objname "DROWN   ",Drown
-		objname "ANIMAL  ",Animal
-		objname "BALLHOG ",BallHog
-		objname "BALL    ",Ball
-		objname "BATBRAIN",Batbrain
-		objname "BOMB    ",Bomb
-		objname "BOMBFUSE",Fuse
-		objname "BOMBFRAG",BombFrag
-		objname "BURROBOT",Burrobot
-		objname "BUZZBOMB",BuzzBomber
-		objname "MISSILE ",Missile
-		objname "CATERKIL",Caterkiller
-		objname "CATERSEG",CaterSegment
-		objname "CHOPPER ",Chopper
-		objname "CRABMEAT",Crabmeat
-		objname "JAWS    ",Jaws
-		objname "MOTOBUG ",MotoBug
-		objname "SMOKE   ",Smoke
-		objname "NEWTRON ",Newtron
-		objname "ORBINAUT",Orbinaut
-		objname "ORBSPIKE",OrbSpike
-		objname "ROLLER  ",Roller
-		objname "SPLATS  ",Splats
-		objname "YADRIN  ",Yadrin
-		objname "FIREBALL",Fireball
-		objname "FIREMAKE",FireMaker
-		objname "FIRE    ",Fire
-		objname "SPIKES  ",Spikes
-		objname "BOSS    ",Boss
-		objname "PRISON  ",Prison
-		objname "CYLINDER",Cylinder
-		objname "SMASHWAL",SmashWall
-		objname "CHAIN   ",Chain
-		objname "BRIDGE  ",Bridge
-		objname "LEDGE   ",Ledge
-		objname "FRAG    ",Frag
-		objname "ROCK    ",Rock
-		objname "HELIX   ",Helix
-		objname "HELIXSPI",HelixSpike
-		objname "WALL    ",Wall
-		objname "BLOCK   ",Block
-		objname "BUBMAKER",BubbleMaker
-		objname "BUBBLE  ",Bubble
-		objname "CONVEYOR",Conveyor
-		objname "CORK    ",Cork
-		objname "DOOR    ",Door
-		objname "GARGOYLE",Gargoyle
-		objname "HARPOON ",Harpoon
-		objname "POLE    ",Pole
-		objname "SPLASH  ",Splash
-		objname "WATERSUR",WaterSurface
-		objname "WATERFAL",Waterfall
-		objname "STOMPER ",Stomper
-		objname "GRASSBLO",GrassBlock
-		objname "GLASSBLO",GlassBlock
-		objname "LAVA    ",Lava
-		objname "LAVAFALL",LavaFall
-		objname "LAVAFOUN",LavaFountain
-		objname "LAVAWALL",LavaWall
-		objname "PUSHBLOC",PushBlock
-		objname "SMASHBLO",SmashBlock
-		objname "COLLAPSE",CollapseFloor
-		objname "ELECTRO ",Electro
-		objname "FLAMETHR",Flamethrower
-		objname "GIRDER  ",Girder
-		objname "JUNCTION",Junction
-		objname "DISC    ",Disc
-		objname "SAW     ",Saw
-		objname "TELEPORT",Teleport
-		objname "TRAPDOOR",Trapdoor
-		objname "ELEVATOR",Elevator
-		objname "FAN     ",Fan
-		objname "SEESAW  ",Seesaw
-		objname "SPIKEBAL",Spikeball
-		objname "STAIR   ",Stair
-		objname "BUMPER  ",Bumper
-		objname "TITLECAR",TitleCard
-		objname "GAMEOVER",GameOver
-		objname "GATE    ",Gate
-		objname "SOLID   ",Solid
-		objname "HUD     ",HUD
-		objname "DEBUG   ",Debug
