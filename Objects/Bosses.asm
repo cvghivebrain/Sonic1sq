@@ -103,7 +103,7 @@ Boss_Main:	; Routine 0
 		add.w	d0,d0
 		lea	Boss_CamXPos,a2
 		move.w	(a2,d0.w),ost_boss2_cam_start(a0)
-		play.w	0, jsr, mus_Boss			; play boss music
+		play_music mus_Boss				; play boss music
 		move.b	#1,(f_boss_loaded).w			; lock screen
 		move.w	(v_camera_x_pos).w,(v_boundary_left).w	; set boundary to current position
 
@@ -273,7 +273,7 @@ Boss_Recover:	; Routine $A
 	.escape:
 		addq.b	#2,ost_routine(a0)			; goto Boss_Escape next
 		move.b	(v_bgm).w,d0
-		jsr	(PlaySound0).w				; play level music
+		play_music d0					; play level music
 		move.w	#$400,ost_x_vel(a0)			; move ship right
 		move.w	#-$40,ost_y_vel(a0)			; move ship upwards
 

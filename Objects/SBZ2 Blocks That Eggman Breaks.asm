@@ -87,7 +87,7 @@ FFloor_Break:	; Routine 4
 		dbf	d1,.loop				; repeat sequence 3 more times
 		
 	.fail:
-		play.w	1, jsr, sfx_Smash			; play smashing sound
+		play_sound sfx_Smash				; play smashing sound
 		jmp	DeleteObject				; delete original block
 		
 FFloor_FragData:

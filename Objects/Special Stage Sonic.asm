@@ -221,7 +221,7 @@ SSS_Jump:
 		asr.l	#8,d0
 		move.w	d0,ost_y_vel(a0)
 		bset	#status_air_bit,ost_status(a0)		; goto SSS_InAir next
-		play.w	1, jsr, sfx_Jump			; play jumping sound
+		play_sound sfx_Jump				; play jumping sound
 
 	.exit:
 		rts
@@ -456,7 +456,7 @@ SSS_ChkRing:
 		bset	#7,(v_ring_reward).w			; set flag
 		bne.s	.nocontinue				; branch if flag was already set
 		addq.b	#1,(v_continues).w			; add 1 to number of continues
-		play.w	0, jsr, sfx_Continue			; play extra continue sound
+		play_sound sfx_Continue				; play extra continue sound
 
 	.nocontinue:
 		moveq	#0,d4
@@ -474,7 +474,7 @@ SSS_Chk1Up:
 	.noslot:
 		addq.b	#1,(v_lives).w				; add 1 to number of lives
 		addq.b	#1,(f_hud_lives_update).w		; update the lives counter
-		play.w	0, jsr, mus_ExtraLife			; play extra life music
+		play_1up					; play extra life music
 		moveq	#0,d4
 		rts	
 ; ===========================================================================
@@ -498,7 +498,7 @@ SSS_ChkEmerald:
 		move.l	d0,(v_emeralds).w			; update bitfield
 
 	.noemerald:
-		play.w	1, jsr, mus_Emerald			; play emerald music
+		play_emerald					; play emerald music
 		moveq	#0,d4
 		rts	
 ; ===========================================================================
@@ -597,14 +597,15 @@ SSS_ChkBumper:
 		move.l	d0,ss_update_levelptr(a2)		; set address within layout to update
 
 	.noslot:
-		play.w	1, jmp, sfx_Bumper			; play bumper sound
+		play_sound sfx_Bumper				; play bumper sound
+		rts
 ; ===========================================================================
 
 SSS_GOAL:
 		cmpi.b	#id_SS_Item_GOAL,d0			; is the item a	"GOAL"?
 		bne.s	SSS_UPblock				; if not, branch
 		addq.b	#2,ost_routine(a0)			; goto SSS_ExitStage next
-		play.w	1, jsr, sfx_Goal			; play "GOAL" sound
+		play_sound sfx_Goal				; play "GOAL" sound
 		rts	
 ; ===========================================================================
 
@@ -622,7 +623,8 @@ SSS_UPblock:
 		move.b	#id_SS_Item_Down,(a1)			; change item to a "DOWN" block
 
 	.keepspeed:
-		play.w	1, jmp, sfx_ActionBlock			; play up/down sound
+		play_sound sfx_ActionBlock			; play up/down sound
+		rts
 ; ===========================================================================
 
 SSS_DOWNblock:
@@ -639,7 +641,8 @@ SSS_DOWNblock:
 		move.b	#id_SS_Item_Up,(a1)			; change item to an "UP" block
 
 	.keepspeed:
-		play.w	1, jmp, sfx_ActionBlock			; play up/down sound
+		play_sound sfx_ActionBlock			; play up/down sound
+		rts
 ; ===========================================================================
 
 SSS_Rblock:
@@ -657,7 +660,8 @@ SSS_Rblock:
 
 	.noslot:
 		neg.w	(v_ss_rotation_speed).w			; reverse stage rotation
-		play.w	1, jmp, sfx_ActionBlock			; play R-block sound
+		play_sound sfx_ActionBlock			; play R-block sound
+		rts
 ; ===========================================================================
 
 SSS_ChkGlass:
@@ -687,7 +691,8 @@ SSS_ChkGlass:
 		move.b	d0,ss_update_levelptr(a2)		; update the stage layout
 
 	.noslot:
-		play.w	1, jmp, sfx_Diamonds			; play diamond block sound
+		play_sound sfx_Diamonds				; play diamond block sound
+		rts
 ; ===========================================================================
 
 SSS_ChkItems_End:

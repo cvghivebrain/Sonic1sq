@@ -53,7 +53,7 @@ Bonus_Main:	; Routine 0
 		jsr	(AddPoints).w				; add points and update HUD
 		move.w	(a2),ost_frame_hi(a0)
 		move.w	#119,ost_bonus_wait_time(a0)		; set display time to 2 seconds
-		play.w	1, jsr, sfx_Bonus			; play bonus sound
+		play_sound sfx_Bonus				; play bonus sound
 		jmp	DespawnQuick_NoDisplay
 
 ; ===========================================================================

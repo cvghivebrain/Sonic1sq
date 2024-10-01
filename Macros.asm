@@ -9,6 +9,13 @@ ifnotarg	macros
 		if strlen("\1")=0
 
 ; ---------------------------------------------------------------------------
+; Test if macro argument is a register
+; ---------------------------------------------------------------------------
+
+ifreg		macros
+		if instr("d0d1d2d3d4d5d6d7(a0)+(a1)+(a2)+(a3)+(a4)+(a5)+(a6)+","\1")
+		
+; ---------------------------------------------------------------------------
 ; Align and pad.
 ; input: length to align to, value to use as padding (default is 0)
 ; ---------------------------------------------------------------------------
@@ -608,3 +615,43 @@ evenr:		macro
 noreturn:	macros
 		addq.w	#4,sp					; skip last location in stack
 
+; ---------------------------------------------------------------------------
+; Play audio
+; ---------------------------------------------------------------------------
+
+play_music:	macro
+		ifreg \1
+		move.b	\1,(v_snddriver_ram+v_soundqueue+0).w	; play in slot 0
+		else
+		move.b	#\1,(v_snddriver_ram+v_soundqueue+0).w
+		endc
+		endm
+
+play_sound:	macro
+		ifreg \1
+		move.b	\1,(v_snddriver_ram+v_soundqueue+1).w	; play in slot 1
+		else
+		move.b	#\1,(v_snddriver_ram+v_soundqueue+1).w
+		endc
+		endm
+		
+play_1up:	macros
+		play_sound mus_ExtraLife			; play extra life music
+		
+play_emerald:	macros
+		play_sound mus_Emerald				; play emerald music
+		
+play_haspassed:	macros
+		play_sound mus_HasPassed			; play "Sonic has passed" music
+		
+play_stop:	macros
+		play_sound cmd_Stop				; stop music
+		
+play_fadeout:	macros
+		play_sound cmd_Fade				; fade out music
+		
+play_fast:	macros
+		play_music cmd_Speedup				; speed up music
+		
+play_normal:	macros
+		play_music cmd_Slowdown				; normal speed music

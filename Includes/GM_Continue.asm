@@ -21,7 +21,7 @@ GM_Continue:
 
 		moveq	#id_Pal_Continue,d0
 		bsr.w	PalLoad					; load continue	screen palette
-		play.b	0, jsr, mus_Continue			; play continue	music
+		play_music mus_Continue				; play continue	music
 		move.w	#659,(v_countdown).w			; set timer to 11 seconds
 		clr.l	(v_camera_x_pos).w
 		move.l	#$1000000,(v_camera_y_pos).w

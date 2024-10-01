@@ -45,7 +45,7 @@ Elec_Wait:	; Routine 2
 
 		tst.b	ost_render(a0)
 		bpl.w	DespawnQuick				; branch if off screen
-		play.w	1, jsr, sfx_Electricity			; play electricity sound
+		play_sound sfx_Electricity			; play electricity sound
 		addq.b	#2,ost_routine(a0)			; goto Elec_Zap next
 		move.b	#id_ani_electro_zap,ost_anim(a0)
 

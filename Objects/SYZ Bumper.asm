@@ -60,7 +60,7 @@ Bump_Hit:
 		bclr	#status_rolljump_bit,ost_status(a1)
 		bclr	#status_pushing_bit,ost_status(a1)
 		move.b	#id_ani_bump_bumped,ost_anim(a0)	; use "hit" animation
-		play.w	1, jsr, sfx_Bumper			; play bumper sound
+		play_sound sfx_Bumper				; play bumper sound
 		move.b	ost_bump_count(a0),d2
 		cmpi.b	#10,d2
 		beq.w	DespawnObject				; branch if bumper has been hit 10 times

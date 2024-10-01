@@ -133,7 +133,7 @@ DLE_LZ3:
 		cmpi.b	#7,(a1)
 		beq.s	.skip_layout				; branch if already modified
 		move.b	#7,(a1)					; modify level layout
-		play.w	1, jsr, sfx_Rumbling			; play rumbling sound
+		play_sound sfx_Rumbling				; play rumbling sound
 
 	.skip_layout:
 		tst.b	(v_dle_routine).w
@@ -148,7 +148,7 @@ DLE_LZ3:
 		move.l	#BossLabyrinth,ost_id(a1)		; load LZ boss object
 
 	.fail:
-		play.w	0, jsr, mus_Boss			; play boss music
+		play_music mus_Boss				; play boss music
 		move.b	#1,(f_boss_loaded).w			; lock screen
 		addq.b	#2,(v_dle_routine).w			; don't load boss again
 		rts
@@ -265,7 +265,7 @@ DLE_SLZ3_Boss:
 		move.l	#BossStarLight,(a1)			; load SLZ boss object
 
 	.fail:
-		play.w	0, jsr, mus_Boss			; play boss music
+		play_music mus_Boss				; play boss music
 		move.b	#1,(f_boss_loaded).w			; lock screen
 		addq.b	#2,(v_dle_routine).w			; goto DLE_SLZ3_End next
 		rts
@@ -335,7 +335,7 @@ DLE_SYZ3_Boss:
 		addq.b	#2,(v_dle_routine).w			; goto DLE_SYZ3_End next
 
 	.fail:
-		play.w	0, jsr, mus_Boss			; play boss music
+		play_music mus_Boss				; play boss music
 		move.b	#1,(f_boss_loaded).w			; lock screen
 		rts
 ; ===========================================================================

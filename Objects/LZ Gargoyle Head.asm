@@ -92,7 +92,7 @@ GarFire:
 		move.b	#StrId_Fireball,ost_name(a0)
 		move.b	#id_frame_gargoyle_fireball1,ost_frame(a0)
 		addq.w	#8,ost_y_pos(a0)
-		play.w	1, jsr, sfx_FireBall			; play fireball sound
+		play_sound sfx_FireBall				; play fireball sound
 
 		shortcut
 		toggleframe	8				; animate

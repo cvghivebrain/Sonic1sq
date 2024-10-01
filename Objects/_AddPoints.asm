@@ -33,7 +33,7 @@ AddPoints:
 		bmi.s   .noextralife				; branch if Mega Drive is Japanese
 		addq.b  #1,(v_lives).w				; give extra life
 		addq.b  #1,(f_hud_lives_update).w
-		play.w	0, jmp, mus_ExtraLife			; play extra life music
+		play_1up					; play extra life music
 
 	.noextralife:
 		rts

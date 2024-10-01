@@ -94,7 +94,7 @@ Drown_Air_Index:	index *,,2
 ; ===========================================================================
 
 Drown_Ding:
-		play.w	1, jsr, sfx_Ding			; play "ding-ding" warning sound
+		play_sound sfx_Ding				; play "ding-ding" warning sound
 
 Drown_Bubble:
 		bsr.w	FindFreeObj				; find free OST slot
@@ -117,7 +117,7 @@ Drown_Bubble:
 		rts
 		
 Drown_Music:
-		play.w	0, jsr, mus_Drowning			; play countdown music
+		play_music mus_Drowning				; play countdown music
 		
 Drown_Number:
 		bsr.s	Drown_Bubble				; spawn 1 or 2 bubbles
@@ -137,7 +137,7 @@ Drown_Number:
 Drown_Death:
 		bsr.w	ResumeMusic
 		move.b	#$81,(v_lock_multi).w			; lock controls
-		play.w	1, jsr, sfx_Drown			; play drowning sound
+		play_sound sfx_Drown				; play drowning sound
 		move.b	#11,ost_subtype(a0)			; create 11 bubbles
 		move.w	#120,ost_drown_restart_time(a0)		; restart after 2 seconds
 		jsr	(RandomNumber).w

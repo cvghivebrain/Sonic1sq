@@ -112,7 +112,7 @@ SEgg_Jump:	; Routine 6
 ; ===========================================================================
 
 SEgg_Stop:	; Routine 8
-		play.w	1, jsr, sfx_Switch			; play "blip" sound
+		play_sound sfx_Switch				; play "blip" sound
 		move.b	ost_subtype(a0),d0
 		andi.w	#$F,d0					; get low nybble of subtype
 		lea	(v_button_state).w,a3

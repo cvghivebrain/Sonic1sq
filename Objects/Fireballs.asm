@@ -72,7 +72,7 @@ FBall_Main:	; Routine 0
 		move.w	#0,ost_y_vel(a0)			; delete vertical speed
 
 	.sound:
-		play.w	1, jsr, sfx_FireBall			; play lava ball sound
+		play_sound sfx_FireBall				; play lava ball sound
 
 FBall_Action:	; Routine 2
 		moveq	#0,d0

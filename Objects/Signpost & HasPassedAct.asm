@@ -47,7 +47,7 @@ Sign_Touch:	; Routine 2
 		range_x_test	32				; is Sonic within 32px?
 		bcc.w	DespawnQuick				; if not, branch
 
-		play.w	0, jsr, sfx_Signpost			; play signpost sound
+		play_sound sfx_Signpost				; play signpost sound
 		clr.b	(f_hud_time_update).w			; stop time counter
 		move.w	(v_boundary_right).w,(v_boundary_left).w ; lock screen position
 		addq.b	#2,ost_routine(a0)			; goto Sign_Spin next
@@ -174,7 +174,7 @@ HasPassedAct:
 		move.w	(v_rings).w,d0				; load number of rings
 		mulu.w	#10,d0					; multiply by 10
 		move.w	d0,(v_ring_bonus).w			; set ring bonus
-		play.w	1, jsr, mus_HasPassed			; play "Sonic Has Passed" music
+		play_haspassed					; play "Sonic Has Passed" music
 		
 	.exit:
 		rts

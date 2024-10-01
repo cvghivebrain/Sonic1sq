@@ -56,7 +56,7 @@ Trap_Wait:	; Routine 2
 		bsr.w	UnSolid
 		tst.b	ost_render(a0)
 		bpl.s	.no_sound				; branch if off screen
-		play.w	1, jsr, sfx_Door			; play door sound
+		play_sound sfx_Door				; play door sound
 		
 	.no_sound:
 		move.b	#id_ani_trap_open,ost_anim(a0)
@@ -80,7 +80,7 @@ Trap_Wait2:	; Routine 6
 		addq.b	#2,ost_routine(a0)			; goto Trap_Close next
 		tst.b	ost_render(a0)
 		bpl.s	.no_sound				; branch if off screen
-		play.w	1, jsr, sfx_Door			; play door sound
+		play_sound sfx_Door				; play door sound
 		
 	.no_sound:
 		move.b	#id_ani_trap_close,ost_anim(a0)

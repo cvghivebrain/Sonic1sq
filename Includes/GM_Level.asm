@@ -6,7 +6,7 @@ GM_Level:
 GM_Demo:
 		tst.w	(v_demo_mode).w				; is this an ending demo?
 		bmi.s	.keep_music				; if yes, branch
-		play.b	1, jsr, cmd_Fade			; fade out music
+		play_fadeout					; fade out music
 
 	.keep_music:
 		bsr.w	PaletteFadeOut				; fade out from previous gamemode
@@ -67,7 +67,7 @@ GM_Demo:
 		move.l	#TitleCard,ost_id(a1)			; load title card object
 		jsr	(ApplyBrightness_KeepSonic).w		; show Sonic/title card palette while remaining palettes are black
 		move.b	(v_bgm).w,d0
-		jsr	(PlaySound0).w				; play music
+		play_music d0					; play music
 
 Level_TtlCardLoop:
 		move.b	#id_VBlank_TitleCard,(v_vblank_routine).w

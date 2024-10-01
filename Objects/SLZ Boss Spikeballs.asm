@@ -308,7 +308,7 @@ BSpike_Update:
 		jsr	(Sonic_ChkRoll).l			; allow Sonic to bounce-roll off seesaw
 		movea.l	(sp)+,a0				; restore spikeball OST
 		move.b	#id_Sonic_Control,ost_routine(a2)
-		play.w	1, jsr, sfx_Spring			; play "spring" sound
+		play_sound sfx_Spring				; play "spring" sound
 
 	.no_change:
 		clr.w	ost_x_vel(a0)

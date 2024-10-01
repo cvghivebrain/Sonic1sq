@@ -3,7 +3,7 @@
 ; ---------------------------------------------------------------------------
 
 GM_Special:
-		play.w	1, jsr, sfx_EnterSS			; play special stage entry sound
+		play_sound sfx_EnterSS				; play special stage entry sound
 		bsr.w	PaletteWhiteOut				; fade to white from previous gamemode
 		disable_ints
 		lea	(vdp_control_port).l,a6
@@ -52,7 +52,7 @@ GM_Special:
 		bsr.w	PalCycle_SS
 		clr.w	(v_ss_angle).w				; set stage angle to "upright"
 		move.w	#$40,(v_ss_rotation_speed).w		; set stage rotation speed
-		play.w	0, jsr, mus_SpecialStage		; play special stage BG	music
+		play_music mus_SpecialStage			; play special stage BG	music
 		move.w	#0,(v_demo_input_counter).w
 		movea.l	(v_demo_ptr).w,a1			; get pointer for demo data
 		move.b	1(a1),(v_demo_input_time).w		; load 1st button press duration
@@ -137,7 +137,7 @@ SS_FinishLoop:
 		move.w	(v_rings).w,d0
 		mulu.w	#10,d0					; multiply rings by 10
 		move.w	d0,(v_ring_bonus).w			; set rings bonus
-		play.w	1, jsr, mus_HasPassed			; play end-of-level music
+		play_haspassed					; play end-of-level music
 
 		lea	(v_ost_all).w,a1			; RAM address to start clearing
 		move.w	#loops_to_clear_ost,d1			; size of RAM block to clear
@@ -155,7 +155,7 @@ SS_NormalExit:
 		bsr.w	BuildSprites
 		tst.w	(f_restart).w
 		beq.s	SS_NormalExit
-		play.w	1, jsr, sfx_EnterSS			; play special stage exit sound
+		play_sound sfx_EnterSS				; play special stage exit sound
 		bsr.w	PaletteWhiteOut
 		rts
 ; ===========================================================================
@@ -905,7 +905,7 @@ SS_UpdateEmerald:
 		clr.l	(a0)
 		clr.l	ss_update_levelptr(a0)
 		move.b	#id_SSS_ExitStage,(v_ost_player+ost_routine).w
-		play.w	1, jsr, sfx_Goal			; play special stage GOAL sound
+		play_sound sfx_Goal				; play special stage GOAL sound
 
 	.wait:
 		rts

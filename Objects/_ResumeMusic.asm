@@ -19,7 +19,7 @@ ResumeMusic:
 		move.w	#mus_Boss,d0
 
 	.playselected:
-		jsr	(PlaySound0).w
+		play_music d0
 
 	.over12:
 		move.w	#air_full<<8,(v_air).w			; reset air to 30 seconds

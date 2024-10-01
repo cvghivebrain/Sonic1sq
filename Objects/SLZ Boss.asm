@@ -134,7 +134,7 @@ BSLZ_Update_SkipPos:
 		tst.b	ost_boss_flash_num(a0)			; is ship flashing?
 		bne.s	.flash					; if yes, branch
 		move.b	#$20,ost_boss_flash_num(a0)		; set ship to flash 32 times
-		play.w	1, jsr, sfx_BossHit			; play boss damage sound
+		play_sound sfx_BossHit				; play boss damage sound
 
 	.flash:
 		lea	(v_pal_dry_line2+2).w,a1		; load 2nd palette, 2nd entry
@@ -312,7 +312,7 @@ BSLZ_Recover:
 
 .ship_rising:
 		clr.w	ost_y_vel(a0)
-		play.w	0, jsr, mus_SLZ				; play SLZ music
+		play_music mus_SLZ				; play SLZ music
 
 .update:
 		bra.w	BSLZ_Update_SkipWobble			; update position

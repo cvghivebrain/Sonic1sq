@@ -3,7 +3,7 @@
 ; ---------------------------------------------------------------------------
 
 GM_HiddenCredits:
-		play.b	1, jsr, cmd_Stop			; stop music
+		play_stop					; stop music
 		bsr.w	PaletteFadeOut				; fade from previous gamemode to black
 		disable_ints
 		lea	(vdp_control_port).l,a6

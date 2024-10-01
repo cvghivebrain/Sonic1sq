@@ -189,7 +189,7 @@ Debug_ChgItem:
 		bsr.w	Debug_GetFrame
 		
 	.blip:
-		play.w	1, jmp, sfx_Switch			; play sound
+		play_sound sfx_Switch				; play sound
 
 	.exit:
 		rts
@@ -260,7 +260,7 @@ Debug_Create:
 		move.b	ost_render(a0),ost_render(a1)
 		movea.l	a1,a3
 		bsr.w	Debug_GetFrame_SkipStatus		; get mappings, frame & tile setting
-		play.w	1, jmp, sfx_ActionBlock			; play sound
+		play_sound sfx_ActionBlock			; play sound
 		
 	.exit:
 		rts

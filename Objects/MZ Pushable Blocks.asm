@@ -226,7 +226,7 @@ PushB_Pushing:
 		subq.w	#1,ost_x_pos(a1)			; Sonic moves left
 	.push_right2:
 		subq.w	#1,ost_x_pos(a0)			; block moves left
-		play.w	1, jsr, sfx_Push			; play pushing sound
+		play_sound sfx_Push				; play pushing sound
 		move.b	#-16,ost_pblock_pushed(a0)
 		bra.s	.push_reset
 		
@@ -239,7 +239,7 @@ PushB_Pushing:
 		addq.w	#1,ost_x_pos(a1)			; Sonic moves right
 	.push_left2:
 		addq.w	#1,ost_x_pos(a0)			; block moves right
-		play.w	1, jsr, sfx_Push			; play pushing sound
+		play_sound sfx_Push				; play pushing sound
 		move.b	#16,ost_pblock_pushed(a0)
 		
 	.push_reset:

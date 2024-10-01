@@ -43,7 +43,7 @@ BFire_Main:	; Routine 0
 		move.b	#8,ost_col_height(a0)
 		addq.b	#2,ost_routine(a0)			; goto BFire_Wait next
 		move.b	#30,ost_bfire_wait_time(a0)		; wait half a second before dropping
-		play.w	1, jsr, sfx_FireBall			; play fireball sound
+		play_sound sfx_FireBall				; play fireball sound
 		bset	#status_yflip_bit,ost_status(a0)	; invert fireball so only tail is visible
 
 BFire_Wait:	; Routine 2

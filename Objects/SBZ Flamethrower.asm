@@ -51,7 +51,7 @@ Flame_Main:	; Routine 0
 		move.b	ost_status(a0),d0
 		andi.b	#status_yflip,d0			; get yflip flag (0 or 2)
 		move.b	d0,ost_anim(a0)				; use as animation
-		play.w	1, jsr, sfx_Flame			; play flame sound
+		play_sound sfx_Flame				; play flame sound
 
 Flame_On:	; Routine 2
 		lea	Ani_Flame(pc),a1
@@ -84,7 +84,7 @@ Flame_Off2:	; Routine 6
 		move.b	#id_Flame_On,ost_routine(a0)		; goto Flame_On next
 		tst.b	ost_render(a0)
 		bpl.w	DespawnQuick				; branch if off screen
-		play.w	1, jsr, sfx_Flame			; play flame sound
+		play_sound sfx_Flame				; play flame sound
 		bra.w	DespawnQuick
 
 ; ---------------------------------------------------------------------------

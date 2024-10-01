@@ -106,7 +106,7 @@ Bub_Big2:	; Routine 8
 		bcc.w	DespawnQuick
 
 		bsr.w	ResumeMusic				; cancel countdown music & reset air
-		play.w	1, jsr, sfx_Bubble			; play collecting bubble sound
+		play_sound sfx_Bubble				; play collecting bubble sound
 		clr.w	ost_x_vel(a1)
 		clr.w	ost_y_vel(a1)
 		clr.w	ost_inertia(a1)				; stop Sonic

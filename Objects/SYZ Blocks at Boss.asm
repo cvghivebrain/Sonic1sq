@@ -147,7 +147,8 @@ BBlock_Break:
 		dbf	d1,.loop				; repeat sequence 3 more times
 
 	.fail:
-		play.w	1, jmp, sfx_Smash			; play smashing sound
+		play_sound sfx_Smash				; play smashing sound
+		rts
 ; End of function BBlock_Break
 
 ; ===========================================================================

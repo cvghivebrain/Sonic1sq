@@ -129,7 +129,7 @@ Spring_Bounce:
 		move.b	#id_Sonic_Control,ost_routine(a1)
 		bclr	#status_platform_bit,ost_status(a0)
 		clr.b	ost_mode(a0)
-		play.w	1, jsr, sfx_Spring			; play spring sound
+		play_sound sfx_Spring				; play spring sound
 
 Spring_Animate:	; Routine 4
 		lea	Ani_Spring(pc),a1
@@ -168,7 +168,7 @@ Spring_LR:	; Routine 8
 	.is_rolling:
 		bclr	#status_pushing_bit,ost_status(a0)
 		bclr	#status_pushing_bit,ost_status(a1)
-		play.w	1, jsr, sfx_Spring			; play spring sound
+		play_sound sfx_Spring				; play spring sound
 		bra.w	Spring_Animate
 ; ===========================================================================
 

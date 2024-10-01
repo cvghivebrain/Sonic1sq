@@ -176,7 +176,7 @@ BFZ_Eggman_Crush:
 		move.w	#0,ost_cylinder_eggman(a1)
 		move.w	#1,ost_fz_phase_state(a0)
 		clr.b	ost_fz_flash_num(a0)
-		play.w	1, jsr, sfx_Rumbling			; play rumbling sound
+		play_sound sfx_Rumbling				; play rumbling sound
 
 	.skip_crushers:
 		tst.w	ost_fz_phase_state(a0)
@@ -213,7 +213,7 @@ BFZ_Eggman_Crush:
 		bne.s	.flash					; if yes, branch
 		subq.b	#1,ost_col_property(a0)			; decrement hit counter
 		move.b	#$64,ost_fz_flash_num(a0)		; flash 100 times
-		play.w	1, jsr, sfx_BossHit			; play boss damage sound
+		play_sound sfx_BossHit				; play boss damage sound
 
 .flash:
 		subq.b	#1,ost_fz_flash_num(a0)			; decrement flash counter
@@ -289,7 +289,8 @@ BFZ_Eggman_Plasma:
 ; ===========================================================================
 
 .electric_sound:
-		play.w	1, jmp, sfx_Electricity			; play electricity sound
+		play_sound sfx_Electricity			; play electricity sound
+		rts
 ; ===========================================================================
 
 BFZ_Eggman_Fall:
@@ -436,7 +437,7 @@ BFZ_Eggman_Escape:
 		tst.b	ost_col_type(a0)			; has ship been hit?
 		bne.s	.chk_sonic				; if not, branch
 		move.w	#30,ost_fz_cylinder_flag(a0)		; set timer
-		play.w	1, jsr, sfx_BossHit			; play boss damage sound every 0.5 seconds
+		play_sound sfx_BossHit				; play boss damage sound every 0.5 seconds
 
 	.skip_sound:
 		subq.w	#1,ost_fz_cylinder_flag(a0)		; decrement timer

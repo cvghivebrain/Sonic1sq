@@ -214,7 +214,7 @@ CStom_TypeBtnx:
 		bne.s	.skip_sound				; branch if not 0
 		tst.b	ost_render(a0)
 		bpl.s	.skip_sound
-		play.w	1, jsr, sfx_ChainRise			; play rising chain sound every 16 frames
+		play_sound sfx_ChainRise			; play rising chain sound every 16 frames
 
 	.skip_sound:
 		subi.w	#$80,ost_cstomp_chain_length(a0)	; shorten chain
@@ -240,7 +240,7 @@ CStom_TypeBtn_Fall:
 		move.w	#0,ost_y_vel(a0)			; stop object falling
 		tst.b	ost_render(a0)
 		bpl.s	CStom_SetPos
-		play.w	1, jsr, sfx_ChainStomp			; play stomping sound
+		play_sound sfx_ChainStomp			; play stomping sound
 
 CStom_SetPos:
 		moveq	#0,d0
@@ -266,7 +266,7 @@ CStom_TypeNormal_Rise:
 		bne.s	.skip_sound
 		tst.b	ost_render(a0)
 		bpl.s	.skip_sound
-		play.w	1, jsr, sfx_ChainRise			; play rising chain sound every 16 frames
+		play_sound sfx_ChainRise			; play rising chain sound every 16 frames
 
 	.skip_sound:
 		subi.w	#$80,ost_cstomp_chain_length(a0)
@@ -287,12 +287,12 @@ CStom_TypeNormal_Fall:
 		cmp.w	ost_cstomp_chain_length(a0),d1
 		bhi.s	CStom_SetPos
 		move.w	d1,ost_cstomp_chain_length(a0)
-		move.w	#0,ost_y_vel(a0)			; stop object falling
+		clr.w	ost_y_vel(a0)				; stop object falling
 		move.b	#1,ost_cstomp_rise_flag(a0)
 		move.w	#60,ost_cstomp_delay_time(a0)
 		tst.b	ost_render(a0)
 		bpl.w	CStom_SetPos
-		play.w	1, jsr, sfx_ChainStomp			; play stomping sound
+		play_sound sfx_ChainStomp			; play stomping sound
 		bra.w	CStom_SetPos
 ; ===========================================================================
 
@@ -301,5 +301,5 @@ CStom_TypeProx:
 		getsonic
 		range_x_test	144				; is Sonic within 144px?
 		bcc.w	CStom_SetPos				; if not, branch
-		move.b	#0,ost_subtype(a0)			; allow stomper to drop by changing subtype to CStom_TypeNormal
+		clr.b	ost_subtype(a0)				; allow stomper to drop by changing subtype to CStom_TypeNormal
 		bra.w	CStom_SetPos

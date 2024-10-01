@@ -99,7 +99,7 @@ BLZ_Update_SkipPos:
 		tst.b	ost_boss_flash_num(a0)			; is ship flashing?
 		bne.s	.flash					; if yes, branch
 		move.b	#$20,ost_boss_flash_num(a0)		; set ship to flash 32 times
-		play.w	1, jsr, sfx_BossHit			; play boss damage sound
+		play_sound sfx_BossHit				; play boss damage sound
 
 	.flash:
 		lea	(v_pal_dry_line2+2).w,a1		; load 2nd palette, 2nd entry
@@ -275,7 +275,7 @@ BLZ_ShipWait:
 		move.b	#50,ost_boss_wait_time(a0)		; set timer for 50 frames
 
 	.beaten:
-		play.w	0, jsr, mus_LZ				; play LZ music
+		play_music mus_LZ				; play LZ music
 		clr.b	(f_boss_loaded).w
 		bset	#status_xflip_bit,ost_status(a0)	; ship face right
 		addq.b	#2,ost_mode(a0)				; goto BLZ_Escape1 next

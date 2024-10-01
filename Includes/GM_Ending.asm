@@ -3,7 +3,7 @@
 ; ---------------------------------------------------------------------------
 
 GM_Ending:
-		play.b	1, jsr, cmd_Stop			; stop music
+		play_stop					; stop music
 		bsr.w	PaletteFadeOut				; fade out from previous gamemode
 
 		lea	(v_ost_all).w,a1			; RAM address to start clearing
@@ -49,7 +49,7 @@ GM_Ending:
 		bsr.w	LevelParameterLoad			; load level boundaries and start positions
 		jsr	DrawTilesAtStart
 		move.b	(v_bgm).w,d0
-		jsr	(PlaySound0).w				; play music
+		play_music d0					; play music
 		btst	#bitA,(v_joypad_hold_actual).w		; is button A being held?
 		beq.s	.no_debug				; if not, branch
 		move.b	#1,(f_debug_enable).w			; enable debug mode

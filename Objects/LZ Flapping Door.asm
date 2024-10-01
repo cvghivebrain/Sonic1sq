@@ -75,7 +75,7 @@ Flap_Open2:	; Routine 6
 		addq.b	#2,ost_routine(a0)			; goto Flap_Closing next
 		tst.b	ost_render(a0)
 		bpl.w	DespawnQuick				; branch if not on screen
-		play.w	1, jsr, sfx_Door			; play door sound
+		play_sound sfx_Door				; play door sound
 		bra.w	DespawnQuick
 ; ===========================================================================
 
@@ -91,7 +91,7 @@ Flap_Closed2:	; Routine $C
 		move.b	#id_Flap_Opening,ost_routine(a0)	; goto Flap_Opening next
 		tst.b	ost_render(a0)
 		bpl.w	DespawnQuick				; branch if not on screen
-		play.w	1, jsr, sfx_Door			; play door sound
+		play_sound sfx_Door				; play door sound
 		bra.w	DespawnQuick
 
 ; ---------------------------------------------------------------------------

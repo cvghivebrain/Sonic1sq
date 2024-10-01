@@ -126,7 +126,7 @@ Spike_Move:
 		bne.s	.exit					; branch if time remains
 		tst.b	ost_render(a0)
 		bpl.s	.exit					; branch if spikes are off screen
-		play.w	1, jmp, sfx_SpikeMove			; play "spikes moving" sound
+		play_sound sfx_SpikeMove			; play "spikes moving" sound
 		
 	.move_now:
 		addq.b	#1,ost_spike_move_dist(a0)

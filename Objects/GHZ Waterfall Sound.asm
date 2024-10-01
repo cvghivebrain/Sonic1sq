@@ -26,5 +26,5 @@ WSnd_PlaySnd:	; Routine 2
 		move.b	(v_vblank_counter_byte).w,d0		; get low byte of VBlank counter
 		andi.b	#$3F,d0					; read bits 0-5
 		bne.w	DespawnQuick_NoDisplay			; branch if not 0
-		play.w	1, jsr, sfx_Waterfall			; play waterfall sound (every 64 frames)
+		play_sound sfx_Waterfall			; play waterfall sound (every 64 frames)
 		bra.w	DespawnQuick_NoDisplay

@@ -71,7 +71,7 @@ Lamp_Blue:	; Routine 2
 		range_y_test	$28
 		bcc.w	DespawnObject
 
-		play.w	1, jsr, sfx_Lamppost			; play lamppost sound
+		play_sound sfx_Lamppost				; play lamppost sound
 		addq.b	#2,ost_routine(a0)			; goto Lamp_Red next
 		jsr	(FindNextFreeObj).l			; find free OST slot
 		bne.s	.fail					; branch if not found

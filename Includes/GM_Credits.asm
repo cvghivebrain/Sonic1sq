@@ -5,7 +5,7 @@
 GM_Credits:
 		tst.b	(f_credits_started).w
 		bne.s	.keep_music				; branch if credits were already running
-		play.b	1, jsr, mus_Credits			; play credits music
+		play_music mus_Credits				; play credits music
 		move.b	#1,(f_credits_started).w
 
 	.keep_music:

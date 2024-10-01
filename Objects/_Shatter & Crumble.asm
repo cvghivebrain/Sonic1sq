@@ -40,7 +40,8 @@ Shatter:
 		
 	.fail:
 		bsr.w	DeleteObject				; delete parent object
-		play.w	1, jmp, sfx_Smash			; play smashing sound
+		play_sound sfx_Smash				; play smashing sound
+		rts
 		
 ; ---------------------------------------------------------------------------
 ; Fragment of shattered object
@@ -95,7 +96,8 @@ Crumble:
 		dbf	d1,.loop				; repeat for all sprite pieces
 		
 	.fail:
-		play.w	1, jmp, sfx_Collapse			; play collapsing sound
+		play_sound sfx_Collapse				; play collapsing sound
+		rts
 		
 ; ---------------------------------------------------------------------------
 ; Fragment of crumbled object

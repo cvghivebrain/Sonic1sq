@@ -78,7 +78,7 @@ Pow_Sonic:
 ExtraLife:
 		addq.b	#1,(v_lives).w				; add 1 to the number of lives you have
 		addq.b	#1,(f_hud_lives_update).w		; update the lives counter
-		play.w	0, jmp, mus_ExtraLife			; play extra life music
+		play_1up					; play extra life music
 ; ===========================================================================
 
 Pow_Shoes:
@@ -86,7 +86,8 @@ Pow_Shoes:
 		move.w	#sonic_max_speed_shoes,(v_sonic_max_speed).w ; change Sonic's top speed
 		move.w	#sonic_acceleration_shoes,(v_sonic_acceleration).w ; change Sonic's acceleration
 		move.w	#sonic_deceleration_shoes,(v_sonic_deceleration).w ; change Sonic's deceleration
-		play.w	0, jmp, cmd_Speedup			; speed up the music
+		play_fast					; speed up the music
+		rts
 ; ===========================================================================
 
 Pow_Shield:
@@ -96,7 +97,8 @@ Pow_Shield:
 		move.l	#ShieldItem,ost_id(a1)			; load shield object ($38)
 		
 	.fail:
-		play.w	0, jmp, sfx_Shield			; play shield sound
+		play_sound sfx_Shield				; play shield sound
+		rts
 ; ===========================================================================
 
 Pow_Invincible:
@@ -125,7 +127,7 @@ Pow_Invincible:
 		bne.s	.skip_music				; if yes, branch
 		cmpi.b	#air_alert,(v_air).w
 		bls.s	.skip_music
-		play.w	0, jmp, mus_Invincible			; play invincibility music
+		play_music mus_Invincible			; play invincibility music
 
 .skip_music:
 		rts	

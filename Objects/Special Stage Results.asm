@@ -153,7 +153,7 @@ SSR_Bonus:	; Routine 4
 	.skip_ringbonus:
 		tst.w	d0					; is there any bonus?
 		bne.s	.add_bonus				; if yes, branch
-		play.w	1, jsr, sfx_Register			; play "ker-ching" sound
+		play_sound sfx_Register				; play "ker-ching" sound
 		addq.b	#2,ost_routine(a0)			; goto SSR_Finish next
 		move.w	#180,ost_ssr_time(a0)			; set time delay to 3 seconds
 		cmpi.w	#rings_for_continue,(v_rings).w
@@ -174,7 +174,8 @@ SSR_Bonus:	; Routine 4
 		move.b	(v_vblank_counter_byte).w,d0		; get byte that increments every frame
 		andi.b	#3,d0					; read bits 0-1
 		bne.s	.exit					; branch if either are set
-		play.w	1, jmp, sfx_Switch			; play "blip" sound every 4th frame
+		play_sound sfx_Switch				; play "blip" sound every 4th frame
+		rts
 ; ===========================================================================
 
 SSR_Finish:	; Routine 6
@@ -196,7 +197,7 @@ SSR_Continue:	; Routine 8
 		move.b	#render_abs,ost_render(a0)
 		move.b	#id_frame_ssr_contsonic1,ost_frame(a0)
 		move.b	#id_SSR_ContAni,ost_routine(a0)		; goto SSR_ContAni next
-		play.w	1, jsr, sfx_Continue			; play continues jingle
+		play_sound sfx_Continue				; play continues jingle
 		
 	.wait:
 		rts

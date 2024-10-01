@@ -42,7 +42,7 @@ Van_RmvSonic:	; Routine 2
 		tst.b	ost_id(a3)				; has Sonic already been removed?
 		beq.s	.display				; if yes, branch
 		move.l	#0,ost_id(a3)				; remove Sonic
-		play.w	1, jsr, sfx_Goal			; play Special Stage "GOAL" sound
+		play_sound sfx_Goal				; play Special Stage "GOAL" sound
 
 	.display:
 		jmp	(DisplaySprite).l

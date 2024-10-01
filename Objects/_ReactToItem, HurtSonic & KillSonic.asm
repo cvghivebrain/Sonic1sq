@@ -102,7 +102,7 @@ React_Boss:
 		asr	ost_x_vel(a0)
 		asr	ost_y_vel(a0)
 		move.b	#16*2,(v_boss_flash).w			; set ship to flash 16 times
-		play.w	1, jsr, sfx_BossHit			; play boss damage sound
+		play_sound sfx_BossHit				; play boss damage sound
 		move.b	#0,ost_col_type(a1)			; temporarily make boss harmless
 		subq.b	#1,ost_col_property(a1)			; decrement hit counter
 		bne.s	.flagnotclear				; branch if not 0
@@ -269,7 +269,8 @@ HurtSonic:
 		move.w	#sfx_SpikeHit,d0			; load spikes damage sound
 
 	.sound:
-		jmp	(PlaySound1).w
+		play_sound d0
+		rts
 ; ===========================================================================
 
 .norings:
@@ -297,8 +298,8 @@ KillSonic:
 		bsr.w	Sonic_ResetOnFloor			; reset several of Sonic's flags
 		bset	#status_air_bit,ost_status(a0)
 		move.w	#-$700,ost_y_vel(a0)			; move Sonic up
-		move.w	#0,ost_x_vel(a0)
-		move.w	#0,ost_inertia(a0)
+		clr.w	ost_x_vel(a0)
+		clr.w	ost_inertia(a0)
 		move.b	#id_Death,ost_anim(a0)
 		bset	#tile_hi_bit,ost_tile(a0)
 		move.w	#sfx_Death,d0				; play normal death sound
@@ -307,7 +308,7 @@ KillSonic:
 		move.w	#sfx_SpikeHit,d0			; play spikes death sound
 
 	.sound:
-		jmp	(PlaySound1).w
+		play_sound d0
 
 	.dontdie:
 		rts

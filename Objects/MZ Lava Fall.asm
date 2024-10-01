@@ -61,7 +61,7 @@ LFall_Action:	; Routine 2
 		subq.w	#1,ost_lfall_time(a0)			; decrement timer
 		bpl.w	DespawnQuick_NoDisplay			; branch if time remains
 		move.w	ost_lfall_time_master(a0),ost_lfall_time(a0) ; reset timer
-		play.w	1, jsr, sfx_Burning			; play flame sound
+		play_sound sfx_Burning				; play flame sound
 		
 		bsr.w	FindNextFreeObj				; find free OST slot
 		bne.w	DespawnQuick_NoDisplay

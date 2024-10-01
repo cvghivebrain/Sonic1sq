@@ -26,7 +26,7 @@ MDis_Main:	; Routine 0
 		move.b	#$C,ost_displaywidth(a0)
 		move.b	#9,ost_anim_time(a0)
 		move.b	#0,ost_frame(a0)
-		play.w	1, jsr, sfx_BuzzExplode			; play missile explosion sound
+		play_sound sfx_BuzzExplode			; play missile explosion sound
 
 MDis_Animate:	; Routine 2
 		shortcut

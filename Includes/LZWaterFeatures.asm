@@ -176,7 +176,7 @@ DynWater_LZ3:
 		move.w	#$4C8,d1
 		move.b	#$4B,(v_level_layout+(sizeof_levelrow*2)+6).w ; modify level layout (row 2, column 6)
 		move.b	#1,(v_water_routine).w			; goto DynWater_LZ3_1 next
-		play.w	1, jsr, sfx_Rumbling			; play the rumbling sound
+		play_sound sfx_Rumbling				; play the rumbling sound
 
 	.set_water:
 		move.w	d1,(v_water_height_next).w
@@ -323,7 +323,7 @@ LZWindTunnels:
 		move.b	(v_vblank_counter_byte).w,d0		; get byte that increments every frame
 		andi.b	#$3F,d0					; read only bits 0-5
 		bne.s	.skipsound				; branch if any are set
-		play.w	1, jsr, sfx_Waterfall			; play rushing water sound every 64th frame
+		play_sound sfx_Waterfall			; play rushing water sound every 64th frame
 
 	.skipsound:
 		tst.b	(f_water_tunnel_disable).w
@@ -442,7 +442,7 @@ LZSlide_Move:
 		move.b	(v_vblank_counter_byte).w,d0		; get byte that increments every frame
 		andi.b	#$1F,d0					; read only bits 0-4
 		bne.s	.skip_sound				; branch if any are set
-		play.w	1, jsr, sfx_Waterfall			; play water sound every 32nd frame
+		play_sound sfx_Waterfall			; play water sound every 32nd frame
 
 	.skip_sound:
 		rts

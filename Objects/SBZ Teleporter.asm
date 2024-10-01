@@ -85,7 +85,7 @@ Tele_Action:	; Routine 2
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		clr.b	ost_tele_bump(a0)
-		play.w	1, jsr, sfx_Roll			; play Sonic rolling sound
+		play_sound sfx_Roll				; play Sonic rolling sound
 		bra.w	DespawnQuick_NoDisplay
 ; ===========================================================================
 
@@ -103,7 +103,7 @@ Tele_Bump:	; Routine 4
 
 		bsr.w	Tele_Move				; set speed/direction
 		addq.b	#2,ost_routine(a0)			; goto Tele_Bend next
-		play.w	1, jsr, sfx_Dash			; play Sonic dashing sound
+		play_sound sfx_Dash				; play Sonic dashing sound
 		bra.w	DespawnQuick_NoDisplay
 ; ===========================================================================
 

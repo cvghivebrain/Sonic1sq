@@ -60,7 +60,7 @@ Fount_Make:	; Routine 4
 		move.b	#id_ani_fount_top,ost_anim(a1)
 		move.b	#id_Fount_Top,ost_routine(a1)
 		saveparent
-		play.w	1, jsr, sfx_Burning			; play flame sound
+		play_sound sfx_Burning				; play flame sound
 		bra.s	Fount_Wait
 ; ===========================================================================
 

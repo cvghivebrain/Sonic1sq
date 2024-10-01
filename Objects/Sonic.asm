@@ -121,7 +121,7 @@ Sonic_Display:
 		cmpi.b	#air_alert,(v_air).w			; is air < $C?
 		bcs.s	.chkshoes				; if yes, branch
 		move.b	(v_bgm).w,d0
-		jsr	(PlaySound0).w				; play normal music
+		play_music d0					; play normal music
 
 	.chkshoes:
 		tst.w	(v_shoes).w				; does Sonic have speed	shoes?
@@ -131,7 +131,7 @@ Sonic_Display:
 		move.w	#sonic_max_speed,(v_sonic_max_speed).w	; restore Sonic's speed
 		move.w	#sonic_acceleration,(v_sonic_acceleration).w ; restore Sonic's acceleration
 		move.w	#sonic_deceleration,(v_sonic_deceleration).w ; restore Sonic's deceleration
-		play.w	0, jmp, cmd_Slowdown			; run music at normal speed
+		play_normal					; run music at normal speed
 
 	.exit:
 		rts
@@ -186,7 +186,8 @@ Sonic_Water:
 		move.b	#1,(f_splash).w
 
 	.fail2:
-		play.w	1, jmp, sfx_Splash			; play splash sound
+		play_sound sfx_Splash				; play splash sound
+		rts
 ; ===========================================================================
 
 .abovewater:
@@ -212,7 +213,8 @@ Sonic_Water:
 		move.w	#-sonic_max_speed_surface,ost_y_vel(a0)	; set maximum speed on leaving water
 
 	.belowmaxspeed:
-		play.w	1, jmp, sfx_Splash			; play splash sound
+		play_sound sfx_Splash				; play splash sound
+		rts
 
 ; ---------------------------------------------------------------------------
 ; Modes	for controlling	Sonic
@@ -538,7 +540,7 @@ Sonic_MoveLeft:
 		blt.s	.exit
 		move.b	#id_Stop,ost_anim(a0)			; use "stopping" animation
 		bclr	#status_xflip_bit,ost_status(a0)	; make Sonic face right
-		play.w	1, jsr, sfx_Skid			; play stopping sound
+		play_sound sfx_Skid				; play stopping sound
 
 	.exit:
 		rts
@@ -582,7 +584,7 @@ Sonic_MoveRight:
 		bgt.s	.exit
 		move.b	#id_Stop,ost_anim(a0)			; use "stopping" animation
 		bset	#status_xflip_bit,ost_status(a0)	; make Sonic face left
-		play.w	1, jsr, sfx_Skid			; play stopping sound
+		play_sound sfx_Skid				; play stopping sound
 
 	.exit:
 		rts
@@ -878,7 +880,7 @@ Sonic_ChkRoll:
 		move.b	#id_Roll,ost_anim(a0)			; use "rolling" animation
 		move.w	(v_player1_height_diff).w,d0
 		add.w	d0,ost_y_pos(a0)
-		play.w	1, jsr, sfx_Roll			; play rolling sound
+		play_sound sfx_Roll				; play rolling sound
 		tst.w	ost_inertia(a0)
 		bne.s	.ismoving
 		move.w	#$200,ost_inertia(a0)			; set inertia if 0
@@ -998,7 +1000,7 @@ Sonic_Jump:
 		bclr	#status_pushing_bit,ost_status(a0)
 		addq.l	#4,sp					; return to earlier position in Sonic_Control
 		bclr	#flags_stuck_bit,ost_sonic_flags(a0)
-		play.w	1, jsr, sfx_Jump			; play jumping sound
+		play_sound sfx_Jump				; play jumping sound
 		bset	#status_jump_bit,ost_status(a0)
 		bne.s	.is_rolling				; branch if Sonic was rolling
 		move.b	(v_player1_height_roll).w,ost_height(a0)
@@ -1469,7 +1471,8 @@ GameOver:
 		clr.b	(f_time_over).w
 
 .music_gfx:
-		play.w	0, jmp, mus_GameOver			; play game over music
+		play_music mus_GameOver				; play game over music
+		rts
 ; ===========================================================================
 
 .lives_remain:

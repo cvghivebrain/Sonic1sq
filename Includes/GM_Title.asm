@@ -3,7 +3,7 @@
 ; ---------------------------------------------------------------------------
 
 GM_Title:
-		play.b	1, jsr, cmd_Stop			; stop music
+		play_stop					; stop music
 		bsr.w	PaletteFadeOut				; fade from previous gamemode to black
 		disable_ints
 		bsr.w	DacDriverLoad
@@ -70,7 +70,7 @@ GM_Title:
 
 		moveq	#id_Pal_Title,d0			; load title screen palette
 		bsr.w	PalLoad
-		play.b	1, jsr, mus_TitleScreen			; play title screen music
+		play_music mus_TitleScreen			; play title screen music
 		clr.b	(f_debug_enable).w			; disable debug mode
 		move.w	#406,(v_countdown).w			; run title screen for 406 frames
 
@@ -147,7 +147,7 @@ Title_Dpad:
 	.complete:
 		move.b	#1,(f_levelselect_cheat).w		; set level select flag
 		move.b	#1,(f_debug_cheat).w			; set debug mode flag
-		play.b	1, jsr, sfx_Ring			; play ring sound
+		play_sound sfx_Ring				; play ring sound
 		rts
 
 LevSelCode:	dc.b btnUp,btnDn,btnL,btnR,$FF
@@ -428,7 +428,7 @@ PlayLevel:
 		move.l	d0,(v_emeralds).w			; clear emeralds
 		move.b	d0,(v_continues).w			; clear continues
 		move.l	#5000,(v_score_next_life).w		; extra life is awarded at 50000 points
-		play.b	1, jsr, cmd_Fade			; fade out music
+		play_fadeout					; fade out music
 		rts
 
 LevSel_Special:
@@ -472,26 +472,27 @@ LevSel_Sound:
 		addi.w	#$10,(v_levelselect_sound).w		; skip $10
 		cmpi.w	#$4F,(v_levelselect_sound).w
 		ble.s	.exit					; branch if valid
-		clr.w	(v_levelselect_sound).w		; reset to 0
+		clr.w	(v_levelselect_sound).w			; reset to 0
 	.exit:
 		bra.w	LevSel_Display				; update number
 
 	.play:
 		move.w	(v_levelselect_sound).w,d0
 		addi.w	#$80,d0
-		jmp	(PlaySound1).w
+		play_sound d0
+		rts
 
 ; ---------------------------------------------------------------------------
 ; Demo mode
 ; ---------------------------------------------------------------------------
 
 PlayDemo:
-		play.b	1, jsr, cmd_Fade			; fade out music
+		play_fadeout					; fade out music
 		bsr.w	LoadPerDemo
 		addq.w	#1,(v_demo_num).w			; add 1 to demo number
 		cmpi.w	#countof_demo,(v_demo_num).w		; is demo number less than 4?
 		blo.s	.demo_0_to_3				; if yes, branch
-		clr.w	(v_demo_num).w			; reset demo number to 0
+		clr.w	(v_demo_num).w				; reset demo number to 0
 
 	.demo_0_to_3:
 		move.w	#1,(v_demo_mode).w			; turn demo mode on

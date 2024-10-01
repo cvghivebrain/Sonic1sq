@@ -176,7 +176,7 @@ Has_Bonus:	; Routine $E
 	.skip_ringbonus:
 		tst.w	d0					; is there any bonus?
 		bne.s	.add_bonus				; if yes, branch
-		play.w	1, jsr, sfx_Register			; play "ker-ching" sound
+		play_sound sfx_Register				; play "ker-ching" sound
 		addq.b	#2,ost_routine(a0)			; goto Has_Finish next
 		move.w	#180,ost_has_time(a0)			; set time delay to 3 seconds
 		rts
@@ -199,7 +199,8 @@ Has_Bonus:	; Routine $E
 		move.b	(v_vblank_counter_byte).w,d0		; get byte that increments every frame
 		andi.b	#3,d0					; read bits 0-1
 		bne.s	.exit					; branch if either are set
-		play.w	1, jmp, sfx_Switch			; play "blip" sound every 4th frame
+		play_sound sfx_Switch				; play "blip" sound every 4th frame
+		rts
 ; ===========================================================================
 
 Has_Finish:	; Routine $10
@@ -225,7 +226,8 @@ Has_Finish:	; Routine $10
 		clr.b	(v_haspassed_state).w			; flag text objects to move off screen
 		addq.b	#2,ost_routine(a0)			; goto Has_Boundary next
 		clr.b	(f_lock_controls).w			; unlock controls
-		play.w	0, jmp, mus_FZ				; play FZ music
+		play_music mus_FZ				; play FZ music
+		rts
 ; ===========================================================================
 
 Has_Boundary:	; Routine $12

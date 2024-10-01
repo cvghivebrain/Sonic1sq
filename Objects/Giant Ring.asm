@@ -62,7 +62,7 @@ GRing_Collect:	; Routine 4
 		bset	#render_xflip_bit,ost_render(a0)	; reverse flash object
 
 	.noflip:
-		play.w	1, jsr, sfx_GiantRing			; play giant ring sound
+		play_sound sfx_GiantRing			; play giant ring sound
 
 GRing_Collect2:	; Routine 6
 		lea	Ani_BigRing(pc),a1

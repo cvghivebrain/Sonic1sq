@@ -97,7 +97,7 @@ But_Action:	; Routine 2
 But_Press:
 		btst	d6,(a3)
 		bne.s	.skip_blip				; branch if button is already pressed
-		play.w	1, jsr, sfx_Switch			; play "blip" sound
+		play_sound sfx_Switch				; play "blip" sound
 		
 	.skip_blip:
 		bset	d6,(a3)					; set button status (bit 0 or 7)

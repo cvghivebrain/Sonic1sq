@@ -86,7 +86,7 @@ Bat_Flap:	; Routine 6
 		move.b	(v_vblank_counter_byte).w,d3		; get byte that increments every frame
 		andi.b	#$F,d3					; read only low nybble
 		bne.s	.nosound				; branch if not 0
-		play.w	1, jsr, sfx_basaran			; play flapping sound every 16th frame
+		play_sound sfx_basaran				; play flapping sound every 16th frame
 
 	.nosound:
 		update_x_pos					; update position

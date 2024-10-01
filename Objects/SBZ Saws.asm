@@ -102,7 +102,7 @@ Saw_Pizza_Sideways:
 		move.w	(v_frame_counter).w,d0
 		andi.w	#$F,d0
 		bne.s	.nosound01
-		play.w	1, jsr, sfx_Saw				; play saw sound every 16th frame
+		play_sound sfx_Saw				; play saw sound every 16th frame
 
 	.nosound01:
 		rts	
@@ -132,7 +132,7 @@ Saw_Pizza_UpDown:
 		bpl.s	.nosound02				; branch if not on screen
 		cmpi.b	#$18,d2
 		bne.s	.nosound02
-		play.w	1, jsr, sfx_Saw				; play saw sound at certain point
+		play_sound sfx_Saw				; play saw sound at certain point
 
 	.nosound02:
 		rts	
@@ -152,7 +152,7 @@ Saw_Ground_Right:
 
 		move.b	#id_Saw_Ground_Move,ost_subtype(a0)	; goto Saw_Ground_Move next
 		move.w	#$600,ost_x_vel(a0)			; move object to the right
-		play.w	1, jsr, sfx_Saw				; play saw sound
+		play_sound sfx_Saw				; play saw sound
 
 	.nosaw03x:
 		addq.l	#4,sp					; don't display sprite
@@ -174,7 +174,7 @@ Saw_Ground_Left:
 
 		move.b	#id_Saw_Ground_Move,ost_subtype(a0)	; goto Saw_Ground_Move next
 		move.w	#-$600,ost_x_vel(a0)			; move object to the left
-		play.w	1, jsr, sfx_Saw				; play saw sound
+		play_sound sfx_Saw				; play saw sound
 
 	.nosaw04x:
 		addq.l	#4,sp					; don't display sprite

@@ -73,7 +73,7 @@ Pause_Debug_Main:
 		clr.w	(v_debugmenu_item).w			; highlight first object in list
 		moveq	#1,d0					; x pos
 		moveq	#1,d1					; y pos
-		moveq	#0,d2
+		moveq	#0,d2					; tile setting
 		lea	(vdp_data_port).l,a1			; data port
 		lea	Str_DebugMenu(pc),a2			; address of string
 		bsr.w	DrawString
@@ -122,7 +122,7 @@ Pause_Debug_Obj_KeepPos:
 		bsr.w	ClearVRAM_Tiles_FG			; clear fg
 		moveq	#1,d0					; x pos
 		moveq	#1,d1					; y pos
-		moveq	#0,d2
+		moveq	#0,d2					; tile setting
 		lea	(vdp_data_port).l,a1			; data port
 		lea	Str_ObjMenu(pc),a2			; address of string
 		bsr.w	DrawString
@@ -275,6 +275,12 @@ show_ost:	macro str,ost,len
 		show_ost Str_ObjParent,ost_parent,4
 		addq.b	#1,d1
 		show_ost Str_ObjLinked,ost_linked,4
+		addq.b	#1,d1
+		lea	Str_ObjChild(pc),a2
+		bsr.w	DrawString
+		moveq	#0,d5
+		moveq	#2,d6
+		bsr.w	DrawHexString_SkipVDP
 		
 	Pause_Debug_ObjView_Loop:
 		move.b	#id_VBlank_PauseDebug,(v_vblank_routine).w
@@ -328,6 +334,7 @@ Str_ObjColw:	dc.b "COL WIDTH@ ",0
 Str_ObjColh:	dc.b "COL HEIGHT@ ",0
 Str_ObjParent:	dc.b "PARENT@ ",0
 Str_ObjLinked:	dc.b "LINKED@ ",0
+Str_ObjChild:	dc.b "CHILDREN@ ",0
 		even
 		
 ; ---------------------------------------------------------------------------
