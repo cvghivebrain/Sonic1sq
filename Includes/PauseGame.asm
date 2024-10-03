@@ -272,6 +272,12 @@ show_ost:	macro str,ost,len
 		addq.b	#1,d1
 		show_ost Str_ObjColh,ost_col_height,2
 		addq.b	#2,d1
+		lea	Str_ObjSlot(pc),a2
+		bsr.w	DrawString
+		move.w	a0,d5
+		moveq	#4,d6
+		bsr.w	DrawHexString_SkipVDP
+		addq.b	#1,d1
 		show_ost Str_ObjParent,ost_parent,4
 		addq.b	#1,d1
 		show_ost Str_ObjLinked,ost_linked,4
@@ -279,6 +285,18 @@ show_ost:	macro str,ost,len
 		lea	Str_ObjChild(pc),a2
 		bsr.w	DrawString
 		moveq	#0,d5
+		lea	(v_ost_all).w,a3			; address of first OST
+		move.w	a0,d3					; address of selected OST
+		
+	.childloop:
+		cmp.w	ost_parent(a3),d3
+		bne.s	.childnext				; branch if object isn't a child of selected object
+		addq.w	#1,d5					; increment child counter
+		
+	.childnext:
+		lea	sizeof_ost(a3),a3			; goto next OST slot
+		cmpa.w	#v_ost_end&$FFFF,a3
+		bne.s	.childloop				; repeat if not at end of OSTs
 		moveq	#2,d6
 		bsr.w	DrawHexString_SkipVDP
 		
@@ -332,6 +350,7 @@ Str_ObjH:	dc.b "HEIGHT@ ",0
 Str_ObjCol:	dc.b "COL TYPE@ ",0
 Str_ObjColw:	dc.b "COL WIDTH@ ",0
 Str_ObjColh:	dc.b "COL HEIGHT@ ",0
+Str_ObjSlot:	dc.b "SLOT@ ",0
 Str_ObjParent:	dc.b "PARENT@ ",0
 Str_ObjLinked:	dc.b "LINKED@ ",0
 Str_ObjChild:	dc.b "CHILDREN@ ",0
