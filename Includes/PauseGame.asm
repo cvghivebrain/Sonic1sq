@@ -198,98 +198,50 @@ Pause_Debug_ObjView:
 		lea	Str_Names,a2
 		lea	(a2,d3.w),a2				; address of string in table
 		bsr.w	DrawString8_SkipVDP			; draw name of object
+		addq.b	#1,d1
+		lea	Pause_Debug_ObjView_Script(pc),a4
 		
-show_ost:	macro str,ost,len
-		lea	\str(pc),a2
-		bsr.w	DrawString
-		if (len=2)|(len=1)
-		move.b	\ost(a0),d5
-		elseif len=4
-		move.w	\ost(a0),d5
-		elseif (len=6)|(len=8)
-		move.l	\ost(a0),d5
-		endc
-		moveq	#len,d6
-		bsr.w	DrawHexString_SkipVDP
-		endm
+	.loop:
+		movea.l	(a4)+,a2				; get string pointer
+		bsr.w	DrawString				; draw on screen
+		moveq	#0,d3
+		moveq	#0,d6
+		move.b	(a4)+,d3				; get OST variable offset
+		move.b	(a4)+,d6				; get length
+		tst.b	d3
+		bmi.s	.special				; branch if not an offset
+		move.b	(a0,d3.w),d5				; read byte
+		cmpi.b	#2,d6
+		beq.s	.readok					; branch if 2 digits (1 byte) should be read
+		move.l	(a0,d3.w),d5				; read longword
+		cmpi.b	#6,d6
+		bcc.s	.readok					; branch if 6-8 digits (4 bytes) should be read
+		swap	d5					; read word
 		
-		addq.b	#1,d1
-		show_ost Str_ObjPtr,ost_id,6
-		
-		addq.b	#2,d1
-		show_ost Str_ObjMap,ost_mappings,6
-		addq.b	#1,d1
-		show_ost Str_ObjTile,ost_tile,4
-		addq.b	#1,d1
-		show_ost Str_ObjFrame,ost_frame_hi,4
-		addq.b	#1,d1
-		show_ost Str_ObjAnim,ost_anim,2
-		addq.b	#1,d1
-		show_ost Str_ObjAnim2,ost_anim_frame,2
-		addq.b	#1,d1
-		show_ost Str_ObjAnim3,ost_anim_time,2
-		addq.b	#1,d1
-		show_ost Str_ObjSubsp,ost_subsprite,4
-		addq.b	#1,d1
-		show_ost Str_ObjPri,ost_priority,4
-		addq.b	#1,d1
-		show_ost Str_ObjDispw,ost_displaywidth_hi,4
-		addq.b	#1,d1
-		show_ost Str_ObjRender,ost_render,2
-		
-		addq.b	#2,d1
-		show_ost Str_ObjX,ost_x_pos,8
-		addq.b	#1,d1
-		show_ost Str_ObjY,ost_y_pos,8
-		addq.b	#1,d1
-		show_ost Str_ObjXvel,ost_x_vel,4
-		addq.b	#1,d1
-		show_ost Str_ObjYvel,ost_y_vel,4
-		addq.b	#1,d1
-		show_ost Str_ObjInertia,ost_inertia,4
-		addq.b	#1,d1
-		show_ost Str_ObjAngle,ost_angle,4
-		
+	.readok:
+		bsr.w	DrawHexString_SkipVDP			; draw hex value
+		add.b	(a4)+,d1				; get line break
+		move.b	(a4)+,d3				; get flags
+		bmi.w	Pause_Debug_ObjView_Loop		; branch if high bit is set
+		btst	#0,d3
+		beq.s	.loop					; branch if bit 0 is clear
 		moveq	#21,d0					; x pos (second column)
 		moveq	#6,d1					; y pos
-		show_ost Str_ObjRout,ost_routine,2
-		addq.b	#1,d1
-		show_ost Str_ObjMode,ost_mode,2
-		addq.b	#1,d1
-		show_ost Str_ObjStatus,ost_mode,2
-		addq.b	#1,d1
-		show_ost Str_ObjRespawn,ost_mode,2
-		addq.b	#1,d1
-		show_ost Str_ObjType,ost_mode,2
-		addq.b	#2,d1
-		show_ost Str_ObjW,ost_width,2
-		addq.b	#1,d1
-		show_ost Str_ObjH,ost_height,2
-		addq.b	#1,d1
-		show_ost Str_ObjCol,ost_col_type,4
-		addq.b	#1,d1
-		show_ost Str_ObjColw,ost_col_width,2
-		addq.b	#1,d1
-		show_ost Str_ObjColh,ost_col_height,2
-		addq.b	#2,d1
-		lea	Str_ObjSlot(pc),a2
-		bsr.w	DrawString
+		bra.s	.loop
+		
+	.special:
+		addq.b	#1,d3
+		bmi.s	.special2				; branch if not -1
 		move.w	a0,d5
-		moveq	#4,d6
-		bsr.w	DrawHexString_SkipVDP
-		addq.b	#1,d1
-		show_ost Str_ObjParent,ost_parent,4
-		addq.b	#1,d1
-		show_ost Str_ObjLinked,ost_linked,4
-		addq.b	#1,d1
-		lea	Str_ObjChild(pc),a2
-		bsr.w	DrawString
+		bra.s	.readok
+		
+	.special2:
 		moveq	#0,d5
 		lea	(v_ost_all).w,a3			; address of first OST
-		move.w	a0,d3					; address of selected OST
+		move.w	a0,d4					; address of selected OST
 		
 	.childloop:
-		cmp.w	ost_parent(a3),d3
+		cmp.w	ost_parent(a3),d4
 		bne.s	.childnext				; branch if object isn't a child of selected object
 		addq.w	#1,d5					; increment child counter
 		
@@ -297,8 +249,46 @@ show_ost:	macro str,ost,len
 		lea	sizeof_ost(a3),a3			; goto next OST slot
 		cmpa.w	#v_ost_end&$FFFF,a3
 		bne.s	.childloop				; repeat if not at end of OSTs
-		moveq	#2,d6
-		bsr.w	DrawHexString_SkipVDP
+		bra.s	.readok
+		
+show_ost:	macro str,ost,len,line,flags
+		dc.l str
+		dc.b ost,len,line,flags
+		endm
+		
+Pause_Debug_ObjView_Script:
+		show_ost Str_ObjPtr,ost_id,6,2,0
+		show_ost Str_ObjMap,ost_mappings,6,1,0
+		show_ost Str_ObjTile,ost_tile,4,1,0
+		show_ost Str_ObjFrame,ost_frame_hi,4,1,0
+		show_ost Str_ObjAnim,ost_anim,2,1,0
+		show_ost Str_ObjAnim2,ost_anim_frame,2,1,0
+		show_ost Str_ObjAnim3,ost_anim_time,2,1,0
+		show_ost Str_ObjSubsp,ost_subsprite,4,1,0
+		show_ost Str_ObjPri,ost_priority,4,1,0
+		show_ost Str_ObjDispw,ost_displaywidth_hi,4,1,0
+		show_ost Str_ObjRender,ost_render,2,2,0
+		show_ost Str_ObjX,ost_x_pos,8,1,0
+		show_ost Str_ObjY,ost_y_pos,8,1,0
+		show_ost Str_ObjXvel,ost_x_vel,4,1,0
+		show_ost Str_ObjYvel,ost_y_vel,4,1,0
+		show_ost Str_ObjInertia,ost_inertia,4,1,0
+		show_ost Str_ObjAngle,ost_angle,4,0,1		; new column after this
+		
+		show_ost Str_ObjRout,ost_routine,2,1,0
+		show_ost Str_ObjMode,ost_mode,2,1,0
+		show_ost Str_ObjStatus,ost_status,2,1,0
+		show_ost Str_ObjRespawn,ost_respawn,2,1,0
+		show_ost Str_ObjType,ost_subtype,2,2,0
+		show_ost Str_ObjW,ost_width,2,1,0
+		show_ost Str_ObjH,ost_height,2,1,0
+		show_ost Str_ObjCol,ost_col_type,4,1,0
+		show_ost Str_ObjColw,ost_col_width,2,1,0
+		show_ost Str_ObjColh,ost_col_height,2,2,0
+		show_ost Str_ObjSlot,-1,4,1,0			; -1 reads OST slot address
+		show_ost Str_ObjParent,ost_parent,4,1,0
+		show_ost Str_ObjLinked,ost_linked,4,1,0
+		show_ost Str_ObjChild,-2,2,1,$80		; -2 reads child count; $80 for last item in list
 		
 	Pause_Debug_ObjView_Loop:
 		move.b	#id_VBlank_PauseDebug,(v_vblank_routine).w
