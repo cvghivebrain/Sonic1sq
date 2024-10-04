@@ -14,12 +14,6 @@ HUD:
 HUD_Index:	index *,,2
 		ptr HUD_Main
 		ptr HUD_Flash
-		ptr HUD_Display
-		ptr HUD_LivesCount
-		ptr HUD_RingsCount
-		ptr HUD_TimeCount
-		ptr HUD_ScoreCount
-		ptr HUD_Debug
 		
 		rsobj HUD
 ost_hud_sprites:	rs.b 1					; sprite counter from previous frame
@@ -39,48 +33,29 @@ HUD_Main:	; Routine 0
 		move.w	#priority_0,ost_priority(a0)
 		
 		jsr	FindFreeInert
-		move.l	#HUD,ost_id(a1)				; load life icon object
-		move.w	#screen_left+16,ost_x_pos(a1)
-		move.w	#screen_top+200,ost_y_screen(a1)
-		move.l	#Map_HUD,ost_mappings(a1)
-		move.b	#StrId_HUD,ost_name(a1)
-		move.b	#id_frame_hud_lifeicon,ost_frame(a1)
-		move.w	#tile_Art_Lives,ost_tile(a1)
-		move.b	#render_abs,ost_render(a1)
-		move.w	#priority_0,ost_priority(a1)
-		move.b	#id_HUD_LivesCount,ost_routine(a1)
+		move.l	#HUD_LivesCount,ost_id(a1)		; load life icon object
+		saveparent
 		move.b	#1,(f_hud_lives_update).w		; set flag to update
 		
 		jsr	FindFreeInert
-		move.l	#HUD,ost_id(a1)				; load ring number object
-		move.b	#id_HUD_RingsCount,ost_routine(a1)
-		move.b	#StrId_HUD,ost_name(a1)
+		move.l	#HUD_RingsCount,ost_id(a1)		; load ring number object
+		saveparent
 		move.b	#1,(v_hud_rings_update).w		; set flag to update
 		
 		jsr	FindFreeInert
-		move.l	#HUD,ost_id(a1)				; load time object
-		move.b	#id_HUD_TimeCount,ost_routine(a1)
-		move.b	#StrId_HUD,ost_name(a1)
+		move.l	#HUD_TimeCount,ost_id(a1)		; load time object
+		saveparent
 		move.b	#1,(f_hud_time_update).w		; set flag to update
 		
 		jsr	FindFreeInert
-		move.l	#HUD,ost_id(a1)				; load score object
-		move.b	#id_HUD_ScoreCount,ost_routine(a1)
-		move.b	#StrId_HUD,ost_name(a1)
+		move.l	#HUD_ScoreCount,ost_id(a1)		; load score object
+		saveparent
 		
 		tst.w	(f_debug_enable).w
 		beq.s	HUD_Flash				; branch if debug mode is disabled
 		jsr	FindFreeInert
-		move.l	#HUD,ost_id(a1)				; load debug object
-		move.w	#screen_left+16,ost_x_pos(a1)
-		move.w	#screen_top+56,ost_y_screen(a1)
-		move.l	#Map_HUD,ost_mappings(a1)
-		move.b	#id_frame_hud_debug,ost_frame(a1)
-		move.w	(v_tile_hud).w,ost_tile(a1)
-		move.b	#render_abs,ost_render(a1)
-		move.w	#priority_0,ost_priority(a1)
-		move.b	#id_HUD_Debug,ost_routine(a1)
-		move.b	#StrId_Debug,ost_name(a1)
+		move.l	#HUD_Debug,ost_id(a1)			; load debug object
+		saveparent
 		move.b	#1,(v_camera_x_diff).w			; force camera x/y update
 		move.b	#1,(v_camera_y_diff).w
 		
@@ -105,16 +80,27 @@ HUD_Flash:	; Routine 2
 	.display:
 		move.b	d0,ost_frame(a0)
 		
-HUD_Display:	; Routine 4
+HUD_Display:
 		tst.b	(f_hide_hud).w
 		bne.s	.dont_display				; branch if HUD is set to not display
 		jmp	DisplaySprite
 		
 	.dont_display:
 		rts
-; ===========================================================================
-		
-HUD_LivesCount:	; Routine 6
+
+; ---------------------------------------------------------------------------
+; Lives icon/counter object
+; ---------------------------------------------------------------------------
+
+HUD_LivesCount:
+		move.w	#screen_left+16,ost_x_pos(a0)
+		move.w	#screen_top+200,ost_y_screen(a0)
+		move.l	#Map_HUD,ost_mappings(a0)
+		move.b	#StrId_HUD,ost_name(a0)
+		move.b	#id_frame_hud_lifeicon,ost_frame(a0)
+		move.w	#tile_Art_Lives,ost_tile(a0)
+		move.b	#render_abs,ost_render(a0)
+		move.w	#priority_0,ost_priority(a0)
 		shortcut
 		tst.b	(f_hud_lives_update).w			; does the lives counter need updating?
 		beq.s	HUD_Display				; if not, branch
@@ -123,11 +109,10 @@ HUD_LivesCount:	; Routine 6
 		move.b	(v_lives).w,d0				; load number of lives
 		bsr.w	HexToDec
 		move.b	(a1)+,d0				; get tens digit
-		tst.b	d0
 		bne.s	.two_digits				; branch if tens digit is not 0
-		move.b	#10,d0					; tens should be blank if 0
+		moveq	#10,d0					; tens should be blank if 0
 	.two_digits:
-		lsl.b	#3,d0					; multiply by 8
+		lsl.w	#3,d0					; multiply by 8
 		lea	HUD_LivesGfxIndex(pc,d0.w),a2
 		set_dma_dest	$FBC0,d1			; VRAM address for tens digit
 		set_dma_size	sizeof_cell,d2
@@ -139,7 +124,7 @@ HUD_LivesCount:	; Routine 6
 		set_dma_dest	$FBE0,d1			; VRAM address for low digit
 		jsr	(AddDMA).w				; load low digit
 		
-		bra.s	HUD_Display
+		bra.w	HUD_Display
 		
 HUD_LivesGfxIndex:
 		set_dma_src	Art_LivesNums,0
@@ -152,9 +137,14 @@ HUD_LivesGfxIndex:
 		set_dma_src	Art_LivesNums+(sizeof_cell*7),0
 		set_dma_src	Art_LivesNums+(sizeof_cell*8),0
 		set_dma_src	Art_LivesNums+(sizeof_cell*9),0
-		set_dma_src	Art_LivesNums+(sizeof_cell*36),0
-	
-HUD_RingsCount:	; Routine 8
+		set_dma_src	Art_LivesNums+sizeof_Art_LivesNums-sizeof_cell,0
+
+; ---------------------------------------------------------------------------
+; Rings counter object
+; ---------------------------------------------------------------------------
+
+HUD_RingsCount:
+		move.b	#StrId_HUDCount,ost_name(a0)
 		shortcut
 		tst.b	(v_hud_rings_update).w			; does the rings counter need updating?
 		beq.w	.exit					; if not, branch
@@ -218,8 +208,12 @@ HUD_DigitGfxIndex:
 		set_dma_src	Art_HUDNums+(sizeof_cell*9*2),0
 		set_dma_src	Art_HUDNums+(sizeof_cell*10*2),0
 		
-		
-HUD_TimeCount:	; Routine $A
+; ---------------------------------------------------------------------------
+; Time counter object
+; ---------------------------------------------------------------------------
+
+HUD_TimeCount:
+		move.b	#StrId_HUDCount,ost_name(a0)
 		shortcut
 		tst.b	(f_hud_time_update).w
 		beq.s	.exit					; branch if time counter is flagged to stop
@@ -262,9 +256,13 @@ HUD_TimeOver:
 		bsr.w	ObjectKillSonic				; kill Sonic
 		move.b	#1,(f_time_over).w			; flag for GAME OVER object to use correct frame
 		jmp	DeleteObject				; delete time counter object (HUD is unaffected)
-; ===========================================================================
-		
-HUD_ScoreCount:	; Routine $C
+
+; ---------------------------------------------------------------------------
+; Score counter object
+; ---------------------------------------------------------------------------
+
+HUD_ScoreCount:
+		move.b	#StrId_HUDCount,ost_name(a0)
 		shortcut
 		tst.b	(f_hud_score_update).w			; does score counter need updating?
 		beq.w	HUD_Exit				; if not, branch
@@ -332,9 +330,20 @@ HUD_ShowLong:
 	.exit:
 	HUD_Exit:
 		rts
-; ===========================================================================
 
-HUD_Debug:	; Routine $E
+; ---------------------------------------------------------------------------
+; Debug object
+; ---------------------------------------------------------------------------
+
+HUD_Debug:
+		move.w	#screen_left+16,ost_x_pos(a0)
+		move.w	#screen_top+56,ost_y_screen(a0)
+		move.l	#Map_HUD,ost_mappings(a0)
+		move.b	#id_frame_hud_debug,ost_frame(a0)
+		move.w	(v_tile_hud).w,ost_tile(a0)
+		move.b	#render_abs,ost_render(a0)
+		move.w	#priority_0,ost_priority(a0)
+		move.b	#StrId_Debug,ost_name(a0)
 		shortcut
 		moveq	#0,d0
 		move.b	(v_spritecount).w,d0			; get sprite count

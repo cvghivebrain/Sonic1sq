@@ -58,6 +58,7 @@ Str_Names:	objname "UNKNOWN ",Unknown
 		objname "HELIX   ",Helix
 		objname "HELIXSPI",HelixSpike
 		objname "HUD     ",HUD
+		objname "HUDCOUNT",HUDCount
 		objname "INVINCIB",Invincible
 		objname "JAWS    ",Jaws
 		objname "JUNCTION",Junction
