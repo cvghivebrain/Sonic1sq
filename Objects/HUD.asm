@@ -101,6 +101,7 @@ HUD_LivesCount:
 		move.w	#tile_Art_Lives,ost_tile(a0)
 		move.b	#render_abs,ost_render(a0)
 		move.w	#priority_0,ost_priority(a0)
+		
 		shortcut
 		tst.b	(f_hud_lives_update).w			; does the lives counter need updating?
 		beq.s	HUD_Display				; if not, branch
@@ -145,6 +146,7 @@ HUD_LivesGfxIndex:
 
 HUD_RingsCount:
 		move.b	#StrId_HUDCount,ost_name(a0)
+		
 		shortcut
 		tst.b	(v_hud_rings_update).w			; does the rings counter need updating?
 		beq.w	.exit					; if not, branch
@@ -214,6 +216,7 @@ HUD_DigitGfxIndex:
 
 HUD_TimeCount:
 		move.b	#StrId_HUDCount,ost_name(a0)
+		
 		shortcut
 		tst.b	(f_hud_time_update).w
 		beq.s	.exit					; branch if time counter is flagged to stop
@@ -263,6 +266,7 @@ HUD_TimeOver:
 
 HUD_ScoreCount:
 		move.b	#StrId_HUDCount,ost_name(a0)
+		
 		shortcut
 		tst.b	(f_hud_score_update).w			; does score counter need updating?
 		beq.w	HUD_Exit				; if not, branch

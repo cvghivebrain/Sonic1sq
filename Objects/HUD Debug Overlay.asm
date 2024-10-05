@@ -30,7 +30,7 @@ Overlay_Main:	; Routine 0
 		move.b	#render_rel,ost_render(a0)
 		move.w	#priority_0,ost_priority(a0)
 		move.b	#16,ost_displaywidth(a0)
-		move.b	#StrId_Debug,ost_name(a0)
+		move.b	#StrId_Overlay,ost_name(a0)
 		moveq	#id_UPLC_Overlay,d0
 		jsr	UncPLC					; load corner & dot gfx
 		jsr	FindFreeFinal
@@ -43,16 +43,18 @@ Overlay_Main:	; Routine 0
 		move.b	ost_render(a0),ost_render(a1)
 		move.w	ost_priority(a0),ost_priority(a1)
 		move.b	ost_displaywidth(a0),ost_displaywidth(a1)
-		move.b	#StrId_Debug,ost_name(a1)
+		move.b	#StrId_Overlay,ost_name(a1)
 		saveparent
 		
-Overlay_Display:
 Overlay_Sonic:	; Routine 2
 		bsr.w	Overlay_MakeBox				; create subsprite table
+		tst.w	ost_subsprite(a0)
+		beq.w	DeleteFamily				; branch if subsprites weren't loaded
 		
 		shortcut
 		tst.b	(v_titlecard_loaded).w
 		bne.w	Overlay_Hidden				; branch if title cards are visible
+		getsubsprite					; a2 = subsprite table
 		move.w	(v_debug_ost_setting).w,d4
 		
 		move.b	(v_joypad_press_actual_xyz).w,d0
@@ -75,9 +77,6 @@ Overlay_Sonic:	; Routine 2
 		beq.s	.z_not_pressed				; if not, branch
 		bchg	#0,(v_debug_hitbox_setting).w
 		bset	#7,(v_debug_hitbox_setting).w
-		tst.w	ost_subsprite(a0)
-		beq.s	.z_not_pressed				; branch if subsprites weren't loaded
-		getsubsprite					; a2 = subsprite table
 		bchg	#tile_pal12_bit,sub1+piece_tile(a2)	; toggle hitbox between red/yellow
 		bchg	#tile_pal12_bit,sub2+piece_tile(a2)
 		bchg	#tile_pal12_bit,sub3+piece_tile(a2)
@@ -95,10 +94,6 @@ Overlay_Sonic:	; Routine 2
 		getsonic					; a1 = OST of Sonic
 		set_dma_dest	vram_overlay,d1			; VRAM address
 		moveq	#0,d5
-		
-		tst.w	ost_subsprite(a0)
-		beq.s	Overlay_ShowDigits			; branch if subsprites weren't loaded
-		getsubsprite					; a2 = subsprite table
 		moveq	#0,d2
 		btst	#0,(v_debug_hitbox_setting).w
 		bne.s	.yellow_hitbox				; branch if hitbox is set to yellow
@@ -216,6 +211,8 @@ Overlay_Box_Sprites:
 Overlay_Nearest:
 		; Routine 4
 		bsr.w	Overlay_MakeBox				; create subsprite table
+		tst.w	ost_subsprite(a0)
+		beq.w	DeleteObject				; branch if subsprites weren't loaded
 		
 		shortcut
 		tst.b	(f_debug_overlay_hide).w
@@ -233,13 +230,11 @@ Overlay_Nearest:
 		movea.w	(v_nearest_obj).w,a1			; a1 = OST of nearest object
 		tst.l	ost_id(a1)
 		beq.s	.find_new				; branch if nearest object is deleted
+		
+		getsubsprite					; a2 = subsprite table
 		move.w	(v_debug_ost_setting).w,d4
 		set_dma_dest	vram_overlay2,d1		; VRAM address
 		moveq	#0,d5
-		
-		tst.w	ost_subsprite(a0)
-		beq.w	Overlay_ShowDigits			; branch if subsprites weren't loaded
-		getsubsprite					; a2 = subsprite table
 		moveq	#0,d2
 		move.b	(v_debug_hitbox_setting).w,d0
 		bpl.s	.skip_update				; branch if high bit of setting is 0

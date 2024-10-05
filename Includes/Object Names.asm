@@ -74,6 +74,7 @@ Str_Names:	objname "UNKNOWN ",Unknown
 		objname "NEWTRON ",Newtron
 		objname "ORBINAUT",Orbinaut
 		objname "ORBSPIKE",OrbSpike
+		objname "OVERLAY ",Overlay
 		objname "PLATFORM",Platform
 		objname "POINTS  ",Points
 		objname "POLE    ",Pole
