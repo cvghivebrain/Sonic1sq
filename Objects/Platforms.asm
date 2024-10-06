@@ -70,7 +70,7 @@ Plat_Solid:	; Routine 2
 		bsr.w	Plat_Move				; move platform
 		move.w	ost_plat_y_pos(a0),d0
 		jsr	Sink					; platform dips when stood on
-		bsr.w	SolidObject_TopOnly
+		bsr.w	SolidObjectTop
 		move.w	ost_plat_x_start(a0),d0
 		bra.w	DespawnQuick_AltX
 ; ===========================================================================

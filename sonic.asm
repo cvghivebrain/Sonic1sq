@@ -324,6 +324,7 @@ startof_obj:	equ *
 		include "Objects\Yadrin.asm"			; Yadrin
 
 		include "Objects\_SolidObject.asm"
+		include "Objects\_SolidObjectTop.asm"
 		include "Objects\_SkipMappings.asm"
 		include "Objects\_DespawnObject & CheckActive.asm"
 
