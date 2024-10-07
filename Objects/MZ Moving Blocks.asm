@@ -63,7 +63,7 @@ MBlock_Solid:	; Routine 2
 		shortcut
 		move.w	ost_x_pos(a0),ost_x_prev(a0)
 		bsr.s	MBlock_Move				; move & update position
-		bsr.w	SolidObject_TopOnly
+		bsr.w	SolidObjectTop
 		move.w	ost_mblock_x_start(a0),d0
 		bra.w	DespawnQuick_AltX
 ; ===========================================================================

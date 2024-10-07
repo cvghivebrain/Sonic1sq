@@ -109,7 +109,7 @@ See_Stand:	; Routine 4
 
 See_Solid:
 		tst.b	ost_frame(a0)
-		bne.w	SolidObject_TopOnly			; branch if seesaw is flat
+		bne.w	SolidObjectTop				; branch if seesaw is flat
 		moveq	#1,d6					; 1 byte in heightmap = 2px
 		lea	See_DataSlope,a2
 		btst	#render_xflip_bit,ost_render(a0)
@@ -122,7 +122,8 @@ See_Solid:
 ; ---------------------------------------------------------------------------
 
 See_SetSide:
-		move.w	d4,d5
+		moveq	#0,d5
+		move.b	ost_solid_x_pos(a0),d5
 		subi.w	#$28,d5
 		bcs.s	.left					; branch if on left side
 		subi.w	#$10,d5

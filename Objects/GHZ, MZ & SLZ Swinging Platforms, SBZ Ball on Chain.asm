@@ -230,7 +230,7 @@ Swing_Platform:	; Routine 4
 		shortcut
 		move.w	ost_x_pos(a0),ost_x_prev(a0)
 		bsr.s	Swing_Update
-		bsr.w	SolidObject_TopOnly
+		bsr.w	SolidObjectTop
 		bra.w	DisplaySprite
 ; ===========================================================================
 

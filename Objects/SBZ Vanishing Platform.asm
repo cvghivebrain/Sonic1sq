@@ -82,14 +82,14 @@ VanP_Appear:	; Routine 6
 		jsr	(AnimateSprite).l			; animate & goto VAnP_Solid/VanP_Reset when done
 		cmpi.b	#id_frame_vanish_quarter,ost_frame(a0)
 		bcc.w	DespawnQuick				; branch if vanished or mostly vanished
-		bsr.w	SolidObject_TopOnly
+		bsr.w	SolidObjectTop
 		bra.w	DespawnQuick
 ; ===========================================================================
 
 VanP_Solid:	; Routine 8
 		subq.w	#1,ost_vanish_wait_time(a0)		; decrement timer
 		bmi.s	.next					; branch if time hits -1
-		bsr.w	SolidObject_TopOnly
+		bsr.w	SolidObjectTop
 		bra.w	DespawnQuick
 		
 	.next:
@@ -104,7 +104,7 @@ VanP_Vanish:	; Routine $A
 		beq.w	DespawnQuick				; branch if not being stood on
 		cmpi.b	#id_frame_vanish_quarter,ost_frame(a0)
 		beq.s	.unsolid				; branch if mostly vanished
-		bsr.w	SolidObject_TopOnly
+		bsr.w	SolidObjectTop
 		bra.w	DespawnQuick
 		
 	.unsolid:

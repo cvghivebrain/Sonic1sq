@@ -56,8 +56,7 @@ HBlock_ChkBtn:	; Routine 2
 ; ===========================================================================
 
 HBlock_Solid:	; Routine 4
-		bsr.w	SolidObject_TopOnly
-		andi.b	#solid_top,d1
+		bsr.w	SolidObjectTop
 		beq.w	DespawnQuick				; branch if no top collision
 		addq.b	#2,ost_routine(a0)			; goto HBlock_Move next
 		bra.w	DespawnQuick
@@ -68,7 +67,7 @@ HBlock_Move:	; Routine 6
 		btst	#status_xflip_bit,ost_status(a0)
 		beq.s	.noxflip				; branch if not xflipped
 		subq.w	#1,ost_x_pos(a0)			; move 1px left
-		bsr.w	SolidObject_TopOnly
+		bsr.w	SolidObjectTop
 		getpos_left hblock_width			; d0 = x pos of left; d1 = y pos
 		moveq	#1,d6
 		bsr.w	WallLeftDist
@@ -78,7 +77,7 @@ HBlock_Move:	; Routine 6
 		
 	.noxflip:
 		addq.w	#1,ost_x_pos(a0)			; move 1px right
-		bsr.w	SolidObject_TopOnly
+		bsr.w	SolidObjectTop
 		getpos_right hblock_width			; d0 = x pos of right; d1 = y pos
 		moveq	#1,d6
 		bsr.w	WallRightDist
@@ -93,7 +92,7 @@ HBlock_Move:	; Routine 6
 
 HBlock_Drop:	; Routine 8
 		update_y_fall	$18				; update position & apply gravity
-		bsr.w	SolidObject_TopOnly
+		bsr.w	SolidObjectTop
 		getpos_bottom hblock_height			; d0 = x pos; d1 = y pos of bottom
 		moveq	#1,d6
 		bsr.w	FloorDist
@@ -107,6 +106,6 @@ HBlock_Drop:	; Routine 8
 
 HBlock_Stop:	; Routine $A
 		shortcut
-		bsr.w	SolidObject_TopOnly
+		bsr.w	SolidObjectTop
 		bra.w	DespawnQuick
 		

@@ -29,6 +29,7 @@ Bri_Main:	; Routine 0
 		move.w	#tile_Kos_Bridge+tile_pal3,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)
 		move.w	#priority_2,ost_priority(a0)
+		move.b	#id_frame_bridge_blank,ost_frame(a0)
 		moveq	#0,d1
 		move.b	ost_subtype(a0),d1
 		andi.b	#$F,d1					; read low nybble of subtype
@@ -71,9 +72,10 @@ Bri_Solid:	; Routine 2
 		bne.w	DespawnFamily_NoDisplay			; branch if debug mode is in use
 		move.w	ost_bridge_y_start(a0),d0
 		bsr.s	Bri_Sink
-		bsr.w	SolidObject_TopOnly_SkipRenderDebug
-		tst.b	d1
+		bsr.w	SolidObjectTop_SkipChk
 		beq.w	DespawnFamily_NoDisplay			; branch if no collision
+		moveq	#0,d4
+		move.b	ost_solid_x_pos(a0),d4
 		lsr.w	#4,d4
 		move.b	d4,ost_bridge_current_log(a0)		; set current log based on Sonic's x pos on object
 		bra.w	DespawnFamily_NoDisplay
@@ -83,13 +85,12 @@ Bri_Solid:	; Routine 2
 ; ---------------------------------------------------------------------------
 
 Bri_Sink:
-		btst	#status_platform_bit,ost_status(a0)
+		tst.b	ost_mode(a0)
 		bne.s	.standing_on				; branch if object is being stood on
 		tst.b	ost_sink(a0)
 		beq.s	.default				; branch if object is in default position
 		subq.b	#2,ost_sink(a0)				; incrementally return block to default
 		bra.s	.update_y
-; ===========================================================================
 
 .standing_on:
 		cmpi.b	#$1E,ost_sink(a0)
@@ -111,7 +112,7 @@ Bri_Sink:
 		move.b	d2,ost_bridge_bend(a0)
 		add.w	d2,d0
 		
-.default:
+	.default:
 		move.w	d0,ost_y_pos(a0)			; update position
 		rts
 		

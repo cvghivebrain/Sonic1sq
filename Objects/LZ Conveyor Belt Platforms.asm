@@ -195,7 +195,7 @@ LConP_ChkCorner:
 	.continue_y:
 		tst.l	ost_x_vel(a0)
 		beq.s	LConP_NextCorner			; branch if at corner
-		bsr.w	SolidObject_TopOnly
+		bsr.w	SolidObjectTop
 		bra.w	DisplaySprite
 ; ===========================================================================
 
@@ -217,7 +217,7 @@ LConP_NextCorner:
 		move.w	(a2)+,ost_lcon_corner_y_pos(a0)
 		move.w	(a2)+,ost_x_vel(a0)			; set speed
 		move.w	(a2)+,ost_y_vel(a0)
-		bsr.w	SolidObject_TopOnly
+		bsr.w	SolidObjectTop
 		bra.w	DisplaySprite
 ; ===========================================================================
 
@@ -241,7 +241,7 @@ LConP_RevCorner:
 		move.w	(a3)+,ost_y_vel(a0)
 		neg.w	ost_x_vel(a0)				; go backwards
 		neg.w	ost_y_vel(a0)
-		bsr.w	SolidObject_TopOnly
+		bsr.w	SolidObjectTop
 		bra.w	DisplaySprite
 ; ===========================================================================
 

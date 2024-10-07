@@ -53,8 +53,7 @@ CFlo_Main:	; Routine 0
 		move.b	#8,ost_height(a0)
 
 CFlo_Solid:	; Routine 2
-		bsr.w	SolidObject_TopOnly
-		tst.b	d1
+		bsr.w	SolidObjectTop
 		beq.w	DespawnObject				; branch if no collision
 		addq.b	#2,ost_routine(a0)			; goto CFlo_Wait next
 		move.b	ost_subtype(a0),d1
@@ -92,7 +91,7 @@ CFlo_FragTiming_1:
 CFlo_Wait:	; Routine 4
 		subq.b	#1,ost_cfloor_wait_time(a0)		; decrement timer
 		bmi.s	.delete					; branch if time hits -1
-		bsr.w	SolidObject_TopOnly
+		bsr.w	SolidObjectTop
 		bra.w	DespawnQuick_NoDisplay
 		
 	.delete:

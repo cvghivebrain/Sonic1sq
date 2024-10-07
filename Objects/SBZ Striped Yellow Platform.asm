@@ -58,12 +58,12 @@ YPlat_Move:	; Routine 2
 		move.w	ost_yplat_y_start(a0),d1
 		sub.w	d0,d1
 		move.w	d1,ost_y_pos(a0)
-		bsr.w	SolidObject_TopOnly
+		bsr.w	SolidObjectTop
 		bra.w	DespawnQuick
 ; ===========================================================================
 
 YPlat_Still:	; Routine 4
 		shortcut
-		bsr.w	SolidObject_TopOnly
+		bsr.w	SolidObjectTop
 		bra.w	DespawnQuick
 		

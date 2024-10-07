@@ -12,7 +12,7 @@
 ; ---------------------------------------------------------------------------
 
 Sink:
-		btst	#status_platform_bit,ost_status(a0)
+		tst.b	ost_mode(a0)
 		bne.s	.standing_on				; branch if object is being stood on
 		tst.b	ost_sink(a0)
 		beq.s	.default				; branch if object is in default position

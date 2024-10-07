@@ -56,7 +56,7 @@ Circ_Action:	; Routine 2
 		add.w	ost_circ_y_start(a0),d2
 		move.w	d2,ost_y_pos(a0)
 		
-		bsr.w	SolidObject_TopOnly
+		bsr.w	SolidObjectTop
 		move.w	ost_circ_x_start(a0),d0
 		bra.w	DespawnQuick_AltX
 ; ===========================================================================

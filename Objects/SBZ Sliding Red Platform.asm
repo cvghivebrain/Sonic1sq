@@ -43,8 +43,7 @@ Slide_Main:	; Routine 0
 		neg.w	ost_slide_speed(a0)
 
 Slide_Solid:	; Routine 2
-		bsr.w	SolidObject_TopOnly
-		tst.b	d1
+		bsr.w	SolidObjectTop
 		bne.s	.stood_on				; branch if Sonic stands on platform
 		bra.w	DespawnQuick
 		
@@ -65,7 +64,7 @@ Slide_Move:	; Routine 4
 		move.w	#300,ost_slide_wait_time(a0)		; wait for 5 seconds
 		
 	.keep_moving:
-		bsr.w	SolidObject_TopOnly
+		bsr.w	SolidObjectTop
 		move.w	ost_slide_x_start(a0),d0
 		bra.w	DespawnQuick_AltX
 ; ===========================================================================
@@ -76,7 +75,7 @@ Slide_Wait:	; Routine 6
 		addq.b	#2,ost_routine(a0)			; goto Slide_Return next
 		
 	.wait:
-		bsr.w	SolidObject_TopOnly
+		bsr.w	SolidObjectTop
 		move.w	ost_slide_x_start(a0),d0
 		bra.w	DespawnQuick_AltX
 ; ===========================================================================
@@ -90,6 +89,6 @@ Slide_Return:	; Routine 8
 		move.b	#id_Slide_Solid,ost_routine(a0)		; goto Slide_Solid next
 		
 	.keep_moving:
-		bsr.w	SolidObject_TopOnly
+		bsr.w	SolidObjectTop
 		move.w	ost_slide_x_start(a0),d0
 		bra.w	DespawnQuick_AltX

@@ -208,43 +208,6 @@ SolidObject_SidesOnly:
 		rts
 
 ; ---------------------------------------------------------------------------
-; Subroutine to make an object solid, top only
-
-; output:
-;	d1.l = collision type (0 = none; 1 = top)
-;	d4.w = x position of Sonic on object, starting at 0 on left edge
-;	a1 = address of OST of Sonic
-
-;	uses d0.w, d2.w, d3.w, d4.l, d5.l
-; ---------------------------------------------------------------------------
-
-SolidObject_TopOnly:
-		tst.b	ost_render(a0)
-		bpl.w	Sol_OffScreen				; branch if object isn't on screen
-
-SolidObject_TopOnly_SkipRender:
-		tst.w	(v_debug_active_hi).w
-		bne.w	Sol_OffScreen				; branch if debug mode is in use
-
-SolidObject_TopOnly_SkipRenderDebug:
-		getsonic
-		tst.b	ost_mode(a0)
-		bne.w	Sol_Stand_TopOnly			; branch if Sonic is already standing on object
-		range_x_sonic0					; get distances between Sonic (a1) and object (a0)
-		tst.w	d1
-		bgt.s	.exit					; branch if outside x hitbox
-		range_y_exact
-		tst.w	d3
-		bpl.s	.exit					; branch if outside y hitbox
-
-		cmpi.w	#-8,d3
-		bge.w	Sol_Above				; branch if Sonic is above
-
-	.exit:
-		moveq	#solid_none,d1				; set collision flag to none
-		rts
-
-; ---------------------------------------------------------------------------
 ; Subroutine to make an object solid using a heightmap
 
 ; input:

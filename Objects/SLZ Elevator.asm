@@ -64,7 +64,7 @@ Elev_Solid:	; Routine 2
 		move.b	ost_subtype(a0),d0
 		move.w	Elev_Type_Index(pc,d0.w),d1
 		jsr	Elev_Type_Index(pc,d1.w)		; move object
-		bsr.w	SolidObject_TopOnly
+		bsr.w	SolidObjectTop
 		move.w	ost_elev_x_start(a0),d0
 		bra.w	DespawnQuick_AltX
 ; ===========================================================================
