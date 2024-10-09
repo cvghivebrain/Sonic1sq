@@ -12,7 +12,9 @@
 ; ---------------------------------------------------------------------------
 
 DrawString:
-		move.l	#(vram_fg&$3FFF)+((vram_fg&$C000)<<2)+$4000,d3
+		move.l	#(vram_fg&$3FFF)+((vram_fg&$C000)<<2)+$4000,d3 ; draw to foreground
+		
+DrawString_SkipPlane:
 		add.w	d0,d3
 		add.w	d0,d3
 		move.w	d1,d4
@@ -39,6 +41,10 @@ DrawString_SkipVDP:						; jump here to draw directly after previous string
 		
 	.exit:
 		rts
+		
+DrawString_BG:
+		move.l	#(vram_bg&$3FFF)+((vram_bg&$C000)<<2)+$4000,d3 ; draw to background
+		bra.s	DrawString_SkipPlane
 
 ; ---------------------------------------------------------------------------
 ; As above, except strings are always 8 characters long

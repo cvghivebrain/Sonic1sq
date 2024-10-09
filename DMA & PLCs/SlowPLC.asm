@@ -165,7 +165,7 @@ sizeof_SPLC:	equ *-SPLC_Title
 		splc Kos_TitleFg
 		splc Kos_TitleSonic
 		splc Kos_TitleTM
-		splc Kos_Text
+		splc Kos_Text,v_tile_text
 		dc.w -1
 
 SPLC_Sega:	splcheader 0

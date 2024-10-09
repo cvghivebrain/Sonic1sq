@@ -135,7 +135,6 @@ Sol_Stand:
 		bne.s	Sol_Stand_Leave				; branch if Sonic jumps
 		range_x_sonic
 		
-Sol_Stand2:
 		move.b	d4,ost_solid_x_pos(a0)			; save x pos of Sonic on object
 		tst	d1
 		bpl.s	Sol_Stand_Leave				; branch if Sonic is outside left/right edges
@@ -168,12 +167,6 @@ Sol_Stand_Leave:
 		move.b	d0,ost_solid_y_pos(a0)
 		moveq	#solid_none,d1
 		rts
-
-Sol_Stand_TopOnly:
-		btst	#status_air_bit,ost_status(a1)
-		bne.s	Sol_Stand_Leave				; branch if Sonic jumps
-		range_x_sonic0
-		bra.s	Sol_Stand2
 
 Sol_Kill:
 		jmp	ObjectKillSonic				; Sonic dies

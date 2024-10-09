@@ -162,6 +162,7 @@ id_TryAgain:	equ id_GM_TryAgain
 Pal_Sega1:	incbin	"Palettes\Sega - Stripe.bin"
 Pal_Sega2:	incbin	"Palettes\Sega - All.bin"
 		include "Includes\GM_Title.asm"
+		include "Includes\SuperSelect.asm"
 		include "Includes\GM_Level.asm"
 		include "Includes\GM_Special.asm"
 Pal_SSCyc1:	incbin	"Palettes\Cycle - Special Stage 1.bin"

@@ -120,7 +120,7 @@ Title_MainLoop:
 		beq.w	PlayLevel				; if not, play level
 		btst	#bitA,(v_joypad_hold_actual).w		; check if A is pressed
 		beq.w	PlayLevel				; if not, play level
-		bra.w	LevSel_Init				; goto level select
+		bra.w	SuperSelect				; goto level select
 ; ===========================================================================
 
 Title_Dpad:
