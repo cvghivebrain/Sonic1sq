@@ -14,6 +14,23 @@ SuperSelect:
 SuperSelect_Loop:
 		move.b	#id_VBlank_Title,(v_vblank_routine).w
 		bsr.w	WaitForVBlank
+		move.w	(v_levelselect_item).w,d0
+		cmpi.w	#sizeof_Select_Settings/6,d0
+		bcc.s	.no_presses				; branch if selected item has no settings
+		mulu.w	#6,d0
+		lea	Select_Settings,a0
+		lea	(a0,d0.w),a0				; jump to settings for selected item
+		move.b	(a0)+,d4				; read flags
+		move.b	(v_joypad_press_actual).w,d0
+		andi.b	#btnABC+btnStart,d0
+		beq.s	.no_presses				; branch if ABC/Start wasn't pressed
+		moveq	#0,d1
+		move.b	(a0)+,d1				; read action type
+		move.w	Select_Index(pc,d1.w),d1
+		jsr	Select_Index(pc,d1.w)			; perform action
+		bne.s	.exit					; branch if exit flag is set
+		
+	.no_presses:
 		moveq	#countof_selectlines,d0
 		moveq	#countof_linespercol,d1
 		lea	(v_levelselect_item).w,a1
@@ -21,6 +38,64 @@ SuperSelect_Loop:
 		beq.s	SuperSelect_Loop			; branch if no inputs
 		bsr.w	Select_Draw				; redraw menu
 		bra.s	SuperSelect_Loop
+		
+	.exit:
+		rts
+		
+Select_Index:	index *,,2
+		ptr Select_Level
+		ptr Select_Special
+		ptr Select_Ending
+		ptr Select_Gamemode
+		ptr Select_Credits
+		
+Select_Level:
+		move.w	(a0)+,d1
+		move.b	d1,(v_zone).w				; set zone
+		move.w	(a0)+,d1
+		move.b	d1,(v_act).w				; set act
+		bsr.w	PlayLevel				; reset lives/rings/etc, set gamemode, fade out music
+		moveq	#1,d1					; set flag to exit menu
+		rts
+		
+Select_Special:
+		move.w	(a0)+,d1
+		move.b	d1,(v_last_ss_levelid).w		; set Special Stage number
+		move.b	#id_Special,(v_gamemode).w		; set gamemode to $10 (Special Stage)
+		clr.w	(v_zone).w				; clear	level
+		move.b	#3,(v_lives).w				; set lives to 3
+		moveq	#0,d0
+		move.w	d0,(v_rings).w				; clear rings
+		move.l	d0,(v_time).w				; clear time
+		move.l	d0,(v_score).w				; clear score
+		move.l	#5000,(v_score_next_life).w		; extra life is awarded at 50000 points
+		moveq	#1,d1					; set flag to exit menu
+		rts
+
+Select_Ending:
+		move.w	(a0)+,d1
+		move.b	d1,(v_zone).w				; set zone
+		move.w	(a0)+,d1
+		move.b	d1,(v_act).w				; set act
+		move.b	#id_Ending,(v_gamemode).w		; set gamemode to $18 (Ending)
+		moveq	#1,d1					; set flag to exit menu
+		rts
+
+Select_Gamemode:
+		move.w	(a0)+,d1
+		move.b	d1,(v_gamemode).w			; set gamemode
+		move.w	(a0)+,d1
+		move.w	d1,(v_emeralds+2).w			; set emeralds
+		move.b	#3,(v_continues).w			; give Sonic 3 continues
+		moveq	#1,d1					; set flag to exit menu
+		rts
+
+Select_Credits:
+		move.w	(a0)+,d1
+		move.w	d1,(v_credits_num).w			; set credits number
+		move.b	#id_Credits,(v_gamemode).w		; set gamemode to credits
+		moveq	#1,d1					; set flag to exit menu
+		rts
 		
 ; ---------------------------------------------------------------------------
 ; Draw level select text
@@ -94,7 +169,47 @@ Select_Text:
 		dc.b "END SCREEN",0
 		dc.b "TRY AGAIN SCREEN",0
 		dc.b "CONTINUE SCREEN",0
-		dc.b "SOUND SELECT   [XX",0
+		dc.b "SOUND SELECT   @XX",0
 		dc.b "CHARACTER XXXXXXXX",0
 		even
 		
+selset:		macro flags,type,zone,act
+		dc.b flags,type
+		dc.w zone,act
+		endm
+		
+Select_Settings:
+		selset 0,id_Select_Level,id_GHZ,0
+		selset 0,id_Select_Level,id_GHZ,1
+		selset 0,id_Select_Level,id_GHZ,2
+		selset 0,id_Select_Level,id_MZ,0
+		selset 0,id_Select_Level,id_MZ,1
+		selset 0,id_Select_Level,id_MZ,2
+		selset 0,id_Select_Level,id_SYZ,0
+		selset 0,id_Select_Level,id_SYZ,1
+		selset 0,id_Select_Level,id_SYZ,2
+		selset 0,id_Select_Level,id_LZ,0
+		selset 0,id_Select_Level,id_LZ,1
+		selset 0,id_Select_Level,id_LZ,2
+		selset 0,id_Select_Level,id_SLZ,0
+		selset 0,id_Select_Level,id_SLZ,1
+		selset 0,id_Select_Level,id_SLZ,2
+		selset 0,id_Select_Level,id_SBZ,0
+		selset 0,id_Select_Level,id_SBZ,1
+		selset 0,id_Select_Level,id_LZ,3
+		selset 0,id_Select_Level,id_SBZ,2
+		selset 0,id_Select_Special,0,0
+		selset 0,id_Select_Special,1,0
+		selset 0,id_Select_Special,2,0
+		selset 0,id_Select_Special,3,0
+		selset 0,id_Select_Special,4,0
+		selset 0,id_Select_Special,5,0
+		selset 0,id_Select_Ending,id_EndZ,0
+		selset 0,id_Select_Ending,id_EndZ,1
+		selset 0,id_Select_Credits,0,0
+		selset 0,id_Select_Gamemode,id_HiddenCredits,0
+		selset 0,id_Select_Gamemode,id_TryAgain,emerald_all
+		selset 0,id_Select_Gamemode,id_TryAgain,0
+		selset 0,id_Select_Gamemode,id_Continue,0
+		
+sizeof_Select_Settings: equ *-Select_Settings
