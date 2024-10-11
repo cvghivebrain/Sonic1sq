@@ -95,6 +95,8 @@ DrawString8_SkipVDP:						; jump here to draw directly after previous string
 
 DrawHexString:
 		move.l	#(vram_fg&$3FFF)+((vram_fg&$C000)<<2)+$4000,d3
+		
+DrawHexString_SkipPlane:
 		add.w	d0,d3
 		add.w	d0,d3
 		move.w	d1,d4
@@ -122,4 +124,8 @@ DrawHexString_SkipVDP:						; jump here to draw directly after previous string
 		
 	.exit:
 		rts
+		
+DrawHexString_BG:
+		move.l	#(vram_bg&$3FFF)+((vram_bg&$C000)<<2)+$4000,d3 ; draw to background
+		bra.s	DrawHexString_SkipPlane
 		

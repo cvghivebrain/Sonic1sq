@@ -15,15 +15,20 @@ SuperSelect_Loop:
 		move.b	#id_VBlank_Title,(v_vblank_routine).w
 		bsr.w	WaitForVBlank
 		move.w	(v_levelselect_item).w,d0
-		cmpi.w	#sizeof_Select_Settings/6,d0
+		cmpi.w	#countof_Select_Settings,d0
 		bcc.s	.no_presses				; branch if selected item has no settings
-		mulu.w	#6,d0
+		mulu.w	#sizeof_selset,d0
 		lea	Select_Settings,a0
 		lea	(a0,d0.w),a0				; jump to settings for selected item
-		move.b	(a0)+,d4				; read flags
 		move.b	(v_joypad_press_actual).w,d0
-		andi.b	#btnABC+btnStart,d0
-		beq.s	.no_presses				; branch if ABC/Start wasn't pressed
+		move.b	#btnABC+btnStart,d2
+		move.b	(a0)+,d4				; read flags
+		beq.s	.noflag					; branch if 0
+		ori.b	#btnL+btnR,d2				; also read left/right buttons
+		
+	.noflag:
+		and.b	d2,d0
+		beq.s	.no_presses				; branch if specified buttons weren't pressed
 		moveq	#0,d1
 		move.b	(a0)+,d1				; read action type
 		move.w	Select_Index(pc,d1.w),d1
@@ -34,6 +39,8 @@ SuperSelect_Loop:
 		moveq	#countof_selectlines,d0
 		moveq	#countof_linespercol,d1
 		lea	(v_levelselect_item).w,a1
+		tst.b	d4
+		bne.s	.updownonly				; branch if flag is set
 		bsr.w	NavigateMenu				; read control inputs
 		beq.s	SuperSelect_Loop			; branch if no inputs
 		bsr.w	Select_Draw				; redraw menu
@@ -42,12 +49,23 @@ SuperSelect_Loop:
 	.exit:
 		rts
 		
+	.updownonly:
+		bsr.w	NavigateMenu_NoLR			; read control inputs
+		beq.s	SuperSelect_Loop			; branch if no inputs
+		bsr.w	Select_Draw				; redraw menu
+		bra.s	SuperSelect_Loop
+		
+; ---------------------------------------------------------------------------
+; Actions when ABC/Start is pressed on level select
+; ---------------------------------------------------------------------------
+
 Select_Index:	index *,,2
 		ptr Select_Level
 		ptr Select_Special
 		ptr Select_Ending
 		ptr Select_Gamemode
 		ptr Select_Credits
+		ptr Select_Sound
 		
 Select_Level:
 		move.w	(a0)+,d1
@@ -97,6 +115,43 @@ Select_Credits:
 		moveq	#1,d1					; set flag to exit menu
 		rts
 		
+Select_Sound:
+		lea	(v_levelselect_sound).w,a1
+		btst	#bitL,d0
+		bne.s	.left					; branch if left pressed
+		btst	#bitR,d0
+		bne.s	.right					; branch if right pressed
+		btst	#bitA,d0
+		bne.s	.btn_a					; branch if A pressed
+		move.w	(a1),d0
+		addi.w	#$80,d0
+		play_sound d0					; play selected sound
+		moveq	#0,d1					; set flag to not exit menu
+		rts
+		
+	.left:
+		subq.w	#1,(a1)					; previous sound
+		bpl.s	.snd_ok					; branch if valid
+		move.w	#$4F,(a1)				; wrap to end
+		
+	.snd_ok:
+		bsr.w	Select_DrawSnd
+		moveq	#0,d1					; set flag to not exit menu
+		rts
+		
+	.right:
+		addq.w	#1,(a1)					; next sound
+		
+	.right_chk:
+		cmpi.w	#$4F,(a1)
+		bls.s	.snd_ok					; branch if sound is valid
+		clr.w	(a1)					; wrap to start
+		bra.s	.snd_ok
+		
+	.btn_a:
+		addi.w	#$10,(a1)				; skip $10 sounds
+		bra.s	.right_chk
+		
 ; ---------------------------------------------------------------------------
 ; Draw level select text
 ; ---------------------------------------------------------------------------
@@ -134,6 +189,7 @@ Select_Draw:
 		
 	.no_wrap:
 		dbf	d6,.loop				; repeat for all lines
+		bsr.w	Select_DrawSnd				; draw sound test
 		rts
 		
 Select_Text:
@@ -180,6 +236,7 @@ selset:		macro flags,type,zone,act
 		
 Select_Settings:
 		selset 0,id_Select_Level,id_GHZ,0
+sizeof_selset:	equ *-Select_Settings
 		selset 0,id_Select_Level,id_GHZ,1
 		selset 0,id_Select_Level,id_GHZ,2
 		selset 0,id_Select_Level,id_MZ,0
@@ -211,5 +268,30 @@ Select_Settings:
 		selset 0,id_Select_Gamemode,id_TryAgain,emerald_all
 		selset 0,id_Select_Gamemode,id_TryAgain,0
 		selset 0,id_Select_Gamemode,id_Continue,0
+		selset 1,id_Select_Sound,0,0
 		
 sizeof_Select_Settings: equ *-Select_Settings
+countof_Select_Settings: equ sizeof_Select_Settings/sizeof_selset
+
+; ---------------------------------------------------------------------------
+; Draw sound test number
+; ---------------------------------------------------------------------------
+
+soundtest_linenum: equ 33
+soundtest_x:	equ 16+(((soundtest_linenum-1)/countof_linespercol)*sizeof_selectcol)+1
+soundtest_y:	equ ((soundtest_linenum-1)%countof_linespercol)+4
+
+Select_DrawSnd:
+		moveq	#soundtest_x,d0				; x pos
+		moveq	#soundtest_y,d1				; y pos
+		lea	(vdp_data_port).l,a1			; data port
+		move.w	(v_levelselect_sound).w,d5		; get sound id
+		addi.w	#$80,d5
+		moveq	#2,d6					; draw 2 digits
+		
+		move.w	#tile_pal4+tile_hi,d2
+		cmpi.w	#soundtest_linenum-1,(v_levelselect_item).w
+		bne.w	DrawHexString_BG			; branch if current line shouldn't be highlighted
+		move.w	#tile_pal3+tile_hi,d2			; use different palette line
+		bra.w	DrawHexString_BG
+		

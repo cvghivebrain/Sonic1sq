@@ -22,15 +22,15 @@ NavigateMenu:
 		moveq	#0,d3
 		move.w	(a1),d3
 		btst	#bitDn,d2
-		bne.s	.down					; branch if down is pressed
+		bne.s	Nav_Down				; branch if down is pressed
 		btst	#bitUp,d2
-		bne.s	.up					; branch if up is pressed
+		bne.s	Nav_Up					; branch if up is pressed
 		btst	#bitR,d2
-		bne.s	.right					; branch if right is pressed
+		bne.s	Nav_Right				; branch if right is pressed
 		
-	.left:
+	Nav_Left:
 		sub.w	d1,(a1)					; jump to previous column
-		bpl.s	.down_ok				; branch if valid
+		bpl.s	Nav_Valid				; branch if valid
 		bsr.s	RoundUp					; d2 = number of items rounded up
 		divu.w	d1,d3
 		swap	d3					; d3 = item within column
@@ -38,38 +38,55 @@ NavigateMenu:
 		sub.w	d1,d3
 		move.w	d3,(a1)					; wrap to end
 		cmp.w	(a1),d0
-		bhi.s	.down_ok				; branch if valid (i.e. not past the end of an incomplete column)
+		bhi.s	Nav_Valid				; branch if valid (i.e. not past the end of an incomplete column)
 		sub.w	d1,(a1)					; jump to previous complete column
 		moveq	#1,d2					; set flag
 		rts
 	
-	.right:
+	Nav_Right:
 		add.w	d1,(a1)					; jump to next column
 		cmp.w	(a1),d0
-		bhi.s	.down_ok				; branch if valid
+		bhi.s	Nav_Valid				; branch if valid
 		divu.w	d1,d3
 		swap	d3					; d3 = item within column
 		move.w	d3,(a1)					; wrap to first column
 		moveq	#1,d2					; set flag
 		rts
 	
-	.down:
+	Nav_Down:
 		addq.w	#1,(a1)
 		cmp.w	(a1),d0
-		bhi.s	.down_ok				; branch if valid
+		bhi.s	Nav_Valid				; branch if valid
 		clr.w	(a1)					; wrap to start
 		
-	.down_ok:
+	Nav_Valid:
 		moveq	#1,d2					; set flag
 		rts
 		
-	.up:
+	Nav_Up:
 		subq.w	#1,(a1)
-		bpl.s	.down_ok				; branch if valid
+		bpl.s	Nav_Valid				; branch if valid
 		move.w	d0,(a1)					; wrap to end
 		subq.w	#1,(a1)
 		moveq	#1,d2					; set flag
 		rts
+
+; ---------------------------------------------------------------------------
+; As above, but with left/right disabled
+; ---------------------------------------------------------------------------
+
+NavigateMenu_NoLR:
+		move.b	(v_joypad_press_actual).w,d2
+		andi.b	#btnUp+btnDn,d2
+		bne.s	.input					; branch if direction is pressed
+		rts
+		
+	.input:
+		moveq	#0,d3
+		move.w	(a1),d3
+		btst	#bitDn,d2
+		bne.s	Nav_Down				; branch if down is pressed
+		bra.s	Nav_Up
 
 ; ---------------------------------------------------------------------------
 ; Round up an integer to next multiple
