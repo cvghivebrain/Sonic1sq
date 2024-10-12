@@ -52,6 +52,8 @@ DrawString_BG:
 
 DrawString8:
 		move.l	#(vram_fg&$3FFF)+((vram_fg&$C000)<<2)+$4000,d3
+		
+DrawString8_SkipPlane:
 		add.w	d0,d3
 		add.w	d0,d3
 		move.w	d1,d4
@@ -78,6 +80,10 @@ DrawString8_SkipVDP:						; jump here to draw directly after previous string
 		move.w	#0,(a1)					; write blank tile
 		dbf	d3,.loop				; repeat for all 8 characters
 		rts
+		
+DrawString8_BG:
+		move.l	#(vram_bg&$3FFF)+((vram_bg&$C000)<<2)+$4000,d3 ; draw to background
+		bra.s	DrawString8_SkipPlane
 		
 ; ---------------------------------------------------------------------------
 ; Draw hex number as string on screen
