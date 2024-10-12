@@ -12,13 +12,28 @@
 ;	uses d3.l
 ; ---------------------------------------------------------------------------
 
+nav_delay_long: equ 16
+nav_delay_short: equ 8
+
 NavigateMenu:
 		move.b	(v_joypad_press_actual).w,d2
 		andi.b	#btnDir,d2
-		bne.s	.input					; branch if direction is pressed
+		bne.s	.press					; branch if direction is pressed
+		move.b	(v_joypad_hold_actual).w,d2
+		andi.b	#btnDir,d2
+		bne.s	.hold					; branch if direction is held
+		move.w	#nav_delay_long,(v_levelselect_hold_delay).w ; reset timer for hold
+		
+	.exit:
+		moveq	#0,d2					; clear flag
 		rts
 		
-	.input:
+	.hold:
+		subq.w	#1,(v_levelselect_hold_delay).w		; decrement timer
+		bpl.s	.exit					; branch if time remains
+		move.w	#nav_delay_short,(v_levelselect_hold_delay).w ; short timer for hold
+		
+	.press:
 		moveq	#0,d3
 		move.w	(a1),d3
 		btst	#bitDn,d2
@@ -78,10 +93,22 @@ NavigateMenu:
 NavigateMenu_NoLR:
 		move.b	(v_joypad_press_actual).w,d2
 		andi.b	#btnUp+btnDn,d2
-		bne.s	.input					; branch if direction is pressed
+		bne.s	.press					; branch if direction is pressed
+		move.b	(v_joypad_hold_actual).w,d2
+		andi.b	#btnUp+btnDn,d2
+		bne.s	.hold					; branch if direction is held
+		move.w	#nav_delay_long,(v_levelselect_hold_delay).w ; reset timer for hold
+		
+	.exit:
+		moveq	#0,d2					; clear flag
 		rts
 		
-	.input:
+	.hold:
+		subq.w	#1,(v_levelselect_hold_delay).w		; decrement timer
+		bpl.s	.exit					; branch if time remains
+		move.w	#nav_delay_short,(v_levelselect_hold_delay).w ; short timer for hold
+		
+	.press:
 		moveq	#0,d3
 		move.w	(a1),d3
 		btst	#bitDn,d2

@@ -153,30 +153,9 @@ Title_Dpad:
 LevSelCode:	dc.b btnUp,btnDn,btnL,btnR,$FF
 		even
 
-LevSel_Hold:
-		move.w	(v_levelselect_item).w,d0
-		move.b	(v_joypad_hold_actual).w,d1
-		andi.b	#btnUp+btnDn,d1				; is up/down currently held?
-		beq.s	.exit					; branch if not
-		subq.w	#1,(v_levelselect_hold_delay).w		; decrement timer
-		bpl.s	.exit					; branch if time remains
-		move.w	#8,(v_levelselect_hold_delay).w		; reset timer
-
-		btst	#bitDn,d1
-		;beq.s	.not_down				; branch if down isn't held
-		;bsr.s	LevSel_Down
-
-	.not_down:
-		btst	#bitUp,d1
-		;beq.s	.not_up					; branch if up isn't held
-		;bsr.s	LevSel_Up
-
-	.not_up:
-		move.w	d0,(v_levelselect_item).w		; set new selection
-		;bra.w	LevSel_Display
-
-	.exit:
-		rts
+; ---------------------------------------------------------------------------
+; Go to level
+; ---------------------------------------------------------------------------
 
 PlayLevel:
 		move.b	#id_Level,(v_gamemode).w		; set gamemode to $0C (level)
@@ -193,7 +172,7 @@ PlayLevel:
 		rts
 
 ; ---------------------------------------------------------------------------
-; Demo mode
+; Go to demo
 ; ---------------------------------------------------------------------------
 
 PlayDemo:

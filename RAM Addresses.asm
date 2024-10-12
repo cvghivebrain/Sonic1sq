@@ -9,12 +9,12 @@
 
 v_256x256_tiles:		equ   $FF0000			; 256x256 tile mappings ($A000 bytes)
 				rsset $FFFF0000+sizeof_256x256_all
-v_level_layout:			rs.b sizeof_level		; level layout ($400 bytes)
-v_bg_layout:			rs.b sizeof_bg			; background layout ($400 bytes)
-v_bgscroll_buffer:		rs.b $200			; background scroll buffer
 		if __rs&$FFFF < $8000
 		rsset $FFFF8000					; addresses after this point must be over $8000
 		endc
+v_level_layout:			rs.b sizeof_level		; level layout ($400 bytes)
+v_bg_layout:			rs.b sizeof_bg			; background layout ($400 bytes)
+v_bgscroll_buffer:		rs.b $200			; background scroll buffer
 v_sprite_queue:			rs.b sizeof_priority*countof_priority ; sprite display queue, first section is highest priority ($380 bytes; 7 sections of $80 bytes)
 v_sonic_pos_tracker:		rs.l $40			; earlier position tracking list for Sonic, used by invincibility stars ($100 bytes)
 v_demo_rec:			rs.b sizeof_demo_rec		; demo recorder ($200 bytes)
