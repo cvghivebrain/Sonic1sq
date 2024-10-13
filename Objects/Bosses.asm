@@ -29,15 +29,15 @@ Boss_Index:	index *,,2
 ost_boss2_y_normal:	rs.l 1					; y position without wobble
 ost_boss2_time:		rs.w 1					; time until next action
 ost_boss2_cam_start:	equ ost_boss2_time			; camera x pos where boss activates
+ost_boss2_mode:		rs.w 1					; index within Boss_MoveList
 ost_boss2_wobble:	rs.b 1					; wobble counter
 ost_boss2_flags:	rs.b 1					; flag bitfield from Boss_MoveList
 		rsobjend
 
 Boss_CamXPos:	dc.w $2960					; camera x pos where the boss becomes active
 		dc.w $1800
-Boss_InitMode:	dc.b (Boss_MoveGHZ-Boss_MoveList)/sizeof_bmove	; initial mode for each boss
-		dc.b (Boss_MoveMZ-Boss_MoveList)/sizeof_bmove
-		even
+Boss_InitMode:	dc.w (Boss_MoveGHZ-Boss_MoveList)/sizeof_bmove	; initial mode for each boss
+		dc.w (Boss_MoveMZ-Boss_MoveList)/sizeof_bmove
 
 bmove:		macro xvel,yvel,time,loadobj,flags,next
 		dc.w xvel, yvel, time
@@ -96,11 +96,11 @@ Boss_Main:	; Routine 0
 		clr.b	(v_boss_flash).w
 		move.b	ost_subtype(a0),d0
 		andi.w	#$7F,d0
+		add.w	d0,d0
 		lea	Boss_InitMode,a2
-		move.b	(a2,d0.w),ost_mode(a0)
+		move.w	(a2,d0.w),ost_boss2_mode(a0)
 		tst.b	ost_subtype(a0)
 		bmi.s	.ignore_cam				; branch if high bit of subtype is set
-		add.w	d0,d0
 		lea	Boss_CamXPos,a2
 		move.w	(a2,d0.w),ost_boss2_cam_start(a0)
 		play_music mus_Boss				; play boss music
@@ -193,9 +193,9 @@ Boss_Move:	; Routine 4
 		jsr	(AddPoints).w				; give Sonic 1000 points
 		addq.b	#2,ost_routine(a0)			; goto Boss_Explode next
 		move.w	#179,ost_boss2_time(a0)			; set timer to 3 seconds
-		move.w	#0,ost_x_vel(a0)
-		move.w	#0,ost_y_vel(a0)
-		move.b	#0,ost_boss2_flags(a0)
+		clr.w	ost_x_vel(a0)
+		clr.w	ost_y_vel(a0)
+		clr.b	ost_boss2_flags(a0)
 		jmp	DisplaySprite
 
 ; ---------------------------------------------------------------------------
@@ -204,7 +204,7 @@ Boss_Move:	; Routine 4
 
 Boss_SetMode:
 		moveq	#0,d0
-		move.b	ost_mode(a0),d0
+		move.w	ost_boss2_mode(a0),d0
 		mulu.w	#sizeof_bmove,d0
 		lea	Boss_MoveList,a2
 		adda.l	d0,a2
@@ -230,7 +230,8 @@ Boss_SetMode:
 	.noflip:
 		move.b	d0,ost_boss2_flags(a0)			; save flags
 		move.b	(a2)+,d0
-		add.b	d0,ost_mode(a0)				; next mode
+		ext.w	d0
+		add.w	d0,ost_boss2_mode(a0)			; next mode
 		rts
 ; ===========================================================================
 
