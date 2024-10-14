@@ -257,6 +257,7 @@ ObjPos_SYZ3:
 		objpos $2AF0,$0532,FloatingBlock,type_fblock_syz1x1+type_fblock_leftright,xflip
 		objpos $2B10,$04D2,FloatingBlock,type_fblock_syz1x1+type_fblock_leftrightwide
 		objpos $2B10,$0552,FloatingBlock,type_fblock_syz1x1+type_fblock_leftrightwide,xflip
+		;objpos $2DB0,$4DA,Boss,2
 		
 		objpos $2DE0,$0541,Prison,$00
 		endobj

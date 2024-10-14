@@ -36,8 +36,10 @@ ost_boss2_flags:	rs.b 1					; flag bitfield from Boss_MoveList
 
 Boss_CamXPos:	dc.w $2960					; camera x pos where the boss becomes active
 		dc.w $1800
+		dc.w $2C00
 Boss_InitMode:	dc.w (Boss_MoveGHZ-Boss_MoveList)/sizeof_bmove	; initial mode for each boss
 		dc.w (Boss_MoveMZ-Boss_MoveList)/sizeof_bmove
+		dc.w (Boss_MoveSYZ-Boss_MoveList)/sizeof_bmove
 
 bmove:		macro xvel,yvel,time,loadobj,flags,next
 		dc.w xvel, yvel, time
@@ -77,6 +79,10 @@ Boss_MoveMZ:	bmove -$100, 0, $E0, BossNozzle, 0, 1
 		bmove $200, -$40, 40, 0, bmove_xflip+bmove_nowobble+bmove_freezehit+bmove_hazard, 1
 		bmove 0, -$40, 32, 0, bmove_xflip+bmove_nowobble, 1
 		bmove 0, 0, 80, BossFire, bmove_nowobble+bmove_laugh, -7
+		
+Boss_MoveSYZ:	bmove -$100, 0, $78, 0, 0, 1
+		bmove -$140, 0, 243, 0, 0, 1
+		bmove $140, 0, 243, 0, bmove_xflip, -1
 ; ===========================================================================
 
 Boss_Main:	; Routine 0
@@ -141,6 +147,8 @@ Boss_Wait:	; Routine 2
 ; ===========================================================================
 
 Boss_Move:	; Routine 4
+		tst.b	ost_mode(a0)
+		bne.s	.skip_wobble				; branch if mode is set (disables movement & pauses timer)
 		subq.w	#1,ost_boss2_time(a0)			; decrement timer
 		bpl.s	.continue				; branch if time remains
 		bsr.w	Boss_SetMode
