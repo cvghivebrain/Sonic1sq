@@ -435,6 +435,7 @@ startof_obj:	equ *
 		include "Objects\Boss Weapons.asm"		; BossWeapon
 		include "Objects\Bosses.asm"			; Boss
 		include "Objects\_Exploding.asm"
+		include "Objects\SYZ Boss Spike.asm"		; BossSpringYard
 
 		include "Objects\LZ Boss.asm"			; BossLabyrinth
 		include "Objects\MZ Boss Fire.asm"		; BossFire

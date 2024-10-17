@@ -81,8 +81,9 @@ Boss_MoveMZ:	bmove -$100, 0, $E0, BossNozzle, 0, 1
 		bmove 0, 0, 80, BossFire, bmove_nowobble+bmove_laugh, -7
 		
 Boss_MoveSYZ:	bmove -$100, 0, $78, 0, 0, 1
-		bmove -$140, 0, 243, 0, 0, 1
-		bmove $140, 0, 243, 0, bmove_xflip, -1
+		bmove -$140, 0, 243, Stabber, 0, 1
+		bmove $140, 0, 243, 0, bmove_xflip, 1
+		bmove -$140, 0, 243, 0, 0, -1
 ; ===========================================================================
 
 Boss_Main:	; Routine 0
@@ -317,6 +318,8 @@ BossExhaust:
 		getparent					; a1 = OST of boss ship
 		tst.w	ost_x_vel(a1)
 		beq.s	.hide					; branch if boss isn't moving
+		cmpi.b	#1,ost_mode(a1)
+		beq.s	.hide					; branch if boss is being controlled by helper object
 		tst.b	ost_subtype(a0)
 		bne.s	.skip_chk				; branch if escape flag is set
 		cmpi.b	#id_Boss_Escape,ost_routine(a1)
