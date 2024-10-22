@@ -14,14 +14,17 @@ Stabber:
 Stab_Index:	index *,,2
 		ptr Stab_Main
 		ptr Stab_Wait
+		ptr Stab_Align
 		ptr Stab_Drop
-		ptr Stab_DropNow
 		ptr Stab_Stop
+		ptr Stab_Return
+		ptr Stab_Retract
 
 		rsobj Stab
 ost_stab_y_start:	rs.w 1					; original y position
 ost_stab_y_stop:	rs.w 1					; y position to stop when picking up a block
 ost_stab_x_grid:	rs.w 1					; x position (div 32) when boss moved over Sonic
+ost_stab_wait_time:	rs.w 1					; time until next action
 		rsobjend
 ; ===========================================================================
 
@@ -33,6 +36,8 @@ Stab_Main:	; Routine 0
 
 Stab_Wait:	; Routine 2
 		getparent					; a1 = OST of boss
+		cmpi.b	#id_Boss_Move,ost_routine(a1)
+		bne.s	.exit					; branch if boss isn't following standard movement
 		move.w	ost_x_pos(a1),d0
 		move.w	d0,ost_x_pos(a0)
 		move.w	ost_y_pos(a1),ost_y_pos(a0)		; match position to boss
@@ -42,18 +47,18 @@ Stab_Wait:	; Routine 2
 		lsr.w	#5,d1
 		cmp.w	d0,d1
 		bne.s	.exit					; branch if not in same 32px vertical strip as Sonic
-		addq.b	#2,ost_routine(a0)			; goto Stab_Drop next
+		addq.b	#2,ost_routine(a0)			; goto Stab_Align next
 		move.w	d0,ost_stab_x_grid(a0)
 		
 	.exit:
 		rts
 ; ===========================================================================
 
-Stab_Drop:	; Routine 4
-		getparent					; a1 = OST of boss
-		move.w	ost_x_pos(a1),d0
+Stab_Align:	; Routine 4
+		getparent a2					; a2 = OST of boss
+		move.w	ost_x_pos(a2),d0
 		move.w	d0,ost_x_pos(a0)
-		move.w	ost_y_pos(a1),ost_y_pos(a0)		; match position to boss
+		move.w	ost_y_pos(a2),ost_y_pos(a0)		; match position to boss
 		move.w	d0,d1
 		lsr.w	#5,d0					; divide x pos by 32
 		cmp.w	ost_stab_x_grid(a0),d0
@@ -63,16 +68,17 @@ Stab_Drop:	; Routine 4
 		andi.w	#$1F,d1
 		cmpi.w	#1,d1
 		bhi.s	.exit					; branch if not in middle of 32px vertical strip
-		addq.b	#2,ost_routine(a0)			; goto Stab_DropNow next
+		
+		addq.b	#2,ost_routine(a0)			; goto Stab_Drop next
 		andi.w	#$FFE0,d2
 		addi.w	#$10,d2
 		move.w	d2,ost_x_pos(a0)			; align to middle of 32px strip
-		move.w	ost_y_pos(a1),ost_stab_y_start(a0)	; save boss y pos (including wobble)
-		move.b	#1,ost_mode(a1)				; stop boss moving by itself
+		move.w	ost_y_pos(a2),ost_stab_y_start(a0)	; save boss y pos (including wobble)
+		move.b	#1,ost_mode(a2)				; stop boss moving by itself
 		move.w	#$180,ost_y_vel(a0)
 		move.l	#CheeseBlock,d0
 		jsr	FindNearestObj				; find nearest cheese block
-		beq.s	Stab_DropNow				; branch if none found
+		beq.s	.cancel					; branch if none found
 		move.w	d1,ost_linked(a0)			; save OST of cheese block
 		getlinked					; a1 = OST of cheese block
 		move.w	ost_y_pos(a1),d0
@@ -81,30 +87,70 @@ Stab_Drop:	; Routine 4
 		add.b	ost_height(a0),d1
 		sub.w	d1,d0
 		move.w	d0,ost_stab_y_stop(a0)
-		bra.s	Stab_DropNow
+		bra.s	Stab_Drop
 		
 	.cancel:
-		subq.b	#2,ost_routine(a0)			; goto Stab_Wait next
+		move.b	#id_Stab_Wait,ost_routine(a0)		; goto Stab_Wait next
+		clr.b	ost_mode(a2)				; allow boss to move itself
 		
 	.exit:
 		rts
 ; ===========================================================================
 
-Stab_DropNow:	; Routine 6
+Stab_Drop:	; Routine 6
 		update_y_pos					; move down
 		getparent					; a1 = OST of boss
-		move.w	ost_x_pos(a0),ost_x_pos(a1)
-		move.w	ost_y_pos(a0),ost_y_pos(a1)		; move boss as well
 		move.w	ost_stab_y_stop(a0),d0
 		cmp.w	ost_y_pos(a0),d0
 		bhi.s	.exit					; branch if boss hasn't reached block
 		addq.b	#2,ost_routine(a0)			; goto Stab_Stop next
+		move.w	d0,ost_y_pos(a0)
 		
 	.exit:
+		move.w	ost_x_pos(a0),ost_x_pos(a1)
+		move.w	ost_y_pos(a0),ost_y_pos(a1)		; move boss as well
 		rts
 ; ===========================================================================
 
 Stab_Stop:	; Routine 8
+		tst.w	ost_linked(a0)
+		beq.s	.no_block				; branch if no block was found
+		getlinked					; a1 = OST of block
+		move.w	ost_x_pos(a1),d0
+		cmp.w	ost_x_pos(a0),d0
+		bne.s	.no_block				; branch if block isn't directly beneath boss
+		rts
+		
+	.no_block:
+		addq.b	#2,ost_routine(a0)			; goto Stab_Return next
+		move.w	#-$400,ost_y_vel(a0)
+		rts
+; ===========================================================================
+
+Stab_Return:	; Routine $A
+		update_y_pos					; move up
+		getparent					; a1 = OST of boss
+		move.w	ost_y_pos(a0),d0
+		cmp.w	ost_stab_y_start(a0),d0
+		bhi.s	.exit					; branch if boss hasn't reached original y pos
+		addq.b	#2,ost_routine(a0)			; goto Stab_Retract next
+		move.w	d0,ost_y_pos(a0)
+		move.w	#26,ost_stab_wait_time(a0)
+		
+	.exit:
+		move.w	ost_x_pos(a0),ost_x_pos(a1)
+		move.w	ost_y_pos(a0),ost_y_pos(a1)		; move boss as well
+		rts
+; ===========================================================================
+
+Stab_Retract:	; Routine $C
+		subq.w	#1,ost_stab_wait_time(a0)		; decrement timer
+		bpl.s	.exit					; branch if time remains
+		move.b	#id_Stab_Wait,ost_routine(a0)		; goto Stab_Wait next
+		getparent					; a1 = OST of boss
+		clr.b	ost_mode(a1)				; allow boss to move on its own
+		
+	.exit:
 		rts
 		
 ; ---------------------------------------------------------------------------
