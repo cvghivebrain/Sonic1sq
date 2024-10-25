@@ -16,7 +16,6 @@ Stab_Index:	index *,,2
 		ptr Stab_Wait
 		ptr Stab_Align
 		ptr Stab_Drop
-		ptr Stab_Stop
 		ptr Stab_Return
 		ptr Stab_Retract
 
@@ -102,21 +101,13 @@ Stab_Drop:	; Routine 6
 		getparent					; a1 = OST of boss
 		move.w	ost_stab_y_stop(a0),d0
 		cmp.w	ost_y_pos(a0),d0
-		bhi.s	.exit					; branch if boss hasn't reached block
-		addq.b	#2,ost_routine(a0)			; goto Stab_Stop next
-		move.w	d0,ost_y_pos(a0)
+		bhi.s	Stab_MoveBoss				; branch if boss hasn't reached block
 		
-	.exit:
-		move.w	ost_x_pos(a0),ost_x_pos(a1)
-		move.w	ost_y_pos(a0),ost_y_pos(a1)		; move boss as well
-		rts
-; ===========================================================================
-
-Stab_Stop:	; Routine 8
+		move.w	d0,ost_y_pos(a0)			; snap to block
 		tst.w	ost_linked(a0)
 		beq.s	.no_block				; branch if no block was found
-		getlinked					; a1 = OST of block
-		move.w	ost_x_pos(a1),d0
+		getlinked a2					; a2 = OST of block
+		move.w	ost_x_pos(a2),d0
 		cmp.w	ost_x_pos(a0),d0
 		bne.s	.no_block				; branch if block isn't directly beneath boss
 		rts
@@ -124,26 +115,26 @@ Stab_Stop:	; Routine 8
 	.no_block:
 		addq.b	#2,ost_routine(a0)			; goto Stab_Return next
 		move.w	#-$400,ost_y_vel(a0)
-		rts
+		bra.s	Stab_MoveBoss
 ; ===========================================================================
 
-Stab_Return:	; Routine $A
+Stab_Return:	; Routine 8
 		update_y_pos					; move up
 		getparent					; a1 = OST of boss
 		move.w	ost_y_pos(a0),d0
 		cmp.w	ost_stab_y_start(a0),d0
-		bhi.s	.exit					; branch if boss hasn't reached original y pos
+		bhi.s	Stab_MoveBoss				; branch if boss hasn't reached original y pos
 		addq.b	#2,ost_routine(a0)			; goto Stab_Retract next
 		move.w	d0,ost_y_pos(a0)
 		move.w	#26,ost_stab_wait_time(a0)
 		
-	.exit:
+Stab_MoveBoss:
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)		; move boss as well
 		rts
 ; ===========================================================================
 
-Stab_Retract:	; Routine $C
+Stab_Retract:	; Routine $A
 		subq.w	#1,ost_stab_wait_time(a0)		; decrement timer
 		bpl.s	.exit					; branch if time remains
 		move.b	#id_Stab_Wait,ost_routine(a0)		; goto Stab_Wait next
