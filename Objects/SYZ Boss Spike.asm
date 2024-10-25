@@ -18,6 +18,7 @@ Stab_Index:	index *,,2
 		ptr Stab_Drop
 		ptr Stab_Return
 		ptr Stab_Retract
+		ptr Stab_Shake
 
 		rsobj Stab
 ost_stab_y_start:	rs.w 1					; original y position
@@ -81,6 +82,8 @@ Stab_Align:	; Routine 4
 		move.w	d1,ost_linked(a0)			; save OST of cheese block
 		getlinked					; a1 = OST of cheese block
 		move.w	ost_y_pos(a1),d0
+		cmp.w	ost_y_pos(a0),d0
+		bls.s	.cancel					; branch if boss is below the cheese block
 		moveq	#0,d1
 		move.b	ost_height(a1),d1
 		add.b	ost_height(a0),d1
@@ -110,7 +113,9 @@ Stab_Drop:	; Routine 6
 		move.w	ost_x_pos(a2),d0
 		cmp.w	ost_x_pos(a0),d0
 		bne.s	.no_block				; branch if block isn't directly beneath boss
-		rts
+		move.b	#id_Stab_Shake,ost_routine(a0)		; goto Stab_Shake next
+		move.w	#50,ost_stab_wait_time(a0)
+		bra.s	Stab_MoveBoss
 		
 	.no_block:
 		addq.b	#2,ost_routine(a0)			; goto Stab_Return next
@@ -142,6 +147,35 @@ Stab_Retract:	; Routine $A
 		clr.b	ost_mode(a1)				; allow boss to move on its own
 		
 	.exit:
+		rts
+; ===========================================================================
+
+Stab_Shake:	; Routine $C
+		subq.w	#1,ost_stab_wait_time(a0)		; decrement timer
+		bpl.s	.shake					; branch if time remains
+		
+	.exit:
+		rts
+		
+	.shake:
+		cmpi.w	#30,ost_stab_wait_time(a0)
+		bgt.s	.exit					; branch if in first 20 frames of touching the block
+		move.w	ost_stab_wait_time(a0),d0
+		andi.w	#%10,d0					; read only bit 1 of timer (changes every 2 frames)
+		add.w	d0,d0
+		subq.w	#2,d0					; d0 = 2 or -2
+		add.w	ost_stab_y_stop(a0),d0
+		move.w	d0,ost_y_pos(a0)			; shake
+		getparent					; a1 = OST of boss
+		bsr.s	Stab_MoveBoss				; move boss
+		
+Stab_MoveBlock:
+		getlinked a2					; a2 = OST of block
+		moveq	#0,d1
+		move.b	ost_height(a0),d1
+		add.b	ost_height(a2),d1
+		add.w	d0,d1
+		move.w	d1,ost_y_pos(a2)			; move block with boss
 		rts
 		
 ; ---------------------------------------------------------------------------
