@@ -19,6 +19,9 @@ Stab_Index:	index *,,2
 		ptr Stab_Return
 		ptr Stab_Retract
 		ptr Stab_Shake
+		ptr Stab_Lift
+		ptr Stab_Lift2
+		ptr Stab_Break
 
 		rsobj Stab
 ost_stab_y_start:	rs.w 1					; original y position
@@ -101,7 +104,6 @@ Stab_Align:	; Routine 4
 
 Stab_Drop:	; Routine 6
 		update_y_pos					; move down
-		getparent					; a1 = OST of boss
 		move.w	ost_stab_y_stop(a0),d0
 		cmp.w	ost_y_pos(a0),d0
 		bhi.s	Stab_MoveBoss				; branch if boss hasn't reached block
@@ -125,7 +127,6 @@ Stab_Drop:	; Routine 6
 
 Stab_Return:	; Routine 8
 		update_y_pos					; move up
-		getparent					; a1 = OST of boss
 		move.w	ost_y_pos(a0),d0
 		cmp.w	ost_stab_y_start(a0),d0
 		bhi.s	Stab_MoveBoss				; branch if boss hasn't reached original y pos
@@ -134,6 +135,7 @@ Stab_Return:	; Routine 8
 		move.w	#26,ost_stab_wait_time(a0)
 		
 Stab_MoveBoss:
+		getparent					; a1 = OST of boss
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)		; move boss as well
 		rts
@@ -153,6 +155,8 @@ Stab_Retract:	; Routine $A
 Stab_Shake:	; Routine $C
 		subq.w	#1,ost_stab_wait_time(a0)		; decrement timer
 		bpl.s	.shake					; branch if time remains
+		addq.b	#2,ost_routine(a0)			; goto Stab_Lift next
+		move.w	#-$800,ost_y_vel(a0)			; move up quickly
 		
 	.exit:
 		rts
@@ -166,7 +170,8 @@ Stab_Shake:	; Routine $C
 		subq.w	#2,d0					; d0 = 2 or -2
 		add.w	ost_stab_y_stop(a0),d0
 		move.w	d0,ost_y_pos(a0)			; shake
-		getparent					; a1 = OST of boss
+		
+Stab_MoveAll:
 		bsr.s	Stab_MoveBoss				; move boss
 		
 Stab_MoveBlock:
@@ -176,6 +181,38 @@ Stab_MoveBlock:
 		add.b	ost_height(a2),d1
 		add.w	d0,d1
 		move.w	d1,ost_y_pos(a2)			; move block with boss
+		rts
+; ===========================================================================
+
+Stab_Lift:	; Routine $E
+		update_y_pos					; move up
+		move.w	ost_stab_y_start(a0),d0
+		subi.w	#32,d0					; target 32px above start y pos
+		cmp.w	ost_y_pos(a0),d0
+		bcs.s	Stab_MoveAll				; branch if boss hasn't reached target
+		addq.b	#2,ost_routine(a0)			; goto Stab_Lift2 next
+		move.w	#$400,ost_y_vel(a0)			; move down next
+		bra.s	Stab_MoveAll
+; ===========================================================================
+
+Stab_Lift2:	; Routine $10
+		update_y_pos					; move down
+		move.w	ost_stab_y_start(a0),d0
+		cmp.w	ost_y_pos(a0),d0
+		bhi.s	Stab_MoveAll				; branch if boss hasn't reached start y pos
+		addq.b	#2,ost_routine(a0)			; goto Stab_Break next
+		move.w	d0,ost_y_pos(a0)			; snap to start y pos
+		move.w	#16,ost_stab_wait_time(a0)
+		bra.s	Stab_MoveAll
+; ===========================================================================
+
+Stab_Break:	; Routine $12
+		subq.w	#1,ost_stab_wait_time(a0)		; decrement timer
+		bpl.s	.exit					; branch if time remains
+		move.b	#id_Stab_Retract,ost_routine(a0)	; goto Stab_Retract next
+		move.w	#26,ost_stab_wait_time(a0)
+		
+	.exit:
 		rts
 		
 ; ---------------------------------------------------------------------------
