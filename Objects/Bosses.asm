@@ -52,11 +52,13 @@ bmove_laugh_bit:	equ 1
 bmove_nowobble_bit:	equ 2
 bmove_freezehit_bit:	equ 3
 bmove_hazard_bit:	equ 4
+bmove_loadinert_bit:	equ 5
 bmove_xflip:		equ 1<<bmove_xflip_bit			; boss faces right
 bmove_laugh:		equ 1<<bmove_laugh_bit			; boss laughs
 bmove_nowobble:		equ 1<<bmove_nowobble_bit		; boss doesn't wobble
 bmove_freezehit:	equ 1<<bmove_freezehit_bit		; boss freezes when hit
 bmove_hazard:		equ 1<<bmove_hazard_bit			; hazards activate
+bmove_loadinert:	equ 1<<bmove_loadinert_bit		; load object as inert
 
 Boss_MoveList:	; x speed, y speed, duration, object to load, flags, value to add to mode
 Boss_MoveGHZ:	bmove 0, $100, $B8, 0, 0, 1
@@ -81,7 +83,7 @@ Boss_MoveMZ:	bmove -$100, 0, $E0, BossNozzle, 0, 1
 		bmove 0, 0, 80, BossFire, bmove_nowobble+bmove_laugh, -7
 		
 Boss_MoveSYZ:	bmove -$100, 0, $78, 0, 0, 1
-		bmove -$140, 0, 243, Stabber, 0, 1
+		bmove -$140, 0, 243, Stabber, bmove_loadinert, 1
 		bmove $140, 0, 243, 0, bmove_xflip, 1
 		bmove -$140, 0, 243, 0, 0, -1
 ; ===========================================================================
@@ -221,23 +223,33 @@ Boss_SetMode:
 		move.w	(a2)+,ost_y_vel(a0)
 		move.w	(a2)+,ost_boss2_time(a0)
 		move.l	(a2)+,d1
+		move.b	(a2)+,d2				; get flags
+		tst.l	d1
 		beq.s	.skip_object				; branch if no object should be loaded
+		btst	#bmove_loadinert_bit,d2
+		beq.s	.not_inert				; branch if object should be normal
+		jsr	FindFreeInert				; find free OST slot
+		bne.s	.skip_object				; branch if not found
+		bra.s	.load_object
+		
+	.not_inert:
 		jsr	FindNextFreeObj				; find free OST slot
 		bne.s	.skip_object				; branch if not found
+		
+	.load_object:
 		move.l	d1,ost_id(a1)				; load object
 		saveparent
 
 	.skip_object:
-		move.b	(a2)+,d0				; get flags
 		bclr	#render_xflip_bit,ost_render(a0)	; assume facing left
 		bclr	#status_xflip_bit,ost_status(a0)
-		btst	#bmove_xflip_bit,d0
+		btst	#bmove_xflip_bit,d2
 		beq.s	.noflip					; branch if xflip bit isn't set
 		bset	#render_xflip_bit,ost_render(a0)	; face right
 		bset	#status_xflip_bit,ost_status(a0)
 
 	.noflip:
-		move.b	d0,ost_boss2_flags(a0)			; save flags
+		move.b	d2,ost_boss2_flags(a0)			; save flags
 		move.b	(a2)+,d0
 		ext.w	d0
 		add.w	d0,ost_boss2_mode(a0)			; next mode

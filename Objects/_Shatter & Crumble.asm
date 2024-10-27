@@ -9,13 +9,11 @@
 ; ---------------------------------------------------------------------------
 
 Shatter:
-		moveq	#0,d0
-		move.b	ost_frame(a0),d0
+		move.w	ost_frame_hi(a0),d0
 		add.w	d0,d0
 		movea.l	ost_mappings(a0),a2			; get mappings address
 		adda.w	(a2,d0.w),a2				; jump to frame
 		move.w	(a2)+,d1				; get number of sprites
-		subq.w	#1,d1					; -1 for loops
 		move.b	ost_render(a0),d3
 		bset	#render_rawmap_bit,d3
 		bclr	#render_useheight_bit,d3
@@ -68,13 +66,11 @@ Fragment:
 ; ---------------------------------------------------------------------------
 
 Crumble:
-		moveq	#0,d0
-		move.b	ost_frame(a0),d0
+		move.w	ost_frame_hi(a0),d0
 		add.w	d0,d0
 		movea.l	ost_mappings(a0),a2			; get mappings address
 		adda.w	(a2,d0.w),a2				; jump to frame
 		move.w	(a2)+,d1				; get number of sprites
-		subq.w	#1,d1					; -1 for loops
 		move.b	ost_render(a0),d3
 		bset	#render_rawmap_bit,d3
 		bclr	#render_useheight_bit,d3

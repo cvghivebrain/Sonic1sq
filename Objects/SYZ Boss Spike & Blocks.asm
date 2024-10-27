@@ -179,7 +179,7 @@ Stab_MoveBlock:
 		moveq	#0,d1
 		move.b	ost_height(a0),d1
 		add.b	ost_height(a2),d1
-		add.w	d0,d1
+		add.w	ost_y_pos(a0),d1
 		move.w	d1,ost_y_pos(a2)			; move block with boss
 		rts
 ; ===========================================================================
@@ -211,6 +211,8 @@ Stab_Break:	; Routine $12
 		bpl.s	.exit					; branch if time remains
 		move.b	#id_Stab_Retract,ost_routine(a0)	; goto Stab_Retract next
 		move.w	#26,ost_stab_wait_time(a0)
+		getlinked					; a1 = OST of block
+		move.b	#id_Cheese_Break,ost_routine(a1)	; make block break
 		
 	.exit:
 		rts
@@ -235,6 +237,7 @@ CheeseBlock:
 Cheese_Index:	index *,,2
 		ptr Cheese_Main
 		ptr Cheese_Solid
+		ptr Cheese_Break
 ; ===========================================================================
 		
 Cheese_Main:	; Routine 0
@@ -252,7 +255,8 @@ Cheese_Main:	; Routine 0
 	.skip_find:
 		move.l	#CheeseBlock,ost_id(a1)
 		move.b	#id_Cheese_Solid,ost_routine(a1)	; goto Cheese_Solid next
-		move.l	#Map_BossBlock,ost_mappings(a1)
+		move.l	#Map_Cheese,ost_mappings(a1)
+		move.b	#id_frame_cheese_wholeblock,ost_frame(a1)
 		move.w	#0+tile_pal3,ost_tile(a1)
 		move.b	#render_rel,ost_render(a1)
 		move.b	#$10,ost_displaywidth(a1)
@@ -270,4 +274,16 @@ Cheese_Main:	; Routine 0
 Cheese_Solid:	; Routine 2
 		jsr	SolidObject
 		jmp	DespawnQuick
+; ===========================================================================
+		
+Cheese_Break:	; Routine 4
+		move.b	#id_frame_cheese_broken,ost_frame(a0)	; use frame with 4 sprite pieces
+		lea	Cheese_Speeds(pc),a4
+		move.w	#$38,d2					; gravity for fragments
+		jmp	Shatter
+		
+Cheese_Speeds:	dc.w -$180, -$200
+		dc.w $180, -$200
+		dc.w -$100, -$100
+		dc.w $100, -$100
 		

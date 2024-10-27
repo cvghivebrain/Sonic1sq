@@ -435,7 +435,7 @@ startof_obj:	equ *
 		include "Objects\Boss Weapons.asm"		; BossWeapon
 		include "Objects\Bosses.asm"			; Boss
 		include "Objects\_Exploding.asm"
-		include "Objects\SYZ Boss Spike.asm"		; BossSpringYard
+		include "Objects\SYZ Boss Spike & Blocks.asm"	; Stabber, CheeseBlock
 
 		include "Objects\LZ Boss.asm"			; BossLabyrinth
 		include "Objects\MZ Boss Fire.asm"		; BossFire
@@ -810,7 +810,7 @@ Col_SBZ:	incbin	"Collision\SBZ.bin"			; SBZ index
 		include "Objects\SLZ Square Blocks [Mappings].asm" ; Map_SBlock
 		include "Objects\SYZ & LZ Spike Ball Chain [Mappings].asm" ; Map_SBall, Map_SBall2
 		include "Objects\SYZ & SBZ Large Spike Balls [Mappings].asm" ; Map_BBall
-		include "Objects\SYZ Blocks at Boss [Mappings].asm" ; Map_BossBlock
+		include "Objects\SYZ Boss Spike & Blocks [Mappings].asm" ; Map_Stab
 		include "Objects\LZ Water Surface [Mappings].asm" ; Map_Surf
 		include "Objects\LZ Pole [Mappings].asm"	; Map_Pole
 		include "Objects\LZ Flapping Door [Mappings].asm" ; Map_Flap

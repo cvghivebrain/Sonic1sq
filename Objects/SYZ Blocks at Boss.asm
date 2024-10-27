@@ -37,7 +37,7 @@ BBlock_Main:	; Routine 0
 
 .load_block:
 		move.l	#BossBlock,ost_id(a1)
-		move.l	#Map_BossBlock,ost_mappings(a1)
+		move.l	#Map_Cheese,ost_mappings(a1)
 		move.w	#0+tile_pal3,ost_tile(a1)
 		move.b	#render_rel,ost_render(a1)
 		move.b	#$10,ost_displaywidth(a1)
@@ -110,7 +110,7 @@ BBlock_Frag:	; Routine 4
 
 BBlock_Break:
 		lea	BBlock_FragData(pc),a4
-		moveq	#id_frame_bblock_topleft,d4		; first fragment is top left
+		moveq	#0,d4		; first fragment is top left
 		moveq	#3,d1
 		moveq	#$38,d2
 		addq.b	#2,ost_routine(a0)			; goto BBlock_Frag next
