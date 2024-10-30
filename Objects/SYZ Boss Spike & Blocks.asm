@@ -1,5 +1,5 @@
 ; ---------------------------------------------------------------------------
-; Spring Yard Zone boss spike
+; Spring Yard Zone boss
 
 ; spawned by:
 ;	Boss
@@ -36,6 +36,10 @@ Stab_Main:	; Routine 0
 		move.b	#16,ost_width(a0)
 		move.b	#$1D,ost_height(a0)
 		move.b	#StrId_Boss,ost_name(a0)
+		jsr	FindFreeFinal
+		bne.s	Stab_Wait
+		move.l	#CheesePick,ost_id(a1)			; load cheese pick object
+		move.w	ost_parent(a0),ost_parent(a1)		; set boss as parent
 
 Stab_Wait:	; Routine 2
 		getparent					; a1 = OST of boss
@@ -217,6 +221,47 @@ Stab_Break:	; Routine $12
 	.exit:
 		rts
 		
+; ---------------------------------------------------------------------------
+; Spring Yard Zone boss spike
+
+; spawned by:
+;	Stabber
+; ---------------------------------------------------------------------------
+
+CheesePick:
+		moveq	#0,d0
+		move.b	ost_routine(a0),d0
+		move.w	Pick_Index(pc,d0.w),d1
+		jmp	Pick_Index(pc,d1.w)
+; ===========================================================================
+Pick_Index:	index *,,2
+		ptr Pick_Main
+		ptr Pick_Move
+; ===========================================================================
+		
+Pick_Main:	; Routine 0
+		addq.b	#2,ost_routine(a0)			; goto Pick_Move next
+		move.b	#4,ost_col_width(a0)
+		move.b	#16,ost_col_height(a0)
+		move.b	#StrId_Boss,ost_name(a0)
+		moveq	#id_UPLC_SYZSpike,d0
+		jsr	UncPLC					; load gfx
+		move.l	#Map_Cheese,ost_mappings(a0)
+		move.w	#(vram_weapon/sizeof_cell)+tile_pal2,ost_tile(a0)
+		move.b	#render_rel,ost_render(a0)
+		move.b	#8,ost_displaywidth(a0)
+		move.b	#id_frame_cheese_spike,ost_frame(a0)
+		move.w	#priority_5,ost_priority(a0)
+		move.b	#id_React_Hurt,ost_col_type(a0)		; make spike harmful
+		
+Pick_Move:	; Routine 2
+		getparent					; a1 = OST of boss
+		move.w	ost_x_pos(a1),ost_x_pos(a0)
+		move.w	ost_y_pos(a1),d0
+		addi.w	#36,d0
+		move.w	d0,ost_y_pos(a0)
+		jmp	DisplaySprite
+
 ; ---------------------------------------------------------------------------
 ; Spring Yard Zone cheese blocks
 
