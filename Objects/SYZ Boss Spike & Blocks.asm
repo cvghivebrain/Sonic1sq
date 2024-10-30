@@ -40,6 +40,7 @@ Stab_Main:	; Routine 0
 		bne.s	Stab_Wait
 		move.l	#CheesePick,ost_id(a1)			; load cheese pick object
 		move.w	ost_parent(a0),ost_parent(a1)		; set boss as parent
+		move.w	a0,ost_linked(a1)			; set this object as linked
 
 Stab_Wait:	; Routine 2
 		getparent					; a1 = OST of boss
@@ -252,15 +253,37 @@ Pick_Main:	; Routine 0
 		move.b	#8,ost_displaywidth(a0)
 		move.b	#id_frame_cheese_spike,ost_frame(a0)
 		move.w	#priority_5,ost_priority(a0)
-		move.b	#id_React_Hurt,ost_col_type(a0)		; make spike harmful
 		
 Pick_Move:	; Routine 2
-		getparent					; a1 = OST of boss
+		shortcut
+		getlinked					; a1 = OST of stabber main
+		cmpi.b	#id_Stab_Align,ost_routine(a1)
+		bls.s	.exit					; branch if boss is moving freely
+		move.b	#id_React_Hurt,ost_col_type(a0)		; make spike harmful
+		move.w	ost_angle(a0),d0			; get current y offset
+		beq.s	.retracted				; branch if 0
+		cmpi.b	#id_Stab_Retract,ost_routine(a1)
+		bne.s	.retracted				; branch if not retracting
+		subq.w	#2,d0					; move up 2px
+		bra.s	.setpos
+		
+	.retracted:
+		cmpi.b	#id_Stab_Drop,ost_routine(a1)
+		bne.s	.setpos					; branch if not dropping
+		cmpi.w	#36,d0
+		beq.s	.setpos					; branch if fully extended
+		addq.w	#2,d0					; move down 2px
+		
+	.setpos:
+		move.w	d0,ost_angle(a0)			; save y offset
 		move.w	ost_x_pos(a1),ost_x_pos(a0)
-		move.w	ost_y_pos(a1),d0
-		addi.w	#36,d0
-		move.w	d0,ost_y_pos(a0)
+		add.w	ost_y_pos(a1),d0
+		move.w	d0,ost_y_pos(a0)			; set pos relative to boss
 		jmp	DisplaySprite
+		
+	.exit:
+		clr.b	ost_col_type(a0)			; make spike harmless
+		rts
 
 ; ---------------------------------------------------------------------------
 ; Spring Yard Zone cheese blocks
