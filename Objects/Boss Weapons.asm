@@ -36,7 +36,6 @@ BossWeapon:
 Weapon_Index:	index *,,2
 		ptr Weapon_Main
 		ptr Weapon_Done
-		ptr Weapon_Spike
 
 		rsobj BossWeapon
 ost_weapon_parent:	rs.l 1					; address of OST of parent
@@ -45,7 +44,6 @@ ost_weapon_y_diff:	rs.w 1					; value to add to y pos
 
 Weapon_Data:	dc.b id_frame_boss_pipe,3,id_Weapon_Done,id_UPLC_MZPipe
 		dc.b id_frame_boss_widepipe,3,id_Weapon_Done,id_UPLC_SLZPipe
-		dc.b id_frame_boss_spike,5,id_Weapon_Spike,id_UPLC_SYZSpike
 		even
 ; ===========================================================================
 
@@ -69,32 +67,5 @@ Weapon_Main:	; Routine 0
 		jsr	UncPLC					; load gfx
 		
 Weapon_Done:	; Routine 2
-		rts
-		
-Weapon_Spike:	; Routine 4
-		cmpi.b	#id_BSYZ_Attack,ost_mode(a3)
-		bne.s	.exit					; branch if boss isn't attacking
-		cmpi.b	#id_BSYZ_BreakBlock,ost_subtype(a3)
-		beq.s	.retract				; branch if boss is breaking block
-		cmpi.w	#$94,ost_weapon_y_diff(a0)
-		bge.s	.exit					; branch if spike is fully extended
-		addq.w	#7,ost_weapon_y_diff(a0)
-		move.b	#id_React_Hurt,ost_col_type(a0)		; make spike harmful
-		move.b	#4,ost_col_width(a0)
-		move.b	#16,ost_col_height(a0)
-		
-	.exit:
-		rts
-		
-	.retract:
-		tst.w	ost_boss_wait_time(a3)
-		bpl.s	.exit					; branch if boss is shaking
-		tst.w	ost_weapon_y_diff(a0)
-		bmi.s	.gone					; branch if spike is fully retracted
-		subq.w	#5,ost_weapon_y_diff(a0)
-		rts
-		
-	.gone:
-		clr.b	ost_col_type(a0)			; make spike harmless
 		rts
 		

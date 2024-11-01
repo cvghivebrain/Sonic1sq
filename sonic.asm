@@ -441,8 +441,6 @@ startof_obj:	equ *
 		include "Objects\MZ Boss Fire.asm"		; BossFire
 		include "Objects\SLZ Boss.asm"			; BossStarLight
 		include "Objects\SLZ Boss Spikeballs.asm"	; BossSpikeball
-		include "Objects\SYZ Boss.asm"			; BossSpringYard
-		include "Objects\SYZ Blocks at Boss.asm"	; BossBlock
 
 		include "Objects\SBZ2 Blocks That Eggman Breaks.asm" ; FalseFloor
 		include "Objects\SBZ2 Eggman.asm"		; ScrapEggman

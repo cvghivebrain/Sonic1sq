@@ -302,53 +302,13 @@ DLE_SYZ2_Sect_2:
 ; ===========================================================================
 
 DLE_SYZ3:
-		moveq	#0,d0
-		move.b	(v_dle_routine).w,d0
-		move.w	DLE_SYZ3_Index(pc,d0.w),d0
-		jmp	DLE_SYZ3_Index(pc,d0.w)
-; ===========================================================================
-DLE_SYZ3_Index:	index *
-		ptr DLE_SYZ3_Main
-		ptr DLE_SYZ3_Boss
-		ptr DLE_SYZ3_End
-; ===========================================================================
+		lea	DLE_SYZ3_Sect(pc),a1
+		bra.w	DLE_BoundaryUpdate
 
-DLE_SYZ3_Main:
-		cmpi.w	#$2AC0,(v_camera_x_pos).w
-		bcs.s	.exit					; branch if camera is left of $2AC0
-
-		bsr.w	FindFreeObj				; find free OST slot
-		bne.s	.exit					; branch if not found
-		move.l	#BossBlock,ost_id(a1)			; load blocks that boss picks up
-		addq.b	#2,(v_dle_routine).w			; goto DLE_SYZ3_Boss next
-
-	.exit:
-		rts
-; ===========================================================================
-
-DLE_SYZ3_Boss:
-		cmpi.w	#$2C00,(v_camera_x_pos).w
-		bcs.s	.exit					; branch if camera is left of $2C00
-
-		move.w	#$4CC,(v_boundary_bottom_next).w
-		bsr.w	FindFreeObj				; find free OST slot
-		bne.s	.fail					; branch if not found
-		move.l	#BossSpringYard,ost_id(a1)		; load SYZ boss	object
-		addq.b	#2,(v_dle_routine).w			; goto DLE_SYZ3_End next
-
-	.fail:
-		play_music mus_Boss				; play boss music
-		move.b	#1,(f_boss_loaded).w			; lock screen
-		rts
-; ===========================================================================
-
-.exit:
-		rts
-; ===========================================================================
-
-DLE_SYZ3_End:
-		move.w	(v_camera_x_pos).w,(v_boundary_left).w	; set boundary to current position
-		rts
+DLE_SYZ3_Sect:
+		dc.w 0, 0, $620
+		dc.w $2C00, 0, $4CC
+		dc.w -1
 
 ; ---------------------------------------------------------------------------
 ; Scrap	Brain Zone dynamic level events

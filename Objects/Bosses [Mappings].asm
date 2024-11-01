@@ -143,7 +143,6 @@ Map_BossItems:	index *
 		ptr frame_boss_chainanchor2
 		ptr frame_boss_widepipe
 		ptr frame_boss_pipe
-		ptr frame_boss_spike
 		
 frame_boss_chainanchor1:
 		spritemap					; GHZ boss
@@ -164,12 +163,4 @@ frame_boss_widepipe:
 frame_boss_pipe:
 		spritemap					; MZ boss
 		piece	-8, $14, 2x2, 0
-		endsprite
-		
-frame_boss_spike:
-		spritemap					; SYZ boss
-		piece	-8, -$10, 2x1, 0
-		piece	-8, -8, 1x2, 2
-		piece	0, -8, 1x2, 2, xflip
-		piece	-8, 8, 2x1, 4
 		endsprite

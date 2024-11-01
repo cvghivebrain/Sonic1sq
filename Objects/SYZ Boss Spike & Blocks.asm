@@ -290,10 +290,6 @@ Pick_Move:	; Routine 2
 
 ; spawned by:
 ;	ObjPos_SYZ3
-
-; subtypes:
-;	%0000NNNN
-;	NNNN - number of additional blocks to right of this one
 ; ---------------------------------------------------------------------------
 
 CheeseBlock:
@@ -309,35 +305,16 @@ Cheese_Index:	index *,,2
 ; ===========================================================================
 		
 Cheese_Main:	; Routine 0
-		moveq	#0,d1
-		move.b	ost_subtype(a0),d1			; get number of extra blocks
-		andi.b	#$F,d1
-		move.w	ost_x_pos(a0),d2			; starting x pos
-		movea.w	a0,a1
-		bra.s	.skip_find
-		
-	.loop:
-		jsr	FindFreeObj				; find free OST slot
-		bne.s	.fail					; branch if not found
-		
-	.skip_find:
-		move.l	#CheeseBlock,ost_id(a1)
-		move.b	#id_Cheese_Solid,ost_routine(a1)	; goto Cheese_Solid next
-		move.l	#Map_Cheese,ost_mappings(a1)
-		move.b	#id_frame_cheese_wholeblock,ost_frame(a1)
-		move.w	#0+tile_pal3,ost_tile(a1)
-		move.b	#render_rel,ost_render(a1)
-		move.b	#$10,ost_displaywidth(a1)
-		move.b	#StrId_Block,ost_name(a1)
-		move.b	#$10,ost_width(a1)
-		move.b	#$10,ost_height(a1)
-		move.w	#priority_3,ost_priority(a1)
-		move.w	d2,ost_x_pos(a1)			; set x position
-		move.w	ost_y_pos(a0),ost_y_pos(a1)
-		addi.w	#32,d2					; next block 32px to right
-		dbf	d1,.loop				; repeat for all blocks
-		
-	.fail:
+		addq.b	#2,ost_routine(a0)			; goto Cheese_Solid next
+		move.l	#Map_Cheese,ost_mappings(a0)
+		move.b	#id_frame_cheese_wholeblock,ost_frame(a0)
+		move.w	#0+tile_pal3,ost_tile(a0)
+		move.b	#render_rel,ost_render(a0)
+		move.b	#$10,ost_displaywidth(a0)
+		move.b	#StrId_Block,ost_name(a0)
+		move.b	#$10,ost_width(a0)
+		move.b	#$10,ost_height(a0)
+		move.w	#priority_3,ost_priority(a0)
 		
 Cheese_Solid:	; Routine 2
 		jsr	SolidObject

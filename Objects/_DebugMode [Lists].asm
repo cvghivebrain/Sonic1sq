@@ -74,7 +74,6 @@ DebugList_SYZ:
 		dbitem	Bumper, Map_Bump, 0, 0, id_frame_bump_normal, v_tile_bumper, 0
 		dbitem	Button, Map_But, 0, 0, id_frame_button_up, v_tile_button, 0
 		dbitem	BasicPlatform, Map_Platform, type_plat_syz+type_plat_still, 0, id_frame_plat_syz, 0, tile_pal3
-		dbitem	Boss, Map_Bosses, $82, 0, 0, tile_Art_Eggman, 0
 		dbitem	CheeseBlock, Map_Cheese, 0, 0, id_frame_cheese_wholeblock, 0, tile_pal3
 	.end:
 DebugList_LZ:
