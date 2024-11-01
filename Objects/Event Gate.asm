@@ -97,7 +97,7 @@ EGate_LeaveLR:	; Routine 4
 		
 EGate_Update:
 		add.b	d2,(v_dle_routine).w			; update routine counter
-		move.w	#0,(v_dle_section).w			; reset section counter
+		clr.w	(v_dle_section).w			; reset section counter
 		
 EGate_Reset:
 		move.b	#id_EGate_Enter,ost_routine(a0)		; goto EGate_Enter next

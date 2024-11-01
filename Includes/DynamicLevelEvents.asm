@@ -187,7 +187,7 @@ DLE_MZ1:
 		lea	DLE_MZ1_Sect(pc,d0.w),a1
 		bra.w	DLE_BoundaryUpdate
 		
-DLE_MZ1_Sect:	index *
+DLE_MZ1_Sect:	index *,,2
 		ptr DLE_MZ1_Sect_0
 		ptr DLE_MZ1_Sect_2
 		ptr DLE_MZ1_Sect_4
@@ -285,18 +285,20 @@ DLE_SLZ3_End:
 ; ---------------------------------------------------------------------------
 
 DLE_SYZ2:
-		move.w	#$520,(v_boundary_bottom_next).w
-		cmpi.w	#$25A0,(v_camera_x_pos).w
-		bcs.s	.exit					; branch if camera is left of $25A0
+		lea	DLE_SYZ2_Sect_0(pc),a1
+		tst.b	(v_dle_routine).w
+		beq.w	DLE_BoundaryUpdate
+		lea	DLE_SYZ2_Sect_2(pc),a1
+		bra.w	DLE_BoundaryUpdate
 
-		move.w	#$420,(v_boundary_bottom_next).w
-		cmpi.w	#$4D0,(v_ost_player+ost_y_pos).w
-		bcs.s	.exit					; branch if Sonic is above $4D0
+DLE_SYZ2_Sect_0:
+		dc.w 0, 0, $520
+		dc.w -1
 
-		move.w	#$520,(v_boundary_bottom_next).w
-
-	.exit:
-		rts
+DLE_SYZ2_Sect_2:
+		dc.w 0, 0, $520
+		dc.w $25A0, 0, $420
+		dc.w -1
 ; ===========================================================================
 
 DLE_SYZ3:

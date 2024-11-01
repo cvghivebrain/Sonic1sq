@@ -40,6 +40,9 @@ Boss_CamXPos:	dc.w $2960					; camera x pos where the boss becomes active
 Boss_InitMode:	dc.w (Boss_MoveGHZ-Boss_MoveList)/sizeof_bmove	; initial mode for each boss
 		dc.w (Boss_MoveMZ-Boss_MoveList)/sizeof_bmove
 		dc.w (Boss_MoveSYZ-Boss_MoveList)/sizeof_bmove
+Boss_HitCounts:	dc.b hitcount_ghz,hitcount_mz,hitcount_syz	; hits to beat each boss
+		dc.b hitcount_lz,hitcount_slz
+		even
 
 bmove:		macro xvel,yvel,time,loadobj,flags,next
 		dc.w xvel, yvel, time
@@ -100,11 +103,12 @@ Boss_Main:	; Routine 0
 		move.b	#id_React_Boss,ost_col_type(a0)
 		move.b	#24,ost_col_width(a0)
 		move.b	#24,ost_col_height(a0)
-		move.b	#hitcount_ghz,ost_col_property(a0)	; set number of hits to 8
 		move.w	ost_y_pos(a0),ost_boss2_y_normal(a0)
 		clr.b	(v_boss_flash).w
 		move.b	ost_subtype(a0),d0
 		andi.w	#$7F,d0
+		lea	Boss_HitCounts,a2
+		move.b	(a2,d0.w),ost_col_property(a0)		; set hit count
 		add.w	d0,d0
 		lea	Boss_InitMode,a2
 		move.w	(a2,d0.w),ost_boss2_mode(a0)

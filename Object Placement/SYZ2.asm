@@ -202,6 +202,7 @@ ObjPos_SYZ2:
 		objpos $24F0,$052D,Rings,$00,rem
 		objpos $2508,$051F,Rings,$00,rem
 		objpos $2520,$0510,Rings,$00,rem
+		objpos $2600,$4A8,EventGate,40
 		objpos $2638,$0410,Rings,$16,rem
 		objpos $2646,$0424,Rings,$15,rem
 		objpos $2690,$04CA,Springs,type_spring_yellow+type_spring_up
