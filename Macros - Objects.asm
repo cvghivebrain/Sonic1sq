@@ -327,10 +327,10 @@ toggleframe:	macro
 
 mul60:		macro
 		move.w	\1,\2
-		lsl.w	#6,\1
+		lsl.w	#6,\1					; multiply by 64
 		add.w	\2,\2
-		add.w	\2,\2
-		sub.w	\2,\1
+		add.w	\2,\2					; multiply by 4
+		sub.w	\2,\1					; output difference
 		endm
 
 ; ---------------------------------------------------------------------------

@@ -641,9 +641,6 @@ play_1up:	macros
 play_emerald:	macros
 		play_sound mus_Emerald				; play emerald music
 		
-play_haspassed:	macros
-		play_sound mus_HasPassed			; play "Sonic has passed" music
-		
 play_stop:	macros
 		play_sound cmd_Stop				; stop music
 		

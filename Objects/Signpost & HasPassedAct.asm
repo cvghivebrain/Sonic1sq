@@ -174,7 +174,7 @@ HasPassedAct:
 		move.w	(v_rings).w,d0				; load number of rings
 		mulu.w	#10,d0					; multiply by 10
 		move.w	d0,(v_ring_bonus).w			; set ring bonus
-		play_haspassed					; play "Sonic Has Passed" music
+		play_music mus_HasPassed			; play "Sonic Has Passed" music
 		
 	.exit:
 		rts

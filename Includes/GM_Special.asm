@@ -137,7 +137,7 @@ SS_FinishLoop:
 		move.w	(v_rings).w,d0
 		mulu.w	#10,d0					; multiply rings by 10
 		move.w	d0,(v_ring_bonus).w			; set rings bonus
-		play_haspassed					; play end-of-level music
+		play_music mus_HasPassed			; play end-of-level music
 
 		lea	(v_ost_all).w,a1			; RAM address to start clearing
 		move.w	#loops_to_clear_ost,d1			; size of RAM block to clear
