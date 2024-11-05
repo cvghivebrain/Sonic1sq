@@ -40,7 +40,7 @@ DeleteParent:
 ; input:
 ;	a0 = address of OST of object
 
-;	uses d0.l, d1.w, a1
+;	uses d0.l, d1.w, d2.l, a1
 ; ---------------------------------------------------------------------------
 
 DeleteFamily:
@@ -50,6 +50,8 @@ DeleteFamily:
 		rept sizeof_ost/4
 		move.l	d0,(a1)+				; delete parent
 		endr
+		lea	(v_ost_all+sizeof_ost).w,a1		; start at object after Sonic
+		moveq	#countof_ost-2,d2
 		
 	.loop:
 		cmp.w	ost_parent(a1),d1
@@ -57,14 +59,12 @@ DeleteFamily:
 		rept sizeof_ost/4
 		move.l	d0,(a1)+				; delete child object
 		endr
-		cmpa.w	#v_ost_end&$FFFF,a1
-		bne.s	.loop					; repeat if not at end of OSTs
+		dbf	d2,.loop				; repeat if not at end of OSTs
 		rts
 		
 	.next:
 		lea	sizeof_ost(a1),a1			; goto next OST slot
-		cmpa.w	#v_ost_end&$FFFF,a1
-		bne.s	.loop					; repeat if not at end of OSTs
+		dbf	d2,.loop				; repeat if not at end of OSTs
 		rts
 
 ; ---------------------------------------------------------------------------
