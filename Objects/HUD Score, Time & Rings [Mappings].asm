@@ -94,5 +94,5 @@ frame_hud_debugsonictop:
 		
 frame_hud_debugcpu:
 		spritemap
-		piece	0, -4, 1x1, 2, hi
+		piece	0, -4, 2x1, 2, hi
 		endsprite
