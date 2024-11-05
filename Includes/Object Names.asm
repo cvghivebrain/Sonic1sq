@@ -33,6 +33,7 @@ Str_Names:	objname "UNKNOWN ",Unknown
 		objname "COLLAPSE",CollapseFloor
 		objname "CONVEYOR",Conveyor
 		objname "CORK    ",Cork
+		objname	"CPUUSAGE",CPU
 		objname "CRABMEAT",Crabmeat
 		objname "CYLINDER",Cylinder
 		objname "DEBUG   ",Debug

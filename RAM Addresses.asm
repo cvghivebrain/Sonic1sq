@@ -244,6 +244,9 @@ v_nearest_obj:			rs.w 1				; address of OST of nearest object, as found by FindN
 v_invincibility:		rs.w 1				; time left for invincibility
 v_shoes:			rs.w 1				; time left for speed shoes
 v_debugmenu_item:		rs.w 1				; item highlighted on debug menu
+v_vblank_overflow:		rs.w 1				; scanline drawn when VBlank overflows into frame
+v_vblank_overflow_prev:		rs.w 1
+v_frame_usage:			rs.w 1				; scanline drawn when CPU usage for frame is complete
 f_128x128_mode:			rs.b 1				; flag set for 128x128 level chunks
 				rsblockend levelinfo
 

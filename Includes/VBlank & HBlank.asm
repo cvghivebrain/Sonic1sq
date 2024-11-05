@@ -70,7 +70,6 @@ VBlank_Lag:
 		move.b	#1,(f_hblank_pal_change).w		; set flag to let HBlank know a frame has finished
 		stopZ80
 		waitZ80
-		dma	Art_Red99,(sizeof_cell*2),$DF40
 		bsr.w	UpdatePalette
 		move.w	(v_vdp_hint_counter).w,(a6)		; set water palette position by sending VDP register $8Axx to control port (vdp_control_port)
 		startZ80

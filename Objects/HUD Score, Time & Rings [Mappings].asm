@@ -10,6 +10,7 @@ Map_HUD:	index *
 		ptr frame_hud_debug
 		ptr frame_hud_debugsonic
 		ptr frame_hud_debugsonictop
+		ptr frame_hud_debugcpu
 
 frame_hud_allyellow:
 		spritemap
@@ -74,8 +75,7 @@ frame_hud_lifeicon:
 		
 frame_hud_debug:
 		spritemap
-		piece	0, 0, 2x1, $32, hi			; cpu usage
-		piece	$18, 0, 2x1, $34, hi			; sprite counter
+		piece	0, 0, 2x1, $34, hi			; sprite counter
 		piece	0, 12, 4x1, $D0, hi			; camera x pos
 		piece	0, 20, 4x1, $D4, hi			; camera y pos
 		endsprite
@@ -90,4 +90,9 @@ frame_hud_debugsonictop:
 		spritemap
 		piece	-16, -40, 4x1, 0, hi			; object x pos
 		piece	-16, -32, 4x1, 4, hi			; object y pos
+		endsprite
+		
+frame_hud_debugcpu:
+		spritemap
+		piece	0, -4, 1x1, 2, hi
 		endsprite

@@ -9,7 +9,7 @@ _Sonic 1-squared_ is an enhanced version of the original _Sonic the Hedgehog_ ga
 * `LoadPerDemo` loads the level number, demo data, character and start position for all demos, including those during the credits.
 * Rewritten level select routine to be more customisable. It now uses standard ASCII, and supports multiple columns (which are automatically generated based on the lines-per-column setting).
 * The hidden Japanese credits, "try again" and "end" screens have been given their own gamemodes, which are accessible through the level select.
-* The HUD has new debug features, including a CPU cycle usage counter (displayed as a decimal percentage), sprite counter ($50 is max) and camera x/y position.
+* The HUD has new debug features, including a CPU cycle usage indicator (displayed as two arrows on the left side of the screen - red for VBlank overflow and yellow for overall usage), sprite counter ($50 is max) and camera x/y position.
 * 6 button support. `v_joypad_hold_actual_xyz` contains the status of the X/Y/Z/Mode buttons.
 
 ## Graphics
@@ -21,6 +21,7 @@ _Sonic 1-squared_ is an enhanced version of the original _Sonic the Hedgehog_ ga
 * Water palettes are generated in-game by the `WaterFilter` subroutine, instead of being hardcoded.
 * Fading to black/white is controlled by a brightness variable, and no longer requires a "next" palette. This simplifies loading new palettes.
 * Sprites can be hidden with the variables `v_spritemask_height` and `v_spritemask_pos`.
+* Sonic's sprites are loaded from a PNG spritesheet using [HiveMap](https://github.com/cvghivebrain/HiveMapExport).
 
 ## Objects
 * Modified the way animation works to save 2 bytes in RAM per object. The high bit of `ost_anim` now serves as an update flag instead of `ost_anim_restart`.
@@ -39,7 +40,7 @@ _Sonic 1-squared_ is an enhanced version of the original _Sonic the Hedgehog_ ga
 * Monitors can be broken from below if they are already on the ground.
 * Each title card has its own PLC, so only letters that are used need to be loaded. Title cards are automatically centered by the `autocard` macro. Title card mappings are also automated, and can use sprite mappings more efficiently by joining two letters together as a single sprite.
 * GHZ/SLZ loops use an object instead of being hard-coded. The object reads Sonic's position within the loop and updates the level layout accordingly.
-* Pushable blocks can be moved by standing on top of them and pushing against a wall. The player can use this to retrieve a block that's stuck next to a wall.
+* Pushable blocks can be moved by standing on top of them and pushing against a wall. The player can use this to retrieve a block if it's stuck next to a wall.
 * Debug mode has been rewritten with more features, including info overlays for Sonic and the nearest object (similar to those in the [Sonic Physics Guide](http://info.sonicretro.org/Sonic_Physics_Guide)). The controls are as follows:
   * B - Toggle between Sonic and object.
   * C (as object) - Place an object.
@@ -62,3 +63,5 @@ _Sonic 1-squared_ is an enhanced version of the original _Sonic the Hedgehog_ ga
 * [flamewing](https://github.com/flamewing) for [mdcomp](https://github.com/flamewing/mdcomp).
 * [vladikcomper](https://github.com/vladikcomper) for the advanced error handler.
 * [Devon](https://github.com/Ralakimus) for the optimised CalcAngle routine.
+* [OrionNavattan](https://github.com/OrionNavattan) for various optimisations.
+* [Brainulator](https://github.com/Brainulator9) for some display bugfixes.

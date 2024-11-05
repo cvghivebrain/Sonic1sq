@@ -363,6 +363,7 @@ startof_obj:	equ *
 		include "Objects\HUD.asm"			; HUD
 		include "Objects\_HexToDec.asm"
 		include "Objects\HUD Debug Overlay.asm"		; DebugOverlay
+		include "Objects\HUD CPU Usage.asm"		; CPUUsage
 
 		include "Objects\SLZ Fans.asm"			; Fan
 
@@ -637,7 +638,6 @@ startof_obj:	equ *
 		incfile Art_Lives,"Graphics\HUD - Life Counter Icon",bin,dma_safe
 		incfile	Art_HUDNums,"Graphics\HUD Numbers",bin,dma_safe
 		incfile	Art_LivesNums,"Graphics\Lives Counter Numbers",bin,dma_safe
-		incfile	Art_Red99,"Graphics\Red 99",bin,dma_safe
 		incfile	Art_Overlay,"Graphics\Debug Overlay",bin,dma_safe
 		incfile Kos_Ring,"Graphics Moduled\Rings",kpm
 		incfile Art_Shield,"Graphics\Shield",bin,dma_safe

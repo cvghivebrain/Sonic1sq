@@ -71,7 +71,7 @@ GM_Demo:
 
 Level_TtlCardLoop:
 		move.b	#id_VBlank_TitleCard,(v_vblank_routine).w
-		bsr.w	WaitForVBlank_CPU
+		bsr.w	WaitForVBlank
 		bsr.w	ExecuteObjects
 		bsr.w	BuildSprites
 		move.b	(v_titlecard_loaded).w,d0
@@ -172,7 +172,7 @@ Level_Skip_TtlCard:
 Level_MainLoop:
 		bsr.w	PauseGame				; check for pause (enters another loop if paused)
 		move.b	#id_VBlank_Level,(v_vblank_routine).w
-		bsr.w	WaitForVBlank_CPU
+		bsr.w	WaitForVBlank
 		addq.w	#1,(v_frame_counter).w			; increment level timer
 		bsr.w	MoveSonicInDemo
 		bsr.w	LZWaterFeatures

@@ -61,6 +61,8 @@ HUD_Main:	; Routine 0
 		
 		jsr	FindFreeFinal
 		move.l	#DebugOverlay,ost_id(a1)		; load overlay object
+		jsr	FindFreeInert
+		move.l	#CPUUsage,ost_id(a1)			; load CPU usage object
 
 HUD_Flash:	; Routine 2
 		shortcut
@@ -349,7 +351,6 @@ HUD_Debug:
 		move.w	#priority_0,ost_priority(a0)
 		move.b	#StrId_Debug,ost_name(a0)
 		shortcut
-		moveq	#0,d0
 		move.b	(v_spritecount).w,d0			; get sprite count
 		cmp.b	ost_hud_sprites(a0),d0
 		beq.s	.skip_sprite				; branch if counter is unchanged
