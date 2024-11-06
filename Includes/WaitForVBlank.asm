@@ -3,18 +3,36 @@
 ; ---------------------------------------------------------------------------
 
 WaitForVBlank:
-		move.w	(vdp_counter).l,d2			; get vertical position
-		move.w	d2,(v_frame_usage).w			; save as end of previous frame
-		move.w	(v_vblank_overflow).w,d2
-		move.w	d2,(v_vblank_overflow_prev).w		; save previous VBlank overflow
+		tst.b	(f_pause).w
+		bne.s	WaitForVBlank_NoCPU			; branch if paused
+
+WaitForVBlank_SkipChk:
+		move.w	(vdp_counter).l,d3			; get vertical position
+		move.w	d3,(v_frame_usage).w			; save as end of previous frame
+		move.w	(v_vblank_overflow).w,d3
+		move.w	d3,(v_vblank_overflow_prev).w		; save previous VBlank overflow
 		enable_ints
 
 	.wait:
 		tst.b	(v_vblank_routine).w			; has VBlank routine finished?
 		bne.s	.wait					; if not, branch
-		move.w	(vdp_counter).l,d2			; get vertical position
-		move.w	d2,(v_vblank_overflow).w		; save as start of frame (should be 0, assuming no overflow)
+		move.w	(vdp_counter).l,d3			; get vertical position
+		move.w	d3,(v_vblank_overflow).w		; save as start of frame (should be 0, assuming no overflow)
 		rts
+
+WaitForVBlank_NoCPU:
+		enable_ints
+
+	.wait:
+		tst.b	(v_vblank_routine).w			; has VBlank routine finished?
+		bne.s	.wait					; if not, branch
+		rts
+
+WaitForVBlank_Paused:
+		tst.b	(f_pause).w
+		bpl.s	WaitForVBlank_NoCPU			; branch if not using slow-mo
+		move.b	#1,(f_pause).w				; clear slow-mo flag
+		bra.s	WaitForVBlank_SkipChk
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	freeze the game for a set time

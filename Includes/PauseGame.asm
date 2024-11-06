@@ -18,7 +18,7 @@ PauseGame:
 
 Pause_Loop:
 		move.b	#id_VBlank_Pause,(v_vblank_routine).w
-		bsr.w	WaitForVBlank				; wait for next frame
+		bsr.w	WaitForVBlank_Paused			; wait for next frame
 		move.b	(v_joypad_press_actual).w,d0		; read joypad presses
 		tst.b	(f_debug_cheat).w
 		beq.s	.chk_start				; branch if debug mode is off
@@ -54,6 +54,7 @@ Unpause:
 
 Pause_SlowMo:
 		move.b	#$80,(v_snddriver_ram+f_pause_sound).w	; unpause the music
+		move.b	#$81,(f_pause).w			; set slow motion flag
 		rts	
 
 ; ---------------------------------------------------------------------------
@@ -84,7 +85,7 @@ Pause_Debug_Main:
 		
 	Pause_Debug_Loop:
 		move.b	#id_VBlank_PauseDebug,(v_vblank_routine).w
-		bsr.w	WaitForVBlank				; wait for next frame
+		bsr.w	WaitForVBlank_Paused			; wait for next frame
 		btst	#bitM,(v_joypad_press_actual_xyz).w
 		bne.s	Pause_Debug_Exit			; branch if Mode is pressed
 		lea	(v_debugmenu_item).w,a1
@@ -133,7 +134,7 @@ Pause_Debug_Obj_KeepPos:
 		
 	Pause_Debug_Obj_Loop:
 		move.b	#id_VBlank_PauseDebug,(v_vblank_routine).w
-		bsr.w	WaitForVBlank				; wait for next frame
+		bsr.w	WaitForVBlank_Paused			; wait for next frame
 		btst	#bitM,(v_joypad_press_actual_xyz).w
 		bne.w	Pause_Debug_Exit			; branch if Mode is pressed
 		move.w	#countof_ost,d0				; number of items in menu
@@ -292,7 +293,7 @@ Pause_Debug_ObjView_Script:
 		
 	Pause_Debug_ObjView_Loop:
 		move.b	#id_VBlank_PauseDebug,(v_vblank_routine).w
-		bsr.w	WaitForVBlank				; wait for next frame
+		bsr.w	WaitForVBlank_Paused			; wait for next frame
 		btst	#bitM,(v_joypad_press_actual_xyz).w
 		bne.w	Pause_Debug_Exit			; branch if Mode is pressed
 		btst	#bitB,(v_joypad_press_actual).w
