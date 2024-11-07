@@ -270,13 +270,13 @@ startof_obj:	equ *
 
 		include "Objects\Burrobot.asm"			; Burrobot
 
+		include "Objects\MZ Unused Sideways Stomper.asm" ; SideStomp
 		include "Objects\MZ Green Glass Blocks.asm"	; GlassBlock
 		include "Objects\MZ Grass Platforms.asm"	; LargeGrass
 		incfile	LGrass_Coll_Wide,"Collision\MZ Grass Platforms Heightmap (Wide)",bin
 		incfile LGrass_Coll_Sloped,"Collision\MZ Grass Platforms Heightmap (Sloped)",bin
 		include "Objects\MZ Burning Grass.asm"		; GrassFire
 		include "Objects\MZ Chain Stompers.asm"		; ChainStomp
-		include "Objects\MZ Unused Sideways Stomper.asm" ; SideStomp
 		include "Objects\MZ Pushable Blocks.asm"	; PushBlock
 
 		include "Objects\Button.asm"			; Button

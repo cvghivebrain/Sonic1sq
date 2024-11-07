@@ -113,9 +113,9 @@ See_Solid:
 		moveq	#1,d6					; 1 byte in heightmap = 2px
 		lea	See_DataSlope,a2
 		btst	#render_xflip_bit,ost_render(a0)
-		beq.w	SolidObject_TopOnly_Heightmap		; branch if not xflipped
+		beq.w	SolidObjectTopHeightmap			; branch if not xflipped
 		lea	See_DataFlip,a2
-		bra.w	SolidObject_TopOnly_Heightmap
+		bra.w	SolidObjectTopHeightmap
 		
 ; ---------------------------------------------------------------------------
 ; Subroutine to set seesaw frame based on where Sonic is

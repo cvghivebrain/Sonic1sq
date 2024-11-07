@@ -45,7 +45,7 @@ Ledge_Main:	; Routine 0
 Ledge_Solid:	; Routine 2
 		moveq	#1,d6					; 1 byte in heightmap = 2px
 		movea.l	ost_ledge_heightmap(a0),a2		; heightmap
-		bsr.w	SolidObject_TopOnly_Heightmap
+		bsr.w	SolidObjectTopHeightmap
 		tst.b	d1
 		beq.w	DespawnObject				; branch if no collision
 		addq.b	#2,ost_routine(a0)			; goto Ledge_Wait next
@@ -65,7 +65,7 @@ Ledge_Wait:	; Routine 4
 		bmi.s	.delete					; branch if time hits -1
 		moveq	#1,d6					; 1 byte in heightmap = 2px
 		movea.l	ost_ledge_heightmap(a0),a2		; heightmap
-		bsr.w	SolidObject_TopOnly_Heightmap
+		bsr.w	SolidObjectTopHeightmap
 		bra.w	DespawnQuick_NoDisplay
 		
 	.delete:
