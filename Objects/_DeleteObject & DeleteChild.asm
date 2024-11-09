@@ -40,10 +40,43 @@ DeleteParent:
 ; input:
 ;	a0 = address of OST of object
 
-;	uses d0.l, d1.w, d2.l, a1
+;	uses d0.l, d1.w, a1
 ; ---------------------------------------------------------------------------
 
 DeleteFamily:
+		movea.l	a0,a1					; move current OST address to a1
+		move.w	a1,d1
+		moveq	#0,d0
+		rept sizeof_ost/4
+		move.l	d0,(a1)+				; delete parent
+		endr
+
+	.loop:
+		cmpa.w	#v_ost_end&$FFFF,a1
+		beq.s	.exit					; branch if at end of OSTs
+		cmp.w	ost_parent(a1),d1
+		bne.s	.next					; branch if next object isn't a child
+		rept sizeof_ost/4
+		move.l	d0,(a1)+				; delete child object
+		endr
+
+	.next:
+		lea	sizeof_ost(a1),a1			; goto next OST slot
+		bra.s	.loop
+		
+	.exit:
+		rts
+
+; ---------------------------------------------------------------------------
+; As above, but also deletes children before parent object
+
+; input:
+;	a0 = address of OST of object
+
+;	uses d0.l, d1.w, d2.l, a1
+; ---------------------------------------------------------------------------
+
+DeleteFamilyAll:
 		movea.l	a0,a1					; move current OST address to a1
 		move.w	a1,d1
 		moveq	#0,d0
@@ -82,19 +115,19 @@ DeleteChildren:
 		moveq	#0,d0
 		
 	.loop:
+		cmpa.w	#v_ost_end&$FFFF,a1
+		beq.s	.exit					; branch if at end of OSTs
 		cmp.w	ost_parent(a1),d1
 		bne.s	.next					; branch if next object isn't a child
 		rept sizeof_ost/4
 		move.l	d0,(a1)+				; delete child object
 		endr
-		cmpa.w	#v_ost_end&$FFFF,a1
-		bne.s	.loop					; repeat if not at end of OSTs
-		rts
 		
 	.next:
 		lea	sizeof_ost(a1),a1			; goto next OST slot
-		cmpa.w	#v_ost_end&$FFFF,a1
-		bne.s	.loop					; repeat if not at end of OSTs
+		bra.s	.loop
+		
+	.exit:
 		rts
 
 ; ---------------------------------------------------------------------------

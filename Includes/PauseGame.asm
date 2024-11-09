@@ -156,7 +156,7 @@ Pause_Debug_Obj_KeepPos:
 		mulu.w	#sizeof_ost,d0
 		addi.w	#v_ost_all&$FFFF,d0
 		move.w	d0,a0					; a0 = address of selected object
-		jsr	DeleteFamily				; delete object and children
+		jsr	DeleteFamilyAll				; delete object and children
 		bsr.w	Pause_Debug_DrawObj			; redraw menu
 		bra.s	Pause_Debug_Obj_Loop
 		
