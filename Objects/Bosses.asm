@@ -29,6 +29,8 @@ Boss_Index:	index *,,2
 ost_boss2_y_normal:	rs.l 1					; y position without wobble
 ost_boss2_time:		rs.w 1					; time until next action
 ost_boss2_cam_start:	equ ost_boss2_time			; camera x pos where boss activates
+ost_boss2_x_target:	equ ost_boss2_time			; x pos boss moves towards
+ost_boss2_y_target:	rs.w 1					; y pos boss moves towards
 ost_boss2_mode:		rs.w 1					; index within Boss_MoveList
 ost_boss2_wobble:	rs.b 1					; wobble counter
 ost_boss2_flags:	rs.b 1					; flag bitfield from Boss_MoveList
@@ -44,8 +46,8 @@ Boss_HitCounts:	dc.b hitcount_ghz,hitcount_mz,hitcount_syz	; hits to beat each b
 		dc.b hitcount_lz,hitcount_slz
 		even
 
-bmove:		macro xvel,yvel,time,loadobj,flags,next
-		dc.w xvel, yvel, time
+bmove:		macro xvel,yvel,xdist,ydist,loadobj,flags,next
+		dc.w xvel, yvel, xdist, ydist
 		dc.l loadobj
 		dc.b flags, next
 		endm
@@ -63,32 +65,32 @@ bmove_freezehit:	equ 1<<bmove_freezehit_bit		; boss freezes when hit
 bmove_hazard:		equ 1<<bmove_hazard_bit			; hazards activate
 bmove_loadinert:	equ 1<<bmove_loadinert_bit		; load object as inert
 
-Boss_MoveList:	; x speed, y speed, duration, object to load, flags, value to add to mode
-Boss_MoveGHZ:	bmove 0, $100, $B8, 0, 0, 1
+Boss_MoveList:	; x speed, y speed, x dist, y dist, object to load, flags, value to add to mode
+Boss_MoveGHZ:	bmove 0, $100, 0, $B8, 0, 0, 1
 sizeof_bmove:	equ *-Boss_MoveGHZ
-		bmove -$100, -$40, $60, 0, 0, 1
-		bmove 0, 0, 128, BossBall, bmove_laugh, 1
-		bmove -$40, 0, 128, 0, 0, 1
-		bmove 0, 0, 63, 0, bmove_xflip, 1
-		bmove $100, 0, 63, 0, bmove_xflip, 1
-		bmove 0, 0, 63, 0, 0, 1
-		bmove -$100, 0, 63, 0, 0, -3
+		bmove -$100, -$40, -$60, -$18, 0, 0, 1
+		bmove 0, 0, 128, 0, BossBall, bmove_laugh, 1
+		bmove -$40, 0, -$20, 0, 0, 0, 1
+		bmove 0, 0, 63, 0, 0, bmove_xflip, 1
+		bmove $100, 0, $40, 0, 0, bmove_xflip, 1
+		bmove 0, 0, 63, 0, 0, 0, 1
+		bmove -$100, 0, -$40, 0, 0, 0, -3
 
-Boss_MoveMZ:	bmove -$100, 0, $E0, BossNozzle, 0, 1
-		bmove 0, 0, 15, 0, bmove_nowobble, 1
-		bmove -$200, $40, 72, 0, bmove_nowobble+bmove_freezehit+bmove_hazard, 1
-		bmove -$200, -$40, 40, 0, bmove_nowobble+bmove_freezehit+bmove_hazard, 1
-		bmove 0, -$40, 32, 0, bmove_nowobble, 1
-		bmove 0, 0, 80, BossFire, bmove_xflip+bmove_nowobble+bmove_laugh, 1
-		bmove $200, $40, 72, 0, bmove_xflip+bmove_nowobble+bmove_freezehit+bmove_hazard, 1
-		bmove $200, -$40, 40, 0, bmove_xflip+bmove_nowobble+bmove_freezehit+bmove_hazard, 1
-		bmove 0, -$40, 32, 0, bmove_xflip+bmove_nowobble, 1
-		bmove 0, 0, 80, BossFire, bmove_nowobble+bmove_laugh, -7
+Boss_MoveMZ:	bmove -$100, 0, -$E0, 0, BossNozzle, 0, 1
+		bmove 0, 0, 15, 0, 0, bmove_nowobble, 1
+		bmove -$200, $40, -$90, $12, 0, bmove_nowobble+bmove_freezehit+bmove_hazard, 1
+		bmove -$200, -$40, -$50, -$A, 0, bmove_nowobble+bmove_freezehit+bmove_hazard, 1
+		bmove 0, -$40, 0, -8, 0, bmove_nowobble, 1
+		bmove 0, 0, 80, 0, BossFire, bmove_xflip+bmove_nowobble+bmove_laugh, 1
+		bmove $200, $40, $90, $12, 0, bmove_xflip+bmove_nowobble+bmove_freezehit+bmove_hazard, 1
+		bmove $200, -$40, $90, -$12, 0, bmove_xflip+bmove_nowobble+bmove_freezehit+bmove_hazard, 1
+		bmove 0, -$40, 0, -8, 0, bmove_xflip+bmove_nowobble, 1
+		bmove 0, 0, 80, 0, BossFire, bmove_nowobble+bmove_laugh, -7
 		
-Boss_MoveSYZ:	bmove -$100, 0, $78, 0, 0, 1
-		bmove -$140, 0, 243, Stabber, bmove_loadinert, 1
-		bmove $140, 0, 243, 0, bmove_xflip, 1
-		bmove -$140, 0, 243, 0, 0, -1
+Boss_MoveSYZ:	bmove -$100, 0, -$78, 0, 0, 0, 1
+		bmove -$140, 0, -$132, 0, Stabber, bmove_loadinert, 1
+		bmove $140, 0, $132, 0, 0, bmove_xflip, 1
+		bmove -$140, 0, -$132, 0, 0, 0, -1
 ; ===========================================================================
 
 Boss_Main:	; Routine 0
@@ -154,26 +156,16 @@ Boss_Wait:	; Routine 2
 ; ===========================================================================
 
 Boss_Move:	; Routine 4
-		tst.b	ost_mode(a0)
-		bne.s	.skip_wobble				; branch if mode is set (disables movement & pauses timer)
-		subq.w	#1,ost_boss2_time(a0)			; decrement timer
-		bpl.s	.continue				; branch if time remains
-		bsr.w	Boss_SetMode
-
-	.continue:
 		move.b	ost_boss2_flags(a0),d2
-		btst	#bmove_freezehit_bit,d2
-		beq.s	.nofreezehit				; branch if freeze on hit flag isn't set
-		cmpi.b	#$18,(v_boss_flash).w
-		bcc.s	.skip_wobble				; branch if boss was recently hit
+		tst.b	ost_mode(a0)
+		bne.s	Boss_Move_Flash				; branch if mode is set (disables movement & pauses timer)
+		tst.l	ost_x_vel(a0)
+		beq.s	Boss_Move_Wait				; branch if boss should stay still for set time
+		bsr.w	Boss_Move_Update			; actually move boss and stop when it reaches its target
 
-	.nofreezehit:
-		update_x_pos
-		move.w	ost_y_vel(a0),d0			; load vertical speed
-		ext.l	d0
-		asl.l	#8,d0					; multiply speed by $100
-		add.l	d0,ost_boss2_y_normal(a0)		; update y position
-
+Boss_Move_Wobble:
+		bsr.w	Boss_Move_ChkFreeze
+		bne.s	Boss_Move_Flash				; branch if boss should freeze when hit
 		move.b	ost_boss2_wobble(a0),d0			; get wobble byte
 		btst	#bmove_nowobble_bit,d2
 		beq.s	.wobble					; branch if wobble is enabled
@@ -181,7 +173,7 @@ Boss_Move:	; Routine 4
 		andi.b	#$7F,d1
 		bne.s	.wobble					; continue wobble until it evens out
 		move.w	ost_boss2_y_normal(a0),ost_y_pos(a0)	; update y pos
-		bra.s	.skip_wobble
+		bra.s	Boss_Move_Flash
 
 	.wobble:
 		jsr	(CalcSine).w				; convert to sine
@@ -190,7 +182,7 @@ Boss_Move:	; Routine 4
 		move.w	d0,ost_y_pos(a0)			; update actual y pos
 		addq.b	#2,ost_boss2_wobble(a0)			; increment wobble (wraps to 0 after $FE)
 
-	.skip_wobble:
+Boss_Move_Flash:
 		tst.b	ost_status(a0)
 		bmi.s	.beaten					; branch if boss has been beaten
 		tst.b	ost_col_type(a0)
@@ -212,6 +204,76 @@ Boss_Move:	; Routine 4
 		clr.w	ost_y_vel(a0)
 		clr.b	ost_boss2_flags(a0)
 		jmp	DisplaySprite
+; ===========================================================================
+		
+Boss_Move_Wait:
+		subq.w	#1,ost_boss2_time(a0)			; decrement timer
+		bpl.s	.continue				; branch if time remains
+		bsr.w	Boss_SetMode				; update mode
+		
+	.continue:
+		bra.w	Boss_Move_Wobble
+
+; ---------------------------------------------------------------------------
+; Subroutine to check if boss should freeze when hit
+; ---------------------------------------------------------------------------
+
+Boss_Move_ChkFreeze:
+		btst	#bmove_freezehit_bit,d2
+		beq.s	.exit					; branch if freeze on hit flag isn't set
+		cmpi.b	#$18,(v_boss_flash).w
+		bcc.s	.exit					; branch if boss was recently hit
+		moveq	#0,d0					; set output to 0
+
+	.exit:
+		rts
+
+; ---------------------------------------------------------------------------
+; Subroutine to move boss and stop at target pos
+; ---------------------------------------------------------------------------
+
+Boss_Move_Update:
+		bsr.s	Boss_Move_ChkFreeze
+		bne.s	.exit					; branch if boss should freeze when hit
+		move.w	ost_x_vel(a0),d0			; load x speed
+		beq.s	.skip_x					; branch if 0
+		ext.l	d0
+		asl.l	#8,d0					; multiply by $100
+		add.l	d0,ost_x_pos(a0)			; update x pos
+		move.w	ost_x_pos(a0),d1
+		sub.w	ost_boss2_x_target(a0),d1
+		tst.l	d0
+		bpl.s	.moving_right				; branch if boss is moving right
+		neg.w	d1
+		
+	.moving_right:
+		tst.w	d1
+		bmi.s	.skip_x					; branch if boss hasn't reached target
+		clr.w	ost_x_vel(a0)				; stop moving
+		move.w	ost_boss2_x_target(a0),ost_x_pos(a0)	; snap to target
+		
+	.skip_x:
+		move.w	ost_y_vel(a0),d0			; load y speed
+		beq.s	.exit					; branch if 0
+		ext.l	d0
+		asl.l	#8,d0					; multiply by $100
+		add.l	d0,ost_boss2_y_normal(a0)		; update y pos
+		move.w	ost_boss2_y_normal(a0),d1
+		sub.w	ost_boss2_y_target(a0),d1
+		tst.l	d0
+		bpl.s	.moving_down				; branch if boss is moving down
+		neg.w	d1
+		
+	.moving_down:
+		tst.w	d1
+		bmi.s	.exit					; branch if boss hasn't reached target
+		clr.w	ost_y_vel(a0)				; stop moving
+		move.w	ost_boss2_y_target(a0),ost_boss2_y_normal(a0) ; snap to target
+		
+	.exit:
+		tst.l	ost_x_vel(a0)
+		beq.s	Boss_SetMode				; update mode if x/y targets are both reached
+		rts
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to load info for and update the boss mode
@@ -225,9 +287,19 @@ Boss_SetMode:
 		adda.l	d0,a2
 		move.w	(a2)+,ost_x_vel(a0)
 		move.w	(a2)+,ost_y_vel(a0)
-		move.w	(a2)+,ost_boss2_time(a0)
+		move.w	(a2)+,ost_boss2_x_target(a0)
+		move.w	(a2)+,ost_boss2_y_target(a0)
 		move.l	(a2)+,d1
 		move.b	(a2)+,d2				; get flags
+		
+		tst.l	ost_x_vel(a0)
+		beq.s	.static					; branch if x/y speeds are both 0
+		move.w	ost_x_pos(a0),d0
+		add.w	d0,ost_boss2_x_target(a0)		; set x target based on current pos
+		move.w	ost_boss2_y_normal(a0),d0
+		add.w	d0,ost_boss2_y_target(a0)		; set y target based on current pos
+		
+	.static:
 		tst.l	d1
 		beq.s	.skip_object				; branch if no object should be loaded
 		btst	#bmove_loadinert_bit,d2
