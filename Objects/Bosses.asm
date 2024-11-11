@@ -70,10 +70,10 @@ Boss_MoveGHZ:	bmove 0, $100, 0, $B8, 0, 0, 1
 sizeof_bmove:	equ *-Boss_MoveGHZ
 		bmove -$100, -$40, -$60, -$18, 0, 0, 1
 		bmove 0, 0, 128, 0, BossBall, bmove_laugh, 1
-		bmove -$40, 0, -$20, 0, 0, 0, 1
-		bmove 0, 0, 64, 0, 0, bmove_xflip, 1
+		bmove -$3E, 0, -$20, 0, 0, 0, 1
+		bmove 0, 0, 63, 0, 0, bmove_xflip, 1
 		bmove $100, 0, $40, 0, 0, bmove_xflip, 1
-		bmove 0, 0, 64, 0, 0, 0, 1
+		bmove 0, 0, 63, 0, 0, 0, 1
 		bmove -$100, 0, -$40, 0, 0, 0, -3
 
 Boss_MoveMZ:	bmove -$100, 0, -$E0, 0, BossNozzle, 0, 1
@@ -427,6 +427,7 @@ BossExhaust:
 		jmp	DisplaySprite
 
 	.hide:
+		bclr	#render_onscreen_bit,ost_render(a0)	; don't display
 		rts
 
 ; ---------------------------------------------------------------------------
