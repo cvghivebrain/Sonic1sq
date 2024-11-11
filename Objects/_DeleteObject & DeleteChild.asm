@@ -59,6 +59,7 @@ DeleteFamily:
 		rept sizeof_ost/4
 		move.l	d0,(a1)+				; delete child object
 		endr
+		bra.s	.loop
 
 	.next:
 		lea	sizeof_ost(a1),a1			; goto next OST slot

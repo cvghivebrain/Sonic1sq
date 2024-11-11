@@ -71,9 +71,9 @@ sizeof_bmove:	equ *-Boss_MoveGHZ
 		bmove -$100, -$40, -$60, -$18, 0, 0, 1
 		bmove 0, 0, 128, 0, BossBall, bmove_laugh, 1
 		bmove -$40, 0, -$20, 0, 0, 0, 1
-		bmove 0, 0, 63, 0, 0, bmove_xflip, 1
+		bmove 0, 0, 64, 0, 0, bmove_xflip, 1
 		bmove $100, 0, $40, 0, 0, bmove_xflip, 1
-		bmove 0, 0, 63, 0, 0, 0, 1
+		bmove 0, 0, 64, 0, 0, 0, 1
 		bmove -$100, 0, -$40, 0, 0, 0, -3
 
 Boss_MoveMZ:	bmove -$100, 0, -$E0, 0, BossNozzle, 0, 1
@@ -229,7 +229,7 @@ Boss_Move_ChkFreeze:
 		rts
 
 ; ---------------------------------------------------------------------------
-; Subroutine to move boss and stop at target pos
+; Subroutine to move boss and stop at target position
 ; ---------------------------------------------------------------------------
 
 Boss_Move_Update:

@@ -81,9 +81,10 @@ See_Detect:	; Routine 2
 		lea	See_DataFlip,a2
 		
 	.noflip:
-		lsr.w	#1,d4
 		moveq	#0,d0
-		move.b	(a2,d4.w),d0				; get height byte from heightmap
+		move.b	ost_solid_x_pos(a0),d0
+		lsr.w	#1,d0
+		move.b	(a2,d0.w),d0				; get height byte from heightmap
 		move.b	ost_solid_y_pos(a0),d1
 		move.b	d0,ost_solid_y_pos(a0)			; save new height
 		sub.b	d1,d0					; height diff (+ve if reduced)
