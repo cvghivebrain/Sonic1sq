@@ -71,6 +71,7 @@ sizeof_bmove:	equ *-Boss_MoveGHZ
 		bmove -$100, -$40, -$60, -$18, 0, 0, 1
 		bmove 0, 0, 128, 0, BossBall, bmove_laugh, 1
 		bmove -$3E, 0, -$20, 0, 0, 0, 1
+		; loop
 		bmove 0, 0, 63, 0, 0, bmove_xflip, 1
 		bmove $100, 0, $40, 0, 0, bmove_xflip, 1
 		bmove 0, 0, 63, 0, 0, 0, 1
@@ -78,17 +79,19 @@ sizeof_bmove:	equ *-Boss_MoveGHZ
 
 Boss_MoveMZ:	bmove -$100, 0, -$E0, 0, BossNozzle, 0, 1
 		bmove 0, 0, 15, 0, 0, bmove_nowobble, 1
+		; loop
 		bmove -$200, $40, -$90, $12, 0, bmove_nowobble+bmove_freezehit+bmove_hazard, 1
 		bmove -$200, -$40, -$50, -$A, 0, bmove_nowobble+bmove_freezehit+bmove_hazard, 1
 		bmove 0, -$40, 0, -8, 0, bmove_nowobble, 1
 		bmove 0, 0, 80, 0, BossFire, bmove_xflip+bmove_nowobble+bmove_laugh, 1
 		bmove $200, $40, $90, $12, 0, bmove_xflip+bmove_nowobble+bmove_freezehit+bmove_hazard, 1
-		bmove $200, -$40, $90, -$12, 0, bmove_xflip+bmove_nowobble+bmove_freezehit+bmove_hazard, 1
+		bmove $200, -$40, $50, -$A, 0, bmove_xflip+bmove_nowobble+bmove_freezehit+bmove_hazard, 1
 		bmove 0, -$40, 0, -8, 0, bmove_xflip+bmove_nowobble, 1
 		bmove 0, 0, 80, 0, BossFire, bmove_nowobble+bmove_laugh, -7
 		
 Boss_MoveSYZ:	bmove -$100, 0, -$78, 0, 0, 0, 1
 		bmove -$140, 0, -$132, 0, Stabber, bmove_loadinert, 1
+		; loop
 		bmove $140, 0, $132, 0, 0, bmove_xflip, 1
 		bmove -$140, 0, -$132, 0, 0, 0, -1
 ; ===========================================================================
