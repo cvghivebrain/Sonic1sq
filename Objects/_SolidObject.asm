@@ -172,35 +172,6 @@ Sol_Kill:
 		jmp	ObjectKillSonic				; Sonic dies
 
 ; ---------------------------------------------------------------------------
-; Subroutine to make an object solid, sides only
-
-; output:
-;	d1.l = collision type (0 = none; 4 = left; 8 = right)
-;	a1 = address of OST of Sonic
-
-;	uses d0.w, d2.w, d3.w, d4.l, d5.l
-; ---------------------------------------------------------------------------
-
-SolidObject_SidesOnly:
-		tst.b	ost_render(a0)
-		bpl.w	Sol_OffScreen				; branch if object isn't on screen
-		tst.w	(v_debug_active_hi).w
-		bne.w	Sol_None				; branch if debug mode is in use
-		getsonic
-		range_x_sonic					; get distances between Sonic (a1) and object (a0)
-		tst.w	d1
-		bgt.s	.exit					; branch if outside x hitbox
-		range_y_exact
-		bpl.s	.exit					; branch if outside y hitbox
-
-		cmp.w	d1,d3
-		blt.w	Sol_Side				; branch if Sonic is to the side
-
-	.exit:
-		moveq	#solid_none,d1				; set collision flag to none
-		rts
-
-; ---------------------------------------------------------------------------
 ; Subroutine to make an object solid using a heightmap
 
 ; input:

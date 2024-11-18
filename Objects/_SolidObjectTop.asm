@@ -30,10 +30,10 @@ SolidObjectTop_SkipChk:
 		
 		range_y_quick					; d2 = y dist (-ve if Sonic is above)
 		bpl.s	Top_None				; branch if Sonic is below
-		moveq	#0,d0
-		move.b	ost_height(a1),d0
+		moveq	#1,d0
+		add.b	ost_height(a0),d0
 		add.w	d0,d2
-		move.b	ost_height(a0),d0
+		move.b	ost_height(a1),d0
 		add.w	d0,d2
 		bmi.s	Top_None				; branch if outside y range
 		
@@ -88,8 +88,8 @@ Top_Stand:
 		
 	.not_moving:
 		move.w	ost_y_pos(a0),d2
-		moveq	#0,d1
-		move.b	ost_height(a0),d1
+		moveq	#1,d1
+		add.b	ost_height(a0),d1
 		sub.w	d1,d2
 		move.b	ost_height(a1),d1
 		sub.w	d1,d2

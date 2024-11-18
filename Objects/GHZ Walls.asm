@@ -51,7 +51,7 @@ Edge_Main:	; Routine 0
 
 Edge_Solid:	; Routine 2
 		shortcut
-		bsr.w	SolidObject_SidesOnly
+		bsr.w	SolidObjectSides
 		bra.w	DespawnQuick
 ; ===========================================================================
 
