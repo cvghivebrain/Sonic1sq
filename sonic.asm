@@ -331,6 +331,7 @@ startof_obj:	equ *
 		include "Objects\_SolidObject.asm"
 		include "Objects\_SolidObjectTop.asm"
 		include "Objects\_SolidObjectSides.asm"
+		include "Objects\_SolidObjectBottom.asm"
 		include "Objects\_SkipMappings.asm"
 		include "Objects\_DespawnObject & CheckActive.asm"
 
