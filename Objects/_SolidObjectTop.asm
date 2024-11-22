@@ -6,6 +6,14 @@
 ;	a1 = address of OST of Sonic
 
 ;	uses d0.l, d2.w
+
+; usage (if object only moves vertically or not at all):
+;		bsr.w	SolidObjectTop
+
+; usage (if object moves horizontally):
+;		move.w	ost_x_pos(a0),ost_x_prev(a0)		; save x pos before moving
+;		bsr.w	.moveobject				; move object
+;		bsr.w	SolidObjectTop
 ; ---------------------------------------------------------------------------
 
 SolidObjectTop:
@@ -26,7 +34,7 @@ SolidObjectTop_SkipChk:
 		moveq	#0,d1
 		move.b	ost_width(a0),d1
 		cmp.w	d0,d1
-		bcs.s	Top_None				; branch if outside x range
+		bcs.w	Top_None				; branch if outside x range
 		
 		range_y_quick					; d2 = y dist (-ve if Sonic is above)
 		bpl.s	Top_None				; branch if Sonic is below
@@ -40,18 +48,22 @@ SolidObjectTop_SkipChk:
 		range_x_quick					; d0 = x dist (-ve if Sonic is to the left)
 		add.w	d0,d1
 		move.b	d1,ost_solid_x_pos(a0)			; save x pos of Sonic on object
+		
+Top_Collide:
 		sub.w	d2,ost_y_pos(a1)			; snap to hitbox
 		move.w	ost_y_vel(a1),ost_sonic_impact(a1)	; copy Sonic's y speed
-		moveq	#0,d1
-		move.w	d1,ost_y_vel(a1)			; stop Sonic falling
-		move.w	d1,ost_angle(a1)			; clear Sonic's angle
-		move.w	ost_x_vel(a1),ost_inertia(a1)
 		move.b	#2,ost_mode(a0)				; set flag - Sonic is on the object
 		cmpi.b	#id_Roll,ost_anim(a1)
 		bne.s	.not_rolling				; branch if Sonic wasn't rolling/jumping
 		addq.b	#2,ost_mode(a0)				; set flag - Sonic hit the object rolling/jumping
+		cmpi.l	#Monitor,ost_id(a0)
+		beq.s	.exit					; skip landing if object was a monitor
 		
 	.not_rolling:
+		moveq	#0,d1
+		move.w	d1,ost_y_vel(a1)			; stop Sonic falling
+		move.w	d1,ost_angle(a1)			; clear Sonic's angle
+		move.w	ost_x_vel(a1),ost_inertia(a1)
 		bset	#status_platform_bit,ost_status(a0)	; set object's platform flag
 		bset	#status_platform_bit,ost_status(a1)	; set Sonic standing on object flag
 		move.w	a0,ost_sonic_on_obj(a1)			; save OST of object being stood on

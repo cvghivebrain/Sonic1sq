@@ -19,157 +19,64 @@
 
 SolidObject:
 		tst.b	ost_render(a0)
-		bpl.w	Sol_OffScreen				; branch if object isn't on screen
+		bpl.s	Sol_None				; branch if object isn't on screen
 
 SolidObject_SkipRender:
 		tst.w	(v_debug_active_hi).w
 		bne.s	Sol_None				; branch if debug mode is in use
 
 SolidObject_SkipRenderDebug:
-		getsonic
 		tst.b	ost_mode(a0)
-		bne.w	Sol_Stand				; branch if Sonic is already standing on object
-		range_x_sonic					; get distances between Sonic (a1) and object (a0)
-		cmpi.w	#0,d1
-		bgt.s	Sol_None				; branch if outside x hitbox
-		range_y_exact
-		bpl.s	Sol_None				; branch if outside y hitbox
+		bne.w	Top_Stand				; branch if Sonic is already standing on object
+		
+		getsonic					; a1 = OST of Sonic
+		move.w	ost_y_pos(a1),d2
+		sbabs.w	ost_y_pos(a0),d2			; d2 = y dist (abs)
+		moveq	#0,d0
+		move.b	ost_height(a0),d0
+		sub.w	d0,d2
+		move.b	ost_height(a1),d0
+		sub.w	d0,d2					; d2 = y dist with heights
+		bpl.s	Sol_None				; branch if outside y range
+		
+		moveq	#1,d1
+		move.w	ost_x_pos(a1),d0
+		sub.w	ost_x_pos(a0),d0
+		bpl.s	.right					; branch if Sonic is to the right
+		neg.w	d0					; d0 = x dist (abs)
+		addq.w	#1,d1					; 1px correction on left side
+		
+	.right:
+		add.b	ost_width(a0),d1
+		sub.w	d1,d0
+		move.b	(v_player1_width).w,d1
+		sub.w	d1,d0					; d0 = x dist with widths
+		bpl.s	Sol_None				; branch if outside x range
 
-		cmp.w	d1,d3
-		blt.w	Sol_Side				; branch if Sonic is to the side
-
-		tst.w	d2
-		bmi.s	Sol_Above				; branch if Sonic is above
-
-		cmpi.w	#-1,d1
-		bge.s	Sol_None				; branch if Sonic is below, but within 1px of the sides
+		cmp.w	d0,d2
+		blt.s	Sol_Side				; branch if Sonic is to the side
+		move.w	ost_y_pos(a1),d1
+		sub.w	ost_y_pos(a0),d1			; d1 = y dist (-ve if Sonic is above)
+		bpl.w	Bottom_Collide				; branch if Sonic is below
+		bra.w	Top_Collide
+		
+Sol_Side:
+		move.w	ost_x_pos(a1),d1
+		sub.w	ost_x_pos(a0),d1			; d1 = x dist (-ve if Sonic is to the left)
+		bpl.w	Sides_Right_SkipChk			; branch if Sonic is to the right
+		neg.w	d0
+		bra.w	Sides_Left_SkipChk			; branch if Sonic is to the left
 
 Sol_Below:
-		sub.w	d3,ost_y_pos(a1)			; snap to hitbox
-		move.w	#0,ost_y_vel(a1)			; stop Sonic moving up
-		moveq	#solid_bottom,d1			; set collision flag to bottom
-		btst	#status_air_bit,ost_status(a1)
-		beq.w	Sol_Kill				; branch if Sonic is on the ground
-		rts
 
 Sol_None:
-		btst	#status_pushing_bit,ost_status(a0)
-		beq.s	Sol_OffScreen				; branch if object isn't being pushed
-		bclr	#status_pushing_bit,ost_status(a1)	; stop pushing
-		bclr	#status_pushing_bit,ost_status(a0)
-
 Sol_OffScreen:
 		moveq	#solid_none,d1				; set collision flag to none
 		rts
 
 Sol_Above:
-		tst.w	ost_y_vel(a1)
-		bmi.s	Sol_None				; branch if Sonic is moving up
-		move.b	d4,ost_solid_x_pos(a0)			; save x pos of Sonic on object
-		add.w	d3,ost_y_pos(a1)			; snap to hitbox
-		move.w	ost_y_vel(a1),ost_sonic_impact(a1)	; copy Sonic's y speed
-		moveq	#0,d1
-		move.w	d1,ost_y_vel(a1)			; stop Sonic falling
-		move.w	d1,ost_angle(a1)			; clear Sonic's angle
-		move.w	ost_x_vel(a1),ost_inertia(a1)
-		move.b	#2,ost_mode(a0)				; set flag - Sonic is on the object
-		cmpi.b	#id_Roll,ost_anim(a1)
-		bne.s	.not_rolling				; branch if Sonic wasn't rolling/jumping
-		addq.b	#2,ost_mode(a0)				; set flag - Sonic hit the object rolling/jumping
-
-	.not_rolling:
-		bset	#status_platform_bit,ost_status(a0)	; set object's platform flag
-		bset	#status_platform_bit,ost_status(a1)	; set Sonic standing on object flag
-		move.w	a0,ost_sonic_on_obj(a1)			; save OST of object being stood on
-		btst	#status_air_bit,ost_status(a1)
-		beq.s	.exit					; branch if Sonic isn't jumping
-		exg	a0,a1					; temporarily make Sonic the current object
-		jsr	Sonic_ResetOnFloor			; reset Sonic as if on floor
-		exg	a0,a1
-
-	.exit:
-		moveq	#solid_top,d1				; set collision flag to top
-		rts
-
-Sol_Side:
-		tst.w	d0
-		bmi.s	.left					; branch if Sonic is on left side
-
-	.right:
-		sub.w	d1,ost_x_pos(a1)			; snap to hitbox
-		moveq	#solid_right,d1				; set collision flag to right
-		cmpi.w	#0,ost_x_vel(a1)
-		bgt.s	.away					; branch if Sonic is moving away
-		bra.s	.push
-
-	.left:
-		add.w	d1,ost_x_pos(a1)			; snap to hitbox
-		moveq	#solid_left,d1				; set collision flag to left
-		tst.w	ost_x_vel(a1)
-		bmi.s	.away					; branch if Sonic is moving away
-
-	.push:
-		btst	#status_air_bit,ost_status(a1)
-		bne.s	.in_air					; branch if Sonic is in the air
-		bset	#status_pushing_bit,ost_status(a1)	; make Sonic push object
-		bne.s	.stop_moving				; branch if Sonic has already started pushing
-		bset	#status_pushing_bit,ost_status(a0)	; make object be pushed
-		rts
-
-	.away:
-		bclr	#status_pushing_bit,ost_status(a1)
-		bclr	#status_pushing_bit,ost_status(a0)
-		rts
-
-	.in_air:
-		bclr	#status_pushing_bit,ost_status(a1)
-		bclr	#status_pushing_bit,ost_status(a0)
-
-	.stop_moving:
-		move.w	#0,ost_inertia(a1)
-		move.w	#0,ost_x_vel(a1)			; stop Sonic moving
-		rts
-
-Sol_Stand:
-		btst	#status_air_bit,ost_status(a1)
-		bne.s	Sol_Stand_Leave				; branch if Sonic jumps
-		range_x_sonic
-		
-		move.b	d4,ost_solid_x_pos(a0)			; save x pos of Sonic on object
-		tst	d1
-		bpl.s	Sol_Stand_Leave				; branch if Sonic is outside left/right edges
-
-		moveq	#0,d5
-		move.b	ost_height(a0),d5
-		
 Sol_Stand_Moving:
-		move.w	ost_y_pos(a0),d3
-		add.b	ost_height(a1),d5
-		sub.w	d5,d3
-		move.w	d3,ost_y_pos(a1)			; align Sonic with top of object
-		
-		move.w	ost_x_prev(a0),d2
-		beq.s	.skip_x_prev				; branch if previous x pos is unused
-		sub.w	ost_x_pos(a0),d2			; subtract previous x pos for distance in pixels moved (-ve if moved right)
-		clr.w	ost_x_prev(a0)
-		sub.w	d2,ost_x_pos(a1)			; update Sonic's x position
-
-	.skip_x_prev:
-		moveq	#solid_top,d1				; set collision flag to top
-		rts
-
 Sol_Stand_Leave:
-		bclr	#status_platform_bit,ost_status(a1)	; clear Sonic's standing flag
-		bclr	#status_platform_bit,ost_status(a0)	; clear object's standing flag
-		moveq	#0,d0
-		move.b	d0,ost_mode(a0)
-		move.b	d0,ost_solid_x_pos(a0)
-		move.b	d0,ost_solid_y_pos(a0)
-		moveq	#solid_none,d1
-		rts
-
-Sol_Kill:
-		jmp	ObjectKillSonic				; Sonic dies
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to make an object solid using a heightmap
@@ -199,6 +106,7 @@ Sol_Kill:
 ; ---------------------------------------------------------------------------
 
 SolidObject_Heightmap:
+		rts
 		tst.b	ost_render(a0)
 		bpl.w	Sol_OffScreen				; branch if object isn't on screen
 		tst.w	(v_debug_active_hi).w

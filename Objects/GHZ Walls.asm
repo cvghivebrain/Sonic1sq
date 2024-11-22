@@ -35,7 +35,7 @@ Edge_Main:	; Routine 0
 		ori.b	#render_rel,ost_render(a0)
 		move.b	#8,ost_displaywidth(a0)
 		move.b	#StrId_Wall,ost_name(a0)
-		move.b	#9,ost_width(a0)
+		move.b	#8,ost_width(a0)
 		move.b	#32,ost_height(a0)
 		move.w	#priority_6,ost_priority(a0)
 		move.b	ost_subtype(a0),d0

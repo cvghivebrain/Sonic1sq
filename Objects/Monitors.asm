@@ -67,7 +67,7 @@ Mon_Main:	; Routine 0
 		bsr.w	Mon_FindSlot
 
 Mon_Solid:	; Routine 2
-		bsr.w	Mon_Solid_Detect
+		bsr.w	SolidObject
 		cmpi.b	#solid_bottom,d1
 		beq.s	.bottom					; branch if hit from bottom
 		cmpi.b	#4,ost_mode(a0)
@@ -176,11 +176,11 @@ Mon_Broken:	; Routine $A
 
 Mon_Solid_Detect:
 		tst.b	ost_render(a0)
-		bpl.w	Sol_OffScreen				; branch if object isn't on screen
+		;bpl.w	Sol_OffScreen				; branch if object isn't on screen
 		tst.w	(v_debug_active_hi).w
 		bne.w	Sol_None				; branch if debug mode is in use
 		tst.b	ost_mode(a0)
-		bne.w	Sol_Stand				; branch if Sonic is already standing on object
+		;bne.w	Sol_Stand				; branch if Sonic is already standing on object
 		getsonic
 		range_x_sonic					; get distances between Sonic (a1) and object (a0)
 		tst.w	d1
@@ -200,7 +200,7 @@ Mon_Solid_Detect:
 
 	.side:
 		cmpi.b	#id_Roll,ost_anim(a1)
-		bne.w	Sol_Side				; use regular side collision if not rolling/jumping
+		;bne.w	Sol_Side				; use regular side collision if not rolling/jumping
 		tst.w	d0
 		bmi.s	.left					; branch if Sonic is on left side
 		moveq	#solid_right,d1				; set collision flag to right
@@ -212,7 +212,7 @@ Mon_Solid_Detect:
 
 	.above:
 		cmpi.b	#id_Roll,ost_anim(a1)
-		bne.w	Sol_Above				; use regular top collision if not rolling/jumping
+		;bne.w	Sol_Above				; use regular top collision if not rolling/jumping
 		tst.w	ost_y_vel(a1)
 		bmi.w	Sol_None				; branch if Sonic is moving up
 		add.w	d3,ost_y_pos(a1)			; snap to hitbox

@@ -34,7 +34,10 @@ SolidObjectSides_SkipChk:
 		
 Sides_Left:
 		add.w	d1,d0					; d0 = x dist with widths (-ve)
+		addq.w	#1,d0					; 1px correction
 		bmi.s	Sides_None				; branch if outside x range
+		
+Sides_Left_SkipChk:
 		tst.w	ost_x_vel(a1)
 		bmi.s	Sides_Cancel				; branch if Sonic is moving away
 		moveq	#solid_left,d1				; set collision flag to left
@@ -44,6 +47,8 @@ Sides_Right:
 		sub.w	d1,d0					; d0 = x dist with widths
 		cmpi.w	#0,d0
 		bgt.s	Sides_None				; branch if outside x range
+		
+Sides_Right_SkipChk:
 		cmpi.w	#0,ost_x_vel(a1)
 		bgt.s	Sides_Cancel				; branch if Sonic is moving away
 		moveq	#solid_right,d1				; set collision flag to right
