@@ -3,10 +3,9 @@
 
 ; output:
 ;	d1.l = collision type (0 = none; 1 = top; 2 = bottom; 4 = left; 8 = right)
-;	d4.w = x position of Sonic on object, starting at 0 on left edge
 ;	a1 = address of OST of Sonic
 
-;	uses d0.w, d2.w, d3.w, d4.l, d5.l
+;	uses d0.l, d2.l, a2
 
 ; usage (if object only moves vertically or not at all):
 ;		bsr.w	SolidObject

@@ -58,11 +58,11 @@ Sides_Collide:
 		clr.w	ost_inertia(a1)
 		clr.w	ost_x_vel(a1)				; stop Sonic moving
 		btst	#status_air_bit,ost_status(a1)
-		bne.s	.in_air					; branch if Sonic is in the air
+		bne.s	.exit					; branch if Sonic is in the air
 		bset	#status_pushing_bit,ost_status(a1)	; make Sonic push object
 		bset	#status_pushing_bit,ost_status(a0)	; make object be pushed
 		
-	.in_air:
+	.exit:
 		rts
 		
 Sides_Cancel:

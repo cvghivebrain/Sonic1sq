@@ -67,7 +67,7 @@ Mon_Main:	; Routine 0
 		bsr.w	Mon_FindSlot
 
 Mon_Solid:	; Routine 2
-		bsr.w	SolidObject
+		bsr.w	Mon_Solid_Detect
 		cmpi.b	#solid_bottom,d1
 		beq.s	.bottom					; branch if hit from bottom
 		cmpi.b	#4,ost_mode(a0)
@@ -176,48 +176,66 @@ Mon_Broken:	; Routine $A
 
 Mon_Solid_Detect:
 		tst.b	ost_render(a0)
-		;bpl.w	Sol_OffScreen				; branch if object isn't on screen
+		bpl.w	Sol_None				; branch if object isn't on screen
 		tst.w	(v_debug_active_hi).w
 		bne.w	Sol_None				; branch if debug mode is in use
 		tst.b	ost_mode(a0)
-		;bne.w	Sol_Stand				; branch if Sonic is already standing on object
-		getsonic
-		range_x_sonic					; get distances between Sonic (a1) and object (a0)
-		tst.w	d1
-		bgt.w	Sol_None				; branch if outside x hitbox
-		range_y_exact
-		bpl.w	Sol_None				; branch if outside y hitbox
+		bne.w	Top_Stand				; branch if Sonic is already standing on object
+		
+		getsonic					; a1 = OST of Sonic
+		move.w	ost_y_pos(a1),d2
+		sbabs.w	ost_y_pos(a0),d2			; d2 = y dist (abs)
+		moveq	#0,d0
+		move.b	ost_height(a0),d0
+		sub.w	d0,d2
+		move.b	ost_height(a1),d0
+		sub.w	d0,d2					; d2 = y dist with heights
+		bpl.w	Sol_None				; branch if outside y range
+		
+		moveq	#1,d1
+		move.w	ost_x_pos(a1),d0
+		sub.w	ost_x_pos(a0),d0
+		bpl.s	.right					; branch if Sonic is to the right
+		neg.w	d0					; d0 = x dist (abs)
+		addq.w	#1,d1					; 1px correction on left side
+		
+	.right:
+		add.b	ost_width(a0),d1
+		sub.w	d1,d0
+		move.b	(v_player1_width).w,d1
+		sub.w	d1,d0					; d0 = x dist with widths
+		bpl.w	Sol_None				; branch if outside x range
 
-		cmp.w	d1,d3
+		cmp.w	d0,d2
 		blt.s	.side					; branch if Sonic is to the side
-
-		tst.w	d2
-		bmi.s	.above					; branch if Sonic is above
-
-		sub.w	d3,ost_y_pos(a1)			; snap to hitbox
-		moveq	#solid_bottom,d1			; set collision flag to bottom
-		rts
-
-	.side:
+		move.w	ost_y_pos(a1),d1
+		sub.w	ost_y_pos(a0),d1			; d1 = y dist (-ve if Sonic is above)
+		bpl.w	.bottom					; branch if Sonic is below
+		
+	.top:
 		cmpi.b	#id_Roll,ost_anim(a1)
-		;bne.w	Sol_Side				; use regular side collision if not rolling/jumping
-		tst.w	d0
-		bmi.s	.left					; branch if Sonic is on left side
-		moveq	#solid_right,d1				; set collision flag to right
-		rts
-
-	.left:
-		moveq	#solid_left,d1				; set collision flag to left
-		rts
-
-	.above:
-		cmpi.b	#id_Roll,ost_anim(a1)
-		;bne.w	Sol_Above				; use regular top collision if not rolling/jumping
+		bne.w	Top_Collide				; use regular top collision if not rolling/jumping
 		tst.w	ost_y_vel(a1)
 		bmi.w	Sol_None				; branch if Sonic is moving up
-		add.w	d3,ost_y_pos(a1)			; snap to hitbox
+		sub.w	d2,ost_y_pos(a1)			; snap to hitbox
 		move.b	#4,ost_mode(a0)
 		moveq	#solid_top,d1				; set collision flag to top
+		rts
+		
+	.side:
+		cmpi.b	#id_Roll,ost_anim(a1)
+		bne.w	Sol_Side				; use regular side collision if not rolling/jumping
+		moveq	#solid_right,d1				; set collision flag to right
+		range_x_quick					; d0 = x dist (-ve if Sonic is to the left)
+		bpl.s	.exit					; branch if Sonic is to the right
+		moveq	#solid_left,d1				; set collision flag to left
+		rts
+		
+	.bottom:
+		sub.w	d2,ost_y_pos(a1)			; snap to hitbox
+		moveq	#solid_bottom,d1			; set collision flag to bottom
+		
+	.exit:
 		rts
 
 ; ---------------------------------------------------------------------------

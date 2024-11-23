@@ -56,8 +56,6 @@ Top_Collide:
 		cmpi.b	#id_Roll,ost_anim(a1)
 		bne.s	.not_rolling				; branch if Sonic wasn't rolling/jumping
 		addq.b	#2,ost_mode(a0)				; set flag - Sonic hit the object rolling/jumping
-		cmpi.l	#Monitor,ost_id(a0)
-		beq.s	.exit					; skip landing if object was a monitor
 		
 	.not_rolling:
 		moveq	#0,d1
