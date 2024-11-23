@@ -45,11 +45,9 @@ SolidObjectTop_SkipChk:
 		add.w	d0,d2
 		bmi.s	Top_None				; branch if outside y range
 		
-		range_x_quick					; d0 = x dist (-ve if Sonic is to the left)
-		add.w	d0,d1
-		move.b	d1,ost_solid_x_pos(a0)			; save x pos of Sonic on object
-		
 Top_Collide:
+		bsr.w	GetPosOnObject				; d1 = x pos of Sonic on object
+		move.b	d1,ost_solid_x_pos(a0)			; save x pos of Sonic on object
 		sub.w	d2,ost_y_pos(a1)			; snap to hitbox
 		move.w	ost_y_vel(a1),ost_sonic_impact(a1)	; copy Sonic's y speed
 		move.b	#2,ost_mode(a0)				; set flag - Sonic is on the object
@@ -123,6 +121,38 @@ Top_Leave:
 		move.b	d0,ost_solid_x_pos(a0)
 		move.b	d0,ost_solid_y_pos(a0)
 		moveq	#solid_none,d1
+		rts
+
+; ---------------------------------------------------------------------------
+; Subroutine to get Sonic's x position on an object
+
+; input:
+;	a1 = address of OST of Sonic
+
+; output:
+;	d1.w = x position, starting at 0 on left edge
+
+;	uses d0.w, d1.l
+; ---------------------------------------------------------------------------
+
+GetPosOnObject:
+		move.w	ost_x_pos(a1),d1
+		sub.w	ost_x_pos(a0),d1			; d1 = x dist (-ve if Sonic is to the left)
+		moveq	#0,d0
+		move.b	ost_width(a0),d0
+		add.w	d0,d1					; d1 = x pos on object
+		bpl.s	.no_left_overhang			; branch if not overhanging left side
+		moveq	#0,d1					; set to 0 if overhanging
+		rts
+		
+	.no_left_overhang:
+		add.w	d0,d0					; d0 = total width of object
+		cmp.w	d0,d1
+		bcs.s	.exit					; branch if x pos is within object's width
+		move.w	d0,d1
+		subq.w	#1,d1					; set to width-1 if overhanging
+		
+	.exit:
 		rts
 
 ; ---------------------------------------------------------------------------

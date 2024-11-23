@@ -54,8 +54,8 @@ SolidObject_SkipRenderDebug:
 
 		cmp.w	d0,d2
 		blt.s	Sol_Side				; branch if Sonic is to the side
-		move.w	ost_y_pos(a1),d1
-		sub.w	ost_y_pos(a0),d1			; d1 = y dist (-ve if Sonic is above)
+		move.w	ost_y_pos(a1),d0
+		sub.w	ost_y_pos(a0),d0			; d0 = y dist (-ve if Sonic is above)
 		bpl.w	Bottom_Collide				; branch if Sonic is below
 		bra.w	Top_Collide
 		
