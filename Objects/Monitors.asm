@@ -70,16 +70,23 @@ Mon_Solid:	; Routine 2
 		bsr.w	Mon_Solid_Detect
 		cmpi.b	#solid_bottom,d1
 		beq.s	.bottom					; branch if hit from bottom
+		cmpi.b	#id_Roll,ost_anim(a1)
+		bne.w	Mon_Animate				; branch if Sonic isn't rolling/jumping
 		cmpi.b	#4,ost_mode(a0)
 		beq.s	.break					; branch if monitor was jumped on
 		andi.b	#solid_left+solid_right,d1
 		beq.w	Mon_Animate				; branch if no collision
-		tst.w	ost_x_vel(a1)
+		move.w	ost_x_vel(a1),d0
 		beq.w	Mon_Animate				; branch if Sonic isn't moving sideways
-		tst.w	ost_y_vel(a1)
-		bmi.w	Mon_Animate				; branch if Sonic is moving upwards
-		cmpi.b	#id_Roll,ost_anim(a1)
-		bne.w	Mon_Animate				; branch if Sonic isn't rolling/jumping
+		bpl.s	.keep_vel
+		neg.w	d0					; d0 = x vel (abs)
+	.keep_vel:
+		cmpi.w	#0,ost_y_vel(a1)
+		bgt.s	.break					; branch if Sonic is moving down
+		cmpi.w	#$200,d0
+		bcs.w	Mon_Animate				; branch if Sonic is moving too slowly
+		addq.b	#2,ost_routine(a0)			; goto Mon_Break next
+		bra.w	Mon_Animate
 
 	.break:
 		neg.w	ost_y_vel(a1)				; reverse Sonic's y speed

@@ -363,11 +363,11 @@ ost_status:		rs.b 1					; orientation or mode
 	status_air:		equ 1<<status_air_bit		; Sonic is in the air (Sonic only)
 	status_jump:		equ 1<<status_jump_bit		; jumping or rolling (Sonic only)
 	status_platform:	equ 1<<status_platform_bit	; Sonic is standing on this (objects) / Sonic is standing on object (Sonic)
-	status_platform_p2:	equ 1<<status_platform_p2_bit	; Tails is standing on this (objects) / Tails is standing on object (Tails)
+	status_platform_p2:	equ 1<<status_platform_p2_bit	; Tails is standing on this (objects)
 	status_pointy:		equ 1<<status_pointy_bit	; object is pointy (objects only)
 	status_rolljump:	equ 1<<status_rolljump_bit	; Sonic is jumping after rolling (Sonic only)
 	status_pushing:		equ 1<<status_pushing_bit	; Sonic is pushing this (objects) / Sonic is pushing an object (Sonic)
-	status_pushing_p2:	equ 1<<status_pushing_p2_bit	; Tails is pushing this (objects) / Tails is pushing an object (Tails)
+	status_pushing_p2:	equ 1<<status_pushing_p2_bit	; Tails is pushing this (objects)
 	status_underwater:	equ 1<<status_underwater_bit	; Sonic is underwater (Sonic only)
 	status_broken:		equ 1<<status_broken_bit	; object has been broken (enemies/bosses)
 ost_respawn:		rs.b 1					; respawn list index number
