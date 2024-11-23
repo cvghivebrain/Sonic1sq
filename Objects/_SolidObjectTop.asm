@@ -33,8 +33,10 @@ SolidObjectTop_SkipChk:
 		sbabs.w	ost_x_pos(a0),d0			; d0 = x dist
 		moveq	#0,d1
 		move.b	ost_width(a0),d1
-		cmp.w	d0,d1
-		bcs.w	Top_None				; branch if outside x range
+		sub.w	d1,d0
+		move.b	(v_player1_width).w,d1
+		sub.w	d1,d0					; d0 = x dist with widths
+		bpl.w	Top_None				; branch if outside x range
 		
 		range_y_quick					; d2 = y dist (-ve if Sonic is above)
 		bpl.s	Top_None				; branch if Sonic is below
@@ -84,15 +86,17 @@ Top_Stand:
 		tst.w	ost_x_vel(a1)
 		beq.s	.not_moving				; branch if Sonic isn't moving
 		
-		range_x_quick					; d0 = x dist (-ve if Sonic is to the left)
+		move.w	ost_x_pos(a1),d0
+		sbabs.w	ost_x_pos(a0),d0			; d0 = x dist
 		moveq	#0,d1
 		move.b	ost_width(a0),d1
-		add.w	d1,d0					; get Sonic's x pos on platform
-		bmi.s	Top_Leave				; branch if beyond left edge
-		add.w	d1,d1
-		cmp.w	d1,d0
-		bcc.s	Top_Leave				; branch if beyond right edge
-		move.b	d0,ost_solid_x_pos(a0)			; save x pos of Sonic on object
+		sub.w	d1,d0
+		move.b	(v_player1_width).w,d1
+		sub.w	d1,d0					; d0 = x dist with widths
+		bpl.w	Top_Leave				; branch if outside x range
+		
+		bsr.w	GetPosOnObject				; d1 = x pos of Sonic on object
+		move.b	d1,ost_solid_x_pos(a0)			; save x pos of Sonic on object
 		
 	.not_moving:
 		move.w	ost_y_pos(a0),d2
