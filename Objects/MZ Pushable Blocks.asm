@@ -267,17 +267,14 @@ PushB_ChkStomp:
 		sub.w	ost_y_pos(a0),d0
 		cmpi.w	#-screen_height,d0
 		ble.s	.use_gravity				; branch if block is > 224px below stomper
-		moveq	#0,d2
-		move.b	ost_height(a1),d2
-		add.b	ost_height(a0),d2
+		move.w	ost_height_hi(a1),d2
+		add.w	ost_height_hi(a0),d2
 		cmp.w	d0,d2
 		blt.s	.use_gravity				; branch if block is above stomper (and not touching)
 		move.w	ost_x_pos(a1),d0
-		sub.w	ost_x_pos(a0),d0
-		abs.w	d0					; d0 = x dist between block & stomper
-		moveq	#0,d1
-		move.b	ost_width(a1),d1
-		add.b	ost_width(a0),d1
+		sbabs.w	ost_x_pos(a0),d0			; d0 = x dist between block & stomper
+		move.w	ost_width_hi(a1),d1
+		add.w	ost_width_hi(a0),d1
 		cmp.w	d0,d1
 		bcs.s	.use_gravity				; branch if block is outside width
 		move.w	ost_y_pos(a1),d0

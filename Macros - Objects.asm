@@ -347,8 +347,7 @@ getpos_y:	macro
 		moveq	#\1,d1
 		add.w	ost_y_pos(a0),d1
 		else
-		moveq	#0,d1
-		move.b	ost_height(a0),d1
+		move.w	ost_height_hi(a0),d1
 		add.w	ost_y_pos(a0),d1
 		endc
 		endm
@@ -358,10 +357,8 @@ getpos_y_neg:	macro
 		moveq	#-\1,d1
 		add.w	ost_y_pos(a0),d1
 		else
-		moveq	#0,d1
-		move.b	ost_height(a0),d1
-		neg.w	d1
-		add.w	ost_y_pos(a0),d1
+		move.w	ost_y_pos(a0),d1
+		sub.w	ost_height_hi(a0),d1
 		endc
 		endm
 
@@ -380,8 +377,7 @@ getpos_x:	macro
 		moveq	#\1,d0
 		add.w	ost_x_pos(a0),d0
 		else
-		moveq	#0,d0
-		move.b	ost_width(a0),d0
+		move.w	ost_width_hi(a0),d0
 		add.w	ost_x_pos(a0),d0
 		endc
 		endm
@@ -391,10 +387,8 @@ getpos_x_neg:	macro
 		moveq	#-\1,d0
 		add.w	ost_x_pos(a0),d0
 		else
-		moveq	#0,d0
-		move.b	ost_width(a0),d0
-		neg.w	d0
 		add.w	ost_x_pos(a0),d0
+		sub.w	ost_width_hi(a0),d0
 		endc
 		endm
 
@@ -427,8 +421,7 @@ getpos_bottomforward:	macro
 	.right\@:
 		add.w	ost_x_pos(a0),d0
 		else
-		moveq	#0,d0
-		move.b	ost_width(a0),d0
+		move.w	ost_width_hi(a0),d0
 		tst.w	ost_x_vel(a0)
 		bpl.s	.right\@				; branch if moving right
 		neg.w	d0

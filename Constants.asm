@@ -322,6 +322,10 @@ ost_subsprite:		rs.w 1					; pointer to subsprite table
 ost_displaywidth_hi:	rs.w 1					; display width/2
 ost_displaywidth:	equ ost_displaywidth_hi+1
 ost_priority:		rs.w 1					; address of sprite stack priority list
+ost_height_hi:		rs.w 1					; height/2
+ost_height:		equ ost_height_hi+1
+ost_width_hi:		rs.w 1					; width/2
+ost_width:		equ ost_width_hi+1
 ost_render:		rs.b 1					; bitfield for x/y flip, display mode
 	render_xflip_bit:	equ 0
 	render_yflip_bit:	equ 1
@@ -340,8 +344,6 @@ ost_render:		rs.b 1					; bitfield for x/y flip, display mode
 	render_rawmap:		equ 1<<render_rawmap_bit	; sprites use raw mappings - i.e. object consists of a single sprite instead of multipart sprite mappings (e.g. broken block fragments)
 	render_xshift:		equ 1<<render_xshift_bit	; object sprites are shifted by 1px when xflipped
 	render_onscreen:	equ 1<<render_onscreen_bit	; object is on screen
-ost_height:		rs.b 1					; height/2
-ost_width:		rs.b 1					; width/2
 ost_anim_frame:		rs.b 1					; current frame in animation script
 ost_anim:		rs.b 1					; current animation
 ost_anim_time:		rs.b 1					; time to next frame / general timer

@@ -192,11 +192,8 @@ Mon_Solid_Detect:
 		getsonic					; a1 = OST of Sonic
 		move.w	ost_y_pos(a1),d2
 		sbabs.w	ost_y_pos(a0),d2			; d2 = y dist (abs)
-		moveq	#0,d0
-		move.b	ost_height(a0),d0
-		sub.w	d0,d2
-		move.b	ost_height(a1),d0
-		sub.w	d0,d2					; d2 = y dist with heights
+		sub.w	ost_height_hi(a0),d2
+		sub.w	ost_height_hi(a1),d2			; d2 = y dist with heights
 		bpl.w	Sol_None				; branch if outside y range
 		
 		moveq	#1,d1

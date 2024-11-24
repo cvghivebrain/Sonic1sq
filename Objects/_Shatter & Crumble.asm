@@ -86,7 +86,7 @@ Crumble:
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		move.w	ost_tile(a0),ost_tile(a1)
 		move.w	ost_priority(a0),ost_priority(a1)
-		move.b	ost_displaywidth(a0),ost_displaywidth(a1)
+		move.w	ost_displaywidth_hi(a0),ost_displaywidth_hi(a1)
 		move.b	#StrId_Frag,ost_name(a1)
 		move.b	(a4)+,ost_anim_time(a1)
 		dbf	d1,.loop				; repeat for all sprite pieces

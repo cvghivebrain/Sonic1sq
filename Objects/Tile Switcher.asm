@@ -95,14 +95,13 @@ TSwi_Detect:	; Routine 2
 TileSwitchHotspot:
 		getsonic					; a1 = OST of Sonic
 		range_x_quick					; d0 = x dist
-		moveq	#0,d1
-		move.b	ost_width(a0),d1
+		move.w	ost_width_hi(a0),d1
 		add.w	d1,d0
 		add.w	d1,d1
 		cmp.w	d1,d0
 		bcc.s	.outside				; branch if Sonic is outside x range
 		range_y_quick					; d2 = y dist
-		move.b	ost_height(a0),d1
+		move.w	ost_height_hi(a0),d1
 		add.w	d1,d2
 		add.w	d1,d1
 		cmp.w	d1,d2

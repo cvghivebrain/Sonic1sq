@@ -24,17 +24,16 @@ Conv_Index:	index *,,2
 ost_convey_speed:	rs.w 1					; speed - can also be negative
 		rsobjend
 		
-Conv_Widths:	dc.b 128, 56
-		even
+Conv_Widths:	dc.w 128, 56
 ; ===========================================================================
 
 Conv_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Conv_Action next
 		move.b	#StrId_Conveyor,ost_name(a0)
-		move.b	#128,ost_width(a0)			; set width to 128px
 		move.b	ost_subtype(a0),d1			; get object type
 		andi.w	#$F,d1					; read only low nybble
-		move.b	Conv_Widths(pc,d1.w),ost_width(a0)	; set width from list
+		add.w	d1,d1
+		move.w	Conv_Widths(pc,d1.w),ost_width_hi(a0)	; set width from list
 		move.b	ost_subtype(a0),d1			; get object type
 		andi.b	#$F0,d1					; read only high nybble
 		ext.w	d1
@@ -44,12 +43,13 @@ Conv_Main:	; Routine 0
 Conv_Action:	; Routine 2
 		tst.w	(v_debug_active).w
 		bne.w	DespawnQuick_NoDisplay			; branch if debug mode is in use
-		moveq	#0,d2
-		move.b	ost_width(a0),d2			; d2 = width/2
 		getsonic					; a1 = OST of Sonic
-		range_x
-		cmp.w	d2,d1
-		bcc.w	DespawnQuick_NoDisplay			; branch if not in range
+		range_x_quick					; d0 = x dist
+		move.w	ost_width_hi(a0),d1
+		add.w	d1,d0
+		add.w	d1,d1
+		cmp.w	d1,d0
+		bcc.w	DespawnQuick_NoDisplay			; branch if Sonic is outside x range
 		move.w	ost_y_pos(a1),d1
 		sub.w	ost_y_pos(a0),d1
 		addi.w	#$30,d1

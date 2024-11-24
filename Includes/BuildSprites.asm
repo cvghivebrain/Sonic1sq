@@ -52,7 +52,7 @@ BuildSprites:
 		moveq	#32,d0
 		btst	#render_useheight_bit,d4		; is use height flag on?
 		beq.s	.assume_height				; if not, branch
-		move.b	ost_height(a0),d0
+		move.w	ost_height_hi(a0),d0
 		
 	.assume_height:
 		move.w	ost_y_pos(a0),d1

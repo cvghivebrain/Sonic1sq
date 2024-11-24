@@ -279,8 +279,7 @@ Card_Leave:	; Routine 8
 		move.w	ost_card_y_speed2(a0),d0
 		add.w	d0,ost_y_screen(a0)			; update y pos
 		
-		moveq	#0,d0
-		move.b	ost_displaywidth(a0),d0
+		move.w	ost_displaywidth_hi(a0),d0
 		move.w	ost_x_pos(a0),d1
 		subi.w	#screen_left,d1
 		add.w	d0,d1

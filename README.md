@@ -29,6 +29,7 @@ _Sonic 1-squared_ is an enhanced version of the original _Sonic the Hedgehog_ ga
 * `ost_id` is now a longword pointer instead of a single byte (as is the case in _Sonic 3 & Knuckles_). This allows for unlimited object types, and slightly improves performance.
 * `ost_frame` extended to a word (`ost_frame_hi`), allowing objects to have up to 8,192 distinct frames of animation.
 * `ost_displaywidth` extended to a word (`ost_displaywidth_hi`), allowing for objects wider than 256px to remain visible when partially off screen.
+* `ost_width` and `ost_height` extended to words (`ost_width_hi` and `ost_height_hi`).
 * Sprite mappings use 6 bytes per piece instead of 5, and the piece count is a word instead of a byte. This ensures the data is always aligned to even.
 * `ost_parent` contains the parent object's OST address (shortened to a word), if the `saveparent` was useded when the child object was created. `getparent` will set the parent object as `a1`. Calling `DeleteFamily` will delete an object as well as any objects which have it set as their parent.
 * `ost_linked` is similar to `ost_parent`. `getlinked` will set the linked object as `a1`. `DeleteFamily` won't delete linked objects.

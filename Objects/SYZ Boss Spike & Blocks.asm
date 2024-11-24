@@ -92,10 +92,8 @@ Stab_Align:	; Routine 4
 		move.w	ost_y_pos(a1),d0
 		cmp.w	ost_y_pos(a0),d0
 		bls.s	.cancel					; branch if boss is below the cheese block
-		moveq	#0,d1
-		move.b	ost_height(a1),d1
-		add.b	ost_height(a0),d1
-		sub.w	d1,d0
+		sub.w	ost_height_hi(a1),d0
+		sub.w	ost_height_hi(a0),d0
 		move.w	d0,ost_stab_y_stop(a0)
 		bra.s	Stab_Drop
 		
@@ -181,9 +179,8 @@ Stab_MoveAll:
 		
 Stab_MoveBlock:
 		getlinked a2					; a2 = OST of block
-		moveq	#0,d1
-		move.b	ost_height(a0),d1
-		add.b	ost_height(a2),d1
+		move.w	ost_height_hi(a0),d1
+		add.w	ost_height_hi(a2),d1
 		add.w	ost_y_pos(a0),d1
 		move.w	d1,ost_y_pos(a2)			; move block with boss
 		rts
