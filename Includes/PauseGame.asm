@@ -281,8 +281,8 @@ Pause_Debug_ObjView_Script:
 		show_ost Str_ObjStatus,ost_status,2,1,0
 		show_ost Str_ObjRespawn,ost_respawn,2,1,0
 		show_ost Str_ObjType,ost_subtype,2,2,0
-		show_ost Str_ObjW,ost_width,2,1,0
-		show_ost Str_ObjH,ost_height,2,1,0
+		show_ost Str_ObjW,ost_width_hi,4,1,0
+		show_ost Str_ObjH,ost_height_hi,4,1,0
 		show_ost Str_ObjCol,ost_col_type,4,1,0
 		show_ost Str_ObjColw,ost_col_width,2,1,0
 		show_ost Str_ObjColh,ost_col_height,2,2,0

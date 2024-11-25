@@ -4,13 +4,15 @@
 ;	uses d0.l, d1.w, a1, a2
 ; ---------------------------------------------------------------------------
 
+screen_width_active: equ screen_width+(screen_width%128)	; screen_width rounded up to next 128
+
 despawnrange:	macro
 		andi.w	#$FF80,d0				; d0 = current object 128px strip
 		move.w	(v_camera_x_pos).w,d1
 		subi.w	#128,d1
 		andi.w	#$FF80,d1				; d1 = 128px strip to left of camera
 		sub.w	d1,d0					; d0 = distance between both strips (negative if object is left of screen)
-		cmpi.w	#128+screen_width+192,d0
+		cmpi.w	#128+screen_width_active+128,d0		; check active area plus 128px either side
 		endm
 		
 DespawnObject:
@@ -19,9 +21,9 @@ DespawnObject:
 		bls.w	DisplaySprite				; display instead of despawn
 
 	DespawnObject_Delete:
+		moveq	#0,d0
 		move.b	ost_respawn(a0),d0			; get respawn id
 		beq.w	DeleteObject				; branch if not set
-		andi.w	#$FF,d0
 		lea	(v_respawn_list).w,a2
 		bclr	#7,2(a2,d0.w)				; clear high bit of respawn entry (i.e. object was despawned not broken)
 		bra.w	DeleteObject				; delete the object
@@ -72,9 +74,9 @@ DespawnFamily_AltX:
 		bls.w	DisplaySprite				; display instead of despawn
 
 	DespawnFamily_Delete:
+		moveq	#0,d0
 		move.b	ost_respawn(a0),d0			; get respawn id
 		beq.s	.skip_respawn				; branch if not set
-		andi.w	#$FF,d0
 		lea	(v_respawn_list).w,a2
 		bclr	#7,2(a2,d0.w)				; clear high bit of respawn entry (i.e. object was despawned not broken)
 		
@@ -99,9 +101,9 @@ DespawnSub:
 		despawnrange
 		bls.w	DisplaySprite				; display instead of despawn
 
+		moveq	#0,d0
 		move.b	ost_respawn(a0),d0			; get respawn id
 		beq.s	.skip_respawn				; branch if not set
-		andi.w	#$FF,d0
 		lea	(v_respawn_list).w,a2
 		bclr	#7,2(a2,d0.w)				; clear high bit of respawn entry (i.e. object was despawned not broken)
 		
