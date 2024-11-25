@@ -12,8 +12,8 @@ CharacterDefs:
 		dc.w id_UPLC_SonicCard				; "Sonic has passed" graphics
 		dc.w id_SSRSet_Sonic				; "Sonic got them all" settings
 		dc.w id_UPLC_SSRSonic				; "Sonic got them all" graphics
-		dc.b 18/2, 38/2					; width, height (standing/running etc.)
-		dc.b 14/2, 28/2					; width, height (rolling/jumping)
+		dc.w 18/2, 38/2					; width, height (standing/running etc.)
+		dc.w 14/2, 28/2					; width, height (rolling/jumping)
 		dc.b 18/2, 34/2					; hitbox width, height (standing/running etc.)
 		dc.b 18/2, 24/2					; hitbox width, height (rolling/jumping)
 	CharacterDefs_size:
@@ -27,8 +27,8 @@ CharacterDefs:
 		dc.w id_UPLC_KetchupCard
 		dc.w id_SSRSet_Ketchup
 		dc.w id_UPLC_SSRKetchup
-		dc.b 18/2, 38/2
-		dc.b 14/2, 28/2
+		dc.w 18/2, 38/2
+		dc.w 14/2, 28/2
 		dc.b 18/2, 34/2
 		dc.b 18/2, 24/2
 
@@ -41,7 +41,7 @@ CharacterDefs:
 		dc.w id_UPLC_MustardCard
 		dc.w id_SSRSet_Mustard
 		dc.w id_UPLC_SSRMustard
-		dc.b 18/2, 38/2
-		dc.b 14/2, 28/2
+		dc.w 18/2, 38/2
+		dc.w 14/2, 28/2
 		dc.b 18/2, 34/2
 		dc.b 18/2, 24/2

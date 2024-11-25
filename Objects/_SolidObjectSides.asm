@@ -26,7 +26,7 @@ SolidObjectSides_SkipChk:
 		bpl.s	Sides_None				; branch if outside y range
 		
 		moveq	#1,d1
-		add.b	(v_player1_width).w,d1			; use fixed player width value +1
+		add.w	(v_player1_width).w,d1			; use fixed player width value +1
 		move.b	ost_width(a0),d0
 		add.w	d0,d1					; d1 = combined Sonic/object widths
 		range_x_quick					; d0 = x dist (-ve if Sonic is to the left)

@@ -116,8 +116,8 @@ Bub_Big2:	; Routine 8
 		bclr	#status_rolljump_bit,ost_status(a1)
 		bclr	#status_jump_bit,ost_status(a1)
 		beq.s	.burst					; branch if Sonic wasn't jumping
-		move.b	(v_player1_height).w,ost_height(a1)
-		move.b	(v_player1_width).w,ost_width(a1)
+		move.w	(v_player1_height).w,ost_height_hi(a1)
+		move.w	(v_player1_width).w,ost_width_hi(a1)
 		move.w	(v_player1_height_diff).w,d0
 		sub.w	d0,ost_y_pos(a1)
 

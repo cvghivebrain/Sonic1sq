@@ -33,8 +33,8 @@ ost_ss_ghost:		rs.b 1					; status of ghost blocks - 0 = ghost; 1 = passed; 2 = 
 
 SSS_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto SSS_Action next
-		move.b	(v_player1_height_roll).w,ost_height(a0)
-		move.b	(v_player1_width_roll).w,ost_width(a0)
+		move.w	(v_player1_height_roll).w,ost_height_hi(a0)
+		move.w	(v_player1_width_roll).w,ost_width_hi(a0)
 		move.l	#Map_Sonic,ost_mappings(a0)
 		move.w	#tile_sonic,ost_tile(a0)
 		move.b	#render_rel,ost_render(a0)

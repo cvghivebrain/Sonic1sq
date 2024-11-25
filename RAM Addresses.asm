@@ -293,10 +293,10 @@ v_character1:			rs.w 1				; player 1 character id
 v_character2:			rs.w 1				; player 2 character id
 v_player1_ptr:			rs.l 1				; player 1 object pointer
 v_player2_ptr:			rs.l 1				; player 2 object pointer
-v_player1_width:		rs.b 1				; player 1 half width, standing/running etc.
-v_player1_height:		rs.b 1				; player 1 half height, standing/running etc.
-v_player1_width_roll:		rs.b 1				; player 1 half width, rolling/jumping
-v_player1_height_roll:		rs.b 1				; player 1 half height, rolling/jumping
+v_player1_width:		rs.w 1				; player 1 half width, standing/running etc.
+v_player1_height:		rs.w 1				; player 1 half height, standing/running etc.
+v_player1_width_roll:		rs.w 1				; player 1 half width, rolling/jumping
+v_player1_height_roll:		rs.w 1				; player 1 half height, rolling/jumping
 v_player1_height_diff:		rs.w 1				; player 1 difference in height between standing and rolling
 v_player1_hitbox_width:		rs.b 1				; player 1 half width, standing/running etc. (hitbox)
 v_player1_hitbox_height:	rs.b 1				; player 1 half height, standing/running etc. (hitbox)

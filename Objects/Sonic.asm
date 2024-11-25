@@ -27,8 +27,8 @@ Sonic_Index:	index *,,2
 
 Sonic_Main:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto Sonic_Control next
-		move.b	(v_player1_height).w,ost_height(a0)
-		move.b	(v_player1_width).w,ost_width(a0)
+		move.w	(v_player1_height).w,ost_height_hi(a0)
+		move.w	(v_player1_width).w,ost_width_hi(a0)
 		move.l	#Map_Sonic,ost_mappings(a0)
 		move.w	#tile_sonic,ost_tile(a0)
 		move.w	#priority_2,ost_priority(a0)
@@ -640,8 +640,8 @@ Sonic_RollSpeed:
 		tst.w	ost_inertia(a0)				; is Sonic moving?
 		bne.s	.update_speed				; if yes, branch
 		bclr	#status_jump_bit,ost_status(a0)
-		move.b	(v_player1_height).w,ost_height(a0)
-		move.b	(v_player1_width).w,ost_width(a0)
+		move.w	(v_player1_height).w,ost_height_hi(a0)
+		move.w	(v_player1_width).w,ost_width_hi(a0)
 		move.b	#id_Wait,ost_anim(a0)			; use "standing" animation
 		move.w	(v_player1_height_diff).w,d0
 		sub.w	d0,ost_y_pos(a0)
@@ -875,8 +875,8 @@ Sonic_ChkRoll:
 
 .roll:
 		bset	#status_jump_bit,ost_status(a0)		; set rolling/jumping flag
-		move.b	(v_player1_height_roll).w,ost_height(a0)
-		move.b	(v_player1_width_roll).w,ost_width(a0)
+		move.w	(v_player1_height_roll).w,ost_height_hi(a0)
+		move.w	(v_player1_width_roll).w,ost_width_hi(a0)
 		move.b	#id_Roll,ost_anim(a0)			; use "rolling" animation
 		move.w	(v_player1_height_diff).w,d0
 		add.w	d0,ost_y_pos(a0)
@@ -1003,8 +1003,8 @@ Sonic_Jump:
 		play_sound sfx_Jump				; play jumping sound
 		bset	#status_jump_bit,ost_status(a0)
 		bne.s	.is_rolling				; branch if Sonic was rolling
-		move.b	(v_player1_height_roll).w,ost_height(a0)
-		move.b	(v_player1_width_roll).w,ost_width(a0)
+		move.w	(v_player1_height_roll).w,ost_height_hi(a0)
+		move.w	(v_player1_width_roll).w,ost_width_hi(a0)
 		move.b	#id_Roll,ost_anim(a0)			; use "jumping" animation
 		move.w	(v_player1_height_diff).w,d0
 		add.w	d0,ost_y_pos(a0)
@@ -1380,8 +1380,8 @@ Sonic_JumpCollision_Right:
 Sonic_ResetOnFloor:
 		btst	#status_jump_bit,ost_status(a0)		; is Sonic jumping/rolling?
 		beq.s	.no_jump				; if not, branch
-		move.b	(v_player1_height).w,ost_height(a0)
-		move.b	(v_player1_width).w,ost_width(a0)
+		move.w	(v_player1_height).w,ost_height_hi(a0)
+		move.w	(v_player1_width).w,ost_width_hi(a0)
 		move.b	#id_Walk,ost_anim(a0)			; use running/walking animation
 		move.w	(v_player1_height_diff).w,d0
 		sub.w	d0,ost_y_pos(a0)

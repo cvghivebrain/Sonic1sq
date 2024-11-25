@@ -206,7 +206,7 @@ Mon_Solid_Detect:
 	.right:
 		add.b	ost_width(a0),d1
 		sub.w	d1,d0
-		move.b	(v_player1_width).w,d1
+		move.w	(v_player1_width).w,d1
 		sub.w	d1,d0					; d0 = x dist with widths
 		bpl.w	Sol_None				; branch if outside x range
 

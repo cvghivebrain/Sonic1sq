@@ -38,8 +38,8 @@ Smab_Solid:	; Routine 2
 		cmpi.b	#4,ost_mode(a0)
 		bne.w	DespawnQuick				; branch if Sonic wasn't rolling/jumping
 		bset	#status_jump_bit,ost_status(a1)
-		move.b	(v_player1_height_roll).w,ost_height(a1)
-		move.b	(v_player1_width_roll).w,ost_width(a1)
+		move.w	(v_player1_height_roll).w,ost_height_hi(a1)
+		move.w	(v_player1_width_roll).w,ost_width_hi(a1)
 		move.b	#id_Roll,ost_anim(a1)			; make Sonic roll
 		move.w	#-$300,ost_y_vel(a1)			; rebound Sonic
 		bset	#status_air_bit,ost_status(a1)

@@ -34,7 +34,7 @@ SolidObjectTop_SkipChk:
 		moveq	#0,d1
 		move.b	ost_width(a0),d1
 		sub.w	d1,d0
-		move.b	(v_player1_width).w,d1
+		move.w	(v_player1_width).w,d1
 		sub.w	d1,d0					; d0 = x dist with widths
 		bpl.w	Top_None				; branch if outside x range
 		
@@ -91,7 +91,7 @@ Top_Stand:
 		moveq	#0,d1
 		move.b	ost_width(a0),d1
 		sub.w	d1,d0
-		move.b	(v_player1_width).w,d1
+		move.w	(v_player1_width).w,d1
 		sub.w	d1,d0					; d0 = x dist with widths
 		bpl.w	Top_Leave				; branch if outside x range
 		
