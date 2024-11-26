@@ -19,8 +19,8 @@ BuildSprites:
 		bsr.w	BuildSpr_Mask				; draw spritemask
 		
 	.no_mask:
-		lea	(v_sprite_queue).w,a4			; address of sprite queue - $400 bytes, 8 sections of $80 bytes (1 word for count, $3F words for OST addresses)
-		moveq	#countof_priority-1,d7			; there are 8 priority levels
+		lea	(v_sprite_queue).w,a4			; address of sprite queue - $380 bytes, 7 sections of $80 bytes (1 word for count, $3F words for OST addresses)
+		moveq	#countof_priority-1,d7			; there are 7 priority levels
 
 	.priority_loop:
 		tst.w	(a4)					; are there objects left in current section?
@@ -66,7 +66,9 @@ BuildSprites:
 		addi.w	#screen_top,d2				; d2 = y pos of object on screen, +128px for VDP sprite coordinate
 
 	.draw_object:
-		movea.l	ost_mappings(a0),a1			; get address of mappings
+		move.l	ost_mappings(a0),d0			; get address of mappings
+		beq.s	.skip_mappings				; branch if not set (skip to subsprite check)
+		movea.l	d0,a1
 		moveq	#0,d1
 		btst	#render_rawmap_bit,d4			; is raw mappings flag on?
 		bne.s	.draw_now				; if yes, branch
@@ -83,6 +85,7 @@ BuildSprites:
 		move.w	BuildSpr_Index(pc,d4.w),d0
 		jsr	BuildSpr_Index(pc,d0.w)			; write data from sprite pieces to buffer
 		
+	.skip_mappings:
 		move.w	ost_subsprite(a0),d0
 		beq.s	.skip_draw				; branch if no subsprites are found
 		movea.w	d0,a1					; a1 = RAM address of subsprite table
