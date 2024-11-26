@@ -36,6 +36,8 @@ screen_top:		equ 128					; y coordinate of top edge of screen for sprites
 screen_left:		equ 128					; x coordinate of left edge of screen for sprites
 screen_bottom:		equ screen_top+screen_height		; y coordinate of bottom edge of screen for sprites (352)
 screen_right:		equ screen_left+screen_width		; x coordinate of right edge of screen for sprites (448)
+screen_width_active:	equ screen_width+(screen_width%128)	; screen_width rounded up to next 128 (384)
+screen_height_active:	equ screen_height+(screen_height%128)	; screen_height rounded up to next 128 (256)
 
 ; VRAM data
 vram_window:		equ $A000				; window nametable - unused
@@ -92,21 +94,27 @@ piece_size:		rs.b 1
 piece_tile:		rs.w 1
 piece_x_pos:		rs.w 1
 sizeof_piece:		equ __rs
-sizeof_subsprite:	equ (sizeof_piece*12)+2
-countof_subsprite:	equ 8
-subcount:		equ 0
-sub0:			equ 2
-sub1:			equ sizeof_piece+2
-sub2:			equ (sizeof_piece*2)+2
-sub3:			equ (sizeof_piece*3)+2
-sub4:			equ (sizeof_piece*4)+2
-sub5:			equ (sizeof_piece*5)+2
-sub6:			equ (sizeof_piece*6)+2
-sub7:			equ (sizeof_piece*7)+2
-sub8:			equ (sizeof_piece*8)+2
-sub9:			equ (sizeof_piece*9)+2
-sub10:			equ (sizeof_piece*10)+2
-sub11:			equ (sizeof_piece*11)+2
+countof_piece:		equ 16					; number of pieces per subsprite row
+sizeof_subsprite:	equ (sizeof_piece*countof_piece)+2	; size of single subsprite row
+countof_subsprite:	equ 8					; number of subsprite rows
+			rsset 0
+subcount:		rs.w 1					; number of pieces in this subsprite
+sub0:			rs.b sizeof_piece
+sub1:			rs.b sizeof_piece
+sub2:			rs.b sizeof_piece
+sub3:			rs.b sizeof_piece
+sub4:			rs.b sizeof_piece
+sub5:			rs.b sizeof_piece
+sub6:			rs.b sizeof_piece
+sub7:			rs.b sizeof_piece
+sub8:			rs.b sizeof_piece
+sub9:			rs.b sizeof_piece
+sub10:			rs.b sizeof_piece
+sub11:			rs.b sizeof_piece
+sub12:			rs.b sizeof_piece
+sub13:			rs.b sizeof_piece
+sub14:			rs.b sizeof_piece
+sub15:			rs.b sizeof_piece
 
 sprite1x1:		equ 0
 sprite1x2:		equ 1

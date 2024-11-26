@@ -4,8 +4,6 @@
 ;	uses d0.l, d1.w, a1, a2
 ; ---------------------------------------------------------------------------
 
-screen_width_active: equ screen_width+(screen_width%128)	; screen_width rounded up to next 128
-
 despawnrange:	macro
 		andi.w	#$FF80,d0				; d0 = current object 128px strip
 		move.w	(v_camera_x_pos).w,d1
