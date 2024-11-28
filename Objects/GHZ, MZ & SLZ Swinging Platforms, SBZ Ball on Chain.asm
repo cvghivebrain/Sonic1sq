@@ -147,11 +147,6 @@ Swing_Main:	; Routine 0
 		move.w	#priority_3,ost_priority(a1)
 		move.b	ost_subtype(a0),d1			; d1 = chain length
 		andi.w	#$F,d1					; read low nybble
-		cmpi.w	#countof_subsprite,d1
-		bls.s	.chain_ok				; branch if length is within max
-		moveq	#countof_subsprite,d1			; enforce limit
-		
-	.chain_ok:
 		move.w	d1,d3
 		lsl.w	#4,d3					; d3 = chain length in pixels
 		addq.b	#8,d3
@@ -162,15 +157,10 @@ Swing_Main:	; Routine 0
 		
 		bsr.w	FindFreeSub				; find free subsprite table
 		bne.s	Swing_Anchor
-		move.w	d1,(a1)+				; write subsprite count
-		subq.b	#1,d1					; subtract 1 for loops
-	.loop:
-		move.w	#sprite2x2,(a1)+			; write y pos (blank) & sprite size
-		move.w	ost_tile(a0),d0				; tile setting from anchor
-		andi.w	#$7FF,d0				; use palette line 1
-		move.w	d0,(a1)+				; write tile setting
-		move.w	#0,(a1)+				; write x pos (blank)
-		dbf	d1,.loop				; repeat for all chain links
+		moveq	#sprite2x2,d2
+		move.w	ost_tile(a0),d3				; tile setting from anchor
+		andi.w	#$7FF,d3				; use palette line 1
+		bsr.w	InitSub					; populate subsprite list
 
 Swing_Anchor:	; Routine 2
 		shortcut

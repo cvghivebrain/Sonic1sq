@@ -305,6 +305,7 @@ startof_obj:	equ *
 		include "Objects\_FindFreeObj & FindNextFreeObj.asm"
 		include "Objects\_CloneObject & RunLast.asm"
 		include "Objects\_FindNearestObj.asm"
+		include "Objects\_FindFreeSub & InitSub.asm"
 
 		include "Objects\MZ & SLZ Fireball Launchers.asm"
 		include "Objects\Fireballs.asm"			; FireBall
