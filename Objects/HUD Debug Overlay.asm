@@ -181,31 +181,22 @@ Overlay_Words:
 Overlay_MakeBox:
 		bsr.w	FindFreeSub				; find free subsprite table
 		bne.s	.fail
-		move.w	#5,(a1)+				; 5 subsprites (centre dot & 4 corners)
+		move.w	a1,a3
+		moveq	#5,d1					; 5 subsprites (centre dot & 4 corners)
 		lea	Overlay_Box_Sprites(pc),a2
-		moveq	#5-1,d0
-		
-	.loop:
-		move.b	(a2)+,(a1)+				; y pos
-		move.b	(a2)+,(a1)+				; size
-		move.w	(a2)+,(a1)+				; tile setting
-		move.w	(a2)+,(a1)+				; x pos
-		dbf	d0,.loop				; repeat for all subsprites
+		bsr.w	InitSubFromList				; populate subsprite list
+		move.w	#-1,sub0+piece_x_pos(a3)
+		move.b	#-2,sub0+piece_y_pos(a3)		; set position of centre dot
 		
 	.fail:
 		rts
 		
 Overlay_Box_Sprites:
-		dc.b -2, 0					; y pos, size
-		dc.w tile_Art_Overlay+1+tile_hi, -1		; tile setting, x pos
-		dc.b 0, 0
-		dc.w tile_Art_Overlay+tile_hi, 0
-		dc.b 0, 0
-		dc.w tile_Art_Overlay+tile_xflip+tile_hi, 0
-		dc.b 0, 0
-		dc.w tile_Art_Overlay+tile_yflip+tile_hi, 0
-		dc.b 0, 0
-		dc.w tile_Art_Overlay+tile_xflip+tile_yflip+tile_hi, 0
+		dc.w sprite1x1,tile_Art_Overlay+1+tile_hi	; piece size, tile setting
+		dc.w sprite1x1,tile_Art_Overlay+tile_hi
+		dc.w sprite1x1,tile_Art_Overlay+tile_xflip+tile_hi
+		dc.w sprite1x1,tile_Art_Overlay+tile_yflip+tile_hi
+		dc.w sprite1x1,tile_Art_Overlay+tile_xflip+tile_yflip+tile_hi
 ; ===========================================================================
 
 Overlay_Nearest:

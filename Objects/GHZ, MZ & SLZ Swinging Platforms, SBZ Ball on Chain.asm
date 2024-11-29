@@ -11,7 +11,7 @@
 ; subtypes:
 ;	%IIIINNNN
 ;	IIII - settings to use from list (only 0-3 are currently defined)
-;	NNNN - number of chain links (max 8)
+;	NNNN - number of chain links (max 15)
 ; ---------------------------------------------------------------------------
 
 SwingingPlatform:
