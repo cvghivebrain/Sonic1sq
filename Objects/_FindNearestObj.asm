@@ -44,6 +44,37 @@ FindNearestObj:
 		rts
 
 ; ---------------------------------------------------------------------------
+; As above, but ost_linked is untouched
+; ---------------------------------------------------------------------------
+
+FindNearestObj_KeepLinked:
+		lea	(v_ost_level_obj).w,a1			; start address for OSTs
+		move.w	#countof_ost_ert-1,d2
+		moveq	#-1,d5					; initial dist = $FFFF
+		moveq	#0,d1
+
+	.loop:
+		cmp.l	ost_id(a1),d0
+		bne.s	.next					; branch if id doesn't match
+		move.w	ost_x_pos(a1),d3
+		sbabs.w	ost_x_pos(a0),d3			; d3 = x dist
+		move.w	ost_y_pos(a1),d4
+		sbabs.w	ost_y_pos(a0),d4			; d4 = y dist
+		add.w	d4,d3					; d3 = sum x+y dist
+		
+		cmp.w	d3,d5
+		bls.s	.next					; branch if not nearer than previous
+		move.w	d3,d5					; d5 = new nearest dist
+		move.w	a1,d1					; save OST address for new nearest
+		
+	.next:
+		lea	sizeof_ost(a1),a1			; goto next OST
+		dbf	d2,.loop				; repeat $5F times
+
+		tst.w	d1
+		rts
+
+; ---------------------------------------------------------------------------
 ; As above, but finds nearest to Sonic instead of local object
 
 ;	uses d1.l, d2.w, d3.l, d4.w, d5.l, a1, a2

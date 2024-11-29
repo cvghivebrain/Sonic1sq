@@ -309,7 +309,9 @@ Boss_SetMode:
 		beq.s	.not_inert				; branch if object should be normal
 		jsr	FindFreeInert				; find free OST slot
 		bne.s	.skip_object				; branch if not found
-		bra.s	.load_object
+		move.l	d1,ost_id(a1)				; load object
+		move.w	a0,ost_linked(a1)			; save boss OST as linked
+		bra.s	.skip_object
 		
 	.not_inert:
 		jsr	FindNextFreeObj				; find free OST slot
