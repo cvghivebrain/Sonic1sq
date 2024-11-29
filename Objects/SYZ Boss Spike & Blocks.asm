@@ -6,12 +6,12 @@
 ; ---------------------------------------------------------------------------
 
 Stabber:
+		getlinked a3					; a3 = OST of boss
 		moveq	#0,d0
 		move.b	ost_routine(a0),d0
 		move.w	Stab_Index(pc,d0.w),d1
 		jsr	Stab_Index(pc,d1.w)
-		getlinked					; a1 = OST of boss
-		cmpi.b	#id_Boss_Explode,ost_routine(a1)
+		cmpi.b	#id_Boss_Explode,ost_routine(a3)
 		bne.s	.exit					; branch if boss isn't exploding
 		tst.w	ost_stab_blockobj(a0)
 		beq.s	.no_block				; branch if no block was found
@@ -19,7 +19,7 @@ Stabber:
 		move.b	#id_Cheese_Break,ost_routine(a2)	; break block immediately
 		
 	.no_block:
-		clr.b	ost_mode(a1)				; allow boss to move itself
+		clr.b	ost_mode(a3)				; allow boss to move itself
 		jmp	DeleteObject
 		
 	.exit:
@@ -57,12 +57,11 @@ Stab_Main:	; Routine 0
 		saveparent
 
 Stab_Wait:	; Routine 2
-		getlinked					; a1 = OST of boss
-		cmpi.b	#id_Boss_Move,ost_routine(a1)
+		cmpi.b	#id_Boss_Move,ost_routine(a3)
 		bne.s	.exit					; branch if boss isn't following standard movement
-		move.w	ost_x_pos(a1),d0
+		move.w	ost_x_pos(a3),d0
 		move.w	d0,ost_x_pos(a0)
-		move.w	ost_y_pos(a1),ost_y_pos(a0)		; match position to boss
+		move.w	ost_y_pos(a3),ost_y_pos(a0)		; match position to boss
 		lsr.w	#5,d0					; divide x pos by 32
 		getsonic a2					; a2 = OST of Sonic
 		move.w	ost_x_pos(a2),d1
@@ -77,10 +76,9 @@ Stab_Wait:	; Routine 2
 ; ===========================================================================
 
 Stab_Align:	; Routine 4
-		getlinked a2					; a2 = OST of boss
-		move.w	ost_x_pos(a2),d0
+		move.w	ost_x_pos(a3),d0
 		move.w	d0,ost_x_pos(a0)
-		move.w	ost_y_pos(a2),ost_y_pos(a0)		; match position to boss
+		move.w	ost_y_pos(a3),ost_y_pos(a0)		; match position to boss
 		move.w	d0,d1
 		lsr.w	#5,d0					; divide x pos by 32
 		cmp.w	ost_stab_x_grid(a0),d0
@@ -95,8 +93,8 @@ Stab_Align:	; Routine 4
 		andi.w	#$FFE0,d2
 		addi.w	#$10,d2
 		move.w	d2,ost_x_pos(a0)			; align to middle of 32px strip
-		move.w	ost_y_pos(a2),ost_stab_y_start(a0)	; save boss y pos (including wobble)
-		move.b	#1,ost_mode(a2)				; stop boss moving by itself
+		move.w	ost_y_pos(a3),ost_stab_y_start(a0)	; save boss y pos (including wobble)
+		move.b	#1,ost_mode(a3)				; stop boss moving by itself
 		move.w	#$180,ost_y_vel(a0)
 		move.l	#CheeseBlock,d0
 		jsr	FindNearestObj_KeepLinked		; find nearest cheese block
@@ -113,7 +111,7 @@ Stab_Align:	; Routine 4
 		
 	.cancel:
 		move.b	#id_Stab_Wait,ost_routine(a0)		; goto Stab_Wait next
-		clr.b	ost_mode(a2)				; allow boss to move itself
+		clr.b	ost_mode(a3)				; allow boss to move itself
 		
 	.exit:
 		rts
@@ -152,9 +150,8 @@ Stab_Return:	; Routine 8
 		move.w	#26,ost_stab_wait_time(a0)
 		
 Stab_MoveBoss:
-		getlinked					; a1 = OST of boss
-		move.w	ost_x_pos(a0),ost_x_pos(a1)
-		move.w	ost_y_pos(a0),ost_y_pos(a1)		; move boss as well
+		move.w	ost_x_pos(a0),ost_x_pos(a3)
+		move.w	ost_y_pos(a0),ost_y_pos(a3)		; move boss as well
 		rts
 ; ===========================================================================
 
@@ -162,8 +159,7 @@ Stab_Retract:	; Routine $A
 		subq.w	#1,ost_stab_wait_time(a0)		; decrement timer
 		bpl.s	.exit					; branch if time remains
 		move.b	#id_Stab_Wait,ost_routine(a0)		; goto Stab_Wait next
-		getlinked					; a1 = OST of boss
-		clr.b	ost_mode(a1)				; allow boss to move on its own
+		clr.b	ost_mode(a3)				; allow boss to move on its own
 		
 	.exit:
 		rts
