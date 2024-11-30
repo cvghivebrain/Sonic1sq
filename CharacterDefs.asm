@@ -14,8 +14,8 @@ CharacterDefs:
 		dc.w id_UPLC_SSRSonic				; "Sonic got them all" graphics
 		dc.w 18/2, 38/2					; width, height (standing/running etc.)
 		dc.w 14/2, 28/2					; width, height (rolling/jumping)
-		dc.b 18/2, 34/2					; hitbox width, height (standing/running etc.)
-		dc.b 18/2, 24/2					; hitbox width, height (rolling/jumping)
+		dc.w 18/2, 34/2					; hitbox width, height (standing/running etc.)
+		dc.w 18/2, 24/2					; hitbox width, height (rolling/jumping)
 	CharacterDefs_size:
 
 		; Red Sonic
@@ -29,8 +29,8 @@ CharacterDefs:
 		dc.w id_UPLC_SSRKetchup
 		dc.w 18/2, 38/2
 		dc.w 14/2, 28/2
-		dc.b 18/2, 34/2
-		dc.b 18/2, 24/2
+		dc.w 18/2, 34/2
+		dc.w 18/2, 24/2
 
 		; Yellow Sonic
 		dc.l SonicPlayer
@@ -43,5 +43,5 @@ CharacterDefs:
 		dc.w id_UPLC_SSRMustard
 		dc.w 18/2, 38/2
 		dc.w 14/2, 28/2
-		dc.b 18/2, 34/2
-		dc.b 18/2, 24/2
+		dc.w 18/2, 34/2
+		dc.w 18/2, 24/2

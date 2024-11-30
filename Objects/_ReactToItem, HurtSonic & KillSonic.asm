@@ -7,60 +7,48 @@
 ; output:
 ;	a2 = address of OST of object hurting/killing Sonic
 
-;	uses d0.l, d1.l, d2.w, d3.w, d4.w, d5.l, d6.l, a1
+;	uses d0.w, d1.l, d2.w, d3.w, d4.w, d5.w, d6.l, a1
 ; ---------------------------------------------------------------------------
 
 ReactToItem:	
-		move.w	ost_x_pos(a0),d2
-		move.w	ost_y_pos(a0),d3
-		moveq	#0,d4
-		moveq	#0,d5
-		move.b	(v_player1_hitbox_width).w,d4
-		move.b	(v_player1_hitbox_height).w,d5
+		move.w	ost_x_pos(a0),d0
+		move.w	ost_y_pos(a0),d2
+		move.w	(v_player1_hitbox_width).w,d4
+		move.w	(v_player1_hitbox_height).w,d5
 		cmpi.b	#id_Roll,ost_anim(a0)
 		bne.s	.not_rolling				; branch if Sonic isn't rolling/jumping
-		move.b	(v_player1_hitbox_width_roll).w,d4
-		move.b	(v_player1_hitbox_height_roll).w,d5
+		move.w	(v_player1_hitbox_width_roll).w,d4
+		move.w	(v_player1_hitbox_height_roll).w,d5
 		
 	.not_rolling:
 		cmpi.b	#id_Duck,ost_anim(a0)
 		bne.s	.not_ducking				; branch if Sonic isn't ducking
-		addq.w	#6,d3
-		subq.b	#6,d5					; smaller hitbox when ducking
+		addq.w	#6,d2
+		subq.w	#6,d5					; smaller hitbox when ducking
 		
 	.not_ducking:
 		lea	(v_ost_level_obj).w,a1			; first OST slot for interactable objects
 		move.w	#countof_ost_ert-1,d6			; number of interactable objects
+		moveq	#0,d1
 
 React_Loop:
 		tst.b	ost_render(a1)
 		bpl.s	React_Next				; branch if object is off screen
-		tst.b	ost_col_type(a1)
+		move.b	ost_col_type(a1),d1
 		beq.s	React_Next				; branch if collision type is 0
-		move.w	ost_x_pos(a1),d0
-		sub.w	d2,d0					; d0 = x dist between Sonic & object
-		moveq	#0,d1
-		move.b	ost_col_width(a1),d1
-		add.w	d1,d0
-		add.w	d4,d0					; add Sonic & object hitboxes
-		add.w	d4,d1
-		add.w	d1,d1					; d1 = combined hitbox widths
-		cmp.w	d1,d0
-		bcc.s	React_Next				; branch if no overlap on x
-		move.w	ost_y_pos(a1),d0
-		sub.w	d3,d0					; d0 = y dist between Sonic & object
-		moveq	#0,d1
-		move.b	ost_col_height(a1),d1
-		add.w	d1,d0
-		add.w	d5,d0					; add Sonic & object hitboxes
-		add.w	d5,d1
-		add.w	d1,d1					; d1 = combined hitbox heights
-		cmp.w	d1,d0
-		bcc.s	React_Next				; branch if no overlap on y
-		moveq	#0,d0
-		move.b	ost_col_type(a1),d0
-		move.w	React_Index(pc,d0.w),d0
-		jmp	React_Index(pc,d0.w)			; collision successful, exit loop
+		move.w	d0,d3
+		sbabs.w	ost_x_pos(a1),d3			; d3 = x dist (abs)
+		sub.w	d4,d3
+		sub.w	ost_col_width_hi(a1),d3			; d3 = x dist with widths
+		bpl.s	React_Next				; branch if no overlap
+		move.w	d2,d3
+		sbabs.w	ost_y_pos(a1),d3			; d3 = y dist (abs)
+		sub.w	d5,d3
+		sub.w	ost_col_height_hi(a1),d3		; d3 = y dist with heights
+		bpl.s	React_Next				; branch if no overlap
+		
+		move.w	React_Index(pc,d1.w),d3
+		jmp	React_Index(pc,d3.w)			; collision successful, exit loop
 
 	React_Next:
 		lea	sizeof_ost(a1),a1			; next OST slot
@@ -176,6 +164,7 @@ React_Caterkiller:
 ; ===========================================================================
 
 React_Yadrin:
+		rts
 		sub.w	d0,d5					; d5 = Sonic's height, minus y dist between Sonic & yadrin
 		cmpi.w	#8,d5
 		bcc.w	React_Enemy				; branch if Sonic is below spike level

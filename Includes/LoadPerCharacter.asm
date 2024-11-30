@@ -38,8 +38,8 @@ LoadPerCharacter:
 		sub.w	(a4),d0
 		move.w	d0,(v_player1_height_diff).w		; set height difference
 		move.w	(a4)+,(v_player1_height_roll).w		; set height (rolling/jumping)
-		move.b	(a4)+,(v_player1_hitbox_width).w	; set hitbox
-		move.b	(a4)+,(v_player1_hitbox_height).w
-		move.b	(a4)+,(v_player1_hitbox_width_roll).w
-		move.b	(a4)+,(v_player1_hitbox_height_roll).w
+		move.w	(a4)+,(v_player1_hitbox_width).w	; set hitbox
+		move.w	(a4)+,(v_player1_hitbox_height).w
+		move.w	(a4)+,(v_player1_hitbox_width_roll).w
+		move.w	(a4)+,(v_player1_hitbox_height_roll).w
 		rts

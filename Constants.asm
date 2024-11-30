@@ -10,7 +10,7 @@ countof_128x128:	equ $100				; max number of 128x128 tiles
 sizeof_16x16:		equ 8					; size of one 16x16 tile
 countof_16x16:		equ $300				; max number of 16x16 tiles
 sizeof_16x16_all:	equ sizeof_16x16*countof_16x16		; size of all 16x16 tiles ($1800 bytes)
-sizeof_ost:		equ $44					; size of one OST in bytes
+sizeof_ost:		equ $48					; size of one OST in bytes
 countof_ost_inert:	equ $18					; number of OSTs that don't interact with Sonic (including Sonic himself)
 countof_ost_ert:	equ $60					; number of OSTs that do interact with Sonic
 countof_ost:		equ countof_ost_inert+countof_ost_ert	; number of OSTs in RAM
@@ -322,10 +322,12 @@ ost_mode:		equ ost_routine+1			; secondary routine number
 ost_col_type:		rs.w 1					; collision response type - 0 = none; 2 = enemy; 4 = boss; 6 = ring; 8 = hurts; et al
 ost_col_property:	equ ost_col_type+1			; collision extra property
 ost_sink:		equ ost_col_property			; amount platform has sunk when stood on - 0 is none, $1E is max
-ost_col_width:		rs.w 1					; hitbox width
-ost_col_height:		equ ost_col_width+1			; hitbox height
-ost_solid_x_pos:	equ ost_col_width			; Sonic's x pos on platform - 0 = left edge
-ost_solid_y_pos:	equ ost_col_height			; Sonic's y pos on platform with heightmap (i.e. the height of the spot where he's standing)
+ost_col_width_hi:	rs.w 1					; hitbox width
+ost_col_width:		equ ost_col_width_hi+1
+ost_col_height_hi:	rs.w 1					; hitbox height
+ost_col_height:		equ ost_col_height_hi+1
+ost_solid_x_pos:	equ ost_col_width_hi			; Sonic's x pos on platform - 0 = left edge
+ost_solid_y_pos:	equ ost_col_height_hi			; Sonic's y pos on platform with heightmap (i.e. the height of the spot where he's standing)
 ost_subsprite:		rs.w 1					; pointer to subsprite table
 ost_displaywidth_hi:	rs.w 1					; display width/2
 ost_displaywidth:	equ ost_displaywidth_hi+1
