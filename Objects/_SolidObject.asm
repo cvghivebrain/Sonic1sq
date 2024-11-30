@@ -5,7 +5,7 @@
 ;	d1.l = collision type (0 = none; 1 = top; 2 = bottom; 4 = left; 8 = right)
 ;	a1 = address of OST of Sonic
 
-;	uses d0.l, d2.l, a2
+;	uses d0.w, d2.l, a2
 
 ; usage (if object only moves vertically or not at all):
 ;		bsr.w	SolidObject
@@ -30,33 +30,34 @@ SolidObject_SkipRenderDebug:
 		
 		getsonic					; a1 = OST of Sonic
 		move.w	ost_y_pos(a1),d2
-		sbabs.w	ost_y_pos(a0),d2			; d2 = y dist (abs)
-		moveq	#0,d0
-		move.b	ost_height(a0),d0
-		sub.w	d0,d2
-		move.b	ost_height(a1),d0
-		sub.w	d0,d2					; d2 = y dist with heights
+		sub.w	ost_y_pos(a0),d2			; d2 = y dist (-ve if Sonic is above)
+		bpl.s	.below					; branch if Sonic is below
+		addq.w	#1,d2					; 1px correction on top side
+		neg.w	d2					; d2 = y dist (abs)
+		
+	.below:
+		sub.w	ost_height_hi(a0),d2
+		sub.w	ost_height_hi(a1),d2			; d2 = y dist with heights
 		bpl.s	Sol_None				; branch if outside y range
 		
-		moveq	#1,d1
 		move.w	ost_x_pos(a1),d0
-		sub.w	ost_x_pos(a0),d0
+		subq.w	#1,d0					; 1px correction on right side
+		sub.w	ost_x_pos(a0),d0			; d0 = x dist (-ve if Sonic is to the left)
 		bpl.s	.right					; branch if Sonic is to the right
+		addq.w	#3,d0					; 2px correction on left side
 		neg.w	d0					; d0 = x dist (abs)
-		addq.w	#1,d1					; 1px correction on left side
 		
 	.right:
-		add.b	ost_width(a0),d1
-		sub.w	d1,d0
-		move.w	(v_player1_width).w,d1
-		sub.w	d1,d0					; d0 = x dist with widths
+		sub.w	ost_width_hi(a0),d0
+		sub.w	(v_player1_width).w,d0			; d0 = x dist with widths
 		bpl.s	Sol_None				; branch if outside x range
 
 		cmp.w	d0,d2
 		blt.s	Sol_Side				; branch if Sonic is to the side
-		move.w	ost_y_pos(a1),d0
-		sub.w	ost_y_pos(a0),d0			; d0 = y dist (-ve if Sonic is above)
+		move.w	ost_y_pos(a1),d1
+		sub.w	ost_y_pos(a0),d1			; d1 = y dist (-ve if Sonic is above)
 		bpl.w	Bottom_Collide				; branch if Sonic is below
+		neg.w	d2
 		bra.w	Top_Collide
 		
 Sol_Side:

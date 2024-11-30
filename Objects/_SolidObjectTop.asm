@@ -30,21 +30,16 @@ SolidObjectTop_SkipChk:
 		tst.w	ost_y_vel(a1)
 		bmi.w	Top_None				; branch if Sonic is moving up
 		move.w	ost_x_pos(a1),d0
-		sbabs.w	ost_x_pos(a0),d0			; d0 = x dist
-		moveq	#0,d1
-		move.b	ost_width(a0),d1
-		sub.w	d1,d0
-		move.w	(v_player1_width).w,d1
-		sub.w	d1,d0					; d0 = x dist with widths
-		bpl.w	Top_None				; branch if outside x range
+		sbabs.w	ost_x_pos(a0),d0			; d0 = x dist (abs)
+		sub.w	ost_width_hi(a0),d0
+		sub.w	(v_player1_width).w,d0			; d0 = x dist with widths
+		bpl.s	Top_None				; branch if outside x range
 		
 		range_y_quick					; d2 = y dist (-ve if Sonic is above)
 		bpl.s	Top_None				; branch if Sonic is below
-		moveq	#1,d0
-		add.b	ost_height(a0),d0
-		add.w	d0,d2
-		move.b	ost_height(a1),d0
-		add.w	d0,d2
+		addq.w	#1,d2
+		add.w	ost_height_hi(a0),d2
+		add.w	ost_height_hi(a1),d2			; d2 = y dist with heights
 		bmi.s	Top_None				; branch if outside y range
 		
 Top_Collide:
@@ -87,12 +82,9 @@ Top_Stand:
 		beq.s	.not_moving				; branch if Sonic isn't moving
 		
 		move.w	ost_x_pos(a1),d0
-		sbabs.w	ost_x_pos(a0),d0			; d0 = x dist
-		moveq	#0,d1
-		move.b	ost_width(a0),d1
-		sub.w	d1,d0
-		move.w	(v_player1_width).w,d1
-		sub.w	d1,d0					; d0 = x dist with widths
+		sbabs.w	ost_x_pos(a0),d0			; d0 = x dist (abs)
+		sub.w	ost_width_hi(a0),d0
+		sub.w	(v_player1_width).w,d0			; d0 = x dist with widths
 		bpl.w	Top_Leave				; branch if outside x range
 		
 		bsr.w	GetPosOnObject				; d1 = x pos of Sonic on object
@@ -100,11 +92,9 @@ Top_Stand:
 		
 	.not_moving:
 		move.w	ost_y_pos(a0),d2
-		moveq	#1,d1
-		add.b	ost_height(a0),d1
-		sub.w	d1,d2
-		move.b	ost_height(a1),d1
-		sub.w	d1,d2
+		subq.w	#1,d2
+		sub.w	ost_height_hi(a0),d2
+		sub.w	ost_height_hi(a1),d2
 		move.w	d2,ost_y_pos(a1)			; snap to hitbox
 		
 		move.w	ost_x_prev(a0),d2
@@ -120,11 +110,10 @@ Top_Stand:
 Top_Leave:
 		bclr	#status_platform_bit,ost_status(a1)	; clear Sonic's platform flag
 		bclr	#status_platform_bit,ost_status(a0)	; clear object's platform flag
-		moveq	#0,d0
-		move.b	d0,ost_mode(a0)
-		move.b	d0,ost_solid_x_pos(a0)
-		move.b	d0,ost_solid_y_pos(a0)
 		moveq	#solid_none,d1
+		move.b	d1,ost_mode(a0)
+		move.b	d1,ost_solid_x_pos(a0)
+		move.b	d1,ost_solid_y_pos(a0)
 		rts
 
 ; ---------------------------------------------------------------------------

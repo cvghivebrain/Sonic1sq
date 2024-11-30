@@ -5,7 +5,7 @@
 ;	d1.l = collision type (0 = none; 2 = bottom)
 ;	a1 = address of OST of Sonic
 
-;	uses d0.l, d2.w, a2
+;	uses d0.w, d2.w, a2
 ; ---------------------------------------------------------------------------
 
 SolidObjectBottom:
@@ -17,20 +17,16 @@ SolidObjectBottom:
 SolidObjectBottom_SkipChk:
 		getsonic					; a1 = OST of Sonic
 		move.w	ost_x_pos(a1),d0
-		sbabs.w	ost_x_pos(a0),d0			; d0 = x dist
-		moveq	#0,d1
-		move.b	ost_width(a0),d1
-		cmp.w	d0,d1
-		bcs.s	Bottom_None				; branch if outside x range
+		sbabs.w	ost_x_pos(a0),d0			; d0 = x dist (abs)
+		sub.w	ost_width_hi(a0),d0
+		sub.w	(v_player1_width).w,d0			; d0 = x dist with widths
+		bpl.s	Bottom_None				; branch if outside x range
 		
 		range_y_quick					; d2 = y dist (-ve if Sonic is above)
 		bmi.s	Bottom_None				; branch if Sonic is above
-		moveq	#0,d0
-		add.b	ost_height(a0),d0
-		add.w	d0,d2
-		move.b	ost_height(a1),d0
-		add.w	d0,d2
-		bmi.s	Bottom_None				; branch if outside y range
+		sub.w	ost_height_hi(a0),d2
+		sub.w	ost_height_hi(a1),d2			; d2 = y dist with heights
+		bpl.s	Bottom_None				; branch if outside y range
 		
 Bottom_Collide:
 		sub.w	d2,ost_y_pos(a1)			; snap to hitbox
