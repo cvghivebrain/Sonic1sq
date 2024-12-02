@@ -328,7 +328,7 @@ ost_col_width_hi:	rs.w 1					; hitbox width/2
 ost_col_width:		equ ost_col_width_hi+1
 ost_col_height_hi:	rs.w 1					; hitbox height/2
 ost_col_height:		equ ost_col_height_hi+1
-ost_solid_x_pos:	equ ost_col_width_hi			; Sonic's x pos on platform - 0 = left edge
+ost_solid_x_pos:	rs.w 1					; Sonic's x pos on platform - 0 = left edge
 ost_solid_y_pos:	equ ost_col_height_hi			; Sonic's y pos on platform with heightmap (i.e. the height of the spot where he's standing)
 ost_subsprite:		rs.w 1					; pointer to subsprite table
 ost_displaywidth_hi:	rs.w 1					; display width/2

@@ -74,8 +74,7 @@ Bri_Solid:	; Routine 2
 		bsr.s	Bri_Sink
 		bsr.w	SolidObjectTop_SkipChk
 		beq.w	DespawnFamily_NoDisplay			; branch if no collision
-		moveq	#0,d4
-		move.b	ost_solid_x_pos(a0),d4
+		move.w	ost_solid_x_pos(a0),d4
 		lsr.w	#4,d4
 		move.b	d4,ost_bridge_current_log(a0)		; set current log based on Sonic's x pos on object
 		bra.w	DespawnFamily_NoDisplay

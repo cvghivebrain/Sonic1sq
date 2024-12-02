@@ -81,8 +81,7 @@ See_Detect:	; Routine 2
 		lea	See_DataFlip,a2
 		
 	.noflip:
-		moveq	#0,d0
-		move.b	ost_solid_x_pos(a0),d0
+		move.w	ost_solid_x_pos(a0),d0
 		lsr.w	#1,d0
 		move.b	(a2,d0.w),d0				; get height byte from heightmap
 		move.b	ost_solid_y_pos(a0),d1
@@ -123,8 +122,7 @@ See_Solid:
 ; ---------------------------------------------------------------------------
 
 See_SetSide:
-		moveq	#0,d5
-		move.b	ost_solid_x_pos(a0),d5
+		move.w	ost_solid_x_pos(a0),d5
 		subi.w	#$28,d5
 		bcs.s	.left					; branch if on left side
 		subi.w	#$10,d5

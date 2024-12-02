@@ -44,7 +44,7 @@ SolidObjectTop_SkipChk:
 		
 Top_Collide:
 		bsr.w	GetPosOnObject				; d1 = x pos of Sonic on object
-		move.b	d1,ost_solid_x_pos(a0)			; save x pos of Sonic on object
+		move.w	d1,ost_solid_x_pos(a0)			; save x pos of Sonic on object
 		sub.w	d2,ost_y_pos(a1)			; snap to hitbox
 		move.w	ost_y_vel(a1),ost_sonic_impact(a1)	; copy Sonic's y speed
 		move.b	#2,ost_mode(a0)				; set flag - Sonic is on the object
@@ -88,7 +88,7 @@ Top_Stand:
 		bpl.w	Top_Leave				; branch if outside x range
 		
 		bsr.w	GetPosOnObject				; d1 = x pos of Sonic on object
-		move.b	d1,ost_solid_x_pos(a0)			; save x pos of Sonic on object
+		move.w	d1,ost_solid_x_pos(a0)			; save x pos of Sonic on object
 		
 	.not_moving:
 		move.w	ost_y_pos(a0),d2
@@ -112,7 +112,7 @@ Top_Leave:
 		bclr	#status_platform_bit,ost_status(a0)	; clear object's platform flag
 		moveq	#solid_none,d1
 		move.b	d1,ost_mode(a0)
-		move.b	d1,ost_solid_x_pos(a0)
+		move.w	d1,ost_solid_x_pos(a0)
 		move.b	d1,ost_solid_y_pos(a0)
 		rts
 
@@ -185,7 +185,7 @@ SolidObjectTopHeightmap_SkipChk:
 		range_y_quick					; d2 = y dist (-ve if Sonic is above)
 		bpl.w	Top_None				; branch if Sonic is below
 		add.w	d0,d1
-		move.b	d1,ost_solid_x_pos(a0)			; save x pos of Sonic on object
+		move.w	d1,ost_solid_x_pos(a0)			; save x pos of Sonic on object
 		moveq	#0,d0
 		move.b	ost_height(a1),d0
 		add.w	d0,d2
@@ -236,7 +236,7 @@ TopH_Stand:
 		add.w	d1,d1
 		cmp.w	d1,d0
 		bcc.w	Top_Leave				; branch if beyond right edge
-		move.b	d0,ost_solid_x_pos(a0)			; save x pos of Sonic on object
+		move.w	d0,ost_solid_x_pos(a0)			; save x pos of Sonic on object
 		lsr.w	d6,d0					; reduce precision of x pos
 		move.b	(a2,d0.w),d0				; get height byte from heightmap
 		;andi.w	#$FF,d0
