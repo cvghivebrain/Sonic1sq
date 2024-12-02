@@ -311,6 +311,8 @@ ost_x_vel:		rs.l 1					; x-axis velocity
 ost_y_vel:		equ ost_x_vel+2				; y-axis velocity
 ost_inertia:		rs.w 1					; potential speed
 ost_x_prev:		equ ost_inertia				; previous x position
+ost_col_width_extra:	equ ost_inertia				; extra hitbox width (+ve on left side; -ve on right side)
+ost_col_height_extra:	equ ost_inertia+1			; extra hitbox height (+ve on top; -ve on bottom)
 ost_angle:		rs.w 1					; angle of floor or rotation (some objects use 2 bytes for higher precision)
 ost_anglesnap:		equ ost_angle+1				; angle snapped to nearest 90 degrees - 0 = flat; $40 = vertical left; $80 = ceiling; $C0 = vertical right
 ost_frame_hi:		rs.w 1					; current frame displayed
@@ -322,9 +324,9 @@ ost_mode:		equ ost_routine+1			; secondary routine number
 ost_col_type:		rs.w 1					; collision response type - 0 = none; 2 = enemy; 4 = boss; 6 = ring; 8 = hurts; et al
 ost_col_property:	equ ost_col_type+1			; collision extra property
 ost_sink:		equ ost_col_property			; amount platform has sunk when stood on - 0 is none, $1E is max
-ost_col_width_hi:	rs.w 1					; hitbox width
+ost_col_width_hi:	rs.w 1					; hitbox width/2
 ost_col_width:		equ ost_col_width_hi+1
-ost_col_height_hi:	rs.w 1					; hitbox height
+ost_col_height_hi:	rs.w 1					; hitbox height/2
 ost_col_height:		equ ost_col_height_hi+1
 ost_solid_x_pos:	equ ost_col_width_hi			; Sonic's x pos on platform - 0 = left edge
 ost_solid_y_pos:	equ ost_col_height_hi			; Sonic's y pos on platform with heightmap (i.e. the height of the spot where he's standing)

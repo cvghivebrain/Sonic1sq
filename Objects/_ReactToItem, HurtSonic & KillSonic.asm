@@ -127,7 +127,7 @@ React_Enemy_Break:
 		move.b	#id_ExItem_Animal,ost_routine(a1)	; explosion also spawns an animal
 		tst.w	ost_y_vel(a0)
 		bmi.s	.bouncedown				; branch if Sonic is moving upwards
-		cmp.w	ost_y_pos(a1),d3			; d3 = Sonic's y pos
+		cmp.w	ost_y_pos(a1),d2			; d2 = Sonic's y pos
 		bcc.s	.bounceup				; branch if Sonic is below enemy
 		neg.w	ost_y_vel(a0)
 		rts
@@ -164,28 +164,50 @@ React_Caterkiller:
 ; ===========================================================================
 
 React_Yadrin:
-		rts
-		sub.w	d0,d5					; d5 = Sonic's height, minus y dist between Sonic & yadrin
-		cmpi.w	#8,d5
-		bcc.w	React_Enemy				; branch if Sonic is below spike level
-		move.w	ost_x_pos(a1),d0
-		subq.w	#4,d0
+		move.w	ost_col_height_hi(a1),d1
+		add.w	d2,d5					; d5 = y pos of Sonic's feet
+		sub.w	ost_y_pos(a1),d5			; d5 = y dist
+		add.w	d1,d5					; d5 = y pos within enemy
+		move.b	ost_col_height_extra(a1),d3
+		ext.w	d3					; d3 = height of extra hitbox
+		bpl.s	.top					; branch if extra hitbox is on top
+		add.w	d1,d1					; d1 = full height of enemy hitbox
+		cmp.w	d1,d5
+		bcc.w	React_Enemy				; branch if not in hitbox
+		add.w	d1,d3					; d3 = height of hitbox minus extra hitbox
+		neg.w	d5
+		neg.w	d3
+		
+	.top:
+		sub.w	d3,d5
+		bpl.w	React_Enemy				; branch if not in extra hitbox
+		
+		add.w	d4,d0					; d0 = x pos of Sonic's right side
+		move.w	ost_x_pos(a1),d1
+		sub.w	ost_col_width_hi(a1),d1			; d1 = x pos of extra hitbox left side
+		move.b	ost_col_width_extra(a1),d3
+		ext.w	d3					; d3 = width of extra hitbox
 		btst	#status_xflip_bit,ost_status(a1)
 		beq.s	.no_xflip
-		subi.w	#$10,d0
-
+		neg.w	d3					; reverse hitbox if enemy is xflipped
+		
 	.no_xflip:
-		sub.w	d2,d0					; d0 = x pos of yadrin's face, minus x pos of Sonic's left edge
-		bcc.s	.sonic_left				; branch if Sonic is left of the yadrin
-		addi.w	#$18,d0
-		bcs.s	React_Hurt				; branch if Sonic is inside the yadrin
-		bra.w	React_Enemy
-; ===========================================================================
-
-.sonic_left:
-		cmp.w	d4,d0
-		bhi.w	React_Enemy				; branch if Sonic is outside the yadrin
-		bra.w	React_Hurt				; check for invincibility, then hurt Sonic
+		tst.w	d3
+		bpl.s	.left					; branch if extra hitbox is on the left
+		neg.w	d3
+		add.w	ost_col_width_hi(a1),d1
+		add.w	ost_col_width_hi(a1),d1
+		sub.w	d3,d1
+		
+	.left:
+		cmp.w	d0,d1
+		bcc.w	React_Enemy				; branch if not in extra hitbox
+		sub.w	d4,d0
+		sub.w	d4,d0					; d0 = x pos of Sonic's left side
+		add.w	d3,d1					; d1 = x pos of extra hitbox right side
+		cmp.w	d0,d1
+		bcs.w	React_Enemy				; branch if not in extra hitbox
+		bra.w	React_Hurt				; treat as harmful object instead of regular enemy
 ; ===========================================================================
 
 React_Bumper:

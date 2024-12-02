@@ -94,20 +94,19 @@ Overlay_Sonic:	; Routine 2
 		getsonic					; a1 = OST of Sonic
 		set_dma_dest	vram_overlay,d1			; VRAM address
 		moveq	#0,d5
-		moveq	#0,d2
 		btst	#0,(v_debug_hitbox_setting).w
 		bne.s	.yellow_hitbox				; branch if hitbox is set to yellow
-		move.b	ost_height(a1),d0			; use standard width/height
-		move.b	ost_width(a1),d2
+		move.w	ost_height_hi(a1),d0			; use standard width/height
+		move.w	ost_width_hi(a1),d2
 		bra.s	Overlay_ShowBox
 		
 	.yellow_hitbox:
-		move.b	(v_player1_hitbox_height_roll).w,d0
-		move.b	(v_player1_hitbox_width_roll).w,d2
+		move.w	(v_player1_hitbox_height_roll).w,d0
+		move.w	(v_player1_hitbox_width_roll).w,d2
 		cmpi.b	#id_Roll,ost_anim(a1)
 		beq.s	Overlay_ShowBox				; branch if Sonic is rolling/jumping
-		move.b	(v_player1_hitbox_height).w,d0
-		move.b	(v_player1_hitbox_width).w,d2
+		move.w	(v_player1_hitbox_height).w,d0
+		move.w	(v_player1_hitbox_width).w,d2
 		cmpi.b	#id_Duck,ost_anim(a1)
 		bne.s	Overlay_ShowBox				; branch if Sonic isn't ducking
 		moveq	#6,d5					; hitbox is 6px lower
@@ -226,7 +225,6 @@ Overlay_Nearest:
 		move.w	(v_debug_ost_setting).w,d4
 		set_dma_dest	vram_overlay2,d1		; VRAM address
 		moveq	#0,d5
-		moveq	#0,d2
 		move.b	(v_debug_hitbox_setting).w,d0
 		bpl.s	.skip_update				; branch if high bit of setting is 0
 		bclr	#7,(v_debug_hitbox_setting).w
@@ -238,9 +236,9 @@ Overlay_Nearest:
 	.skip_update:
 		btst	#0,d0
 		bne.s	.yellow_hitbox				; branch if hitbox is set to yellow
-		move.b	ost_height(a1),d0			; use standard width/height
+		move.w	ost_height_hi(a1),d0			; use standard width/height
 		beq.s	.hide_hitbox				; branch if 0
-		move.b	ost_width(a1),d2
+		move.w	ost_width_hi(a1),d2
 		bne.w	Overlay_ShowBox				; branch if not 0
 		
 	.hide_hitbox:
@@ -250,7 +248,7 @@ Overlay_Nearest:
 	.yellow_hitbox:
 		tst.b	ost_col_type(a1)			; get hitbox type id
 		beq.s	.hide_hitbox				; don't display if object has no hitbox
-		move.b	ost_col_height(a1),d0			; get height
-		move.b	ost_col_width(a1),d2			; get width
+		move.w	ost_col_height_hi(a1),d0		; get height
+		move.w	ost_col_width_hi(a1),d2			; get width
 		bra.w	Overlay_ShowBox
 		

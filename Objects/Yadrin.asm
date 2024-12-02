@@ -37,6 +37,8 @@ Yad_Main:	; Routine 0
 		move.b	#id_React_Yadrin,ost_col_type(a0)
 		move.b	#20,ost_col_width(a0)
 		move.b	#16,ost_col_height(a0)
+		move.b	#-24,ost_col_width_extra(a0)		; secondary hitbox on right side
+		move.b	#8,ost_col_height_extra(a0)
 		addq.b	#2,ost_routine(a0)			; goto Yad_Walk next
 		move.w	#-$100,ost_x_vel(a0)			; move yadrin left
 		btst	#status_xflip_bit,ost_status(a0)
