@@ -80,7 +80,7 @@ LGrass_Action:	; Routine 2
 		beq.s	.no_heightmap				; branch if there is no heightmap
 		moveq	#1,d6					; 1 byte in heightmap = 2px
 		movea.l	d0,a2
-		bsr.w	SolidObject_Heightmap
+		bsr.w	SolidObjectHeightmap
 		cmpi.b	#id_frame_grass_sloped,ost_frame(a0)
 		beq.w	DespawnFamily				; branch if object is the sloped burning kind
 		bra.w	DespawnQuick

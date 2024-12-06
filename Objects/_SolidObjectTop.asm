@@ -128,24 +128,25 @@ Top_Leave:
 
 ; output:
 ;	d1.w = x position, starting at 0 on left edge
+;	d3.w = total width of object
 
-;	uses d0.w, d1.l
+;	uses d1.l
 ; ---------------------------------------------------------------------------
 
 GetPosOnObject:
 		move.w	ost_x_pos(a1),d1
 		sub.w	ost_x_pos(a0),d1			; d1 = x dist (-ve if Sonic is to the left)
-		move.w	ost_width_hi(a0),d0
-		add.w	d0,d1					; d1 = x pos on object
+		move.w	ost_width_hi(a0),d3
+		add.w	d3,d1					; d1 = x pos on object
 		bpl.s	.no_left_overhang			; branch if not overhanging left side
 		moveq	#0,d1					; set to 0 if overhanging
 		rts
 		
 	.no_left_overhang:
-		add.w	d0,d0					; d0 = total width of object
-		cmp.w	d0,d1
+		add.w	d3,d3					; d3 = total width of object
+		cmp.w	d3,d1
 		bcs.s	.exit					; branch if x pos is within object's width
-		move.w	d0,d1
+		move.w	d3,d1
 		subq.w	#1,d1					; set to width-1 if overhanging
 		
 	.exit:
@@ -170,7 +171,7 @@ GetHeightOnObject:
 		rts
 
 ; ---------------------------------------------------------------------------
-; Subroutine to make an object solid, top only
+; Subroutine to make an object solid, top only with heightmap
 
 ; input:
 ;	d6.l = resolution of heightmap (0 = 1px per byte; 1 = 2px; 2 = 4px; 3 = 8px)
@@ -180,7 +181,7 @@ GetHeightOnObject:
 ;	d1.l = collision type (0 = none; 1 = top)
 ;	a1 = address of OST of Sonic
 
-;	uses d0.w, d2.w
+;	uses d0.w, d2.w, d3.w
 ; ---------------------------------------------------------------------------
 
 SolidObjectTopHeightmap:
