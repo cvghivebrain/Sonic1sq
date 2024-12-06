@@ -76,7 +76,7 @@ Plat_Solid:	; Routine 2
 ; ===========================================================================
 
 Plat_Drop:	; Routine 4
-		bsr.w	UnSolid_TopOnly
+		bsr.w	UnSolid
 		shortcut
 		update_y_fall					; update position & apply gravity
 		move.w	ost_y_vel(a0),ost_y_vel(a1)		; pull Sonic down with platform

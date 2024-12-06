@@ -95,5 +95,5 @@ CFlo_Wait:	; Routine 4
 		bra.w	DespawnQuick_NoDisplay
 		
 	.delete:
-		bsr.w	UnSolid_TopOnly
+		bsr.w	UnSolid
 		bra.w	DeleteObject

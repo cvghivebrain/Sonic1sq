@@ -81,7 +81,7 @@ Spin_Wait2:	; Routine 4
 		bclr	#7,ost_anim(a0)
 
 Spin_Animate:	; Routine 6
-		btst	#status_platform_bit,ost_status(a0)
+		tst.b	ost_mode(a0)
 		beq.s	.not_solid				; branch if not being stood on
 		cmpi.b	#id_frame_spin_1,ost_frame(a0)
 		bne.s	Spin_Animate2				; branch if not on the first tilted frame

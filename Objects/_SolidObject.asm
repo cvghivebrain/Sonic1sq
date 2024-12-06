@@ -128,32 +128,23 @@ SolidObjectHeightmap:
 ; Subroutine to cancel a solid object
 
 ; output:
-;	d1.l = 0
 ;	a1 = address of OST of Sonic
 ; ---------------------------------------------------------------------------
 
 UnSolid:
-		getsonic
-		btst	#status_platform_bit,ost_status(a0)
-		beq.s	.exit					; branch if Sonic isn't standing on the object
-		bclr	#status_platform_bit,ost_status(a1)	; remove platform effect
+		getsonic					; a1 = OST of Sonic
 		bclr	#status_platform_bit,ost_status(a0)
-		clr.b	ost_mode(a0)
-		moveq	#solid_none,d1
-
-	.exit:
-		rts
-
-UnSolid_TopOnly:
-		getsonic
-		btst	#status_platform_bit,ost_status(a0)
-		beq.s	.exit					; branch if Sonic isn't standing on the object
-		bset	#status_air_bit,ost_status(a1)
+		beq.s	.skip_top				; branch if Sonic isn't standing on the object
 		bclr	#status_platform_bit,ost_status(a1)	; remove platform effect
-		bclr	#status_platform_bit,ost_status(a0)
-		move.b	#id_Sonic_Control,ost_routine(a1)
 		clr.b	ost_mode(a0)
-		moveq	#solid_none,d1
+		clr.w	ost_solid_x_pos(a0)
+		clr.b	ost_solid_y_pos(a0)
+		bset	#status_air_bit,ost_status(a1)		; make Sonic airborne
 
+	.skip_top:
+		bclr	#status_pushing_bit,ost_status(a0)
+		beq.s	.exit					; branch if Sonic isn't pushing the object
+		bclr	#status_pushing_bit,ost_status(a1)	; remove pushing effect
+		
 	.exit:
 		rts

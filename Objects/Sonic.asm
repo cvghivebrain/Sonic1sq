@@ -50,6 +50,13 @@ Sonic_Control:	; Routine 2
 		beq.s	.no_debug				; if not, branch
 		move.w	#1,(v_debug_active).w			; change Sonic into a ring/item
 		clr.b	(f_lock_controls).w
+		tst.w	ost_parent(a0)
+		beq.s	.exit					; branch if Sonic isn't standing on an object
+		movea.w	ost_parent(a0),a0			; make that object the current one
+		bsr.w	UnSolid					; remove settings for Sonic standing on object
+		move.w	a1,a0					; restore Sonic as current object
+		
+	.exit:
 		rts
 ; ===========================================================================
 

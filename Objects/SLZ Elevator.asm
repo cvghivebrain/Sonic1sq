@@ -159,7 +159,7 @@ Elev_UpVanish:
 ; ===========================================================================
 
 	.typereset:
-		bsr.w	UnSolid_TopOnly
+		bsr.w	UnSolid
 		noreturn					; don't display object
 		bra.w	DeleteObject
 

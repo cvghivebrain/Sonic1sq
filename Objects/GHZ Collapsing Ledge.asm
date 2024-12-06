@@ -46,7 +46,6 @@ Ledge_Solid:	; Routine 2
 		moveq	#1,d6					; 1 byte in heightmap = 2px
 		movea.l	ost_ledge_heightmap(a0),a2		; heightmap
 		bsr.w	SolidObjectTopHeightmap
-		tst.b	d1
 		beq.w	DespawnObject				; branch if no collision
 		addq.b	#2,ost_routine(a0)			; goto Ledge_Wait next
 		addq.b	#2,ost_frame(a0)			; use frame consisting of smaller pieces
@@ -69,5 +68,5 @@ Ledge_Wait:	; Routine 4
 		bra.w	DespawnQuick_NoDisplay
 		
 	.delete:
-		bsr.w	UnSolid_TopOnly
+		bsr.w	UnSolid
 		bra.w	DeleteObject

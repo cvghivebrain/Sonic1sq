@@ -108,7 +108,7 @@ VanP_Vanish:	; Routine $A
 		bra.w	DespawnQuick
 		
 	.unsolid:
-		bsr.w	UnSolid_TopOnly
+		bsr.w	UnSolid
 		bra.w	DespawnQuick
 ; ===========================================================================
 
