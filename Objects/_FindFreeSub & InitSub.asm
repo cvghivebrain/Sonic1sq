@@ -32,7 +32,7 @@ FindFreeSub:
 ; Subroutine to initialise subsprites
 
 ; input:
-;	d1.w = number of subsprites
+;	d1.w = number of subsprite pieces
 ;	d2.w = sprite size
 ;	d3.w = tile setting
 ;	a1 = address of free subsprite slot
@@ -49,12 +49,12 @@ FindFreeSub:
 ; ---------------------------------------------------------------------------
 
 InitSub:
-		cmpi.w	#countof_subsprite,d1
+		cmpi.w	#countof_piece,d1
 		bls.s	.num_ok					; branch if number is within max
-		moveq	#countof_subsprite,d1			; enforce limit
+		moveq	#countof_piece,d1			; enforce limit
 		
 	.num_ok:
-		move.w	d1,(a1)+				; write subsprite count
+		move.w	d1,(a1)+				; write subsprite piece count
 		subq.w	#1,d1					; subtract 1 for loops
 		
 	.loop:
@@ -68,7 +68,7 @@ InitSub:
 ; Subroutine to initialise subsprites using a list
 
 ; input:
-;	d1.w = number of subsprites
+;	d1.w = number of subsprite pieces
 ;	a1 = address of free subsprite slot
 ;	a2 = address of subsprite data to write
 
@@ -82,12 +82,12 @@ InitSub:
 ; ---------------------------------------------------------------------------
 
 InitSubFromList:
-		cmpi.w	#countof_subsprite,d1
+		cmpi.w	#countof_piece,d1
 		bls.s	.num_ok					; branch if number is within max
-		moveq	#countof_subsprite,d1			; enforce limit
+		moveq	#countof_piece,d1			; enforce limit
 		
 	.num_ok:
-		move.w	d1,(a1)+				; write subsprite count
+		move.w	d1,(a1)+				; write subsprite piece count
 		subq.w	#1,d1					; subtract 1 for loops
 		
 	.loop:

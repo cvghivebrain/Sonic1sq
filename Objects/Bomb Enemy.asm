@@ -90,6 +90,7 @@ Bom_ChkDist:
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		move.b	ost_status(a0),ost_status(a1)
+		saveparent
 		move.b	#id_frame_bomb_fuse1,ost_frame(a1)
 		move.w	ost_bomb_time(a0),ost_bomb_time(a1)	; set fuse time
 		move.w	Bom_FuseSpeeds(pc,d1.w),d0		; get fuse speed from list based on subtype
@@ -107,7 +108,7 @@ Bom_Explode:	; Routine 6
 		shortcut
 		toggleframe	$13
 		subq.w	#1,ost_bomb_time(a0)			; decrement timer
-		bpl.w	DespawnObject				; branch if time remains
+		bpl.w	DespawnFamily				; branch if time remains
 		move.l	#ExplosionBomb,ost_id(a0)		; change bomb into an explosion
 		move.b	#id_ExBom_Main,ost_routine(a0)
 		moveq	#4-1,d1					; 4 shrapnel objects
@@ -115,7 +116,7 @@ Bom_Explode:	; Routine 6
 
 	.loop:
 		bsr.w	FindFreeObj
-		bne.w	DespawnObject
+		bne.w	DespawnFamily
 		move.l	#BombShrapnel,ost_id(a1)		; load shrapnel	object
 		move.l	ost_mappings(a0),ost_mappings(a1)
 		move.w	ost_tile(a0),ost_tile(a1)
@@ -133,7 +134,7 @@ Bom_Explode:	; Routine 6
 		move.b	#4,ost_col_height(a1)
 		bset	#render_onscreen_bit,ost_render(a1)
 		dbf	d1,.loop				; repeat 3 more	times
-		bra.w	DespawnObject
+		bra.w	DespawnFamily
 ; ===========================================================================
 Bom_ShrSpeed:	dc.w -$200, -$300				; top left
 		dc.w -$100, -$200				; bottom left
