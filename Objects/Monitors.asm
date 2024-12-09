@@ -76,15 +76,10 @@ Mon_Solid:	; Routine 2
 		beq.s	.break					; branch if monitor was jumped on
 		andi.b	#solid_left+solid_right,d1
 		beq.w	Mon_Animate				; branch if no collision
-		move.w	ost_x_vel(a1),d0
+		tst.w	ost_x_vel(a1)
 		beq.w	Mon_Animate				; branch if Sonic isn't moving sideways
-		bpl.s	.keep_vel
-		neg.w	d0					; d0 = x vel (abs)
-	.keep_vel:
 		cmpi.w	#0,ost_y_vel(a1)
 		bgt.s	.break					; branch if Sonic is moving down
-		cmpi.w	#$200,d0
-		bcs.w	Mon_Animate				; branch if Sonic is moving too slowly
 		addq.b	#2,ost_routine(a0)			; goto Mon_Break next
 		bra.w	Mon_Animate
 
@@ -190,24 +185,26 @@ Mon_Solid_Detect:
 		bne.w	Top_Stand				; branch if Sonic is already standing on object
 		
 		getsonic					; a1 = OST of Sonic
-		move.w	ost_y_pos(a1),d2
-		sbabs.w	ost_y_pos(a0),d2			; d2 = y dist (abs)
+		range_y_quick					; d2 = y dist (-ve if Sonic is above)
+		bpl.s	.below					; branch if Sonic is below
+		addq.w	#1,d2					; 1px correction on top side
+		neg.w	d2					; d2 = y dist (abs)
+		
+	.below:
 		sub.w	ost_height_hi(a0),d2
 		sub.w	ost_height_hi(a1),d2			; d2 = y dist with heights
 		bpl.w	Sol_None				; branch if outside y range
 		
-		moveq	#1,d1
 		move.w	ost_x_pos(a1),d0
-		sub.w	ost_x_pos(a0),d0
+		subq.w	#1,d0					; 1px correction on right side
+		sub.w	ost_x_pos(a0),d0			; d0 = x dist (-ve if Sonic is to the left)
 		bpl.s	.right					; branch if Sonic is to the right
+		addq.w	#3,d0					; 2px correction on left side
 		neg.w	d0					; d0 = x dist (abs)
-		addq.w	#1,d1					; 1px correction on left side
 		
 	.right:
-		add.w	ost_width_hi(a0),d1
-		sub.w	d1,d0
-		move.w	(v_player1_width).w,d1
-		sub.w	d1,d0					; d0 = x dist with widths
+		sub.w	ost_width_hi(a0),d0
+		sub.w	(v_player1_width).w,d0			; d0 = x dist with widths
 		bpl.w	Sol_None				; branch if outside x range
 
 		cmp.w	d0,d2
@@ -229,6 +226,9 @@ Mon_Solid_Detect:
 	.side:
 		cmpi.b	#id_Roll,ost_anim(a1)
 		bne.w	Sol_Side				; use regular side collision if not rolling/jumping
+		mvabs.w	ost_x_vel(a1),d1
+		cmpi.w	#$200,d1
+		bcs.w	Sol_Side				; use regular side collision if rolling too slowly
 		moveq	#solid_right,d1				; set collision flag to right
 		range_x_quick					; d0 = x dist (-ve if Sonic is to the left)
 		bpl.s	.exit					; branch if Sonic is to the right
