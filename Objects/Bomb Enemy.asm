@@ -109,8 +109,7 @@ Bom_Explode:	; Routine 6
 		toggleframe	$13
 		subq.w	#1,ost_bomb_time(a0)			; decrement timer
 		bpl.w	DespawnFamily				; branch if time remains
-		move.l	#ExplosionBomb,ost_id(a0)		; change bomb into an explosion
-		move.b	#id_ExBom_Main,ost_routine(a0)
+		bsr.w	Explode					; replace bomb with explosion (on next frame)
 		moveq	#4-1,d1					; 4 shrapnel objects
 		lea	Bom_ShrSpeed(pc),a2			; load shrapnel speed data
 

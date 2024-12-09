@@ -78,8 +78,7 @@ Cbal_Bounce:	; Routine 2
 Cbal_ChkExplode:
 		subq.w	#1,ost_ball_time(a0)			; subtract 1 from explosion time
 		bpl.s	Cbal_Animate				; if time is > 0, branch
-		move.l	#ExplosionBomb,ost_id(a0)		; change object	to an explosion
-		move.b	#id_ExBom_Main,ost_routine(a0)		; reset routine counter
+		jsr	Explode					; replace cannonball with explosion
 		bra.w	ExplosionBomb				; jump to explosion code
 ; ===========================================================================
 

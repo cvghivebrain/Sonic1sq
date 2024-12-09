@@ -204,7 +204,7 @@ Mon_Solid_Detect:
 		addq.w	#1,d1					; 1px correction on left side
 		
 	.right:
-		add.b	ost_width(a0),d1
+		add.w	ost_width_hi(a0),d1
 		sub.w	d1,d0
 		move.w	(v_player1_width).w,d1
 		sub.w	d1,d0					; d0 = x dist with widths

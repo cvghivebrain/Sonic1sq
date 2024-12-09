@@ -27,3 +27,13 @@ Exploding:
 	.exit:
 		rts
 		
+; ---------------------------------------------------------------------------
+; Subroutine to change an object into an explosion
+
+;	uses d0.l, a1
+; ---------------------------------------------------------------------------
+
+Explode:
+		move.l	#ExplosionBomb,ost_id(a0)		; change object into an explosion
+		move.b	#id_ExBom_Main,ost_routine(a0)		; reset routine
+		jmp	DeleteSub				; remove any subsprites

@@ -56,7 +56,7 @@ GBall_Main:	; Routine 0
 		move.b	#20,ost_col_height(a1)
 		move.b	#$60,ost_gball_radius(a1)
 		move.b	#-32,ost_gball_radius_now(a1)
-		getparent	a2
+		getparent a2
 		move.w	ost_x_pos(a2),ost_x_pos(a1)
 		move.w	ost_y_pos(a2),ost_y_pos(a1)		; match position to ship
 		saveparent
@@ -110,8 +110,7 @@ GBall_Pos:
 		
 		tst.b	ost_status(a1)				; has boss been beaten?
 		bpl.s	.not_beaten				; if not, branch
-		move.l	#ExplosionBomb,ost_id(a0)		; replace with explosion object
-		move.b	#id_ExBom_Main,ost_routine(a0)
+		jsr	Explode					; replace with explosion (on next frame)
 		bset	#status_broken_bit,ost_status(a0)	; signal to chain links and ball to explode
 		
 	.not_beaten:
@@ -230,8 +229,7 @@ BossChain_Visible:
 		bsr.s	GBall_SetPos
 		tst.b	ost_status(a1)				; has boss been beaten?
 		bpl.s	.not_beaten				; if not, branch
-		move.l	#ExplosionBomb,ost_id(a0)		; replace with explosion object
-		move.b	#id_ExBom_Main,ost_routine(a0)
+		jsr	Explode					; replace with explosion (on next frame)
 		
 	.not_beaten:
 		jmp	DisplaySprite

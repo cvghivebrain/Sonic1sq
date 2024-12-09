@@ -24,14 +24,13 @@ ExItem_Index:	index *,,2
 
 ExItem_Animal:	; Routine 0
 		addq.b	#2,ost_routine(a0)			; goto ExItem_Main next
-		move.b	#StrId_Explosion,ost_name(a0)
 		bsr.w	FindFreeObj				; find free OST slot
 		bne.s	ExItem_Main				; branch if none found
 		move.l	#Animals,ost_id(a1)			; load animal object
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
 		bsr.w	FindFreeObj
-		bne.w	DisplaySprite
+		bne.s	ExItem_Main
 		move.l	#Points,ost_id(a1)			; load points object
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)
