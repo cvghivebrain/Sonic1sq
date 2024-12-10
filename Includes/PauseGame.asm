@@ -117,6 +117,14 @@ Pause_Debug_Exit:
 ; ---------------------------------------------------------------------------
 
 Pause_Debug_Obj:
+		move.w	(v_nearest_obj).w,d0			; d0 = OST of object selected with overlay
+		beq.s	.use_first				; branch if no object selected
+		subi.w	#v_ost_all&$FFFF,d0
+		divu.w	#sizeof_ost,d0				; convert to item num
+		move.w	d0,(v_debugmenu_item).w
+		bra.s	Pause_Debug_Obj_KeepPos
+		
+	.use_first:
 		clr.w	(v_debugmenu_item).w			; highlight first object in list
 		
 Pause_Debug_Obj_KeepPos:
@@ -258,6 +266,7 @@ show_ost:	macro str,ost,len,line,flags
 		endm
 		
 Pause_Debug_ObjView_Script:
+		; string address, OST offset, nybble count, line breaks, flags (1 = new column; $80 = end)
 		show_ost Str_ObjPtr,ost_id,6,2,0
 		show_ost Str_ObjMap,ost_mappings,6,1,0
 		show_ost Str_ObjTile,ost_tile,4,1,0
@@ -284,8 +293,9 @@ Pause_Debug_ObjView_Script:
 		show_ost Str_ObjW,ost_width_hi,4,1,0
 		show_ost Str_ObjH,ost_height_hi,4,1,0
 		show_ost Str_ObjCol,ost_col_type,4,1,0
-		show_ost Str_ObjColw,ost_col_width,2,1,0
-		show_ost Str_ObjColh,ost_col_height,2,2,0
+		show_ost Str_ObjColw,ost_col_width_hi,4,1,0
+		show_ost Str_ObjColh,ost_col_height_hi,4,1,0
+		show_ost Str_ObjSolX,ost_solid_x_pos,4,2,0
 		show_ost Str_ObjSlot,-1,4,1,0			; -1 reads OST slot address
 		show_ost Str_ObjParent,ost_parent,4,1,0
 		show_ost Str_ObjLinked,ost_linked,4,1,0
@@ -341,6 +351,7 @@ Str_ObjH:	dc.b "HEIGHT@ ",0
 Str_ObjCol:	dc.b "COL TYPE@ ",0
 Str_ObjColw:	dc.b "COL WIDTH@ ",0
 Str_ObjColh:	dc.b "COL HEIGHT@ ",0
+Str_ObjSolX:	dc.b "SOLID X POS@ ",0
 Str_ObjSlot:	dc.b "SLOT@ ",0
 Str_ObjParent:	dc.b "PARENT@ ",0
 Str_ObjLinked:	dc.b "LINKED@ ",0
