@@ -29,6 +29,7 @@ v_ost_all:			rs.b sizeof_ost*countof_ost	; object variable space ($40 bytes per 
 v_ost_end:			equ __rs
 v_ost_final:			equ v_ost_end-sizeof_ost
 v_subsprite_queue:		rs.b sizeof_subsprite*countof_subsprite
+v_subsprite_queue_mini:		rs.b sizeof_subsprite_mini*countof_subsprite_mini
 				rsblockend ost
 
 v_snddriver_ram:		rs.b v_snddriver_size		; start of RAM for the sound driver data ($5C0 bytes)

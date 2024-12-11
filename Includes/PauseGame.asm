@@ -121,11 +121,9 @@ Pause_Debug_Obj:
 		beq.s	.use_first				; branch if no object selected
 		subi.w	#v_ost_all&$FFFF,d0
 		divu.w	#sizeof_ost,d0				; convert to item num
-		move.w	d0,(v_debugmenu_item).w
-		bra.s	Pause_Debug_Obj_KeepPos
 		
 	.use_first:
-		clr.w	(v_debugmenu_item).w			; highlight first object in list
+		move.w	d0,(v_debugmenu_item).w			; set highlighted object
 		
 Pause_Debug_Obj_KeepPos:
 		bsr.w	ClearVRAM_Tiles_FG			; clear fg
