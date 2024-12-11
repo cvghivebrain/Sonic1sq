@@ -597,6 +597,22 @@ sbabs:		macro
 		endm
 
 ; ---------------------------------------------------------------------------
+; Multiply or divide word by $100
+; ---------------------------------------------------------------------------
+
+lsr8:		macro
+		pushr.w	\1					; save whole word to stack
+		moveq	#0,\1
+		popr.b	\1					; retrieve only high byte
+		endm
+
+lsl8:		macro
+		pushr.b	\1					; save byte to stack
+		popr.w	\1					; retrieve word with byte in high position
+		clr.b	\1					; clear low byte
+		endm
+
+; ---------------------------------------------------------------------------
 ; Align address register to even
 ; ---------------------------------------------------------------------------
 

@@ -18,10 +18,7 @@ FindNearestTile:
 		lsr.w	#1,d0					; divide by 256 (tile height), multiply by 128 (level width)
 		move.w	a5,d1					; copy x pos
 		andi.w	#$7F00,d1				; round down 256px
-		pushr.w	d1
-		moveq	#0,d1
-		popr.b	d1
-		;lsr.w	#8,d1					; divide by 256 (tile width)
+		lsr8	d1					; divide by 256 (tile width)
 		add.w	d1,d0					; combine for position within layout
 		moveq	#-1,d1					; d1 = $FFFFFFFF
 		clr.w	d1					; d1 = $FFFF0000
