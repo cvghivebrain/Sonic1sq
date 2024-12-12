@@ -177,34 +177,6 @@ index:		macro
 		endm
 
 ; ---------------------------------------------------------------------------
-; Create a mirrored pointer index. Used to keep Sonic's mappings & DPLC
-; indexes aligned.
-; input: same as index (see above), prefix, pointer label array
-; ---------------------------------------------------------------------------
-
-mirror_index:	macro
-		nolist
-		pusho
-		opt	m-
-
-		index.\0 \1,\2,\3
-		ptr_prefix: equs "\4"
-		ptr_pos: = 1
-		ptr_bar: = instr(1,"\5","|")			; find first bar
-		while ptr_bar>0
-		ptr_sub: substr ptr_pos,ptr_bar-1,"\5"		; get label
-		ptr \ptr_prefix\_\ptr_sub			; create pointer
-		ptr_pos: = ptr_bar+1
-		ptr_bar: = instr(ptr_pos,"\5","|")		; find next bar
-		endw
-		ptr_sub: substr ptr_pos,,"\5"
-		ptr \ptr_prefix\_\ptr_sub			; final pointer
-
-		popo
-		list
-		endm
-
-; ---------------------------------------------------------------------------
 ; Item in a pointer index.
 ; input: pointer target, pointer label array (optional)
 ; ---------------------------------------------------------------------------
