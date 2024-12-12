@@ -354,7 +354,7 @@ spritemap:	macro
 		current_sprite: = 1
 		endc
 		sprite_start: = *+1
-		dc.w ((sprite_\#current_sprite-sprite_start)/6)-1
+		dc.w ((sprite_\#current_sprite-sprite_start)/sizeof_piece)-1
 		endm
 
 endsprite:	macro
@@ -369,8 +369,8 @@ endsprite:	macro
 ; ---------------------------------------------------------------------------
 
 piece:		macro
-		dc.b \2						; ypos
-		dc.b sprite\3\					; sprite size (e.g. sprite1x1 = 0)
+		dc.w \2						; ypos
+		dc.w sprite\3\					; sprite size (e.g. sprite1x1 = 0)
 		sprite_xpos: = \1
 		if \4<0						; is tile index negative?
 			sprite_tile: = $10000+(\4)		; convert signed to unsigned

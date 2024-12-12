@@ -73,7 +73,8 @@ InitSub_SkipChk:
 		subq.w	#1,d1					; subtract 1 for loops
 		
 	.loop:
-		move.w	d2,(a1)+				; write y pos (blank) & sprite size
+		clr.w	(a1)+					; write y pos (blank)
+		move.w	d2,(a1)+				; write sprite size
 		move.w	d3,(a1)+				; write tile setting
 		clr.w	(a1)+					; write x pos (blank)
 		dbf	d1,.loop				; repeat for all subsprites
@@ -112,7 +113,8 @@ InitSubFromList_SkipChk:
 		subq.w	#1,d1					; subtract 1 for loops
 		
 	.loop:
-		move.w	(a2)+,(a1)+				; write y pos (blank) & sprite size
+		clr.w	(a1)+					; write y pos (blank)
+		move.w	(a2)+,(a1)+				; write sprite size
 		move.w	(a2)+,(a1)+				; write tile setting
 		clr.w	(a1)+					; write x pos (blank)
 		dbf	d1,.loop				; repeat for all subsprites

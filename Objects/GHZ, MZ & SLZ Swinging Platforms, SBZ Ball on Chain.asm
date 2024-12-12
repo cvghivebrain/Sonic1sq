@@ -205,9 +205,9 @@ Swing_Anchor:	; Routine 2
 		asr.l	#8,d4
 		muls.w	d1,d5
 		asr.l	#8,d5
-		subq.b	#8,d4
+		subq.w	#8,d4
 		subq.w	#8,d5
-		move.b	d4,piece_y_pos(a2)			; update position
+		move.w	d4,piece_y_pos(a2)			; update position
 		move.w	d5,piece_x_pos(a2)
 		addi.w	#16,d3
 		lea	sizeof_piece(a2),a2			; next sprite

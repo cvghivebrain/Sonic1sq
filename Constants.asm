@@ -89,8 +89,8 @@ sizeof_pal_all:		equ sizeof_pal*countof_pal		; bytes in all palette lines
 brightness_range:	equ 15
 
 			rsset 0
-piece_y_pos:		rs.b 1
-piece_size:		rs.b 1
+piece_y_pos:		rs.w 1
+piece_size:		rs.w 1
 piece_tile:		rs.w 1
 piece_x_pos:		rs.w 1
 sizeof_piece:		equ __rs

@@ -139,12 +139,12 @@ BuildSpr_Index:	index *,,2
 BuildSpr_Normal:
 		cmpi.b	#countof_max_sprites,d5
 		beq.s	.exit					; branch if at max sprites
-		move.b	(a1)+,d0				; get relative y pos from mappings
-		ext.w	d0
+		move.w	(a1)+,d0				; get relative y pos from mappings
 		add.w	d2,d0					; add VDP y pos
 		move.w	d0,(a2)+				; write y pos to sprite buffer
 
-		move.b	(a1)+,(a2)+				; write sprite size to buffer
+		move.w	(a1)+,d0
+		move.b	d0,(a2)+				; write sprite size to buffer
 		addq.b	#1,d5					; increment sprite counter
 		move.b	d5,(a2)+				; write link to next sprite in buffer
 
@@ -174,13 +174,11 @@ BuildSpr_Normal:
 BuildSpr_FlipX:
 		cmpi.b	#countof_max_sprites,d5
 		beq.s	.exit					; branch if at max sprites
-		move.b	(a1)+,d0				; y position
-		ext.w	d0
+		move.w	(a1)+,d0				; y position
 		add.w	d2,d0
 		move.w	d0,(a2)+
 		
-		moveq	#0,d4
-		move.b	(a1)+,d4
+		move.w	(a1)+,d4
 		move.b	d4,(a2)+				; size
 		addq.b	#1,d5
 		move.b	d5,(a2)+				; link
@@ -220,17 +218,16 @@ BuildSpr_FlipX:
 BuildSpr_FlipY:
 		cmpi.b	#countof_max_sprites,d5
 		beq.s	.exit					; branch if at max sprites
-		move.b	(a1)+,d0				; get y-offset
-		moveq	#0,d4
-		move.b	(a1),d4					; get size
-		ext.w	d0
+		move.w	(a1)+,d0				; get y-offset
+		move.w	(a1),d4					; get size
 		neg.w	d0					; negate y-offset
 		add.b	d4,d4
 		sub.w	BuildSpr_FlipY_Shift(pc,d4.w),d0	; calculate flipped position by size
 		add.w	d2,d0					; add y-position
 		move.w	d0,(a2)+				; write to buffer
 		
-		move.b	(a1)+,(a2)+				; size
+		move.w	(a1)+,d0
+		move.b	d0,(a2)+				; size
 		addq.b	#1,d5
 		move.b	d5,(a2)+				; link
 		
@@ -273,17 +270,16 @@ BuildSpr_FlipY_Shift:
 BuildSpr_FlipXY:
 		cmpi.b	#countof_max_sprites,d5
 		beq.s	.exit					; branch if at max sprites
-		move.b	(a1)+,d0				; calculated flipped y
-		moveq	#0,d4
-		move.b	(a1),d4
-		ext.w	d0
+		move.w	(a1)+,d0				; calculated flipped y
+		move.w	(a1),d4
 		neg.w	d0
 		add.b	d4,d4
 		sub.w	BuildSpr_FlipY_Shift(pc,d4.w),d0	; calculate flipped position by size
 		add.w	d2,d0
 		move.w	d0,(a2)+				; write to buffer
 		
-		move.b	(a1)+,(a2)+				; size
+		move.w	(a1)+,d0
+		move.b	d0,(a2)+				; size
 		addq.b	#1,d5
 		move.b	d5,(a2)+				; link
 		
@@ -321,8 +317,7 @@ BuildSpr_FlipXY:
 BuildSpr_Sub:
 		cmpi.b	#countof_max_sprites,d5
 		beq.s	.exit					; branch if at max sprites
-		move.b	(a1)+,d0				; get relative y pos from subsprite table
-		ext.w	d0
+		move.w	(a1)+,d0				; get relative y pos from subsprite table
 		add.w	d2,d0					; add VDP y pos
 		move.w	d0,d4
 		subi.w	#screen_top-32,d4
@@ -330,7 +325,8 @@ BuildSpr_Sub:
 		bhi.s	.abort_y				; branch if subsprite is off screen
 		move.w	d0,(a2)+				; write y pos to sprite buffer
 
-		move.b	(a1)+,(a2)+				; write sprite size to buffer
+		move.w	(a1)+,d0
+		move.b	d0,(a2)+				; write sprite size to buffer
 		addq.b	#1,d5					; increment sprite counter
 		move.b	d5,(a2)+				; write link to next sprite in buffer
 
@@ -349,7 +345,7 @@ BuildSpr_Sub:
 		rts
 		
 	.abort_y:
-		addq.w	#5,a1					; skip this subsprite
+		addq.w	#sizeof_piece-2,a1			; skip this subsprite
 		dbf	d1,BuildSpr_Sub				; next sprite piece
 		rts
 		
