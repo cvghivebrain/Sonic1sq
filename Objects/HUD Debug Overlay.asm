@@ -33,17 +33,10 @@ Overlay_Main:	; Routine 0
 		move.b	#StrId_Overlay,ost_name(a0)
 		moveq	#id_UPLC_Overlay,d0
 		jsr	UncPLC					; load corner & dot gfx
-		jsr	FindFreeFinal
+		jsr	CloneObjectLast				; create copy of this object
 		bne.s	Overlay_Sonic
-		move.l	#DebugOverlay,ost_id(a1)		; load overlay for nearest object
 		move.b	#id_Overlay_Nearest,ost_routine(a1)
-		move.l	ost_mappings(a0),ost_mappings(a1)
-		move.b	ost_frame(a0),ost_frame(a1)
 		move.w	#vram_overlay2/sizeof_cell,ost_tile(a1)
-		move.b	ost_render(a0),ost_render(a1)
-		move.w	ost_priority(a0),ost_priority(a1)
-		move.b	ost_displaywidth(a0),ost_displaywidth(a1)
-		move.b	#StrId_Overlay,ost_name(a1)
 		saveparent
 		
 Overlay_Sonic:	; Routine 2
@@ -170,7 +163,7 @@ Overlay_Hidden:
 Overlay_Words:
 		dc.w ost_x_pos, ost_y_pos
 		dc.w ost_x_vel, ost_y_vel
-		dc.w ost_angle, ost_routine
+		dc.w ost_angle, ost_routine			; ost_routine includes ost_mode as low byte
 	Overlay_Words_end:
 	
 ; ---------------------------------------------------------------------------

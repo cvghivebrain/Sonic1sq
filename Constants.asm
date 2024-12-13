@@ -98,7 +98,7 @@ countof_piece:		equ 16					; number of pieces per subsprite row
 countof_piece_mini:	equ 4
 sizeof_subsprite:	equ (sizeof_piece*countof_piece)+2	; size of single subsprite row
 sizeof_subsprite_mini:	equ (sizeof_piece*countof_piece_mini)+2
-countof_subsprite:	equ 8					; number of subsprite rows
+countof_subsprite:	equ 6					; number of subsprite rows
 countof_subsprite_mini:	equ 8
 			rsset 0
 subcount:		rs.w 1					; number of pieces in this subsprite
