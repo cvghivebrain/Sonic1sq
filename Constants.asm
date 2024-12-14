@@ -263,16 +263,19 @@ air_alert:			equ 12				; time in seconds remaining when music changes to drownin
 bumper_power:			equ $700
 spring_power_red:		equ $1000
 spring_power_yellow:		equ $A00
+solid_break_x_vel:		equ $400			; x speed required to break a solid object
 
 solid_top_bit:			equ 0
 solid_bottom_bit:		equ 1
 solid_left_bit:			equ 2
 solid_right_bit:		equ 3
+solid_broken_bit:		equ 4
 solid_none:			equ 0
 solid_top:			equ 1<<solid_top_bit
 solid_bottom:			equ 1<<solid_bottom_bit
 solid_left:			equ 1<<solid_left_bit
 solid_right:			equ 1<<solid_right_bit
+solid_broken:			equ 1<<solid_broken_bit
 
 ; General gameplay
 lives_start:			equ 3				; lives at start of game
@@ -375,6 +378,7 @@ ost_status:		rs.b 1					; orientation or mode
 	status_underwater_bit:	equ 6
 	status_pushing_p2_bit:	equ 6
 	status_broken_bit:	equ 7
+	status_breakable_bit:	equ 7
 	status_xflip:		equ 1<<status_xflip_bit		; xflip
 	status_yflip:		equ 1<<status_yflip_bit		; yflip (objects only)
 	status_air:		equ 1<<status_air_bit		; Sonic is in the air (Sonic only)
@@ -387,6 +391,7 @@ ost_status:		rs.b 1					; orientation or mode
 	status_pushing_p2:	equ 1<<status_pushing_p2_bit	; Tails is pushing this (objects)
 	status_underwater:	equ 1<<status_underwater_bit	; Sonic is underwater (Sonic only)
 	status_broken:		equ 1<<status_broken_bit	; object has been broken (enemies/bosses)
+	status_breakable:	equ 1<<status_breakable_bit	; object is breakable (blocks)
 ost_respawn:		rs.b 1					; respawn list index number
 ost_subtype:		rs.b 1					; object subtype
 ost_name:		rs.b 1					; name string id
