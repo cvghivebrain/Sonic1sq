@@ -92,6 +92,12 @@ BuildSprites:
 		move.w	(a1)+,d1				; number of sprite pieces
 		beq.s	.skip_draw				; branch if 0
 		subq.w	#1,d1					; subtract 1 for loops
+		btst	#render_sublvl_bit,ost_render(a0)
+		beq.s	.obj_aligned				; branch if subsprites should be aligned to object
+		sub.w	ost_y_pos(a0),d2			; make subsprites align to level
+		sub.w	ost_x_pos(a0),d3
+		
+	.obj_aligned:
 		bsr.w	BuildSpr_Sub
 
 	.skip_draw:

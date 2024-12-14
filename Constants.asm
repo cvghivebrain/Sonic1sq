@@ -345,7 +345,7 @@ ost_render:		rs.b 1					; bitfield for x/y flip, display mode
 	render_xflip_bit:	equ 0
 	render_yflip_bit:	equ 1
 	render_rel_bit:		equ 2
-	render_bg_bit:		equ 3
+	render_sublvl_bit:	equ 3
 	render_useheight_bit:	equ 4
 	render_rawmap_bit:	equ 5
 	render_xshift_bit:	equ 6
@@ -354,7 +354,7 @@ ost_render:		rs.b 1					; bitfield for x/y flip, display mode
 	render_yflip:		equ 1<<render_yflip_bit		; yflip
 	render_rel:		equ 1<<render_rel_bit		; relative screen position - coordinates are based on the level
 	render_abs:		equ 0				; absolute screen position - coordinates are based on the screen (e.g. the HUD)
-	render_bg:		equ 1<<render_bg_bit		; align to background
+	render_sublvl:		equ 1<<render_sublvl_bit	; subsprites are aligned to level instead of object
 	render_useheight:	equ 1<<render_useheight_bit	; use ost_height to decide if object is on screen, otherwise height is assumed to be $20 (used for large objects)
 	render_rawmap:		equ 1<<render_rawmap_bit	; sprites use raw mappings - i.e. object consists of a single sprite instead of multipart sprite mappings (e.g. broken block fragments)
 	render_xshift:		equ 1<<render_xshift_bit	; object sprites are shifted by 1px when xflipped
