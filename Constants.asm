@@ -263,8 +263,10 @@ air_alert:			equ 12				; time in seconds remaining when music changes to drownin
 bumper_power:			equ $700
 spring_power_red:		equ $1000
 spring_power_yellow:		equ $A00
-solid_break_x_vel:		equ $400			; x speed required to break a solid object
+solid_break_x_vel:		equ $400			; x speed required to break a wall
+monitor_break_x_vel:		equ $200			; x speed required to break a monitor
 
+; Solid object interaction flags
 solid_top_bit:			equ 0
 solid_bottom_bit:		equ 1
 solid_left_bit:			equ 2

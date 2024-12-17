@@ -23,7 +23,7 @@ Shatter:
 		bne.s	.fail
 		move.l	#Fragment,ost_id(a1)			; load fragment object
 		move.l	a2,ost_mappings(a1)			; raw mappings
-		addq.l	#6,a2					; next piece in mappings
+		addq.l	#sizeof_piece,a2			; next piece in mappings
 		move.b	d3,ost_render(a1)
 		move.w	ost_x_pos(a0),ost_x_pos(a1)
 		move.w	ost_y_pos(a0),ost_y_pos(a1)

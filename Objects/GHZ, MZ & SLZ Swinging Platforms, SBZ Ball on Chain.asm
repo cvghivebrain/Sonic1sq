@@ -47,6 +47,7 @@ Swing_Info_0:	; $0x - normal swinging platform
 		dc.b 24						; width
 		dc.b 8						; height
 		even
+sizeof_Swing_Info: equ *-Swing_Info_0
 Swing_Info_1:	; $1x - GHZ swinging ball
 		dc.l Map_Swing_GHZ				; mappings (anchor/chain)
 		dc.l v_tile_swing				; tile setting
@@ -106,7 +107,7 @@ Swing_Main:	; Routine 0
 		moveq	#0,d0
 		move.b	ost_subtype(a0),d0
 		lsr.b	#4,d0					; read high nybble
-		mulu.w	#Swing_Info_1-Swing_Info_0,d0
+		mulu.w	#sizeof_Swing_Info,d0
 		lea	Swing_Info_0,a2
 		adda.l	d0,a2
 		move.l	(a2)+,ost_mappings(a0)

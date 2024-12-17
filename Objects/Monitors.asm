@@ -227,7 +227,7 @@ Mon_Solid_Detect:
 		cmpi.b	#id_Roll,ost_anim(a1)
 		bne.w	Sol_Side				; use regular side collision if not rolling/jumping
 		mvabs.w	ost_x_vel(a1),d1
-		cmpi.w	#$200,d1
+		cmpi.w	#monitor_break_x_vel,d1
 		bcs.w	Sol_Side				; use regular side collision if rolling too slowly
 		moveq	#solid_right,d1				; set collision flag to right
 		range_x_quick					; d0 = x dist (-ve if Sonic is to the left)
