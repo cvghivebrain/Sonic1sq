@@ -174,7 +174,7 @@ Overlay_MakeBox:
 		bsr.w	FindFreeSub				; find free subsprite table
 		bne.s	.fail
 		move.w	a1,a3
-		moveq	#5,d1					; 5 subsprites (centre dot & 4 corners)
+		moveq	#5,d0					; 5 subsprites (centre dot & 4 corners)
 		lea	Overlay_Box_Sprites(pc),a2
 		bsr.w	InitSubFromList				; populate subsprite list
 		move.w	#-1,sub0+piece_x_pos(a3)

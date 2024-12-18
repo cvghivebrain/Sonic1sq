@@ -29,7 +29,7 @@ Swing_Index:	index *,,2
 		rsobj SwingingPlatform
 ost_swing_sine:		rs.w 1
 ost_swing_cosine:	rs.w 1
-ost_swing_radius:	rs.b 1					; distance of object from anchor
+ost_swing_radius:	rs.w 1					; distance of object from anchor
 		rsobjend
 		
 Swing_Info_0:	; $0x - normal swinging platform
@@ -120,7 +120,6 @@ Swing_Main:	; Routine 0
 		move.w	d0,ost_tile(a0)
 		move.b	#render_rel+render_useheight,ost_render(a0)
 		move.w	#priority_4,ost_priority(a0)
-		move.b	#8,ost_displaywidth(a0)
 		move.b	#StrId_Platform,ost_name(a0)
 		move.b	#id_frame_swing_anchor,ost_frame(a0)
 		
@@ -150,17 +149,18 @@ Swing_Main:	; Routine 0
 		andi.w	#$F,d1					; read low nybble
 		move.w	d1,d3
 		lsl.w	#4,d3					; d3 = chain length in pixels
-		addq.b	#8,d3
-		move.b	d3,ost_swing_radius(a1)			; position relative to anchor
-		move.b	d3,ost_displaywidth(a0)
-		move.b	d3,ost_height(a0)
+		addq.w	#8,d3
+		move.w	d3,ost_swing_radius(a1)			; position relative to anchor
+		move.w	d3,ost_displaywidth_hi(a0)
+		move.w	d3,ost_height_hi(a0)
 		saveparent
 		
 		bsr.w	FindFreeSub				; find free subsprite table
 		bne.s	Swing_Anchor
-		moveq	#sprite2x2,d2
-		move.w	ost_tile(a0),d3				; tile setting from anchor
-		andi.w	#$7FF,d3				; use palette line 1
+		move.w	d1,d0					; get chain length
+		moveq	#sprite2x2,d1
+		move.w	ost_tile(a0),d2				; tile setting from anchor
+		andi.w	#$7FF,d2				; use palette line 1
 		bsr.w	InitSub					; populate subsprite list
 
 Swing_Anchor:	; Routine 2
@@ -241,7 +241,7 @@ Swing_Update:
 		move.w	ost_y_pos(a1),d2
 		move.w	ost_x_pos(a1),d3
 		moveq	#0,d4
-		move.b	ost_swing_radius(a0),d4			; get distance of object from anchor
+		move.w	ost_swing_radius(a0),d4			; get distance of object from anchor
 		move.l	d4,d5
 		muls.w	d0,d4
 		asr.l	#8,d4
