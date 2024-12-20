@@ -19,6 +19,7 @@ Overlay_Index:	index *,,2
 		rsobj DebugOverlay
 ost_overlay_x_prev:	rs.w 1
 ost_overlay_y_prev:	rs.w 1
+ost_overlay_dim_prev:	rs.l 1
 		rsobjend
 ; ===========================================================================
 
@@ -27,9 +28,10 @@ Overlay_Main:	; Routine 0
 		move.l	#Map_HUD,ost_mappings(a0)
 		move.b	#id_frame_hud_debugsonic,ost_frame(a0)
 		move.w	#vram_overlay/sizeof_cell,ost_tile(a0)
-		move.b	#render_rel,ost_render(a0)
+		move.b	#render_rel+render_useheight,ost_render(a0)
 		move.w	#priority_0,ost_priority(a0)
-		move.b	#16,ost_displaywidth(a0)
+		move.w	#16,ost_displaywidth_hi(a0)
+		move.w	#40,ost_height_hi(a0)
 		move.b	#StrId_Overlay,ost_name(a0)
 		moveq	#id_UPLC_Overlay,d0
 		jsr	UncPLC					; load corner & dot gfx
@@ -106,6 +108,20 @@ Overlay_Sonic:	; Routine 2
 		subq.w	#6,d0					; smaller hitbox when ducking
 		
 Overlay_ShowBox:
+		move.w	d0,d3
+		swap	d3
+		move.w	d2,d3
+		cmp.l	ost_overlay_dim_prev(a0),d3
+		beq.s	Overlay_ShowDigits			; branch if width/height haven't changed
+		move.l	d3,ost_overlay_dim_prev(a0)
+		cmpi.w	#40,d0
+		bls.s	.keep_height
+		move.w	d0,ost_height_hi(a0)
+	.keep_height:
+		cmpi.w	#16,d2
+		bls.s	.keep_width
+		move.w	d2,ost_displaywidth_hi(a0)
+	.keep_width:
 		move.w	#5,(a2)
 		move.w	d0,d6
 		neg.w	d0
