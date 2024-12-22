@@ -17,7 +17,7 @@ Bri_Index:	index *,,2
 
 		rsobj Bridge
 ost_bridge_y_start:	rs.w 1					; original y position
-ost_bridge_y_subspr:	rs.w 1					; y position of subsprites
+ost_bridge_y_subspr:	rs.w 1					; original y position of subsprites
 ost_bridge_bend:	rs.b 1					; number of pixels the bridge has been deflected
 ost_bridge_current_log:	rs.b 1					; log Sonic is currently standing on (left to right, starts at 0)
 ost_bridge_last_log:	rs.b 1					; log on the far right
@@ -69,6 +69,8 @@ Bri_Solid:	; Routine 2
 		getsonic					; a1 = OST of Sonic
 		move.w	ost_bridge_y_start(a0),d0
 		bsr.s	Bri_Sink
+		beq.w	DespawnSub				; branch if bridge hasn't moved
+		bsr.w	Bri_Logs
 		bra.w	DespawnSub
 		
 ; ---------------------------------------------------------------------------
@@ -78,20 +80,21 @@ Bri_Solid:	; Routine 2
 Bri_Sink:
 		tst.b	ost_mode(a0)
 		bne.s	.standing_on				; branch if object is being stood on
-		tst.b	ost_sink(a0)
-		beq.s	.default				; branch if object is in default position
-		subq.b	#2,ost_sink(a0)				; incrementally return block to default
+		move.b	ost_sink(a0),d3
+		beq.s	.exit					; branch if object is in default position
+		subq.b	#2,d3					; incrementally return block to default
 		bra.s	.update_y
 
 .standing_on:
-		cmpi.b	#$1E,ost_sink(a0)
+		move.b	ost_sink(a0),d3
+		cmpi.b	#$1E,d3
 		bne.s	.keep_sinking				; branch if not at maximum sink level
 		tst.w	ost_x_vel(a1)
 		beq.s	.exit					; branch if Sonic isn't moving
 		bra.s	.update_y
 		
 	.keep_sinking:
-		addq.b	#2,ost_sink(a0)				; keep sinking
+		addq.b	#2,d3					; keep sinking
 
 .update_y:
 		moveq	#0,d1
@@ -103,47 +106,48 @@ Bri_Sink:
 		add.b	ost_bridge_last_log(a0),d1
 	.left_side:
 		lsl.w	#5,d1
-		add.b	ost_sink(a0),d1
+		add.b	d3,d1
 		move.w	Bri_Sink_Data(pc,d1.w),d2
 		move.b	d2,ost_bridge_bend(a0)
 		add.w	d2,d0
-		
-	.default:
 		move.w	d0,ost_y_pos(a0)			; update position
+		move.b	d3,ost_sink(a0)
+		moveq	#1,d4					; set flag to update subsprites
 		
 	.exit:
 		rts
 		
 Bri_Sink_Data:
-		dc.w 0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,2
+		dc.w 0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,2		; end logs
 		dc.w 0,0,0,1,1,1,1,2,2,2,2,3,3,3,3,4
 		dc.w 0,0,1,1,2,2,3,3,3,4,4,4,5,5,5,6
 		dc.w 0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8
 		dc.w 0,1,2,2,3,3,4,5,5,6,7,7,8,9,9,10
 		dc.w 0,1,2,3,4,5,6,7,7,8,9,9,10,11,11,12
 		dc.w 0,1,2,3,4,5,6,7,8,9,10,11,12,13,13,14
-		dc.w 0,1,2,3,4,5,6,7,9,10,11,12,13,14,15,16
+		dc.w 0,1,2,3,4,5,6,7,9,10,11,12,13,14,15,16	; 7th log from end (i.e. middle of 15 logs)
 		
 ; ---------------------------------------------------------------------------
-; GHZ bridge log
-
-; spawned by:
-;	Bridge - subtypes 0-$F (each log within a bridge is numbered)
+; Subroutine to update log subsprites
 ; ---------------------------------------------------------------------------
 
-BridgeLog:
-		getparent					; a1 = OST of parent object
-		moveq	#0,d2
-		move.b	ost_bridge_bend(a1),d2
-		beq.s	.align_to_parent			; branch if bridge is in default state
+Bri_Logs:
+		move.w	ost_subsprite(a0),d0
+		beq.s	.exit					; branch if no subsprites
+		addq.w	#sub0,d0				; skip subsprite count
+		movea.w	d0,a2					; a2 = y pos of first subsprite
+		move.w	ost_bridge_y_subspr(a0),d4
+		moveq	#0,d5
+		move.b	ost_bridge_last_log(a0),d5
+		move.w	d5,d3
+		moveq	#0,d6
+		
+	.loop:
 		moveq	#0,d0
-		moveq	#0,d1
-		move.b	ost_bridge_current_log(a1),d0
-		move.b	ost_subtype(a0),d1
+		move.b	ost_bridge_current_log(a0),d0
+		move.w	d6,d1
 		cmp.b	d1,d0
-		beq.s	.align_to_parent			; branch if this log was most recently stood on
 		bhi.s	.left_side				; branch if log is left of where Sonic stood
-		move.b	ost_bridge_last_log(a1),d3
 		neg.b	d0
 		add.b	d3,d0
 		neg.b	d1
@@ -155,16 +159,14 @@ BridgeLog:
 		addq.b	#1,d1
 		mulu.w	d1,d0
 		mulu.w	d2,d0
-		pushr.w	d0
-		moveq	#0,d0
-		popr.b	d0
-		;lsr.w	#8,d0
-		add.w	ost_bridge_y_start(a1),d0
-		move.w	d0,ost_y_pos(a0)
-		bra.w	DisplaySprite
+		lsr8	d0
+		add.w	d4,d0
+		move.w	d0,(a2)					; write y pos
+		addq.w	#sizeof_piece,a2			; next subsprite
+		addq.w	#1,d6
+		dbf	d5,.loop				; repeat for all logs
 		
-	.align_to_parent:
-		move.w	ost_y_pos(a1),ost_y_pos(a0)		; align with parent object
-		bra.w	DisplaySprite
+	.exit:
+		rts
 		
 Bri_Fractions:	dc.w 0, $100/2, $100/3, $100/4, $100/5, $100/6, $100/7, $100/8, $100/9, $100/10, $100/11, $100/12, $100/13, $100/14, $100/15, $100/16
