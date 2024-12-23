@@ -187,14 +187,14 @@ ObjPos_GHZ3:
 		objpos $14F8,$04B0,EdgeWalls,type_edge_dark
 		objpos $1500,$0248,BuzzBomber,$00,rem
 		objpos $1588,$0388,WaterSound,$00
-		objpos $1588,$0388,Helix,$10
+		objpos $1588,$0388,Helix,1
 		objpos $15A8,$02C8,SwingingPlatform,$08
 		objpos $1620,$04B0,Monitor,type_monitor_rings,rem
 		objpos $1648,$04B0,Monitor,type_monitor_rings,rem
 		objpos $1670,$04B0,Monitor,type_monitor_rings,rem
 		objpos $1680,$02C8,BasicPlatform,type_plat_falls
 		objpos $1688,$0388,WaterSound,$00
-		objpos $1688,$0388,Helix,$10
+		objpos $1688,$0388,Helix,1
 		objpos $1698,$04B0,Monitor,type_monitor_rings,rem
 		objpos $16C0,$04B0,Monitor,type_monitor_rings,rem
 		objpos $16E8,$04B0,Monitor,type_monitor_1up,rem
@@ -222,13 +222,13 @@ ObjPos_GHZ3:
 		objpos $18D4,$0771,PurpleRock,$00
 		objpos $194C,$0398,Rings,$15,rem
 		objpos $1988,$0288,WaterSound,$00
-		objpos $1988,$0288,Helix,$10
+		objpos $1988,$0288,Helix,1
 		objpos $19C4,$0384,Rings,$15,rem
 		objpos $1A00,$03B0,PurpleRock,$00
 		objpos $1A3C,$0398,Rings,$15,rem
 		objpos $1A80,$0360,BuzzBomber,$00,rem
 		objpos $1A88,$0288,WaterSound,$00
-		objpos $1A88,$0288,Helix,$10
+		objpos $1A88,$0288,Helix,1
 		objpos $1AC0,$0210,BuzzBomber,$00,rem
 		objpos $1AE0,$0340,BuzzBomber,$00,rem
 		objpos $1B76,$0220,Monitor,type_monitor_rings,rem

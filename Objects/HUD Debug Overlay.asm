@@ -72,10 +72,10 @@ Overlay_Sonic:	; Routine 2
 		beq.s	.z_not_pressed				; if not, branch
 		bchg	#0,(v_debug_hitbox_setting).w
 		bset	#7,(v_debug_hitbox_setting).w
-		bchg	#tile_pal12_bit,sub1+piece_tile(a2)	; toggle hitbox between red/yellow
-		bchg	#tile_pal12_bit,sub2+piece_tile(a2)
-		bchg	#tile_pal12_bit,sub3+piece_tile(a2)
-		bchg	#tile_pal12_bit,sub4+piece_tile(a2)
+		bchg	#tile_pal12_bit,subspr1+piece_tile(a2)	; toggle hitbox between red/yellow
+		bchg	#tile_pal12_bit,subspr2+piece_tile(a2)
+		bchg	#tile_pal12_bit,subspr3+piece_tile(a2)
+		bchg	#tile_pal12_bit,subspr4+piece_tile(a2)
 		
 	.z_not_pressed:
 		btst	#bitM,d0				; is Mode pressed?
@@ -125,18 +125,18 @@ Overlay_ShowBox:
 		move.w	#5,(a2)
 		move.w	d0,d6
 		neg.w	d0
-		move.w	d0,sub1+piece_y_pos(a2)
-		move.w	d0,sub2+piece_y_pos(a2)
+		move.w	d0,subspr1+piece_y_pos(a2)
+		move.w	d0,subspr2+piece_y_pos(a2)
 		subq.w	#8,d6
-		move.w	d6,sub3+piece_y_pos(a2)
-		move.w	d6,sub4+piece_y_pos(a2)
+		move.w	d6,subspr3+piece_y_pos(a2)
+		move.w	d6,subspr4+piece_y_pos(a2)
 		move.w	d2,d6
 		neg.w	d2
-		move.w	d2,sub1+piece_x_pos(a2)
+		move.w	d2,subspr1+piece_x_pos(a2)
 		subq.w	#8,d6
-		move.w	d6,sub2+piece_x_pos(a2)
-		move.w	d2,sub3+piece_x_pos(a2)
-		move.w	d6,sub4+piece_x_pos(a2)
+		move.w	d6,subspr2+piece_x_pos(a2)
+		move.w	d2,subspr3+piece_x_pos(a2)
+		move.w	d6,subspr4+piece_x_pos(a2)
 		
 Overlay_ShowDigits:
 		lea	Overlay_Words(pc,d4.w),a3
@@ -193,8 +193,8 @@ Overlay_MakeBox:
 		moveq	#5,d0					; 5 subsprites (centre dot & 4 corners)
 		lea	Overlay_Box_Sprites(pc),a2
 		bsr.w	InitSubFromList				; populate subsprite list
-		move.w	#-1,sub0+piece_x_pos(a3)
-		move.w	#-2,sub0+piece_y_pos(a3)		; set position of centre dot
+		move.w	#-1,subspr0+piece_x_pos(a3)
+		move.w	#-2,subspr0+piece_y_pos(a3)		; set position of centre dot
 		
 	.fail:
 		rts
@@ -237,10 +237,10 @@ Overlay_Nearest:
 		move.b	(v_debug_hitbox_setting).w,d0
 		bpl.s	.skip_update				; branch if high bit of setting is 0
 		bclr	#7,(v_debug_hitbox_setting).w
-		bchg	#tile_pal12_bit,sub1+piece_tile(a2)	; toggle hitbox between red/yellow
-		bchg	#tile_pal12_bit,sub2+piece_tile(a2)
-		bchg	#tile_pal12_bit,sub3+piece_tile(a2)
-		bchg	#tile_pal12_bit,sub4+piece_tile(a2)
+		bchg	#tile_pal12_bit,subspr1+piece_tile(a2)	; toggle hitbox between red/yellow
+		bchg	#tile_pal12_bit,subspr2+piece_tile(a2)
+		bchg	#tile_pal12_bit,subspr3+piece_tile(a2)
+		bchg	#tile_pal12_bit,subspr4+piece_tile(a2)
 		
 	.skip_update:
 		btst	#0,d0

@@ -102,22 +102,22 @@ countof_subsprite:	equ 6					; number of subsprite rows
 countof_subsprite_mini:	equ 8
 			rsset 0
 subcount:		rs.w 1					; number of pieces in this subsprite
-sub0:			rs.b sizeof_piece
-sub1:			rs.b sizeof_piece
-sub2:			rs.b sizeof_piece
-sub3:			rs.b sizeof_piece
-sub4:			rs.b sizeof_piece
-sub5:			rs.b sizeof_piece
-sub6:			rs.b sizeof_piece
-sub7:			rs.b sizeof_piece
-sub8:			rs.b sizeof_piece
-sub9:			rs.b sizeof_piece
-sub10:			rs.b sizeof_piece
-sub11:			rs.b sizeof_piece
-sub12:			rs.b sizeof_piece
-sub13:			rs.b sizeof_piece
-sub14:			rs.b sizeof_piece
-sub15:			rs.b sizeof_piece
+subspr0:		rs.b sizeof_piece
+subspr1:		rs.b sizeof_piece
+subspr2:		rs.b sizeof_piece
+subspr3:		rs.b sizeof_piece
+subspr4:		rs.b sizeof_piece
+subspr5:		rs.b sizeof_piece
+subspr6:		rs.b sizeof_piece
+subspr7:		rs.b sizeof_piece
+subspr8:		rs.b sizeof_piece
+subspr9:		rs.b sizeof_piece
+subspr10:		rs.b sizeof_piece
+subspr11:		rs.b sizeof_piece
+subspr12:		rs.b sizeof_piece
+subspr13:		rs.b sizeof_piece
+subspr14:		rs.b sizeof_piece
+subspr15:		rs.b sizeof_piece
 
 sprite1x1:		equ 0
 sprite1x2:		equ 1

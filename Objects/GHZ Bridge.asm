@@ -134,8 +134,11 @@ Bri_Sink_Data:
 Bri_Logs:
 		move.w	ost_subsprite(a0),d0
 		beq.s	.exit					; branch if no subsprites
-		addq.w	#sub0,d0				; skip subsprite count
+		addq.w	#subspr0,d0				; skip subsprite count
 		movea.w	d0,a2					; a2 = y pos of first subsprite
+		moveq	#0,d0
+		move.b	ost_bridge_current_log(a0),d0
+		move.w	d0,a3
 		move.w	ost_bridge_y_subspr(a0),d4
 		moveq	#0,d5
 		move.b	ost_bridge_last_log(a0),d5
@@ -143,8 +146,7 @@ Bri_Logs:
 		moveq	#0,d6
 		
 	.loop:
-		moveq	#0,d0
-		move.b	ost_bridge_current_log(a0),d0
+		move.w	a3,d0
 		move.w	d6,d1
 		cmp.b	d1,d0
 		bhi.s	.left_side				; branch if log is left of where Sonic stood
