@@ -110,6 +110,8 @@ Hel_Action:	; Routine 2
 		move.w	(a2),d0					; get subsprite count (8 or 16)
 		subq.b	#1,d0					; -1 for loops
 		addq.w	#subspr0+piece_x_pos,a2			; jump to x pos
+		btst	#status_xflip_bit,ost_status(a0)
+		bne.s	Hel_Reverse				; branch if object is xflipped
 		
 	.loop:
 		cmp.w	(a2),d2
@@ -123,6 +125,24 @@ Hel_Action:	; Routine 2
 		
 	.wrap:
 		sub.w	d1,(a2)					; wrap to left side
+		bra.s	.next
+		
+Hel_Reverse:
+		neg.w	d2
+		subi.w	#helix_spacing*2,d2
+		
+	.loop:
+		cmp.w	(a2),d2
+		bgt.s	.wrap					; branch if subsprite is at leftmost end
+		sub.w	d3,(a2)					; move 16px to the left
+		
+	.next:
+		addq.w	#sizeof_piece,a2			; next subsprite
+		dbf	d0,.loop				; repeat for all
+		bra.w	DespawnFamily
+		
+	.wrap:
+		add.w	d1,(a2)					; wrap to right side
 		bra.s	.next
 
 ; ---------------------------------------------------------------------------
