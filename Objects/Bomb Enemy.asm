@@ -22,7 +22,7 @@ Bom_Index:	index *,,2
 		ptr Bom_Explode
 
 		rsobj Bomb
-ost_bomb_time:		rs.w 1					; time left on fuse - also used for change direction timer
+ost_bomb_time:	rs.w 1						; time left on fuse - also used for change direction timer
 		rsobjend
 ; ===========================================================================
 
