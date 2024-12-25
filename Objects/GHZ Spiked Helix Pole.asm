@@ -5,8 +5,7 @@
 ;	ObjPos_GHZ3 - subtype 1
 
 ; subtypes:
-;	%R000SSSN
-;	R - 1 if helix rotates backwards
+;	%0000SSSN
 ;	SSS - start position
 ;	N - number of spikes (0 = 8; 1 = 16)
 ; ---------------------------------------------------------------------------
@@ -20,6 +19,18 @@ Helix:
 Hel_Index:	index *,,2
 		ptr Hel_Main
 		ptr Hel_Action
+
+		rsobj Helix
+ost_helix_max:	rs.w 1						; max x pos for subsprites
+ost_helix_wrap:	rs.w 1						; distance to wrap subsprites
+		rsobjend
+		
+helix_spacing:	equ 16
+		
+Hel_SubsprMax:	dc.w ((8/2)-2)*helix_spacing
+		dc.w ((16/2)-2)*helix_spacing
+Hel_SubsprWrap:	dc.w (8-1)*helix_spacing
+		dc.w (16-1)*helix_spacing
 ; ===========================================================================
 
 Hel_Main:	; Routine 0
@@ -32,8 +43,11 @@ Hel_Main:	; Routine 0
 		move.b	ost_subtype(a0),d1
 		move.b	d1,d4
 		andi.w	#1,d1					; read low bit
-		addq.b	#1,d1
-		lsl.b	#3,d1					; d1 = 8 or 16
+		add.w	d1,d1					; d1 = 0 or 2
+		move.w	Hel_SubsprMax(pc,d1.w),ost_helix_max(a0)
+		move.w	Hel_SubsprWrap(pc,d1.w),ost_helix_wrap(a0)
+		addq.b	#2,d1
+		lsl.b	#2,d1					; d1 = 8 or 16
 		bsr.w	FindFreeSub				; a1 = subsprite table
 		bne.w	DeleteObject				; delete if not available
 		
@@ -68,7 +82,7 @@ Hel_Main:	; Routine 0
 		move.w	d3,d0
 		add.w	(a2)+,d0
 		move.w	d0,(a1)+				; write x pos
-		addi.w	#16,d3					; next spike is 16px apart
+		addi.w	#helix_spacing,d3			; next spike is 16px apart
 		dbf	d1,.loop				; repeat for all spikes
 		bra.s	Hel_Action
 		
@@ -81,6 +95,7 @@ Hel_Sprites:	dc.w -$10, sprite1x2, 0, -4			; up
 		dc.w $1000, sprite1x1, 0, -1			; hidden
 		dc.w -$C, sprite1x1, $11, -3			; up 45 deg
 		dc.w $1234
+; ===========================================================================
 
 Hel_Action:	; Routine 2
 		shortcut
@@ -89,17 +104,12 @@ Hel_Action:	; Routine 2
 		move.w	ost_subsprite(a0),d0
 		beq.w	DespawnFamily				; branch if subsprites aren't present
 		movea.w	d0,a2					; a2 = subsprite table
+		move.w	ost_helix_max(a0),d2
+		move.w	ost_helix_wrap(a0),d1
+		moveq	#helix_spacing,d3
 		move.w	(a2),d0					; get subsprite count (8 or 16)
-		move.w	d0,d1
-		lsl.w	#3,d1
-		move.w	d1,d2					; d2 = 64 or 128
-		add.w	d1,d1					; d1 = 128 or 256
 		subq.b	#1,d0					; -1 for loops
 		addq.w	#subspr0+piece_x_pos,a2			; jump to x pos
-		moveq	#16,d3
-		sub.w	d3,d2
-		subi.w	#32,d2
-		sub.w	d3,d1
 		
 	.loop:
 		cmp.w	(a2),d2
