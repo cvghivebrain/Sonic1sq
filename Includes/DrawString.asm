@@ -96,7 +96,7 @@ DrawString8_BG:
 ;	d6.w = number of digits to display
 ;	a1 = vdp_data_port
 
-;	uses d2.b, d3.l, d4.w, d5.l, d6.w
+;	uses d2.l, d3.l, d4.w, d5.l, d6.w
 ; ---------------------------------------------------------------------------
 
 DrawHexString:
@@ -121,8 +121,8 @@ DrawHexString_SkipVDP:						; jump here to draw directly after previous string
 		
 	.loop:
 		rol.l	#4,d5					; move digit to low nybble
-		move.b	d5,d2
-		andi.b	#$F,d2					; get digit only
+		moveq	#$F,d2
+		and.b	d5,d2					; get digit only
 		move.w	(v_tile_text).w,d4			; tile address for 0-Z gfx
 		add.w	d2,d4					; create final tile
 		move.w	d4,(a1)					; send to vdp_data_port

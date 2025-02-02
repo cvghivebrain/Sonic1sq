@@ -3,7 +3,6 @@
 ;
 ; input:
 ;	a1 = animation script index (e.g. Ani_Crab)
-;	d2.l = x/yflip flags to read from status (Anim_Run only)
 
 ; output:
 ;	a1 = animation script (e.g. ani_crab_stand)
@@ -21,8 +20,8 @@ AnimateSprite:
 		bmi.s	Anim_Run				; branch if animation isn't set to restart
 
 		bset	#7,ost_anim(a0)				; set to "no restart"
-		move.b	#0,ost_anim_frame(a0)			; reset animation
-		move.b	#0,ost_anim_time(a0)			; reset frame duration
+		clr.b	ost_anim_frame(a0)			; reset animation
+		clr.b	ost_anim_time(a0)			; reset frame duration
 
 Anim_Run:
 		subq.b	#1,ost_anim_time(a0)			; subtract 1 from frame duration
@@ -128,8 +127,8 @@ Anim_Flag_WalkRun:
 		exg	a1,a2					; a1 = Ani_Sonic
 		moveq	#0,d0
 		move.b	ost_angle(a0),d0			; get Sonic's angle
-		move.b	ost_status(a0),d2
-		andi.b	#status_xflip,d2
+		moveq	#status_xflip,d2
+		and.b	ost_status(a0),d2
 		beq.s	.noxflip				; branch if Sonic isn't xflipped
 		not.b	d0					; reverse angle
 	.noxflip:
@@ -205,8 +204,8 @@ Anim_Flag_Push:
 		
 Anim_Sonic_Update2:
 		move.b	d1,ost_anim_time(a0)			; set frame duration
-		move.b	ost_status(a0),d1
-		andi.b	#status_xflip,d1			; read xflip from status
+		moveq	#status_xflip,d1
+		and.b	ost_status(a0),d1			; read xflip from status
 		andi.b	#$FF-render_xflip-render_yflip,ost_render(a0)
 		or.b	d1,ost_render(a0)			; apply xflip from status
 		bra.w	Anim_Sonic_Update
@@ -263,14 +262,16 @@ Anim_RunList:	dc.b id_Run,id_Run,id_Run,id_Run		; angles 0-$C
 ; output:
 ;	d1.b = previous animation id
 
+;	uses d1.l
+
 ; usage:
 ;		move.b	#id_ani_roll_roll,d0
 ;		bsr.w	NewAnim
 ; ---------------------------------------------------------------------------
 
 NewAnim:
-		move.b	ost_anim(a0),d1				; get previous animation id
-		andi.b	#$7F,d1					; ignore high bit (the no-restart flag)
+		moveq	#$7F,d1
+		and.b	ost_anim(a0),d1				; get previous animation id without high bit (the no-restart flag)
 		cmp.b	d0,d1					; compare with new id
 		beq.s	.keepanim				; branch if same
 		move.b	d0,ost_anim(a0)				; update animation id (and clear high bit)

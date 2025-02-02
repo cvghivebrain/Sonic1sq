@@ -10,8 +10,8 @@
 CollectRing:
 		add.w	d0,(v_rings).w				; add 1 to rings
 		ori.b	#1,(v_hud_rings_update).w		; update the rings counter
-		move.b	(v_ring_reward).w,d0
-		andi.w	#$7F,d0					; get number of lives gained from rings
+		moveq	#$7F,d0
+		and.b	(v_ring_reward).w,d0			; get number of lives gained from rings
 		add.w	d0,d0
 		move.w	Ring_NextLife(pc,d0.w),d0		; get ring target for next life
 		cmp.w	(v_rings).w,d0
